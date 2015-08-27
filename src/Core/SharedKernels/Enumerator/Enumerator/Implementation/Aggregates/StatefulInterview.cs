@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -13,6 +14,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
 using WB.Core.SharedKernels.Enumerator.Entities;
@@ -43,7 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly Dictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
 
-        public StatefulInterview()
+        public StatefulInterview(ILogger logger, IQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+            : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
             this.answers = new Dictionary<string, BaseInterviewAnswer>();
             this.groups = new Dictionary<string, InterviewGroup>();

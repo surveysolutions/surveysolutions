@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Portable;
@@ -56,21 +55,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         #region Dependencies
-        
-        public IPlainQuestionnaireRepository PlainQuestionnaireRepository
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainQuestionnaireRepository>(); }
-        }
 
-        public IQuestionnaireAssemblyFileAccessor QuestionnaireAssemblyFileAccessor
-        {
-            get { return ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyFileAccessor>(); }
-        }
-
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         
         #endregion
 
-        public Questionnaire() { }
+        public Questionnaire(IPlainQuestionnaireRepository plainQuestionnaireRepository, IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
+        {
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
+        }
 
         public IQuestionnaire GetQuestionnaire()
         {
@@ -118,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var newVersion = GetNextVersion();
 
-            this.QuestionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
+            this.questionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
 
             this.ApplyEvent(new TemplateImported
             {
@@ -181,7 +176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
         {
-            QuestionnaireDocument questionnaireDocument = this.PlainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
+            QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(command.Id, command.Version);
             
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
@@ -193,7 +188,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //ignoring on interviewer but saving on supervisor
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly)) return;
             
-            this.QuestionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
+            this.questionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
             this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
         }
 
