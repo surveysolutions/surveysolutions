@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid);
+            Create.Interview().CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId);
 
         It should_event_context_contains_4_events = () =>
             eventContext.Events.Count().ShouldEqual(4);
@@ -76,7 +76,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
         private static long questionnaireVersion = 18;
         private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static Guid interviewId = Guid.Parse("11000000000000000000000000000000");
         private static bool isValid = true;
         private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
         private static InterviewStatus interviewStatus = InterviewStatus.Completed;

@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         private Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -47,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, answersToFeaturedQuestions, answersTime);
+            Create.Interview().CreateInterviewForTesting(questionnaireId, answersToFeaturedQuestions, answersTime, userId);
 
         Cleanup stuff = () =>
         {
@@ -64,7 +63,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         
 
         private static EventContext eventContext;
-        private static Guid interviewId;
         private static Guid userId;
         private static Guid questionnaireId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;

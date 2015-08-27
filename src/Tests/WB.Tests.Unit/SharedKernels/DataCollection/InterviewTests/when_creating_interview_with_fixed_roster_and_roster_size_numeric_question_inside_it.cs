@@ -51,8 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () => 
-            exception = Catch.Exception(() => new Interview(new Guid(), new Guid(), questionnaireId, new Dictionary<Guid, object>(),
-                DateTime.Now));
+            exception = Catch.Exception(() => Create.Interview().CreateInterviewForTesting(questionnaireId, new Dictionary<Guid, object>(), DateTime.Now, Guid.NewGuid()));
 
         It should_exception_be_null = () =>
             exception.ShouldBeNull();

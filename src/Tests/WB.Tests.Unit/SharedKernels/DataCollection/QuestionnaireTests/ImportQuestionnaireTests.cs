@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         public void Execute_When_SourceIsNotQuestionnaireDocument_Then_QuestionnaireException_should_be_thrown()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire();
+            Questionnaire questionnaire = CreateImportedQuestionnaire();
             Mock<IQuestionnaireDocument> docMock = new Mock<IQuestionnaireDocument>();
             
             // act
@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             // arrange
             var responsibleId = Guid.Parse("11111111111111111111111111111111");
-            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            Questionnaire questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
             var newState = CreateQuestionnaireDocumentWithOneChapter();
 
             using (var eventContext = new EventContext())
@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             // arrange
             var responsibleId = Guid.Parse("11111111111111111111111111111111");
-            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            Questionnaire questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
             var newState = CreateQuestionnaireDocumentWithOneChapter();
 
             using (var eventContext = new EventContext())
@@ -144,7 +144,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             // arrange
             var responsibleId = Guid.Parse("11111111111111111111111111111111");
-            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            Questionnaire questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
             var newState = CreateQuestionnaireDocumentWithOneChapter();
 
             using (var eventContext = new EventContext())
@@ -165,7 +165,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             // arrange
             var responsibleId = Guid.Parse("11111111111111111111111111111111");
-            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            Questionnaire questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
 
             using (var eventContext = new EventContext())
             {
@@ -184,7 +184,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             // arrange
             var responsibleId = Guid.Parse("11111111111111111111111111111111");
-            Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            Questionnaire questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
             var newState = CreateQuestionnaireDocumentWithOneChapter();
 
             using (var eventContext = new EventContext())
@@ -205,7 +205,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         public void DeleteQuestionnaire_When_Valid_Questionnaire_Version_is_invalid_Imported_Then_QuestionnaireException_sould_be_thrown()
         {
             // arrange
-            Questionnaire questionnaire = CreateQuestionnaire();
+            Questionnaire questionnaire = CreateImportedQuestionnaire();
 
             // act
 
@@ -219,9 +219,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             {
                 // arrange
                 var newState = CreateQuestionnaireDocumentWithOneChapter();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
 
                 // act
-                Questionnaire questionnaire = new Questionnaire(newState);
+                questionnaire.ImportFromSupervisor(Create.Command.ImportFromSupervisor(newState));
                
                 // assert
                 Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
@@ -236,7 +237,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var document = CreateQuestionnaireDocumentWithOneChapter();
                 // act
                 questionnaire.ImportFromDesignerForTester(new ImportFromDesignerForTester(document));
@@ -253,7 +254,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
@@ -272,7 +273,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateQuestionnaire();
+                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act
@@ -299,7 +300,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             Setup.InstanceToMockedServiceLocator<IPlainQuestionnaireRepository>(plainQuestionnaireRepository);
 
 
-            Questionnaire questionnaire = CreateQuestionnaire();
+            Questionnaire questionnaire = CreateImportedQuestionnaire();
 
             // act and assert
             Assert.Throws<QuestionnaireException>(() => questionnaire.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(document.PublicKey, 3, false, null)));
@@ -313,7 +314,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             {
                 // arrange
                 var responsibleId = Guid.Parse("11111111111111111111111111111111");
-                Questionnaire questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+                Questionnaire questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
                 var document = CreateQuestionnaireDocumentWithOneChapter();
 
                 // act

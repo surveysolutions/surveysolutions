@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -320,19 +321,26 @@ namespace WB.Tests.Integration
 
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            return new Questionnaire(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly");
+            var questionnaire = new Questionnaire();
+
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly"));
+
+            return questionnaire;
         }
 
-        public static Interview Interview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null)
+        public static Interview Interview(Guid? questionnaireId = null)
         {
-            return new Interview(
-                interviewId ?? new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
-                userId ?? new Guid("F111F111F111F111F111F111F111F111"),
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 1,
-                answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
-                answersTime ?? new DateTime(2012, 12, 20),
-                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
+            var interview = new Interview();
+
+            interview.CreateInterview(
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                1,
+                new Guid("D222D222D222D222D222D222D222D222"),
+                new Dictionary<Guid, object>(),
+                new DateTime(2012, 12, 20),
+                new Guid("F111F111F111F111F111F111F111F111"));
+
+            return interview;
         }
 
         public static Identity Identity(Guid id, decimal[] rosterVector = null)
