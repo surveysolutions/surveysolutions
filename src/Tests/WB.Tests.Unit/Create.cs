@@ -2038,7 +2038,8 @@ namespace WB.Tests.Unit
                         new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
                         .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
                     new QuestionDataParser(),
-                    new UserViewFactory(new TestInMemoryWriter<UserDocument>()));
+                    new UserViewFactory(new  TestInMemoryWriter<UserDocument>()),
+                    Mock.Of<ITransactionManagerProvider>());
 
         }
 
