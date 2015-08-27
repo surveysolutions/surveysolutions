@@ -9,6 +9,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -18,7 +19,10 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
@@ -321,7 +325,9 @@ namespace WB.Tests.Integration
 
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaire = new Questionnaire();
+            var questionnaire = new Questionnaire(
+                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly"));
 
@@ -330,7 +336,10 @@ namespace WB.Tests.Integration
 
         public static Interview Interview(Guid? questionnaireId = null)
         {
-            var interview = new Interview();
+            var interview = new Interview(
+                Mock.Of<ILogger>(),
+                Mock.Of<IQuestionnaireRepository>(),
+                Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
