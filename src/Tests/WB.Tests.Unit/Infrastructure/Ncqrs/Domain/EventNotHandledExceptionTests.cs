@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs.Config;
 using Ncqrs.Domain;
 using NUnit.Framework;
 using Ncqrs.Eventing;

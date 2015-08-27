@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
@@ -10,18 +11,18 @@ namespace Ncqrs.Domain.Storage
 {
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter
     {
-        private readonly IAggregateRootCreationStrategy _aggregateRootCreator;
         private readonly IAggregateSupportsSnapshotValidator _snapshotValidator;
         private readonly ISnapshottingPolicy snapshottingPolicy;
         private readonly ISnapshotStore snapshotStore;
+        private readonly IServiceLocator serviceLocator;
 
-        public DefaultAggregateSnapshotter(IAggregateRootCreationStrategy aggregateRootCreationStrategy, IAggregateSupportsSnapshotValidator snapshotValidator,
-            ISnapshottingPolicy snapshottingPolicy, ISnapshotStore snapshotStore)
+        public DefaultAggregateSnapshotter(IAggregateSupportsSnapshotValidator snapshotValidator,
+            ISnapshottingPolicy snapshottingPolicy, ISnapshotStore snapshotStore, IServiceLocator serviceLocator)
         {
-            _aggregateRootCreator = aggregateRootCreationStrategy;
             _snapshotValidator = snapshotValidator;
             this.snapshottingPolicy = snapshottingPolicy;
             this.snapshotStore = snapshotStore;
+            this.serviceLocator = serviceLocator;
         }
 
         public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot)
@@ -32,7 +33,7 @@ namespace Ncqrs.Domain.Storage
 
             if (AggregateSupportsSnapshot(aggregateRootType, snapshot.Payload.GetType()))
             {
-                aggregateRoot = _aggregateRootCreator.CreateAggregateRoot(aggregateRootType);
+                aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
                 aggregateRoot.InitializeFromSnapshot(snapshot);
 
                 var memType = aggregateRoot.GetType().GetSnapshotInterfaceType();
