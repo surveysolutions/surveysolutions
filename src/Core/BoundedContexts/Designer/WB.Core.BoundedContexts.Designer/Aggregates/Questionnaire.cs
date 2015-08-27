@@ -764,20 +764,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
         }
 
-        public Questionnaire(Guid publicKey)
-            : base(publicKey)
-        {
-            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
-        }
-
-        public Questionnaire(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
-            : base(publicKey)
-        {
-            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
-
-            this.CreateQuestionnaire(publicKey, title, createdBy, isPublic);
-        }
-
         public void CreateQuestionnaire(Guid publicKey, string title, Guid? createdBy, bool isPublic)
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
@@ -802,23 +788,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 );
 
             this.ApplyEvent(new ExpressionsMigratedToCSharp());
-        }
-
-        public Questionnaire(Guid createdBy, IQuestionnaireDocument source)
-            : base(source.PublicKey)
-        {
-            this.questionnaireEntityFactory = new QuestionnaireEntityFactory();
-
-            ImportQuestionnaire(createdBy, source);
-        }
-
-        public Questionnaire(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
-            : this(publicKey, title, createdBy, false, source) { }
-
-        public Questionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
-            : base(publicKey)
-        {
-            this.CloneQuestionnaire(title, isPublic, createdBy, publicKey, source);
         }
 
         public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)

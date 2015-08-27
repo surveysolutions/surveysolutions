@@ -72,24 +72,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Questionnaire() { }
 
-        public Questionnaire(Guid createdBy, IQuestionnaireDocument source, bool allowCensusMode, string supportingAssembly)
-            : base(source.PublicKey)
-        {
-            this.ImportFromDesigner(new ImportFromDesigner(createdBy, source, allowCensusMode, supportingAssembly));
-        }
-
-        public Questionnaire(IQuestionnaireDocument source)
-            : base(source.PublicKey)
-        {
-            this.ImportFromQuestionnaireDocument(source);
-        }
-
-        public Questionnaire(Guid id, long version, bool allowCensusMode, string supportingAssembly)
-            : base(id)
-        {
-            this.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(id, version, allowCensusMode, supportingAssembly));
-        }
-
         public IQuestionnaire GetQuestionnaire()
         {
             var presentVersions = availableVersions.Where(v => v.Value != null).ToList();
