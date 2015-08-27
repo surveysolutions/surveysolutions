@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
+using Microsoft.Practices.ServiceLocation;
+using Ncqrs;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus
@@ -169,37 +174,66 @@ namespace WB.Core.Infrastructure.CommandBus
             return Handlers.ContainsKey(command.GetType().Name);
         }
 
+        private static HandlerDescriptor GetHandlerDescriptor(ICommand command)
+        {
+            return Handlers[command.GetType().Name];
+        }
+
         internal static Type GetAggregateRootType(ICommand command)
         {
-            return Handlers[command.GetType().Name].AggregateType;
+            return GetHandlerDescriptor(command).AggregateType;
         }
 
         internal static bool IsInitializer(ICommand command)
         {
-            return Handlers[command.GetType().Name].IsInitializer;
+            return GetHandlerDescriptor(command).IsInitializer;
         }
 
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
         {
-            return Handlers[command.GetType().Name].IdResolver;
+            return GetHandlerDescriptor(command).IdResolver;
         }
 
         internal static Func<IAggregateRoot> GetAggregateRootConstructor(ICommand command)
         {
-            return Handlers[command.GetType().Name].Constructor;
+            return GetHandlerDescriptor(command).Constructor;
         }
 
         internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
         {
-            return Handlers[command.GetType().Name].Handler;
+            return GetHandlerDescriptor(command).Handler;
         }
 
-        public static IEnumerable<Type> GetValidators(ICommand command)
+        public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
         {
-            return Handlers[command.GetType().Name].Validators;
+            var handlerDescriptor = GetHandlerDescriptor(command);
+
+            return handlerDescriptor.Validators.Select(
+                validatorType => GetValidatingAction(validatorType, handlerDescriptor.AggregateType, command.GetType(), serviceLocator));
         }
 
-        
+        private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
+        {
+            object validatorInstance = serviceLocator.GetInstance(validatorType);
+            MethodInfo validatingMethod = validatorType.GetMethod("Validate", new[] { aggregateType, commandType });
+
+            if (validatingMethod == null)
+                throw new CommandRegistryException(string.Format("Unable to resolve validating method of validator {0} for command {1} and aggregate {2}.",
+                    validatorType.Name, commandType.Name, aggregateType.Name));
+
+            return (aggregate, command) =>
+            {
+                try
+                {
+                    validatingMethod.Invoke(validatorInstance, new object[] { aggregate, command });
+                }
+                catch (TargetInvocationException exception)
+                {
+                    ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                }
+            };
+        }
+
         public static void Configure<TAggregate, TCommand>(Action<CommandHandlerConfiguration<TAggregate>> configuration) where TAggregate : IAggregateRoot
         {
             CommandHandlerConfiguration<TAggregate> cfg = new CommandHandlerConfiguration<TAggregate>();
