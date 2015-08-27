@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public static Questionnaire CreateImportedQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null)
         {
-            var questionnaire = new Questionnaire();
+            var questionnaire = Create.DateCollectionQuestionnaire();
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly"));
 
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire()
         {
-            return new Questionnaire();
+            return Create.DateCollectionQuestionnaire();
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

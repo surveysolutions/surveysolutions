@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
                 .Returns(questionnaireRepository);
-            interview = new Interview();
+            interview = Create.Interview();
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, ""));
         };

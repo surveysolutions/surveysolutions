@@ -15,12 +15,14 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 using Cirrious.CrossCore.Core;
+using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NHibernate;
 using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -74,6 +76,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -1161,7 +1164,13 @@ namespace WB.Tests.Unit
 
         public static Questionnaire Questionnaire()
         {
-            return new Questionnaire();
+            return new Questionnaire(
+                Mock.Of<IQuestionnaireEntityFactory>(),
+                Mock.Of<ILogger>(),
+                Mock.Of<IClock>(),
+                Mock.Of<IExpressionProcessor>(),
+                Mock.Of<ISubstitutionService>(),
+                Mock.Of<IKeywordsProvider>());
         }
 
         public static EventContext EventContext()
@@ -1919,7 +1928,10 @@ namespace WB.Tests.Unit
 
         public static Interview Interview(Guid? interviewId = null)
         {
-            var interview = new Interview();
+            var interview = new Interview(
+                Mock.Of<ILogger>(),
+                Mock.Of<IQuestionnaireRepository>(),
+                Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
 
@@ -1929,7 +1941,10 @@ namespace WB.Tests.Unit
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
-            var statefulInterview = new StatefulInterview
+            var statefulInterview = new StatefulInterview(
+                Mock.Of<ILogger>(),
+                Mock.Of<IQuestionnaireRepository>(),
+                Mock.Of<IInterviewExpressionStatePrototypeProvider>())
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };
@@ -2161,6 +2176,13 @@ namespace WB.Tests.Unit
                 invalidQuestions ?? new HashSet<InterviewItemId>(), 
                 new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
                 false);
+        }
+
+        public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DateCollectionQuestionnaire()
+        {
+            return new Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(
+                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
     }
 }
