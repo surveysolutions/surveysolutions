@@ -2,7 +2,6 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
