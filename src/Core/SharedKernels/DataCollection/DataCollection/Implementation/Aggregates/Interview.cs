@@ -521,29 +521,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
-        public Interview(Func<Guid> getQuestionnaireId, Func<long> getVersion, Guid id)
-            : base(id)
-        {
-            this.SetQuestionnaireProperties(getQuestionnaireId(), getVersion());
-
-            if (ExpressionProcessorStatePrototype == null)
-            {
-                throw new InterviewException(string.Format("Interview activation error. Code EC0002. QuestionnaireId: {0}, Questionnaire version: {1}, InterviewId: {2}", getQuestionnaireId(), getVersion(), id));
-            }
-
-        }
+        #endregion
 
         private void SetQuestionnaireProperties(Guid questionnaireId, long questionnaireVersion)
         {
             this.questionnaireId = questionnaireId;
             this.questionnaireVersion = questionnaireVersion;
-        }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedData, DateTime answersTime,
-            Guid supervisorId)
-            : this(() => questionnaireId, () => version, id)
-        {
-            this.CreateInterviewWithPreloadedData(questionnaireId, version, preloadedData, supervisorId, answersTime, userId);
         }
 
         public void CreateInterviewWithPreloadedData(Guid questionnaireId, long version, PreloadedDataDto preloadedData, Guid supervisorId, DateTime answersTime, Guid userId)
@@ -602,13 +585,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime, Guid supervisorId)
-            : this(() => questionnaireId, () => questionnaireVersion, id)
-        {
-            this.CreateInterview(questionnaireId, questionnaireVersion, supervisorId, answersToFeaturedQuestions, answersTime, userId);
-        }
-
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
@@ -652,13 +628,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime)
-            : this(() => questionnaireId, () => GetQuestionnaireOrThrow(questionnaireId).Version, id)
-        {
-            this.CreateInterviewForTesting(questionnaireId, answersToFeaturedQuestions, answersTime, userId);
-        }
-
         public void CreateInterviewForTesting(Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, GetQuestionnaireOrThrow(questionnaireId).Version);
@@ -699,19 +668,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(enablementAndValidityChanges);
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
-            : this(() => questionnaireId, () =>
-            {
-                IQuestionnaire questionnaire = questionnaireVersion.HasValue
-                    ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
-                    : GetQuestionnaireOrThrow(questionnaireId);
-
-                return questionnaire.Version;
-            }, id)
-        {
-            this.CreateInterviewOnClient(questionnaireId, questionnaireVersion, supervisorId, answersTime, userId);
-        }
-
         public void CreateInterviewOnClient(Guid questionnaireId, long? questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, (questionnaireVersion.HasValue
@@ -745,13 +701,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
-            : this(() => questionnaireId, () => questionnaireVersion, id)
-        {
-            this.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId);
-        }
-
         public void CreateInterviewCreatedOnClient(Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
@@ -765,21 +714,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, string.Empty));
             this.ApplyValidationEvent(isValid);
         }
-
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
-            : this(() => questionnaireId, () => questionnaireVersion, id)
-        {
-            this.CreateInterviewFromSynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
-        }
-
-        public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
-            : this(() => interviewDto.QuestionnaireId, () => interviewDto.QuestionnaireVersion, id)
-        {
-            this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
-        }
-
-        #endregion
 
         #region StaticMethods
 

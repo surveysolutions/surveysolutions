@@ -26,13 +26,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         public User(){}
 
-        public User(Guid publicKey, string userName, string password, string email, UserRoles[] roles, bool isLockedbySupervisor,
-            bool isLockedbyHQ, UserLight supervisor, string personName, string phoneNumber)
-            : base(publicKey)
-        {
-            this.CreateUser(email, isLockedbySupervisor, isLockedbyHQ, password, publicKey, roles, supervisor, userName, personName, phoneNumber);
-        }
-
         public void CreateUser(string email, bool isLockedBySupervisor, bool isLockedByHq, string password, Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
             string phoneNumber)
         {

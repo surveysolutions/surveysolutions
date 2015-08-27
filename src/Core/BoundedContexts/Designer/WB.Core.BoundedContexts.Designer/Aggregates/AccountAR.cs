@@ -45,13 +45,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
         }
 
-        public AccountAR(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt,
-            bool isConfirmed, string confirmationToken)
-            : base(accountId)
-        {
-            this.RegisterAccount(applicationName, userName, email, accountId, password, passwordSalt, isConfirmed, confirmationToken);
-        }
-
         public void RegisterAccount(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
         {
             this.ApplyEvent(
