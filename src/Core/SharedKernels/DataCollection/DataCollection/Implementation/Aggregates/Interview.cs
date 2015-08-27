@@ -1576,8 +1576,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
         {
             ThrowIfInterviewHardDeleted();
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(
-                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+            this.ThrowIfTryAssignToSameInterviewer(interviewerId);
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
             if (!this.wasCompleted && this.status != InterviewStatus.InterviewerAssigned)
@@ -3568,6 +3568,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.status, 
                     string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString())),
                     EventSourceId), InterviewDomainExceptionType.StatusIsNotOneOfExpected);
+        }
+
+        private void ThrowIfTryAssignToSameInterviewer(Guid interviewerIdToAssign)
+        {
+            if (this.status == InterviewStatus.InterviewerAssigned && this.interviewerId == interviewerIdToAssign)
+                throw new InterviewException(string.Format(
+                    "Interview has assigned on this interviewer already. InterviewId: {0}, InterviewerId: {1}",
+                    EventSourceId, this.interviewerId));
         }
 
         protected void ThrowIfInterviewHardDeleted()
