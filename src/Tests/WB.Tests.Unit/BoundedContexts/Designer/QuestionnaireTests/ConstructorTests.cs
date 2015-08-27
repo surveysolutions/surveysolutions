@@ -28,7 +28,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             // arrange
 
             // act
-            TestDelegate act = () => new Questionnaire(Guid.NewGuid(), emptyTitle);
+            TestDelegate act = () =>
+            {
+                Questionnaire questionnaire = Create.Questionnaire();
+                questionnaire.CreateQuestionnaire(Guid.NewGuid(), emptyTitle, null, false);
+            };
 
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -44,7 +48,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 var publicKey = Guid.NewGuid();
 
                 // act
-                new Questionnaire(publicKey, "title");
+                Questionnaire questionnaire = Create.Questionnaire();
+                questionnaire.CreateQuestionnaire(publicKey, "title", null, false);
 
                 // assert
                 Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
@@ -60,7 +65,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 var title = "title, the";
 
                 // act
-                new Questionnaire(Guid.NewGuid(), title);
+                Questionnaire questionnaire = Create.Questionnaire();
+                questionnaire.CreateQuestionnaire(Guid.NewGuid(), title, null, false);
 
                 // assert
                 Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));

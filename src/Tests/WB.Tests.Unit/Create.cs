@@ -141,6 +141,11 @@ namespace WB.Tests.Unit
             {
                 return new LinkUserToDevice(userId, deviceId);
             }
+
+            public static ImportFromSupervisor ImportFromSupervisor(IQuestionnaireDocument source)
+            {
+                return new ImportFromSupervisor(source);
+            }
         }
 
         public static class Event
@@ -1154,20 +1159,9 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static Questionnaire Questionnaire(Guid? questionnaireId = null,
-            string title = "Questionnnaire Title", Guid? responsibleId = null)
+        public static Questionnaire Questionnaire()
         {
-            return new Questionnaire(
-                publicKey: questionnaireId ?? Guid.Parse("ddddaaaaaaaaaaaaaaaaaaaaaaaabbbb"),
-                title: title,
-                createdBy: responsibleId ?? Guid.Parse("ddddccccccccccccccccccccccccbbbb"));
-        }
-
-        public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument, Guid? responsibleId = null)
-        {
-            return new Questionnaire(
-                createdBy: responsibleId ?? Guid.NewGuid(),
-                source: questionnaireDocument);
+            return new Questionnaire();
         }
 
         public static EventContext EventContext()
@@ -1579,11 +1573,6 @@ namespace WB.Tests.Unit
             return result;
         }
 
-        public static WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire Questionnaire(Guid creatorId, QuestionnaireDocument document)
-        {
-            return new WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(new Guid(), document, false, "base65 string of assembly");
-        }
-
         public static EnablementChanges EnablementChanges(
             List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, 
             List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
@@ -1928,9 +1917,13 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Interview Interview()
+        public static Interview Interview(Guid? interviewId = null)
         {
-            return new Interview();
+            var interview = new Interview();
+
+            interview.SetId(interviewId ?? Guid.NewGuid());
+
+            return interview;
         }
 
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null)

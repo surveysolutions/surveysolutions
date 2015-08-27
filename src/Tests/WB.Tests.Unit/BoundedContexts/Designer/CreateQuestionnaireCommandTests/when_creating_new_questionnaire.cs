@@ -20,9 +20,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CreateQuestionnaireCommandTests
             createdBy = Guid.NewGuid();
             eventContext = new EventContext();
             isPublic = true;
+            questionnaire = Create.Questionnaire();
         };
 
-        Because of = () => questionnaire = new Questionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
+        Because of = () => questionnaire.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
 
         It should_raise_questionnaire_created_event = () => 
             eventContext.ShouldContainEvent<NewQuestionnaireCreated>();

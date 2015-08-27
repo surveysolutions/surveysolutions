@@ -16,7 +16,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -38,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
+            Create.Interview().CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
 
         It should_not_raise_GroupDisabled_event = () =>
             eventContext.ShouldNotContainEvent<GroupsDisabled>();
@@ -50,7 +49,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         static EventContext eventContext;
-        static Guid interviewId;
         static Guid userId;
         static Guid questionnaireId;
         static Dictionary<Guid, object> answersToFeaturedQuestions;
