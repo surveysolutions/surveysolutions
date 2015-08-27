@@ -294,6 +294,14 @@
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
+    <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
+    <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
+    <Compile Include="Infrastructure\Logging\FileLogger.cs" />
+    <Compile Include="Infrastructure\NewtonJsonUtils.cs" />
+    <Compile Include="Infrastructure\Rest\FlurlRestClient.cs" />
+    <Compile Include="Infrastructure\Rest\FlurlRestClientProvider.cs" />
+    <Compile Include="Infrastructure\Rest\RestMessageHandler.cs" />
+    <Compile Include="Infrastructure\Rest\RestServicePointManager.cs" />
     <Compile Include="InterviewerBoundedContextModule.cs" />
     <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
@@ -611,10 +619,6 @@
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
       <Project>{C6ED30A9-4D14-48D1-8311-C2267DFD424F}</Project>
       <Name>WB.Core.BoundedContexts.Interviewer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Android\WB.Core.GenericSubdomains.Android.csproj">
-      <Project>{1eb1ebb0-92cf-4339-9f62-4a5ae3ed93a4}</Project>
-      <Name>WB.Core.GenericSubdomains.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
