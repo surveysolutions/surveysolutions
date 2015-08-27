@@ -61,9 +61,9 @@ namespace WB.UI.Interviewer.ViewModel
         {
             this.SyncEndpoint = "";
 #if DEBUG
-            this.SyncEndpoint = "http://superhq-dev.mysurvey.solutions";
-            this.Login = "Interviewer1";
-            this.Password = "P@$$w0rd";
+            this.SyncEndpoint = "http://192.168.88.226/headquarters";
+            this.Login = "int";
+            this.Password = "1";
 #endif
         }
 

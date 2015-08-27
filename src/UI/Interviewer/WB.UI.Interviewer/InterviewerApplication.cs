@@ -198,8 +198,6 @@ namespace WB.UI.Interviewer
                 new InterviewerBoundedContextModule(),
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
-
-                new WB.Core.Infrastructure.Files.Android.FileInfrastructureModule(),
                 new AndroidLoggingModule());
 
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
