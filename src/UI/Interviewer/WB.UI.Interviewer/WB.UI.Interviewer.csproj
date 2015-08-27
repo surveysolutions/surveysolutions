@@ -481,21 +481,14 @@
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <AndroidResource Include="Resources\Drawable\capi.png" />
-    <AndroidResource Include="Resources\Drawable\cell_shape.xml" />
     <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
-    <AndroidResource Include="Resources\Drawable\navigateLeftIcon.png" />
-    <AndroidResource Include="Resources\Drawable\navigateRightIcon.png" />
-    <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
     <AndroidResource Include="Resources\Drawable\SurveyShape.xml" />
     <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Values\Themes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -504,19 +497,9 @@
     <AndroidResource Include="Resources\values-ru\strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\answer_progress_indicator.png" />
-    <AndroidResource Include="Resources\Drawable\bookmarkStyle.xml" />
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
-    <AndroidResource Include="Resources\Drawable\donecountershape.xml" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
-    <AndroidResource Include="Resources\Drawable\ic_drawer_dark.png" />
     <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\Drawable\no_image_found.jpg" />
-    <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
-    <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
-    <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
-    <AndroidResource Include="Resources\Drawable\questionShape.xml" />
-    <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
     <AndroidResource Include="Resources\Values\Colors.xml" />
     <AndroidResource Include="Resources\Values\dimensions.xml">
       <SubType>Designer</SubType>
@@ -622,6 +605,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\splash_image.png" />
+    <AndroidResource Include="Resources\Drawable\capi_splash.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -639,10 +623,6 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
       <Project>{a134f8e7-42c7-4804-8177-d11178600caa}</Project>
       <Name>WB.Core.Infrastructure.Backup</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files.Android\WB.Core.Infrastructure.Files.Android.csproj">
-      <Project>{8ceacd5d-ab0e-4104-8bce-ddd7900887e0}</Project>
-      <Name>WB.Core.Infrastructure.Files.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

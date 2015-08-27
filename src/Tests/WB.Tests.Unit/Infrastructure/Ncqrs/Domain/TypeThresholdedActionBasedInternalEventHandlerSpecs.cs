@@ -16,11 +16,6 @@ namespace Ncqrs.Tests.Domain
         public class BarEvent : FooEvent
         {
         }
-
-        [SetUp]
-        public void SetUp()
-        {
-        }
         
         [Test]
         public void Threshold_should_hold_event_when_it_is_of_a_higher_type_when_exact_is_true()

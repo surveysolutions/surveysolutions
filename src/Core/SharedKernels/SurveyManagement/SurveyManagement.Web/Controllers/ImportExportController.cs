@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.AsyncManager,
                 () =>
                 {
-                    IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                     try
                     {
                         this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version, type);
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     }
                     finally
                     {
-                        IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                     }
                 });
         }
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.AsyncManager,
                 () =>
                 {
-                    IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                     try
                     {
                         this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version, type);
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     }
                     finally
                     {
-                        IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                     }
                 });
         }

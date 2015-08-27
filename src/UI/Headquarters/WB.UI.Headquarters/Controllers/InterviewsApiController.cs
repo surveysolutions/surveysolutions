@@ -39,8 +39,8 @@ namespace WB.UI.Headquarters.Controllers
 
             new Task(() =>
             {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
-                NoTransactionalThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
                 try
                 {
                     var sampleImportService = this.sampleImportServiceFactory.Invoke();
@@ -55,8 +55,8 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 finally
                 {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
-                    NoTransactionalThreadMarkerManager.ReleaseCurrentThreadAsNoTransactional();
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                    ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
                 }
             }).Start();
         }
@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.Controllers
 
             new Task(() =>
             {
-                IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
 
                 try
                 {
@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 finally
                 {
-                    IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                 }
             }).Start();
         }

@@ -1,33 +1,20 @@
 ﻿using Cirrious.MvvmCross.ViewModels;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class InterviewCompletionStatisticsViewModel : MvxViewModel, IInterviewEntityViewModel
+    public class InterviewCompletionStatisticsViewModel
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public InterviewCompletionStatisticsViewModel(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, 
-            IStatefulInterviewRepository interviewRepository)
+        public InterviewCompletionStatisticsViewModel(IStatefulInterviewRepository interviewRepository)
         {
-            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
         }
 
-        private string interviewId;
-
-        public Identity Identity { get { return null; } }
-
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId)
         {
-            this.interviewId = interviewId;
-
-            var interview = this.interviewRepository.Get(this.interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
 
             var questionsCount = interview.CountActiveQuestionsInInterview();
             this.AnsweredCount = interview.CountAnsweredQuestionsInInterview();
@@ -35,25 +22,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UnansweredCount = questionsCount - this.AnsweredCount;
         }
 
-        private int answeredCount;
-        public int AnsweredCount
-        {
-            get { return this.answeredCount; }
-            set { this.answeredCount = value; this.RaisePropertyChanged(); }
-        }
+        public int AnsweredCount { get; set; }
 
-        private int unansweredCount;
-        public int UnansweredCount
-        {
-            get { return this.unansweredCount; }
-            set { this.unansweredCount = value; this.RaisePropertyChanged(); }
-        }
+        public int UnansweredCount { get; set; }
 
-        private int errorsCount;
-        public int ErrorsCount
-        {
-            get { return this.errorsCount; }
-            set { this.errorsCount = value; this.RaisePropertyChanged(); }
-        }
+        public int ErrorsCount { get; set; }
     }
 }

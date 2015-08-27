@@ -131,18 +131,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IEnumerable<dynamic> GetCompleteScreenEntities(string interviewId)
         {
-            var result = new List<IInterviewEntityViewModel>();
+            var result = new List<dynamic>();
 
             var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
             text.StaticText = UIResources.Interview_Complete_Screen_Description;
             result.Add(text);
 
             var statistics = Load<InterviewCompletionStatisticsViewModel>();
-            statistics.Init(interviewId, null, null);
+            statistics.Init(interviewId);
             result.Add(statistics);
 
             var completionInterview = Load<CompleteInterviewViewModel>();
-            completionInterview.Init(interviewId, null, null);
+            completionInterview.Init(interviewId);
             result.Add(completionInterview);
 
             return result;

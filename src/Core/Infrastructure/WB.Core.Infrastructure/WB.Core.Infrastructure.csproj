@@ -88,7 +88,6 @@
     <Compile Include="Modularity\Module.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
     <Compile Include="Ncqrs\Config\IEnvironmentConfiguration.cs" />
-    <Compile Include="Ncqrs\Config\InstanceNotFoundInEnvironment.cs" />
     <Compile Include="Ncqrs\DateTimeBasedClock.cs" />
     <Compile Include="Ncqrs\Domain\AggregateExtensions.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRoot.cs" />
@@ -150,8 +149,6 @@
     <Compile Include="Ncqrs\Eventing\UncommittedEventStream.cs" />
     <Compile Include="Ncqrs\IClock.cs" />
     <Compile Include="Ncqrs\InternalExtensions.cs" />
-    <Compile Include="Ncqrs\LoggerExtensions.cs" />
-    <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
     <Compile Include="Ncqrs\NcqrsModule.cs" />
     <Compile Include="Ncqrs\Utils.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
