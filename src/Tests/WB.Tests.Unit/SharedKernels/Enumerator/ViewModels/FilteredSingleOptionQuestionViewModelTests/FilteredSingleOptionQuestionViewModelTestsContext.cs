@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    public class FilteredSingleOptionQuestionViewModelTestsContext
+    internal class FilteredSingleOptionQuestionViewModelTestsContext
     {
         protected static FilteredSingleOptionQuestionViewModel CreateFilteredSingleOptionQuestionViewModel(
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,

@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.BoundedContexts.Designer.CreateQuestionnaireCommandTests
 {
     [Subject(typeof (Questionnaire))]
-    public class when_creating_new_questionnaire
+    internal class when_creating_new_questionnaire
     {
         Establish context = () =>
         {

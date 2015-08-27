@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
-    public class when_toggling_answer_and_max_answers_count_reached : MultiOptionQuestionViewModelTestsContext
+    internal class when_toggling_answer_and_max_answers_count_reached : MultiOptionQuestionViewModelTestsContext
     {
         private Establish context = () =>
         {

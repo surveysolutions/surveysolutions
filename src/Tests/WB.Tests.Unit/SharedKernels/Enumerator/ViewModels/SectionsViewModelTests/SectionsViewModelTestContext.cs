@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
     [Subject(typeof(SideBarSectionsViewModel))]
-    public class SectionsViewModelTestContext
+    internal class SectionsViewModelTestContext
     {
         protected static SideBarSectionsViewModel CreateSectionsViewModel(
             IMvxMessenger messenger = null,

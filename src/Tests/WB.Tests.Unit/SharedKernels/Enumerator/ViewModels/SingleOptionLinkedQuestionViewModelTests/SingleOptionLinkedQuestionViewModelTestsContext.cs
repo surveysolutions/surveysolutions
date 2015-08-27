@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    public class SingleOptionLinkedQuestionViewModelTestsContext
+    internal class SingleOptionLinkedQuestionViewModelTestsContext
     {
         protected static QuestionnaireModel SetupQuestionnaireModelWithSingleOptionQuestionLinkedToTextQuestion(Guid questionId, Guid linkedToQuestionId)
         {

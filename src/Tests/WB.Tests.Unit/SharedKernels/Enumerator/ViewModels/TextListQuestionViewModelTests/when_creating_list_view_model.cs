@@ -8,7 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    public class when_creating_list_view_model : TextListQuestionViewModelTestContext
+    internal class when_creating_list_view_model : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {

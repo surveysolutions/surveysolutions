@@ -8,7 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    public class when_creating_filtered_single_option_view_model : FilteredSingleOptionQuestionViewModelTestsContext
+    internal class when_creating_filtered_single_option_view_model : FilteredSingleOptionQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

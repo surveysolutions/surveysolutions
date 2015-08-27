@@ -4,7 +4,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
     [TestFixture]
-    public class StringExtensionsTests
+    internal class StringExtensionsTests
     {
         [Test]
         public void WhenCalledForMultiwordString()

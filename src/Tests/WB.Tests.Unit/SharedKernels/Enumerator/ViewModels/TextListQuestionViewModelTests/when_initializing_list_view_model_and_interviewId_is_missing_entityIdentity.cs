@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    public class when_initializing_list_view_model_and_interviewId_is_missing_entityIdentity : TextListQuestionViewModelTestContext
+    internal class when_initializing_list_view_model_and_interviewId_is_missing_entityIdentity : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {

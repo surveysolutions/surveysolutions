@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizerTests
 {
-    public class when_questionnaire_is_deleted_and_all_interviews_deleted : QuestionnaireDenormalizerTestsContext
+    internal class when_questionnaire_is_deleted_and_all_interviews_deleted : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {

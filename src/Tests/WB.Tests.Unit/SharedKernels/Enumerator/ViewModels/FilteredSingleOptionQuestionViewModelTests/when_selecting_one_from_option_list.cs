@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    public class when_selecting_one_from_option_list : FilteredSingleOptionQuestionViewModelTestsContext
+    internal class when_selecting_one_from_option_list : FilteredSingleOptionQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

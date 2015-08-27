@@ -22,7 +22,7 @@ using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.Questionnaire
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class when_load_questionnaire_and_server_not_responding : DashboardViewModelTestContext
+    internal class when_load_questionnaire_and_server_not_responding : DashboardViewModelTestContext
     {
         Establish context = () =>
         {

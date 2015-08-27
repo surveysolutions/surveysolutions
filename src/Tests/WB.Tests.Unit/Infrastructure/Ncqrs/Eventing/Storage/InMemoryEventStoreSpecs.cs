@@ -13,7 +13,7 @@ using WB.Tests.Unit;
 namespace Ncqrs.Tests.Eventing.Storage
 {
     [TestFixture]
-    public class InMemoryEventStoreSpecs
+    internal class InMemoryEventStoreSpecs
     {
         [SetUp]
         public void SetUp()
@@ -21,7 +21,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class SomethingDoneEvent
+        internal class SomethingDoneEvent
         {
         }
 

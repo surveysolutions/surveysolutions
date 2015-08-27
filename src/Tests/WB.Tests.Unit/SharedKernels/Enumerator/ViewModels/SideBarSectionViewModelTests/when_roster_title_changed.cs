@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewModelTests
 {
-    public class when_roster_title_changed : SideBarSectionViewModelTestsContext
+    internal class when_roster_title_changed : SideBarSectionViewModelTestsContext
     {
         Establish context = () =>
         {

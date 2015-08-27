@@ -5,7 +5,7 @@ using WB.UI.Designer.Code.MessageHandlers;
 
 namespace WB.Tests.Unit.Applications.Designer.MessageHandlerTests
 {
-    public class MessageHandlerTestContext
+    internal class MessageHandlerTestContext
     {
         public static FakeInnerHandler CreateFakeInnerHandler()
         {
@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Applications.Designer.MessageHandlerTests
         }
     }
 
-    public class FakeInnerHandler : DelegatingHandler
+    internal class FakeInnerHandler : DelegatingHandler
     {
         public HttpResponseMessage Message { get; set; }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

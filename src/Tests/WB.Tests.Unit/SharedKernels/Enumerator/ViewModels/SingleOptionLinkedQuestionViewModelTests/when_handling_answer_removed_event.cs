@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    public class when_handling_answer_removed_event : SingleOptionLinkedQuestionViewModelTestsContext
+    internal class when_handling_answer_removed_event : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
     [TestFixture]
-    public class UserARTests
+    internal class UserARTests
     {
         private EventContext eventContext;
 

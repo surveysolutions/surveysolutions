@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     [Subject(typeof(MultiOptionQuestionViewModel))]
-    public class MultiOptionQuestionViewModelTestsContext
+    internal class MultiOptionQuestionViewModelTestsContext
     {
         protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage = null, 

@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.Extensions;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.WebClientExtensionsTests
 {
     [Subject(typeof(WebClientExtensions), "AppendAuthToken")]
-    public class when_auth_token_provided
+    internal class when_auth_token_provided
     {
         Establish context = () =>
         {

@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
 {
     [TestFixture]
-    public class PdfQuestionViewTests
+    internal class PdfQuestionViewTests
     {
         [SetUp]
         public void SetUp()

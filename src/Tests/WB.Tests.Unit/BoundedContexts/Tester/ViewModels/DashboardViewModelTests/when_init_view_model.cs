@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class when_init_view_model : DashboardViewModelTestContext
+    internal class when_init_view_model : DashboardViewModelTestContext
     {
         Establish context = () =>
         {

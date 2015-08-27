@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronozationProcessorTests
 {
-    public class SynchronozationProcessorTestContext
+    internal class SynchronozationProcessorTestContext
     {
         protected SynchronizationProcessor CreateSynchronozationProcessor(
             IDeviceChangingVerifier deviceChangingVerifier = null,

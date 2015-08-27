@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     [Subject(typeof (NavigationState))]
-    public class when_navigating_back_to_removed_roster_instance
+    internal class when_navigating_back_to_removed_roster_instance
     {
         Establish context = () =>
         {

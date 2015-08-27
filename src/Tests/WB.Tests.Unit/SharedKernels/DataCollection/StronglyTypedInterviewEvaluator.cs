@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    public class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
+    internal class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
     {
         public StronglyTypedInterviewEvaluator()
         {
@@ -304,7 +304,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
         }
 
-        public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IExpressionExecutable
+        internal class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IExpressionExecutable
         {
             public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -409,7 +409,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         //roster first level
-        public class HhMember_type : AbstractConditionalLevel<HhMember_type>, IRosterLevel<HhMember_type>, IExpressionExecutable
+        internal class HhMember_type : AbstractConditionalLevel<HhMember_type>, IRosterLevel<HhMember_type>, IExpressionExecutable
         {
             public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid,
                 IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -693,7 +693,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         //roster second level
-        public class FoodConsumption_type : AbstractConditionalLevel<FoodConsumption_type>, IRosterLevel<FoodConsumption_type>, IExpressionExecutable
+        internal class FoodConsumption_type : AbstractConditionalLevel<FoodConsumption_type>, IRosterLevel<FoodConsumption_type>, IExpressionExecutable
         {
             public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -881,7 +881,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
-        public class Education_type : AbstractConditionalLevel<Education_type>, IRosterLevel<Education_type>, IExpressionExecutable
+        internal class Education_type : AbstractConditionalLevel<Education_type>, IRosterLevel<Education_type>, IExpressionExecutable
         {
             public Education_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -981,7 +981,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
         }
 
-        public static class IdOf
+        internal static class IdOf
         {
             public static readonly Guid id = Guid.Parse("45ba5cc2-9bd7-4c76-8f13-94432405917a");
             public static readonly Guid persons_count = Guid.Parse("4139db8c-d3cc-49a7-a86f-0e1b5fd31edd");

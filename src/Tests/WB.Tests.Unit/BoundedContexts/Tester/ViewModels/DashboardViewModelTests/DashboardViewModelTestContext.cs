@@ -12,7 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class DashboardViewModelTestContext : MvxIoCSupportingTest
+    internal class DashboardViewModelTestContext : MvxIoCSupportingTest
     {
         public DashboardViewModelTestContext()
         {

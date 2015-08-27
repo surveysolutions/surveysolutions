@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
-    public class when_section_get_disable_event : SectionsViewModelTestContext
+    internal class when_section_get_disable_event : SectionsViewModelTestContext
     {
         Establish context = () =>
         {
