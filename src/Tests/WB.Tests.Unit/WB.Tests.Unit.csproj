@@ -1654,8 +1654,6 @@
     <Compile Include="Infrastructure\Ncqrs\DateTimeBasedClockSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\AggregateRootTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\EventNotHandledExceptionTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Domain\Storage\AggregateRootCreationExceptionTests.cs" />
-    <Compile Include="Infrastructure\Ncqrs\Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
     <Compile Include="Infrastructure\Ncqrs\Domain\TypeThresholdedActionBasedInternalEventHandlerSpecs.cs" />
     <Compile Include="Infrastructure\Ncqrs\EventContext.cs" />
     <Compile Include="Infrastructure\Ncqrs\Eventing\CommittedEventStreamTests.cs" />
