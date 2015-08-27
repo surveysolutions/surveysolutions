@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit
 {
-    public class AssemblyContext : IAssemblyContext
+    internal class AssemblyContext : IAssemblyContext
     {
         public void OnAssemblyStart()
         {

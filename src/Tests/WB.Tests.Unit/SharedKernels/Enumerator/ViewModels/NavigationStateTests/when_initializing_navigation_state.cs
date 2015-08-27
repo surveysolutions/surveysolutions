@@ -4,7 +4,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
-    public class when_initializing_navigation_state
+    internal class when_initializing_navigation_state
     {
         Establish context = () =>
         {

@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
-    public class when_roster_instances_added : SectionsViewModelTestContext
+    internal class when_roster_instances_added : SectionsViewModelTestContext
     {
         Establish context = () =>
         {

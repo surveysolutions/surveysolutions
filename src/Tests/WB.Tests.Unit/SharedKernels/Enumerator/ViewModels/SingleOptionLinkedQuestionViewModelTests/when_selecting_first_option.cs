@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    public class when_selecting_first_option : SingleOptionLinkedQuestionViewModelTestsContext
+    internal class when_selecting_first_option : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

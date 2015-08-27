@@ -111,7 +111,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
     }
 
-    public static class ShouldExtensions
+    internal static class ShouldExtensions
     {
         public static void ShouldQuestionHasOneNotEmptyAnswer(this ExportedQuestion[] questions, Guid questionId)
         {

@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    public class TextListQuestionViewModelTestContext : MvxIoCSupportingTest
+    internal class TextListQuestionViewModelTestContext : MvxIoCSupportingTest
     {
         public TextListQuestionViewModelTestContext()
         {

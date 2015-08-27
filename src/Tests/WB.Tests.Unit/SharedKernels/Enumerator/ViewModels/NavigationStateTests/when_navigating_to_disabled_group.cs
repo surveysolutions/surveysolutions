@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
-    public class when_navigating_to_disabled_group
+    internal class when_navigating_to_disabled_group
     {
         Establish context = () =>
         {

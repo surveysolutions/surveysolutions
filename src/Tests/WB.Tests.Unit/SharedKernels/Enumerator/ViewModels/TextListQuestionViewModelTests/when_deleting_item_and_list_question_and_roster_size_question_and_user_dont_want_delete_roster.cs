@@ -22,7 +22,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    public class when_deleting_item_and_list_question_and_roster_size_question_and_user_dont_want_delete_roster : TextListQuestionViewModelTestContext
+    internal class when_deleting_item_and_list_question_and_roster_size_question_and_user_dont_want_delete_roster : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {

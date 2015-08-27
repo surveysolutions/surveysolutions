@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    public class when_answering_roster_size_numeric_question_with_big_value_and_question_was_answered : IntegerQuestionViewModelTestContext
+    internal class when_answering_roster_size_numeric_question_with_big_value_and_question_was_answered : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>
         {

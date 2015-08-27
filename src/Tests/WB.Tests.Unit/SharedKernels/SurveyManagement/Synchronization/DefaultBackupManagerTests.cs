@@ -10,7 +10,7 @@ using WB.Core.Synchronization.Implementation.ImportManager;
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Synchronization
 {
     [TestFixture]
-    public class DefaultBackupManagerTests
+    internal class DefaultBackupManagerTests
     {
         [SetUp]
         public void SetUp()

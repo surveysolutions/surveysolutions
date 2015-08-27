@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    public class when_initializing : SingleOptionLinkedQuestionViewModelTestsContext
+    internal class when_initializing : SingleOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {

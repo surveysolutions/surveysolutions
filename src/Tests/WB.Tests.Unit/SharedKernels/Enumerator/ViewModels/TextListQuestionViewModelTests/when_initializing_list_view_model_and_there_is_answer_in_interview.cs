@@ -19,7 +19,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    public class when_initializing_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
+    internal class when_initializing_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
         Establish context = () =>
         {

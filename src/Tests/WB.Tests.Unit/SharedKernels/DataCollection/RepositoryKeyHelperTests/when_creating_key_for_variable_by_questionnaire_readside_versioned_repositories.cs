@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.RepositoryKeyHelperTests
 {
-    public class when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories
+    internal class when_creating_key_for_variable_by_questionnaire_readside_versioned_repositories
     {
         Establish context = () => { };
 

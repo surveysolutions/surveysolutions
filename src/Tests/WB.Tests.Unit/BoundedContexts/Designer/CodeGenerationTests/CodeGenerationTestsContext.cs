@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 {
-    public class CodeGenerationTestsContext
+    internal class CodeGenerationTestsContext
     {
         public static QuestionnaireDocument CreateQuestionnaireForGeneration(Guid? questionnaireId = null)
         {

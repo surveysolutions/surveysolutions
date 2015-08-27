@@ -4,7 +4,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    public class when_creating_cascading_single_option_view_model : CascadingSingleOptionQuestionViewModelTestContext
+    internal class when_creating_cascading_single_option_view_model : CascadingSingleOptionQuestionViewModelTestContext
     {
         Establish context = () =>
         {

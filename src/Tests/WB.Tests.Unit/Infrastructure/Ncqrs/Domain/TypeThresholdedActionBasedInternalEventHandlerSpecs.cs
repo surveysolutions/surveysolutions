@@ -7,13 +7,13 @@ using FluentAssertions;
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class TypeThresholdedActionBasedInternalEventHandlerSpecs
+    internal class TypeThresholdedActionBasedInternalEventHandlerSpecs
     {
-        public class FooEvent
+        internal class FooEvent
         {
         }
 
-        public class BarEvent : FooEvent
+        internal class BarEvent : FooEvent
         {
         }
         

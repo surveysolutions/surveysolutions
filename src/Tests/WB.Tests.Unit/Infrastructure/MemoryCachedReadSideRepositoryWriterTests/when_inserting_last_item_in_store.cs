@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideRepositoryWriterTests
 {
     [Subject(typeof(MemoryCachedReadSideRepositoryWriter<>))]
-    public class when_inserting_last_item_in_store
+    internal class when_inserting_last_item_in_store
     {
         Establish context = () =>
         {

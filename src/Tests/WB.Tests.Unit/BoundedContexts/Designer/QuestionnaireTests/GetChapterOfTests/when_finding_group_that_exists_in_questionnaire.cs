@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.GetChapterOfTests
 {
     [Subject(typeof(Questionnaire))]
-    public class when_finding_group_that_exists_in_questionnaire
+    internal class when_finding_group_that_exists_in_questionnaire
     {
         Establish context = () =>
         {

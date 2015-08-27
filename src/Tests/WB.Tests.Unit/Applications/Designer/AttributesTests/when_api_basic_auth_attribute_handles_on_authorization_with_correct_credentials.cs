@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.AttributesTests
 {
-    public class when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials : AttributesTestContext
+    internal class when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials : AttributesTestContext
     {
         Establish context = () =>
         {

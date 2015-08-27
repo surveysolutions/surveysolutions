@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewModelTests
 {
-    public class when_answering_numeric_question_with_negative_value : IntegerQuestionViewModelTestContext
+    internal class when_answering_numeric_question_with_negative_value : IntegerQuestionViewModelTestContext
     {
         Establish context = () =>
         {

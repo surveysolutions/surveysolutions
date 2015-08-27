@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServiceTests
 {
-    public class when_invalid_credentials_provided
+    internal class when_invalid_credentials_provided
     {
         Establish context = () =>
         {

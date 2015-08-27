@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 
 namespace WB.Tests.Unit
 {
-    public static class QuestionnaireExtensions
+    internal static class QuestionnaireExtensions
     {
         public static void AddTextQuestion(
             this Questionnaire questionnaire,
