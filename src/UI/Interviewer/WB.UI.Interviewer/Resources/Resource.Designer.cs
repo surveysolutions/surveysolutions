@@ -43,10 +43,6 @@ namespace WB.UI.Interviewer
 			global::MWBarcodeScanner.Resource.String.library_name = global::WB.UI.Interviewer.Resource.String.library_name;
 			global::PCLStorage.Resource.String.ApplicationName = global::WB.UI.Interviewer.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::WB.UI.Interviewer.Resource.String.Hello;
-			global::WB.Core.GenericSubdomains.Android.Resource.String.ApplicationName = global::WB.UI.Interviewer.Resource.String.ApplicationName;
-			global::WB.Core.GenericSubdomains.Android.Resource.String.Hello = global::WB.UI.Interviewer.Resource.String.Hello;
-			global::WB.Core.Infrastructure.Files.Resource.String.ApplicationName = global::WB.UI.Interviewer.Resource.String.ApplicationName;
-			global::WB.Core.Infrastructure.Files.Resource.String.Hello = global::WB.UI.Interviewer.Resource.String.Hello;
 			global::WB.UI.Shared.Enumerator.Resource.Animation.abc_fade_in = global::WB.UI.Interviewer.Resource.Animation.abc_fade_in;
 			global::WB.UI.Shared.Enumerator.Resource.Animation.abc_fade_out = global::WB.UI.Interviewer.Resource.Animation.abc_fade_out;
 			global::WB.UI.Shared.Enumerator.Resource.Animation.abc_grow_fade_in_from_bottom = global::WB.UI.Interviewer.Resource.Animation.abc_grow_fade_in_from_bottom;

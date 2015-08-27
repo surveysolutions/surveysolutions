@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             }
             var archiveUtilsMock = new Mock<IArchiveUtils>();
             if (zipCallback != null)
-                archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
+                archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
                     .Callback<IEnumerable<string>, IEnumerable<string>, string>((f, d, n) => zipCallback(f, d));
 
             return new FilebasedExportedDataAccessor(fileSystemAccessor, "",
