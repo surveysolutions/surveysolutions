@@ -1,8 +1,7 @@
 using Java.Lang;
-
 using Exception = System.Exception;
 
-namespace WB.Core.GenericSubdomains.Android.Logging
+namespace WB.UI.Interviewer.Infrastructure.Logging
 {
     internal static class ExceptionExtension
     {
