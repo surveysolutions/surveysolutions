@@ -18,7 +18,10 @@
         self.sendCommandAfterFilterAndConfirm(
             "AssignInterviewerCommand",
             function (item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId }},
-            function (item) { return item.CanBeReassigned(); },
+            function(item) {
+                return item.CanBeReassigned()
+                    && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
+            },
             "#confirm-assign-template",
             "#confirm-continue-message-template",
             function() {
