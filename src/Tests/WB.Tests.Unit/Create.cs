@@ -1713,12 +1713,6 @@ namespace WB.Tests.Unit
             return new InterviewExportedDataRecord();
         }
 
-        public static InterviewActionExportView InterviewActionExportView(Guid? interviewId = null)
-        {
-            return new InterviewActionExportView((interviewId ?? Guid.NewGuid()).FormatGuid(),
-                InterviewExportedAction.SupervisorAssigned, "test", DateTime.Now, "test");
-        }
-
         public static InterviewDataExportView InterviewDataExportView(
             Guid? interviewId = null, 
             Guid? questionnaireId = null, 

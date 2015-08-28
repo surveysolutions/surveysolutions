@@ -7,12 +7,15 @@ using StatData.Core;
 using StatData.Writers;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
@@ -215,7 +218,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 if (varValueLabels.ContainsKey(datasetVariable.VarName))
                 {
-                    var valueSet = new StatData.Core.ValueSet();
+                    var valueSet = new ValueSet();
                     foreach (var variable in varValueLabels[datasetVariable.VarName])
                     {
                         valueSet.Add(variable.Key, variable.Value);
@@ -295,48 +298,69 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId,
             long questionnaireVersion)
         {
+
             Expression<Func<InterviewStatuses, bool>> queryActions =
-                (i) =>
-                    i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
-                    i.InterviewCommentedStatuses.Any(a => a.Status != InterviewExportedAction.Deleted);
+                interviewWithStatusHistory =>
+                    interviewWithStatusHistory.QuestionnaireId == questionnaireId && interviewWithStatusHistory.QuestionnaireVersion == questionnaireVersion;
 
             if (action.HasValue)
             {
                 queryActions =
-                    (i) =>
-                        i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
-                        i.InterviewCommentedStatuses.Any(a => a.Status == action.Value);
+                    interviewWithStatusHistory =>
+                        interviewWithStatusHistory.QuestionnaireId == questionnaireId && 
+                        interviewWithStatusHistory.QuestionnaireVersion == questionnaireVersion &&
+                        interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status).Any(s => s == action.Value);
             }
 
-            IEnumerable<InterviewStatuses> actions =
+            var interviews =
                 interviewActionsDataStorage.Query(
                     _ =>
                         _.Where(queryActions)
+                            .SelectMany(
+                                interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
+                                (interview, status) => new {interview.InterviewId, StatusHistory = status})
                             .Select(
                                 i =>
-                                    new InterviewStatuses()
+                                    new
                                     {
-                                        InterviewId = i.InterviewId,
-                                        InterviewCommentedStatuses = i.InterviewCommentedStatuses
+                                        i.InterviewId,
+                                        i.StatusHistory.Status,
+                                        i.StatusHistory.StatusChangeOriginatorName,
+                                        i.StatusHistory.StatusChangeOriginatorRole,
+                                        i.StatusHistory.Timestamp
+
                                     }).ToList());
 
             var result = new List<string[]>();
 
-            foreach (var interviewHistory in actions)
+            foreach (var interview in interviews)
             {
-                foreach (var interviewAction in interviewHistory.InterviewCommentedStatuses)
-                {
-                    var resultRow = new List<string>();
-                    resultRow.Add(interviewHistory.InterviewId);
-                    resultRow.Add(interviewAction.Status.ToString());
-                    resultRow.Add(interviewAction.StatusChangeOriginatorName);
-                    resultRow.Add(/*interviewAction.Role*/"");
-                    resultRow.Add(interviewAction.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-                    resultRow.Add(interviewAction.Timestamp.ToString("T", CultureInfo.InvariantCulture));
-                    result.Add(resultRow.ToArray());
-                }
+                var resultRow = new List<string>();
+                resultRow.Add(interview.InterviewId);
+                resultRow.Add(interview.Status.ToString());
+                resultRow.Add(interview.StatusChangeOriginatorName);
+                resultRow.Add(GetUserRole(interview.StatusChangeOriginatorRole));
+                resultRow.Add(interview.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+                resultRow.Add(interview.Timestamp.ToString("T", CultureInfo.InvariantCulture));
+                result.Add(resultRow.ToArray());
             }
             return result;
+        }
+
+        private string GetUserRole(UserRoles userRole)
+        {
+            switch (userRole)
+            {
+                case UserRoles.Operator:
+                    return FileBasedDataExportRepositoryWriterMessages.Interviewer;
+                case UserRoles.Supervisor:
+                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
+                case UserRoles.Headquarter:
+                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
+                case UserRoles.Administrator:
+                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
+            }
+            return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }
 
         void ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath,
