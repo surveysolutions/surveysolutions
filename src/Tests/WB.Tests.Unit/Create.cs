@@ -1347,6 +1347,7 @@ namespace WB.Tests.Unit
                 eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
                 eventSequence,
                 new DateTime(2014, 10, 22),
+                0,
                 payload ?? "some payload");
         }
 
