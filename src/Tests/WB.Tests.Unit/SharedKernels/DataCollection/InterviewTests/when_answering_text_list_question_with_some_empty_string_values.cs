@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     }));
 
         private It should_raise_InterviewException = () =>
-            exception.ShouldBeOfType<InterviewException>();
+            exception.ShouldBeOfExactType<InterviewException>();
 
         private It should_throw_exception_with_message_containting__string_values__ = () =>
             exception.Message.ToLower().ShouldContain("string values");

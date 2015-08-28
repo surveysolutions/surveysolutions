@@ -33,34 +33,13 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public Guid Id { get;  set; }
 
-        public decimal[] QuestionRosterVector {
-            get
-            {
-                if (this.questionRosterVector == null)
-                {
-                    this.questionRosterVector = this.RestoreFromRosterVectorInOldIntFormat();
-                }
-                return this.questionRosterVector;
-            }
-            set { this.questionRosterVector = value; }
-        }
-
-        private decimal[] questionRosterVector;
-        
-        [Obsolete("please use QuestionRosterVector instead")]
-        public int[] RosterVector { get; set; }
+        public decimal[] QuestionRosterVector { get; set; }
 
         public object Answer { get;  set; }
         public string Comments { get;  set; }
 
         public CommentSynchronizationDto[] AllComments { get; set; }
 
-        private decimal[] RestoreFromRosterVectorInOldIntFormat()
-        {
-            if (this.RosterVector == null)
-                return new decimal[0];
-            return this.RosterVector.Select(Convert.ToDecimal).ToArray();
-        }
         public bool IsEmpty()
         {
             return this.Answer == null

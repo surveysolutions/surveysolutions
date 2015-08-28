@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
             () => plainQuestionnaireRepositoryMock.Verify(x => x.DeleteQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Never);
 
         It should_throw_ArgumentException = () =>
-            exception.ShouldBeOfType<ArgumentException>();
+            exception.ShouldBeOfExactType<ArgumentException>();
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static QuestionnaireSyncPackageDto syncItem;

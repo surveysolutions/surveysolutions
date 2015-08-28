@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewDeleteQuestionCommand = () =>
-            result.ShouldBeOfType<DeleteQuestionCommand>();
+            result.ShouldBeOfExactType<DeleteQuestionCommand>();
 
         It should_return_same_questionnaire_id_in_NewDeleteQuestionCommand = () =>
             ((DeleteQuestionCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));

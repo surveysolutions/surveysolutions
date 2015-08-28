@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
                     Times.Never);
 
         It should_throw_ArgumentException = () =>
-            exception.ShouldBeOfType<ArgumentException>();
+            exception.ShouldBeOfExactType<ArgumentException>();
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static QuestionnaireSyncPackageDto syncItem;

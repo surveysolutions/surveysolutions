@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
                     Times.Never);
 
         It should_throw_ArgumentException = () =>
-            exception.ShouldBeOfType<ArgumentException>();
+            exception.ShouldBeOfExactType<ArgumentException>();
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long version = 3;

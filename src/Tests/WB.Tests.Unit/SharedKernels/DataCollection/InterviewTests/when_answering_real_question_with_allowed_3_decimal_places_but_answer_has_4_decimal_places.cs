@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerNumericRealQuestion(userId, realQuestionId, new decimal[] { }, DateTime.Now, (decimal)0.1234));
 
         It should_throw_InterviewException = () =>
-            expectedException.ShouldBeOfType(typeof (InterviewException));
+            expectedException.ShouldBeOfExactType(typeof (InterviewException));
 
         private static Exception expectedException;
         private static Guid realQuestionId;
