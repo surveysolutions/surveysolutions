@@ -5,7 +5,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class SurveysAndStatusesReportRequest
     {
-        public PagerData Pager { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
 
         public string ResponsibleName { get; set; }

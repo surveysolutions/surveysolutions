@@ -205,7 +205,6 @@
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
-    <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
@@ -290,15 +289,11 @@
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
-    <Compile Include="Models\DocumentRequestModel.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
-    <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
-    <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
@@ -316,16 +311,13 @@
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
     <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
-    <Compile Include="Models\SummaryRequestModel.cs" />
     <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
-    <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\FieldsAndValidations.Designer.cs">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>

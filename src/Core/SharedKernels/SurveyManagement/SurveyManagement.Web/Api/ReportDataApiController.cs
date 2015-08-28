@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -85,27 +84,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var input = new TeamsAndStatusesInputModel
             {
                 ViewerId = this.GlobalInfo.GetCurrentUser().Id,
+                Orders = data.SortOrder,
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                TemplateId = data.TemplateId,
+                TemplateVersion = data.TemplateVersion
             };
 
-
-            if (data != null)
-            {
-                input.Orders = data.SortOrder;
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
-
-                if (data.Request != null)
-                {
-                    input.TemplateId = data.Request.TemplateId;
-                    input.TemplateVersion = data.Request.TemplateVersion;
-                }
-            }
-
-            var result = this.supervisorTeamsAndStatusesReport.Load(input);
-            return result;
+            return this.supervisorTeamsAndStatusesReport.Load(input);
         }
 
         [HttpPost]
@@ -139,197 +125,136 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.questionInforFactory.Load(input);
         }
 
-        public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel input)
+        public QuantityByResponsibleReportView QuantityByInterviewers(QuantityByInterviewersReportModel data)
         {
-            if (input.Pager != null)
-            {
-                input.Request.Page = input.Pager.Page;
-                input.Request.PageSize = input.Pager.PageSize;
-            }
-            if (input.Request.SupervisorId == Guid.Empty)
-            {
-                input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
-            }
 
-            input.Request.InterviewStatuses =
-                GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(input.Request.ReportType);
+            var input = new QuantityByInterviewersReportInputModel
+            {
+               SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
+               InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
+               Page = data.PageIndex,
+               PageSize = data.PageSize,
+               QuestionnaireVersion = data.QuestionnaireVersion,
+               QuestionnaireId = data.QuestionnaireId,
+               ColumnCount = data.ColumnCount,
+               From = data.From,
+               Orders = data.SortOrder ?? Enumerable.Empty<OrderRequestItem>(),
+               Period = data.Period,
+               ReportType = data.ReportType
+            }; 
 
-            return this.quantityByInterviewersReport.Load(input.Request);
+            return this.quantityByInterviewersReport.Load(input);
         }
 
-        public QuantityByResponsibleReportView QuantityBySupervisors(QuantityBySupervisorsReportModel input)
+        public QuantityByResponsibleReportView QuantityBySupervisors(QuantityBySupervisorsReportModel data)
         {
-            if (input.Pager != null)
+            var input = new QuantityBySupervisorsReportInputModel
             {
-                input.Request.Page = input.Pager.Page;
-                input.Request.PageSize = input.Pager.PageSize;
-            }
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(data.ReportType),
+                Period = data.Period,
+                ReportType = data.ReportType,
+                QuestionnaireVersion = data.QuestionnaireVersion,
+                QuestionnaireId = data.QuestionnaireId,
+                ColumnCount = data.ColumnCount,
+                From = data.From,
+                Orders = data.SortOrder
+            };
 
-            input.Request.InterviewStatuses =
-                GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(input.Request.ReportType);
-
-            return this.quantityBySupervisorsReport.Load(input.Request);
+            return this.quantityBySupervisorsReport.Load(input);
         }
 
-        public SpeedByResponsibleReportView SpeedByInterviewers(SpeedByInterviewersReportModel input)
+        public SpeedByResponsibleReportView SpeedByInterviewers(SpeedByInterviewersReportModel data)
         {
-            if (input.Pager != null)
+            var input = new SpeedByInterviewersReportInputModel
             {
-                input.Request.Page = input.Pager.Page;
-                input.Request.PageSize = input.Pager.PageSize;
-            }
-            if (input.Request.SupervisorId == Guid.Empty)
-            {
-                input.Request.SupervisorId = this.GlobalInfo.GetCurrentUser().Id;
-            }
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                SupervisorId = data.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id,
+                InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
+                QuestionnaireVersion = data.QuestionnaireVersion,
+                QuestionnaireId = data.QuestionnaireId,
+                ColumnCount = data.ColumnCount,
+                From = data.From,
+                ReportType = data.ReportType,
+                Period = data.Period,
+                Orders = data.SortOrder
+            };
 
-            input.Request.InterviewStatuses =
-             GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(input.Request.ReportType);
-
-            return this.speedByInterviewersReport.Load(input.Request);
-        }
-
-        private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(
-            PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedBySupervisor };
-                case PeriodiceReportType.NumberOfCompletedInterviews:
-                    return new[] { InterviewExportedAction.Completed };
-                case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
-                case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter };
-            }
-            return new InterviewExportedAction[0];
-        }
-
-        private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(
-           PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.AverageInterviewDuration:
-                    return new[] { InterviewExportedAction.Completed };
-                case PeriodiceReportType.AverageSupervisorProcessingTime:
-                    return new[] { InterviewExportedAction.ApprovedBySupervisor, InterviewExportedAction.RejectedBySupervisor };
-                case PeriodiceReportType.AverageHQProcessingTime:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
-            }
-            return new InterviewExportedAction[0];
-        }
-
-        private InterviewExportedAction[] GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(
-           PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return new[] { InterviewExportedAction.InterviewerAssigned };
-                case PeriodiceReportType.AverageCaseAssignmentDuration:
-                    return new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
-            }
-            return new InterviewExportedAction[0];
-        }
-
-        private InterviewExportedAction[] GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(
-        PeriodiceReportType reportType)
-        {
-            switch (reportType)
-            {
-                case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter };
-                case PeriodiceReportType.AverageCaseAssignmentDuration:
-                    return new[] { InterviewExportedAction.Completed };
-            }
-            return new InterviewExportedAction[0];
+            return this.speedByInterviewersReport.Load(input);
         }
 
         public SpeedByResponsibleReportView SpeedBetweenStatusesBySupervisors(SpeedBySupervisorsReportModel input)
         {
-            var inputParameters = new SpeedBetweenStatusesBySupervisorsReportInputModel()
+            var inputParameters = new SpeedBetweenStatusesBySupervisorsReportInputModel
             {
-                ColumnCount = input.Request.ColumnCount,
-                From = input.Request.From,
-                Order = input.Request.Order,
-                Orders = input.Request.Orders,
-                Period = input.Request.Period,
-                QuestionnaireId = input.Request.QuestionnaireId,
-                QuestionnaireVersion = input.Request.QuestionnaireVersion
+                Page = input.PageIndex,
+                PageSize = input.PageSize,
+                ColumnCount = input.ColumnCount,
+                From = input.From,
+                Orders = input.SortOrder,
+                Period = input.Period,
+                QuestionnaireId = input.QuestionnaireId,
+                QuestionnaireVersion = input.QuestionnaireVersion,
+                BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
             };
-
-            if (input.Pager != null)
-            {
-                inputParameters.Page = input.Pager.Page;
-                inputParameters.PageSize = input.Pager.PageSize;
-            }
-
-            inputParameters.BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.Request.ReportType);
-            inputParameters.EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.Request.ReportType);
 
             return this.speedBetweenStatusesBySupervisorsReport.Load(inputParameters);
         }
 
         public SpeedByResponsibleReportView SpeedBetweenStatusesByInterviewers(SpeedByInterviewersReportModel input)
         {
-            var inputParameters = new SpeedBetweenStatusesByInterviewersReportInputModel()
+            var inputParameters = new SpeedBetweenStatusesByInterviewersReportInputModel
             {
-                ColumnCount = input.Request.ColumnCount,
-                From = input.Request.From,
-                Order = input.Request.Order,
-                Orders = input.Request.Orders,
-                Period = input.Request.Period,
-                QuestionnaireId = input.Request.QuestionnaireId,
-                QuestionnaireVersion = input.Request.QuestionnaireVersion
+                Page = input.PageIndex,
+                PageSize = input.PageSize,
+                ColumnCount = input.ColumnCount,
+                From = input.From,
+                Orders = input.SortOrder,
+                Period = input.Period,
+                QuestionnaireId = input.QuestionnaireId,
+                QuestionnaireVersion = input.QuestionnaireVersion,
+                BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
             };
-
-            if (input.Pager != null)
-            {
-                inputParameters.Page = input.Pager.Page;
-                inputParameters.PageSize = input.Pager.PageSize;
-            }
-
-            inputParameters.BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.Request.ReportType);
-            inputParameters.EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.Request.ReportType);
 
             return this.speedBetweenStatusesByInterviewersReport.Load(inputParameters);
         }
 
-        public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel input)
+        public SpeedByResponsibleReportView SpeedBySupervisors(SpeedBySupervisorsReportModel data)
         {
-            if (input.Pager != null)
+            var input = new SpeedBySupervisorsReportInputModel
             {
-                input.Request.Page = input.Pager.Page;
-                input.Request.PageSize = input.Pager.PageSize;
-            }
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                InterviewStatuses = GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(data.ReportType),
+                ColumnCount = data.ColumnCount,
+                From = data.From,
+                QuestionnaireVersion = data.QuestionnaireVersion,
+                QuestionnaireId = data.QuestionnaireId,
+                ReportType = data.ReportType,
+                Period = data.Period,
+                Orders = data.SortOrder
+            };
 
-            input.Request.InterviewStatuses =
-                GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(input.Request.ReportType);
-
-            return this.speedBySupervisorsReport.Load(input.Request);
+            return this.speedBySupervisorsReport.Load(input);
         }
 
         [HttpPost]
         public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveysAndStatusesReportRequest request)
         {
-            var input = new SurveysAndStatusesReportInputModel { TeamLeadName = this.GlobalInfo.GetCurrentUser().Name };
+            var teamLeadName = this.GlobalInfo.GetCurrentUser().Name;
 
-            if (request != null)
+            var input = new SurveysAndStatusesReportInputModel
             {
-                input.Orders = request.SortOrder;
-                if (request.Pager != null)
-                {
-                    input.Page = request.Pager.Page;
-                    input.PageSize = request.Pager.PageSize;
-                }
-
-                if (request.ResponsibleName != input.TeamLeadName)
-                {
-                    input.ResponsibleName = request.ResponsibleName;
-                }
-            }
+                TeamLeadName = teamLeadName,
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.SortOrder,
+                ResponsibleName = request.ResponsibleName == teamLeadName ? null : request.ResponsibleName 
+            };
 
             return this.surveysAndStatusesReport.Load(input);
         }
@@ -337,23 +262,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public TeamsAndStatusesReportView HeadquarterSupervisorsAndStatusesReport(SummaryListViewModel data)
         {
-            var input = new TeamsAndStatusesInputModel();
-
-            if (data != null)
+            var input = new TeamsAndStatusesInputModel
             {
-                input.Orders = data.SortOrder;
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
-
-                if (data.Request != null)
-                {
-                    input.TemplateId = data.Request.TemplateId;
-                    input.TemplateVersion = data.Request.TemplateVersion;
-                }
-            }
+                Orders = data.SortOrder,
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                TemplateId = data.TemplateId,
+                TemplateVersion = data.TemplateVersion
+            };
 
             return this.headquartersTeamsAndStatusesReport.Load(input);
         }
@@ -361,19 +277,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public SurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveysAndStatusesReportRequest data)
         {
-            var input = new SurveysAndStatusesReportInputModel();
-
-            if (data != null)
+            var input = new SurveysAndStatusesReportInputModel
             {
-                input.Orders = data.SortOrder;
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
-
-                input.TeamLeadName = data.ResponsibleName;
-            }
+                Orders = data.SortOrder,
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                TeamLeadName = data.ResponsibleName
+            };
 
             return this.surveysAndStatusesReport.Load(input);
         }
@@ -391,6 +301,60 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             };
 
             return this.chartStatisticsViewFactory.Load(input);
+        }
+
+        private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)
+        {
+            switch (reportType)
+            {
+                case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
+                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedBySupervisor };
+                case PeriodiceReportType.NumberOfCompletedInterviews:
+                    return new[] { InterviewExportedAction.Completed };
+                case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
+                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
+                case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
+                    return new[] { InterviewExportedAction.ApprovedByHeadquarter };
+            }
+            return new InterviewExportedAction[0];
+        }
+
+        private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForSpeedReports(PeriodiceReportType reportType)
+        {
+            switch (reportType)
+            {
+                case PeriodiceReportType.AverageInterviewDuration:
+                    return new[] { InterviewExportedAction.Completed };
+                case PeriodiceReportType.AverageSupervisorProcessingTime:
+                    return new[] { InterviewExportedAction.ApprovedBySupervisor, InterviewExportedAction.RejectedBySupervisor };
+                case PeriodiceReportType.AverageHQProcessingTime:
+                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedByHeadquarter };
+            }
+            return new InterviewExportedAction[0];
+        }
+
+        private InterviewExportedAction[] GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(PeriodiceReportType reportType)
+        {
+            switch (reportType)
+            {
+                case PeriodiceReportType.AverageOverallCaseProcessingTime:
+                    return new[] { InterviewExportedAction.InterviewerAssigned };
+                case PeriodiceReportType.AverageCaseAssignmentDuration:
+                    return new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
+            }
+            return new InterviewExportedAction[0];
+        }
+
+        private InterviewExportedAction[] GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(PeriodiceReportType reportType)
+        {
+            switch (reportType)
+            {
+                case PeriodiceReportType.AverageOverallCaseProcessingTime:
+                    return new[] { InterviewExportedAction.ApprovedByHeadquarter };
+                case PeriodiceReportType.AverageCaseAssignmentDuration:
+                    return new[] { InterviewExportedAction.Completed };
+            }
+            return new InterviewExportedAction[0];
         }
     }
 }
