@@ -52,7 +52,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
         private static IPublishableEvent CreateADomainEvent()
         {
-            return new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), Guid.NewGuid(), 0, DateTime.UtcNow, new ADomainEvent());
+            return new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), Guid.NewGuid(), 0, DateTime.UtcNow, 0, new ADomainEvent());
         }
 
         [Test]

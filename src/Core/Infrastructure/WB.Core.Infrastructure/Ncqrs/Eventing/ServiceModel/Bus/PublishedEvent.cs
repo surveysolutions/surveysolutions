@@ -51,6 +51,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         private readonly Guid _eventSourceId;
         private readonly Guid _commitId;
         private readonly string _origin;
+        private readonly long globalSequence;
 
         /// <summary>
         /// Id of the commit this event belongs to (usually corresponds to command id).
@@ -112,6 +113,11 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             get { return _eventSequence; }
         }
 
+        public long GlobalSequence
+        {
+            get { return globalSequence; }
+        }
+
         protected PublishedEvent(IPublishableEvent evnt)            
         {            
             _payload = evnt.Payload;           
@@ -121,6 +127,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             _eventTimeStamp = evnt.EventTimeStamp;
             _commitId = evnt.CommitId;
             _origin = evnt.Origin;
+            globalSequence = evnt.GlobalSequence;
         }
     }
 }

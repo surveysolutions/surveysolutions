@@ -7,8 +7,6 @@ namespace Ncqrs.Eventing
     /// </summary>
     public abstract class Event : IEvent
     {
-        private static Version DefaultVersion = new Version(1,0);
-
         /// <summary>
         /// Gets the unique identifier for this event.
         /// </summary>
@@ -22,31 +20,18 @@ namespace Ncqrs.Eventing
         public DateTime EventTimeStamp { get; internal protected set; }
 
         /// <summary>
-        /// Gets the event version.
-        /// </summary>
-        /// <value>The event version.</value>
-        public Version EventVersion { get; internal protected set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Event"/> class.
         /// </summary>
         public Event()
         {
             EventIdentifier = Guid.NewGuid();
             EventTimeStamp = DateTime.UtcNow;
-            EventVersion = DefaultVersion;
         }
 
         public Event(Guid eventIdentifier, DateTime eventTimeStamp)
-            : this(eventIdentifier, eventTimeStamp, DefaultVersion)
-        {
-        }
-
-        public Event(Guid eventIdentifier, DateTime eventTimeStamp, Version eventVersion)
         {
             EventIdentifier = eventIdentifier;
             EventTimeStamp = eventTimeStamp;
-            EventVersion = eventVersion;
         }
     }
 }

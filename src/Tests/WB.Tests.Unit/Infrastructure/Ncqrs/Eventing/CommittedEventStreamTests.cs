@@ -47,7 +47,7 @@ namespace Ncqrs.Tests.Eventing
             var sourceId = Guid.NewGuid();
             var stream = new[]
             {
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 1, DateTime.Now, new object())
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 1, DateTime.Now, 0, new object())
             };
 
             var sut = new CommittedEventStream(sourceId, stream);
@@ -73,7 +73,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_constructing_it_with_events_but_an_element_is_null_it_should_throw_ArgumentNullException()
         {
             var sourceId = Guid.NewGuid();
-            var eventsWithAnNullElement = new[] { new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 0, DateTime.Now, new object()), null };
+            var eventsWithAnNullElement = new[] { new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 0, DateTime.Now, 0, new object()), null };
 
             Action act = () => new CommittedEventStream(sourceId, eventsWithAnNullElement);
 
@@ -89,7 +89,7 @@ namespace Ncqrs.Tests.Eventing
 
             var lastEvent = committedEvents.Last();
             const int incorrectSequence = int.MaxValue;
-            var incorrectEvent = new CommittedEvent(lastEvent.CommitId, null, lastEvent.EventIdentifier, lastEvent.EventSourceId, incorrectSequence, lastEvent.EventTimeStamp, lastEvent.Payload);
+            var incorrectEvent = new CommittedEvent(lastEvent.CommitId, null, lastEvent.EventIdentifier, lastEvent.EventSourceId, incorrectSequence, lastEvent.EventTimeStamp, 0, lastEvent.Payload);
             committedEvents[committedEvents.Count - 1] = incorrectEvent;
 
             Action act = () => new CommittedEventStream(sourceId, committedEvents);
@@ -106,7 +106,7 @@ namespace Ncqrs.Tests.Eventing
 
             var lastEvent = committedEvents.Last();
             var incorrectSourceId = Guid.NewGuid();
-            var incorrectEvent = new CommittedEvent(lastEvent.CommitId, null, lastEvent.EventIdentifier, incorrectSourceId, lastEvent.EventSequence, lastEvent.EventTimeStamp, lastEvent.Payload);
+            var incorrectEvent = new CommittedEvent(lastEvent.CommitId, null, lastEvent.EventIdentifier, incorrectSourceId, lastEvent.EventSequence, lastEvent.EventTimeStamp, 0, lastEvent.Payload);
             committedEvents[committedEvents.Count - 1] = incorrectEvent;
 
             Action act = () => new CommittedEventStream(sourceId, committedEvents);
