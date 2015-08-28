@@ -42,11 +42,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return new InterviewCommentedStatus() { Status = status, InterviewerId = Guid.NewGuid() };
         }
 
-        protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")
-        {
-            return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, DateTime.Now, role);
-        }
-
         protected static IPublishedEvent<InterviewApprovedByHQ> CreateInterviewApprovedByHQPublishableEvent(Guid? interviewId=null)
         {
              var eventSourceId = interviewId ?? Guid.NewGuid();
