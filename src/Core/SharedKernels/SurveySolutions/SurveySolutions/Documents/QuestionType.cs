@@ -6,9 +6,11 @@ namespace Main.Core.Entities.SubEntities
     {
         SingleOption = 0,
 
-        [Obsolete] YesNo = 1,
+        [Obsolete("should be removed after db check")]
+        YesNo = 1,
 
-        [Obsolete] DropDownList = 2,
+        [Obsolete("should be removed after db check")]
+        DropDownList = 2,
 
         MultyOption = 3,
 
@@ -20,7 +22,8 @@ namespace Main.Core.Entities.SubEntities
 
         Text = 7,
 
-        [Obsolete] AutoPropagate = 8,
+        [Obsolete("should be removed after db check")]
+        AutoPropagate = 8,
 
         TextList = 9,
 
