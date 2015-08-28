@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionServiceAwaiter;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
 
         protected NavigationState()
         {
@@ -22,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual event GroupChanged GroupChanged;
         public virtual event BeforeGroupChanged BeforeGroupChanged;
 
+        private bool isNavigating = false;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
@@ -36,11 +38,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public NavigationState(
             ICommandService commandService, 
             IStatefulInterviewRepository interviewRepository,
-            IUserInteractionService userInteractionServiceAwaiter)
+            IUserInteractionService userInteractionServiceAwaiter, 
+            IUserInterfaceStateService userInterfaceStateService)
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;
             this.userInteractionServiceAwaiter = userInteractionServiceAwaiter;
+            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         public void Init(string interviewId, string questionnaireId)
@@ -54,13 +58,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateToAsync(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
-            await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
-            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+            await this.DoNavigatinActionAsync((() => this.NavigateTo(groupIdentity, anchoredElementIdentity)));
+        }       
+        
+        private async Task DoNavigatinActionAsync(Action action)
+        {
+            if (isNavigating)
+                return;
 
+            try
+            {
+                isNavigating = true;
+
+                await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
+                await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+
+                action.Invoke();
+            }
+            finally 
+            {
+                isNavigating = false;
+            }
+        }
+
+        private void NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity)
+        {
             if (!this.CanNavigateTo(groupIdentity))
                 return;
 
-            var navigationItem = new NavigationParams { TargetGroup = groupIdentity };
+            var navigationItem = new NavigationParams {TargetGroup = groupIdentity};
 
             while (this.navigationStack.Contains(navigationItem))
             {
@@ -86,10 +113,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
-            await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
-            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+            await this.DoNavigatinActionAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
+        }
 
-            if (navigateToIfHistoryIsEmpty == null) throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
+        private void NavigateBack(Action navigateToIfHistoryIsEmpty)
+        {
+            if (navigateToIfHistoryIsEmpty == null) 
+                throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
 
             // remove current group from stack
             if (this.navigationStack.Count != 0)
@@ -104,7 +134,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 NavigationParams previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
-                while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) || previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
+                while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) ||
+                       previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
                 {
                     if (this.navigationStack.Count == 0)
                     {
@@ -113,7 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     }
 
                     previousNavigationItem = this.navigationStack.Pop();
-                } 
+                }
 
                 this.ChangeCurrentGroupAndFireEvent(previousNavigationItem.TargetGroup, previousNavigationItem);
             }

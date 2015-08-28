@@ -64,8 +64,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IStatefulInterview interview;
         QuestionnaireModel questionnaire;
         string interviewId;
-        CancellationTokenSource loadViewModelsCancellationToken = new CancellationTokenSource();
-        readonly object loadViewModelsLockObject = new object();
 
 
         public ActiveGroupViewModel(
@@ -102,9 +100,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            loadViewModelsCancellationToken.Cancel(false);
-            loadViewModelsCancellationToken = new CancellationTokenSource();
-
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
             if (navigationParams.TargetGroup.Id == this.questionnaire.FinishGroupId)
@@ -113,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                await this.CreateRegularGroupScreen(navigationParams, @group, loadViewModelsCancellationToken.Token);
+                await this.CreateRegularGroupScreen(navigationParams, @group);
             }
         }
 
@@ -129,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
 
-        private async Task CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group, CancellationToken cancellationToken)
+        private async Task CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
         {
             if (@group is RosterModel)
             {
@@ -146,13 +141,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await Task.Run(
                 () =>
                 {
-                    lock (loadViewModelsLockObject)
-                    {
-                        this.LoadFromModel(navigationParams.TargetGroup, cancellationToken);
-                        this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
-                    }
-                },
-                cancellationToken);
+                    this.LoadFromModel(navigationParams.TargetGroup);
+                    this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
+                });
         }
 
         private void SendScrollToMessage(Identity scrollTo)
@@ -170,11 +161,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.messenger.Publish(new ScrollToAnchorMessage(this, anchorElementIndex));
         }
 
-        private void LoadFromModel(Identity groupIdentity, CancellationToken cancellationToken)
+        private void LoadFromModel(Identity groupIdentity)
         {
-            if (cancellationToken.IsCancellationRequested)
-                return;
-
             try
             {
                 userInterfaceStateService.NotifyRefreshStarted();
@@ -187,14 +175,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     navigationState: this.navigationState);
                 foreach (var x in interviewEntityViewModels)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                        return;
-
                     this.Items.Add(x);
                 }
-
-                if (cancellationToken.IsCancellationRequested)
-                    return;
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
@@ -220,30 +202,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesAdded @event)
         {
-            lock (loadViewModelsLockObject)
+            var viewModelEntities = this.interviewViewModelFactory.GetEntities(
+                interviewId: this.navigationState.InterviewId,
+                groupIdentity: this.navigationState.CurrentGroup,
+                navigationState: this.navigationState).ToList();
+
+            foreach (var addedRosterInstance in @event.Instances)
             {
-                var viewModelEntities = this.interviewViewModelFactory.GetEntities(
-                    interviewId: this.navigationState.InterviewId,
-                    groupIdentity: this.navigationState.CurrentGroup,
-                    navigationState: this.navigationState).ToList();
+                var viewModelEntity = viewModelEntities.FirstOrDefault(x => x.Identity.Equals(addedRosterInstance.GetIdentity()));
 
-                foreach (var addedRosterInstance in @event.Instances)
-                {
-                    var viewModelEntity = viewModelEntities.FirstOrDefault(x => x.Identity.Equals(addedRosterInstance.GetIdentity()));
-
-                    if (viewModelEntity != null)
-                        this.Items.Insert(viewModelEntities.IndexOf(viewModelEntity), viewModelEntity);
-                }
+                if (viewModelEntity != null)
+                    this.Items.Insert(viewModelEntities.IndexOf(viewModelEntity), viewModelEntity);
             }
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            lock (loadViewModelsLockObject)
-            {
-                var itemsToRemove = this.Items.OfType<GroupViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
-                InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
-            }
+            var itemsToRemove = this.Items.OfType<GroupViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+            InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
         }
 
         public void Handle(QuestionsEnabled @event)
