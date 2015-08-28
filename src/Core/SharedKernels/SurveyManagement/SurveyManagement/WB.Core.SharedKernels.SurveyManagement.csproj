@@ -370,10 +370,10 @@
     <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityBySupervisorsReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
-    <Compile Include="Views\Reposts\InputModels\SpeedBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesByInterviewersReportInputModel.cs" />
     <Compile Include="Views\Reposts\InputModels\SpeedBetweenStatusesBySupervisorsReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedByInterviewersReportInputModel.cs" />
+    <Compile Include="Views\Reposts\InputModels\SpeedBySupervisorsReportInputModel.cs" />
     <Compile Include="Views\Reposts\ISupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\SupervisorTeamsAndStatusesReport.cs" />
     <Compile Include="Views\Reposts\Factories\HeadquartersTeamsAndStatusesReport.cs" />
