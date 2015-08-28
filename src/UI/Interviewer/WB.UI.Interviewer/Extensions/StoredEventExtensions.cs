@@ -9,9 +9,12 @@ namespace WB.UI.Interviewer.Extensions
     {
         public static CommittedEvent ToCommitedEvent(this StoredEvent storedEvent, Guid eventSourceId)
         {
+            var eventTimeStamp = DateTime.FromBinary(storedEvent.TimeStamp);
             return new CommittedEvent(Guid.Parse(storedEvent.CommitId), storedEvent.Origin, Guid.Parse(storedEvent.EventId),
                                       eventSourceId, storedEvent.Sequence,
-                                      DateTime.FromBinary(storedEvent.TimeStamp), GetObject(storedEvent.Data));
+                                      eventTimeStamp,
+                                      eventTimeStamp.Ticks,
+                                      GetObject(storedEvent.Data));
         }
 
         public static StoredEvent ToStoredEvent(this UncommittedEvent evt)
