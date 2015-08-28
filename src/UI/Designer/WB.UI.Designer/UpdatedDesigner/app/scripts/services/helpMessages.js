@@ -11,7 +11,7 @@
                     '"(###) ###-####" - phone number, ' +
                     '"AA####" - flight number operated by American AirLines or ' +
                     '"~*-###-~###"',
-                'variableName': 'Variable names may be 1 to 32 characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.',
+                'variableName': 'Variable names and roster IDs may be from 1 to 32 characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.',
                 'titleQuestion': 'Titles of rows',
                 'variableLabel': 'A text up to 80 characters that will be attached to the exported variable',
                 'conditionExpression': 'A logical expression that activates(deactivates) the current question, roster or sub-section depending on the answers on the other questions.',
