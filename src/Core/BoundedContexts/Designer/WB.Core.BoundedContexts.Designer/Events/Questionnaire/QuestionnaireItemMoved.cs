@@ -5,7 +5,8 @@
     using Ncqrs.Eventing.Storage;
     public class QuestionnaireItemMoved : QuestionnaireActiveEvent
     {
-        [Obsolete]
+        [Obsolete("should be checked in db before removing")]
+        //survived clean up - could exist in designer db
         public Guid? AfterItemKey { get; set; }
 
         public Guid? GroupKey { get; set; }
