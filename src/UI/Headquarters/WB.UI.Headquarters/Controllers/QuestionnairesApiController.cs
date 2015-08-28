@@ -36,18 +36,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var input = new QuestionnaireBrowseInputModel
             {
-                Orders = data.SortOrder  == null ? new List<OrderRequestItem>() : data.SortOrder.ToList()
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder ?? new List<OrderRequestItem>(),
+                Filter = data.Filter
             };
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
-
-            if (data.Request != null)
-            {
-                input.Filter = data.Request.Filter;
-            }
 
             return this.questionnaireBrowseViewFactory.Load(input);
         }
