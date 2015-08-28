@@ -1,4 +1,5 @@
 using System;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -19,6 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             DateTime timestamp, 
             string comment, 
             string statusChangeOriginatorName,
+            UserRoles statusChangeOriginatorRole,
             TimeSpan? timeSpanWithPreviousStatus,
             string supervisorName,
             string interviewerName)
@@ -31,6 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             Timestamp = timestamp;
             Comment = comment;
             StatusChangeOriginatorName = statusChangeOriginatorName;
+            StatusChangeOriginatorRole = statusChangeOriginatorRole;
             TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus;
             SupervisorName = supervisorName;
             InterviewerName = interviewerName;
@@ -42,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual string InterviewerName { get; set; }
         public virtual Guid StatusChangeOriginatorId { get; set; }
         public virtual string StatusChangeOriginatorName { get; set; }
-
+        public virtual UserRoles StatusChangeOriginatorRole { get; set; }
         public virtual InterviewExportedAction Status { get; set; }
         public virtual DateTime Timestamp { get; set; }
         public virtual TimeSpan? TimeSpanWithPreviousStatus { get; set; }

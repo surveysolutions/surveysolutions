@@ -226,18 +226,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return questionsWithAnswersOnMultimediaQuestions.Select(a => a.Answers[0]).ToArray();
         }
 
-        private InterviewActionExportView CreateInterviewAction(InterviewExportedAction action, Guid interviewId,
-            Guid userId, DateTime timestamp)
-        {
-            UserDocument responsible = this.users.GetById(userId);
-
-            var userName = this.GetUserName(responsible);
-
-            return
-                new InterviewActionExportView(interviewId.FormatGuid(), action, userName, timestamp,
-                    this.GetUserRole(responsible));
-        }
-
         private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId,
             QuestionnaireExportStructure questionnaireExportStructure = null)
         {
@@ -254,33 +242,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     return null;
             }
             return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview);
-        }
-
-        private string GetUserRole(UserDocument user)
-        {
-            if (user == null || !user.Roles.Any())
-                return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
-            var firstRole = user.Roles.First();
-            switch (firstRole)
-            {
-                case UserRoles.Operator:
-                    return FileBasedDataExportRepositoryWriterMessages.Interviewer;
-                case UserRoles.Supervisor:
-                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
-                case UserRoles.Headquarter:
-                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
-                case UserRoles.Administrator:
-                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
-            }
-            return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
-        }
-
-        private string GetUserName(UserDocument responsible)
-        {
-            var userName = responsible != null
-                ? responsible.UserName
-                : FileBasedDataExportRepositoryWriterMessages.UnknownUser;
-            return userName;
         }
 
         public void EnableCache()

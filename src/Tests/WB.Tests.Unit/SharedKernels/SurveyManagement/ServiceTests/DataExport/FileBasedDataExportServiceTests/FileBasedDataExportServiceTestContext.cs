@@ -40,6 +40,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             InterviewDataExportView interviewDataExportView = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, UserDocument user = null, InterviewData interviewData=null)
         {
+            InterviewSummary interviewSummary = null;
+            if (interviewDataExportView != null)
+                interviewSummary = Create.InterviewSummary(questionnaireId: interviewDataExportView.TemplateId,
+                    questionnaireVersion: interviewDataExportView.TemplateVersion);
             var currentFileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new FileBasedDataExportRepositoryWriter(
                 dataExportWriter ?? Mock.Of<IDataExportWriter>(),
@@ -53,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                     _ => _.GetById(It.IsAny<string>()) == new QuestionnaireExportStructure()),
                 Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
+                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
                 Mock.Of<IExportViewFactory>(
                     _ =>
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
