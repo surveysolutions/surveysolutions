@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             HashSet<InterviewItemId> disabledQuestions,
             HashSet<InterviewItemId> validAnsweredQuestions,
             HashSet<InterviewItemId> invalidAnsweredQuestions,
-            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
             bool wasCompleted,
             bool createdOnClient = false)
@@ -33,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             DisabledQuestions = disabledQuestions;
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
-            PropagatedGroupInstanceCounts = propagatedGroupInstanceCounts;
+            
             RosterGroupInstances = rosterGroupInstances;
             this.WasCompleted = wasCompleted;
             this.CreatedOnClient = createdOnClient;
@@ -52,41 +51,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
-        [Obsolete("please use RosterGroupInstances")]
-        public Dictionary<InterviewItemId, int> PropagatedGroupInstanceCounts { get; set; }
-        public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances
-        {
-            get
-            {
-                if (rosterGroupInstances == null)
-                {
-                    rosterGroupInstances = this.RestoreFromPropagatedGroupInstanceCounts();
-                }
-                return rosterGroupInstances;
-            }
-            set { rosterGroupInstances = value; }
-        }
-        private Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances;
+        
+        public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
+
         public bool WasCompleted { get; set; }
-
-        private Dictionary<InterviewItemId, RosterSynchronizationDto[]> RestoreFromPropagatedGroupInstanceCounts()
-        {
-            if (PropagatedGroupInstanceCounts == null)
-                return new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
-
-            var result = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
-            foreach (var propagatedGroupInstanceCount in PropagatedGroupInstanceCounts)
-            {
-                result[propagatedGroupInstanceCount.Key] = new RosterSynchronizationDto[propagatedGroupInstanceCount.Value];
-                for (int i = 0; i < propagatedGroupInstanceCount.Value; i++)
-                {
-                    result[propagatedGroupInstanceCount.Key][i] =
-                        new RosterSynchronizationDto(propagatedGroupInstanceCount.Key.Id,
-                            propagatedGroupInstanceCount.Key.InterviewItemRosterVector, Convert.ToDecimal(i), null,
-                            string.Empty);
-                }
-            }
-            return result;
-        }
     }
 }

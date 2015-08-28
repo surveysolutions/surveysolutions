@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId));
 
         It should_throw_interview_exception = () =>
-            exception.ShouldBeOfType<InterviewException>();
+            exception.ShouldBeOfExactType<InterviewException>();
 
         private static Exception exception;
         private static Guid questionnaireId;
