@@ -24,8 +24,7 @@ namespace Ncqrs.Spec
                 var comittedEvents = new List<CommittedEvent>();
                 foreach (var evnt in _events)
                 {
-                    var committedEvent = new CommittedEvent(commitId, null, Guid.NewGuid(), id, sequence, DateTime.UtcNow,
-                                                            evnt);
+                    var committedEvent = new CommittedEvent(commitId, null, Guid.NewGuid(), id, sequence, DateTime.UtcNow, 0, evnt);
                     sequence++;
                     comittedEvents.Add(committedEvent);
                 }
