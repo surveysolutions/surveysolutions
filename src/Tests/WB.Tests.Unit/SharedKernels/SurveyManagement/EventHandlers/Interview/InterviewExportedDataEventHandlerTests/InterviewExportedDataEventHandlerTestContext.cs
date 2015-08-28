@@ -28,15 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
           IDataExportRepositoryWriter dataExportRepositoryWriter = null,UserDocument user = null, InterviewSummary interviewSummary = null)
         {
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),null);
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),null);
         }
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter = null,
             IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage = null, IReadSideRepositoryWriter<InterviewStatuses> statuses = null)
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage = null)
         {
-            return new InterviewExportedDataDenormalizer(dataExportWriter, userDocumentWriter,interviewSummaryStorage,statuses);
+            return new InterviewExportedDataDenormalizer(dataExportWriter, userDocumentWriter,interviewSummaryStorage);
         }
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewExportedAction status)
         {

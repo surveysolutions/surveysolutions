@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
+            fileBasedDataExportRepositoryWriter.AddExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.Completed);
 
         It should_store_once_data_by_level = () =>
             interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewToExport, Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once());

@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IExportedDataAccessor exportedDataAccessor;
         private readonly string parentId = "ParentId";
         private readonly IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IJsonUtils jsonUtils;
@@ -45,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IExportedDataAccessor exportedDataAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewHistory> interviewActionsDataStorage, 
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage, 
             IJsonUtils jsonUtils, 
             ITransactionManagerProvider transactionManager,
             ILogger logger,
@@ -294,40 +295,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId,
             long questionnaireVersion)
         {
-            Expression<Func<InterviewHistory, bool>> queryActions =
-                (i) => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion;
+            Expression<Func<InterviewStatuses, bool>> queryActions =
+                (i) =>
+                    i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
+                    i.InterviewCommentedStatuses.Any(a => a.Status != InterviewExportedAction.Deleted);
 
             if (action.HasValue)
             {
                 queryActions =
                     (i) =>
                         i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
-                        i.InterviewActions.Any(a => a.Action == action.Value);
+                        i.InterviewCommentedStatuses.Any(a => a.Status == action.Value);
             }
 
-            IEnumerable<InterviewHistory> actions =
+            IEnumerable<InterviewStatuses> actions =
                 interviewActionsDataStorage.Query(
                     _ =>
                         _.Where(queryActions)
                             .Select(
                                 i =>
-                                    new InterviewHistory()
+                                    new InterviewStatuses()
                                     {
                                         InterviewId = i.InterviewId,
-                                        InterviewActions = i.InterviewActions
+                                        InterviewCommentedStatuses = i.InterviewCommentedStatuses
                                     }).ToList());
 
             var result = new List<string[]>();
 
             foreach (var interviewHistory in actions)
             {
-                foreach (var interviewAction in interviewHistory.InterviewActions)
+                foreach (var interviewAction in interviewHistory.InterviewCommentedStatuses)
                 {
                     var resultRow = new List<string>();
                     resultRow.Add(interviewHistory.InterviewId);
-                    resultRow.Add(interviewAction.Action.ToString());
-                    resultRow.Add(interviewAction.Originator);
-                    resultRow.Add(interviewAction.Role);
+                    resultRow.Add(interviewAction.Status.ToString());
+                    resultRow.Add(interviewAction.StatusChangeOriginatorName);
+                    resultRow.Add(/*interviewAction.Role*/"");
                     resultRow.Add(interviewAction.Timestamp.ToString("d", CultureInfo.InvariantCulture));
                     resultRow.Add(interviewAction.Timestamp.ToString("T", CultureInfo.InvariantCulture));
                     result.Add(resultRow.ToArray());

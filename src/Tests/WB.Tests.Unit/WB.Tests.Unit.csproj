@@ -611,13 +611,10 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_in_interviewer_assigned_status.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_which_didnt_exist_before.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_from_hq_interview_which_existed_before.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_didnt_happen.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_happened.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\InterviewStatusTimeSpanDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_approved_by_hq_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_event_handled_and_first_answer_set_event_is_missing_be__.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_completed_handled_and_first_answer_set_and_complete_have_been_recorded.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_first_answer_given.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\when_interview_second_answer_given.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_containing_gps_question.cs" />
@@ -701,11 +698,9 @@
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_supervisor_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\ReadSideRepositoryDataExportWriterTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_action.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_data_records.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called_for_Approved_by_HQ_action.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
@@ -1896,7 +1891,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\InterviewExportedDataEventHandlerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerCommented_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_AnswerSet_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_Restored_event_recived_and_interview_summary_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\InterviewHistoryDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\when_interview_hard_Deleted_recived.cs">
       <SubType>Code</SubType>
@@ -2081,8 +2075,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_disabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_answer_on_multimedia_question_is_enabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddExportedDataByInterview_is_called_and_interview_is_deleted.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_AddInterviewAction_is_called_and_interview_is_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_create_export_structure_is_called_for_questionnaire_with_2_levels.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteExportedDataForQuestionnaireVersion_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FileBasedDataExportServiceTests\when_DeleteInterview_is_called.cs" />

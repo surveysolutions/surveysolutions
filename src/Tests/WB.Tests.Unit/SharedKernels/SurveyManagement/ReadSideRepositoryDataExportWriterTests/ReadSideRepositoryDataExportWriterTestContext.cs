@@ -16,13 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExp
     internal class ReadSideRepositoryDataExportWriterTestContext
     {
         protected static ReadSideRepositoryDataExportWriter CreateReadSideRepositoryDataExportWriter(
-            IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage = null,
-            IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage = null)
+            IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage = null)
         {
             return
                 new ReadSideRepositoryDataExportWriter(
                     interviewExportedDataStorage ?? new TestInMemoryWriter<InterviewExportedDataRecord>(),
-                    interviewActionsDataStorage ?? new TestInMemoryWriter<InterviewHistory>(),
                     new NewtonJsonUtils());
         }
     }
