@@ -11,7 +11,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -61,7 +60,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 questionnaireId.ToString(), 
                 this.GetItemAsContent(questionnaireMetadata), 
                 evnt.EventTimeStamp,
-                evnt.EventIdentifier.FormatGuid());
+                evnt.EventIdentifier.FormatGuid(), 
+                evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt)
@@ -77,7 +77,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 assemblyAsBase64String, 
                 this.GetItemAsContent(meta), 
                 evnt.EventTimeStamp,
-                evnt.EventIdentifier.FormatGuid());
+                evnt.EventIdentifier.FormatGuid(), 
+                evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -85,8 +86,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.SaveQuestionnaire(evnt.Payload.Source, 
                 evnt.Payload.Version ?? evnt.EventSequence, 
                 evnt.Payload.AllowCensusMode,
-                evnt.EventTimeStamp, 
-                evnt.EventIdentifier.FormatGuid());
+                evnt.EventTimeStamp,
+                evnt.EventIdentifier.FormatGuid(),
+                evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -96,10 +98,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.Version, 
                 evnt.Payload.AllowCensusMode,
                 evnt.EventTimeStamp,
-                evnt.EventIdentifier.FormatGuid());
+                evnt.EventIdentifier.FormatGuid(), 
+                evnt.GlobalSequence);
         }
 
-        private void SaveQuestionnaire(QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode, DateTime timestamp, string packageId)
+        private void SaveQuestionnaire(QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode, DateTime timestamp, string packageId, long globalSequence)
         {
             questionnaireDocument.IsDeleted = false;
 
@@ -111,7 +114,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 this.GetItemAsContent(questionnaireDocument), 
                 this.GetItemAsContent(questionnaireMetadata), 
                 timestamp,
-                packageId);
+                packageId,
+                globalSequence);
         }
 
         protected string GetItemAsContent(object item)
@@ -119,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
         }
 
-        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, string packageId)
+        public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, string packageId, long globalSequence)
         {
             var syncPackageMeta = new QuestionnaireSyncPackageMeta(
                 questionnaireId,
@@ -131,7 +135,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 Content = content,
                 Meta = metaInfo,
-                PackageId = packageId
+                PackageId = packageId,
+                SortIndex = globalSequence
             };
 
             syncPackageWriter.Store(syncPackageMeta, packageId);

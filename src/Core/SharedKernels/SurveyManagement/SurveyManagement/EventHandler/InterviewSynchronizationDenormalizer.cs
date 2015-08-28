@@ -81,7 +81,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         interviewSummary.ResponsibleId, 
                         evnt.EventTimeStamp, interviewSummary.QuestionnaireId, 
                         interviewSummary.QuestionnaireVersion,
-                        evnt.EventIdentifier.FormatGuid());
+                        evnt.EventIdentifier.FormatGuid(),
+                        evnt.GlobalSequence);
                     break;
 
                 case InterviewStatus.RejectedBySupervisor:
@@ -90,7 +91,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         newStatus, 
                         evnt.Payload.Comment, 
                         evnt.EventTimeStamp, 
-                        evnt.EventIdentifier.FormatGuid());
+                        evnt.EventIdentifier.FormatGuid(),
+                        evnt.GlobalSequence);
                     break;
             }
         }
@@ -109,7 +111,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     evnt.EventTimeStamp,
                     interviewSummary.QuestionnaireId, 
                     interviewSummary.QuestionnaireVersion,
-                    evnt.EventIdentifier.FormatGuid());
+                    evnt.EventIdentifier.FormatGuid(),
+                    evnt.GlobalSequence);
             }
 
             if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
@@ -121,7 +124,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         this.ResendInterviewForPerson(interviewWithVersion, 
                             evnt.Payload.InterviewerId, 
                             evnt.EventTimeStamp, 
-                            evnt.EventIdentifier.FormatGuid());
+                            evnt.EventIdentifier.FormatGuid(),
+                            evnt.GlobalSequence);
                 }
             }
 
@@ -147,23 +151,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.EventTimeStamp,
                 interviewSummary.QuestionnaireId, 
                 interviewSummary.QuestionnaireVersion,
-                evnt.EventIdentifier.FormatGuid());
+                evnt.EventIdentifier.FormatGuid(),
+                evnt.GlobalSequence);
         }
 
-        private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp, string packageId)
+        private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp, string packageId, long globalSequence)
         {
             if (interviewData == null)
                 return;
 
             var interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId, newStatus, comments);
 
-            this.SaveInterview(interviewSyncData, interviewData.ResponsibleId, timestamp, interviewData.QuestionnaireId, interviewData.QuestionnaireVersion, packageId);
+            this.SaveInterview(interviewSyncData, 
+                interviewData.ResponsibleId, 
+                timestamp, 
+                interviewData.QuestionnaireId, 
+                interviewData.QuestionnaireVersion,
+                packageId,
+                globalSequence);
         }
 
-        private void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp, string packageId)
+        private void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp, string packageId, long globalSequence)
         {
             InterviewSynchronizationDto interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interview, responsibleId, InterviewStatus.InterviewerAssigned, null);
-            this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interview.QuestionnaireId, interview.QuestionnaireVersion, packageId);
+            this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interview.QuestionnaireId, interview.QuestionnaireVersion, packageId, globalSequence);
         }
 
         private bool IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(InterviewSummary interviewSummary)
@@ -173,10 +184,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void SaveInterview(InterviewSynchronizationDto doc, 
             Guid responsibleId, 
-            DateTime timestamp,
+            DateTime timestamp, 
             Guid questionnaireId, 
-            long questionnaireVersion,
-            string packageId)
+            long questionnaireVersion, 
+            string packageId, 
+            long globalSequence)
         {
             this.StoreChunk(
                 doc.Id,
@@ -187,15 +199,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 this.jsonUtils.Serialize(doc, TypeSerializationSettings.AllTypes),
                 this.jsonUtils.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes),
                 timestamp,
-                packageId);
+                packageId,
+                globalSequence);
         }
 
         public void MarkInterviewForClientDeleting(Guid interviewId, 
             Guid? responsibleId, 
-            DateTime timestamp,
+            DateTime timestamp, 
             Guid questionnaireId, 
-            long questionnaireVersion,
-            string packageId)
+            long questionnaireVersion, 
+            string packageId, 
+            long globalSequence)
         {
             this.StoreChunk(
                 interviewId,
@@ -206,19 +220,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interviewId.ToString(),
                 string.Empty,
                 timestamp,
-                packageId);
+                packageId,
+                globalSequence);
         }
 
-        public void StoreChunk(
-            Guid interviewId,
-            Guid questionnaireId,
-            long questionnaireVersion,
-            Guid? userId,
-            string itemType,
-            string content,
-            string metaInfo,
-            DateTime timestamp,
-            string packageId)
+        public void StoreChunk(Guid interviewId, 
+            Guid questionnaireId, 
+            long questionnaireVersion, 
+            Guid? userId, 
+            string itemType, 
+            string content, 
+            string metaInfo, 
+            DateTime timestamp, 
+            string packageId, 
+            long globalSequence)
         {
             var id = packageId + (userId.HasValue ? "$" + userId.FormatGuid() : "");
             var syncPackageMeta = new InterviewSyncPackageMeta(
@@ -233,7 +248,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 Meta = metaInfo,
                 Content = content,
-                PackageId = id
+                PackageId = id,
+                SortIndex = globalSequence
             };
 
             syncPackageWriter.Store(syncPackageMeta, id);
