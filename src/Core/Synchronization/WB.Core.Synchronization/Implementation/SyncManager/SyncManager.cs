@@ -248,7 +248,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
                 }
 
-                return filteredItems.OrderBy(x => x.SortIndex).ToList();
+                return filteredItems.OrderBy(x => x.SortIndex).ThenBy(x => x.PackageId).ToList();
             });
 
             IEnumerable<InterviewSyncPackageMeta> result = 
@@ -275,7 +275,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
                 }
 
-                filteredItems = filteredItems.OrderByDescending(x => x.SortIndex);
+                filteredItems = filteredItems.OrderByDescending(x => x.SortIndex).ThenBy(x => x.PackageId);
                 return filteredItems.FirstOrDefault();
             });
 
@@ -299,7 +299,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     filteredItems = filteredItems.Where(x => x.SortIndex > lastSyncedSortIndex.Value);
                 }
 
-                return filteredItems.OrderBy(x => x.SortIndex).ToList();
+                return filteredItems.OrderBy(x => x.SortIndex).ThenBy(x => x.PackageId).ToList();
             });
 
 
