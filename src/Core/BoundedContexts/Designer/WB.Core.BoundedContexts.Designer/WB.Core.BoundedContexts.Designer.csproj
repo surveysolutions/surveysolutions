@@ -213,7 +213,6 @@
     <Compile Include="Events\Users\AccountRoleRemoved.cs" />
     <Compile Include="Events\Users\AccountUnlocked.cs" />
     <Compile Include="Events\Users\AccountUpdated.cs" />
-    <Compile Include="Events\Users\AccountValidated.cs" />
     <Compile Include="Events\Users\UserLoggedIn.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ExpressionMethodModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />

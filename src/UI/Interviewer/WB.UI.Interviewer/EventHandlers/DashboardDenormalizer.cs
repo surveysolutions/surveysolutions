@@ -51,7 +51,7 @@ namespace WB.UI.Interviewer.EventHandlers
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtoDocumentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.DropDownList, QuestionType.YesNo };
+        private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.YesNo };
 
         public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
                                      IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage,

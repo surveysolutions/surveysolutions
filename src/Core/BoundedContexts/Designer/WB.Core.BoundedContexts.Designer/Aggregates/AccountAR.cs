@@ -36,8 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void Apply(AccountUpdated @event) { }
         public void Apply(AccountPasswordResetTokenChanged @event) { }
         public void Apply(UserLoggedIn @event) { }
-        [Obsolete]
-        public void Apply(AccountValidated @event) { }
+        
         #endregion
         public void Apply(AccountRoleAdded @event) { }
         public void Apply(AccountRoleRemoved @event) { }
