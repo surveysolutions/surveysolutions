@@ -35,6 +35,8 @@ namespace Ncqrs.Eventing
             get { return _payload; }
         }
 
+        public long GlobalSequence { get; set; }
+
         /// <summary>
         /// Gets the unique identifier for this event.
         /// </summary>

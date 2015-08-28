@@ -202,14 +202,15 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         internal EventData BuildEventData(UncommittedEvent @event)
         {
             var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
+            var globalSequence = this.GetNextSequnce();
             var metaData = JsonConvert.SerializeObject(new EventMetada
             {
                 Timestamp = @event.EventTimeStamp,
                 Origin = @event.Origin,
                 EventSourceId = @event.EventSourceId,
-                GlobalSequence = GetNextSequnce()
+                GlobalSequence = globalSequence
             });
-
+            @event.GlobalSequence = globalSequence;
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
                 true,
@@ -287,6 +288,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                         var meta = Encoding.GetString(@event.Event.Metadata);
                         var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
                         lastUsedGlobalSequence = metadata.GlobalSequence;
+                        return;
                     }
                 }
             } while (!slice.IsEndOfStream);

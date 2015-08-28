@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -11,7 +9,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -28,8 +25,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IJsonUtils jsonUtils;
         private readonly IReadSideRepositoryWriter<UserSyncPackageMeta> syncPackageWriter;
-
-        private const string CounterId = "UserSyncPackageСounter";
 
         public UserSynchronizationDenormalizer(
             IReadSideRepositoryWriter<UserDocument> users, 
@@ -68,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                           PersonName = evnt.Payload.PersonName,
                           PhoneNumber = evnt.Payload.PhoneNumber
                       };
-            this.SaveUser(doc, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
+            this.SaveUser(doc, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<UserChanged> evnt)
@@ -78,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             item.Email = evnt.Payload.Email;
             item.Password = evnt.Payload.PasswordHash;
 
-            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<UserLocked> evnt)
@@ -86,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedByHQ = true;
-            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> evnt)
@@ -94,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedByHQ = false;
-            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt)
@@ -102,7 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedBySupervisor = true;
-            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
         public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
@@ -110,10 +105,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.IsLockedBySupervisor = false;
-            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid());
+            this.SaveUser(item, evnt.EventTimeStamp, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
-        private void SaveUser(UserDocument user, DateTime timestamp, string packageId)
+        private void SaveUser(UserDocument user, DateTime timestamp, string packageId, long globalSequence)
         {
             if (!user.Roles.Contains(UserRoles.Operator))
             {
@@ -125,7 +120,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp)
             {
                 Content = content,
-                PackageId = packageId
+                PackageId = packageId,
+                SortIndex = globalSequence
             };
 
             syncPackageWriter.Store(syncPackageMeta, packageId);
