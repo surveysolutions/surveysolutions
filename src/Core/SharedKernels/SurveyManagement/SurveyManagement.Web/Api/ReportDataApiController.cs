@@ -312,22 +312,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveyListViewModel data)
+        public SurveysAndStatusesReportView SupervisorSurveysAndStatusesReport(SurveysAndStatusesReportRequest request)
         {
             var input = new SurveysAndStatusesReportInputModel { TeamLeadName = this.GlobalInfo.GetCurrentUser().Name };
 
-            if (data != null)
+            if (request != null)
             {
-                input.Orders = data.SortOrder;
-                if (data.Pager != null)
+                input.Orders = request.SortOrder;
+                if (request.Pager != null)
                 {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
+                    input.Page = request.Pager.Page;
+                    input.PageSize = request.Pager.PageSize;
                 }
 
-                if (data.Request != null && data.Request.ResponsibleName != input.TeamLeadName)
+                if (request.ResponsibleName != input.TeamLeadName)
                 {
-                    input.ResponsibleName = data.Request.ResponsibleName;
+                    input.ResponsibleName = request.ResponsibleName;
                 }
             }
 
@@ -359,7 +359,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        public SurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveyListViewModel data)
+        public SurveysAndStatusesReportView HeadquarterSurveysAndStatusesReport(SurveysAndStatusesReportRequest data)
         {
             var input = new SurveysAndStatusesReportInputModel();
 
@@ -372,10 +372,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                     input.PageSize = data.Pager.PageSize;
                 }
 
-                if (data.Request != null)
-                {
-                    input.TeamLeadName = data.Request.ResponsibleName;
-                }
+                input.TeamLeadName = data.ResponsibleName;
             }
 
             return this.surveysAndStatusesReport.Load(input);

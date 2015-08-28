@@ -320,8 +320,7 @@
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
     <Compile Include="Models\SummaryRequestModel.cs" />
-    <Compile Include="Models\SurveyListViewModel.cs" />
-    <Compile Include="Models\SurveyRequestModel.cs" />
+    <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />

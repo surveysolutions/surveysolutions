@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
             if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleName == input.ResponsibleName);
+                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower());
             }
             if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
