@@ -13,7 +13,7 @@ namespace WB.UI.Interviewer.Extensions
             return new CommittedEvent(Guid.Parse(storedEvent.CommitId), storedEvent.Origin, Guid.Parse(storedEvent.EventId),
                                       eventSourceId, storedEvent.Sequence,
                                       eventTimeStamp,
-                                      eventTimeStamp.Ticks,
+                                      0,
                                       GetObject(storedEvent.Data));
         }
 
