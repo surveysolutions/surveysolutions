@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, new decimal[] { 1, 2, 3 }));
 
         It should_raise_MultipleOptionsQuestionAnswered_event_with_QuestionId_equal_to_validatingQuestionId = () =>
-            expectedException.ShouldBeOfType(typeof(InterviewException));
+            expectedException.ShouldBeOfExactType(typeof(InterviewException));
 
         private static Exception expectedException;
         private static Guid validatingQuestionId;

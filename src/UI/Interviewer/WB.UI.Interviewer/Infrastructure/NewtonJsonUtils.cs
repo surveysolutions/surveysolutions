@@ -73,26 +73,9 @@ namespace WB.UI.Interviewer.Infrastructure
 
         public T Deserialize<T>(string payload)
         {
-            var replaceOldAssemblyNames = ReplaceOldAssemblyNames(payload);
-            return JsonConvert.DeserializeObject<T>(replaceOldAssemblyNames, this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
+            return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
         }
-
-        [Obsolete]
-        private static string ReplaceOldAssemblyNames(string payload)
-        {
-            var replaceOldAssemblyNames = payload;
-            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
-
-            foreach (var type in new[] { "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked", "UserUnlockedBySupervisor" })
-            {
-               replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(
-                   string.Format("Main.Core.Events.User.{0}, Main.Core", type),
-                   string.Format("Main.Core.Events.User.{0}, WB.Core.SharedKernels.DataCollection", type));
-            }
-            
-            return replaceOldAssemblyNames;
-        }
-
+        
         public T Deserialize<T>(byte[] payload)
         {
             try

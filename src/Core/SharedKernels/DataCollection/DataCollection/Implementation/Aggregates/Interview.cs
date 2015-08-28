@@ -5,7 +5,6 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -24,7 +23,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Interview : AggregateRootMappedByConvention, ISnapshotable<InterviewState>
+    public class Interview : AggregateRootMappedByConvention
     {
         private static readonly decimal[] EmptyRosterVector = { };
 
@@ -489,52 +488,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // if single option question with this identity is absent, nothing will happen
                 this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(identity.Id, identity.RosterVector, null);
            }
-        }
-
-        public InterviewState CreateSnapshot()
-        {
-            if (wasHardDeleted)
-                return new InterviewState(wasHardDeleted);
-
-            return new InterviewState(
-                this.questionnaireId,
-                this.questionnaireVersion,
-                this.status,
-                this.interviewState.AnswersSupportedInExpressions,
-                this.interviewState.LinkedSingleOptionAnswersBuggy,
-                this.interviewState.LinkedMultipleOptionsAnswers,
-                this.interviewState.TextListAnswers,
-                this.interviewState.AnsweredQuestions,
-                this.interviewState.AnswerComments,
-                this.interviewState.DisabledGroups,
-                this.interviewState.DisabledQuestions,
-                this.interviewState.RosterGroupInstanceIds,
-                this.interviewState.ValidAnsweredQuestions,
-                this.interviewState.InvalidAnsweredQuestions,
-                this.wasCompleted,
-                this.ExpressionProcessorStatePrototype, this.interviewerId);
-        }
-
-        public virtual void RestoreFromSnapshot(InterviewState snapshot)
-        {
-            this.ExpressionProcessorStatePrototype = snapshot.ExpressionProcessorState;
-            this.questionnaireId = snapshot.QuestionnaireId;
-            this.questionnaireVersion = snapshot.QuestionnaireVersion;
-            this.status = snapshot.Status;
-            this.interviewState.AnswersSupportedInExpressions = snapshot.AnswersSupportedInExpressions;
-            this.interviewState.LinkedSingleOptionAnswersBuggy = snapshot.LinkedSingleOptionAnswers;
-            this.interviewState.LinkedMultipleOptionsAnswers = snapshot.LinkedMultipleOptionsAnswers;
-            this.interviewState.TextListAnswers = snapshot.TextListAnswers;
-            this.interviewState.AnsweredQuestions = snapshot.AnsweredQuestions;
-            this.interviewState.AnswerComments = snapshot.AnswerComments;
-            this.interviewState.DisabledGroups = snapshot.DisabledGroups;
-            this.interviewState.DisabledQuestions = snapshot.DisabledQuestions;
-            this.interviewState.RosterGroupInstanceIds = snapshot.RosterGroupInstanceIds;
-            this.interviewState.ValidAnsweredQuestions = snapshot.ValidAnsweredQuestions;
-            this.interviewState.InvalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
-            this.wasCompleted = snapshot.WasCompleted;
-            this.wasHardDeleted = snapshot.WasHardDeleted;
-            this.interviewerId = snapshot.InterviewewerId;
         }
 
         #region Dependencies

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     rosterVector: invalidRosterVector, answer: answer));
 
         It should_raise_InterviewException = () =>
-            exception.ShouldBeOfType<InterviewException>();
+            exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__question_not_found__ = () =>
              new[] { "roster", "information", "incorrect" }.ShouldEachConformTo(

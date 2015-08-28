@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
         It should_raise_InterviewException = () =>
-           exception.ShouldBeOfType<InterviewException>();
+           exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__question_not_found__ = () =>
              new[] { "question", "not", "found" }.ShouldEachConformTo(

@@ -104,7 +104,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     questionnaire.Version,
                     new AnsweredQuestionSynchronizationDto[0],
                     new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
+                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                     true));
 

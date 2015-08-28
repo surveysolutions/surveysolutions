@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
                     Times.Never);
 
         It should_throw_NullReferenceException = () =>
-            exception.ShouldBeOfType<NullReferenceException>();
+            exception.ShouldBeOfExactType<NullReferenceException>();
 
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static InterviewSyncPackageDto syncItem;
