@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 new SingleQuestion()
                 {
                     PublicKey = questionId,
-                    QuestionType = QuestionType.DropDownList,
+                    QuestionType = QuestionType.YesNo,
                     StataExportCaption = "var1",
                     Answers =
                         new List<Answer>

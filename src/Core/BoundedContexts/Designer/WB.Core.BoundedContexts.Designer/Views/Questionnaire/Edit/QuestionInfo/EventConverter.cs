@@ -407,7 +407,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             if (type == QuestionType.AutoPropagate)
                 return QuestionType.Numeric;
 
-            if (type == QuestionType.YesNo || type == QuestionType.DropDownList)
+            if (type == QuestionType.YesNo)
                 return QuestionType.SingleOption;
 
             return type;

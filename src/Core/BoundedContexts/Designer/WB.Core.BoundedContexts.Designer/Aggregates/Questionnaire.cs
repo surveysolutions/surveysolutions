@@ -518,14 +518,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(QuestionnaireItemMoved e)
         {
-            bool isLegacyEvent = e.AfterItemKey != null;
-
-            if (isLegacyEvent)
-            {
-                Logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
-                return;
-            }
-
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
 
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);

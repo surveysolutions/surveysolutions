@@ -6,11 +6,8 @@ namespace Main.Core.Entities.SubEntities
     {
         SingleOption = 0,
 
-        [Obsolete("should be removed after db check")]
+        [Obsolete("db contains at least one questionnaire")]
         YesNo = 1,
-
-        [Obsolete("should be removed after db check")]
-        DropDownList = 2,
 
         MultyOption = 3,
 
@@ -22,7 +19,7 @@ namespace Main.Core.Entities.SubEntities
 
         Text = 7,
 
-        [Obsolete("should be removed after db check")]
+        [Obsolete("db contains a bunch of them")]
         AutoPropagate = 8,
 
         TextList = 9,
