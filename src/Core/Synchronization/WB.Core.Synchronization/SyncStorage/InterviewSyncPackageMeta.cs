@@ -4,7 +4,7 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     public class InterviewSyncPackageMeta : IOrderableSyncPackage
     {
-        [Obsolete("Probably used for deserialization")]
+        //DO not delete - is used for deserialization
         public InterviewSyncPackageMeta()
         {
         }

@@ -140,32 +140,14 @@ namespace WB.UI.Designer.Api
                     ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
-
-            UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(
-                questionnaireView.Source);
+            
             return new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(jsonUtils.Serialize(questionnaireView.Source)),
                 QuestionnaireAssembly = resultAssembly
             };
         }
-
-
-
-        private void UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(QuestionnaireDocument questionnaire)
-        {
-            var numericQuestions = questionnaire.Find<NumericQuestion>(q => true).ToArray();
-            foreach (var numericQuestion in numericQuestions)
-            {
-                var rostersTriggeredByTheQuestion =
-                    questionnaire.Find<IGroup>(g => g.RosterSizeQuestionId == numericQuestion.PublicKey);
-                if (rostersTriggeredByTheQuestion.Any())
-                    numericQuestion.MaxValue = Constants.MaxRosterRowCount;
-                else
-                    numericQuestion.MaxValue = null;
-            }
-        }
-
+        
         [HttpPost]
         public PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
         {

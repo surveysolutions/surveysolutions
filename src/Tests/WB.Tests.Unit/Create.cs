@@ -2170,7 +2170,6 @@ namespace WB.Tests.Unit
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(), 
-                new Dictionary<InterviewItemId, int>(),
                 new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
                 false);
         }
