@@ -235,7 +235,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             string packageId, 
             long globalSequence)
         {
-            var id = packageId + (userId.HasValue ? "$" + userId.FormatGuid() : "");
+            var id = string.Format("{0}${1}{2}", interviewId.FormatGuid(), packageId, (userId.HasValue ? "$" + userId.FormatGuid() : ""));
+
             var syncPackageMeta = new InterviewSyncPackageMeta(
                 interviewId,
                 questionnaireId,
