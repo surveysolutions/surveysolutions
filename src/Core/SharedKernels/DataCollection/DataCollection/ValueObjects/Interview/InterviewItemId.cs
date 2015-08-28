@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public struct InterviewItemId
     {
-        public InterviewItemId(Guid id, decimal[] rosterVector)
+        public InterviewItemId(Guid id, decimal[] rosterVector):this()
         {
             Id = id;
             this.InterviewItemRosterVector = rosterVector ?? new decimal[0];
