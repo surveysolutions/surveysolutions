@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             }
 
             items = !string.IsNullOrWhiteSpace(input.ResponsibleName)
-                ? items.Where(x => x.ResponsibleName == input.ResponsibleName)
+                ? items.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower())
                 : items.Where(x => x.TeamLeadId == input.ViewerId);
             return items;
         }
