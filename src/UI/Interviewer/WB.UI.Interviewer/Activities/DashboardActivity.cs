@@ -90,7 +90,7 @@ namespace WB.UI.Interviewer.Activities
 
         private TextView CreateNoAssignmentsMessageTextView(string messge)
         {
-            var layoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
+            var layoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
             layoutParameters.SetMargins(15, 10, 15, 10);
 
             var noAssignmentsMessage = new TextView(this)

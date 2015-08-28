@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.ShouldNotContainEvent<InterviewOnClientCreated>();
 
         It should_raise_InterviewException = () =>
-            exception.ShouldBeOfType(typeof(InterviewException));
+            exception.ShouldBeOfExactType(typeof(InterviewException));
 
         Cleanup stuff = () =>
         {
