@@ -181,7 +181,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
                 var eventData = JsonConvert.DeserializeObject(value,
-                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()),
+                    eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase()),
                     JsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
