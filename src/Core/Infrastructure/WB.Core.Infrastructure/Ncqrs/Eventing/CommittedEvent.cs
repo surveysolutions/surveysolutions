@@ -8,6 +8,7 @@ namespace Ncqrs.Eventing
     /// </summary>
     public class CommittedEvent : IPublishableEvent
     {
+        public long GlobalSequence { get; private set; }
         private readonly object _payload;
         private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
@@ -76,8 +77,16 @@ namespace Ncqrs.Eventing
             get { return _eventSequence; }
         }
 
-        public CommittedEvent(Guid commitId, string origin, Guid eventIdentifier, Guid eventSourceId, int eventSequence, DateTime eventTimeStamp, object payload)            
-        {            
+        public CommittedEvent(Guid commitId, 
+            string origin, 
+            Guid eventIdentifier, 
+            Guid eventSourceId, 
+            int eventSequence, 
+            DateTime eventTimeStamp, 
+            long globalSequence,
+            object payload)            
+        {
+            GlobalSequence = globalSequence;
             _payload = payload;
             _commitId = commitId;
             _origin = origin;
