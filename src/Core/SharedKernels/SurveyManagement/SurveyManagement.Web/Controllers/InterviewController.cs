@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
@@ -164,7 +165,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             try
             {
                 this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                this.dataExportRepositoryWriter.AddExportedDataByInterview(input.InterviewId);
+                this.dataExportRepositoryWriter.AddExportedDataByInterviewWithAction(input.InterviewId, InterviewExportedAction.Completed);
                 this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
             }
             catch (Exception exception)

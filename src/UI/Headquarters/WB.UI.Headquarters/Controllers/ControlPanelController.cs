@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -105,7 +106,7 @@ namespace WB.UI.Headquarters.Controllers
                     try
                     {
                         this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                        this.dataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
+                        this.dataExportRepositoryWriter.AddExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.Completed);
                         this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
                     }
                     catch (Exception ex)

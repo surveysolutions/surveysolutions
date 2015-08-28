@@ -17,42 +17,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     internal class ReadSideRepositoryDataExportWriter : IDataExportWriter
     {
         private readonly IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage;
-        private readonly IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage;
         private readonly IJsonUtils jsonUtils;
 
         public ReadSideRepositoryDataExportWriter(
             IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage, 
-            IReadSideRepositoryWriter<InterviewHistory> interviewActionsDataStorage, 
             IJsonUtils jsonUtils)
         {
             this.interviewExportedDataStorage = interviewExportedDataStorage;
-            this.interviewActionsDataStorage = interviewActionsDataStorage;
             this.jsonUtils = jsonUtils;
-        }
-
-        public void AddActionRecord(InterviewActionExportView action, Guid questionnaireId, long questionnaireVersion)
-        {
-            var history = interviewActionsDataStorage.GetById(action.InterviewId);
-            if (history == null)
-            {
-                history = new InterviewHistory()
-                {
-                    InterviewId = action.InterviewId,
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion
-                };
-            }
-
-            history.InterviewActions.Add(CreateInterviewAction(action));
-
-            interviewActionsDataStorage.Store(history, history.InterviewId);
-
-            var interviewExportedData = interviewExportedDataStorage.GetById(history.InterviewId);
-            if (interviewExportedData != null)
-            {
-                interviewExportedData.LastAction = action.Action;
-                interviewExportedDataStorage.Store(interviewExportedData, history.InterviewId);
-            }
         }
 
         public void AddOrUpdateInterviewRecords(InterviewDataExportView item, Guid questionnaireId, long questionnaireVersion)
@@ -65,18 +37,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public void DeleteInterviewRecords(Guid interviewId)
         {
             interviewExportedDataStorage.Remove(interviewId);
-            interviewActionsDataStorage.Remove(interviewId.FormatGuid());
-        }
-
-        private InterviewAction CreateInterviewAction(InterviewActionExportView action)
-        {
-            return new InterviewAction()
-            {
-                Action = action.Action,
-                Originator = action.Originator,
-                Role = action.Role,
-                Timestamp = action.Timestamp
-            };
         }
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
@@ -118,7 +78,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public void Clear()
         {
-            ((IReadSideRepositoryCleaner)interviewActionsDataStorage).Clear();
             ((IReadSideRepositoryCleaner)interviewExportedDataStorage).Clear();
         }
 
@@ -129,26 +88,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetReadableStatus()
         {
-            var status1 = ((ICacheableRepositoryWriter) interviewActionsDataStorage).GetReadableStatus();
-            var status2 = ((ICacheableRepositoryWriter)interviewExportedDataStorage).GetReadableStatus();
-            return status1 + Environment.NewLine + status2;
+            return ((ICacheableRepositoryWriter)interviewExportedDataStorage).GetReadableStatus();
         }
 
         public void EnableCache()
         {
-            ((ICacheableRepositoryWriter)interviewActionsDataStorage).EnableCache();
             ((ICacheableRepositoryWriter)interviewExportedDataStorage).EnableCache();
         }
 
         public void DisableCache()
         {
-            ((ICacheableRepositoryWriter)interviewActionsDataStorage).DisableCache();
             ((ICacheableRepositoryWriter)interviewExportedDataStorage).DisableCache();
         }
 
         public bool IsCacheEnabled
         {
-            get { return ((ICacheableRepositoryWriter) interviewActionsDataStorage).IsCacheEnabled; }
+            get { return ((ICacheableRepositoryWriter)interviewExportedDataStorage).IsCacheEnabled; }
         }
     }
 }

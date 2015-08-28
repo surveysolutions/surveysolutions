@@ -38,6 +38,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IExportedDataAccessor exportedDataAccessor;
 
+        private readonly InterviewExportedAction[] interviewActionsForDataUpdate = new[]
+        {
+            InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.SupervisorAssigned,
+            InterviewExportedAction.Completed, InterviewExportedAction.ApprovedBySupervisor,
+            InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restored
+        };
+
         public FileBasedDataExportRepositoryWriter(
             IDataExportWriter dataExportWriter,
             IEnvironmentContentService environmentContentService,
@@ -78,25 +85,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.CreateExportedFileStructure(questionnaireExportStructure);
         }
 
-        public void AddExportedDataByInterview(Guid interviewId)
-        {
-            var interviewDataExportView = this.CreateInterviewDataExportView(interviewId);
-
-            if (interviewDataExportView == null)
-                return;
-
-            this.AddExportedDataByInterviewImpl(interviewDataExportView);
-        }
-
-        public void AddInterviewAction(InterviewExportedAction action, Guid interviewId, Guid userId, DateTime timestamp)
+        public void AddExportedDataByInterviewWithAction(Guid interviewId, InterviewExportedAction action)
         {
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
-
-            if (interviewSummary == null || interviewSummary.IsDeleted)
+            if (interviewSummary == null)
                 return;
 
-            this.AddInterviewActionImpl(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion,
-                CreateInterviewAction(action, interviewId, userId, timestamp));
+            var dataFolderForQuestionnaire =
+                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(
+                    interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+
+            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
+
+            if (action == InterviewExportedAction.ApprovedByHeadquarter)
+                fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetApprovedDataFolder(dataFolderForQuestionnaire));
+
+            if (interviewActionsForDataUpdate.Contains(action))
+            {
+                var interviewDataExportView = this.CreateInterviewDataExportView(interviewId);
+
+                if (interviewDataExportView == null)
+                    return;
+
+                this.AddExportedDataByInterviewImpl(interviewDataExportView);
+            }
         }
 
         public void DeleteInterview(Guid interviewId)
@@ -198,21 +210,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     this.fileSystemAccessor.CombinePath(filesFolderForInterview,
                         questionWithAnswersOnMultimediaQuestions), fileContent);
             }
-        }
-
-        private void AddInterviewActionImpl(Guid questionnaireId, long questionnaireVersion,
-            InterviewActionExportView action)
-        {
-            this.dataExportWriter.AddActionRecord(action, questionnaireId, questionnaireVersion);
-
-            var dataFolderForQuestionnaire =
-                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                    questionnaireVersion);
-
-            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
-
-            if (action.Action == InterviewExportedAction.ApprovedByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetApprovedDataFolder(dataFolderForQuestionnaire));
         }
 
         private string[] GetAllMultimediaQuestionFileNames(InterviewDataExportView interviewDataExportView)
