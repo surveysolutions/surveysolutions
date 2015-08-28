@@ -207,6 +207,7 @@
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EnumeratorSetup.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
   </ItemGroup>
