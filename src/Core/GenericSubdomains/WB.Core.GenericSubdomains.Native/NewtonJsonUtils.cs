@@ -79,6 +79,7 @@ namespace WB.Core.GenericSubdomains.Native
         }
 
         [Obsolete]
+        //survive clean up. designer could contain 
         private static string ReplaceOldAssemblyNames(string payload)
         {
             var replaceOldAssemblyNames = payload;

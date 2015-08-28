@@ -90,7 +90,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 disabledQuestions,
                 validQuestions,
                 invalidQuestions,
-                null,
                 propagatedGroupInstanceCounts,
                 interview.WasCompleted,
                 interview.CreatedOnClient);

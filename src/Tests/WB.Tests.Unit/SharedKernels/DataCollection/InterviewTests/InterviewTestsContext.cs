@@ -37,7 +37,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             AnsweredQuestionSynchronizationDto[] answers = null,
             HashSet<InterviewItemId> disabledGroups = null, HashSet<InterviewItemId> disabledQuestions = null,
             HashSet<InterviewItemId> validAnsweredQuestions = null, HashSet<InterviewItemId> invalidAnsweredQuestions = null,
-            Dictionary<InterviewItemId, int> propagatedGroupInstanceCounts = null,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null, bool? wasCompleted = false)
         {
             return new InterviewSynchronizationDto(
@@ -51,7 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
                 validAnsweredQuestions ?? new HashSet<InterviewItemId>(),
                 invalidAnsweredQuestions ?? new HashSet<InterviewItemId>(),
-                propagatedGroupInstanceCounts ?? new Dictionary<InterviewItemId, int>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 wasCompleted ?? false);
         }

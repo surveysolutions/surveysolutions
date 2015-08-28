@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     questionnaireMock.Object.Version,
                     new[] { new AnsweredQuestionSynchronizationDto(multyOptionAnsweredQuestionId, new decimal[0], new decimal[] { 1 }, string.Empty) },
                     new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
+                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true));
 
             eventContext = new EventContext();
