@@ -292,6 +292,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     }
                 }
             } while (!slice.IsEndOfStream);
+
+            lastUsedGlobalSequence = 0;
         }
 
         private void ConfigureEventStore()
