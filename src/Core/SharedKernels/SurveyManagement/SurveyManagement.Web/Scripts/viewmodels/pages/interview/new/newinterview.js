@@ -12,10 +12,14 @@
     self.questionnaire = ko.observable();
     self.responsible = ko.observable().extend({ required: true });
     self.questions = ko.observableArray();
+    self.isSupervisorsLoading = ko.observable(false);
     self.supervisors = function (query, sync, pageSize) {
+        self.isSupervisorsLoading(true);
         self.SendRequest(supervisorsUrl, { query: query, pageSize: pageSize }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
-        }, true, true);
+        }, true, true, function() {
+            self.isSupervisorsLoading(false);
+        });
     }
 
     self.isSaveEnable = ko.computed(function() {

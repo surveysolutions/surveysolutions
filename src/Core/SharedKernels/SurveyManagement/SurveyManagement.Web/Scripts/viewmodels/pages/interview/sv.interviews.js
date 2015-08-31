@@ -2,11 +2,15 @@
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 
+    self.IsAssignToLoading = ko.observable(false);
     self.UsersToAssignUrl = usersToAssignUrl;
     self.Users = function (query, sync, pageSize) {
+        self.IsAssignToLoading(true);
         self.SendRequest(self.UsersToAssignUrl, { query: query, pageSize: pageSize }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
-        }, true, true);
+        }, true, true, function() {
+            self.IsAssignToLoading(false);
+        });
     }
     self.AssignTo = ko.observable();
 
