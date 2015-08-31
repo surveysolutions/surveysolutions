@@ -60,10 +60,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateToAsync(NavigationIdentity navigationItem)
         {
-            await this.DoNavigationActionWhenAllWaitersArelFinishedAsync((() => this.NavigateTo(groupIdentity, anchoredElementIdentity)));
+            await this.DoNavigationActionAsync((() => this.NavigateTo(navigationItem)));
         }       
         
-        private async Task DoNavigationActionWhenAllWaitersArelFinishedAsync(Action action)
+        private async Task DoNavigationActionAsync(Action action)
         {
             if (this.isNavigatingInExecutionInCurrentMoment)
                 return;
@@ -84,27 +84,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private void NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity)
+        private void NavigateTo(NavigationIdentity navigationItem)
         {
-            if (!this.CanNavigateTo(groupIdentity))
-                return;
+            if (navigationItem.ScreenType == ScreenType.Group)
+            {
+                if (!this.CanNavigateTo(navigationItem.TargetGroup)) return;
 
-            var navigationItem = new NavigationParams {TargetGroup = groupIdentity};
                 while (this.navigationStack.Any(x => x.TargetGroup.Equals(navigationItem.TargetGroup)))
-
-            while (this.navigationStack.Contains(navigationItem))
-            {
-                this.navigationStack.Pop();
-            }
-
-            if (anchoredElementIdentity != null)
-            {
-                navigationItem.AnchoredElementIdentity = anchoredElementIdentity;
+                {
+                    this.navigationStack.Pop();
+                }
             }
 
             this.navigationStack.Push(navigationItem);
 
-            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
+            this.ChangeCurrentGroupAndFireEvent(navigationItem);
         }
 
         private bool CanNavigateTo(Identity group)
@@ -116,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
-            await this.DoNavigationActionWhenAllWaitersArelFinishedAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
+            await this.DoNavigationActionAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
         }
 
         private void NavigateBack(Action navigateToIfHistoryIsEmpty)
