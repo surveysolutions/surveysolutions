@@ -27,7 +27,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
                 GroupPublicKey = chapterId,
                 QuestionText = "old title",
                 StataExportCaption = "old_variable_name",
-                Mandatory = false,
                 Instructions = "old instructions",
                 ConditionExpression = "old condition",
                 ResponsibleId = responsibleId
@@ -38,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
         Because of = () =>
                 questionnaire.UpdateMultimediaQuestion(questionId: questionId, title: "title",
                     variableName: "multimedia_question",
-                    variableLabel: variableName, isMandatory: isMandatory, enablementCondition: condition, instructions: instructions,
+                    variableLabel: variableName, enablementCondition: condition, instructions: instructions,
                     responsibleId: responsibleId);
 
         Cleanup stuff = () =>
@@ -66,10 +65,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
                 .EnablementCondition.ShouldEqual(condition);
 
-        It should_raise_MultimediaQuestionUpdated_event_with_ismandatory_specified = () =>
-            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
-                .IsMandatory.ShouldEqual(isMandatory);
-
         It should_raise_MultimediaQuestionUpdated_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
                 .Instructions.ShouldEqual(instructions);
@@ -80,7 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "multimedia_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";

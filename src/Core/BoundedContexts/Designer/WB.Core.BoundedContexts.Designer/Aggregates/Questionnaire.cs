@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private const int MaxChapterItemsCount = 400;
         private const int MaxTitleLength = 500;
         private const int maxFilteredComboboxOptionsCount = 5000;
+        private const int MaxGroupDepth = 10;
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
         {
@@ -162,7 +163,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         e.AnswerOrder,
                         e.Featured,
-                        e.Mandatory,
                         e.Capital,
                         e.Instructions,
                         e.Mask,
@@ -206,7 +206,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         e.Featured,
-                        e.Mandatory,
                         e.Capital,
                         e.Instructions,
                         null,
@@ -247,7 +246,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         false,
-                        e.Mandatory,
                         false,
                         e.Instructions,
                         null,
@@ -286,7 +284,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         e.AnswerOrder,
                         e.Featured,
-                        e.Mandatory,
                         e.Capital,
                         e.Instructions,
                         e.Mask,
@@ -327,7 +324,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         e.Featured,
-                        e.Mandatory,
                         e.Capital,
                         e.Instructions,
                         null,
@@ -369,7 +365,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         false,
-                        e.Mandatory,
                         false,
                         e.Instructions,
                         null,
@@ -420,7 +415,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         e.AnswerOrder,
                         e.Featured,
-                        e.Mandatory,
                         e.Capital,
                         e.Instructions,
                         e.Mask,
@@ -457,7 +451,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         e.Featured,
-                        e.Mandatory,
                         e.Capital,
                         e.Instructions,
                         null,
@@ -494,7 +487,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         false,
-                        e.Mandatory,
                         false,
                         e.Instructions,
                         null,
@@ -555,7 +547,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         false,
-                        e.IsMandatory,
                         false,
                         e.Instructions,
                         null,
@@ -594,7 +585,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         false,
-                        e.IsMandatory,
                         false,
                         e.Instructions,
                         null,
@@ -633,7 +623,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         Order.AZ,
                         false,
-                        e.IsMandatory,
                         false,
                         e.Instructions,
                         null,
@@ -671,7 +660,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.ValidationMessage,
                         Order.AZ,
                         false,
-                        e.IsMandatory,
                         false,
                         e.Instructions,
                         null,
@@ -937,6 +925,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.innerDocument.ConnectChildrenWithParent();
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
+                this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
 
             this.ApplyEvent(new NewGroupAdded
@@ -1081,7 +1070,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     var variableName = string.Empty;
                     var variableLabel = question.VariableLabel;
                     var title = question.QuestionText;
-                    var isMandatory = question.Mandatory;
                     var enablementCondition = question.ConditionExpression;
                     var instructions = question.Instructions;
 
@@ -1093,7 +1081,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             variableLabel: variableLabel, 
                             parentGroupId: groupId,
                             title: title,
-                            isMandatory: isMandatory, 
                             isPreFilled: numericQuestion.Featured,
                             scope: numericQuestion.QuestionScope, 
                             enablementCondition: enablementCondition,
@@ -1113,7 +1100,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateTextListQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
-                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            enablementCondition: enablementCondition,
                             validationExpression: textListQuestion.ValidationExpression,
                             validationMessage: textListQuestion.ValidationMessage, 
                             instructions: instructions,
@@ -1128,7 +1115,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateQrBarcodeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
-                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            enablementCondition: enablementCondition,
                             validationExpression: qrBarcodeQuestion.ValidationExpression,
                             validationMessage: qrBarcodeQuestion.ValidationMessage, 
                             instructions: instructions,
@@ -1141,7 +1128,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateTextQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
-                            title: title, isMandatory: isMandatory,
+                            title: title,
                             enablementCondition: enablementCondition, responsibleId: responsibleId,
                             sourceQuestionId: sourceItemId, instructions: instructions, mask: textQuestion.Mask,
                             isPreFilled: textQuestion.Featured,
@@ -1155,7 +1142,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateGeoLocationQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
-                            isMandatory: isMandatory,
                             enablementCondition: enablementCondition, instructions: instructions,
                             parentGroupId: groupId, sourceQuestionId: sourceItemId,
                             responsibleId: responsibleId, validationExpression: geoLocationQuestion.ValidationExpression,
@@ -1168,7 +1154,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateDateTimeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
-                            isMandatory: isMandatory,
                             enablementCondition: enablementCondition, instructions: instructions,
                             parentGroupId: groupId, sourceQuestionId: sourceItemId,
                             responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
@@ -1183,7 +1168,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateCategoricalMultiAnswersQuestionClonedEvents(questionId: itemId,
                             targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
-                            title: title, isMandatory: isMandatory,
+                            title: title, 
                             enablementCondition: enablementCondition, parentGroupId: groupId,
                             sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
                             scope: categoricalMultiQuestion.QuestionScope,
@@ -1204,7 +1189,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateCategoricalSingleAnswerQuestionEvents(questionId: itemId,
                             targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
-                            title: title, isMandatory: isMandatory,
+                            title: title, 
                             enablementCondition: enablementCondition, parentGroupId: groupId,
                             sourceQuestionId: sourceItemId, instructions: instructions, responsibleId: responsibleId,
                             scope: categoricalSingleQuestion.QuestionScope,
@@ -1227,7 +1212,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateMultimediaQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
-                            isMandatory: isMandatory, enablementCondition: enablementCondition,
+                            enablementCondition: enablementCondition,
                             instructions: instructions,
                             sourceQuestionId: sourceItemId, responsibleId: responsibleId));
                         continue;
@@ -1364,6 +1349,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
                     }
                 }
+
+                var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetGroupId.Value)).Count();
+                var sourceGroupMaxChildNestingDepth = this.GetMaxChildGroupNestingDepth(sourceGroup);
+
+                if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
+                {
+                    throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                }
+                
             }
             
             // if we don't have a target group we would like to move source group into root of questionnaire
@@ -1418,7 +1412,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = question.QuestionType,
                 VariableLabel = question.VariableLabel,
 
-                Mandatory = question.Mandatory,
                 Featured = question.Featured,
                 Capital = question.Capital,
 
@@ -1503,7 +1496,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.Text,
                 StataExportCaption = null,
                 VariableLabel = null,
-                Mandatory = false,
                 Featured = false,
                 QuestionScope = QuestionScope.Interviewer,
                 ConditionExpression = null,
@@ -1580,7 +1572,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
@@ -1606,7 +1597,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.Text,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -1622,7 +1612,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             QuestionScope scope,
             string enablementCondition,
             string validationExpression,
@@ -1645,7 +1634,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -1659,7 +1647,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
@@ -1684,7 +1671,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -1699,7 +1685,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             QuestionScope scope,
             string enablementCondition,
             string validationExpression,
@@ -1728,7 +1713,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.MultyOption,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -1748,7 +1732,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
@@ -1799,7 +1782,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.SingleOption,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -1829,7 +1811,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = categoricalOneAnswerQuestion.QuestionType,
                 StataExportCaption = categoricalOneAnswerQuestion.StataExportCaption,
                 VariableLabel = categoricalOneAnswerQuestion.VariableLabel,
-                Mandatory = categoricalOneAnswerQuestion.Mandatory,
                 Featured = categoricalOneAnswerQuestion.Featured,
                 QuestionScope = categoricalOneAnswerQuestion.QuestionScope,
                 ConditionExpression = categoricalOneAnswerQuestion.ConditionExpression,
@@ -1865,7 +1846,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = categoricalOneAnswerQuestion.QuestionType,
                 StataExportCaption = categoricalOneAnswerQuestion.StataExportCaption,
                 VariableLabel = categoricalOneAnswerQuestion.VariableLabel,
-                Mandatory = categoricalOneAnswerQuestion.Mandatory,
                 Featured = categoricalOneAnswerQuestion.Featured,
                 QuestionScope = categoricalOneAnswerQuestion.QuestionScope,
                 ConditionExpression = categoricalOneAnswerQuestion.ConditionExpression,
@@ -1885,7 +1865,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory, 
             bool isPreFilled,
             QuestionScope scope, 
             string enablementCondition, 
@@ -1914,7 +1893,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 Capital = false,
                 QuestionScope = scope,
@@ -1929,7 +1907,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition,
+            string enablementCondition,
             string validationExpression,
             string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
         {
@@ -1951,7 +1929,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -1963,7 +1940,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
-         bool isMandatory, string enablementCondition, string instructions, Guid responsibleId)
+         string enablementCondition, string instructions, Guid responsibleId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1979,7 +1956,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 VariableLabel = variableLabel,
-                IsMandatory = isMandatory,
                 EnablementCondition = enablementCondition,
                 Instructions = instructions,
                 ResponsibleId = responsibleId
@@ -1987,7 +1963,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition,
+            string enablementCondition,
             string validationExpression, 
             string validationMessage, string instructions, Guid responsibleId)
         {
@@ -2005,7 +1981,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 VariableLabel = variableLabel,
-                IsMandatory = isMandatory,
                 EnablementCondition = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -2096,18 +2071,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            if (responsibleId == personId)
+            if (this.innerDocument.CreatedBy == personId)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
-                    "You are the owner of this questionnaire. Please, input another email");
+                    string.Format("User {0} is an owner of this questionnaire. Please, input another email.", email));
             }
 
             if (this.innerDocument.SharedPersons.Contains(personId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.UserExistInShareList,
-                    string.Format("User {0} already exist in share list", email));
+                    string.Format("User {0} already exist in share list.", email));
             }
 
             this.ApplyEvent(new SharedPersonToQuestionnaireAdded()
@@ -2197,6 +2172,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
                 throw new QuestionnaireException(string.Format("Section cannot have more than {0} child items", MaxChapterItemsCount));
+            }
+        }
+
+        private void ThrowIfTargetGroupHasReachedAllowedDepthLimit(Guid itemId)
+        {
+            
+            var entity = innerDocument.Find<IComposite>(itemId);
+            if (entity != null)
+            {
+                var targetGroupDepth = this.GetAllParentGroups(entity).Count();
+
+                if ((targetGroupDepth) >= MaxGroupDepth)
+                {
+                    throw new QuestionnaireException(string.Format("Sub-section or roster  depth cannot be higher than {0}",
+                        MaxGroupDepth));
+                }
             }
         }
 
@@ -3733,11 +3724,33 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 
         }
 
+        int GetMaxChildGroupNestingDepth(IGroup group)
+        {
+            int maxDepth = 1;
+            Queue<Tuple<IGroup, int>> queue = new Queue<Tuple<IGroup, int>>();
+            queue.Enqueue(Tuple.Create(group, 1));
+
+            while (queue.Any())
+            {
+                var item = queue.Dequeue();
+                foreach (var subGroup in item.Item1.Children.OfType<IGroup>())
+                {
+                    queue.Enqueue(Tuple.Create(subGroup, item.Item2 + 1));
+                }
+
+                if (item.Item2 > maxDepth)
+                    maxDepth = item.Item2;
+            }
+
+            return maxDepth;
+        }
+
         #endregion
 
         #region Create clone events
 
-        private IEnumerable<object> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, string mask, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+        private IEnumerable<object> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
+            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, string mask, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return new QuestionCloned
             {
@@ -3747,7 +3760,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.Text,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -3761,7 +3773,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+        private IEnumerable<object> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
+            string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return new QuestionCloned
             {
@@ -3771,7 +3784,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 QuestionScope = QuestionScope.Interviewer,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -3783,7 +3795,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+        private IEnumerable<object> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
+            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return new QuestionCloned
             {
@@ -3793,7 +3806,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.DateTime,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -3806,7 +3818,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateCategoricalMultiAnswersQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
+        private IEnumerable<object> CreateCategoricalMultiAnswersQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
+            QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
         {
             yield return new QuestionCloned
             {
@@ -3816,7 +3829,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.MultyOption,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -3832,7 +3844,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
+        private IEnumerable<object> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
+            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
             yield return new QuestionCloned
             {
@@ -3842,7 +3855,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionType = QuestionType.SingleOption,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
@@ -3859,7 +3871,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
+        private IEnumerable<object> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             yield return new NumericQuestionCloned
             {
@@ -3868,7 +3880,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 Featured = isPreFilled,
                 Capital = false,
                 QuestionScope = scope,
@@ -3884,7 +3895,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxAnswerCount)
+        private IEnumerable<object> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId, int? maxAnswerCount)
         {
             yield return new TextListQuestionCloned
             {
@@ -3893,7 +3904,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = title,
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
-                Mandatory = isMandatory,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -3905,7 +3915,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isMandatory, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
+        private IEnumerable<object> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
+            string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return new QRBarcodeQuestionCloned
             {
@@ -3914,7 +3925,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Title = title,
                 VariableName = variableName,
                 VariableLabel = variableLabel,
-                IsMandatory = isMandatory,
                 EnablementCondition = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -3926,8 +3936,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<object> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel,
-            bool isMandatory, string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex,
-            Guid responsibleId)
+            string enablementCondition, string instructions, Guid sourceQuestionId, int targetIndex, Guid responsibleId)
         {
             yield return
                 new QuestionCloned
@@ -3938,7 +3947,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     QuestionType = QuestionType.Multimedia,
                     StataExportCaption = variableName,
                     VariableLabel = variableLabel,
-                    Mandatory = isMandatory,
                     Featured = false,
                     Capital = false,
                     QuestionScope = QuestionScope.Interviewer,
@@ -3955,7 +3963,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     Title = title,
                     VariableName = variableName,
                     VariableLabel = variableLabel,
-                    IsMandatory = isMandatory,
                     EnablementCondition = enablementCondition,
                     Instructions = instructions,
                     ResponsibleId = responsibleId

@@ -41,12 +41,6 @@
     <Reference Include="Castle.Core">
       <HintPath>..\..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Collections">
-      <HintPath>..\..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Interop">
-      <HintPath>..\..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="EventStore.ClientAPI, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\EventStore.Client.3.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
@@ -58,8 +52,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -77,17 +72,12 @@
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.ByteCode.Castle">
-      <HintPath>..\..\..\..\Externals\NHibernate.ByteCode.Castle.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.Caches.SysCache">
-      <HintPath>..\..\..\..\packages\NHibernate.Caches.SysCache.4.0.0.4000\lib\net40\NHibernate.Caches.SysCache.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -111,7 +101,8 @@
       <HintPath>..\..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
     </Reference>
     <Reference Include="Npgsql">
-      <HintPath>..\..\..\..\packages\Npgsql.2.2.4.3\lib\net45\Npgsql.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Npgsql.3.0.1\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -142,9 +133,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Esent\EsentReadSideModule.cs" />
-    <Compile Include="Esent\Implementation\EsentKeyValueStorage.cs" />
-    <Compile Include="Esent\Implementation\EsentSettings.cs" />
     <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
@@ -153,6 +141,7 @@
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="IsolatedThreadExtensions.cs" />
+    <Compile Include="NoTransactionalThreadMarkerManager.cs" />
     <Compile Include="IsolatedThreadManager.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
@@ -160,12 +149,14 @@
     <Compile Include="Memory\Implementation\ReadSideStoreMemoryCacheSettings.cs" />
     <Compile Include="NinjectExtensions.cs" />
     <Compile Include="Postgre\Implementation\DatabaseManagement.cs" />
-    <Compile Include="Postgre\Implementation\PostgresClientBatchingBatcherFactory.cs" />
     <Compile Include="Postgre\Implementation\ICqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\ISessionProvider.cs" />
     <Compile Include="Postgre\Implementation\PlainPostgresTransactionManager.cs" />
-    <Compile Include="Postgre\Implementation\PostgresClientBatchingBatcher.cs" />
+    <Compile Include="Postgre\Implementation\PostgresKeyValueStorage.cs" />
+    <Compile Include="Postgre\Implementation\PostgresPlainKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\PostgresPlainStorageRepository.cs" />
+    <Compile Include="Postgre\Implementation\PostgresReadSideKeyValueStorage.cs" />
+    <Compile Include="Postgre\Implementation\NoTransactionCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />
     <Compile Include="Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
@@ -175,6 +166,7 @@
     <Compile Include="Postgre\PostgreReadSideModule.cs" />
     <Compile Include="Postgre\PostgresPlainStorageModule.cs" />
     <Compile Include="Postgre\PostgresPlainStorageSettings.cs" />
+    <Compile Include="Postgre\PostresKeyValueModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

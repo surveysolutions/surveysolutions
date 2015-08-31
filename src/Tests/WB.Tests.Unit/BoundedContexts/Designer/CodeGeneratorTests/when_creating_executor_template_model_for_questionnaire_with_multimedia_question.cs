@@ -60,7 +60,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             GetQuestion(multimediaId).ShouldContainValues(
                 id: multimediaId,
                 variableName: "multimedia",
-                isMandatory: false,
                 conditions: "text == \"a\"",
                 validations: null,
                 questionType: QuestionType.Multimedia,
@@ -70,7 +69,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                 generatedStateName: "@__multimedia_state",
                 rosterScopeName: "@__questionnaire_scope",
                 generatedValidationsMethodName: "IsValid_multimedia",
-                generatedMandatoryMethodName: "IsManadatoryValid_multimedia",
                 generatedConditionsMethodName: "IsEnabled_multimedia");
 
 

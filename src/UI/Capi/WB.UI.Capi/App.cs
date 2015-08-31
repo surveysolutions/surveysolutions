@@ -1,14 +1,13 @@
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Capi.Views.Login;
+using WB.UI.Capi.ViewModel;
 
 namespace WB.UI.Capi
 {
-    public class App: MvxApplication
+    public class App : MvxApplication
     {
-        public App()
+        public override void Initialize()
         {
-            Mvx.RegisterSingleton<IMvxAppStart>(new MvxAppStart<LoginViewModel>());
+            RegisterAppStart<SplashViewModel>();
         }
     }
 }

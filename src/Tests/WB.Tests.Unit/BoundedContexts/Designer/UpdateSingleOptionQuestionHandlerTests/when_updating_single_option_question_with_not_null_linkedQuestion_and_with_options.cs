@@ -31,7 +31,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 ParentGroupId = parentGroupId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -46,7 +45,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     title: title,
                     variableName: variableName,
                     variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -76,7 +74,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static Guid groupFromRosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid parentGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static bool isMandatory = false;
         private static bool isPreFilled = false;
         private static string variableName = "single_var";
         private static string title = "title";

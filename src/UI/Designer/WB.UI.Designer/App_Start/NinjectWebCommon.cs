@@ -26,7 +26,6 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
@@ -77,17 +76,6 @@ namespace WB.UI.Designer.App_Start
 
             var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
-            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
-            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
-            {
-                appDataDirectory = System.Web.Hosting.HostingEnvironment.MapPath(appDataDirectory);
-            }
-
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
-            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
-
-            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
-
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
             var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly }; 
 
@@ -97,10 +85,12 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, 
+                    postgresCacheSize,
+                    mappingAssemblies),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
+                new PostresKeyValueModule(postgresCacheSize),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
@@ -128,14 +118,14 @@ namespace WB.UI.Designer.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
-
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            var snapshottingPolicy = new SimpleSnapshottingPolicy(1);
+            kernel.Bind<ISnapshottingPolicy>().ToConstant(snapshottingPolicy);
+            kernel.Bind<ISnapshotStore>().To<InMemoryCachedSnapshotStore>().InSingletonScope();
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(snapshottingPolicy);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(kernel.Get<ISnapshotStore>());
             CreateAndRegisterEventBus(kernel);
         }
 

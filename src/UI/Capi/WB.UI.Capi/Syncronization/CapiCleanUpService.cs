@@ -7,11 +7,12 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Capi.ChangeLog;
 using WB.Core.BoundedContexts.Capi.Services;
-using WB.Core.BoundedContexts.Capi.Views.InterviewDetails;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.WriteSide;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Capi.SnapshotStore;
 using WB.UI.Capi.ViewModel.Dashboard;
 
 namespace WB.UI.Capi.Syncronization
@@ -22,7 +23,7 @@ namespace WB.UI.Capi.Syncronization
         private readonly IChangeLogManipulator changelog;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
 
-        private ISyncPackageIdsStorage syncPackageIdsStorage;
+        private readonly ISyncPackageIdsStorage syncPackageIdsStorage;
 
         public CapiCleanUpService(
             IChangeLogManipulator changelog, 
@@ -58,15 +59,12 @@ namespace WB.UI.Capi.Syncronization
         {
             this.changelog.CleanUpChangeLogByEventSourceId(id);
 
-            //delete from event store
-#warning invent some better way of doing that
-            var eventStore = NcqrsEnvironment.Get<IEventStore>() as MvvmCrossSqliteEventStore;
-            if (eventStore != null)
-                eventStore.CleanStream(id);
+            var writeSideCleanerRegistry = CapiApplication.Kernel.Get<IWriteSideCleanerRegistry>();
 
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as FileBasedSnapshotStore;
-            if (snapshotStore != null)
-                snapshotStore.DeleteSnapshot(id);
+            foreach (var writeSideCleaner in writeSideCleanerRegistry.GetAll())
+            {
+                writeSideCleaner.Clean(id);
+            }
 
             //todo: notify denormalizes
 
@@ -74,10 +72,6 @@ namespace WB.UI.Capi.Syncronization
             var questionnaireDtoWriter = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>();
             if (questionnaireDtoWriter!=null)
                 questionnaireDtoWriter.Remove(id);
-
-            var interviewViewModelWriter = CapiApplication.Kernel.Get<IReadSideRepositoryWriter<InterviewViewModel>>();
-            if (interviewViewModelWriter!=null)
-                interviewViewModelWriter.Remove(id);
 
             this.plainInterviewFileStorage.RemoveAllBinaryDataForInterview(id);
         }

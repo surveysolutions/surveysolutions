@@ -12,8 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public string Instructions { get; set; }
 
-        public bool IsMandatory { get; set; }
-
         public QuestionScope QuestionScope { get; set; }
 
         public string VariableName { get; set; }

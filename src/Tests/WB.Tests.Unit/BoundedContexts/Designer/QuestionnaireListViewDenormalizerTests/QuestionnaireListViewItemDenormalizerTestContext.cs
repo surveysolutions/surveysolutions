@@ -31,8 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
 
         protected static CommittedEvent CreateCommittedEvent(object payload, Guid eventSourceId, DateTime eventTimeStamp)
         {
-            return new CommittedEvent(Guid.NewGuid(), "", Guid.NewGuid(), eventSourceId, 1, eventTimeStamp,
-                payload);
+            return new CommittedEvent(Guid.NewGuid(), "", Guid.NewGuid(), eventSourceId, 1, eventTimeStamp, 0, payload);
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid eventSourceId,T payload, DateTime? timeStamp=null)

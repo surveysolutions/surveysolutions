@@ -20,31 +20,16 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             this.eventStore = eventStore;
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool isBulk = false)
+        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            UncommittedEvent[] uncommittedChanges = aggregateRoot.GetUncommittedChanges().ToArray();
-            var eventStream = new UncommittedEventStream(origin);
-
-            foreach (UncommittedEvent @event in uncommittedChanges)
-            {
-                eventStream.Append(@event);
-            }
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUncommittedChanges());
 
             this.eventStore.Store(eventStream);
-
-            try
-            {
-                Publish(uncommittedChanges);
-            }
-            finally
-            {
-                aggregateRoot.MarkChangesAsCommitted();
-            }
         }
 
-        private void Publish(UncommittedEvent[] uncommittedChanges)
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
         {
-            foreach (var uncommittedChange in uncommittedChanges)
+            foreach (var uncommittedChange in aggregateRoot.GetUncommittedChanges())
             {
                 var handlers = this.liteEventRegistry.GetHandlers(uncommittedChange);
 

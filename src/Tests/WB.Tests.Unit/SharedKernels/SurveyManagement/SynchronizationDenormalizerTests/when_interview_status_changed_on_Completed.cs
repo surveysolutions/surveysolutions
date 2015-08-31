@@ -31,17 +31,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         };
 
         Because of = () =>
-            denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.Completed, comments));
+            denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.Completed, comments, eventId: Guid.Parse(partialPackageId)));
 
         It should_create_interview_package = () =>
             interviewPackageStorageWriterMock.Verify(x => x.Store(
-                Moq.It.IsAny<InterviewSyncPackageContent>(),
-                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.DeleteInterview), 
-                partialPackageId, 
-                CounterId), Times.Once);
+                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.DeleteInterview),
+                Moq.It.Is<string>(id => id.StartsWith(partialPackageId))), Times.Once);
 
         private static InterviewSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+        private static Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>> interviewPackageStorageWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>();
 
         private static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

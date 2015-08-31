@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 
             var userViewFactory = new Mock<IUserViewFactory>();
             return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument,
-                new QuestionDataParser(), userViewFactory.Object);
+                new QuestionDataParser(), userViewFactory.Object, Mock.Of<ITransactionManagerProvider>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

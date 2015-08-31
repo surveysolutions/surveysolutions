@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using System.Data;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -14,7 +15,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.UserId);
             Property(x => x.PackageId);
             Property(x => x.Timestamp);
+
             Property(x => x.SortIndex);
+
+            Property(x => x.Content, pm =>
+            {
+                pm.Lazy(true);
+                pm.Update(false);
+            });
+
+            Property(x => x.Meta, pm => pm.Update(false));
         }
     }
 }

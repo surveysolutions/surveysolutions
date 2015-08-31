@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <integer name="HttpResponseTimeout">1200</integer>
+  <integer name="BufferSize">512</integer>
+  <integer name="GpsReceiveTimeoutSec">30</integer>
+  <bool name="AcceptUnsignedSslCertificate">false</bool>
+  <string name="DesignerEndpoint">https://solutions.worldbank.org/api/v9</string>
+</resources>

@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Featured = isPrefilled,
-                Mandatory = isMandatory,
                 StataExportCaption = variableName,
                 Instructions = instructions,
                 QuestionScope = scope,
@@ -76,9 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
         It should_set_Instructionst_in_instructions = () =>
             questionView.Instructions.ShouldEqual(instructions);
 
-        It should_set_IsMandatoryt_in_isMandatory = () =>
-            questionView.IsMandatory.ShouldEqual(isMandatory);
-
         It should_set_QuestionScopet_in_scope = () =>
             questionView.QuestionScope.ShouldEqual(scope);
 
@@ -104,7 +100,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
         private static string validationMessage = "message";
         private static bool isPrefilled = true;
         private static string instructions = "message";
-        private static bool isMandatory = true;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string variableName = "variable";
         private static Guid linkedToQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

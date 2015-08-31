@@ -67,9 +67,9 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
@@ -86,7 +86,7 @@
       <HintPath>..\..\..\..\..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="StatData">
-      <HintPath>..\..\..\..\..\Externals\StatData.dll</HintPath>
+      <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -111,13 +111,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataCollectionSharedKernelModule.cs" />
+    <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
-    <Compile Include="Implementation\ReadSide\RepositoryAccessors\OrderableSyncPackageWriter.cs" />
+    <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
@@ -167,7 +167,6 @@
     <Compile Include="Services\DeleteQuestionnaireTemplate\IInterviewsToDeleteFactory.cs" />
     <Compile Include="Services\DeleteSupervisor\IDeleteSupervisorService.cs" />
     <Compile Include="Services\Export\ExportDataType.cs" />
-    <Compile Include="Services\IOrderableSyncPackageWriter.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireSynchronizationDenormalizer.cs" />
@@ -176,7 +175,6 @@
     <Compile Include="EventHandler\UserSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
-    <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
@@ -240,6 +238,7 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
     <Compile Include="Services\Sql\IExportedDataAccessor.cs" />
+    <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Users\UserFeedEntryType.cs" />
     <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
     <Compile Include="ValueObjects\HealthCheck\HealthCheckResults.cs" />
@@ -512,17 +511,15 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.ValidityChanges != null)
             {
-                this.DeclareAnswersInvalid(Events.Interview.Dtos.Identity.ToEventIdentities(changes.ValidityChanges.AnswersDeclaredInvalid));
+                this.DeclareAnswersInvalid(changes.ValidityChanges.AnswersDeclaredInvalid);
             }
 
             if (changes.RosterCalculationData != null)
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.AnswersForLinkedQuestionsToRemove != null)
             {
-                this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(changes.AnswersForLinkedQuestionsToRemove));
+                this.RemoveAnswers(changes.AnswersForLinkedQuestionsToRemove);
             }
         }
 
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (rosterCalculationData.AnswersToRemoveByDecreasedRosterSize.Any())
             {
-                this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize));
+                this.RemoveAnswers(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize);
             }
 
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
@@ -90,10 +90,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)
         {
-            this.EnableGroups(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.GroupsToBeEnabled));
-            this.DisableGroups(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.GroupsToBeDisabled));
-            this.EnableQuestions(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.QuestionsToBeEnabled));
-            this.DisableQuestions(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.QuestionsToBeDisabled));
+            this.EnableGroups(enablementChanges.GroupsToBeEnabled);
+            this.DisableGroups(enablementChanges.GroupsToBeDisabled);
+            this.EnableQuestions(enablementChanges.QuestionsToBeEnabled);
+            this.DisableQuestions(enablementChanges.QuestionsToBeDisabled);
         }
 
         public void AddRosterInstances(AddedRosterInstance[] instances)
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void EnableQuestions(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void EnableQuestions(IEnumerable<Identity> groups)
         {
             foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
             {
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DisableQuestions(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void DisableQuestions(IEnumerable<Identity> groups)
         {
             foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
             {
@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void EnableGroups(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void EnableGroups(IEnumerable<Identity> groups)
         {
             foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
             {
@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DisableGroups(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void DisableGroups(IEnumerable<Identity> groups)
         {
             foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
             {
@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DeclareAnswersInvalid(IEnumerable<Events.Interview.Dtos.Identity> questions)
+        public void DeclareAnswersInvalid(IEnumerable<Identity> questions)
         {
             foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
             {
@@ -167,7 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DeclareAnswersValid(IEnumerable<Events.Interview.Dtos.Identity> questions)
+        public void DeclareAnswersValid(IEnumerable<Identity> questions)
         {
             foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
             {
@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
         
-        public void RemoveAnswers(IEnumerable<Events.Interview.Dtos.Identity> questions)
+        public void RemoveAnswers(IEnumerable<Identity> questions)
         {
             foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
             {
@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// This is one-way transformation. Opposite operation is too slow.
         /// If you need to compactify data and get it back, you should use another datatype, not a string.
         /// </remarks>
-        private static string ConvertEventIdentityToString(Events.Interview.Dtos.Identity identity)
+        private static string ConvertEventIdentityToString(Identity identity)
         {
             return ConversionHelper.ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
         }

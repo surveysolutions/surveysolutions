@@ -29,6 +29,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         public override void Load()
         {
+            this.Bind<PostgresPlainStorageSettings>().ToConstant(this.settings);
             DatabaseManagement.CreateDatabase(settings.ConnectionString);
 
             this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory())
@@ -53,7 +54,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.Dialect<NHibernate.Dialect.PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
-            cfg.Proxy(proxy => proxy.ProxyFactoryFactory<NHibernate.ByteCode.Castle.ProxyFactoryFactory>());
 
             cfg.AddDeserializedMapping(GetMappings(), "Plain");
             var update = new SchemaUpdate(cfg);

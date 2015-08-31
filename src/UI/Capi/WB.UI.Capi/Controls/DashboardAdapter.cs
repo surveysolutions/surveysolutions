@@ -8,8 +8,8 @@ using Android.Views;
 using Android.Widget;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Capi.Controls.Adapters;
 using WB.UI.Capi.ViewModel.Dashboard;
-using WB.UI.Shared.Android.Adapters;
 
 namespace WB.UI.Capi.Controls
 {
@@ -28,54 +28,40 @@ namespace WB.UI.Capi.Controls
 
         protected override View BuildViewItem(DashboardQuestionnaireItem dataItem, int position)
         {
-            LayoutInflater layoutInflater =
-               (LayoutInflater)this.activity.GetSystemService(Context.LayoutInflaterService);
+            View view = this.activity.LayoutInflater.Inflate(Resource.Layout.dashboard_survey_item, null);
 
-            View view = layoutInflater.Inflate(Resource.Layout.dashboard_survey_item, null);
-
-            var llQuestionnairie = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnairie);
+            var llQuestionnaire = view.FindViewById<LinearLayout>(Resource.Id.llQuestionnairie);
             view.SetTag(Resource.Id.QuestionnaireId, dataItem.PublicKey.ToString());
-            llQuestionnairie.Focusable = false;
+            llQuestionnaire.Focusable = false;
 
-            if (dataItem.CanBeDeleted)
+            Button delButton = view.FindViewById<Button>(Resource.Id.btnRemoveInterview);
+
+            delButton.Visibility = dataItem.CanBeDeleted ? ViewStates.Visible : ViewStates.Gone;
+            delButton.Click += (sender, args) =>
             {
-                Button delButton = new Button(activity);
+                var target = sender as Button;
+                if (target == null)
+                    return;
 
-                var layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
-                
-                delButton.LayoutParameters = layoutParams;
-
-                delButton.SetTypeface(null, TypefaceStyle.Bold);
-                delButton.Text = "-";
-                delButton.SetPadding(0,0,0,5);
-                
-                llQuestionnairie.AddView(delButton);
-
-                delButton.Click += (sender, args) =>
-                {
-                    var target = sender as Button;
-                    if(target == null)
-                        return;
-
-                    this.deleteHandler.Invoke(dataItem.PublicKey, view);
-                };
-            }
+                this.deleteHandler.Invoke(dataItem.PublicKey, view);
+            };
 
             view.SetTag(Resource.Id.IsInterviewLocal, dataItem.CreatedOnClient);
 
 
-            AddPropertyToContainer(llQuestionnairie, GetStatusText(dataItem.Status));
+            TextView tvInterviewStatus = view.FindViewById<TextView>(Resource.Id.txtInterviewStatus);
+            tvInterviewStatus.Text = GetStatusText(dataItem.Status);
           
             foreach (var featuredItem in dataItem.Properties)
             {
                 var answerValue = featuredItem.Value;
-                AddPropertyToContainer(llQuestionnairie, featuredItem.Title + ": " + answerValue);
+                AddPropertyToContainer(llQuestionnaire, featuredItem.Title + ": " + answerValue);
             }
             
             var tvArrow = new TextView(activity);
             var img = activity.Resources.GetDrawable(global::Android.Resource.Drawable.IcMediaPlay);
             tvArrow.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-            llQuestionnairie.AddView(tvArrow, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WrapContent, 1));
+            llQuestionnaire.AddView(tvArrow, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WrapContent, 1));
 
             var tvComment = view.FindViewById<TextView>(Resource.Id.tvComment);
 

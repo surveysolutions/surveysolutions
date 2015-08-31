@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswersDeclaredInvalid : QuestionsPassiveEvent
     {
-        public AnswersDeclaredInvalid(Dtos.Identity[] questions)
+        public AnswersDeclaredInvalid(Identity[] questions)
             : base(questions) {}
     }
 }

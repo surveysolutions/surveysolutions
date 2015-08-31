@@ -43,6 +43,10 @@
         $('body').addClass('output-visible');
     };
 
+    self.HideAllAlerts = function() {
+        $("#alerts").empty();
+    }
+
     self.ShowError = function(message) {
         self.ShowErrors([message]);
     };
@@ -93,7 +97,7 @@
         }
     };
 
-    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
+    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
 
         if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -129,11 +133,15 @@
         }).always(function() {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);
+            if (!_.isUndefined(onDone)) {
+                onDone();
+            }
         });
     };
 
-    self.SendCommand = function(command, onSuccess) {
-        self.SendRequest(commandExecutionUrl, command, function(data) {
+    self.SendCommand = function(command, onSuccess, onDone) {
+        self.SendRequest(commandExecutionUrl, command, function (data) {
+            self.HideAllAlerts();
             if (data.IsSuccess) {
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
                   onSuccess(data);
@@ -144,11 +152,12 @@
                 else
                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
-        });
+        }, false, false, onDone);
     };
 
     self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
-        self.SendRequest(commandExecutionUrl, commands, function(data) {
+        self.SendRequest(commandExecutionUrl, commands, function (data) {
+            self.HideAllAlerts();
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
                 return !cmd.IsSuccess;
             });

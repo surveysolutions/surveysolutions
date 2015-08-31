@@ -63,7 +63,7 @@
                 case "SingleOption":
                     answer = {
                         id: question.id(),
-                        answer: question.selectedOption(),
+                        answer: question.isFilteredCombobox() ? question.selectedOption().value() : question.selectedOption(),
                         type: question.type()
                     };
                     break;

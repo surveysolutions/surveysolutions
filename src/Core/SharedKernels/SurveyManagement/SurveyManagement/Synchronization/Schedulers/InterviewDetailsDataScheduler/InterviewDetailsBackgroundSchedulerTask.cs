@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<SyncPackagesProcessor>()
+            IJobDetail job = JobBuilder.Create<InterviewDetailsBackgroundJob>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();

@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     title: title,
                     variableName: variableNameWithInvalidCharacters,
                     variableLabel: null,
-                    isMandatory: isMandatory,
                     scope: scope,
                     enablementCondition: enablementCondition,
                     validationExpression: string.Empty,
@@ -59,7 +57,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableNameWithInvalidCharacters = "var!";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;

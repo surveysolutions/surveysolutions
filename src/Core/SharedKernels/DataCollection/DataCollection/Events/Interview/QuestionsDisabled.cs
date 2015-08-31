@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class QuestionsDisabled : QuestionsPassiveEvent
     {
-        public QuestionsDisabled(Dtos.Identity[] questions)
+        public QuestionsDisabled(Identity[] questions)
             : base(questions) {}
     }
 }

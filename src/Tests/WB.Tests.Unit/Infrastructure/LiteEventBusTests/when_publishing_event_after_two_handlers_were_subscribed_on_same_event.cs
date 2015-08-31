@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommitedEventsFromAggregateRoot(aggregateRoot, null);
+            eventBus.PublishUncommittedEvents(aggregateRoot);
 
         It should_call_Handle_once_for_first_handler = () =>
             firstHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());

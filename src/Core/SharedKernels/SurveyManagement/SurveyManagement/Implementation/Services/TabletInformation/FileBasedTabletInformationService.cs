@@ -6,7 +6,9 @@ using Main.Core.Entities.SubEntities;
 
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
@@ -22,12 +24,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string zipExtension = ".zip";
 
-        private readonly IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletDocumentsStrogeReader;
+        private readonly IPlainStorageAccessor<TabletSyncLog> tabletDocumentsStrogeReader;
         private readonly IReadSideRepositoryReader<UserDocument> usersStorageReader;
 
         public FileBasedTabletInformationService(string parentFolder, 
             IFileSystemAccessor fileSystemAccessor,
-            IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
+            IPlainStorageAccessor<TabletSyncLog> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletDocumentsStrogeReader = tabletDocumentsStrogeReader;
@@ -88,35 +90,68 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
         {
             string deviceId = androidId.ToGuid().FormatGuid();
             var tabletLogView = new TabletLogView();
-            TabletSyncLogByUsers tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
+            TabletSyncLog tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
             if (tabletLog == null)
                 return tabletLogView;
 
-            tabletLogView.Users = tabletLog.Users.Select(x => new UserLight(x, usersStorageReader.GetById(x).UserName)).ToList();
+            tabletLogView.DeviceId = Guid.Parse(deviceId);
+            tabletLogView.AndroidId = tabletLog.AndroidId;
+            tabletLogView.LastUpdateDate = tabletLog.LastUpdateDate;
+            tabletLogView.RegistrationDate = tabletLog.RegistrationDate;
 
-            foreach (var userSyncLog in tabletLog.SyncLog)
+            tabletLogView.Users =
+                tabletLog.RegisteredUsersOnDevice.Select(
+                    x => new UserLight(x, usersStorageReader.GetById(x).UserName)).ToList();
+
+            foreach (var userSyncLog in tabletLog.UserSyncLog.OrderByDescending(x => x.HandshakeTime))
             {
                 var userSyncLogView = new UserSyncLogView
-                                      {
-                                          User = new UserLight(userSyncLog.Key, this.usersStorageReader.GetById(userSyncLog.Key).UserName)
-                                      };
-
-                foreach (var tabletSyncLog in userSyncLog.Value.OrderByDescending(x => x.HandshakeTime))
                 {
-                    var tabletSyncLogView = new TabletSyncLogView
-                                            {
-                                                AppVersion = tabletSyncLog.AppVersion,
-                                                HandshakeTime = tabletSyncLog.HandshakeTime,
-                                                PackagesTrackingInfo = tabletSyncLog.PackagesTrackingInfo
-                                            };
+                    User =
+                        new UserLight(Guid.Parse(userSyncLog.UserId),
+                            this.usersStorageReader.GetById(userSyncLog.UserId).UserName)
+                };
 
-                    userSyncLogView.TabletSyncLog.Add(tabletSyncLogView);
-                }
+                var tabletSyncLogView = new TabletSyncLogView
+                {
+                    AppVersion = userSyncLog.AppVersion,
+                    HandshakeTime = userSyncLog.HandshakeTime,
+                    /*    PackagesTrackingInfo =
+                        userSyncLog.PackagesTrackingInfo.GroupBy(x => x.PackageType)
+                            .ToDictionary(x => x.Key,
+                                x =>
+                                    new PackagesTrackingInfo()
+                                    {
+                                        LastPackageId = x.Last().PackageId,
+                                        PackagesRequestInfo =
+                                            x.ToDictionary(y => y.PackageId, y => y.PackageSyncTime)
+                                    })*/
+                    PackagesTrackingInfo =
+                        new[] {SyncItemType.User, SyncItemType.Interview, SyncItemType.Questionnaire}.ToDictionary(
+                            x => x, x => CreatePackagesTrackingInfoForPackageType(x, userSyncLog.PackagesTrackingInfo))
+                };
+
+                userSyncLogView.TabletSyncLog.Add(tabletSyncLogView);
 
                 tabletLogView.SyncLog.Add(userSyncLogView);
             }
 
             return tabletLogView;
+        }
+
+        private PackagesTrackingInfo CreatePackagesTrackingInfoForPackageType(string packageType,
+            IList<SyncPackageTrackingInfo> packages)
+        {
+            var packagesFilteredByType = packages.Where(p => p.PackageType == packageType).ToArray();
+
+            if (!packagesFilteredByType.Any())
+                return new PackagesTrackingInfo() {PackagesRequestInfo = new Dictionary<string, DateTime?>()};
+            
+            return new PackagesTrackingInfo()
+            {
+                LastPackageId = packagesFilteredByType.Last().PackageId,
+                PackagesRequestInfo = packagesFilteredByType.ToDictionary(x => x.PackageId, x => x.PackageSyncTime)
+            };
         }
     }
 }

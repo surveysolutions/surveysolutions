@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                     title: titleWithSubstitutionToSelf,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -60,7 +58,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private const string variableName = "var";
         private static string titleWithSubstitutionToSelf = string.Format("title with substitution to self - %{0}%", variableName);
-        private static bool isMandatory = true;
         private static string instructions = "intructions";
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;

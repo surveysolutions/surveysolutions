@@ -1,6 +1,7 @@
 using System;
-using AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage;
+
 using WB.Core.GenericSubdomains.Portable;
+using WB.UI.Capi.Implementations.DenormalizerStorage;
 
 namespace WB.UI.Capi.ViewModel.Dashboard
 {

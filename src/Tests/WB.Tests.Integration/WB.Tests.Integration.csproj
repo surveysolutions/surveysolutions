@@ -43,14 +43,6 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Esent.Collections, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.2.0\lib\net40\Esent.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Interop, Version=1.9.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\ManagedEsent.1.9.2.0\lib\net40\Esent.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="EventStore.ClientAPI, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\EventStore.Client.3.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
@@ -65,21 +57,27 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.9.1\lib\net45\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.9.1\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Machine.Specifications.Should">
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.2\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -97,8 +95,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Npgsql, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Npgsql.3.0.1\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -109,6 +116,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
@@ -147,11 +155,6 @@
     <Compile Include="CommandServiceTests\when_waiting_for_command_execution_and_there_are_3_commands_executing_each_for_half_a_second.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Empty.cs" />
-    <Compile Include="EsentTests\TestStoredEntity.cs" />
-    <Compile Include="EsentTests\when_esent_store_is_cleared.cs" />
-    <Compile Include="EsentTests\when_item_removed.cs" />
-    <Compile Include="EsentTests\when_random_item_is_stored.cs" />
-    <Compile Include="EsentTests\with_esent_store.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
     <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
@@ -169,9 +172,6 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_decimal_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_integer_number.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options_with_mandatory_child_under_condition_expression.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_off_cascading.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_on_cascading.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />
@@ -189,15 +189,9 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_revalidating_interview_with_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_answer_is_empty_set.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_numeric_roster_size_question_which_propagate_roster_with_mandatory_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and____.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_mandatory_questions_inside_triggered_by_the_same_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_linked_multiple_options_question_which_is_mandatory_and_links_to_text_question_and_has_2_selected_options_and__new_answer_is_empty_set.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_revalidating_interview_with_multiple_options_question_which_is_mandatory_and_answer_is_empty_set.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_roster_size_question_of_nested_roster_increase_row_count_but_row_is_disabled.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_inside_propagatable_group_which_triggers_group_enablement_with_mandatory_question_inside_disabled_group.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_top_level_question_which_enables_nested_roster.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_group_GC_with_question_C.cs" />
@@ -215,12 +209,13 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_which_is_part_of_condition_expression_in_another_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_disabled_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_enabled_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_question_which_enable_group_with_mandatory_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
+    <Compile Include="PostgreSQLTests\when_storing_entity_into_key_value_storage.cs" />
+    <Compile Include="PostgreSQLTests\with_postgres_db.cs" />
     <Compile Include="SequentialCommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_in_parallel_with_small_delays_each_command_taking_half_second_to_execute.cs" />
@@ -266,6 +261,10 @@
       <Project>{755ca607-6b50-487f-98a0-34a98973593d}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
+      <Project>{689346D7-30AC-420E-BC5B-588CC186A466}</Project>
+      <Name>WB.Core.BoundedContexts.Tester</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj">
       <Project>{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}</Project>
       <Name>WB.Core.GenericSubdomains.Native</Name>
@@ -309,6 +308,10 @@
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75D70EB8-1E56-4BFE-816C-5231112F64C0}</Project>
       <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
+      <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
+      <Name>WB.UI.Designer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

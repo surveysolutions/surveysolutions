@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Entities;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -29,21 +34,19 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
 
-        readonly IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor;
+        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
 
-        private readonly IFriendlyMessageService friendlyMessageService;
+        private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public DashboardViewModel(
             IPrincipal principal,
-            ILogger logger,
             IDesignerApiService designerApiService, 
             ICommandService commandService, 
             IQuestionnaireImportService questionnaireImportService,
             IViewModelNavigationService viewModelNavigationService,
-            IFriendlyMessageService friendlyMessageService,
+            IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
-            IPlainStorageAccessor<QuestionnaireListItem> questionnaireListStorageAccessor)
-            : base(logger)
+            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -51,18 +54,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
-            this.questionnaireListStorageAccessor = questionnaireListStorageAccessor;
-            this.friendlyMessageService = friendlyMessageService;
+            this.questionnaireListStorage = questionnaireListStorage;
+            this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         public async void Init()
         {
-            this.myQuestionnaires = this.questionnaireListStorageAccessor
+            this.myQuestionnaires = this.questionnaireListStorage
                     .Query(query => query
                     .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
                     .ToList());
 
-            this.publicQuestionnaires = this.questionnaireListStorageAccessor
+            this.publicQuestionnaires = this.questionnaireListStorage
                     .Query(query => query
                     .Where(questionnaire => questionnaire.IsPublic)
                     .ToList());
@@ -74,7 +77,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             await this.LoadServerQuestionnairesAsync();
 
-            this.IsInitialized = true;
+            this.ShowEmptyQuestionnaireListText = true;
         }
 
         private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
@@ -84,11 +87,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { this.questionnaires = value; RaisePropertyChanged(); }
         }
 
-        private bool isInitialized;
-        public bool IsInitialized
+        private bool showEmptyQuestionnaireListText;
+        public bool ShowEmptyQuestionnaireListText
         {
-            get { return isInitialized; }
-            set { isInitialized = value; RaisePropertyChanged(); }
+            get { return this.showEmptyQuestionnaireListText; }
+            set { this.showEmptyQuestionnaireListText = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
@@ -163,7 +166,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void SignOut()
         {
-            this.IsInitialized = false;
             this.principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
@@ -188,6 +190,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
 
+            string errorMessage = null;
             try
             {
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
@@ -197,14 +200,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress,
                             downloadProgress);
                     },
-                    token: tokenSource.Token);
+                    token: this.tokenSource.Token);
 
                 if (questionnairePackage != null)
                 {
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                    questionnaireImportService.ImportQuestionnaire(questionnairePackage.Document, questionnairePackage.Assembly);
-                    
+                    var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
+                    var questionnaireDocument = questionnairePackage.Document;
+                    var supportingAssembly = questionnairePackage.Assembly;
+
+                    questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
+
+                    this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+
                     this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
 
                     var interviewId = Guid.NewGuid();
@@ -212,19 +221,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
                         interviewId: interviewId,
                         userId: this.principal.CurrentUserIdentity.UserId,
-                        questionnaireId: questionnairePackage.Document.PublicKey,
-                        questionnaireVersion: 1,
+                        questionnaireId: questionnaireIdentity.QuestionnaireId,
+                        questionnaireVersion: questionnaireIdentity.Version,
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
-                    this.IsInitialized = false;
-                    this.viewModelNavigationService.NavigateTo<PrefilledQuestionsViewModel>(new {interviewId = interviewId.FormatGuid()});
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
                 }
             }
             catch (RestException ex)
             {
-                string errorMessage;
-
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
@@ -237,29 +243,30 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         errorMessage = String.Format(UIResources.ImportQuestionnaire_Error_NotFound, selectedQuestionnaire.Title);
                         break;
                     default:
-                        errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                        errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteractionService.Alert(errorMessage);
-                else 
+                if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
             finally
             {
                 this.IsInProgress = false;   
             }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
-
+            string errorMessage = null;
             try
             {
-                await this.questionnaireListStorageAccessor.RemoveAsync(this.myQuestionnaires);
-                await this.questionnaireListStorageAccessor.RemoveAsync(this.publicQuestionnaires);
+                await this.questionnaireListStorage.RemoveAsync(this.myQuestionnaires);
+                await this.questionnaireListStorage.RemoveAsync(this.publicQuestionnaires);
 
                 this.myQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
                 this.publicQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
@@ -269,22 +276,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 this.ShowMyQuestionnaires();
 
-                await this.questionnaireListStorageAccessor.StoreAsync(this.myQuestionnaires);
-                await this.questionnaireListStorageAccessor.StoreAsync(this.publicQuestionnaires);
+                await this.questionnaireListStorage.StoreAsync(this.myQuestionnaires);
+                await this.questionnaireListStorage.StoreAsync(this.publicQuestionnaires);
             }
             catch (RestException ex)
             {
-                string errorMessage = this.friendlyMessageService.GetFriendlyErrorMessageByRestException(ex);
+                errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
 
-                if (!string.IsNullOrEmpty(errorMessage))
-                    this.userInteractionService.Alert(errorMessage);
-                else
+                if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
             finally
             {
                 this.IsInProgress = false;
             }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         public override void NavigateToPreviousViewModel()

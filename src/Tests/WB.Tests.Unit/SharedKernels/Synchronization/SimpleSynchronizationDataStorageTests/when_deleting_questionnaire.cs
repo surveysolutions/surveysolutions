@@ -23,15 +23,14 @@ namespace WB.Tests.Unit.SharedKernels.Synchronization.SimpleSynchronizationDataS
 
         It should_store_delete_package_meta_information = () =>
             questionnairePackageStorageWriter.Verify(
-                x => x.Store(Moq.It.IsAny<QuestionnaireSyncPackageContent>(),
+                x => x.Store(
                     Moq.It.Is<QuestionnaireSyncPackageMeta>(s => s.ItemType == SyncItemType.DeleteQuestionnaire),
-                    Moq.It.IsAny<string>(),
-                    CounterId),
+                    Moq.It.IsAny<string>()),
                 Times.Once);
     
         private static QuestionnaireSynchronizationDenormalizer denormalizer;
         private static Guid questionnaireId = Guid.Parse("1BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static long version = 4;
-        private static Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>> questionnairePackageStorageWriter = new Mock<IOrderableSyncPackageWriter<QuestionnaireSyncPackageMeta, QuestionnaireSyncPackageContent>>();
+        private static Mock<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>> questionnairePackageStorageWriter = new Mock<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>>();
     }
 }

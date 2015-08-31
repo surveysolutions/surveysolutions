@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers
 {
 
     [LimitsFilter]
+    [ValidateInput(false)]
     [Authorize(Roles = "Administrator, Headquarter, Observer")]
     public class SupervisorController : TeamController
     {

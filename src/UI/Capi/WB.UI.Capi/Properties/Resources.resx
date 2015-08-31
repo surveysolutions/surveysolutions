@@ -150,4 +150,7 @@
   <data name="SynchronizationCanceledExceptionMessage" xml:space="preserve">
     <value>Synchronization was canceled</value>
   </data>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>Synchronization partially failed. Completed interviews were sent to server, but you won't receive new assignments. Please navigate to 'Android settings' -&gt; Apps -&gt; Interviewer and push Clear Data button. Then synchronize from scratch.</value>
+  </data>
 </root>

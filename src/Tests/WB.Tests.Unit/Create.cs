@@ -31,16 +31,11 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities.QuestionModels;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions.State;
-using WB.Core.BoundedContexts.Tester.ViewModels.Questions;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
@@ -53,6 +48,7 @@ using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -83,6 +79,20 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Entities;
+using WB.Core.SharedKernels.Enumerator.Entities.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
@@ -97,7 +107,6 @@ using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using WB.UI.Supervisor.Controllers;
-using Identity = WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.Identity;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
@@ -110,15 +119,15 @@ namespace WB.Tests.Unit
         public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event, 
             Guid? eventSourceId = null,
             string origin = null,
-            DateTime? eventTimeStamp = null)
+            DateTime? eventTimeStamp = null,
+            Guid? eventId = null)
             where T : class
         {
-            var eventId = Guid.NewGuid();
             var mock = new Mock<IPublishedEvent<T>>();
             mock.Setup(x => x.Payload).Returns(@event);
             mock.Setup(x => x.EventSourceId).Returns(eventSourceId ?? Guid.NewGuid());
             mock.Setup(x => x.Origin).Returns(origin);
-            mock.Setup(x => x.EventIdentifier).Returns(eventId);
+            mock.Setup(x => x.EventIdentifier).Returns(eventId ?? Guid.NewGuid());
             mock.Setup(x => x.EventTimeStamp).Returns((eventTimeStamp ?? DateTime.Now));
             var publishableEventMock =mock.As<IPublishableEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
@@ -319,44 +328,50 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId, eventTimeStamp: eventTimeStamp);
             }
 
-            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId)
+            public static IPublishedEvent<UserUnlockedBySupervisor> UserUnlockedBySupervisor(Guid userId, Guid? eventId = null)
             {
                 return new UserUnlockedBySupervisor
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId)
+            public static IPublishedEvent<UserLockedBySupervisor> UserLockedBySupervisor(Guid userId, Guid? eventId = null)
             {
                 return new UserLockedBySupervisor
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId)
+            public static IPublishedEvent<UserUnlocked> UserUnlocked(Guid userId, Guid? eventId = null)
             {
                 return new UserUnlocked
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserLocked> UserLocked(Guid userId)
+            public static IPublishedEvent<UserLocked> UserLocked(Guid userId, Guid? eventId = null)
             {
                 return new UserLocked
                 {
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email)
+            public static IPublishedEvent<UserChanged> UserChanged(Guid userId, string password, string email, Guid? eventId = null)
             {
                 return new UserChanged
                 {
                     PasswordHash = password,
                     Email = email
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, string name, string password, string email, bool islockedBySupervisor, bool isLocked)
+            public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
+                string name, 
+                string password, 
+                string email,
+                bool islockedBySupervisor, 
+                bool isLocked,
+                Guid? eventId = null)
             {
                 return new NewUserCreated
                 {
@@ -366,7 +381,7 @@ namespace WB.Tests.Unit
                     IsLockedBySupervisor = islockedBySupervisor,
                     IsLocked = isLocked,
                     Roles = new[] { UserRoles.Operator }
-                }.ToPublishedEvent(eventSourceId: userId);
+                }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
             public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(Guid questionId, decimal[] rosterVector, decimal answer, Guid? userId = null)
@@ -374,10 +389,13 @@ namespace WB.Tests.Unit
                 return new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, DateTime.UtcNow, answer);
             }
 
-            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, InterviewStatus status, string comment = "hello")
+            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, 
+                InterviewStatus status, 
+                string comment = "hello",
+                Guid? eventId = null)
             {
                 return new InterviewStatusChanged(status, comment)
-                        .ToPublishedEvent(eventSourceId: interviewId);
+                    .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
             }
 
             public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
@@ -416,6 +434,11 @@ namespace WB.Tests.Unit
                     rosterVector ?? new decimal[]{},
                     DateTime.Now, 
                     selectedRosterVectors ?? new decimal[][]{});
+            }
+
+            public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
+            {
+                return new InterviewSynchronized(synchronizationDto);
             }
         }
 
@@ -457,7 +480,6 @@ namespace WB.Tests.Unit
             string variable = null,
             string enablementCondition = null,
             string validationExpression = null,
-            bool isMandatory = false,
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
             params Answer[] answers)
@@ -470,7 +492,6 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                Mandatory = isMandatory,
                 Answers = answers.ToList()
             };
         }
@@ -480,14 +501,13 @@ namespace WB.Tests.Unit
             return new Answer() {AnswerText = answer, AnswerValue = value.ToString()};
         }
 
-        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, bool isMandatory = false,
+        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
             IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null)
         {
             return new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
-                Mandatory = isMandatory,
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable
@@ -532,7 +552,8 @@ namespace WB.Tests.Unit
             return group;
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false)
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+            string validationExpression = null)
         {
             return new NumericQuestion
             {
@@ -541,12 +562,11 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                Mandatory = isMandatory
+                ValidationExpression = validationExpression
             };
         }
 
-        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, bool isMandatory = false,
+        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, 
             Guid? cascadeFromQuestionId = null, List<Answer> options = null)
         {
             return new SingleQuestion
@@ -556,7 +576,6 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
-                Mandatory = isMandatory,
                 Answers = options ?? new List<Answer>(),
                 CascadeFromQuestionId = cascadeFromQuestionId
             };
@@ -1328,6 +1347,7 @@ namespace WB.Tests.Unit
                 eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
                 eventSequence,
                 new DateTime(2014, 10, 22),
+                0,
                 payload ?? "some payload");
         }
 
@@ -1608,10 +1628,12 @@ namespace WB.Tests.Unit
 
         public static TransactionManagerProvider TransactionManagerProvider(
             Func<ICqrsPostgresTransactionManager> transactionManagerFactory = null,
+            Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory = null,
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
         {
             return new TransactionManagerProvider(
                 transactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
+                noTransactionTransactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>());
         }
 
@@ -1752,7 +1774,8 @@ namespace WB.Tests.Unit
         {
             return new QuestionnaireImportService(plainKeyValueStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                Mock.Of<IQuestionnaireModelBuilder>());
         }
 
         public static ISubstitutionService SubstitutionService()
@@ -1893,15 +1916,17 @@ namespace WB.Tests.Unit
             return new Interview();
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null)
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
-
-            return new StatefulInterview
+            var statefulInterview = new StatefulInterview
             {
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                QuestionnaireVersion = 1,
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };
+
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+
+            return statefulInterview;
         }
 
         public static CascadingOptionModel CascadingOptionModel(int value, string title, int parentValue)
@@ -2014,7 +2039,8 @@ namespace WB.Tests.Unit
                         new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
                         .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
                     new QuestionDataParser(),
-                    new UserViewFactory(new TestInMemoryWriter<UserDocument>()));
+                    new UserViewFactory(new  TestInMemoryWriter<UserDocument>()),
+                    Mock.Of<ITransactionManagerProvider>());
 
         }
 
@@ -2039,6 +2065,93 @@ namespace WB.Tests.Unit
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
                 TimeSpan = timeSpanWithPreviousStatus?? new TimeSpan()
             };
+        }
+
+        public static UserPreloadingProcess UserPreloadingProcess(string userPreloadingProcessId = null,
+            UserPrelodingState state = UserPrelodingState.Uploaded, int recordsCount=0, params UserPreloadingDataRecord[] dataRecords)
+        {
+            var result = new UserPreloadingProcess()
+            {
+                UserPreloadingProcessId = userPreloadingProcessId ?? Guid.NewGuid().FormatGuid(),
+                State = state,
+                RecordsCount = recordsCount,
+                LastUpdateDate = DateTime.Now
+            };
+            foreach (var userPreloadingDataRecord in dataRecords)
+            {
+                result.UserPrelodingData.Add(userPreloadingDataRecord);
+            }
+            return result;
+        }
+
+        public static UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email="", string phoneNumber="", string role=null)
+        {
+            return new UserPreloadingDataRecord()
+            {
+                Login = login,
+                Supervisor = supervisor,
+                Role = role??(string.IsNullOrEmpty(supervisor) ? "supervisor" : "interviewer"),
+                Password = password,
+                Email = email,
+                PhoneNumber = phoneNumber
+            };
+        }
+
+        public static UserPreloadingVerificationError UserPreloadingVerificationError()
+        {
+            return new UserPreloadingVerificationError();
+        }
+
+        public static HybridEventBus HybridEventBus(ILiteEventBus liteEventBus = null, IEventBus cqrsEventBus = null)
+        {
+            return new HybridEventBus(
+                liteEventBus ?? Mock.Of<ILiteEventBus>(),
+                cqrsEventBus ?? Mock.Of<IEventBus>());
+        }
+
+        public static UserPreloadingSettings UserPreloadingSettings()
+        {
+            return new UserPreloadingSettings(5, 5, 12, 1, 10000, 100, 100, "^[a-zA-Z0-9_]{3,15}$",
+                @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$",
+                "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$",
+                @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$");
+        }
+
+        public static QuestionnaireIdentity QuestionnaireIdentity()
+        {
+            return new QuestionnaireIdentity(Guid.NewGuid(), 7);
+        }
+
+        public static QuestionnaireModelBuilder QuestionnaireModelBuilder()
+        {
+            return new QuestionnaireModelBuilder();
+        }
+
+        public static InterviewSynchronizationDto InterviewSynchronizationDto(
+            Guid? questionnaireId = null, 
+            Guid? userId = null, 
+            AnsweredQuestionSynchronizationDto[] answers = null,
+            HashSet<InterviewItemId> disabledGroups = null,
+            HashSet<InterviewItemId> disabledQuestions = null,
+            HashSet<InterviewItemId> validQuestions = null,
+            HashSet<InterviewItemId> invalidQuestions = null,
+            InterviewStatus status=InterviewStatus.SupervisorAssigned)
+        {
+            return new InterviewSynchronizationDto(
+                Guid.NewGuid(),
+                status,
+                "",
+                userId ?? Guid.NewGuid(),
+                questionnaireId ?? Guid.NewGuid(), 
+                1, 
+                answers ?? new AnsweredQuestionSynchronizationDto[0],
+                disabledGroups ?? new HashSet<InterviewItemId>(),
+                disabledQuestions ?? new HashSet<InterviewItemId>(),
+                validQuestions ?? new HashSet<InterviewItemId>(),
+                invalidQuestions ?? new HashSet<InterviewItemId>(), 
+                new Dictionary<InterviewItemId, int>(),
+                new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
+                false);
         }
     }
 }

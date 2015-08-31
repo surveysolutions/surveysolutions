@@ -39,21 +39,21 @@
 }
 @section styles
 {
-    @Styles.Render("~/Content/bootstrap-datetimepicker.css")
+    @Styles.Render("~/Content/bootstrap-datepicker3.css")
 }
 
 @section header
 {
 
-<h3 data-bind="text: ReportTypeName"></h3>
+    <h3 data-bind="text: ReportTypeName"></h3>
 }
 
 @section actionbar
 {
-@if (Model.CanNavigateToQuantityBySupervisors)
-{
-    <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
-}
+    @if (Model.CanNavigateToQuantityBySupervisors)
+    {
+        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
+    }
     <h4 class="sinle-line-header text-italic" data-bind="text: QuestionnaireName"></h4>
     <h5 class="sinle-line-header">@Model.ReportNameDescription</h5>
 }
@@ -88,8 +88,8 @@
         </li>
         <li class="list-group-item">
             <h4 class="list-group-item-heading">From</h4>
-            <div class="input-group date" data-bind="dateTimePicker: FromDate, dateTimePickerOptions: { format: DateFormat, minDate: '01/01/2013', maxDate: 'now', allowInputToggle: true}">
-                <input id="date-picker-from" type="text" class="form-control">
+            <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
+                <input id="date-picker-from" type="text" class="form-control" readonly="readonly">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
         </li>

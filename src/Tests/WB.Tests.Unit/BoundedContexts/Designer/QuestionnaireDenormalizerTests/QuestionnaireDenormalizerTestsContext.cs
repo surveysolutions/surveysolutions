@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return group;
         }
 
-        protected static QRBarcodeQuestion CreateQRBarcodeQuestion(Guid questionId, string enablementCondition, bool isMandatory, string instructions, string title, string variableName)
+        protected static QRBarcodeQuestion CreateQRBarcodeQuestion(Guid questionId, string enablementCondition, string instructions, string title, string variableName)
         {
             return new QRBarcodeQuestion
             {
@@ -97,13 +97,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 QuestionText = title,
                 QuestionType = QuestionType.QRBarcode,
                 ConditionExpression = enablementCondition,
-                Mandatory = isMandatory,
                 StataExportCaption = variableName,
                 Instructions = instructions
             };
         }
 
-        protected static IQuestion CreateMultimediaQuestion(Guid questionId, string enablementCondition, bool isMandatory, string instructions, string title, string variableName)
+        protected static IQuestion CreateMultimediaQuestion(Guid questionId, string enablementCondition, string instructions, string title, string variableName)
         {
             return new MultimediaQuestion()
             {
@@ -111,7 +110,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 QuestionText = title,
                 QuestionType = QuestionType.Multimedia,
                 ConditionExpression = enablementCondition,
-                Mandatory = isMandatory,
                 StataExportCaption = variableName,
                 Instructions = instructions
             };

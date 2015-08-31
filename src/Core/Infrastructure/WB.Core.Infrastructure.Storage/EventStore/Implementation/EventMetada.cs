@@ -7,5 +7,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         public string Origin { get; set; }
         public DateTime Timestamp { get; set; }
         public Guid EventSourceId { get; set; }
+        public long GlobalSequence { get; set; }
     }
 }

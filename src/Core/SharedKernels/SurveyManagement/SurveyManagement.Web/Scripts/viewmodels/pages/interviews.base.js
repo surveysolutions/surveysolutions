@@ -1,17 +1,16 @@
-﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, users, commandExecutionUrl) {
+﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsibles, users, commandExecutionUrl) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
     
     self.Url = new Url(interviewDetailsUrl);
-    self.Users = users;
 
-    self.Templates = ko.observableArray([]);
-    self.Responsibles = ko.observableArray([]);
-    self.Statuses = ko.observableArray([]);
+    self.Responsibles = responsibles;
 
     self.SelectedTemplate = ko.observable('');
-    self.SelectedResponsible = ko.observable('');
+
+    self.SelectedResponsible = ko.observable();
+
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
 
@@ -34,7 +33,7 @@
         self.Url.query['templateId'] = selectedTemplate.templateId;
         self.Url.query['templateVersion'] = selectedTemplate.version;
         self.Url.query['status'] = self.SelectedStatus() || "";
-        self.Url.query['interviewerId'] = self.SelectedResponsible() || "";
+        self.Url.query['interviewerId'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId;
         self.Url.query['searchBy'] = self.SearchBy() || "";
         
         if (Modernizr.history) {
@@ -44,23 +43,26 @@
         return {
             TemplateId: selectedTemplate.templateId,
             TemplateVersion: selectedTemplate.version,
-            ResponsibleId: self.SelectedResponsible,
+            ResponsibleId: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy
         };
     };
 
     self.load = function () {
-        self.SelectedTemplate("{\"templateId\": \"" + self.Url.query['templateId'] + "\",\"version\": \"" + self.Url.query['templateVersion'] + "\"}");
-        self.SelectedStatus(self.Url.query['status']);
-        self.SelectedResponsible(self.Url.query['interviewerId']);
-        self.SearchBy(decodeURIComponent(self.Url.query['searchBy'] || ""));
+        self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
+        self.SelectedStatus(self.QueryString['status']);
 
-        self.Url.query['templateId'] = self.Url.query['templateId'] || "";
-        self.Url.query['templateVersion'] = self.Url.query['templateVersion'] || "";
-        self.Url.query['status'] = self.Url.query['status'] || "";
-        self.Url.query['interviewerId'] = self.Url.query['interviewerId'] || "";
-        self.Url.query['searchBy'] = self.Url.query['searchBy'] || "";
+        var selectedResponsible = _.find(self.Responsibles, function(responsible) { return responsible.UserId == self.QueryString['interviewerId'] });
+        self.SelectedResponsible(selectedResponsible);
+
+        self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
+
+        self.Url.query['templateId'] = self.QueryString['templateId'] || "";
+        self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
+        self.Url.query['status'] = self.QueryString['status'] || "";
+        self.Url.query['interviewerId'] = self.QueryString['interviewerId'] || "";
+        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
 
         self.SelectedTemplate.subscribe(self.filter);
         self.SelectedResponsible.subscribe(self.filter);
@@ -69,7 +71,7 @@
         self.search();
     };
 
-    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId) {
+    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId, onSuccessCommandExecuting, onCancelConfirmation) {
         var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
@@ -81,12 +83,17 @@
         messageHtml += $(continueMessageTemplateId).html();
 
         bootbox.confirm(messageHtml, function (result) {
-            if (result)
-                self.sendCommand(commandName, parametersFunc, filteredItems);
+            if (result) {
+                self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
+            } else {
+                if (!_.isUndefined(onCancelConfirmation)) {
+                    onCancelConfirmation();
+                }
+            }
         });
     };
 
-    self.sendCommand = function (commandName, parametersFunc, items) {
+    self.sendCommand = function (commandName, parametersFunc, items, onSuccessCommandExecuting) {
         var commands = ko.utils.arrayMap(items, function (rawItem) {
             var item = ko.mapping.toJS(rawItem);
             return ko.toJSON(parametersFunc(item));
@@ -98,7 +105,9 @@
         };
 
         self.SendCommands(command, function () {
-            self.load();
+            if (!_.isUndefined(onSuccessCommandExecuting))
+                onSuccessCommandExecuting();
+            self.search();
         }, true);
     };
 

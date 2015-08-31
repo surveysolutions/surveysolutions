@@ -19,7 +19,8 @@ namespace WB.Core.Infrastructure.CommandBus
                 Func<ICommand, Guid> idResolver, 
                 Func<IAggregateRoot> constructor, 
                 Action<ICommand, IAggregateRoot> handler,
-                IEnumerable<Type> validators)
+                IEnumerable<Type> validators,
+                bool isNonTransactional = false)
             {
                 this.AggregateType = aggregateType;
                 this.IsInitializer = isInitializer;
@@ -27,6 +28,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 this.Constructor = constructor;
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();
+                this.IsNonTransactional = isNonTransactional;
             }
 
             public Type AggregateType { get; private set; }
@@ -35,6 +37,8 @@ namespace WB.Core.Infrastructure.CommandBus
             public Func<IAggregateRoot> Constructor { get; private set; }
             public Action<ICommand, IAggregateRoot> Handler { get; private set; }
             public List<Type> Validators { get; private set; }
+
+            public bool IsNonTransactional { get; private set; }
 
             public void AppendValidators(List<Type> validators)
             {
@@ -199,6 +203,11 @@ namespace WB.Core.Infrastructure.CommandBus
         public static IEnumerable<Type> GetValidators(ICommand command)
         {
             return Handlers[command.GetType().Name].Validators;
+        }
+
+        internal static bool IsNonTransactional(ICommand command)
+        {
+            return Handlers[command.GetType().Name].IsNonTransactional;
         }
 
         public static void Configure<TAggregate, TCommand>(Action<CommandHandlerConfiguration<TAggregate>> configuration) where TAggregate : IAggregateRoot

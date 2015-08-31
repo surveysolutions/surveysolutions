@@ -4,12 +4,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
     public abstract class QuestionAnswered : QuestionActiveEvent
     {
-        public DateTime AnswerTime { get; private set; }
+        public DateTime AnswerTimeUtc { get; private set; }
 
-        protected QuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime)
-            : base(userId, questionId, propagationVector)
+        protected QuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTimeUtc)
+            : base(userId, questionId, rosterVector)
         {
-            this.AnswerTime = answerTime;
+            this.AnswerTimeUtc = answerTimeUtc;
         }
     }
 }
