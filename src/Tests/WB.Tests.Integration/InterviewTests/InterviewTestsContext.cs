@@ -30,23 +30,19 @@ namespace WB.Tests.Integration.InterviewTests
     [Subject(typeof(Interview))]
     internal class InterviewTestsContext
     {
-        protected static Interview CreateInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)
+        protected static Interview SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireId = Guid.Parse("10000010000100100100100001000001");
 
             PlainQuestionnaire questionnaire = CreateQuestionnaire(questionnaireDocument);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            var interviewExpressionStatePrototypeProvider = CreateInterviewExpressionStateProviderStub(questionnaireId);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub(questionnaireId));
-
-            return CreateInterview(questionnaireId: questionnaireId);
-        }
-
-        protected static Interview CreateInterview(Guid? questionnaireId = null)
-        {
-            return Create.Interview(questionnaireId);
+            return Create.Interview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         }
 
         protected static PlainQuestionnaire CreateQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? userId = null)
@@ -99,11 +95,14 @@ namespace WB.Tests.Integration.InterviewTests
                     && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
                     && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
+            IInterviewExpressionStateV2 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
-            SetupRoslyn(questionnaireDocument, precompiledState);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            var interview = Create.Interview(questionnaireId: questionnaireId);
+            var interview = Create.Interview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
 
             ApplyAllEvents(interview, events);
 
@@ -152,15 +151,6 @@ namespace WB.Tests.Integration.InterviewTests
             var firstTypedEvent = events.FirstOrDefault(b => b.Payload is T);
 
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
-        }
-
-        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument, IInterviewExpressionStateV2 precompiledState = null)
-        {
-            IInterviewExpressionStateV2 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
-
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
-
-            Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(statePrototypeProvider);
         }
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
