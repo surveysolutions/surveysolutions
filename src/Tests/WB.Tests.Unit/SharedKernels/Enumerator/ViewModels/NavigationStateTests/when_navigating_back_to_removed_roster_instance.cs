@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                      .Returns(true);
 
             navigationState = Create.NavigationState(Setup.StatefulInterviewRepository(interview));
-            navigationState.NavigateToAsync(rosterIdentity).WaitAndUnwrapException();
+            navigationState.NavigateToAsync(new NavigationIdentity(rosterIdentity)).WaitAndUnwrapException();
 
             emptyHistoryHandler = () => emptyHandlerCalled = true;
         };

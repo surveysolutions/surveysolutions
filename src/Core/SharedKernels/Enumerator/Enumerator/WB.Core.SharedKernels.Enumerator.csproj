@@ -185,7 +185,7 @@
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarShownMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextViewModel.cs" />
-    <Compile Include="ViewModels\NavigationParams.cs" />
+    <Compile Include="ViewModels\NavigationIdentity.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\ObservableRangeCollection.cs" />
