@@ -31,7 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
            string interviewId)
         {
             var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
-            sideBarItem.Init(interviewId, enabledSubgroupIdentity, null, null, null, navigationState);
+            var groupStateViewModel = this.serviceLocator.GetInstance<GroupStateViewModel>();
+            sideBarItem.Init(interviewId, enabledSubgroupIdentity, null, null, groupStateViewModel, navigationState);
             return sideBarItem;
         }
     }
