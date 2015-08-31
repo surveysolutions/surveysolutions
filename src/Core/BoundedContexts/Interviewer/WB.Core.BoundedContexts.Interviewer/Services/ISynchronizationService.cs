@@ -10,11 +10,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         Task<HandshakePackage> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false);
 
-        Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId);
+        Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId);
 
-        Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId);
+        Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId);
 
-        Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId);
+        Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId);
 
         Task PushChunkAsync(SyncCredentials credentials, string chunkAsString, Guid interviewId);
 
@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         Task<bool> CheckExpectedDeviceAsync(SyncCredentials credentials);
 
-        Task<SyncItemsMetaContainer> GetPackageIdsToDownloadAsync(SyncCredentials credentials, string type, string lastSyncedPackageId);
+        Task<SyncItemsMetaContainer> GetPackageIdsToDownloadAsync(SyncCredentials credentials, string type, string previousSuccessfullyHandledPackageId);
+
+        Task MarkPackageAsSuccessfullyHandled(SyncCredentials credentials, string type, string successfullyHandledPackageId);
     }
 }
