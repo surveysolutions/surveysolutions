@@ -9,6 +9,7 @@ using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -25,9 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             return (T)eventContext.Events.Last(e => e.Payload is T).Payload;
         }
 
-        public static Questionnaire CreateImportedQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null)
+        public static Questionnaire CreateImportedQuestionnaire(Guid? creatorId = null, QuestionnaireDocument document = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            var questionnaire = Create.DateCollectionQuestionnaire();
+            var questionnaire = Create.DataCollectionQuestionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(creatorId ?? new Guid(), document ?? new QuestionnaireDocument(), false, "base64 string of assembly"));
 
@@ -36,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 
         public static Questionnaire CreateQuestionnaire()
         {
-            return Create.DateCollectionQuestionnaire();
+            return Create.DataCollectionQuestionnaire();
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

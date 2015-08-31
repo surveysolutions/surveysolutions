@@ -273,8 +273,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
                 var document = CreateQuestionnaireDocumentWithOneChapter();
+                var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(_
+                    => _.GetQuestionnaireDocument(document.PublicKey, 3) == Mock.Of<QuestionnaireDocument>());
+                Questionnaire questionnaire = CreateImportedQuestionnaire(plainQuestionnaireRepository: plainQuestionnaireRepository);
 
                 // act
                 questionnaire.RegisterPlainQuestionnaire(new RegisterPlainQuestionnaire(document.PublicKey, 3, false, "dummy assembly"));

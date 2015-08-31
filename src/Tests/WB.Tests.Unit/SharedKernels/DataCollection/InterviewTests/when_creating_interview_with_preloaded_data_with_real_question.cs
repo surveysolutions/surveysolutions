@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_creating_interview_with_preloaded_data_with_real_question : InterviewTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -43,30 +43,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-                CreateInterviewExpressionStateProviderStub());
-
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
-        private Because of = () =>
-            Create.Interview().CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
+        Because of = () =>
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
 
-        private Cleanup stuff = () =>
+        Cleanup stuff = () =>
         {
             eventContext.Dispose();
             eventContext = null;
         };
 
-        private It should_raise_InterviewFromPreloadedDataCreated_event = () =>
+        It should_raise_InterviewFromPreloadedDataCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewFromPreloadedDataCreated>();
 
-        private It should_raise_valid_TextQuestionAnswered_event = () =>
+        It should_raise_valid_TextQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<NumericRealQuestionAnswered>(@event
                 => @event.Answer == prefilledQuestionAnswer && @event.QuestionId == prefilledQuestionId);
 
@@ -79,5 +73,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid supervisorId;
         private static Guid prefilledQuestionId;
         private static decimal prefilledQuestionAnswer;
+        private static Interview interview;
     }
 }

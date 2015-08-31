@@ -23,6 +23,7 @@ using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -1162,15 +1163,20 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static Questionnaire Questionnaire()
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null)
         {
             return new Questionnaire(
-                Mock.Of<IQuestionnaireEntityFactory>(),
+                new QuestionnaireEntityFactory(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
-                Mock.Of<IExpressionProcessor>(),
-                Mock.Of<ISubstitutionService>(),
-                Mock.Of<IKeywordsProvider>());
+                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
+                Create.SubstitutionService(),
+                Create.KeywordsProvider());
+        }
+
+        public static KeywordsProvider KeywordsProvider()
+        {
+            return new KeywordsProvider(Create.SubstitutionService());
         }
 
         public static EventContext EventContext()
@@ -1926,25 +1932,27 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Interview Interview(Guid? interviewId = null)
+        public static Interview Interview(Guid? interviewId = null, IQuestionnaireRepository questionnaireRepository = null,
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                Mock.Of<IQuestionnaireRepository>(),
-                Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
 
             return interview;
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null)
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
+            IQuestionnaireRepository questionnaireRepository = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                Mock.Of<IQuestionnaireRepository>(),
-                Mock.Of<IInterviewExpressionStatePrototypeProvider>())
+                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
             };
@@ -2178,10 +2186,11 @@ namespace WB.Tests.Unit
                 false);
         }
 
-        public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DateCollectionQuestionnaire()
+        public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
             return new Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(
-                Mock.Of<IPlainQuestionnaireRepository>(),
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
     }

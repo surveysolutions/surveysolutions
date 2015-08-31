@@ -49,19 +49,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-                CreateInterviewExpressionStateProviderStub());
-
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            Create.Interview().CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
 
         Cleanup stuff = () =>
         {
@@ -90,5 +84,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid prefilledQuestionId;
         private static Guid rosterGroupId;
         private static decimal[] prefilledQuestionAnswer;
+        private static Interview interview;
     }
 }

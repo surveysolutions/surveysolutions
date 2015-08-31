@@ -24,15 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext = new EventContext();
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>();
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = Create.Interview();
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            Create.Interview().CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId));
+            interview.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId));
 
         It should_event_context_contains__events = () =>
             eventContext.Events.Count().ShouldEqual(0);
@@ -57,5 +53,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static bool isValid = true;
         private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
         private static InterviewStatus interviewStatus = InterviewStatus.Completed;
+        private static Interview interview;
     }
 }

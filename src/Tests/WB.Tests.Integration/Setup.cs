@@ -28,5 +28,12 @@ namespace WB.Tests.Integration
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
+
+        public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
+        {
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<TInstance>())
+                .Returns(instance);
+        }
     }
 }

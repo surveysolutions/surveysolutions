@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
@@ -16,10 +17,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2, referencedRoster3 };
 
-            SetupQuestionnaireWithLinkedAndReferencedQuestions(
-                questionnaireId, linkedQuestionId, linkedQuestionRosters, referencedQuestionId, referencedQuestionRosters);
+            IQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+                => _.HasQuestion(linkedQuestionId) == true
+                && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
+                && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters
+                && _.GetRosterSizeSourcesForQuestion(linkedQuestionId) == linkedQuestionRosters
+                && _.HasQuestion(referencedQuestionId) == true
+                && _.GetRosterLevelForQuestion(referencedQuestionId) == referencedQuestionRosters.Length
+                && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
+                && _.GetRosterSizeSourcesForQuestion(referencedQuestionId) == referencedQuestionRosters);
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId);
+            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             FillInterviewWithInstancesForThreeNestedRostersAndAnswersToTextQuestionInLastRoster(interview, referencedRoster1, referencedRoster2, referencedRoster3, referencedQuestionId);
         };

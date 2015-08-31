@@ -53,11 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(Mock.Of<IQuestionnaire>());
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepositoryMock.Object);
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub());
-
-            interview = CreateInterview();
+            interview = CreateInterview(questionnaireRepository: questionnaireRepositoryMock.Object);
             interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, existingComment.Date, existingComment.Text));
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);

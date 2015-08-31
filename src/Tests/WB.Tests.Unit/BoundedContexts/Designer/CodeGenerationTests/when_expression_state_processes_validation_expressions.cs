@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         private static InvokeResults results;
 
         [Serializable]
-        internal class InvokeResults
+        public class InvokeResults
         {
             public int ValidQuestionsCount { get; set; }
             public int InvalidQuestionsCount { get; set; }
