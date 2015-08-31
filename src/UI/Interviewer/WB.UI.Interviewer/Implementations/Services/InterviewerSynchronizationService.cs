@@ -39,6 +39,20 @@ namespace WB.UI.Interviewer.Implementations.Services
             return await this.SyncItemsMetaContainer(credentials, lastSyncedPackageId, type);
         }
 
+        public async Task MarkPackageAsSuccessfullyHandled(SyncCredentials credentials, string type, string successfullyHandledPackageId)
+        {
+           await this.restService.PostAsync(
+                        url: "api/InterviewerSync/MarkPackageAsSuccessfullyHandled",
+                        credentials: new RestCredentials { Login = credentials.Login, Password = credentials.Password },
+                        request:
+                            new MarkPackageAsSuccessfullyHandledRequest
+                            {
+                                PackageId = successfullyHandledPackageId,
+                                ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value
+                            });
+
+        }
+
         public async Task<HandshakePackage> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false)
         {
             var package = await this.restService.PostAsync<HandshakePackage>(
@@ -71,22 +85,22 @@ namespace WB.UI.Interviewer.Implementations.Services
             return syncItemsMetaContainer;
         }
 
-        public async Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId)
+        public async Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId)
         {
-            return await this.DownloadPackage<UserSyncPackageDto>(credentials, chunkId, "GetUserSyncPackage");
+            return await this.DownloadPackage<UserSyncPackageDto>(credentials, chunkId, previousSuccessfullyHandledPackageId, "GetUserSyncPackage");
         }
 
-        public async Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId)
+        public async Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId)
         {
-            return await this.DownloadPackage<QuestionnaireSyncPackageDto>(credentials, chunkId, "GetQuestionnaireSyncPackage");
+            return await this.DownloadPackage<QuestionnaireSyncPackageDto>(credentials, chunkId, previousSuccessfullyHandledPackageId, "GetQuestionnaireSyncPackage");
         }
 
-        public async Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId)
+        public async Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId)
         {
-            return await this.DownloadPackage<InterviewSyncPackageDto>(credentials, chunkId, "GetInterviewSyncPackage");
+            return await this.DownloadPackage<InterviewSyncPackageDto>(credentials, chunkId, previousSuccessfullyHandledPackageId, "GetInterviewSyncPackage");
         }
 
-        private async Task<T> DownloadPackage<T>(SyncCredentials credentials, string chunkId, string Url)
+        private async Task<T> DownloadPackage<T>(SyncCredentials credentials, string chunkId, string previousSuccessfullyHandledPackageId, string Url)
         {
             var package = await this.restService.PostAsync<T>(
                         url: string.Format("api/InterviewerSync/{0}", Url),
@@ -95,6 +109,7 @@ namespace WB.UI.Interviewer.Implementations.Services
                             new SyncPackageRequest
                             {
                                 PackageId = chunkId,
+                                PreviousSuccessfullyHandledPackageId=previousSuccessfullyHandledPackageId,
                                 ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value
                             });
 
