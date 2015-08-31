@@ -8,5 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public Identity TargetGroup { get; set; }
 
         public Identity AnchoredElementIdentity { get; set; }
+
+        public ScreenType ScreenType { get; set; }
     }
 }

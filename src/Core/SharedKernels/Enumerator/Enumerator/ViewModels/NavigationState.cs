@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -27,8 +28,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
+        public virtual ScreenType CurrentGroupType { get; private set; }
 
-        private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
+        private readonly Stack<NavigationIdentity> navigationStack = new Stack<NavigationIdentity>();
 
         protected NavigationState(IUserInteractionService userInteractionServiceAwaiter)
         {
@@ -56,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireId = questionnaireId;
         }
 
-        public async Task NavigateToAsync(Identity groupIdentity, Identity anchoredElementIdentity = null)
+        public async Task NavigateToAsync(NavigationIdentity navigationItem)
         {
             await this.DoNavigationActionWhenAllWaitersArelFinishedAsync((() => this.NavigateTo(groupIdentity, anchoredElementIdentity)));
         }       
@@ -88,6 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 return;
 
             var navigationItem = new NavigationParams {TargetGroup = groupIdentity};
+                while (this.navigationStack.Any(x => x.TargetGroup.Equals(navigationItem.TargetGroup)))
 
             while (this.navigationStack.Contains(navigationItem))
             {
@@ -131,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 navigateToIfHistoryIsEmpty.Invoke();
             else
             {
-                NavigationParams previousNavigationItem = this.navigationStack.Peek();
+                NavigationIdentity previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
                 while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) ||
@@ -146,25 +149,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     previousNavigationItem = this.navigationStack.Pop();
                 }
 
-                this.ChangeCurrentGroupAndFireEvent(previousNavigationItem.TargetGroup, previousNavigationItem);
+                this.ChangeCurrentGroupAndFireEvent(previousNavigationItem);
             }
         }
 
-        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
+        private void ChangeCurrentGroupAndFireEvent(NavigationIdentity navigationIdentity)
         {
             if (this.BeforeGroupChanged != null)
             {
-                this.BeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationParams.TargetGroup));
+                this.BeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationIdentity.TargetGroup));
             }
 
-            this.CurrentGroup = groupIdentity;
+            this.CurrentGroup = navigationIdentity.TargetGroup;
+            this.CurrentGroupType = navigationIdentity.ScreenType;
 
             if (this.GroupChanged != null)
             {
                 var groupChangedEventArgs = new GroupChangedEventArgs
                 {
-                    TargetGroup = navigationParams.TargetGroup,
-                    AnchoredElementIdentity = navigationParams.AnchoredElementIdentity
+                    TargetGroup = navigationIdentity.TargetGroup,
+                    AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
+                    ScreenType = navigationIdentity.ScreenType
                 };
                 
                 this.GroupChanged(groupChangedEventArgs);

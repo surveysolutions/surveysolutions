@@ -15,13 +15,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public SideBarSectionViewModel BuildSectionItem(SideBarSectionsViewModel root, 
             SideBarSectionViewModel sectionToAddTo,
-            Identity enabledSubgroupIdentity, 
+            NavigationIdentity enabledSubgroupIdentity, 
             NavigationState navigationState, 
             string interviewId)
         {
             var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
             var groupStateViewModel = this.serviceLocator.GetInstance<GroupStateViewModel>();
             sideBarItem.Init(interviewId, enabledSubgroupIdentity, root, sectionToAddTo, groupStateViewModel, navigationState);
+            return sideBarItem;
+        }
+
+        public SideBarSectionViewModel BuildCompleteScreenSectionItem(
+            NavigationIdentity enabledSubgroupIdentity,
+            NavigationState navigationState,
+           string interviewId)
+        {
+            var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
+            sideBarItem.Init(interviewId, enabledSubgroupIdentity, null, null, null, navigationState);
             return sideBarItem;
         }
     }
