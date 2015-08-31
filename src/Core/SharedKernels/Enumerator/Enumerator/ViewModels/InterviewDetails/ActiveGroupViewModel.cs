@@ -100,10 +100,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            loadViewModelsCancellationToken.Cancel(false);
-            loadViewModelsCancellationToken = new CancellationTokenSource();
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
-            await this.CreateRegularGroupScreen(navigationParams, @group, loadViewModelsCancellationToken.Token);
+            await this.CreateRegularGroupScreen(navigationParams, @group);
         }
 
         private void CreateCompleteScreen()
