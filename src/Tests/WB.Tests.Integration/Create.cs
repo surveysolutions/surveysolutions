@@ -334,12 +334,13 @@ namespace WB.Tests.Integration
             return questionnaire;
         }
 
-        public static Interview Interview(Guid? questionnaireId = null)
+        public static Interview Interview(Guid? questionnaireId = null,
+            IQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                Mock.Of<IQuestionnaireRepository>(),
-                Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
