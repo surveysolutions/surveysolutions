@@ -1,7 +1,8 @@
 using System;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Tests.Unit.BoundedContexts.Tester.Aggregates;
 
 namespace WB.Tests.Unit.BoundedContexts.QuestionnaireTester.Aggregates
 {

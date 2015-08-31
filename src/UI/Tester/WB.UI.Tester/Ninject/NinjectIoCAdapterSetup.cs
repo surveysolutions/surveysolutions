@@ -3,9 +3,15 @@ using System.IO;
 using Cirrious.CrossCore.IoC;
 using PCLStorage;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.BoundedContexts.Tester.Infrastructure;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Android;
+using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator;
+using WB.Infrastructure.Shared.Enumerator;
+using WB.Infrastructure.Shared.Enumerator.Ninject;
+using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Ninject;
+using WB.UI.Tester.Infrastructure;
 
 namespace WB.UI.Tester.Ninject
 {
@@ -18,26 +24,17 @@ namespace WB.UI.Tester.Ninject
                : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
             return new NinjectMvxIocProvider(
-                new AndroidInfrastructureModule(pathToQuestionnaireAssemblies: GetPathToSubfolderInLocalDirectory("libraries"),
-                    plainStorageSettings: new PlainStorageSettings(){ StorageFolderPath = GetPathToSubfolderInLocalDirectory("database") }),
-                new ApplicationModule(),
-                new PlainStorageInfrastructureModule(),
-                new TesterBoundedContextModule(),
-                new DataCollectionModule(basePath),
-                new NinjectModuleAdapter<InfrastructureModuleMobile>(new InfrastructureModuleMobile()));
-        }
 
-        private static string GetPathToSubfolderInLocalDirectory(string subFolderName)
-        {
-            var pathToSubfolderInLocalDirectory = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, subFolderName);
+                new NcqrsModule().AsNinject(),
+                new InfrastructureModuleMobile().AsNinject(),
+                new DataCollectionInfrastructureModule(basePath).AsNinject(),
 
-            var subfolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
-            if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
-            {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory, CreationCollisionOption.FailIfExists).Wait();
-            }
+                new EnumeratorSharedKernelModule(),
+                new EnumeratorInfrastructureModule(),
 
-            return pathToSubfolderInLocalDirectory;
+                new TesterBoundedContextModule().AsNinject(),
+                new TesterInfrastructureModule(),
+                new TesterUIModule());
         }
     }
 }

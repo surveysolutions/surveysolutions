@@ -1,5 +1,7 @@
 using Mvc.Mailer;
+using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Mailers
 {
@@ -12,76 +14,36 @@ namespace WB.UI.Designer.Mailers
 
         public virtual MvcMailMessage ConfirmationEmail(EmailConfirmationModel model)
         {
-            this.ViewData.Model = model;
-            return this.Populate(
-                x =>
-                    {
-                        x.Subject = "Complete Registration Process";
-                        x.ViewName = "ConfirmationEmail";
-                        x.To.Add(model.Email);
-                    });
+            return this.GetMessage(model, NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process, "ConfirmationEmail");
         }
 
         public virtual MvcMailMessage ResetPasswordEmail(EmailConfirmationModel model)
         {
-            this.ViewData.Model = model;
-            return this.Populate(
-                x =>
-                    {
-                        x.Subject = "Complete Password Reset";
-                        x.ViewName = "ResetPasswordEmail";
-                        x.To.Add(model.Email);
-                    });
+            return this.GetMessage(model, NotificationResources.SystemMailer_ResetPasswordEmail_Complete_Password_Reset, "ResetPasswordEmail");
         }
-        public MvcMailMessage GetShareNotificationEmail(SharingNotificationModel model)
+
+        public MvcMailMessage GetShareChangeNotificationEmail(SharingNotificationModel model)
+        {
+            return this.GetMessage(model, NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification, model.ShareChangeType == ShareChangeType.Share ? "TargetPersonShareNotification" : "TargetPersonStopShareNotification");
+        }
+
+        public MvcMailMessage GetOwnerShareChangeNotificationEmail(SharingNotificationModel model)
+        {
+            return this.GetMessage(model, NotificationResources.SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification, model.ShareChangeType == ShareChangeType.Share ? "OwnerShareNotification" : "OwnerStopShareNotification");
+        }
+
+        private MvcMailMessage GetMessage(IEmailNotification model, string subject, string viewName)
         {
             this.ViewData.Model = model;
             var message = this.Populate(
                 x =>
                 {
-                    x.Subject = "Questionnaire sharing notification";
-                    x.ViewName = "TargetPersonShareNotification";
+                    x.Subject = subject;
+                    x.ViewName = viewName;
                     x.To.Add(model.Email);
                 });
 
             return message;
         }
-
-        public MvcMailMessage GetStopShareNotificationEmail(SharingNotificationModel model)
-        {
-            this.ViewData.Model = model;
-            return this.Populate(
-                x =>
-                {
-                    x.Subject = "Questionnaire stop sharing notification";
-                    x.ViewName = "TargetPersonStopShareNotification";
-                    x.To.Add(model.Email);
-                });
-        }
-
-        public MvcMailMessage GetOwnerShareNotificationEmail(SharingNotificationModel model)
-        {
-            this.ViewData.Model = model;
-            return this.Populate(
-                x =>
-                {
-                    x.Subject = "Your questionnaire sharing notification";
-                    x.ViewName = "OwnerShareNotification";
-                    x.To.Add(model.Email);
-                });
-        }
-
-        public MvcMailMessage GetOwnerStopShareNotificationEmail(SharingNotificationModel model)
-        {
-            this.ViewData.Model = model;
-            return this.Populate(
-                x =>
-                {
-                    x.Subject = "Your questionnaire stop sharing notification";
-                    x.ViewName = "OwnerStopShareNotification";
-                    x.To.Add(model.Email);
-                });
-        }
-
     }
 }

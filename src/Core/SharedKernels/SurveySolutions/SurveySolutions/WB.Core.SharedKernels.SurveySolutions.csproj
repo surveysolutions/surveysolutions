@@ -49,7 +49,6 @@
     <Compile Include="Api\Designer\QuestionnaireListItem.cs" />
     <Compile Include="Documents\AbstractQuestion.cs" />
     <Compile Include="Documents\Answer.cs" />
-    <Compile Include="Documents\AnswerType.cs" />
     <Compile Include="Documents\CompositeException.cs" />
     <Compile Include="Documents\Constants.cs" />
     <Compile Include="Documents\FixedRosterTitle.cs" />

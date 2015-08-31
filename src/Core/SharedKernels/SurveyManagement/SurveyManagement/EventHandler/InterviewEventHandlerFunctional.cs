@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -391,7 +383,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 this.AddNewLevelsToInterview(currentState, startIndex: countOfLevelByScope,
                     count: evnt.Payload.Count - countOfLevelByScope,
-                    outerVector: evnt.Payload.OuterScopePropagationVector, sortIndex: null, scope: scopeOfCurrentGroup);
+                    outerVector: evnt.Payload.OuterScopeRosterVector, sortIndex: null, scope: scopeOfCurrentGroup);
             }
             else
             {
@@ -409,80 +401,80 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             var commenter = this.users.GetById(evnt.Payload.UserId);
 
-            return this.SaveComment(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveComment(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                 evnt.Payload.Comment, evnt.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", evnt.Payload.CommentTime);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                 evnt.Payload.SelectedValues);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                 evnt.Payload.Answer);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                     evnt.Payload.Answer);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                     evnt.Payload.Answer);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<TextListQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                   new InterviewTextListAnswers(evnt.Payload.Answers));
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                      evnt.Payload.SelectedValue);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-                    evnt.Payload.SelectedPropagationVector);
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
+                    evnt.Payload.SelectedRosterVector);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
-            evnt.Payload.SelectedPropagationVectors);
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
+            evnt.Payload.SelectedRosterVectors);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
          evnt.Payload.Answer);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
                 new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude,
                     evnt.Payload.Timestamp));
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
        evnt.Payload.Answer);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<PictureQuestionAnswered> evnt)
         {
-            return this.SaveAnswer(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId,
+            return this.SaveAnswer(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId,
        evnt.Payload.PictureFileName);
         }
 
@@ -561,13 +553,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData currentState, IPublishedEvent<FlagRemovedFromAnswer> evnt)
         {
             return
-                   SetFlagStateForQuestion(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, false);
+                   SetFlagStateForQuestion(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId, false);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<FlagSetToAnswer> evnt)
         {
             return
-                 SetFlagStateForQuestion(currentState, evnt.Payload.PropagationVector, evnt.Payload.QuestionId, true);
+                 SetFlagStateForQuestion(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId, true);
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<InterviewDeclaredInvalid> evt)

@@ -1,5 +1,5 @@
-﻿Supervisor.VM.HQInterviews = function(listViewUrl, interviewDetailsUrl, users, commandExecutionUrl) {
-    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, arguments);
+﻿Supervisor.VM.HQInterviews = function(listViewUrl, interviewDetailsUrl, responsibles, commandExecutionUrl) {
+    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsibles, null, commandExecutionUrl]);
 
     var self = this;
 

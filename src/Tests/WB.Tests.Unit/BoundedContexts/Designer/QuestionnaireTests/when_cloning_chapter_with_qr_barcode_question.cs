@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Title = title,
                 EnablementCondition =  conditionExpression,
                 Instructions = instructions,
-                IsMandatory =  isMandatory,
                 VariableName = variableName,
                 ValidationExpression = validation,
                 ValidationMessage = validationMessage
@@ -71,9 +70,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_QRBarcodeQuestionCloned_event_QuestionText_be_equal_title = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().Title.ShouldEqual(title);
 
-        It should_QRBarcodeQuestionCloned_event_Mandatory_be_equal_isMandatory = () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().IsMandatory.ShouldEqual(isMandatory);
-
         It should_QRBarcodeQuestionCloned_event_Instructions_be_equal_instructions = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().Instructions.ShouldEqual(instructions);
 
@@ -97,7 +93,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string variableName = "var_name";
         private static string conditionExpression = "condition exptession";
         private static string instructions = "instructions";
-        private static bool isMandatory = true;
         private static string validation = "validation";
         private static string validationMessage = "validationMessage";
 

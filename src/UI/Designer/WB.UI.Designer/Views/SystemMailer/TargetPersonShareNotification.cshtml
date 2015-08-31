@@ -1,8 +1,6 @@
 @using Main.Core.Entities.SubEntities
+@using WB.UI.Designer.Resources
 @model WB.UI.Designer.Models.SharingNotificationModel
 
-Hello @(String.IsNullOrWhiteSpace(Model.UserName) ? Model.Email : Model.UserName),
-<br/>
-@(String.IsNullOrWhiteSpace(Model.ActionPersonEmail) ? "user" : Model.ActionPersonEmail) has invited you to @(Model.ShareType == ShareType.View ? "view" : "edit") the following questionnaire: 
-@Html.ActionLink((String.IsNullOrWhiteSpace(Model.QiestionnaireTitle) ? "link" : Model.QiestionnaireTitle), "Open", "App", @Model.QiestionnaireId, null) 
-
+@Html.Raw(string.Format(NotificationResources.TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_, @Model.UserCallName, @Model.ActionPersonCallName, @Model.ShareTypeName))
+@Html.ActionLink(Model.QuestionnaireDisplayTitle, "Open", "App", HttpContext.Current.Request.Url.Scheme, null, null, new { id = Model.QuestionnaireId }, null)

@@ -24,11 +24,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Storage.Esent;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -51,7 +51,6 @@ using WB.UI.Supervisor.Controllers;
 using WB.UI.Supervisor.Injections;
 using WebActivatorEx;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
-using WB.Core.Infrastructure.EventBus.Lite;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -117,7 +116,7 @@ namespace WB.UI.Supervisor.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof (SupervisorBoundedContextModule).Assembly }
+                MappingAssemblies = new List<Assembly> { typeof(SupervisorBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
             };
 
             var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly }; 
@@ -132,7 +131,7 @@ namespace WB.UI.Supervisor.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
+                new SurveyManagementDataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, readSideMaps),
@@ -140,7 +139,7 @@ namespace WB.UI.Supervisor.App_Start
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
+                new PostresKeyValueModule(postgresCacheSize),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
@@ -188,14 +187,14 @@ namespace WB.UI.Supervisor.App_Start
 
         private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
         {
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
-
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
+            var snapshottingPolicy = new SimpleSnapshottingPolicy(1);
+            kernel.Bind<ISnapshottingPolicy>().ToConstant(snapshottingPolicy);
+            kernel.Bind<ISnapshotStore>().To<InMemoryCachedSnapshotStore>().InSingletonScope();
             kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
             kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
 
+            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(snapshottingPolicy);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(kernel.Get<ISnapshotStore>());
             CreateAndRegisterEventBus(kernel);
         }
 

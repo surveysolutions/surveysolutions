@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionId,
             string title,
             string variableName, string variableLabel, 
-            bool isMandatory,
             bool isPreFilled,
             QuestionScope scope, 
             string enablementCondition, 
@@ -24,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             int? countOfDecimalPlaces)
             : base(
                  responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                 variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
+                 variableName: variableName, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
         {
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;

@@ -30,15 +30,13 @@ namespace WB.UI.Capi.Backup
 
             var fullPath = this.GetPathToBackupFile();
 
+            if (Directory.Exists(fullPath))
+                Directory.Delete(fullPath, true);
+
             if (Directory.Exists(pathToBackupedFolder))
             {
-                if(Directory.Exists(fullPath))
-                    Directory.Delete(fullPath, true);
-
                 this.CopyFileOrDirectory(pathToBackupedFolder, this.basePath);
             }
-            else
-                Directory.Delete(fullPath, true);
         }
 
         private void CopyFileOrDirectory(string sourceDir, string targetDir)

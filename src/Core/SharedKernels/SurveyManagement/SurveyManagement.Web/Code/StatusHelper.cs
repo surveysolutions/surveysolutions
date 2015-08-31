@@ -33,13 +33,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public static IEnumerable<SurveyStatusViewItem> GetOnlyActualSurveyStatusViewItems()
         {
-            return from InterviewStatus status in Enum.GetValues(typeof (InterviewStatus))
+            return (from InterviewStatus status in Enum.GetValues(typeof (InterviewStatus))
                    where !invisibleForUserStatuses.Contains(status)
                    select new SurveyStatusViewItem
                        {
                            Status = status,
                            StatusName = GetEnumDescription(status)
-                       };
+                       }).OrderBy(status=>status.StatusName);
         }
 
         private static string GetEnumDescription(InterviewStatus value)

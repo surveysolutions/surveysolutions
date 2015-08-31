@@ -28,11 +28,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public int TotalCount { get; set; }
 
-        public Guid QuestionnaireId { get; set; }
+        public Guid? QuestionnaireId { get; set; }
 
         public string QuestionnaireTitle { get; set; }
 
-        public long QuestionnaireVersion { get; set; }
+        public long? QuestionnaireVersion { get; set; }
 
         public Guid ResponsibleId { get; set; }
 

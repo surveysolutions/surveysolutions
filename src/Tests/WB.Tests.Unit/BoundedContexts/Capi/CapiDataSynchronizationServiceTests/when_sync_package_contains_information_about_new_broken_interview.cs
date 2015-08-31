@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
 
             commandService = new Mock<ICommandService>();
-            commandService.Setup(x => x.Execute(Moq.It.IsAny<ApplySynchronizationMetadata>(), null, false)).Throws<NullReferenceException>();
+            commandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewFromSynchronizationMetadata>(), null)).Throws<NullReferenceException>();
 
             plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
 
@@ -61,11 +61,11 @@ namespace WB.Tests.Unit.BoundedContexts.Capi.CapiDataSynchronizationServiceTests
                 commandService.Verify(
                     x =>
                         x.Execute(
-                            Moq.It.Is<ApplySynchronizationMetadata>(
+                            Moq.It.Is<CreateInterviewFromSynchronizationMetadata>(
                                 param =>
                                     param.QuestionnaireId == questionnaireMetadata.TemplateId && param.QuestionnaireVersion == questionnaireMetadata.TemplateVersion && param.Id == questionnaireMetadata.PublicKey &&
                                     param.UserId == questionnaireMetadata.ResponsibleId && (int)param.InterviewStatus == questionnaireMetadata.Status &&
-                                    param.Comments == "my comment" && param.Valid == true && param.CreatedOnClient == false && param.FeaturedQuestionsMeta.Length == 2), null, false),
+                                    param.Comments == "my comment" && param.Valid == true && param.CreatedOnClient == false && param.FeaturedQuestionsMeta.Length == 2), null),
                     Times.Once);
 
         It should_not_store_questionnaire_in_pline_storage =

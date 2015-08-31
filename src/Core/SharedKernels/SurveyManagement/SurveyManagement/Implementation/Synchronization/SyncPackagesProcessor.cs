@@ -9,8 +9,7 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
-    [DisallowConcurrentExecution]
-    internal class SyncPackagesProcessor : ISyncPackagesProcessor, IJob
+    internal class SyncPackagesProcessor : ISyncPackagesProcessor
     {
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
@@ -68,11 +67,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
 
             incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
-        }
-
-        public void Execute(IJobExecutionContext context)
-        {
-            ProcessNextSyncPackage();
         }
     }
 }

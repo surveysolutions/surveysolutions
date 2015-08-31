@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             string enablementCondition,
             string instructions,
             string mask,
@@ -23,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool isPreFilled)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
+                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;

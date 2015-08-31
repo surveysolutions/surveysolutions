@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionText = title,
                 ConditionExpression =  conditionExpression,
                 Instructions = instructions,
-                Mandatory =  isMandatory,
                 StataExportCaption = variableName,
                 Featured = isPrefilled,
                 QuestionScope = questionScope,
@@ -74,9 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_QuestionCloned_event_QuestionText_be_equal_title = () =>
             eventContext.GetSingleEvent<QuestionCloned>().QuestionText.ShouldEqual(title);
 
-        It should_QuestionCloned_event_Mandatory_be_equal_isMandatory = () =>
-            eventContext.GetSingleEvent<QuestionCloned>().Mandatory.ShouldEqual(isMandatory);
-
         It should_QuestionCloned_event_Instructions_be_equal_instructions = () =>
             eventContext.GetSingleEvent<QuestionCloned>().Instructions.ShouldEqual(instructions);
 
@@ -109,7 +105,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string variableName = "var_name";
         private static string conditionExpression = "condition exptession";
         private static string instructions = "instructions";
-        private static bool isMandatory = true;
         private static bool isPrefilled = true;
         private static QuestionScope questionScope = QuestionScope.Interviewer;
         private static string validationExpression = "validation expression";

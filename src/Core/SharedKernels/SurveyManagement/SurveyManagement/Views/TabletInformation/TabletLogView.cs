@@ -45,4 +45,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
 
         public Dictionary<string, PackagesTrackingInfo> PackagesTrackingInfo { get; set; }
     }
+
+    public class PackagesTrackingInfo
+    {
+        public PackagesTrackingInfo()
+        {
+            PackagesRequestInfo = new Dictionary<string, DateTime?>();
+        }
+
+        public string LastPackageId { get; set; }
+
+        public Dictionary<string, DateTime?> PackagesRequestInfo { get; set; }
+    }
 }

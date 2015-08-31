@@ -66,7 +66,6 @@
                         variableName: question.variable,
                         variableLabel: question.variableLabel,
                         mask: question.mask,
-                        isMandatory: question.isMandatory,
                         enablementCondition: question.enablementCondition,
                         validationExpression: question.validationExpression,
                         validationMessage: question.validationMessage,

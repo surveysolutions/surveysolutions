@@ -5,6 +5,7 @@ using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities

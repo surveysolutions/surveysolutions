@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
                 {
                     result[propagatedGroupInstanceCount.Key][i] =
                         new RosterSynchronizationDto(propagatedGroupInstanceCount.Key.Id,
-                            propagatedGroupInstanceCount.Key.InterviewItemPropagationVector, Convert.ToDecimal(i), null,
+                            propagatedGroupInstanceCount.Key.InterviewItemRosterVector, Convert.ToDecimal(i), null,
                             string.Empty);
                 }
             }

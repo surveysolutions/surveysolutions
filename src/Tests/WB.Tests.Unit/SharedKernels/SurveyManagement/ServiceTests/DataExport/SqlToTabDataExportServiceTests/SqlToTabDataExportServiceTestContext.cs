@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     It.IsAny<string>()) == questionnaireExportStructure),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewExportedDataRecord>>(),
                 Mock.Of<IQueryableReadSideRepositoryReader<InterviewHistory>>(), Mock.Of<IJsonUtils>(),
-                Mock.Of<ITransactionManagerProvider>(),
+                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
                 datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>());

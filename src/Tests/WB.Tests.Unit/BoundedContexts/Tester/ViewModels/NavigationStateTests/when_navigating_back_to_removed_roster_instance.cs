@@ -1,10 +1,11 @@
 ﻿using System;
 using Machine.Specifications;
 using NSubstitute;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests
 {
