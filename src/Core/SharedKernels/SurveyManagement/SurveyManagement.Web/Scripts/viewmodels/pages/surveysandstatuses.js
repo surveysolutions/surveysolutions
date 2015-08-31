@@ -3,11 +3,15 @@
 
     var self = this;
     self.Url = new Url(window.location.href);
+    self.IsResponsiblesLoading = ko.observable(false);
     self.ResponsiblesUrl = responsiblesUrl;
     self.Responsibles = function (query, sync, pageSize) {
+        self.IsResponsiblesLoading(true);
         self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
-        }, true, true);
+        }, true, true, function() {
+            self.IsResponsiblesLoading(false);
+        });
     }
     self.SelectedResponsible = ko.observable();
 

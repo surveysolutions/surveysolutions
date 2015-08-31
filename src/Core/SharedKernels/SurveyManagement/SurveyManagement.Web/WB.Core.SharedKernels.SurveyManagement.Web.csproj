@@ -528,6 +528,9 @@
     <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Archived.cshtml" />
     <EmbeddedResource Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
+    <None Include="Scripts\spin.min.js.map">
+      <DependentUpon>spin.min.js</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
@@ -635,6 +638,9 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
+    <EmbeddedResource Include="Scripts\spin.js" />
+    <Content Include="Scripts\spin.min.js" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.css" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.min.css" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.standalone.css" />

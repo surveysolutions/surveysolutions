@@ -4,13 +4,16 @@
     var self = this;
     
     self.Url = new Url(interviewDetailsUrl);
-
+    self.IsResponsiblesLoading = ko.observable(false);
     self.ResponsiblesUrl = responsiblesUrl;
 
-    self.Responsibles = function(query, sync, pageSize) {
+    self.Responsibles = function (query, sync, pageSize) {
+        self.IsResponsiblesLoading(true);
         self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
-        }, true, true);
+        }, true, true, function() {
+            self.IsResponsiblesLoading(false);
+        });
     }
 
     self.SelectedTemplate = ko.observable('');
