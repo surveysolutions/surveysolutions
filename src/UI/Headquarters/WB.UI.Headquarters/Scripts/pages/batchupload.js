@@ -4,10 +4,14 @@
     var self = this;
 
     self.ResponsiblesUrl = responsiblesUrl;
+    self.IsResponsiblesLoading = ko.observable(false);
     self.Responsibles = function (query, sync, pageSize) {
+        self.IsResponsiblesLoading(true);
         self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
-        }, true, true);
+        }, true, true, function() {
+            self.IsResponsiblesLoading(false);
+        });
     }
     self.SelectedResponsible = ko.observable();
 
