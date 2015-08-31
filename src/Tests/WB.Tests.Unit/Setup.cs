@@ -62,13 +62,11 @@ namespace WB.Tests.Unit
             Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(interviewExpressionStatePrototypeProvider);
         }
 
-        public static void QuestionnaireWithRepositoryToMockedServiceLocator(
-            Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+        public static IQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
         public static IEventHandler FailingFunctionalEventHandler()

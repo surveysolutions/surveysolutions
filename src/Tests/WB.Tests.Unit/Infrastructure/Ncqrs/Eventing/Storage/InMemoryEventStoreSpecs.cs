@@ -21,7 +21,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             AssemblyContext.SetupServiceLocator();
         }
 
-        internal class SomethingDoneEvent
+        public class SomethingDoneEvent
         {
         }
 

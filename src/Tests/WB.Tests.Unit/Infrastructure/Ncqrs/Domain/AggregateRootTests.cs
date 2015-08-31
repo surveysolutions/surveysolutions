@@ -21,14 +21,14 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        internal class HandledEvent
+        public class HandledEvent
         {
         }
 
-        internal class UnhandledEvent
+        public class UnhandledEvent
         {}
 
-        internal class MyAggregateRoot : AggregateRoot
+        public class MyAggregateRoot : AggregateRoot
         {
             private readonly List<UncommittedEvent> _uncomittedEvents = new List<UncommittedEvent>();
             public int FooEventHandlerInvokeCount = 0;

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
@@ -13,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
+            IQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetChildEntityIds(selectedGroupIdentity.Id) == new ReadOnlyCollection<Guid>(new [] { staticTextId, prefilledTextQuestionId, interviewerTextQuetionId, rosterId, groupId })
                 && _.IsRosterGroup(rosterId) == true
                 && _.IsRosterGroup(groupId) == false
@@ -39,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetRostersFromTopToSpecifiedEntity(interviewerTextQuetionId) == new Guid[] { }
                 && _.GetRostersFromTopToSpecifiedEntity(groupId) == new Guid[] { });
 
-            statefulInterview = Create.StatefulInterview(questionnaireId: questionnaireId);
+            statefulInterview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, new[] { rosterInstance1Id }));
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, new[] { rosterInstance2Id }));

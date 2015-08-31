@@ -59,9 +59,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             
         }
 
-        public static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire")
+        public static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire",
+            IExpressionProcessor expressionProcessor = null)
         {
-            var questionnaire = Create.Questionnaire();
+            var questionnaire = Create.Questionnaire(expressionProcessor: expressionProcessor);
 
             questionnaire.CreateQuestionnaire(publicKey: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId, isPublic: false);
 
@@ -76,9 +77,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             return questionnaire;
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneGroup(Guid responsibleId, Guid? questionnaireId = null, Guid? groupId = null, bool isRoster = false)
+        public static Questionnaire CreateQuestionnaireWithOneGroup(Guid responsibleId, Guid? questionnaireId = null, Guid? groupId = null, bool isRoster = false,
+            IExpressionProcessor expressionProcessor = null)
         {
-            Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId);
+            Questionnaire questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), text: "Title", responsibleId: responsibleId, expressionProcessor: expressionProcessor);
 
             groupId = groupId ?? Guid.NewGuid();
             questionnaire.Apply(new NewGroupAdded
@@ -375,16 +377,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             }
 
             return questionnaire;
-        }
-
-        protected static void RegisterExpressionProcessorMock(string expression, string[] identifiers)
-        {
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(expression) == identifiers);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(x => x.GetInstance<IExpressionProcessor>())
-                .Returns(expressionProcessor);
         }
     }
 }

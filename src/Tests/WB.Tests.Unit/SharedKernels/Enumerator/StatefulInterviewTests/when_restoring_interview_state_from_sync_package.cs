@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
 using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
@@ -16,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
+            IQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetAnswerType(integerQuestionId) == AnswerType.Integer
                 && _.GetAnswerType(decimalQuestionId) == AnswerType.Decimal
                 && _.GetAnswerType(dateTimeQuestionId) == AnswerType.DateTime
@@ -29,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 && _.GetAnswerType(gpsQestionId) == AnswerType.GpsData
                 && _.GetAnswerType(multimediaQuestionId) == AnswerType.FileName);
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId);
+            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             var answersDtos = new[]
             {

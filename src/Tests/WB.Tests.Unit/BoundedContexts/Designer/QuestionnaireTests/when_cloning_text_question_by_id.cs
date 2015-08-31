@@ -22,6 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 VariableLabel = "varlabel",
                 QuestionType = QuestionType.Text,
                 Featured = true,
+                GroupPublicKey = chapterId,
                 QuestionScope = QuestionScope.Interviewer,
                 ConditionExpression = "Conditional",
                 ValidationExpression = "Validation",
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             e.QuestionType == QuestionType.Text &&
             string.IsNullOrEmpty(e.StataExportCaption) &&
             e.PublicKey == questionId &&
-            e.GroupPublicKey == questionnaire.EventSourceId &&
+            e.GroupPublicKey == chapterId &&
             e.QuestionText == newQuestionAdded.QuestionText &&
             e.VariableLabel == newQuestionAdded.VariableLabel &&
             e.Featured &&
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             e.ValidationMessage == newQuestionAdded.ValidationMessage &&
             e.Instructions == newQuestionAdded.Instructions &&
             e.SourceQuestionId == sourceQuestionId &&
-            e.TargetIndex == 3 &&
+            e.TargetIndex == 1 &&
             e.ResponsibleId == responsibleId &&
             e.IsFilteredCombobox == newQuestionAdded.IsFilteredCombobox &&
             e.Mask == newQuestionAdded.Mask

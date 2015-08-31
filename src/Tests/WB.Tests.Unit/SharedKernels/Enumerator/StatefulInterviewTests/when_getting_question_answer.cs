@@ -15,16 +15,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId);
-
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var targetRosterVector = new[] {0m};
 
             var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetRosterLevelForQuestion(questionId) == 1);
-            IQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire); 
+            IQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-
+            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(Create.Event.TextQuestionAnswered(questionId, targetRosterVector, "answer"));
         };
 

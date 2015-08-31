@@ -9,11 +9,11 @@ namespace Ncqrs.Tests.Domain
     [TestFixture]
     internal class TypeThresholdedActionBasedInternalEventHandlerSpecs
     {
-        internal class FooEvent
+        public class FooEvent
         {
         }
 
-        internal class BarEvent : FooEvent
+        public class BarEvent : FooEvent
         {
         }
         

@@ -7,7 +7,7 @@ namespace Ncqrs.Spec
 {
     internal static class Prepare
     {
-        internal class PrepareTheseEvents
+        public class PrepareTheseEvents
         {
             private readonly IEnumerable<object> _events;
 

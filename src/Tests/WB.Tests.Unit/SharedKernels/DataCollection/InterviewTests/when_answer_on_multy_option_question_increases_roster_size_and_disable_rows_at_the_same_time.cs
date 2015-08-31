@@ -52,10 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
             var enablementQueue = new Queue<EnablementChanges>();
             // init .ctor call
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
@@ -91,13 +87,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
 
-            SetupInstanceToMockedServiceLocator(
-                Mock.Of<IInterviewExpressionStatePrototypeProvider>(
-                    x =>
-                        x.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
-                        interviewExpressionState.Object));
+            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == interviewExpressionState.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interview.SynchronizeInterview(
                 userId,

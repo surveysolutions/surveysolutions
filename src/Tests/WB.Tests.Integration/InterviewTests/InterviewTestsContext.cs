@@ -38,13 +38,8 @@ namespace WB.Tests.Integration.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(CreateInterviewExpressionStateProviderStub(questionnaireId));
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub(questionnaireId));
 
             return CreateInterview(questionnaireId: questionnaireId);
         }
@@ -93,13 +88,6 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
-        {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
-        }
-
         protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV2 precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
@@ -111,9 +99,7 @@ namespace WB.Tests.Integration.InterviewTests
                     && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
                     && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
 
             SetupRoslyn(questionnaireDocument, precompiledState);
 
@@ -174,9 +160,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(statePrototypeProvider);
+            Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(statePrototypeProvider);
         }
 
         public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)

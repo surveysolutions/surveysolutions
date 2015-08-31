@@ -22,12 +22,12 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             AssemblyContext.SetupServiceLocator();
         }
 
-        internal class ADomainEvent
+        public class ADomainEvent
         {
 
         }
 
-        internal class AEvent
+        public class AEvent
         {
         }
 
