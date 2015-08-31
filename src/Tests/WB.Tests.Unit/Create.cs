@@ -2186,6 +2186,10 @@ namespace WB.Tests.Unit
                 false);
         }
 
+        public static QuestionnaireExportStructure QuestionnaireExportStructure()
+        {
+            return new QuestionnaireExportStructure();
+        }
         public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {

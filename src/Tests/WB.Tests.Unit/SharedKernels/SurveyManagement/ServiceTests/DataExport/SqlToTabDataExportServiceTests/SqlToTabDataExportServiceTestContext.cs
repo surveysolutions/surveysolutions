@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -30,17 +31,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             IExportedDataAccessor exportedDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
-            IDatasetWriterFactory datasetWriterFactory = null)
+            IDatasetWriterFactory datasetWriterFactory = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses=null)
         {
+            fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new SqlToTabDataExportService(
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                fileSystemAccessor,
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
-                    It.IsAny<Stream>(), It.IsAny<string>()) == csvWriterService),
-                Mock.Of<IExportedDataAccessor>(),
+                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+                new ExportedDataAccessor(fileSystemAccessor),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewExportedDataRecord>>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(), Mock.Of<IJsonUtils>(),
+                new TestInMemoryWriter<InterviewExportedDataRecord>(),
+                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
+                Mock.Of<IJsonUtils>(),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
