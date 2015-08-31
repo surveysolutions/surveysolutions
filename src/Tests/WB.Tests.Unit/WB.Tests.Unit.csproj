@@ -552,6 +552,7 @@
     <Compile Include="Synchronization\when_getting_user_sync_package_and_device_is_registered_and_package_is_present.cs" />
     <Compile Include="Synchronization\when_linking_user_to_device_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_linking_user_to_device_and_device_is_registered.cs" />
+    <Compile Include="Synchronization\when_mark_sync_package_as_successfully_handled.cs" />
     <Compile Include="Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archiving_process_thrown_an_exception.cs" />
