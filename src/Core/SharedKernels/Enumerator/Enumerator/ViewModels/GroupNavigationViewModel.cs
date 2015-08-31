@@ -76,11 +76,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (this.IsInSection)
             {
-                await this.navigationState.NavigateToAsync(this.NavigateToIdentity);
+                await this.navigationState.NavigateToAsync(new NavigationIdentity(this.NavigateToIdentity));
             }
             else
             {
-                await this.navigationState.NavigateToAsync(this.NavigateToIdentity, this.groupIdentity);
+                await this.navigationState.NavigateToAsync(new NavigationIdentity(this.NavigateToIdentity, anchoredElementIdentity: this.groupIdentity));
             }
         }
 

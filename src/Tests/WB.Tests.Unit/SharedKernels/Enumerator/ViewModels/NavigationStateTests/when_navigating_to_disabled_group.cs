@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
         };
 
         Because of = () =>
-            navigationState.NavigateToAsync(disabledGroup).WaitAndUnwrapException();
+            navigationState.NavigateToAsync(new NavigationIdentity(disabledGroup)).WaitAndUnwrapException();
 
         It should_not_navigate = () =>
             navigatedTo.ShouldBeNull();

@@ -3,13 +3,32 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class NavigationParams : EventArgs
+    public enum ScreenType
+    {
+        Group = 0,
+        Cover = 1,
+        Complete = 1
+    }
+
+    public class NavigationIdentity : EventArgs
     {
         public Identity TargetGroup { get; set; }
 
+        public ScreenType ScreenType { get; set; }
+
         public Identity AnchoredElementIdentity { get; set; }
 
-        protected bool Equals(NavigationParams other)
+        public NavigationIdentity() { }
+
+        public NavigationIdentity(Identity targetGroup, ScreenType screenType = ScreenType.Group, Identity anchoredElementIdentity = null)
+            : this()
+        {
+            this.TargetGroup = targetGroup;
+            this.ScreenType = screenType;
+            this.AnchoredElementIdentity = anchoredElementIdentity;
+        }
+
+        protected bool Equals(NavigationIdentity other)
         {
             return Equals(this.TargetGroup, other.TargetGroup) && Equals(this.AnchoredElementIdentity, other.AnchoredElementIdentity);
         }
@@ -36,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 return false;
             }
-            return this.Equals((NavigationParams)obj);
+            return this.Equals((NavigationIdentity)obj);
         }
     }
 }

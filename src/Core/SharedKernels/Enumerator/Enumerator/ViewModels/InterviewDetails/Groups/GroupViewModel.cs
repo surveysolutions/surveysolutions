@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private async Task NavigateToGroupAsync()
         {
-            await this.navigationState.NavigateToAsync(this.groupIdentity);
+            await this.navigationState.NavigateToAsync(new NavigationIdentity(this.groupIdentity));
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
