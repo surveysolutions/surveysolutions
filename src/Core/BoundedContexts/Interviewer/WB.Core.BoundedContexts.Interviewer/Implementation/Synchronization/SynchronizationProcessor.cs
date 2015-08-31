@@ -190,40 +190,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Synchronization
 
         private async Task PullUserPackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessUserPackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, string, Task>(this.DownloadAndProcessUserPackage);
             await this.PullPackages(this.userId, "User", packageProcessor, SyncItemType.User);
         }
 
         private async Task PullQuestionnairePackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessQuestionnirePackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, string, Task>(this.DownloadAndProcessQuestionnirePackage);
             await this.PullPackages(Guid.Empty, "Questionnaire", packageProcessor, SyncItemType.Questionnaire);
         }
 
         private async Task PullInterviewPackages()
         {
-            var packageProcessor = new Func<SynchronizationChunkMeta, Task>(this.DownloadAndProcessInterviewPackage);
+            var packageProcessor = new Func<SynchronizationChunkMeta, string, Task>(this.DownloadAndProcessInterviewPackage);
             await this.PullPackages(this.userId, "Interview", packageProcessor, SyncItemType.Interview);
         }
 
-        private async Task PullPackages(Guid currentUserId, string type, Func<SynchronizationChunkMeta, Task> packageProcessor, string packageType)
+        private async Task PullPackages(Guid currentUserId, string type, Func<SynchronizationChunkMeta, string, Task> packageProcessor, string packageType)
         {
             this.ExitIfCanceled();
             this.OnStatusChanged(new SynchronizationEventArgsWithPercent(
                 string.Format("Pulling packages for {0}", type.ToLower()), Operation.Pull, true, 0));
 
-            var syncItemsMetaContainer = await this.GetSyncItemsMetaContainer(currentUserId, type, packageType);
+            string lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
+            SyncItemsMetaContainer syncItemsMetaContainer = await this.GetSyncItemsMetaContainer(currentUserId, type, packageType, lastKnownPackageId);
 
             int progressCounter = 0;
             int chunksToDownload = syncItemsMetaContainer.SyncPackagesMeta.Count();
 
+            string previousSuccessfullyHandledPackageId = lastKnownPackageId;
             foreach (SynchronizationChunkMeta chunk in syncItemsMetaContainer.SyncPackagesMeta)
             {
                 this.ExitIfCanceled();
 
                 try
                 {
-                    await packageProcessor(chunk);
+                    await packageProcessor(chunk, previousSuccessfullyHandledPackageId);
+                    previousSuccessfullyHandledPackageId = chunk.Id;
                 }
                 catch (Exception e)
                 {
@@ -238,16 +241,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Synchronization
                         true,
                         ((progressCounter++) * 100) / chunksToDownload));
             }
+
+            await this.synchronizationService.MarkPackageAsSuccessfullyHandled(this.credentials, type, previousSuccessfullyHandledPackageId);
         }
 
-        private async Task<SyncItemsMetaContainer> GetSyncItemsMetaContainer(Guid currentUserId, string type, string packageType)
+        private async Task<SyncItemsMetaContainer> GetSyncItemsMetaContainer(Guid currentUserId, string type, string packageType, string lastKnownPackageId)
         {
             SyncItemsMetaContainer syncItemsMetaContainer = null;
 
             bool foundNeededPackages = false;
             int returnedBackCount = 0;
 
-            var lastKnownPackageId = this.packageIdStorage.GetLastStoredPackageId(packageType, currentUserId);
             do
             {
                 this.OnStatusChanged(
@@ -283,23 +287,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Synchronization
             return syncItemsMetaContainer;
         }
 
-        private async Task DownloadAndProcessUserPackage(SynchronizationChunkMeta chunk)
+        private async Task DownloadAndProcessUserPackage(SynchronizationChunkMeta chunk, string previousSuccessfullyHandledPackageId)
         {
-            var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id);
+            var package = await this.synchronizationService.RequestUserPackageAsync(credentials: this.credentials, chunkId: chunk.Id, previousSuccessfullyHandledPackageId: previousSuccessfullyHandledPackageId);
             this.dataProcessor.ProcessDownloadedPackage(package);
             this.packageIdStorage.Append(package.PackageId, SyncItemType.User, this.userId, chunk.SortIndex);
         }
 
-        private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk)
+        private async Task DownloadAndProcessQuestionnirePackage(SynchronizationChunkMeta chunk, string previousSuccessfullyHandledPackageId)
         {
-            var package = await this.synchronizationService.RequestQuestionnairePackageAsync(this.credentials, chunk.Id);
+            var package = await this.synchronizationService.RequestQuestionnairePackageAsync(this.credentials, chunk.Id, previousSuccessfullyHandledPackageId: previousSuccessfullyHandledPackageId);
             this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType);
             this.packageIdStorage.Append(package.PackageId, SyncItemType.Questionnaire, Guid.Empty, chunk.SortIndex);
         }
 
-        private async Task DownloadAndProcessInterviewPackage(SynchronizationChunkMeta chunk)
+        private async Task DownloadAndProcessInterviewPackage(SynchronizationChunkMeta chunk, string previousSuccessfullyHandledPackageId)
         {
-            var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id);
+            var package = await this.synchronizationService.RequestInterviewPackageAsync(this.credentials, chunk.Id, previousSuccessfullyHandledPackageId: previousSuccessfullyHandledPackageId);
             this.dataProcessor.ProcessDownloadedPackage(package, chunk.ItemType, this.userId);
             this.packageIdStorage.Append(package.PackageId, SyncItemType.Interview, this.userId, chunk.SortIndex);
         }
