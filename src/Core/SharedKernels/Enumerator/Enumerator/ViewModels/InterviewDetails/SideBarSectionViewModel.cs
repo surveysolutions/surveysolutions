@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -64,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.eventRegistry.Subscribe(this, interviewId);
 
+
             if (navigationIdentity.ScreenType == ScreenType.Group)
             {
                 var interview = this.statefulInterviewRepository.Get(this.interviewId);
@@ -74,7 +76,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
                 this.root = root;
-                this.SideBarGroupState = groupStateViewModel;
                 this.Parent = parent;
                 this.SectionIdentity = navigationIdentity.TargetGroup;
                 this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
@@ -100,9 +101,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.HasChildren = false;
                 this.NodeDepth = 0;
                 this.IsCurrent = navigationState.CurrentGroupType == ScreenType.Complete;
-                this.Title = "Complete";
+                this.Title = UIResources.Interview_Complete_Screen_Title;
             }
-
+            this.SideBarGroupState = groupStateViewModel;
             this.ScreenType = navigationIdentity.ScreenType;
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
