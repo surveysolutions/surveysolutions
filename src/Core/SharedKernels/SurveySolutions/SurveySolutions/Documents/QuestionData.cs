@@ -18,7 +18,6 @@ namespace Main.Core.Entities
             string validationMessage,
             Order answerOrder,
             bool featured,
-            bool mandatory,
             bool capital,
             string instructions,
             string mask,
@@ -44,7 +43,6 @@ namespace Main.Core.Entities
             this.ValidationMessage = validationMessage;
             this.AnswerOrder = answerOrder;
             this.Featured = featured;
-            this.Mandatory = mandatory;
             this.Capital = capital;
             this.Instructions = instructions;
             this.Answers = answers;
@@ -71,7 +69,6 @@ namespace Main.Core.Entities
         public readonly string ValidationMessage;
         public readonly Order AnswerOrder;
         public readonly bool Featured;
-        public readonly bool Mandatory;
         public readonly bool Capital;
         public readonly string Instructions;
         public readonly string Mask;

@@ -1,92 +1,54 @@
-﻿using System.Data;
-using Microsoft.Isam.Esent.Interop;
+﻿using System;
+using System.Data;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
+using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideCleaner : IReadSideCleaner
     {
-        private readonly ISessionFactory sessionFactory;
+        private readonly PostgreConnectionSettings connectionSettings;
         private readonly SchemaUpdate schemaUpdate;
 
-        public PostgresReadSideCleaner([Named(PostgresReadSideModule.ReadSideSessionFactoryName)] ISessionFactory sessionFactory,
-            SchemaUpdate schemaUpdate)
+        public PostgresReadSideCleaner(PostgreConnectionSettings connectionSettings, SchemaUpdate schemaUpdate)
         {
-            this.sessionFactory = sessionFactory;
+            this.connectionSettings = connectionSettings;
             this.schemaUpdate = schemaUpdate;
         }
 
         public void ReCreateViewDatabase()
         {
-            using (var openStatelessSession = sessionFactory.OpenStatelessSession())
+            using (NpgsqlConnection connection = new Npgsql.NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                IDbConnection dbConnection = openStatelessSession.Connection;
-                var dbCommand = dbConnection.CreateCommand();
+                connection.Open();
+                var dbCommand = connection.CreateCommand();
 
                 dbCommand.CommandText = "drop schema public cascade;create schema public;";
                 dbCommand.ExecuteNonQuery();
             }
 
             schemaUpdate.Execute(true, true);
-
-            using (var openStatelessSession = sessionFactory.OpenStatelessSession())
-            {
-                IDbConnection dbConnection = openStatelessSession.Connection;
-                var dbCommand = dbConnection.CreateCommand();
-
-                dbCommand.CommandText =
-                    @"CREATE OR REPLACE FUNCTION DisableAutovacuum()
-                    RETURNS VOID
-                    AS $$
-                    DECLARE
-                    my_row    RECORD;    
-                    BEGIN       
-                    FOR my_row IN 
-                        SELECT table_name
-                        FROM   information_schema.tables
-                        WHERE  table_schema = 'public'
-                    LOOP
-                    EXECUTE 'ALTER TABLE ' || my_row.table_name || ' SET (autovacuum_enabled = false, toast.autovacuum_enabled = false)';
-                    END LOOP;
-                    END;
-                    $$ LANGUAGE plpgsql;
-
-                    SELECT DisableAutovacuum();
-                    DROP FUNCTION DisableAutovacuum();";
-                dbCommand.ExecuteNonQuery();
-            }
         }
 
         public void CreateIndexesAfterRebuildReadSide()
         {
-            using (var openStatelessSession = sessionFactory.OpenStatelessSession())
+            using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                IDbConnection dbConnection = openStatelessSession.Connection;
-                var dbCommand = dbConnection.CreateCommand();
+                connection.Open();
+                NpgsqlCommand dbCommand = connection.CreateCommand();
+                dbCommand.AllResultTypesAreUnknown = true;
 
-                dbCommand.CommandText =
-                    @"CREATE OR REPLACE FUNCTION EnableAutovacuum()
-                    RETURNS VOID
-                    AS $$
-                    DECLARE
-                    my_row    RECORD;    
-                    BEGIN       
-                    FOR my_row IN 
-                        SELECT table_name
-                        FROM   information_schema.tables
-                        WHERE  table_schema = 'public'
-                    LOOP
-                    EXECUTE 'ALTER TABLE ' || my_row.table_name || ' SET (autovacuum_enabled = true, toast.autovacuum_enabled = true)';
-                    END LOOP;
-                    END;
-                    $$ LANGUAGE plpgsql;
+                dbCommand.CommandText = "SELECT to_regclass('public.userdocuments')";
+                var tableExists = dbCommand.ExecuteScalar();
 
-                    SELECT EnableAutovacuum();
-                    DROP FUNCTION EnableAutovacuum();";
-                dbCommand.ExecuteNonQuery();
+                if (tableExists != DBNull.Value)
+                {
+                    dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));";
+                    dbCommand.ExecuteNonQuery();
+                }
             }
         }
     }

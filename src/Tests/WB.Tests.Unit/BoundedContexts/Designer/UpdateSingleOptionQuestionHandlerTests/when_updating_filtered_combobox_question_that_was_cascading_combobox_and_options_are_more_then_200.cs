@@ -63,7 +63,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 title: "title",
                 variableName: "qr_barcode_question",
                 variableLabel: null,
-                isMandatory: true,
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "some condition",

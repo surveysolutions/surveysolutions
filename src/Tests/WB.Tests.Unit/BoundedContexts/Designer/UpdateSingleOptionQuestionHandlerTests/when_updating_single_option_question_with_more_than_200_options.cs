@@ -30,7 +30,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     title: title,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -55,12 +54,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static Guid parentGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        private static bool isMandatory = false;
         private static bool isPreFilled = false;
         private static string variableName = "single_var";
         private static string title = "title";
-        private static string instructions = "intructions";
+        private static string instructions = "instructions";
         private static string enablementCondition = "";
         private static string validationExpression = "";
         private static string validationMessage = "";

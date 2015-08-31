@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                 title: title,
                 variableName: variableName,
                 variableLabel: variableLabel,
-                isMandatory: isMandatory,
                 scope: scope,
                 enablementCondition: enablementCondition,
                 validationExpression: validationExpression,
@@ -74,10 +72,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
-        It should_raise_QuestionChanged_event_with_ismandatory_specified = () =>
-            eventContext.GetSingleEvent<QuestionChanged>()
-                .Mandatory.ShouldEqual(isMandatory);
-
         It should_raise_QuestionChanged_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Instructions.ShouldEqual(instructions);
@@ -92,7 +86,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string variableLabel = "label";
         private static string instructions = "intructions";

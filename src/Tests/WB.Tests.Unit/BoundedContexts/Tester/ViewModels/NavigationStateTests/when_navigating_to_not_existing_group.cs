@@ -1,9 +1,10 @@
 using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.NavigationStateTests

@@ -22,7 +22,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IJsonUtils jsonUtils;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
-            IExpressionsEngineVersionService expressionsEngineVersionService, 
+            IDesignerExpressionsEngineVersionService expressionsEngineVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;

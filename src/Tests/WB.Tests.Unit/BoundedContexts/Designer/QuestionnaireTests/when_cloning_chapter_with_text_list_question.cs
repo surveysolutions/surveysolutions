@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionText = title,
                 ConditionExpression =  conditionExpression,
                 Instructions = instructions,
-                Mandatory =  isMandatory,
                 MaxAnswerCount = maxAnswerCount,
                 StataExportCaption = variableName,
                 ValidationExpression = validation,
@@ -72,9 +71,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_TextListQuestionCloned_event_QuestionText_be_equal_title = () =>
             eventContext.GetSingleEvent<TextListQuestionCloned>().QuestionText.ShouldEqual(title);
 
-        It should_TextListQuestionCloned_event_Mandatory_be_equal_isMandatory = () =>
-            eventContext.GetSingleEvent<TextListQuestionCloned>().Mandatory.ShouldEqual(isMandatory);
-
         It should_TextListQuestionCloned_event_Instructions_be_equal_instructions = () =>
             eventContext.GetSingleEvent<TextListQuestionCloned>().Instructions.ShouldEqual(instructions);
 
@@ -99,9 +95,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid questionId = Guid.Parse("22222222222222222222222222222222");
         private static string title = "text question title";
         private static string variableName = "var_name";
-        private static string conditionExpression = "condition exptession";
+        private static string conditionExpression = "condition expression";
         private static string instructions = "instructions";
-        private static bool isMandatory = true;
         private static int? maxAnswerCount = 5;
         private static string validation = "validation";
         private static string validationMessage = "validationMessage";

@@ -43,7 +43,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                 title: "title",
                 variableName: "text_question",
                 variableLabel: null,
-                isMandatory: false,
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "roster.Max(x => x.age) > maxAge",

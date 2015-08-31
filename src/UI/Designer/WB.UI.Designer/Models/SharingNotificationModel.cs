@@ -1,17 +1,19 @@
 ﻿using System;
-using Main.Core.Entities.SubEntities;
+using WB.UI.Designer.Code.Implementation;
 
 namespace WB.UI.Designer.Models
 {
-    public class SharingNotificationModel
+    public class SharingNotificationModel : IEmailNotification
     {
-        public Guid QiestionnaireId { get; set; }
-        public string QiestionnaireTitle { get; set; }
-        public ShareType ShareType { get; set; }
+        public ShareChangeType ShareChangeType { get; set; }
+
         public string Email { get; set; }
-        public string UserName { get; set; }
-        public string ActionPersonEmail { get; set; }
+
+        public Guid QuestionnaireId { get; set; }
+        public string QuestionnaireDisplayTitle { get; set; }
+        public string ShareTypeName { get; set; }
+        public string UserCallName { get; set; }
+        public string ActionPersonCallName { get; set; }
         public string SharedWithPersonEmail { get; set; }
-        
     }
 }

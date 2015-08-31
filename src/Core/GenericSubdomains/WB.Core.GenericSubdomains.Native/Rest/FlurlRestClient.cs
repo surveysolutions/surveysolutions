@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,16 +17,34 @@ namespace WB.Core.GenericSubdomains.Native.Rest
             this.restClient = restClient;
         }
 
-        public Task<HttpResponseMessage> PostJsonAsync(object request)
-        {
-            return this.restClient.PostJsonAsync(request);
-        }
-
-        public Task<HttpResponseMessage> GetAsync()
+        public async Task<HttpResponseMessage> PostJsonAsync(object request)
         {
             try
             {
-                return this.restClient.GetAsync();
+                return await this.restClient.PostJsonAsync(request);
+            }
+            catch (FlurlHttpTimeoutException ex)
+            {
+                throw new RestHttpTimeoutException(ex.Message, ex);
+            }
+            catch (FlurlHttpException ex)
+            {
+                var restException = new RestHttpException(ex.Message, ex);
+                if (ex.Call.Response != null)
+                {
+                    restException.ReasonPhrase = ex.Call.Response.ReasonPhrase;
+                    restException.StatusCode = ex.Call.Response.StatusCode;
+                }
+
+                throw restException;
+            }
+        }
+
+        public async Task<HttpResponseMessage> GetAsync()
+        {
+            try
+            {
+                return await this.restClient.GetAsync();
             }
             catch (FlurlHttpTimeoutException ex)
             {

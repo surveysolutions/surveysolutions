@@ -13,7 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionId,
             string title,
             string variableName, string variableLabel,
-            bool isMandatory,
             string enablementCondition,
             string instructions,
             Guid responsibleId,
@@ -27,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid? cascadeFromQuestionId)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, isMandatory: isMandatory, enablementCondition: enablementCondition, 
+                variableName: variableName, enablementCondition: enablementCondition, 
                 instructions: instructions, variableLabel: variableLabel)
         {
             this.IsPreFilled = isPreFilled;

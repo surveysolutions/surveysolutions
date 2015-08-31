@@ -25,7 +25,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     title: "title %valid_varname%",
                     variableName: "varname",
                     variableLabel: null,
-                    isMandatory: false,
                     isPreFilled: false,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: string.Empty,

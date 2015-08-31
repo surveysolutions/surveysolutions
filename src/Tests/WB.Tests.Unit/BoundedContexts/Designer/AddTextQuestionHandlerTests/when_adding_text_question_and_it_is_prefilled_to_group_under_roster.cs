@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     title: title,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPrefilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
@@ -53,7 +52,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static bool isPrefilled = true;
-        private static bool isMandatory = false;
         private static string variableName = "text_var";
         private static string title = "title";
         private static string instructions = "intructions";

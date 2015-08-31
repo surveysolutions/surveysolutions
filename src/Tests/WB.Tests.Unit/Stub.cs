@@ -2,11 +2,11 @@ using System;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Tester.Implementation.Entities;
-using WB.Core.BoundedContexts.Tester.Repositories;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
@@ -46,7 +46,6 @@ namespace WB.Tests.Unit
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 Create.SubstitutionService(),
                 Create.LiteEventRegistry(),
-                Stub.MvxMainThreadDispatcher(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),
                 Mock.Of<IMvxMessenger>());
             sideBarSectionViewModel.NavigationState = Create.NavigationState();

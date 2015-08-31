@@ -7,8 +7,8 @@ namespace WB.Tests.Integration.TesterResourcesTests
     {
         Because of = () =>
         {
-            largeDevicesDimensions = GetDimensionsNames("UI/Tester/WB.UI.Tester/Resources/values-large").ToArray();
-            smallDevicesDimensions = GetDimensionsNames("UI/Tester/WB.UI.Tester/Resources/values-small").ToArray();
+            largeDevicesDimensions = GetDimensionsNames("UI/Shared/WB.UI.Shared.Enumerator/Resources/values-large").ToArray();
+            smallDevicesDimensions = GetDimensionsNames("UI/Shared/WB.UI.Shared.Enumerator/Resources/values-small").ToArray();
         };
 
         It should_return_same_dimensions_from_both_folders = () =>

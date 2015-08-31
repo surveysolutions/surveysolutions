@@ -21,7 +21,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 ParentGroupId = chapterId,
                 Title = "old title",
                 VariableName = "old_variable_name",
-                IsMandatory = false,
                 Instructions = "old instructions",
                 EnablementCondition = "old condition",
                 ResponsibleId = responsibleId
@@ -35,7 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     title: title,
                     variableName: variableName,
                     variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
@@ -64,7 +62,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid notExistinigUserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string variableName = "qr_barcode_question";
-        private static bool isMandatory = true;
         private static string title = "title";
         private static string instructions = "intructions";
         private static bool isPreFilled = false;

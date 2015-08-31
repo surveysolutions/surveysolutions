@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -30,15 +31,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Guid? responsibleId;
 
         private Dictionary<Guid, IQuestion> questionCache = null;
-        private Dictionary<Guid, IGroup> groupCache = null;
+        private Dictionary<string, IGroup> groupCache = null;
+        private Dictionary<Guid, IComposite> entityCache = null;
+        private List<Guid> sectionCache = null;
 
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
-        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingMandatoryQuestions = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
 
@@ -50,6 +53,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? ResponsibleId
         {
             get { return this.responsibleId; }
+        }
+
+        private Dictionary<Guid, IComposite> EntityCache
+        {
+            get
+            {
+                return this.entityCache ?? (this.entityCache
+                    = this.innerDocument
+                        .Find<IComposite>(_ => true)
+                        .ToDictionary(
+                            entity => entity.PublicKey,
+                            entity => entity));
+            }
+        }
+
+        private List<Guid> SectionCache
+        {
+            get
+            {
+                return this.sectionCache ?? (this.sectionCache = this.innerDocument.Children.Cast<IGroup>().Where(x => x != null).Select(x => x.PublicKey).ToList());
+            }
         }
         
         private Dictionary<Guid, IQuestion> QuestionCache
@@ -65,15 +89,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        private Dictionary<Guid, IGroup> GroupCache
+        private Dictionary<string, IGroup> GroupCache
         {
             get
             {
-                return this.groupCache ?? (this.groupCache
-                    = this.innerDocument
-                        .Find<IGroup>(_ => true)
+                return this.groupCache ?? (
+                    this.groupCache = this.innerDocument.Find<IGroup>(_ => true)
                         .ToDictionary(
-                            group => group.PublicKey,
+                            group => group.PublicKey.FormatGuid(),
                             group => group));
             }
         }
@@ -99,10 +122,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
             : this(document, getVersion, responsibleId)
         {
-            this.groupCache = groupCache;
+            this.groupCache = groupCache.ToDictionary(x => x.Key.FormatGuid(), x => x.Value);
             this.questionCache = questionCache;
         }
-
 
         public long Version { get { return this.getVersion(); } }
 
@@ -129,6 +151,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public QuestionType GetQuestionType(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionType;
+        }
+
+        public AnswerType GetAnswerType(Guid questionId)
+        {
+            var questionType = GetQuestionType(questionId);
+            switch (questionType)
+            {
+                case QuestionType.SingleOption:
+                    return IsQuestionLinked(questionId)
+                        ? AnswerType.RosterVector
+                        : AnswerType.OptionCode;
+
+                case QuestionType.MultyOption:
+                    return IsQuestionLinked(questionId)
+                        ? AnswerType.RosterVectorArray
+                        : AnswerType.OptionCodeArray;
+
+                case QuestionType.Numeric:
+                    return IsQuestionInteger(questionId)
+                        ? AnswerType.Integer
+                        : AnswerType.Decimal;
+
+                case QuestionType.DateTime:
+                    return AnswerType.DateTime;
+
+                case QuestionType.GpsCoordinates:
+                    return AnswerType.GpsData;
+
+                case QuestionType.Text:
+                    return AnswerType.String;
+
+                case QuestionType.TextList:
+                    return AnswerType.DecimalAndStringArray;
+
+                case QuestionType.QRBarcode:
+                    return AnswerType.String;
+
+                case QuestionType.Multimedia:
+                    return AnswerType.FileName;
+            }
+
+            throw new ArgumentException(string.Format("Question of unknown type was found. Question id: {0}", questionId));
         }
 
         public bool IsQuestionLinked(Guid questionId)
@@ -241,6 +305,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return IsExpressionDefined(validationExpression);
         }
 
+        public bool IsQuestion(Guid entityId)
+        {
+            return this.GetQuestion(entityId) != null;
+        }
+
+        public bool IsInterviewierQuestion(Guid questionId)
+        {
+            var question = this.GetQuestion(questionId);
+
+            return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
+        }
+
         public string GetCustomValidationExpression(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
@@ -251,6 +327,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
         {
             return this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
+        }
+
+        public IEnumerable<Guid> GetAllParentGroupsForEntity(Guid entityId)
+        {
+            return this.GetAllParentGroupsForEntityStartingFromBottom(entityId);
         }
 
         public Guid? GetParentGroup(Guid groupOrQuestionId)
@@ -314,6 +395,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
+        public IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid entityId)
+        {
+            return this
+                .GetAllParentGroupsForEntityStartingFromBottom(entityId)
+                .Where(this.IsRosterGroup)
+                .Reverse()
+                .ToList();
+        }
+
         public IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
@@ -362,6 +452,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetRosterLevelForQuestion(questionId, this.GetAllParentGroupsForQuestion, this.IsRosterGroup);
         }
 
+        public int GetRosterLevelForEntity(Guid entityId)
+        {
+            this.ThrowIfEntityDoesNotExist(entityId);
+
+            return this.GetRosterLevelForEntity(entityId, this.GetAllParentGroupsForEntity, this.IsRosterGroup);
+        }
+
         public int GetRosterLevelForGroup(Guid groupId)
         {
             IGroup group = this.GetGroupOrThrow(groupId);
@@ -371,17 +468,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Count(this.IsRosterGroup);
         }
 
-        public IEnumerable<Guid> GetAllMandatoryQuestions()
-        {
-            return
-                from question in this.GetAllQuestions()
-                where question.Mandatory
-                select question.PublicKey;
-        }
-
+        
         public bool IsRosterGroup(Guid groupId)
         {
-            IGroup @group = this.GetGroupOrThrow(groupId);
+            IGroup @group = this.GetGroup(groupId);
+
+            if (@group == null) return false;
 
             return IsRosterGroup(@group);
         }
@@ -418,6 +510,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return this.cacheOfChildQuestions[groupId];
+        }
+
+        public ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
+        {
+            if (!this.cacheOfChildEntities.ContainsKey(groupId))
+            {
+                this.cacheOfChildEntities[groupId] = new ReadOnlyCollection<Guid>(
+                    this.GetGroupOrThrow(groupId)
+                        .Children
+                        .Select(entity => entity.PublicKey)
+                        .ToList());
+            }
+
+            return this.cacheOfChildEntities[groupId];
         }
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
@@ -469,14 +575,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     FormatQuestionForException(linkedQuestion)));
 
             return linkedQuestion.LinkedToQuestionId.Value;
-        }
-
-        public bool IsQuestionMandatory(Guid questionId)
-        {
-            return false;
-            //IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            //return question.Mandatory;
         }
 
         public bool IsQuestionInteger(Guid questionId)
@@ -663,12 +761,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public IEnumerable<Guid> GetUnderlyingMandatoryQuestions(Guid groupId)
+        public IEnumerable<Guid> GetAllSections()
         {
-            if (!this.cacheOfUnderlyingMandatoryQuestions.ContainsKey(groupId))
-                this.cacheOfUnderlyingMandatoryQuestions[groupId] = this.GetUnderlyingMandatoryQuestionsImpl(groupId);
-
-            return this.cacheOfUnderlyingMandatoryQuestions[groupId];
+            return SectionCache;
         }
 
         private IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestionImpl(Guid questionId)
@@ -732,15 +827,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        private IEnumerable<Guid> GetUnderlyingMandatoryQuestionsImpl(Guid groupId)
-        {
-            return this
-                .GetGroupOrThrow(groupId)
-                .Find<IQuestion>(question => question.Mandatory)
-                .Select(question => question.PublicKey)
-                .ToList();
-        }
-
         private IEnumerable<IGroup> GetAllGroups()
         {
             return this.GroupCache.Values;
@@ -757,11 +843,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return getAllParentGroupsForQuestion(questionId).Count(isRosterGroup);
         }
 
+        private int GetRosterLevelForEntity(Guid entityId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForEntity,
+            Func<Guid, bool> isRosterGroup)
+        {
+            return getAllParentGroupsForEntity(entityId).Count(isRosterGroup);
+        }
+
         private IEnumerable<Guid> GetAllParentGroupsForQuestionStartingFromBottom(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
             var parentGroup = (IGroup)question.GetParent();
+
+            return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
+        }
+
+        private IEnumerable<Guid> GetAllParentGroupsForEntityStartingFromBottom(Guid entityId)
+        {
+            IComposite entity = this.GetEntityOrThrow(entityId);
+
+            var parentGroup = (IGroup)entity.GetParent();
 
             return this.GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(parentGroup);
         }
@@ -874,7 +975,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IGroup GetGroup(Guid groupId)
         {
-            return GetGroup(this.GroupCache, groupId);
+            return GetGroup(this.GroupCache, groupId.FormatGuid());
         }
 
         private void ThrowIfQuestionDoesNotExist(Guid questionId)
@@ -882,9 +983,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.GetQuestionOrThrow(questionId);
         }
 
+        private void ThrowIfEntityDoesNotExist(Guid entityId)
+        {
+            this.GetEntityOrThrow(entityId);
+        }
+
         private IQuestion GetQuestionOrThrow(Guid questionId)
         {
             return GetQuestionOrThrow(this.QuestionCache, questionId);
+        }
+
+        private IComposite GetEntityOrThrow(Guid entityId)
+        {
+            return GetEntityOrThrow(this.EntityCache, entityId);
         }
 
         private IQuestion GetQuestion(Guid questionId)
@@ -915,6 +1026,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question;
         }
 
+        private static IComposite GetEntityOrThrow(Dictionary<Guid, IComposite> entities, Guid entityId)
+        {
+            IComposite entity = GetEntity(entities, entityId);
+
+            if (entity == null)
+                throw new QuestionnaireException(string.Format("Entity with id '{0}' is not found.", entityId));
+
+            return entity;
+        }
+
         private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
         {
             return questions.ContainsKey(questionId)
@@ -922,7 +1043,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 : null;
         }
 
-        private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId)
+        private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId)
+        {
+            return entities.ContainsKey(entityId)
+                ? entities[entityId]
+                : null;
+        }
+
+        private static IGroup GetGroup(Dictionary<string, IGroup> groups, string groupId)
         {
             return groups.ContainsKey(groupId)
                 ? groups[groupId]

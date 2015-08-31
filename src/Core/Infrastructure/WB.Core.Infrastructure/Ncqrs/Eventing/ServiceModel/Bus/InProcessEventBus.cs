@@ -37,19 +37,16 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
         }
 
-        public void PublishUncommitedEventsFromAggregateRoot(IAggregateRoot aggregateRoot, string origin, bool asBulk)
+        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin);
-
-            foreach (UncommittedEvent @event in aggregateRoot.GetUncommittedChanges())
-            {
-                eventStream.Append(@event);
-            }
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUncommittedChanges());
 
             this.eventStore.Store(eventStream);
-            this.Publish(eventStream);
+        }
 
-            aggregateRoot.MarkChangesAsCommitted();
+        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
+        {
+            this.Publish(aggregateRoot.GetUncommittedChanges());
         }
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)

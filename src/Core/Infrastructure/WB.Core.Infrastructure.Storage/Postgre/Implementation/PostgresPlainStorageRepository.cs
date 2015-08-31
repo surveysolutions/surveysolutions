@@ -22,7 +22,14 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Remove(object id)
         {
-            this.sessionProvider.GetSession().Delete(id);
+            var session = this.sessionProvider.GetSession();
+
+            var entity = session.Get<TEntity>(id);
+
+            if (entity == null)
+                return;
+
+            session.Delete(entity);
         }
 
         public void Remove(IEnumerable<TEntity> entities)

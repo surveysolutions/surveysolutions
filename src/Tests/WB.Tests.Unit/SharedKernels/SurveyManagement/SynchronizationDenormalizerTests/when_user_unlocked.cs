@@ -36,15 +36,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         };
 
         Because of = () =>
-            denormalizer.Handle(Create.Event.UserUnlocked(userId));
+            denormalizer.Handle(Create.Event.UserUnlocked(userId, eventId: Guid.Parse(partialPackageId)));
 
         It should_create_new_user_package = () =>
             userSyncPackageWriter.Verify(
                 x => x.Store(
-                    Moq.It.IsAny<UserSyncPackageContent>(),
                     Moq.It.Is<UserSyncPackageMeta>(u => u.UserId == userId),
-                    partialPackageId,
-                    CounterId),
+                    partialPackageId),
                 Times.Once);
 
         It should_serialize_not_empty_user = () =>
@@ -54,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             user.IsLockedByHQ.ShouldBeFalse();
 
         private static UserSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>> userSyncPackageWriter = new Mock<IOrderableSyncPackageWriter<UserSyncPackageMeta, UserSyncPackageContent>>();
+        private static Mock<IReadSideRepositoryWriter<UserSyncPackageMeta>> userSyncPackageWriter = new Mock<IReadSideRepositoryWriter<UserSyncPackageMeta>>();
         private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         private static Mock<IJsonUtils> jsonUtilsMock;

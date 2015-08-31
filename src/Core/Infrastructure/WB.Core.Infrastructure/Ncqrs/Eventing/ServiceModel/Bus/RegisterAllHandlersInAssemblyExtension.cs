@@ -44,8 +44,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
             var targetMethod = registerHandlerMethod.MakeGenericMethod(new[] { eventDataType });
             targetMethod.Invoke(target, new object[] { handler });
-
-            _log.InfoFormat("Registered {0} as event handler for event {1}.", handler.GetType().FullName, eventDataType.FullName);
         }
 
         private static bool ImplementsAtLeastOneIEventHandlerInterface(TypeInfo typeInfo)

@@ -33,7 +33,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
             IServiceLocator serviceLocator)
             : base(repository, eventBus, snapshooter, serviceLocator) { }
 
-        protected override void ExecuteImpl(ICommand command, string origin, bool handleInBatch, CancellationToken cancellationToken)
+        protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
             var commandDescriptor = new CommandDescriptor(command, origin, cancellationToken);
 
@@ -48,7 +48,7 @@ namespace WB.Core.Infrastructure.Implementation.CommandBus
 
                     this.RemoveFromTopOfQueue(commandDescriptor);
 
-                    base.ExecuteImpl(commandDescriptor.Command, commandDescriptor.Origin, handleInBatch, commandDescriptor.CancellationToken);
+                    base.ExecuteImpl(commandDescriptor.Command, commandDescriptor.Origin, commandDescriptor.CancellationToken);
                 }
             }
         }

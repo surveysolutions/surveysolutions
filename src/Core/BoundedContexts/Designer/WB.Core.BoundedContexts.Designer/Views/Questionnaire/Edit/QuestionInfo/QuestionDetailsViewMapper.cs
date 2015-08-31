@@ -25,7 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.ValidationExpression = question.ValidationExpression;
             questionView.ValidationMessage = question.ValidationMessage;
             questionView.IsPreFilled = question.Featured;
-            questionView.IsMandatory = question.Mandatory;
             questionView.Instructions = question.Instructions;
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];

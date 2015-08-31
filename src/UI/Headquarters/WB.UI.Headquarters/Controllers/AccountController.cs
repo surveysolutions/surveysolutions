@@ -19,6 +19,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
+    [ValidateInput(false)]
     public class AccountController : TeamController
     {
         private readonly IFormsAuthentication authentication;

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.ErrorReporting.Implementation.TabletInformation;
-using WB.Core.GenericSubdomains.ErrorReporting.Services;
-using WB.Core.GenericSubdomains.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Implementation.TabletInformation;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services;
+using WB.Core.BoundedContexts.Capi.ErrorReporting.Services.TabletInformationSender;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.GenericSubdomains.ErrorReporting.TabletInformationSenderTests

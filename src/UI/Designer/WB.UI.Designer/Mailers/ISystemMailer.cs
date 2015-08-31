@@ -8,10 +8,7 @@ namespace WB.UI.Designer.Mailers
         MvcMailMessage ConfirmationEmail(EmailConfirmationModel model);
         MvcMailMessage ResetPasswordEmail(EmailConfirmationModel model);
 
-        MvcMailMessage GetShareNotificationEmail(SharingNotificationModel model);
-        MvcMailMessage GetStopShareNotificationEmail(SharingNotificationModel model);
-
-        MvcMailMessage GetOwnerShareNotificationEmail(SharingNotificationModel model);
-        MvcMailMessage GetOwnerStopShareNotificationEmail(SharingNotificationModel model);
+        MvcMailMessage GetShareChangeNotificationEmail(SharingNotificationModel model);
+        MvcMailMessage GetOwnerShareChangeNotificationEmail(SharingNotificationModel model);
     }
 }

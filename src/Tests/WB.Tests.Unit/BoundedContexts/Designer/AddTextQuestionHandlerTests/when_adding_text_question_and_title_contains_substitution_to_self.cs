@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     title: titleWithSubstitutionToSelf,
                     variableName: variableName,
                 variableLabel: null,
-                    isMandatory: isMandatory,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
@@ -49,7 +48,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private const string variableName = "var";
         private static string titleWithSubstitutionToSelf = string.Format("title with substitution to self - %{0}%", variableName);
-        private static bool isMandatory = false;
         private static bool isPreFilled = false;
         private static string instructions = "intructions";
         private static string enablementCondition = "";

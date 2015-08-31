@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 namespace WB.UI.Supervisor.Controllers
 {
     [LimitsFilter]
+    [ValidateInput(false)]
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;
