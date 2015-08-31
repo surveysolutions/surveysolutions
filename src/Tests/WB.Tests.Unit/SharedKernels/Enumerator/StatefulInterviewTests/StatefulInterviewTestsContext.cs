@@ -1,6 +1,9 @@
 using System;
+using System.Linq.Expressions;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
@@ -8,20 +11,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     [Subject(typeof(StatefulInterview))]
     internal class StatefulInterviewTestsContext
     {
-        protected static void SetupQuestionnaireWithLinkedAndReferencedQuestions(Guid questionnaireId,
-            Guid linkedQuestionId, Guid[] linkedQuestionRosters, Guid referencedQuestionId, Guid[] referencedQuestionRosters)
-        {
-            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
-                => _.HasQuestion(linkedQuestionId) == true
-                && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters
-                && _.GetRosterSizeSourcesForQuestion(linkedQuestionId) == linkedQuestionRosters
-                && _.HasQuestion(referencedQuestionId) == true
-                && _.GetRosterLevelForQuestion(referencedQuestionId) == referencedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
-                && _.GetRosterSizeSourcesForQuestion(referencedQuestionId) == referencedQuestionRosters);
-        }
-
         protected static AnsweredQuestionSynchronizationDto CreateAnsweredQuestionSynchronizationDto(Guid questionId, decimal[] rosterVector, object answer, string comment = "comment")
         {
             return new AnsweredQuestionSynchronizationDto(questionId, rosterVector, answer, comment);

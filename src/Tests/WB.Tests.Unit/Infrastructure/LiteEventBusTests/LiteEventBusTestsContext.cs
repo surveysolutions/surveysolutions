@@ -6,11 +6,11 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
-    internal class LiteEventBusTestsContext
+    public class LiteEventBusTestsContext
     {
-        internal class DummyEvent  { }
+        public class DummyEvent  { }
 
-        internal class DifferentDummyEvent  { }
+        public class DifferentDummyEvent { }
 
         public static IAggregateRoot CreateDummyAggregateRoot(Guid eventSourceId, params object[] events)
         {

@@ -7,7 +7,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
     internal class when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions
     {
-        internal class ParentClass
+        public class ParentClass
         {
             public ParentClass(int a)
             {
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             public int A { get; set; }
         }
 
-        internal class ChildClass : ParentClass
+        public class ChildClass : ParentClass
         {
             public ChildClass(int a)
                 : base(a) {}

@@ -8,6 +8,7 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -79,14 +80,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Guid groupId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId);
-
             string aliasForDeletedQuestion = "q1";
             string expression = string.Format("[{0}] > 0", aliasForDeletedQuestion);
 
-            RegisterExpressionProcessorMock(expression, new[] { aliasForDeletedQuestion });
-            
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression(expression) == new[] { aliasForDeletedQuestion });
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId, expressionProcessor: expressionProcessor);
+
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, aliasForDeletedQuestion);
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",
                 condition: expression);
@@ -108,12 +110,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Guid groupId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId);
-
             string expression = string.Format("[{0}] > 0", question1Id);
 
-            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString() });
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression(expression) == new[] { question1Id.ToString() });
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId, expressionProcessor: expressionProcessor);
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",
@@ -135,12 +138,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Guid question1Id = Guid.NewGuid();
             Guid groupId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId);
             string aliasForDeletedQuestion = "q1";
             string expression = string.Format("[{0}] > 0", aliasForDeletedQuestion);
 
-            RegisterExpressionProcessorMock(expression, new[] { aliasForDeletedQuestion });
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression(expression) == new[] { aliasForDeletedQuestion });
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId, expressionProcessor: expressionProcessor);
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, aliasForDeletedQuestion);
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",
@@ -161,12 +166,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Guid question1Id = Guid.NewGuid();
             Guid groupId = Guid.NewGuid();
             Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId);
 
             string expression = string.Format("[{0}] > 0", question1Id);
 
-            RegisterExpressionProcessorMock(expression, new[] { question1Id.ToString() });
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression(expression) == new[] { question1Id.ToString() });
+
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
+                groupId: groupId, expressionProcessor: expressionProcessor);
 
             AddQuestion(questionnaire, question1Id, groupId, responsibleId, QuestionType.Text, "q1");
             AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q2",

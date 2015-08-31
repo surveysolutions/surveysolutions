@@ -28,14 +28,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(repositoryWithoutQuestionnaire);
+            interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                Create.Interview().CreateInterview(questionnaireId, 1, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId));
+                interview.CreateInterview(questionnaireId, 1, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId));
 
         It should_throw_interview_exception = () =>
             exception.ShouldBeOfExactType<InterviewException>();
@@ -45,5 +43,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid responsibleSupervisorId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
+        private static Interview interview;
     }
 }

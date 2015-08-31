@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            SetupInstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
+            Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
 
             AddInterviewLevel(interview, new ValueVector<Guid> { parentRosterId }, new decimal[] { 0 },
               new Dictionary<Guid, object> { { substitutionReferenceQuestionId ,18} },

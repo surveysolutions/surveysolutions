@@ -23,13 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.Version == questionnaireVersion);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                =>
-                repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-            interview = Create.Interview();
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, ""));
         };

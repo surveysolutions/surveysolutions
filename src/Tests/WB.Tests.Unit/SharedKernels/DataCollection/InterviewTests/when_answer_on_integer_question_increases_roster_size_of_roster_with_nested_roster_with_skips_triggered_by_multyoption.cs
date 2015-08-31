@@ -56,13 +56,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     && _.GetNestedRostersOfGroupById(parentRosterGroupId) == new[] { nestedRosterGroupId }
                     && _.GetRosterSizeQuestion(nestedRosterGroupId) == multyOptionQuestionWhichIncreasesNestedRosterSizeId);
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new MultipleOptionsQuestionAnswered(userId, multyOptionQuestionWhichIncreasesNestedRosterSizeId, new decimal[0],
                 DateTime.Now, new decimal[] { 5 }));
             eventContext = new EventContext();

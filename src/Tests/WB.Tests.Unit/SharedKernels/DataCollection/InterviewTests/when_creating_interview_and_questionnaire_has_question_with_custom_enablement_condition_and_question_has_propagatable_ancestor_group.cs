@@ -33,15 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            Create.Interview().CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
+            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
 
         It should_not_raise_QuestionDisabled_event = () =>
             eventContext.ShouldNotContainEvent<QuestionsDisabled>();
@@ -58,5 +56,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
         private static DateTime answersTime;
         private static Guid supervisorId;
+        private static Interview interview;
     }
 }

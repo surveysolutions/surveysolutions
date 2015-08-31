@@ -44,6 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         rosterAddIndex[id] = callOrder;
                         callOrder++;
                     });
+            interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => 
@@ -58,13 +59,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
-
-            SetupInstanceToMockedServiceLocator(Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object));
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
                     questionnaire.Version,
@@ -97,8 +96,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext.Dispose();
             eventContext = null;
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-               CreateInterviewExpressionStateProviderStub());
         };
 
         Because of = () => interview.SynchronizeInterview(userId, interviewSynchronizationDto);

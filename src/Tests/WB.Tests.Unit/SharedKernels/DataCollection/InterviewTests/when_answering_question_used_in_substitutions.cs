@@ -47,12 +47,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 }
             });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                new PlainQuestionnaire(questionnaire, 1));
+            IQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             events = new EventContext();
         };

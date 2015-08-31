@@ -21,6 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 QuestionText = "text",
                 VariableLabel = "varlabel",
                 QuestionType = QuestionType.MultyOption,
+                GroupPublicKey = chapterId,
                 AreAnswersOrdered = true,
                 MaxAllowedAnswers = 1,
                 Featured = true,
@@ -40,26 +41,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         Because of = () => questionnaire.CloneQuestionById(sourceQuestionId, responsibleId, questionId);
 
-        It should_copy_property_values_from_source_question = () => eventContext.ShouldContainEvent<QuestionCloned>(e => 
-            e.QuestionType == QuestionType.MultyOption &&
-            string.IsNullOrEmpty(e.StataExportCaption) &&
-            e.PublicKey == questionId &&
-            e.GroupPublicKey == questionnaire.EventSourceId &&
-            e.QuestionText == newQuestionAdded.QuestionText &&
-            e.VariableLabel == newQuestionAdded.VariableLabel &&
-            e.Featured &&
-            e.QuestionScope == QuestionScope.Interviewer &&
-            e.ConditionExpression == newQuestionAdded.ConditionExpression &&
-            e.ValidationExpression == newQuestionAdded.ValidationExpression &&
-            e.ValidationMessage == newQuestionAdded.ValidationMessage &&
-            e.Instructions == newQuestionAdded.Instructions &&
-            e.SourceQuestionId == sourceQuestionId &&
-            e.TargetIndex == 3 &&
-            e.ResponsibleId == responsibleId &&
-            e.AreAnswersOrdered == newQuestionAdded.AreAnswersOrdered &&
-            e.MaxAllowedAnswers == newQuestionAdded.MaxAllowedAnswers &&
-            e.IsFilteredCombobox == newQuestionAdded.IsFilteredCombobox
-            );
+        It should_copy_property_values_from_source_question = () =>
+            eventContext.ShouldContainEvent<QuestionCloned>(e =>
+            {
+                return e.QuestionType == QuestionType.MultyOption &&
+                       string.IsNullOrEmpty(e.StataExportCaption) &&
+                       e.PublicKey == questionId &&
+                       e.GroupPublicKey == chapterId &&
+                       e.QuestionText == newQuestionAdded.QuestionText &&
+                       e.VariableLabel == newQuestionAdded.VariableLabel &&
+                       e.Featured == true &&
+                       e.QuestionScope == QuestionScope.Interviewer &&
+                       e.ConditionExpression == newQuestionAdded.ConditionExpression &&
+                       e.ValidationExpression == newQuestionAdded.ValidationExpression &&
+                       e.ValidationMessage == newQuestionAdded.ValidationMessage &&
+                       e.Instructions == newQuestionAdded.Instructions &&
+                       e.SourceQuestionId == sourceQuestionId &&
+                       e.TargetIndex == 1 &&
+                       e.ResponsibleId == responsibleId &&
+                       e.AreAnswersOrdered == newQuestionAdded.AreAnswersOrdered &&
+                       e.MaxAllowedAnswers == newQuestionAdded.MaxAllowedAnswers &&
+                       e.IsFilteredCombobox == newQuestionAdded.IsFilteredCombobox;
+            });
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
         It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(27);

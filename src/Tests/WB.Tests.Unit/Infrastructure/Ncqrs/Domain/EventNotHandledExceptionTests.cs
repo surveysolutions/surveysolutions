@@ -18,7 +18,7 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        internal class FooEvent : Event
+        public class FooEvent : Event
         {}
 
         [Test]

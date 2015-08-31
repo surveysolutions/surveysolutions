@@ -20,9 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(Mock.Of<IQuestionnaire>());
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepositoryMock.Object);
-
-            interview = CreateInterview(userId: userId);
+            interview = CreateInterview(userId: userId, questionnaireRepository: questionnaireRepositoryMock.Object);
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Completed, null));
        
             eventContext = new EventContext();

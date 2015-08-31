@@ -204,12 +204,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             result.ConnectChildrenWithParent();
             return result;
         }
-
-        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
-        {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
-        }
     }
 }

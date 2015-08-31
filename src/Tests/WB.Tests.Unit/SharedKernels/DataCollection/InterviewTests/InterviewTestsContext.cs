@@ -21,9 +21,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     internal class InterviewTestsContext
     {
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null)
+            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
+            IQuestionnaireRepository questionnaireRepository = null, 
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = Create.Interview();
+            var interview = Create.Interview(
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: expressionProcessorStatePrototypeProvider);
 
             interview.CreateInterview(
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
@@ -62,18 +66,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
             return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
-        }
-
-        protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub()
-        {
-            var expresstionState = new StronglyTypedInterviewEvaluator();
-            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(x => x.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expresstionState);
-            return interviewExpressionStatePrototypeProvider;
-        }
-
-        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
-        {
-            Setup.InstanceToMockedServiceLocator(instance);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)

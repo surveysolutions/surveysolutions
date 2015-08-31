@@ -1,6 +1,9 @@
 using System;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
@@ -9,11 +12,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
-                => _.HasGroup(group.Id) == true
-                && _.GetRostersFromTopToSpecifiedGroup(group.Id) == new [] { rosterId });
+            IQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+                => _.HasGroup(@group.Id) == true
+                && _.GetRostersFromTopToSpecifiedGroup(@group.Id) == new [] { rosterId });
 
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId);
+            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
