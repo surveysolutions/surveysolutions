@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         It should_initialize_section_list = () =>
             sectionsModel.Sections.ShouldNotBeEmpty();
 
-        It should_create_the_same_amount_of_sections_as_in_questionnaire_model = () =>
-            sectionsModel.Sections.Count.ShouldEqual(listOfSection.Count);
+        It should_create_the_same_amount_of_sections_as_in_questionnaire_model_plus_complete_button = () =>
+            sectionsModel.Sections.Count.ShouldEqual(listOfSection.Count + 1);
 
         static SideBarSectionsViewModel sectionsModel;
 
