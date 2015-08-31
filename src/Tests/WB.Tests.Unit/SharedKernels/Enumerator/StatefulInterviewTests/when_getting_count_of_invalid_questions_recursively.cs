@@ -16,8 +16,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            interview = Create.StatefulInterview(questionnaireId: questionnaireId);
-
             var targetRosterVector = new decimal[0] { };
 
             var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetAllUnderlyingInterviewerQuestions(group.Id) == new List<Guid>
@@ -28,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                                                             }.ToReadOnlyCollection());
             IQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Setup.InstanceToMockedServiceLocator(questionnaireRepository);
+            interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.TextQuestionAnswered(question1Id, targetRosterVector, "answer"));
             interview.Apply(Create.Event.AnswersDeclaredInvalid(question1Id, targetRosterVector));
