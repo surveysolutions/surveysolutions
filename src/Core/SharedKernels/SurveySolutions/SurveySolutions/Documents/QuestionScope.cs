@@ -8,6 +8,6 @@
         Interviewer = 0, 
         Supervisor = 1, 
         Headquarter = 2,
-        Hidden = 2, 
+        Hidden = 3, 
     }
 }
