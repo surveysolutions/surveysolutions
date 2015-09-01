@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Views;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Interviewer.ViewModel;
 

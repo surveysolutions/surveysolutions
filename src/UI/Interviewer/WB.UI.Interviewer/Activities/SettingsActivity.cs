@@ -10,6 +10,7 @@ using Android.Views;
 using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;

@@ -402,7 +402,6 @@
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
-    <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
@@ -416,11 +415,8 @@
     <Compile Include="ViewModel\FinishIntallationViewModel.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
-    <Compile Include="ViewModel\LoginActivityViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="ViewModel\SynchronizationViewModel.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
@@ -467,6 +463,10 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Values\styles.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_item.axml" />
+    <AndroidResource Include="Resources\Layout\dashboard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -614,6 +614,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\splash_image.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
+    <AndroidResource Include="Resources\Values\dashboard.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

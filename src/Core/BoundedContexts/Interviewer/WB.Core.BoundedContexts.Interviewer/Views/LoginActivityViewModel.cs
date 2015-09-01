@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class LoginActivityViewModel : BaseViewModel
     {
@@ -64,8 +64,8 @@ namespace WB.UI.Interviewer.ViewModel
             this.ShouldActivationButtonBeVisible = false;
 
 #if DEBUG
-            this.Login = "interviewer1";
-            this.Password = "P@$$w0rd";
+            this.Login = "in1sv1";
+            this.Password = "1234";
 #endif
         }
 
@@ -91,7 +91,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         private async void StartLogin()
         {
-            var result = await authenticationService.LogOnAsync(this.Login, this.Password);
+            var result = await this.authenticationService.LogOnAsync(this.Login, this.Password);
             if (result)
             {
                 this.viewModelNavigationService.NavigateToDashboard();
