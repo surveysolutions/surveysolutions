@@ -27,6 +27,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
 
             this.LoggedInUserName = this.authenticationService.CurrentUser.Name;
+
+            NewInterviewsTabMenu = new DashboardTabMenuViewModel(5);
+            StartedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
+            CompletedInterviewsTabMenu = new DashboardTabMenuViewModel(7);
+            RejectedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
+
+            DashboardItems = new DashboardItemViewModel[]
+            {
+                new DashboardItemViewModel(), 
+                new DashboardItemViewModel(), 
+                new DashboardItemViewModel(), 
+            };
         }
 
         private string loggedInUserName;
