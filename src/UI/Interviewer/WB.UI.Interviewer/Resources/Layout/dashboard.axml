@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<!--  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/colorPrimary"
+      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <TextView
+        style="@style/ToolbarTitle"
+        local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
+  </android.support.v7.widget.Toolbar>-->
+
+  <LinearLayout style="@style/Dashboard_Interviews_Header">
+    <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
+      <TextView style="@style/Dashboard_NewItemsLink"
+                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_NewItemsLinkText'), NewInterviewsTabMenu.Count); 
+                Click ShowNewItemsInterviewsCommand;" />
+      <TextView style="@style/Dashboard_StartedLink"
+                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_Dashboard_StartedLinkText'), StartedInterviewsTabMenu.Count); 
+                Click ShowStartedInterviewsCommand;
+                Visible StartedInterviewsTabMenu.IsVisible;" />
+      <TextView style="@style/Dashboard_CompletedLink"
+                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_Dashboard_CompletedLinkText'), CompletedInterviewsTabMenu.Count); 
+                Click ShowCompletedInterviewsCommand;
+                Visible CompletedInterviewsTabMenu.IsVisible;" />
+      <TextView style="@style/Dashboard_RejectedLink"
+                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_Dashboard_RejectedLinkText'), RejectedInterviewsTabMenu.Count); 
+                Click ShowRejectedInterviewsCommand;
+                Visible RejectedInterviewsTabMenu.IsVisible;" />
+    </LinearLayout>
+  </LinearLayout>
+
+  <TextView android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="DASHBOARD" />
+  
+  <ScrollView
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:fillViewport="true">
+
+      <MvxListView android:id="@+id/interviewsList"
+               style="@style/Dashboard_InterviewsList"
+               local:MvxBind="ItemsSource DashboardItems; 
+                              ItemClick LoadQuestionnaireCommand;"
+               local:MvxItemTemplate="@layout/dashboard_item" />
+
+  </ScrollView>
+</LinearLayout>

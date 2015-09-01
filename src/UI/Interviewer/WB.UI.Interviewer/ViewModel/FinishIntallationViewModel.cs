@@ -1,6 +1,7 @@
 using System;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -61,9 +62,9 @@ namespace WB.UI.Interviewer.ViewModel
         {
             this.SyncEndpoint = "";
 #if DEBUG
-            this.SyncEndpoint = "http://192.168.88.226/headquarters";
-            this.Login = "int";
-            this.Password = "1";
+            this.SyncEndpoint = "http://192.168.88.163/headquarters";
+            this.Login = "in1sv1";
+            this.Password = "1234";
 #endif
         }
 

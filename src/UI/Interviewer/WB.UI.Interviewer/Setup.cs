@@ -7,6 +7,8 @@ using Cirrious.CrossCore;
 using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.ViewModel;
