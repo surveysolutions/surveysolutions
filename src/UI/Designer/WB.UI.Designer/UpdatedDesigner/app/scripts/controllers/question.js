@@ -40,7 +40,6 @@
                 $scope.activeQuestion.validationExpression = question.validationExpression;
                 $scope.activeQuestion.validationMessage = question.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
-                $scope.activeQuestion.notPrefilledQuestionScopeOptions = question.notPrefilledQuestionScopeOptions;
                 $scope.activeQuestion.instructions = question.instructions;
                 $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
                 $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
@@ -150,8 +149,8 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
-
-                if (type === 'TextList') {
+                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Prefilled';
+                if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -163,7 +162,7 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates') {
+                if (type === 'GpsCoordinates' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
                 if (type !== "SingleOption" && type !== "MultyOption") {
@@ -273,6 +272,18 @@
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 $scope.questionForm.$setDirty();
+            };
+
+            $scope.getQuestionScopes = function (currentQuestion) {
+                if (!currentQuestion)
+                    return [];
+                var allScopes = currentQuestion.allQuestionScopeOptions;
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates'])<0)
+                    return allScopes;
+
+                return allScopes.filter(function (o) {
+                    return o.value !== 'Prefilled' && o.value !== 'Supervisor';
+                });
             };
 
             $scope.$watch('activeQuestion.isLinked', function (newValue) {
