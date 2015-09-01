@@ -334,7 +334,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application..
+        ///   Looks up a localized string similar to Your version of this application does not support this questionnaire.  Please update this application..
         /// </summary>
         public static string ImportQuestionnaire_Error_UpgradeRequired {
             get {
