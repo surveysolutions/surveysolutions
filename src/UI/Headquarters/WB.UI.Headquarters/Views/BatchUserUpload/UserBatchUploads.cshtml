@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.UI.Headquarters.API
+@using WB.UI.Headquarters.Models.UserBatchUpload
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
@@ -12,8 +13,8 @@
     var $userPreloadigVerificationDetailsUrl = '@Url.Action("UserPreloadigVerificationDetails", "BatchUserUpload", new { area = string.Empty })';
     var $userCreationProcessDetailsUrl = '@Url.Action("UserCreationProcessDetails", "BatchUserUpload", new { area = string.Empty })';
     $(function() {
-        var allUserBatchUploadProcessesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "BatchUpload", action = "AllUserBatchUploadProcesses" })';
-        var deleteUserBatchUploadProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "BatchUpload", action = "DeleteUserBatchUploadProcess" })';
+        var allUserBatchUploadProcessesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PreloadingApi", action = "AllUserBatchUploadProcesses" })';
+        var deleteUserBatchUploadProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PreloadingApi", action = "DeleteUserBatchUploadProcess" })';
         var model = new Supervisor.VM.BatchUserCreation(allUserBatchUploadProcessesUrl, deleteUserBatchUploadProcessUrl, "#confirm-delete-template");
         ko.applyBindings(model);
         model.load();
