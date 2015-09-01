@@ -2,7 +2,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.UI.Interviewer.ViewModel
+namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class SynchronizationViewModel : BaseViewModel
     {

@@ -1,4 +1,5 @@
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.ViewModel;
 
 namespace WB.UI.Interviewer
