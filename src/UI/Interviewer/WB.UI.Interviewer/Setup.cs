@@ -53,7 +53,8 @@ namespace WB.UI.Interviewer
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(AndroidCoreRegistry).Assembly
+                typeof(AndroidCoreRegistry).Assembly,
+                typeof(LoginActivityViewModel).Assembly,
 
             }).ToArray();
         }
