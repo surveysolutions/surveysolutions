@@ -287,6 +287,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
+    <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -496,6 +497,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
+    <Compile Include="API\BatchUploadController.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
     <Compile Include="API\PreloadingApiController.cs" />
