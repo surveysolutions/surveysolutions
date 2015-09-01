@@ -497,7 +497,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
-    <Compile Include="API\BatchUploadController.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
     <Compile Include="API\PreloadingApiController.cs" />
@@ -563,6 +562,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\HeadquartersRegistry.cs" />
+    <Compile Include="Models\UserBatchUpload\AllUserBatchUploadProcessesRequest.cs" />
+    <Compile Include="Models\UserBatchUpload\UserBatchUploadProcessesView.cs" />
+    <Compile Include="Models\UserBatchUpload\UserBatchUploadProcessState.cs" />
+    <Compile Include="Models\UserBatchUpload\UserBatchUploadProcessView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
@@ -592,7 +595,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
