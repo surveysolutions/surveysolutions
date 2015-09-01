@@ -30,11 +30,19 @@ namespace WB.UI.Shared.Enumerator
         protected EnumeratorSetup(Context applicationContext) : base(applicationContext)
         {
             //killing app to avoid incorrect state
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => 
-                UncaughtExceptionHandler();
+            AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainOnUnhandledException;
             
-            TaskScheduler.UnobservedTaskException += (sender, args) =>
-                UncaughtExceptionHandler();
+            TaskScheduler.UnobservedTaskException += OnTaskSchedulerOnUnobservedTaskException;
+        }
+
+        private void OnTaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs args)
+        {
+            UncaughtExceptionHandler();
+        }
+
+        private void OnCurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            UncaughtExceptionHandler();
         }
 
         static void UncaughtExceptionHandler()
