@@ -103,11 +103,13 @@
             this.$menu.html(items);
             return this;
         },
-        focus: function(e) {
-            this.focused = true;
+        focus: function (e) {
+            if (!this.focused) {
+                this.focused = true;
 
-            if (!this.mousedover && this.options.showHintOnFocus) {
-                this.lookup();
+                if (!this.mousedover && this.options.showHintOnFocus) {
+                    this.lookup();
+                }
             }
         },
         click: function(e) {
@@ -167,11 +169,13 @@
                 this.options.scrollHeight.call() :
                 this.options.scrollHeight;
 
+            var shouldFitToParent = _.isUndefined(this.options.shouldFitToParent) ? true : this.options.shouldFitToParent;
+
             (this.$appendTo ? this.$menu.appendTo(this.$appendTo) : this.$menu.insertAfter(this.$element))
                 .css({
                     top: pos.top + pos.height + scrollHeight,
                     left: pos.left,
-                    width: this.$element.parent().width()
+                    width: shouldFitToParent ? this.$element.parent().width() : this.$element.width()
                 })
                 .show();
 
@@ -212,16 +216,15 @@
             //
             // #351: preventDefault won't cancel blurs in ie <= 8
             self.$element.on('blur', function($e) {
-                var active = document.activeElement;
-                var isActive = self.$menu.is(active);
-                var hasActive = self.$menu.has(active).length > 0;
+                var active = $(document.activeElement);
+                var isActive = self.$menu.parent().is(active);
 
-                if (Supervisor.Framework.Browser.isMsie() && (isActive || hasActive)) {
+                if (Supervisor.Framework.Browser.isMsie() && isActive) {
                     $e.preventDefault();
                     // stop immediate in order to prevent Input#_onBlur from
                     // getting exectued
                     $e.stopImmediatePropagation();
-                    _.defer(function() { self.$element.focus(); });
+                    setTimeout(function () { self.$element.focus(); }, 0);
                 }
             });
 
