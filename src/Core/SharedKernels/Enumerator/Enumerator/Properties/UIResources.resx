@@ -184,7 +184,7 @@
     <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
   </data>
   <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Your version of application does not support of this questionnaire. Please, update application.</value>
+    <value>Your version of this application does not support this questionnaire.  Please update this application.</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
     <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
