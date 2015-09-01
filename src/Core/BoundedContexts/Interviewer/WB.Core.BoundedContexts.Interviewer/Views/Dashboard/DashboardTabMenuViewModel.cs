@@ -2,6 +2,11 @@
 {
     public class DashboardTabMenuViewModel
     {
+        public DashboardTabMenuViewModel(int count)
+        {
+            this.Count = count;
+        }
+
         public int Count { get; set; }
 
         public bool IsVisible
