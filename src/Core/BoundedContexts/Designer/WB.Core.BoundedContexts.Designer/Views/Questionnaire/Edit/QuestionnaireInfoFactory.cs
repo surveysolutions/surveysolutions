@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly SelectOption InterviewerQuestionScope = new SelectOption { Value = "Interviewer", Text = "Interviewer" };
         private static readonly SelectOption SupervisorQuestionScope = new SelectOption { Value = "Supervisor", Text = "Supervisor" };
+        private static readonly SelectOption HiddenQuestionScope = new SelectOption { Value = "Hidden", Text = "Hidden" };
         private static readonly SelectOption PrefilledQuestionScope = new SelectOption { Value = "Prefilled", Text = "Prefilled" };
 
         private static readonly SelectOption[] AllQuestionScopeOptions =
@@ -32,12 +33,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             InterviewerQuestionScope,
             SupervisorQuestionScope,
             PrefilledQuestionScope,
+            HiddenQuestionScope
         };
 
         private static readonly SelectOption[] NotPrefilledQuestionScopeOptions =
         {
             InterviewerQuestionScope,
             SupervisorQuestionScope,
+            HiddenQuestionScope
         };
 
         private static readonly SelectOption[] QuestionTypeOptions =
