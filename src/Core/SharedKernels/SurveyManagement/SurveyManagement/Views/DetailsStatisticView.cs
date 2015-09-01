@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         public int SupervisorsCount { get; set; }
         public int AnsweredCount { get; set; }
         public int UnansweredCount { get; set; }
+        public int HiddenCount { get; set; }
     }
 }
