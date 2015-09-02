@@ -18,6 +18,7 @@
         var $ApprovedDataUrl = '@Url.Action("GetApprovedData", "ImportExport")';
         var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
         var $HistoryUrl = '@Url.Action("GetHistory", "ImportExport")';
+        var $DDIUrl = '@Url.Action("GetDDI", "ImportExport")';
 
         $(function() {
             var templates = [
@@ -64,6 +65,7 @@
             <th>All Data</th>
             <th>Approved Data</th>
             <th>Binary Data</th>
+            <th>DDI</th>
             @if (this.ViewBag.EnableInterviewHistory)
             {
                 <th>Para Data</th>
@@ -112,8 +114,16 @@
             <td>
                 <div>
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $FilesUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <img src="@Url.Content("~/Content/icons/binary.png")" alt="tabs" />
+                        <img src="@Url.Content("~/Content/icons/binary.png")" alt="tabs"/>
                         Binary
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <a class="btn btn-default btn-block" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <img src="@Url.Content("~/Content/icons/ddi.png")" alt="tabs" />
+                        Metadata
                     </a>
                 </div>
             </td>

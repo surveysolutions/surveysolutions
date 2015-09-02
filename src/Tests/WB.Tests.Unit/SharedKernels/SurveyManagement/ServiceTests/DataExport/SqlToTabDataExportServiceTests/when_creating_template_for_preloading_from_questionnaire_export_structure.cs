@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         It should_add_second_header_that_corresponds_to_nested_roster_level_of_the_interview = () =>
             csvWriterServiceTestable.Rows[1].ShouldEqual(new object[] { "Id", "r1", "r2", "1", "a", "ParentId1", "ParentId2" });
 
-        private static SqlToTabDataExportService sqlToTabDataExportService;
+        private static SqlToDataExportService sqlToTabDataExportService;
         private static Guid questionnaireId=Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion=3;
         private static CsvWriterServiceTestable csvWriterServiceTestable;
