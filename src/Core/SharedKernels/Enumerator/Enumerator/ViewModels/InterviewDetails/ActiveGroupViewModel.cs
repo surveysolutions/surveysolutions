@@ -22,7 +22,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
+    public class ActiveGroupViewModel : MvxViewModel,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
@@ -100,6 +100,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
+            if (navigationParams.ScreenType != ScreenType.Group)
+                return;
+
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
             await this.CreateRegularGroupScreen(navigationParams, @group);
         }
