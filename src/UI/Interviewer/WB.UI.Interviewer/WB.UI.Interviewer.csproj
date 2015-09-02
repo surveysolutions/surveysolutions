@@ -615,6 +615,7 @@
     <AndroidResource Include="Resources\Drawable\splash_image.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Values\dashboard.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
