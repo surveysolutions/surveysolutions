@@ -588,8 +588,8 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, 
-            Guid? cascadeFromQuestionId = null, List<Answer> options = null)
+        public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
+            Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer)
         {
             return new SingleQuestion
             {
@@ -599,7 +599,9 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 Answers = options ?? new List<Answer>(),
-                CascadeFromQuestionId = cascadeFromQuestionId
+                CascadeFromQuestionId = cascadeFromQuestionId,
+                LinkedToQuestionId = linkedToQuestionId,
+                QuestionScope = scope
             };
         }
 
@@ -1223,7 +1225,7 @@ namespace WB.Tests.Unit
         }
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string mask = null, string variable=null, string validationMessage=null,  string text = null)
+            string mask = null, string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer)
             
         {
             return new TextQuestion("Question T")
@@ -1235,7 +1237,8 @@ namespace WB.Tests.Unit
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                QuestionScope = scope
             };
         }
 
@@ -2196,6 +2199,22 @@ namespace WB.Tests.Unit
             return new Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+        }
+
+        public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer)
+        {
+            return new MultimediaQuestion("Question T")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionType = QuestionType.Multimedia,
+                StataExportCaption = variable,
+                QuestionScope = scope,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                QuestionText = text
+            };
         }
     }
 }

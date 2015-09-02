@@ -477,7 +477,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.VariableLabel,
@@ -567,7 +567,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.Title,
                         e.VariableName,
                         e.VariableLabel,
@@ -605,7 +605,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.Multimedia,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.Title,
                         e.VariableName,
                         e.VariableLabel,
@@ -1851,7 +1851,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
             string enablementCondition,
             string validationExpression,
-            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
+            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount,
+            QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1876,13 +1877,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-
+                QuestionScope = scope,
                 MaxAnswerCount = maxAnswerCount
             });
         }
 
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
-         string enablementCondition, string instructions, Guid responsibleId)
+         string enablementCondition, string instructions, Guid responsibleId,
+            QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1900,14 +1902,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
                 Instructions = instructions,
+                QuestionScope = scope,
                 ResponsibleId = responsibleId
             });
         }
 
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
             string enablementCondition,
-            string validationExpression, 
-            string validationMessage, string instructions, Guid responsibleId)
+            string validationExpression,
+            string validationMessage, string instructions, Guid responsibleId,
+            QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1927,6 +1931,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
+                QuestionScope = scope,
                 ResponsibleId = responsibleId
             });
         }
@@ -2552,7 +2557,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(QuestionScope scope)
         {
-            if (scope != QuestionScope.Interviewer)
+            if (scope == QuestionScope.Supervisor)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.LinkedCategoricalQuestionCanNotBeFilledBySupervisor,

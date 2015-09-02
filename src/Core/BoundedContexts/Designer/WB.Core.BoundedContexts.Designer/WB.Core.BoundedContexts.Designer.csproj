@@ -223,7 +223,7 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\DesignerExpressionsEngineVersionService.cs" />
+    <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
@@ -315,7 +315,7 @@
     <Compile Include="Services\ExpressionLocationType.cs" />
     <Compile Include="Services\GenerationResult.cs" />
     <Compile Include="Services\ICodeGenerator.cs" />
-    <Compile Include="Services\IDesignerExpressionsEngineVersionService.cs" />
+    <Compile Include="Services\IDesignerEngineVersionService.cs" />
     <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionProcessorGenerator.cs" />
