@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Synchronization
             this.dataProcessor = dataProcessor;
         }
 
-        public Task Run()
+        public Task Run(CancellationToken token)
         {
             this.cancellationTokenSource = new CancellationTokenSource();
             this.cancellationToken = this.cancellationTokenSource.Token;
