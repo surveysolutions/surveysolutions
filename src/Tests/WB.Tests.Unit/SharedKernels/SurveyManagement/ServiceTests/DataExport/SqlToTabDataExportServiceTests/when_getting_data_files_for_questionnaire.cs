@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         It should_record_one_completed_action = () =>
            csvWriterServiceMock.Verify(x=>x.WriteField("Completed"), Times.Once);
 
-        private static SqlToTabDataExportService sqlToTabDataExportService;
+        private static SqlToDataExportService sqlToTabDataExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static string[] filePaths;

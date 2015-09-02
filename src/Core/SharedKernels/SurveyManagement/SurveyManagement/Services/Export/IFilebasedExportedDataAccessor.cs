@@ -16,6 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         string GetFilePathToExportedBinaryData(Guid questionnaireId, long version);
         string GetFilePathToExportedCompressedHistoryData(Guid questionnaireId, long version);
 
+        string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version);
+
         string CreateExportDataFolder(Guid questionnaireId, long version);
         string CreateExportFileFolder(Guid questionnaireId, long version);
 

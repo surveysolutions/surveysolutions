@@ -14,5 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         string[] CreateAndGetStataDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath);
         string[] CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath);
 
+        string CreateAndGetDDIMetadataFileForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath);
+
     }
 }

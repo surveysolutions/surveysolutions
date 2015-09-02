@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IDataExportService>().To<SqlToTabDataExportService>();
+            this.Bind<IDataExportService>().To<SqlToDataExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
             this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
             this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
