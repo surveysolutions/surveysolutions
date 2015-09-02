@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.Multimedia,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.PublicKey,
                 QuestionType.TextList,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
                 e.VariableLabel,

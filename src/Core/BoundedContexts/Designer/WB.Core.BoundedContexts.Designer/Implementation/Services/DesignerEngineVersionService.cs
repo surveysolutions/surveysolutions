@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class DesignerExpressionsEngineVersionService : IDesignerExpressionsEngineVersionService
+    internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
         /// <summary>
         /// New Era of c# conditions
@@ -25,9 +28,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Potatoid release (introduced RosterVector)</summary>
         private readonly Version version_9 = new Version(9, 0, 0);
 
+        /// <summary>Hidden questions release</summary>
+        private readonly Version version_10 = new Version(10, 0, 0);
+
         public Version GetLatestSupportedVersion()
         {
-            return version_9;
+            return version_10;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
@@ -37,6 +43,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 if (clientVersion < version_5)
                     return false;
+            }
+            return true;
+        }
+
+        public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
+        {
+            if (clientVersion < version_10)
+            {
+                var countOfHiddenQuestions =
+                    questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
+             
+                return countOfHiddenQuestions == 0;
             }
             return true;
         }
