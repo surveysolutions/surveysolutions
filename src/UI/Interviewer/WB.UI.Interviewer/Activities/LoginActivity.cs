@@ -36,9 +36,6 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_settings:
                     this.ViewModel.NavigateToSettingsCommand.Execute();
                     break;
-                case Resource.Id.menu_synchronization:
-                    this.ViewModel.NavigateToSynchronizationCommand.Execute();
-                    break;
             }
             return base.OnOptionsItemSelected(item);
         }
