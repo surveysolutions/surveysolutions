@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
@@ -23,19 +24,20 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
 {
-    [Subject(typeof (SqlToTabDataExportService))]
+    [Subject(typeof (SqlToDataExportService))]
     internal class SqlToTabDataExportServiceTestContext
     {
-        protected static SqlToTabDataExportService CreateSqlToTabDataExportService(ICsvWriterService csvWriterService = null, 
+        protected static SqlToDataExportService CreateSqlToTabDataExportService(ICsvWriterService csvWriterService = null, 
             QuestionnaireExportStructure questionnaireExportStructure = null,
             IExportedDataAccessor exportedDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IDatasetWriterFactory datasetWriterFactory = null,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses=null)
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses=null,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage = null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new SqlToTabDataExportService(
+            return new SqlToDataExportService(
                 fileSystemAccessor,
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
@@ -48,7 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
-                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>());
+                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(),
+                questionnaireDocumentVersionedStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

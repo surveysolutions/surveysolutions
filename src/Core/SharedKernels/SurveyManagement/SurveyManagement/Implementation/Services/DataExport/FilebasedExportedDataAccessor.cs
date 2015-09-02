@@ -250,6 +250,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return archiveFilePath;
         }
 
+        public string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version)
+        {
+            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+
+            var fileName = string.Format("{0}_ddi.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath));
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
+
+            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+            var filesToArchive = new List<string>
+            {
+                this.dataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId, version,
+                    dataDirectoryPath)
+            };
+
+            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+
+            return archiveFilePath;
+        }
+
         public string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version, Guid interviewId)
         {
             return this.fileSystemAccessor.CombinePath(this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version),

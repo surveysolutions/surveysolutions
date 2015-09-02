@@ -7,13 +7,16 @@ using StatData.Core;
 using StatData.Writers;
 using System.Text;
 using System.Threading.Tasks;
+using ddidotnet;
 using Main.Core.Entities.SubEntities;
+using Polly;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -26,7 +29,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlToTabDataExportService : IDataExportService
+    internal class SqlToDataExportService : IDataExportService
     {
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly ITransactionManagerProvider transactionManager;
@@ -42,8 +45,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IJsonUtils jsonUtils;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
 
-        public SqlToTabDataExportService(
+        public SqlToDataExportService(
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriterFactory csvWriterFactory, 
             IExportedDataAccessor exportedDataAccessor,
@@ -54,7 +58,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             ITabFileReader tabReader,
-            IDatasetWriterFactory datasetWriterFactory)
+            IDatasetWriterFactory datasetWriterFactory,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage)
         {
             this.csvWriterFactory = csvWriterFactory;
             this.exportedDataAccessor = exportedDataAccessor;
@@ -70,6 +75,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
+
+            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string targetFolder)
@@ -241,6 +248,133 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
             return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
+        }
+
+        public string CreateAndGetDDIMetadataFileForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        {
+            try
+            {
+                QuestionnaireDocumentVersioned bigTemplateObject;
+                QuestionnaireExportStructure questionnaireExportStructure;
+
+                this.transactionManager.GetTransactionManager().BeginQueryTransaction();
+                try
+                {
+                    bigTemplateObject = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+                    questionnaireExportStructure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+                }
+                finally
+                {
+                    this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
+                }
+
+                
+
+                if (questionnaireExportStructure == null)
+                    return string.Empty;
+
+                Dictionary<string, string> varLabels;
+                Dictionary<string, Dictionary<double, string>> varValueLabels;
+                CollectLabels(questionnaireExportStructure, out varLabels, out varValueLabels);
+
+                MetaDescription metaDescription = new MetaDescription
+                {
+                    Document = {Title = bigTemplateObject.Questionnaire.Title},
+                    Study =
+                    {
+                        Title = bigTemplateObject.Questionnaire.Title,
+                        Idno = "QUEST"
+                    }
+                };
+
+
+                foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
+                {
+                    var hhDataFile = metaDescription.AddDataFile(headerStructureForLevel.LevelName);
+
+                    var idColumn = hhDataFile.AddVariable(DdiDataType.DynString);
+                    idColumn.Name = headerStructureForLevel.LevelIdColumnName;
+
+                    if (headerStructureForLevel.IsTextListScope)
+                    {
+                        foreach (var name in headerStructureForLevel.ReferencedNames)
+                        {
+                            var v1 = hhDataFile.AddVariable(DdiDataType.DynString);
+                            v1.Name = name;
+                        }
+                    }
+
+                    foreach (ExportedHeaderItem question in headerStructureForLevel.HeaderItems.Values)
+                    {
+                        var questionItem = bigTemplateObject.Questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == question.PublicKey);
+                        foreach (var columnName in question.ColumnNames)
+                        {
+                            var variable = this.AddVadiableToDdiFileAndGet(hhDataFile, question.QuestionType, columnName);
+                            
+                            if (questionItem != null && !string.IsNullOrWhiteSpace(questionItem.Instructions))
+                                variable.IvuInstr = questionItem.Instructions;
+
+                            if (questionItem != null)
+                                variable.QstnLit = questionItem.QuestionText;
+
+                            if (varLabels.ContainsKey(columnName))
+                                variable.Label = varLabels[columnName];
+
+                            if (varValueLabels.ContainsKey(question.VariableName))
+                            {
+                                foreach (var label in varValueLabels[question.VariableName])
+                                {
+                                    variable.AddValueLabel(Convert.ToDecimal(label.Key), label.Value);
+                                }
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
+                    {
+                        var v1 = hhDataFile.AddVariable(DdiDataType.DynString);
+                        v1.Name = string.Format("{0}{1}", parentId, i + 1);
+                    }
+                }
+
+                var pathToWrite = fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(string.Format("{0}_{1}_ddi", questionnaireId, questionnaireVersion)));
+                metaDescription.WriteXml(pathToWrite);
+                return pathToWrite;
+            }
+
+            catch (Exception exc)
+            {
+                logger.Error(string.Format("Error on DDI metadata creation (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
+            }
+
+            return string.Empty;
+        }
+
+        private DdiVariable AddVadiableToDdiFileAndGet(DdiDataFile hhDataFile, QuestionType questionType, string columnName)
+        {
+            DdiVariable variable = null;
+            switch (questionType)
+            {
+                case QuestionType.Numeric:
+                    variable = hhDataFile.AddVariable(DdiDataType.Numeric);
+                    variable.VariableScale = DdiVariableScale.Ordinal;
+                    break;
+                case QuestionType.SingleOption: 
+                case QuestionType.MultyOption:
+                    variable = hhDataFile.AddVariable(DdiDataType.Numeric);
+                    variable.VariableScale = DdiVariableScale.Nominal;
+                    break;
+                case QuestionType.GpsCoordinates: 
+                    variable = hhDataFile.AddVariable(DdiDataType.Numeric);
+                    variable.VariableScale = DdiVariableScale.Ordinal;
+                    break;
+
+                default:
+                    variable = hhDataFile.AddVariable(DdiDataType.DynString);
+                    break; 
+            }
+            variable.Name = columnName;
+            return variable;
         }
 
         public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
