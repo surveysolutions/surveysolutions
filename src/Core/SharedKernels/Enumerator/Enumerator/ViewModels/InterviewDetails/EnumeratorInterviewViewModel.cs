@@ -81,6 +81,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void NavigationStateOnOnGroupChanged(GroupChangedEventArgs newGroupIdentity)
         {
+            if (newGroupIdentity.ScreenType != ScreenType.Group)
+                return; 
+
             var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
             IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
 

@@ -17,7 +17,8 @@ using WB.UI.Tester.Converters;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Ninject;
 using Xamarin;
-
+using Cirrious.MvvmCross.Droid.Views;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester
 {
@@ -58,6 +59,22 @@ namespace WB.UI.Tester
             base.FillValueConverters(registry);
             
             registry.AddOrOverwrite("PublicBackground", new QuestionnairePublicityBackgroundConverter());
+        }
+
+        protected override IMvxAndroidViewPresenter CreateViewPresenter()
+        {
+            var presenter = Mvx.IocConstruct<FragmentPresenter>();
+
+            Mvx.RegisterSingleton<IMvxAndroidViewPresenter>(presenter);
+
+            return presenter;
+        }
+
+        protected override void InitializeIoC()
+        {
+            base.InitializeIoC();
+
+            Mvx.ConstructAndRegisterSingleton<IFragmentTypeLookup, FragmentTypeLookup>();
         }
 
         protected override Assembly[] GetViewModelAssemblies()
