@@ -4,12 +4,14 @@ using System.Linq;
 using System.Reflection;
 using Android.Content;
 using Cirrious.CrossCore;
+using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
@@ -42,6 +44,13 @@ namespace WB.UI.Interviewer
         protected override IMvxApplication CreateApp()
         {
             return new App();
+        }
+
+        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
+        {
+            base.FillValueConverters(registry);
+
+            registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
         }
 
         protected override IMvxIoCProvider CreateIocProvider()

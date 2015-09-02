@@ -6334,11 +6334,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f070193
 			public const int Dashboard_InterviewsList = 2131165587;
 			
-			// aapt resource value: 0x7f07018d
-			public const int Dashboard_Interviews_Header = 2131165581;
+			// aapt resource value: 0x7f07018c
+			public const int Dashboard_Interviews_Header = 2131165580;
 			
-			// aapt resource value: 0x7f07018e
-			public const int Dashboard_Interviews_Header_Body = 2131165582;
+			// aapt resource value: 0x7f07018d
+			public const int Dashboard_Interviews_Header_Body = 2131165581;
 			
 			// aapt resource value: 0x7f07018f
 			public const int Dashboard_NewItemsLink = 2131165583;
@@ -6349,8 +6349,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f070190
 			public const int Dashboard_StartedLink = 2131165584;
 			
-			// aapt resource value: 0x7f07018c
-			public const int Dashboard_ToolbarTitle = 2131165580;
+			// aapt resource value: 0x7f07018e
+			public const int Dashboard_TabLink = 2131165582;
 			
 			// aapt resource value: 0x7f070183
 			public const int Divider_ListStyle = 2131165571;
