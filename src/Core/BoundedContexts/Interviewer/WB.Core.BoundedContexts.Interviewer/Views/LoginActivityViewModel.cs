@@ -40,14 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.areCredentialsWrong = value; this.RaisePropertyChanged(); }
         }
 
-        private bool shouldActivationButtonBeVisible = false;
-        public bool ShouldActivationButtonBeVisible
-        {
-            get { return this.shouldActivationButtonBeVisible; }
-            set { this.shouldActivationButtonBeVisible = value; this.RaisePropertyChanged(); }
-        }
-
-        private int countOfUnsuccessfulLogins = 0;
+        public bool ShouldActivationButtonBeVisible = true;
         
         public async void Init()
         {
@@ -60,9 +53,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.Login = previousLoggedInUserNames.First();
             }
-            this.countOfUnsuccessfulLogins = 0;
-            this.ShouldActivationButtonBeVisible = false;
-
 #if DEBUG
             this.Login = "in1sv1";
             this.Password = "1234";
@@ -72,16 +62,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxCommand LoginCommand
         {
             get { return new MvxCommand(this.StartLogin); }
-        }
-
-        public IMvxCommand ActivationCommand
-        {
-            get { return new MvxCommand(this.StartActivation); }
-        }
-
-        public IMvxCommand NavigateToSynchronizationCommand
-        {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<SynchronizationViewModel>()); }
         }
 
         public IMvxCommand NavigateToSettingsCommand
@@ -99,20 +79,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             this.AreCredentialsWrong = true;
-            this.countOfUnsuccessfulLogins++;
-            if (this.countOfUnsuccessfulLogins > 3)
-            {
-                this.ShouldActivationButtonBeVisible = true;
-            }
-        }
-
-        private void StartActivation()
-        {
-            this.viewModelNavigationService.NavigateTo<SynchronizationViewModel>(new
-            {
-                login = this.Login,
-                passwordHash = this.passwordHasher.Hash(this.Password)
-            });
         }
 
         public override void NavigateToPreviousViewModel()

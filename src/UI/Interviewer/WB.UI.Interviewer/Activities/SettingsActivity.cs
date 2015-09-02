@@ -369,9 +369,6 @@ namespace WB.UI.Interviewer.Activities
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_synchronization:
-                    this.ViewModel.NavigateToSynchronizationCommand.Execute();
-                    break;
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
