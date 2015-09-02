@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-<!--  <android.support.v7.widget.Toolbar
+  <android.support.v7.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -14,8 +14,8 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
-  </android.support.v7.widget.Toolbar>-->
+        local:MvxBind="Text DashboardTitle" />
+  </android.support.v7.widget.Toolbar>
 
   <LinearLayout style="@style/Dashboard_Interviews_Header">
     <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
@@ -41,6 +41,7 @@
       android:layout_height="wrap_content"
       android:text="DASHBOARD" />
   
+   
   <ScrollView
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"

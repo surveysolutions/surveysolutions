@@ -2,6 +2,7 @@ using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
@@ -9,24 +10,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class DashboardViewModel : BaseViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
-        readonly IDataCollectionAuthentication authenticationService;
+        readonly IPrincipal principal;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
-            IDataCollectionAuthentication authenticationService)
+            IPrincipal principal)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.authenticationService = authenticationService;
+            this.principal = principal;
         }
 
         public void Init()
         {
-            if (!this.authenticationService.IsLoggedIn)
+            if (!this.principal.IsAuthenticated)
             {
                 this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
                 return;
             }
 
-            this.LoggedInUserName = this.authenticationService.CurrentUser.Name;
+
+            LoggedInUserName = this.principal.CurrentUserIdentity.Name;
+            DashboardTitle = "14 assigments for " + LoggedInUserName;
 
             NewInterviewsTabMenu = new DashboardTabMenuViewModel(5);
             StartedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
@@ -41,6 +44,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             };
         }
 
+        private string dashboardTitle;
+        public string DashboardTitle
+        {
+            get { return this.dashboardTitle; }
+            set { this.dashboardTitle = value; this.RaisePropertyChanged(); }
+        }
+
         private string loggedInUserName;
         public string LoggedInUserName
         {
@@ -52,55 +62,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public DashboardTabMenuViewModel NewInterviewsTabMenu
         {
             get { return this.newInterviewsTabMenu; }
-            set
-            {
-                this.newInterviewsTabMenu = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.newInterviewsTabMenu = value; this.RaisePropertyChanged(); }
         }
 
         private DashboardTabMenuViewModel startedInterviewsTabMenu;
         public DashboardTabMenuViewModel StartedInterviewsTabMenu
         {
             get { return this.startedInterviewsTabMenu; }
-            set
-            {
-                this.startedInterviewsTabMenu = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.startedInterviewsTabMenu = value; this.RaisePropertyChanged(); }
         }
 
         private DashboardTabMenuViewModel completedInterviewsTabMenu;
         public DashboardTabMenuViewModel CompletedInterviewsTabMenu
         {
             get { return this.completedInterviewsTabMenu; }
-            set
-            {
-                this.completedInterviewsTabMenu = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.completedInterviewsTabMenu = value; this.RaisePropertyChanged(); }
         }
 
         private DashboardTabMenuViewModel rejectedInterviewsTabMenu;
         public DashboardTabMenuViewModel RejectedInterviewsTabMenu
         {
             get { return this.rejectedInterviewsTabMenu; }
-            set
-            {
-                this.rejectedInterviewsTabMenu = value;
-                this.RaisePropertyChanged();
-            }
+            set { this.rejectedInterviewsTabMenu = value; this.RaisePropertyChanged(); }
         }
 
         private DashboardItemViewModel[] dashboardItems;
         public DashboardItemViewModel[] DashboardItems
         {
             get { return this.dashboardItems; }
-            set
-            {
-                this.dashboardItems = value; 
-                this.RaisePropertyChanged();
-            }
+            set { this.dashboardItems = value;  this.RaisePropertyChanged(); }
         }
 
         public IMvxCommand ShowNewItemsInterviewsCommand
@@ -128,9 +118,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         }
 
+        public IMvxCommand SynchronizationCommand
+        {
+            get { return new MvxCommand(this.ExecuteSynchronization); }
+        }
+
+        private void ExecuteSynchronization()
+        {
+            // do something
+        }
+
+        public IMvxCommand SignOutCommand
+        {
+            get { return new MvxCommand(this.SignOut); }
+        }
+
         void SignOut()
         {
-            authenticationService.LogOff();
+            principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
         }
 
