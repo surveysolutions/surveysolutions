@@ -19,7 +19,7 @@
 
                     <ul class="dropdown-menu " role="menu" aria-labelledby="questionTypeBtn">
                         <li role="presentation" ng-repeat="type in activeQuestion.questionTypeOptions">
-                            <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="setQuestionType(type.value)">
+                            <a role="menuitem" tabindex="-1" ng-click="setQuestionType(type.value)">
                                 <i class="icon {{answerTypeClass[type.value]}}"></i>
                                 {{type.text}}
                             </a>
@@ -106,14 +106,14 @@
 
                         <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
-                                <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
+                                <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
                                 </a>
                             </li>
                         </ul>
                         <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
                             <li role="presentation" ng-repeat="scope in activeQuestion.notPrefilledQuestionScopeOptions">
-                                <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
+                                <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
                                 </a>
                             </li>
