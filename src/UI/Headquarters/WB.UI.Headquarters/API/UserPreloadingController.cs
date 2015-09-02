@@ -6,15 +6,15 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
-using WB.UI.Headquarters.Models.UserBatchUpload;
+using WB.UI.Headquarters.Models.UserPreloading;
 
 namespace WB.UI.Headquarters.API
 {
-    public class PreloadingApiController : ApiController
+    public class UserPreloadingController : ApiController
     {
         private readonly IUserPreloadingService userPreloadingService;
 
-        public PreloadingApiController(IUserPreloadingService userPreloadingService)
+        public UserPreloadingController(IUserPreloadingService userPreloadingService)
         {
             this.userPreloadingService = userPreloadingService;
         }
@@ -26,48 +26,48 @@ namespace WB.UI.Headquarters.API
 
         [ObserverNotAllowedApi]
         [HttpPost]
-        public void DeleteUserBatchUploadProcess(string id)
+        public void DeleteUserPreloadingProcess(string id)
         {
             this.userPreloadingService.DeletePreloadingProcess(id);
         }
 
-        public UserBatchUploadProcessesView AllUserBatchUploadProcesses(AllUserBatchUploadProcessesRequest request)
+        public UserPreloadingProcessesView AllUserPreloadingProcesses(AllUserPreloadingProcessesRequest request)
         {
             var userPreloadingProcesses = this.userPreloadingService.GetPreloadingProcesses();
             var userPreloadingProcessViews =
                 userPreloadingProcesses.Skip((request.PageIndex - 1)*request.PageSize).Take(request.PageSize);
 
-            return new UserBatchUploadProcessesView()
+            return new UserPreloadingProcessesView()
             {
-                Items = userPreloadingProcessViews.Select(this.ConvertUserBatchUploadProcessModelToView),
+                Items = userPreloadingProcessViews.Select(this.ConvertUserPreloadingProcessModelToView),
                 PageSize = request.PageSize,
                 Page = request.PageIndex,
                 TotalCount = userPreloadingProcesses.Length
             };
         }
 
-        private UserBatchUploadProcessView ConvertUserBatchUploadProcessModelToView(
-            UserPreloadingProcess userBatchUploadProcess)
+        private UserPreloadingProcessView ConvertUserPreloadingProcessModelToView(
+            UserPreloadingProcess userPreloadingProcess)
         {
-            return new UserBatchUploadProcessView()
+            return new UserPreloadingProcessView()
             {
-                ProcessId = userBatchUploadProcess.UserPreloadingProcessId,
-                FileName = userBatchUploadProcess.FileName,
-                FileSize = FileSizeUtils.SizeSuffix(userBatchUploadProcess.FileSize),
+                ProcessId = userPreloadingProcess.UserPreloadingProcessId,
+                FileName = userPreloadingProcess.FileName,
+                FileSize = FileSizeUtils.SizeSuffix(userPreloadingProcess.FileSize),
                 UploadDate =
-                    TimeZoneInfo.ConvertTimeFromUtc(userBatchUploadProcess.UploadDate, TimeZoneInfo.Local).ToString("g"),
+                    TimeZoneInfo.ConvertTimeFromUtc(userPreloadingProcess.UploadDate, TimeZoneInfo.Local).ToString("g"),
                 LastUpdateDate =
-                    TimeZoneInfo.ConvertTimeFromUtc(userBatchUploadProcess.LastUpdateDate, TimeZoneInfo.Local)
+                    TimeZoneInfo.ConvertTimeFromUtc(userPreloadingProcess.LastUpdateDate, TimeZoneInfo.Local)
                         .ToString("g"),
-                Status = UserPrelodingStateToLocalizeString(userBatchUploadProcess.State),
+                Status = UserPrelodingStateToLocalizeString(userPreloadingProcess.State),
                 CanDeleteFile =
                     !new[] {UserPrelodingState.CreatingUsers, UserPrelodingState.Validating}.Contains(
-                        userBatchUploadProcess.State),
-                State = UserPrelodingStateToUserBatchUploadProcessState(userBatchUploadProcess.State)
+                        userPreloadingProcess.State),
+                State = this.UserPrelodingStateToUserPreloadingProcessState(userPreloadingProcess.State)
             };
         }
 
-        private UserBatchUploadProcessState UserPrelodingStateToUserBatchUploadProcessState(UserPrelodingState state)
+        private UserPreloadingProcessState UserPrelodingStateToUserPreloadingProcessState(UserPrelodingState state)
         {
             switch (state)
             {
@@ -75,15 +75,15 @@ namespace WB.UI.Headquarters.API
                 case UserPrelodingState.CreatingUsers:
                 case UserPrelodingState.Finished:
                 case UserPrelodingState.FinishedWithError:
-                    return UserBatchUploadProcessState.Started;
+                    return UserPreloadingProcessState.Started;
 
                 case UserPrelodingState.ReadyForValidation:
                 case UserPrelodingState.Validating:
                 case UserPrelodingState.Validated:
-                    return UserBatchUploadProcessState.InProgress;
+                    return UserPreloadingProcessState.InProgress;
 
                 default:
-                    return UserBatchUploadProcessState.Finished;
+                    return UserPreloadingProcessState.Finished;
             }
         }
 
