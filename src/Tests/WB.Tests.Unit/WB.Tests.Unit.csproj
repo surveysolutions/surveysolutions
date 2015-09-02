@@ -278,6 +278,7 @@
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_is_valid.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_view_is_absent.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_request_parameter_is_null.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_client_version_doesnt_support_questionnaire_document.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_client_version_is_not_supported.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_cant_be_compiled.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_cant_be_verified.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_changing_device_is_requested.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_not_that_expected.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_that_expected.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />

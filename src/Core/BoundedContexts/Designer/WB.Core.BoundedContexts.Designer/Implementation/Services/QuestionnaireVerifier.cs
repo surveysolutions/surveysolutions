@@ -90,21 +90,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerExpressionsEngineVersionService expressionsEngineVersionService)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerEngineVersionService engineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.engineVersionService = engineVersionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -258,7 +258,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             string resultAssembly;
 
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire,expressionsEngineVersionService.GetLatestSupportedVersion(), 
+                questionnaire,this.engineVersionService.GetLatestSupportedVersion(), 
                 out resultAssembly);
         }
 
