@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CompleteInterviewViewModel : MvxNotifyPropertyChanged
+    public class CompleteInterviewViewModel : MvxViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
 

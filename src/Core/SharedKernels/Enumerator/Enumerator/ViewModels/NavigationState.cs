@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionServiceAwaiter;
         private readonly IUserInterfaceStateService userInterfaceStateService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         protected NavigationState()
         {
@@ -41,12 +42,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ICommandService commandService, 
             IStatefulInterviewRepository interviewRepository,
             IUserInteractionService userInteractionServiceAwaiter, 
-            IUserInterfaceStateService userInterfaceStateService)
+            IUserInterfaceStateService userInterfaceStateService,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.commandService = commandService;
             this.interviewRepository = interviewRepository;
             this.userInteractionServiceAwaiter = userInteractionServiceAwaiter;
             this.userInterfaceStateService = userInterfaceStateService;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public void Init(string interviewId, string questionnaireId)
@@ -157,16 +160,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CurrentGroup = navigationIdentity.TargetGroup;
             this.CurrentGroupType = navigationIdentity.ScreenType;
 
-            if (this.GroupChanged != null)
+            if (navigationIdentity.ScreenType == ScreenType.Complete)
             {
-                var groupChangedEventArgs = new GroupChangedEventArgs
+                this.viewModelNavigationService.NavigateTo<CompleteInterviewViewModel>();
+            }
+            else
+            {
+                if (this.GroupChanged != null)
                 {
-                    TargetGroup = navigationIdentity.TargetGroup,
-                    AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
-                    ScreenType = navigationIdentity.ScreenType
-                };
-                
-                this.GroupChanged(groupChangedEventArgs);
+                    var groupChangedEventArgs = new GroupChangedEventArgs
+                    {
+                        TargetGroup = navigationIdentity.TargetGroup,
+                        AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
+                        ScreenType = navigationIdentity.ScreenType
+                    };
+
+                    this.GroupChanged(groupChangedEventArgs);
+                }
             }
         }
     }
