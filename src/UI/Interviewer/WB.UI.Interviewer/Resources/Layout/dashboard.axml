@@ -20,28 +20,23 @@
   <LinearLayout style="@style/Dashboard_Interviews_Header">
     <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
       <TextView style="@style/Dashboard_NewItemsLink"
-                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_NewItemsLinkText'), NewInterviewsTabMenu.Count); 
+                local:MvxBind="Text If(NewInterviewsTabMenu.IsVisible, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsTabMenu.Count), Localization('Dashboard_NoNewItemsLinkText')); 
                 Click ShowNewItemsInterviewsCommand;" />
       <TextView style="@style/Dashboard_StartedLink"
-                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_Dashboard_StartedLinkText'), StartedInterviewsTabMenu.Count); 
+                local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsTabMenu.Count); 
                 Click ShowStartedInterviewsCommand;
                 Visible StartedInterviewsTabMenu.IsVisible;" />
       <TextView style="@style/Dashboard_CompletedLink"
-                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_Dashboard_CompletedLinkText'), CompletedInterviewsTabMenu.Count); 
+                local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsTabMenu.Count); 
                 Click ShowCompletedInterviewsCommand;
                 Visible CompletedInterviewsTabMenu.IsVisible;" />
       <TextView style="@style/Dashboard_RejectedLink"
-                local:MvxBind="Text Format('{0} {1}', Localization('Dashboard_Dashboard_RejectedLinkText'), RejectedInterviewsTabMenu.Count); 
+                local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsTabMenu.Count); 
                 Click ShowRejectedInterviewsCommand;
                 Visible RejectedInterviewsTabMenu.IsVisible;" />
     </LinearLayout>
   </LinearLayout>
-
-  <TextView android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="DASHBOARD" />
-  
-   
+ 
   <ScrollView
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"

@@ -1,6 +1,8 @@
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -29,9 +31,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
 
             LoggedInUserName = this.principal.CurrentUserIdentity.Name;
-            DashboardTitle = "14 assigments for " + LoggedInUserName;
+            DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, LoggedInUserName);
 
-            NewInterviewsTabMenu = new DashboardTabMenuViewModel(5);
+            NewInterviewsTabMenu = new DashboardTabMenuViewModel(1);
             StartedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
             CompletedInterviewsTabMenu = new DashboardTabMenuViewModel(7);
             RejectedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
