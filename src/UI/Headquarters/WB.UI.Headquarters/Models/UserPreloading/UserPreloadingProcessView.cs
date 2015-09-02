@@ -1,8 +1,6 @@
-using WB.UI.Headquarters.API;
-
-namespace WB.UI.Headquarters.Models.UserBatchUpload
+namespace WB.UI.Headquarters.Models.UserPreloading
 {
-    public class UserBatchUploadProcessView
+    public class UserPreloadingProcessView
     {
         public string ProcessId { get; set; }
         public string FileName { get; set; }
@@ -11,6 +9,6 @@ namespace WB.UI.Headquarters.Models.UserBatchUpload
         public string LastUpdateDate { get; set; }
         public string Status { get; set; }
         public bool CanDeleteFile { get; set; }
-        public UserBatchUploadProcessState State { get; set; }
+        public UserPreloadingProcessState State { get; set; }
     }
 }

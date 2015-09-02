@@ -1,6 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.UI.Headquarters.API
-@using WB.UI.Headquarters.Models.UserBatchUpload
+@using WB.UI.Headquarters.Models.UserPreloading
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
 }
@@ -13,8 +13,8 @@
     var $userPreloadigVerificationDetailsUrl = '@Url.Action("UserPreloadigVerificationDetails", "BatchUserUpload", new { area = string.Empty })';
     var $userCreationProcessDetailsUrl = '@Url.Action("UserCreationProcessDetails", "BatchUserUpload", new { area = string.Empty })';
     $(function() {
-        var allUserBatchUploadProcessesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PreloadingApi", action = "AllUserBatchUploadProcesses" })';
-        var deleteUserBatchUploadProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PreloadingApi", action = "DeleteUserBatchUploadProcess" })';
+        var allUserBatchUploadProcessesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UserPreloading", action = "AllUserPreloadingProcesses" })';
+        var deleteUserBatchUploadProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UserPreloading", action = "DeleteUserPreloadingProcess" })';
         var model = new Supervisor.VM.BatchUserCreation(allUserBatchUploadProcessesUrl, deleteUserBatchUploadProcessUrl, "#confirm-delete-template");
         ko.applyBindings(model);
         model.load();
@@ -58,13 +58,13 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <!-- ko if:State() == @((int)UserBatchUploadProcessState.Started) -->
+                    <!-- ko if:State() == @((int)UserPreloadingProcessState.Started) -->
                     <a data-bind="attr: { href: $userCreationProcessDetailsUrl + '/' + ProcessId() }, text: FileName"></a>
                     <!-- /ko -->
-                    <!-- ko if:State() == @((int)UserBatchUploadProcessState.InProgress) -->
+                    <!-- ko if:State() == @((int)UserPreloadingProcessState.InProgress) -->
                     <a data-bind="attr: { href: $userPreloadigVerificationDetailsUrl + '/' + ProcessId() }, text: FileName"></a>
                     <!-- /ko -->
-                    <!-- ko if:State() == @((int)UserBatchUploadProcessState.Finished) -->
+                    <!-- ko if:State() == @((int)UserPreloadingProcessState.Finished) -->
                     <a data-bind="attr: { href: $importUserDetailsUrl + '/' + ProcessId() }, text: FileName"></a>
                     <!-- /ko -->
                 </td>
