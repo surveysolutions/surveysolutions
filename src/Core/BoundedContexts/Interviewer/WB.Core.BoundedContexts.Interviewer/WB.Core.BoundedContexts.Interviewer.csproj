@@ -139,7 +139,6 @@
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
     <Compile Include="Views\Dashboard\DashboardItemViewModel.cs" />
-    <Compile Include="Views\Dashboard\DashboardTabMenuViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\LoginActivityViewModel.cs" />

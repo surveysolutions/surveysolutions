@@ -20,20 +20,20 @@
   <LinearLayout style="@style/Dashboard_Interviews_Header">
     <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
       <TextView style="@style/Dashboard_NewItemsLink"
-                local:MvxBind="Text If(NewInterviewsTabMenu.IsVisible, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsTabMenu.Count), Localization('Dashboard_NoNewItemsLinkText')); 
+                local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
                 Click ShowNewItemsInterviewsCommand;" />
       <TextView style="@style/Dashboard_StartedLink"
-                local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsTabMenu.Count); 
+                local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsCount); 
                 Click ShowStartedInterviewsCommand;
-                Visible StartedInterviewsTabMenu.IsVisible;" />
+                Visible IsExistsAnyStartedInterview;" />
       <TextView style="@style/Dashboard_CompletedLink"
-                local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsTabMenu.Count); 
+                local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsCount); 
                 Click ShowCompletedInterviewsCommand;
-                Visible CompletedInterviewsTabMenu.IsVisible;" />
+                Visible IsExistsAnyCompletedInterview;" />
       <TextView style="@style/Dashboard_RejectedLink"
-                local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsTabMenu.Count); 
+                local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsCount); 
                 Click ShowRejectedInterviewsCommand;
-                Visible RejectedInterviewsTabMenu.IsVisible;" />
+                Visible IsExistsAnyRejectedInterview;" />
     </LinearLayout>
   </LinearLayout>
  
