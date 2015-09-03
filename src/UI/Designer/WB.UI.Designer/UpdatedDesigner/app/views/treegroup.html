@@ -13,11 +13,10 @@
             <span class="roster-marker" ng-show="item.isRoster">roster:</span>
             <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
         </div>
-        <span class="qname-block">
+        <div class="qname-block">
+            <span class="enabling-group-marker condition-item" ng-if="item.hasCondition">&#x26AB;</span>
             <span ng-if="item.isRoster" ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
-
-        </span>
-
+        </div>
     </a>
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">

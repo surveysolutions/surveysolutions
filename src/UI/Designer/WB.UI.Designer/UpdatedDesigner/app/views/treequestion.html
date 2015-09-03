@@ -7,9 +7,13 @@
             <div class="icon {{answerTypeClass[item.type]}}"></div>
             <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
         </div>
-        <span class="qname-block">
+        <div class="qname-block">
+            <div class="conditions-block">
+                <div class="enabling-group-marker condition-item" ng-if="item.hasCondition">&#x26AB;</div>
+                <div class="validation-group-marker condition-item" ng-if="item.hasValidation">&#x26AB;</div>
+            </div>
             <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
-        </span>
+        </div>
     </a>
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">

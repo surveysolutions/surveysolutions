@@ -54,6 +54,7 @@
                         "title": "New sub-section",
                         "items": [],
                         itemType: 'Group',
+                        hasCondition:false,
                         getParentItem: function () { return parent; }
                     };
                     return emptyGroup;
@@ -66,6 +67,7 @@
                         "title": "New roster",
                         "items": [],
                         itemType: 'Group',
+                        hasCondition: false,
                         isRoster: true,
                         getParentItem: function () { return parent; }
                     };
@@ -79,6 +81,8 @@
                         "title": '',
                         "type": 'Text',
                         itemType: 'Question',
+                        hasCondition: false,
+                        hasValidation: false,
                         getParentItem: function () { return parent; }
                     };
                     return emptyQuestion;
