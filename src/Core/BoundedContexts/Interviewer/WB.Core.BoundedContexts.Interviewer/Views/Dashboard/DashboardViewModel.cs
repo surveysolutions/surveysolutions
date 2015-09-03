@@ -33,10 +33,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             LoggedInUserName = this.principal.CurrentUserIdentity.Name;
             DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, LoggedInUserName);
 
-            NewInterviewsTabMenu = new DashboardTabMenuViewModel(1);
-            StartedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
-            CompletedInterviewsTabMenu = new DashboardTabMenuViewModel(7);
-            RejectedInterviewsTabMenu = new DashboardTabMenuViewModel(2);
+            NewInterviewsCount = 5;
+            StartedInterviewsCount = 2;
+            CompletedInterviewsCount = 7;
+            RejectedInterviewsCount = 2;
 
             DashboardItems = new DashboardItemViewModel[]
             {
@@ -60,32 +60,72 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set { this.loggedInUserName = value; this.RaisePropertyChanged(); }
         }
 
-        private DashboardTabMenuViewModel newInterviewsTabMenu;
-        public DashboardTabMenuViewModel NewInterviewsTabMenu
+        private int newInterviewsCount;
+        public int NewInterviewsCount
         {
-            get { return this.newInterviewsTabMenu; }
-            set { this.newInterviewsTabMenu = value; this.RaisePropertyChanged(); }
+            get { return this.newInterviewsCount; }
+            set 
+            { 
+                this.newInterviewsCount = value; 
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(() => IsExistsAnyNewInterview);
+            }
         }
 
-        private DashboardTabMenuViewModel startedInterviewsTabMenu;
-        public DashboardTabMenuViewModel StartedInterviewsTabMenu
+        public bool IsExistsAnyNewInterview
         {
-            get { return this.startedInterviewsTabMenu; }
-            set { this.startedInterviewsTabMenu = value; this.RaisePropertyChanged(); }
+            get { return this.newInterviewsCount > 0; }
         }
 
-        private DashboardTabMenuViewModel completedInterviewsTabMenu;
-        public DashboardTabMenuViewModel CompletedInterviewsTabMenu
+        private int startedInterviewsCount;
+        public int StartedInterviewsCount
         {
-            get { return this.completedInterviewsTabMenu; }
-            set { this.completedInterviewsTabMenu = value; this.RaisePropertyChanged(); }
+            get { return this.startedInterviewsCount; }
+            set 
+            { 
+                this.startedInterviewsCount = value; 
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(() => IsExistsAnyStartedInterview);
+            }
         }
 
-        private DashboardTabMenuViewModel rejectedInterviewsTabMenu;
-        public DashboardTabMenuViewModel RejectedInterviewsTabMenu
+        public bool IsExistsAnyStartedInterview
         {
-            get { return this.rejectedInterviewsTabMenu; }
-            set { this.rejectedInterviewsTabMenu = value; this.RaisePropertyChanged(); }
+            get { return this.startedInterviewsCount > 0; }
+        }
+
+        private int completedInterviewsCount;
+        public int CompletedInterviewsCount
+        {
+            get { return this.completedInterviewsCount; }
+            set
+            {
+                this.completedInterviewsCount = value; 
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(() => IsExistsAnyCompletedInterview);
+            }
+        }
+
+        public bool IsExistsAnyCompletedInterview
+        {
+            get { return this.completedInterviewsCount > 0; }
+        }
+
+        private int rejectedInterviewsCount;
+        public int RejectedInterviewsCount
+        {
+            get { return this.rejectedInterviewsCount; }
+            set
+            {
+                this.rejectedInterviewsCount = value;
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(() => IsExistsAnyRejectedInterview);
+            }
+        }
+
+        public bool IsExistsAnyRejectedInterview
+        {
+            get { return this.rejectedInterviewsCount > 0; }
         }
 
         private DashboardItemViewModel[] dashboardItems;
