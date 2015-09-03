@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
             fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object,
-                interviewExportServiceMock.Object, interviewSummaryWriter: interviewSummaryWriter.Object, user: new UserDocument());
+                interviewExportServiceMock.Object, interviewSummaryWriter: interviewSummaryWriter.Object);
         };
 
         Because of = () =>

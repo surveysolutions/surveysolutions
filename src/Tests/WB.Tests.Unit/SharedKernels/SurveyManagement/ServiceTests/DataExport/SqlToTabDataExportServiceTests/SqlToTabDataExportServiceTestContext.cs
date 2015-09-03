@@ -15,9 +15,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Moq.It;
@@ -29,7 +27,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
     {
         protected static SqlToDataExportService CreateSqlToTabDataExportService(ICsvWriterService csvWriterService = null, 
             QuestionnaireExportStructure questionnaireExportStructure = null,
-            IExportedDataAccessor exportedDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IDatasetWriterFactory datasetWriterFactory = null,
@@ -41,7 +38,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 fileSystemAccessor,
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
-                new ExportedDataAccessor(fileSystemAccessor),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure),
                 new TestInMemoryWriter<InterviewExportedDataRecord>(),

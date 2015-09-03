@@ -142,7 +142,6 @@
     <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
-    <Compile Include="Implementation\Services\Sql\ExportedDataAccessor.cs" />
     <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
@@ -240,7 +239,6 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthCheck.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
-    <Compile Include="Services\Sql\IExportedDataAccessor.cs" />
     <Compile Include="Synchronization\Schedulers\InterviewDetailsDataScheduler\InterviewDetailsBackgroundJob.cs" />
     <Compile Include="Synchronization\Users\UserFeedEntryType.cs" />
     <Compile Include="ValueObjects\HealthCheck\NumberOfSyncPackagesWithBigSizeCheckResult.cs" />
