@@ -165,6 +165,11 @@
                 if (type === 'GpsCoordinates' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
+
+                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Prefilled') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
                 if (type !== "SingleOption" && type !== "MultyOption") {
                     $scope.setLinkSource(null);
                 }
@@ -278,10 +283,13 @@
                 if (!currentQuestion)
                     return [];
                 var allScopes = currentQuestion.allQuestionScopeOptions;
-                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates'])<0)
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption']) < 0)
                     return allScopes;
 
                 return allScopes.filter(function (o) {
+                    if (currentQuestion.type == 'MultyOption')
+                        return o.value !== 'Prefilled';
+
                     return o.value !== 'Prefilled' && o.value !== 'Supervisor';
                 });
             };
