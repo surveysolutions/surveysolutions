@@ -2,7 +2,7 @@
 <resources>
   
   <style name="Dashboard_Interviews_Header" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginTop">42dp</item>
     <item name="android:layout_marginBottom">32dp</item>
@@ -11,8 +11,9 @@
   </style>
 
   <style name="Dashboard_Interviews_Header_Body" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
   </style>
 
   <style name="Dashboard_TabLink" parent="AppTheme">
@@ -43,8 +44,38 @@
 
 
   <style name="Dashboard_InterviewsList" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+  </style>
+
+  <style name="Dashboard_InterviewListItem" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">32dp</item>
+    <item name="android:layout_marginRight">32dp</item>
+    <item name="android:layout_marginBottom">12dp</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
+    <item name="android:layout_width">14dp</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:background">#e32102</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_marginTop">14dp</item>
+    <item name="android:layout_marginBottom">14dp</item>
+    <item name="android:layout_marginLeft">14dp</item>
+    <item name="android:layout_marginRight">14dp</item>
+    <item name="android:orientation">vertical</item>
   </style>
 
 
