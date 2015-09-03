@@ -7,7 +7,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 
 using It = Machine.Specifications.It;
 
@@ -20,9 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(CreateHeaderStructureForLevel("main level"),
                 CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] { "r1", "r2" },
                     levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() })));
-
-            var sqlDataAccessor = new Mock<IExportedDataAccessor>();
-            sqlDataAccessor.Setup(x => x.GetAllDataFolder(Moq.It.IsAny<string>())).Returns(string.Empty);
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
@@ -38,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
             datasetWriterFactory.Setup(x => x.CreateDatasetWriter(ExportDataType.Stata)).Returns(datasetWriter.Object);
 
-            sqlToTabDataExportService = CreateSqlToTabDataExportService(exportedDataAccessor: sqlDataAccessor.Object,
+            sqlToTabDataExportService = CreateSqlToTabDataExportService(
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
                 tabFileReader: tabFileReader.Object, datasetWriterFactory: datasetWriterFactory.Object);
         };

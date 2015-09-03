@@ -22,7 +22,6 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteSuper
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataStorage;
@@ -34,7 +33,6 @@ using WB.Core.SharedKernels.SurveyManagement.Services.DeleteSupervisor;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
@@ -124,7 +122,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
             this.Bind<IDataExportWriter>().To<ReadSideRepositoryDataExportWriter>();
-            this.Bind<IExportedDataAccessor>().To<ExportedDataAccessor>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();

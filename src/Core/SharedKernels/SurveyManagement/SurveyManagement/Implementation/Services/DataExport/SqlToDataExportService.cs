@@ -21,7 +21,6 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -36,8 +35,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string separator;
         private readonly Func<string, string> createDataFileName;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IExportedDataAccessor exportedDataAccessor;
         private readonly string parentId = "ParentId";
+        private readonly string commentsFileName = "interview_comments";
+        private readonly string interviewActionsFileName = "interview_actions";
         private readonly IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
@@ -47,11 +47,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
+        private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
 
         public SqlToDataExportService(
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriterFactory csvWriterFactory, 
-            IExportedDataAccessor exportedDataAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage, 
@@ -60,10 +60,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             ILogger logger,
             ITabFileReader tabReader,
             IDatasetWriterFactory datasetWriterFactory,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage, IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage, 
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage)
         {
             this.csvWriterFactory = csvWriterFactory;
-            this.exportedDataAccessor = exportedDataAccessor;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.interviewExportedDataStorage = interviewExportedDataStorage;
             this.interviewActionsDataStorage = interviewActionsDataStorage;
@@ -107,10 +107,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string allDataFolderPath)
         {
-            var allDataFolderPath = exportedDataAccessor.GetAllDataFolder(basePath);
-            
             if (!fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
             {
                 fileSystemAccessor.CreateDirectory(allDataFolderPath);
@@ -379,10 +377,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return variable;
         }
 
-        public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string approvedDataFolderPath)
         {
-            var approvedDataFolderPath = exportedDataAccessor.GetApprovedDataFolder(basePath);
-
             if (!fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
             {
                 fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
@@ -397,7 +393,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private void CreateHeaderForActionFile(ICsvWriterService fileWriter)
         {
-            foreach (var actionFileColumn in exportedDataAccessor.ActionFileColumns)
+            foreach (var actionFileColumn in actionFileColumns)
             {
                 fileWriter.WriteField(actionFileColumn);
             }
@@ -673,7 +669,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private void CreateFileForInterviewActions(InterviewExportedAction? action, string basePath, Guid questionnaireId, long questionnaireVersion)
         {
             var actionFilePath =
-                fileSystemAccessor.CombinePath(basePath, createDataFileName(exportedDataAccessor.InterviewActionsTableName));
+                fileSystemAccessor.CombinePath(basePath, createDataFileName(interviewActionsFileName));
 
             using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(actionFilePath, true))
             using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
@@ -697,7 +693,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             QuestionnaireExportStructure questionnaireExportStructure)
         {
             string commentsFilePath =
-                fileSystemAccessor.CombinePath(basePath, createDataFileName(exportedDataAccessor.CommentsTableName));
+                fileSystemAccessor.CombinePath(basePath, createDataFileName(commentsFileName));
 
             int maxRosterDepthInQuestionnaire =
                 questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
