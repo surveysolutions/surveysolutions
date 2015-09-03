@@ -3,11 +3,12 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using It = Machine.Specifications.It;
+using It = System.Reflection.PortableExecutable.Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
 {
@@ -28,9 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 Create.InterviewStatuses(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion,
                     statuses: new[] {Create.InterviewCommentedStatus()}),
                 "id");
-            
+
+
+            var questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), Create.HeaderStructureForLevel());
             sqlToTabDataExportService = CreateSqlToTabDataExportService(exportedDataAccessor: sqlDataAccessor.Object, csvWriterService:csvWriterServiceMock.Object,
-                fileSystemAccessor: fileSystemAccessor.Object, interviewStatuses: interviewStatuses, questionnaireExportStructure: Create.QuestionnaireExportStructure());
+                fileSystemAccessor: fileSystemAccessor.Object, interviewStatuses: interviewStatuses, questionnaireExportStructure: questionnaireExportStructure);
         };
 
         Because of = () =>

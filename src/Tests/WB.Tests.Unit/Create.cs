@@ -2216,5 +2216,10 @@ namespace WB.Tests.Unit
                 QuestionText = text
             };
         }
+
+        public static HeaderStructureForLevel HeaderStructureForLevel()
+        {
+            return new HeaderStructureForLevel() {LevelScopeVector = new ValueVector<Guid>()};
+        }
     }
 }
