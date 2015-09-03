@@ -113,6 +113,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
+    <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
@@ -285,6 +287,8 @@
     <Compile Include="Views\DataExport\ExportedHeaderItem.cs" />
     <Compile Include="Views\DataExport\ExportedQuestion.cs" />
     <Compile Include="Views\DataExport\HeaderStructureForLevel.cs" />
+    <Compile Include="Views\DataExport\InterviewComment.cs" />
+    <Compile Include="Views\DataExport\InterviewCommentaries.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportLevelView.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportRecord.cs" />
     <Compile Include="Views\DataExport\InterviewDataExportView.cs" />

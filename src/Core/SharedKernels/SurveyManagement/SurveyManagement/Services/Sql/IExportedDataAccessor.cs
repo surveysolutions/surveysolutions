@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Sql
         string GetApprovedDataFolder(string basePath);
 
         string InterviewActionsTableName { get; }
+        string CommentsTableName { get; }
         string DataFileName { get; }
         string AllDataFolder { get; }
         string ApprovedDataFolder { get; }
