@@ -27,8 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             interviewExportServiceMock = new Mock<IDataExportWriter>();
 
             fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(
-                dataExportWriter: interviewExportServiceMock.Object, interviewSummaryWriter: interviewSummaryWriter.Object,
-                user: new UserDocument());
+                dataExportWriter: interviewExportServiceMock.Object, interviewSummaryWriter: interviewSummaryWriter.Object);
         };
 
         Because of = () =>

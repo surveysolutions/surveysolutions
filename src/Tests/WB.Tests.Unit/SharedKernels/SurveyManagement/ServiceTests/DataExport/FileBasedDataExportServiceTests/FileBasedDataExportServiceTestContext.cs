@@ -23,7 +23,6 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -38,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             IFileSystemAccessor fileSystemAccessor = null, IDataExportWriter dataExportWriter = null,
             IEnvironmentContentService environmentContentService = null, IPlainInterviewFileStorage plainFileRepository = null,
             InterviewDataExportView interviewDataExportView = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, UserDocument user = null, InterviewData interviewData=null)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, InterviewData interviewData=null)
         {
             InterviewSummary interviewSummary = null;
             if (interviewDataExportView != null)
@@ -50,21 +49,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 environmentContentService ?? Mock.Of<IEnvironmentContentService>(), currentFileSystemAccessor,
                 Mock.Of<ILogger>(),
                 plainFileRepository ??
-                    Mock.Of<IPlainInterviewFileStorage>(
-                        _ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()),
+                Mock.Of<IPlainInterviewFileStorage>(
+                    _ => _.GetBinaryFilesForInterview(Moq.It.IsAny<Guid>()) == new List<InterviewBinaryDataDescriptor>()),
                 Mock.Of<IReadSideKeyValueStorage<InterviewData>>(
                     _ => _.GetById(It.IsAny<string>()) == (interviewData ?? new InterviewData())),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                     _ => _.GetById(It.IsAny<string>()) == new QuestionnaireExportStructure()),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),
+                interviewSummaryWriter ??
+                Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
+                    _ => _.GetById(It.IsAny<string>()) == interviewSummary),
                 Mock.Of<IExportViewFactory>(
                     _ =>
-                        _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<InterviewData>()) ==
-                            (interviewDataExportView ??
-                                new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1, new InterviewDataExportLevelView[0]))),
-                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
-                Mock.Of<IExportedDataAccessor>(_ => _.GetAllDataFolder(Moq.It.IsAny<string>()) == "AllData" && _.GetApprovedDataFolder(Moq.It.IsAny<string>()) == "ApprovedData"));
+                        _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(),
+                            It.IsAny<InterviewData>()) ==
+                        (interviewDataExportView ??
+                         new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1,
+                             new InterviewDataExportLevelView[0]))),
+                filebasedExportedDataAccessor ??
+                Mock.Of<IFilebasedExportedDataAccessor>(
+                    _ =>
+                        _.GetAllDataFolder(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == "AllData" &&
+                        _.GetApprovedDataFolder(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == "ApprovedData"));
         }
 
         protected static void AddLevelToExportStructure(QuestionnaireExportStructure questionnaireExportStructure, Guid levelId,
