@@ -21,6 +21,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
+            if (!TransactionManager.IsTransactionStarted)
+                return;
+
             if (filterContext.Exception != null)
             {
                 TransactionManager.RollbackTransaction();
