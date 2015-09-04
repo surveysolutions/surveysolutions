@@ -70,7 +70,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
-                Data = jsonUtils.SerializeToByteArray(interviewData)
+                Data = jsonUtils.SerializeToByteArray(interviewData),
+                LastAction = interviewDataExportView.Action
             };
 
             return interviewExportedData;
