@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting_message_about_csharp_keywords = () =>
-            exception.Message.ToLower().ShouldContain("variable name shouldn't match with keywords");
+            exception.Message.ToLower().ShouldContain("variable name or roster ID shouldn't match with keywords");
 
         private static Exception exception;
         private static Questionnaire questionnaire;
