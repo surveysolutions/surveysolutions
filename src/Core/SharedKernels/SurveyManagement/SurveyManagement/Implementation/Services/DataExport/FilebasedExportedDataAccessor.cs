@@ -176,12 +176,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 case ExportDataType.Stata:
                 {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, GetAllDataFolder(questionnaireId, version)));
                     break;
                 }
                 case ExportDataType.Spss:
                 {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
+                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, GetAllDataFolder(questionnaireId, version)));
                     break;
                 }
                 case ExportDataType.Tab:
@@ -234,12 +234,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 case ExportDataType.Stata:
                     {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, dataDirectoryPath));
+                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, GetApprovedDataFolder(questionnaireId, version)));
                         break;
                     }
                 case ExportDataType.Spss:
                     {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, dataDirectoryPath));
+                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, GetApprovedDataFolder(questionnaireId, version)));
                         break;
                     }
                 case ExportDataType.Tab:
