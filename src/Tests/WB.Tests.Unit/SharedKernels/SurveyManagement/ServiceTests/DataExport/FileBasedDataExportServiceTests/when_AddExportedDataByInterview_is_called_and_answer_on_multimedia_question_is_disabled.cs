@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 }, Guid.NewGuid().FormatGuid());
 
             interviewToExport = new InterviewDataExportView(interviewId, Guid.NewGuid(), 1,
-                new[] { interviewLevelToExport });
+                new[] { interviewLevelToExport }, InterviewExportedAction.Completed);
 
             plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
             plainFileRepositoryMock.Setup(x => x.GetInterviewBinaryData(interviewId, Moq.It.IsAny<string>()))

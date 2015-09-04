@@ -61,10 +61,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 Mock.Of<IExportViewFactory>(
                     _ =>
                         _.CreateInterviewDataExportView(It.IsAny<QuestionnaireExportStructure>(),
-                            It.IsAny<InterviewData>()) ==
+                            It.IsAny<InterviewData>(), It.IsAny<InterviewExportedAction>()) ==
                         (interviewDataExportView ??
                          new InterviewDataExportView(Guid.NewGuid(), Guid.NewGuid(), 1,
-                             new InterviewDataExportLevelView[0]))),
+                             new InterviewDataExportLevelView[0], InterviewExportedAction.Completed))),
                 filebasedExportedDataAccessor ??
                 Mock.Of<IFilebasedExportedDataAccessor>(
                     _ =>
