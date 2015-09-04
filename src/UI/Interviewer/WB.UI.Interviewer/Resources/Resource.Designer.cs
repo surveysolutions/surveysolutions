@@ -6400,8 +6400,14 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f070198
 			public const int Dashboard_InterviewItem_Layout = 2131165592;
 			
+			// aapt resource value: 0x7f07019c
+			public const int Dashboard_InterviewItem_Status = 2131165596;
+			
 			// aapt resource value: 0x7f070199
 			public const int Dashboard_InterviewItem_StatusPanel = 2131165593;
+			
+			// aapt resource value: 0x7f07019b
+			public const int Dashboard_InterviewItem_Title = 2131165595;
 			
 			// aapt resource value: 0x7f070197
 			public const int Dashboard_InterviewListItem = 2131165591;
@@ -6691,11 +6697,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f07017e
 			public const int Interview_Sidebar_Title = 2131165566;
 			
-			// aapt resource value: 0x7f07019b
-			public const int Menu_Hint = 2131165595;
+			// aapt resource value: 0x7f07019d
+			public const int Menu_Hint = 2131165597;
 			
-			// aapt resource value: 0x7f07019c
-			public const int Menu_Hint_Bold = 2131165596;
+			// aapt resource value: 0x7f07019e
+			public const int Menu_Hint_Bold = 2131165598;
 			
 			// aapt resource value: 0x7f070085
 			public const int Platform_AppCompat = 2131165317;
@@ -6976,8 +6982,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f070001
 			public const int Theme_MediaRouter_Light = 2131165185;
 			
-			// aapt resource value: 0x7f07019d
-			public const int Theme_SplashBackground = 2131165597;
+			// aapt resource value: 0x7f07019f
+			public const int Theme_SplashBackground = 2131165599;
 			
 			// aapt resource value: 0x7f0700d0
 			public const int ThemeOverlay_AppCompat = 2131165392;
