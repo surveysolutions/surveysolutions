@@ -238,7 +238,7 @@
     <value>Question cannot have empty variable name.</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>Variable name cannot be a reserved word.</value>
+    <value>Variable name or roster ID cannot be a reserved word.</value>
   </data>
   <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
     <value>If question uses %rostertitle% in title it need to be placed inside roster.</value>

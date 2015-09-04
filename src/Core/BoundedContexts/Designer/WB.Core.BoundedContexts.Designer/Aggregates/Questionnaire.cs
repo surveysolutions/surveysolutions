@@ -2368,7 +2368,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isTooLong)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameMaxLength, "Variable name shouldn't be longer than 32 characters");
+                    DomainExceptionType.VariableNameMaxLength, "Variable name or roster ID shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
@@ -2376,21 +2376,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameSpecialCharacters,
-                    "Valid variable name should contain only letters, digits and underscore character");
+                    "Valid variable or roster ID name should contain only letters, digits and underscore character");
             }
 
             bool startsWithDigitOrUnderscore = Char.IsDigit(stataCaption[0]) || stataCaption[0] == '_';
             if (startsWithDigitOrUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit or underscore");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't starts with digit or underscore");
             }
 
             bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
             if (endsWithUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't end with underscore");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't end with underscore");
             }
 
             var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
@@ -2401,7 +2401,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isNotUnique)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
+                    DomainExceptionType.VarialbeNameNotUnique, "Variable name or roster ID should be unique in questionnaire's scope");
             }
             
             var keywords = this.variableNameValidator.GetAllReservedKeywords();
@@ -2409,7 +2409,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
-                    keyword + " is a keyword. Variable name shouldn't match with keywords");
+                    keyword + " is a keyword. Variable name or roster ID shouldn't match with keywords");
             }
         }
 
