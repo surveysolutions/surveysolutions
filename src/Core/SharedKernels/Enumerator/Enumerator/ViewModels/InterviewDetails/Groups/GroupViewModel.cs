@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -101,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             GroupModel groupModel;
             if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(entityIdentity.Id, out groupModel))
-                return;
+                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(entityIdentity));
 
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
             this.GroupState.Init(interviewId, entityIdentity);

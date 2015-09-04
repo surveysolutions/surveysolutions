@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual event GroupChanged GroupChanged;
         public virtual event BeforeGroupChanged BeforeGroupChanged;
 
-        private bool isNavigating = false;
+        private bool isNavigatingInExecutionInCurrentMoment = false;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
@@ -58,17 +58,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateToAsync(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
-            await this.DoNavigatinActionAsync((() => this.NavigateTo(groupIdentity, anchoredElementIdentity)));
+            await this.DoNavigationActionWhenAllWaitersArelFinishedAsync((() => this.NavigateTo(groupIdentity, anchoredElementIdentity)));
         }       
         
-        private async Task DoNavigatinActionAsync(Action action)
+        private async Task DoNavigationActionWhenAllWaitersArelFinishedAsync(Action action)
         {
-            if (isNavigating)
+            if (this.isNavigatingInExecutionInCurrentMoment)
                 return;
 
             try
             {
-                isNavigating = true;
+                this.isNavigatingInExecutionInCurrentMoment = true;
 
                 await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
                 await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             finally 
             {
-                isNavigating = false;
+                this.isNavigatingInExecutionInCurrentMoment = false;
             }
         }
 
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
-            await this.DoNavigatinActionAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
+            await this.DoNavigationActionWhenAllWaitersArelFinishedAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
         }
 
         private void NavigateBack(Action navigateToIfHistoryIsEmpty)
