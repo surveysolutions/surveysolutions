@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (interviewActionsForDataUpdate.Contains(action))
             {
-                var interviewDataExportView = this.CreateInterviewDataExportView(interviewId);
+                var interviewDataExportView = this.CreateInterviewDataExportView(interviewId, action);
 
                 if (interviewDataExportView == null)
                     return;
@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return questionsWithAnswersOnMultimediaQuestions.Select(a => a.Answers[0]).ToArray();
         }
 
-        private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId,
+        private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId, InterviewExportedAction action,
             QuestionnaireExportStructure questionnaireExportStructure = null)
         {
             var interview = interviewDataWriter.GetById(interviewId);
@@ -228,7 +228,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 if (questionnaireExportStructure == null)
                     return null;
             }
-            return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview);
+            return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview, action);
         }
 
         public void EnableCache()
