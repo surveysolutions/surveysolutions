@@ -163,16 +163,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void LoadFromModel(Identity groupIdentity)
         {
+            this.Items = new ObservableRangeCollection<dynamic>();
+
             try
             {
                 userInterfaceStateService.NotifyRefreshStarted();
-
-                this.Items = new ObservableRangeCollection<dynamic>();
 
                 var interviewEntityViewModels = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
                     navigationState: this.navigationState);
+                
                 foreach (var x in interviewEntityViewModels)
                 {
                     this.Items.Add(x);
