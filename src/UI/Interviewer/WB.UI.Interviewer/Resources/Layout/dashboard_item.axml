@@ -10,14 +10,12 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel">
     </LinearLayout>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
-      <TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+      <TextView style="@style/Dashboard_InterviewItem_Title"
           android:text="DASHBOARD-ITEM" />
       <TextView android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="PREFILLED-ITEMS" />
-      <TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+      <TextView  style="@style/Dashboard_InterviewItem_Status"
           android:text="ITEM-STATUS-DESCRIPTION" />
     </LinearLayout>
   </LinearLayout>
