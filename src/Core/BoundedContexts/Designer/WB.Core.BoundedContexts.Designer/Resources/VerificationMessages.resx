@@ -265,16 +265,16 @@
     <value>Question of this type is not supported.</value>
   </data>
   <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
-    <value>Roster cannot have empty variable name.</value>
+    <value>Roster cannot have empty roster ID.</value>
   </data>
   <data name="WB0068_RosterHasNotUniqueVariableName" xml:space="preserve">
-    <value>Another roster with the same variable name already exists.</value>
+    <value>Another roster with the same roster ID already exists.</value>
   </data>
   <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
-    <value>Roster has invalid variable name.</value>
+    <value>Roster has invalid roster ID.</value>
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
-    <value>Roster has variable name equal to questionnaire title.</value>
+    <value>Roster has roster ID equal to questionnaire title.</value>
   </data>
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Static text cannot be empty.</value>

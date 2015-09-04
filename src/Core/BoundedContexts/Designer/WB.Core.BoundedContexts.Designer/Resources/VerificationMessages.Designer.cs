@@ -532,7 +532,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster cannot have empty variable name..
+        ///   Looks up a localized string similar to Roster cannot have empty roster ID..
         /// </summary>
         internal static string WB0067_RosterHasEmptyVariableName {
             get {
@@ -541,7 +541,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another roster with the same variable name already exists..
+        ///   Looks up a localized string similar to Another roster with the same roster ID already exists..
         /// </summary>
         internal static string WB0068_RosterHasNotUniqueVariableName {
             get {
@@ -550,7 +550,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has invalid variable name..
+        ///   Looks up a localized string similar to Roster has invalid roster ID..
         /// </summary>
         internal static string WB0069_RosterHasInvalidVariableName {
             get {
@@ -559,7 +559,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has variable name equal to questionnaire title..
+        ///   Looks up a localized string similar to Roster has roster ID equal to questionnaire title..
         /// </summary>
         internal static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
             get {
