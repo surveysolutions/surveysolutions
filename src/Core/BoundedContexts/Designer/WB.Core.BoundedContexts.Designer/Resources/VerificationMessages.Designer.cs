@@ -451,7 +451,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name cannot be a reserved word..
+        ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
         /// </summary>
         internal static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
             get {
