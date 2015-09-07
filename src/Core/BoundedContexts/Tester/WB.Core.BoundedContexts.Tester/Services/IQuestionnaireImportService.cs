@@ -1,4 +1,5 @@
 using Main.Core.Documents;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Entities;
 
 namespace WB.Core.BoundedContexts.Tester.Services

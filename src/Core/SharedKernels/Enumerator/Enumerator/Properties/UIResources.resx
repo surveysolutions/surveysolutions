@@ -461,13 +461,31 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
-  <data name="Interviewer_Login_ActiveUsers_Label" xml:space="preserve">
-    <value>Active users: {0}</value>
-  </data>
   <data name="Interviewer_DashboardTitle" xml:space="preserve">
     <value>Assignments/Census for {0}</value>
   </data>
   <data name="SynchronizationText" xml:space="preserve">
     <value>Synchronization</value>
+  </data>
+  <data name="Interviewer_Troubleshooting" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
+  <data name="Confirmation_Interviewer_ReassignUserToAnotherDevice" xml:space="preserve">
+    <value>Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?</value>
+  </data>
+  <data name="Confirmation_Interviewer_RemoveAllDataFromOldDevice" xml:space="preserve">
+    <value>All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>You already assigned to another device</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Relink</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>If you relink to this device all data on the old one will be lost</value>
   </data>
 </root>
