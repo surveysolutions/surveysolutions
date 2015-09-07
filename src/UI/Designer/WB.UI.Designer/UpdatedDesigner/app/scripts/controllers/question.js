@@ -103,8 +103,8 @@
                             variable: $scope.activeQuestion.variable,
                             type: $scope.activeQuestion.type,
                             linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId,
-                            hasCondition: ($scope.activeQuestion.enablementCondition !== null && /\S/.test($scope.activeQuestion.enablementCondition)),
-                            hasValidation: ($scope.activeQuestion.validationExpression !== null && /\S/.test($scope.activeQuestion.validationExpression))
+                            hasCondition: ($scope.doesQuestionSupportEnablementConditions() &&$scope.activeQuestion.enablementCondition !== null && /\S/.test($scope.activeQuestion.enablementCondition)),
+                            hasValidation: ($scope.doesQuestionSupportValidations() && $scope.activeQuestion.validationExpression !== null && /\S/.test($scope.activeQuestion.validationExpression))
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
