@@ -1,7 +1,6 @@
-using Cirrious.CrossCore;
+using System.Threading;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -11,14 +10,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class DashboardViewModel : BaseViewModel
     {
-        readonly IViewModelNavigationService viewModelNavigationService;
-        readonly IPrincipal principal;
+        private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IPrincipal principal;
+        public readonly SynchronizationViewModel Synchronization;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
-            IPrincipal principal)
+            IPrincipal principal, SynchronizationViewModel synchronization)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
+            this.Synchronization = synchronization;
         }
 
         public void Init()
@@ -28,7 +29,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
                 return;
             }
-
 
             LoggedInUserName = this.principal.CurrentUserIdentity.Name;
             DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, LoggedInUserName);
@@ -44,6 +44,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 new DashboardItemViewModel(), 
                 new DashboardItemViewModel(), 
             };
+        }
+
+        private bool isSynchronizationInfoShowed;
+        public bool IsSynchronizationInfoShowed
+        {
+            get { return this.isSynchronizationInfoShowed; }
+            set { this.isSynchronizationInfoShowed = value; this.RaisePropertyChanged(); }
+        }
+
+        private IMvxCommand synchronizationCommand;
+        public IMvxCommand SynchronizationCommand
+        {
+            get
+            {
+                return synchronizationCommand ??
+                       (synchronizationCommand =
+                           new MvxCommand(async () => await this.Synchronization.SynchronizeAsync(),
+                               () => !this.Synchronization.IsSynchronizationInProgress));
+            }
         }
 
         private string dashboardTitle;
@@ -158,16 +177,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void SwitchTabCommand()
         {
 
-        }
-
-        public IMvxCommand SynchronizationCommand
-        {
-            get { return new MvxCommand(this.ExecuteSynchronization); }
-        }
-
-        private void ExecuteSynchronization()
-        {
-            // do something
         }
 
         public IMvxCommand SignOutCommand

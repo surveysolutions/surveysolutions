@@ -294,7 +294,6 @@
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\SettingsActivity.cs" />
-    <Compile Include="Activities\SynchronizationActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
@@ -518,9 +517,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\login.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\synchronization.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\settings.xml">

@@ -17,11 +17,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             
         }
 
-        public IMvxCommand NavigateToSynchronizationCommand
-        {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<SynchronizationViewModel>()); }
-        }
-
         public IMvxCommand NavigateToDashboardCommand
         {
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard()); }
