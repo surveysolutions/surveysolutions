@@ -5605,9 +5605,6 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0d0003
 			public const int settings = 2131558403;
 			
-			// aapt resource value: 0x7f0d0004
-			public const int synchronization = 2131558404;
-			
 			static Menu()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();

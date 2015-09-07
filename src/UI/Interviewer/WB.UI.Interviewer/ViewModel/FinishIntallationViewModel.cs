@@ -2,6 +2,7 @@ using System;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -46,7 +47,7 @@ namespace WB.UI.Interviewer.ViewModel
             try
             {
                 this.interviewerSettings.SetSyncAddressPoint(this.SyncEndpoint);
-                this.viewModelNavigationService.NavigateTo<SynchronizationViewModel>(new
+                this.viewModelNavigationService.NavigateTo<DashboardViewModel>(new
                 {
                     login = this.Login,
                     passwordHash = this.passwordHasher.Hash(this.Password)
