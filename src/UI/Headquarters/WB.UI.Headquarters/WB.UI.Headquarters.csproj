@@ -523,6 +523,7 @@
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
+    <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="Code\LegacyOptions.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
     <Compile Include="API\Feeds\Constants.cs" />
