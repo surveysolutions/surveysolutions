@@ -16,99 +16,53 @@
         local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
   </android.support.v7.widget.Toolbar>
   <ScrollView
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:fillViewport="true">
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-      <!--  Header  Starts-->
-      <LinearLayout
-          android:id="@+id/header"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:paddingTop="5dip"
-          android:paddingBottom="5dip" />
-      <!--  Header Ends -->
-      <!-- Footer Start -->
-      <LinearLayout
-          android:id="@+id/footer"
-          android:layout_width="fill_parent"
-          android:layout_height="90dip"
-          android:layout_alignParentBottom="true" />
-      <!-- Footer Ends -->
-      <!-- Login Form -->
-      <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:scrollbarStyle="outsideOverlay">
+    <LinearLayout
           android:orientation="vertical"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:padding="10dip"
-          android:layout_below="@id/header">
-        <TextView
-            android:id="@+id/knownUsers"
-            android:background="@drawable/infowarningstyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:textColor="#1e5262"
-            android:textSize="20dip"
-            android:padding="15px"
-            local:MvxBind="Text Format(Localization('Interviewer_Login_ActiveUsers_Label'), KnownUsers);" />
-        <!--  Email Label -->
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Login" />
+          android:layout_gravity="center"
+          android:gravity="center">
+      <ImageView
+          android:layout_width="@dimen/Login_Element_width"
+          android:layout_height="wrap_content"
+          android:src="@drawable/login_logo"/>
+
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout"
+                    android:layout_width="@dimen/Login_Holder_width"
+                    local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(AreCredentialsWrong, true));">
         <EditText
-            android:layout_width="fill_parent"
-            android:id="@+id/teLogin"
+            android:layout_width="@dimen/Login_Element_width"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="20dip"
-            local:MvxBind="Text Login; TextColor If(AreCredentialsWrong, false, true), Converter=BooleanToTextColor"
-            android:singleLine="true" />
-        <!--  Password Label -->
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Password" />
-        <EditText
-            android:layout_width="fill_parent"
-            android:id="@+id/tePassword"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
             android:singleLine="true"
-            local:MvxBind="Text Password; TextColor If(AreCredentialsWrong, false, true), Converter=BooleanToTextColor"
-            android:password="true" />
-        <TextView
-            android:id="@+id/invalidUserNameOrPassword"
-            android:background="@drawable/errorwarningstyle"
-            android:layout_width="fill_parent"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            local:MvxBind="Text Login; Hint Localization('LoginNameHint');" />
+        <EditText
+            android:layout_width="@dimen/Login_Element_width"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:textColor="#000"
-            android:textSize="20dip"
-            android:padding="15px"
-            local:MvxBind="Visibility AreCredentialsWrong, Converter=Visibility"
-            android:text="Invalid username and/or password" />
-        <!-- Login button -->
-        <Button
-            android:id="@+id/startLogin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:text="Login"
-            local:MvxBind="Click LoginCommand" />
-        <Button
-            android:id="@+id/startActivation"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:text="Activate"
-            local:MvxBind="Click ActivationCommand; Visibility ShouldActivationButtonBeVisible, Converter=Visibility" />
-        <!-- Link to Registration Screen -->
+            android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
+            android:singleLine="true"
+            android:password="true"
+            local:MvxBind="Text Password; Hint Localization('PasswordHint')" />
       </LinearLayout>
-      <!-- Login Form Ends -->
-    </RelativeLayout>
+      <LinearLayout
+                android:layout_width="@dimen/Login_Element_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            local:MvxBind="Click LoginCommand; Text Localization('LoginText');" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            local:MvxBind="Text Localization('Interviewer_Troubleshooting')" />
+      </LinearLayout>
+    </LinearLayout>
   </ScrollView>
 </LinearLayout>
