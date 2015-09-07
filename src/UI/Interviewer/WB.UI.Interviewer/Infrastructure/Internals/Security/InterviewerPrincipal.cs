@@ -1,41 +1,55 @@
-﻿using WB.Core.BoundedContexts.Interviewer;
+﻿using System;
+using System.Linq;
+using Cheesebaron.MvxPlugins.Settings.Interfaces;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.UI.Interviewer.Infrastructure.Internals.Security
 {
     public class InterviewerPrincipal : IPrincipal
     {
-        readonly IAuthentication membership;
+        private const string UserNameParameterName = "authenticatedUser";
 
-        public InterviewerPrincipal(IAuthentication membership)
+        private readonly ISettings settingsService;
+        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+
+        public bool IsAuthenticated { get { return this.currentUserIdentity != null; } }
+
+        private InterviewerIdentity currentUserIdentity;
+        public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
+
+        public InterviewerPrincipal(ISettings settingsService, IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
         {
-            this.membership = membership;
+            this.settingsService = settingsService;
+            this.interviewersPlainStorage = interviewersPlainStorage;
+
+            this.InitializeIdentity();
         }
 
-        public bool IsAuthenticated
+        public void SignIn(string userName, string password, bool staySignedIn)
         {
-            get { return this.membership.IsLoggedIn; }
-        }
+            var localInterviewer = this.interviewersPlainStorage.Query(
+                query => query.FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase) 
+                    && interviewer.Password == password));
 
-        public IUserIdentity CurrentUserIdentity
-        {
-            get
-            {
-                if (this.membership.CurrentUser == null)
-                    return null;
+            if(localInterviewer == null) throw new UnauthorizedAccessException();
 
-                return new InterviewerUserIdentity(this.membership.CurrentUser.Name, this.membership.CurrentUser.Id);
-            }
+            this.settingsService.AddOrUpdateValue(UserNameParameterName, userName);
+            this.currentUserIdentity = localInterviewer;
         }
 
         public void SignOut()
         {
-            this.membership.LogOff();
+            this.settingsService.DeleteValue(UserNameParameterName);
+            this.currentUserIdentity = null;
         }
 
-        public void SignIn(string userName, string password, bool rememberMe)
+        private void InitializeIdentity()
         {
-            this.membership.LogOnAsync(userName, password);
+            var userName = this.settingsService.GetValue(UserNameParameterName, string.Empty);
+            if (!string.IsNullOrEmpty(userName))
+                this.currentUserIdentity = this.interviewersPlainStorage.Query(query => query.FirstOrDefault());
         }
     }
 }
