@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1}. Major change.", request.Version, supervisorRevisionNumber));
 
-                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationHasVersion_butSupervisorHas_PleaseReinstallInterviewerApplication);
+                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerVersionLessThanServerOne);
             }
 
             if (request.Version < supervisorRevisionNumber)

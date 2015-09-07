@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -53,6 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
+
+            this.Bind<IInterviewerInterviewsFactory>().To<InterviewerInterviewsFactory>();
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>().InSingletonScope()
               .WithConstructorArgument("rootDirectoryPath", this.basePath);

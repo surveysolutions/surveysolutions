@@ -181,6 +181,13 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerDevicesController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerInterviewsController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Api\Interviewer\InterviewerQuestionnairesController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerUsersController.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
