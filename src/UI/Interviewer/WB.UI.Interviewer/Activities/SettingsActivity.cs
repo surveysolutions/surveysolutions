@@ -156,7 +156,7 @@ namespace WB.UI.Interviewer.Activities
             this.clickCount = 0;
         }
 
-        private void btnVersion_Click(object sender, EventArgs evnt)
+        private async void btnVersion_Click(object sender, EventArgs evnt)
         {
             if (!this.networkService.IsNetworkEnabled())
             {
@@ -164,16 +164,16 @@ namespace WB.UI.Interviewer.Activities
                 return;
             }
             this.progress = ProgressDialog.Show(this, "Checking", "Please Wait...", true, true);
-            Task.Factory.StartNew(this.CheckVersion);
+            await this.CheckVersion();
         }
 
-        private void CheckVersion()
+        private async Task CheckVersion()
         {
             bool? newVersionExists = null;
             try
             {
-                var updater = new UpdateProcessor(logger: this.logger, synchronizationService: this.synchronizationService);
-                newVersionExists = updater.CheckNewVersion();
+                var updater = new UpdateProcessor(logger: this.logger, synchronizationService: this.synchronizationService, interviewerSettings: this.interviewerSettings);
+                newVersionExists = await updater.CheckNewVersion();
             }
             catch (Exception exc)
             {
@@ -214,7 +214,7 @@ namespace WB.UI.Interviewer.Activities
 
         private void btnUpdateConfirmed_Click(object sender, DialogClickEventArgs e)
         {
-            var updater = new UpdateProcessor(logger: this.logger, synchronizationService: this.synchronizationService);
+            var updater = new UpdateProcessor(logger: this.logger, synchronizationService: this.synchronizationService, interviewerSettings: this.interviewerSettings);
             this.progress = ProgressDialog.Show(this, "Downloading", "Please Wait...", true, true);
 
             Task.Factory.StartNew(() => 

@@ -22,9 +22,9 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.UI.Interviewer.Authorization;
 using WB.UI.Interviewer.Backup;
 using WB.UI.Interviewer.FileStorage;
 using WB.UI.Interviewer.Implementations.DenormalizerStorage;
@@ -105,7 +105,6 @@ namespace WB.UI.Interviewer.Ninject
 
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
-            this.Bind<IDataCollectionAuthentication, IAuthentication>().To<AndroidAuthentication>().InSingletonScope();
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
             this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
             this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();

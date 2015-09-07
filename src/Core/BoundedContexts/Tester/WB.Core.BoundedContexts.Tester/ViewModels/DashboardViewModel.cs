@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Entities;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
@@ -195,7 +196,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
                     selectedQuestionnaire: selectedQuestionnaire,
-                    downloadProgress: (downloadProgress) =>
+                    onDownloadProgressChanged: (downloadProgress) =>
                     {
                         this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress,
                             downloadProgress);

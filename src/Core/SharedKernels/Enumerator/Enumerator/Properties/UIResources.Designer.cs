@@ -134,6 +134,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?.
+        /// </summary>
+        public static string Confirmation_Interviewer_ReassignUserToAnotherDevice {
+            get {
+                return ResourceManager.GetString("Confirmation_Interviewer_ReassignUserToAnotherDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?.
+        /// </summary>
+        public static string Confirmation_Interviewer_RemoveAllDataFromOldDevice {
+            get {
+                return ResourceManager.GetString("Confirmation_Interviewer_RemoveAllDataFromOldDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string ConfirmationCancelText {
@@ -793,11 +811,47 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active users: {0}.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string Interviewer_Login_ActiveUsers_Label {
+        public static string Interviewer_RelinkDevice_Cancel {
             get {
-                return ResourceManager.GetString("Interviewer_Login_ActiveUsers_Label", resourceCulture);
+                return ResourceManager.GetString("Interviewer_RelinkDevice_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You already assigned to another device.
+        /// </summary>
+        public static string Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage {
+            get {
+                return ResourceManager.GetString("Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relink.
+        /// </summary>
+        public static string Interviewer_RelinkDevice_RelinkButtonText {
+            get {
+                return ResourceManager.GetString("Interviewer_RelinkDevice_RelinkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you relink to this device all data on the old one will be lost.
+        /// </summary>
+        public static string Interviewer_RelinkDevice_RelinkMessage {
+            get {
+                return ResourceManager.GetString("Interviewer_RelinkDevice_RelinkMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string Interviewer_Troubleshooting {
+            get {
+                return ResourceManager.GetString("Interviewer_Troubleshooting", resourceCulture);
             }
         }
         
