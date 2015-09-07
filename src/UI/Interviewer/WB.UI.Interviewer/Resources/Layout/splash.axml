@@ -16,7 +16,7 @@
      android:layout_height="@dimen/Splash_Logo_size"
      android:layout_above="@+id/anchorInCenter"
      android:layout_centerHorizontal="true"
-     android:src="@drawable/splash_image"/>
+     android:src="@drawable/login_logo"/>
 
   <ImageView
       android:layout_width="match_parent"
