@@ -60,6 +60,7 @@
     <Compile Include="Implementation\Crypto\IHashInfo.cs" />
     <Compile Include="Implementation\Crypto\SHA0.cs" />
     <Compile Include="Implementation\Crypto\SHA1.cs" />
+    <Compile Include="Implementation\DownloadProgressChangedEventArgs.cs" />
     <Compile Include="Implementation\JsonCompressor.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="Implementation\RestAttachment.cs" />

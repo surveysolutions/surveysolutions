@@ -1,6 +1,8 @@
-﻿namespace WB.UI.Tester.Infrastructure.Internals.Rest
+﻿using WB.Core.GenericSubdomains.Portable.Services;
+
+namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {
-    interface ITesterNetworkService
+    interface ITesterNetworkService : INetworkService
     {
         bool IsEndpointReachable();
     }

@@ -3,14 +3,13 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
-    internal class TesterSettings : ITesterSettings, IEnumeratorSettings
+    internal class TesterSettings : IRestServiceSettings, IEnumeratorSettings
     {
         private const string ApplicationNameParameterName = "ApplicationName";
         private const string DesignerEndpointParameterName = "DesignerEndpointV9";
@@ -44,7 +43,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
-        public TimeSpan RequestTimeout
+        public TimeSpan Timeout
         {
             get
             {
