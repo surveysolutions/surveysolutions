@@ -3,13 +3,12 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
-    public class LoginActivity : BaseActivity<LoginActivityViewModel>
+    public class LoginActivity : BaseActivity<LoginViewModel>
     {
         protected override int ViewResourceId
         {
