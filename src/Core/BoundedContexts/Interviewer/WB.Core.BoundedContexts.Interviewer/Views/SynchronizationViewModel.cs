@@ -1,39 +1,43 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class SynchronizationViewModel : BaseViewModel
+    public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
-        readonly IViewModelNavigationService viewModelNavigationService;
-        public SynchronizationViewModel(IViewModelNavigationService viewModelNavigationService)
+        private readonly SynchronizationProcessor synchronizationProcessor;
+        private readonly CancellationTokenSource synchronizationCancellationTokenSource = new CancellationTokenSource();
+
+        public SynchronizationViewModel(SynchronizationProcessor synchronizationProcessor)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
+            this.synchronizationProcessor = synchronizationProcessor;
         }
 
-        public string Login { get; private set; }
-        public string Password { get; private set; }
-
-        public void Init(string login, string passwordHash)
+        private bool isSynchronizationInProgress;
+        public bool IsSynchronizationInProgress
         {
-            this.Login = login;
-            this.Password = passwordHash;
+            get { return this.isSynchronizationInProgress; }
+            set { this.isSynchronizationInProgress = value; this.RaisePropertyChanged(); }
         }
 
-        public override void NavigateToPreviousViewModel()
+        public async Task SynchronizeAsync()
         {
-            
+            this.IsSynchronizationInProgress = true;
+            try
+            {
+                await this.synchronizationProcessor.Run(this.synchronizationCancellationTokenSource.Token);
+            }
+            finally
+            {
+                this.IsSynchronizationInProgress = false;
+            }
         }
 
-        public IMvxCommand NavigateToSettingsCommand
+        public void CancelSynchronizaion()
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<SettingsViewModel>()); }
-        }
-
-        public IMvxCommand NavigateToDashboardCommand
-        {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard()); }
+            this.synchronizationCancellationTokenSource.Cancel();
         }
     }
 }
