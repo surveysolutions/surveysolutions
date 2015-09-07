@@ -243,6 +243,14 @@
       <HintPath>..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Siaqodb, Version=5.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Siaqodb.5.0.0.7\lib\MonoAndroid\Siaqodb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SiaqodbPortable, Version=4.0.2.27, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Siaqodb.5.0.0.7\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />
     <Reference Include="System.Core" />
@@ -292,6 +300,7 @@
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\SettingsActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
@@ -338,10 +347,8 @@
     <Compile Include="Infrastructure\Internals\Crasher\Utils\PackageManagerWrapper.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Utils\ReportUtils.cs" />
     <Compile Include="Infrastructure\Internals\Security\InterviewerPrincipal.cs" />
-    <Compile Include="Infrastructure\Internals\Security\InterviewerUserIdentity.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="Backup\DefaultBackup.cs" />
     <Compile Include="Backup\FolderBackupable.cs" />
@@ -369,7 +376,6 @@
     <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStorageAccessor.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStore.cs" />
-    <Compile Include="Implementations\Services\InterviewerSynchronizationService.cs" />
     <Compile Include="Implementations\Services\MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Implementations\Services\QuestionnaireModelRepository.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
@@ -388,7 +394,6 @@
     <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
     <Compile Include="Services\IGeoService.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
-    <Compile Include="Settings\ErrorReportingSettings.cs" />
     <Compile Include="Settings\RestServiceSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
@@ -399,10 +404,7 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Syncronization\ChangeLogManipulator.cs" />
-    <Compile Include="Syncronization\DeviceChangingVerifier.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
-    <Compile Include="Syncronization\RestAuthenticator.cs" />
-    <Compile Include="Syncronization\SynchronizationException.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
@@ -416,7 +418,6 @@
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
     <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
     <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
-    <Compile Include="ViewModel\FinishIntallationViewModel.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
@@ -424,7 +425,6 @@
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
-    <Compile Include="Views\Login\LoginViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -461,7 +461,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\FinishInstallation.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\splash.axml">
       <SubType>Designer</SubType>
@@ -472,6 +472,9 @@
     <AndroidResource Include="Resources\Layout\dashboard_item.axml" />
     <AndroidResource Include="Resources\Layout\dashboard.axml">
       <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\relink.axml">
+      <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
@@ -613,10 +616,14 @@
     <AndroidResource Include="Resources\Drawable\splash_animation.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\splash_image.png" />
+    <AndroidResource Include="Resources\Drawable\login_logo.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
     <AndroidResource Include="Resources\Values\dashboard.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -664,7 +671,9 @@
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Login\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

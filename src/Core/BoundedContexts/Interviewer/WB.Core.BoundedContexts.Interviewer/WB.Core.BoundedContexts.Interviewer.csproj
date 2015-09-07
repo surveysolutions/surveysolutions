@@ -98,25 +98,18 @@
       <DependentUpon>TabletInformationSenderStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="ErrorReporting\Services\CapiInformationService\ICapiInformationService.cs" />
-    <Compile Include="ErrorReporting\Services\IErrorReportingSettings.cs" />
     <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageCancellationEventArgs.cs" />
     <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs" />
     <Compile Include="ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
-    <Compile Include="IAuthentication.cs" />
-    <Compile Include="Implementation\Authorization\ISyncAuthenticator.cs" />
-    <Compile Include="Implementation\Authorization\SyncCredentials.cs" />
     <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
+    <Compile Include="Implementation\Services\SynchronizationService.cs" />
     <Compile Include="Implementation\Services\SyncPackageRestoreService.cs" />
-    <Compile Include="Implementation\Synchronization\SynchronizationCanceledEventArgs.cs" />
-    <Compile Include="Implementation\Synchronization\SynchronizationEventArgs.cs" />
-    <Compile Include="Implementation\Synchronization\SynchronizationEventArgsWithPercent.cs" />
-    <Compile Include="Implementation\Synchronization\SynchronizationProcessor.cs" />
     <Compile Include="LinqUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\InterviewerUIResources.Designer.cs">
@@ -132,19 +125,17 @@
     <Compile Include="Services\ICapiCleanUpService.cs" />
     <Compile Include="Services\ICapiDataSynchronizationService.cs" />
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
-    <Compile Include="Services\IDataCollectionAuthentication.cs" />
-    <Compile Include="Services\IDeviceChangingVerifier.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
     <Compile Include="Views\Dashboard\DashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
+    <Compile Include="Views\FinishIntallationViewModel.cs" />
+    <Compile Include="Views\InterviewerIdentity.cs" />
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
-    <Compile Include="Views\LoginActivityViewModel.cs" />
-    <Compile Include="Views\Login\LoginView.cs" />
-    <Compile Include="Views\Login\LoginViewInput.cs" />
-    <Compile Include="Views\Login\LoginViewModel.cs" />
+    <Compile Include="Views\LoginViewModel.cs" />
+    <Compile Include="Views\RelinkDeviceViewModel.cs" />
     <Compile Include="Views\SettingsViewModel.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />
   </ItemGroup>
