@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -40,9 +39,30 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
         }
 
 
-        public static async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(this Task<HttpResponseMessage> response, CancellationToken token, Action<decimal> progressPercentage = null)
+        public static async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(this Task<HttpResponseMessage> response, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
             var responseMessage = await response;
+
+            var responseContent = await GetByteArrayResponseContentWithProgressAsync(token, onDownloadProgressChanged, responseMessage);
+
+            return GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
+        }
+
+        public static async Task<byte[]> ReceiveBytesWithProgressAsync(this Task<HttpResponseMessage> response, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+        {
+            var responseMessage = await response;
+
+            return await GetByteArrayResponseContentWithProgressAsync(token, onDownloadProgressChanged, responseMessage);
+        }
+
+        private static async Task<byte[]> GetByteArrayResponseContentWithProgressAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged,
+            HttpResponseMessage responseMessage)
+        {
+            if (token.IsCancellationRequested)
+            {
+                token.ThrowIfCancellationRequested();
+            }
+
             byte[] responseContent;
             var contentLength = responseMessage.Content.Headers.ContentLength;
 
@@ -54,22 +74,32 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
                 }
 
                 var buffer = new byte[restServiceSettings.BufferSize];
+                var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
+                {
+                    TotalBytesToReceive = contentLength.Value
+                };
                 using (var ms = new MemoryStream())
                 {
                     int read;
                     while ((read = await responseStream.ReadAsync(buffer, 0, buffer.Length, token)) > 0)
                     {
-                        ms.Write(buffer, 0, read);
-                        if (progressPercentage != null)
+                        if (token.IsCancellationRequested)
                         {
-                           progressPercentage(contentLength.HasValue ? Math.Round((decimal) (100*ms.Length)/contentLength.Value) : ms.Length);
+                            token.ThrowIfCancellationRequested();
                         }
+
+                        ms.Write(buffer, 0, read);
+
+                        if (onDownloadProgressChanged == null) continue;
+
+                        downloadProgressChangedEventArgs.BytesReceived = ms.Length;
+                        downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal)(100 * ms.Length) / contentLength.Value);
+                        onDownloadProgressChanged(downloadProgressChangedEventArgs);
                     }
                     responseContent = ms.ToArray();
                 }
             }
-
-            return GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
+            return responseContent;
         }
 
         private static T GetDecompressedJsonFromHttpResponseMessage<T>(HttpResponseMessage responseMessage, byte[] responseContent)

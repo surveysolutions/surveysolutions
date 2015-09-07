@@ -54,7 +54,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return serverQuestionnaires;
         }
 
-        public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<decimal> downloadProgress, CancellationToken token)
+        public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
         {
             Questionnaire downloadedQuestionnaire = null;
 
@@ -66,7 +66,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
                         Login = this.userIdentity.Name,
                         Password = this.userIdentity.Password
                     },
-                progressPercentage: downloadProgress, token: token);
+                onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
             return downloadedQuestionnaire;
         }
