@@ -2,12 +2,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Resources;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 
 namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.TabletInformation
 {
@@ -17,19 +16,19 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.Tabl
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICapiInformationService capiInformationService;
-        private readonly IRestService restService;
-        private readonly IErrorReportingSettings errorReportingSettings;
         private readonly ILogger logger;
-        
-        public TabletInformationSender(ICapiInformationService capiInformationService,
-            IFileSystemAccessor fileSystemAccessor, IRestService restService, IErrorReportingSettings errorReportingSettings, ILogger logger)
+        private readonly ISynchronizationService synchronizationService;
+
+        public TabletInformationSender(
+            ICapiInformationService capiInformationService,
+            IFileSystemAccessor fileSystemAccessor, 
+            ILogger logger,
+            ISynchronizationService synchronizationService)
         {
             this.capiInformationService = capiInformationService;
             this.fileSystemAccessor = fileSystemAccessor;
-
-            this.restService = restService;
-            this.errorReportingSettings = errorReportingSettings;
             this.logger = logger;
+            this.synchronizationService = synchronizationService;
         }
 
         public event EventHandler<InformationPackageEventArgs> InformationPackageCreated;
@@ -45,8 +44,6 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.Tabl
                 string pathToInfoArchive = null;
                 try
                 {
-                    var clientRegistrationId = this.errorReportingSettings.GetClientRegistrationId();
-
                     pathToInfoArchive = await this.capiInformationService.CreateInformationPackage(this.tokenSource.Token);
 
                     if (string.IsNullOrEmpty(pathToInfoArchive) ||
@@ -63,15 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.Tabl
 
                     this.ExitIfCanceled();
 
-                    await this.restService.PostAsync(
-                        url: "api/InterviewerSync/PostInfoPackage",
-                        request: new TabletInformationPackage()
-                        {
-                            Content =
-                                Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToInfoArchive)),
-                            AndroidId = this.errorReportingSettings.GetDeviceId(),
-                            ClientRegistrationId = clientRegistrationId
-                        });
+                    await this.synchronizationService.SendTabletInformationAsync(
+                            Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToInfoArchive)));
 
                 }
                 catch (OperationCanceledException)

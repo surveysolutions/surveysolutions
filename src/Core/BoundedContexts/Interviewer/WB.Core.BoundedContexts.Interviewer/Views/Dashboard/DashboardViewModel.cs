@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
+                this.viewModelNavigationService.NavigateTo<LoginViewModel>();
                 return;
             }
 
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         void SignOut()
         {
             principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
+            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()

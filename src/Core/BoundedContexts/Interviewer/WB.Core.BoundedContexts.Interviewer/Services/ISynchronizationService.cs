@@ -1,29 +1,29 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Authorization;
-using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ISynchronizationService
     {
-        Task<HandshakePackage> HandshakeAsync(SyncCredentials credentials, bool shouldThisDeviceBeLinkedToUser = false);
+        Task<InterviewerApiView> GetCurrentInterviewerAsync(string login, string password);
+        Task<bool> HasCurrentInterviewerDeviceAsync();
 
-        Task<UserSyncPackageDto> RequestUserPackageAsync(SyncCredentials credentials, string chunkId);
+        Task<bool> IsDeviceLinkedToCurrentInterviewerAsync();
+        Task LinkCurrentInterviewerToDeviceAsync();
 
-        Task<QuestionnaireSyncPackageDto> RequestQuestionnairePackageAsync(SyncCredentials credentials, string chunkId);
+        Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+        Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+        Task<IEnumerable<QuestionnaireIdentity>> GetCensusQuestionnairesAsync();
 
-        Task<InterviewSyncPackageDto> RequestInterviewPackageAsync(SyncCredentials credentials, string chunkId);
+        Task<byte[]> GetApplicationAsync(CancellationToken token);
+        Task<int?> GetLatestApplicationVersionAsync();
+        Task CheckInterviewerCompatibilityWithServerAsync();
+        Task SendTabletInformationAsync(string archive);
 
-        Task PushChunkAsync(SyncCredentials credentials, string chunkAsString, Guid interviewId);
-
-        Task PushBinaryAsync(SyncCredentials credentials, Guid interviewId, string fileName, byte[] fileData);
-
-        Task<bool> NewVersionAvailableAsync();
-
-        Task<bool> CheckExpectedDeviceAsync(SyncCredentials credentials);
-
-        Task<SyncItemsMetaContainer> GetPackageIdsToDownloadAsync(SyncCredentials credentials, string type, string lastSyncedPackageId);
+        Task<IEnumerable<InterviewApiView>> GetInterviewsAsync();
     }
 }

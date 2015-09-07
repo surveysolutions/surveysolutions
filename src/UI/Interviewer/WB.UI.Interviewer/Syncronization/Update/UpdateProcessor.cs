@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -13,11 +15,13 @@ namespace WB.UI.Interviewer.Syncronization.Update
         private readonly string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, DownloadFolder);
         private readonly ILogger logger;
         private readonly ISynchronizationService synchronizationService;
+        private readonly IInterviewerSettings interviewerSettings;
 
-        public UpdateProcessor(ILogger logger, ISynchronizationService synchronizationService)
+        public UpdateProcessor(ILogger logger, ISynchronizationService synchronizationService, IInterviewerSettings interviewerSettings)
         {
             this.logger = logger;
             this.synchronizationService = synchronizationService;
+            this.interviewerSettings = interviewerSettings;
 
             if (!Directory.Exists(this.pathToFolder))
             {
@@ -34,7 +38,7 @@ namespace WB.UI.Interviewer.Syncronization.Update
                 if (File.Exists(pathTofile))
                     File.Delete(pathTofile);
 
-                var client = new System.Net.WebClient();
+                var client = new WebClient();
                 client.DownloadFile(uri, pathTofile);
             }
             catch (Exception ex)
@@ -58,12 +62,12 @@ namespace WB.UI.Interviewer.Syncronization.Update
             }
         }
 
-        public bool? CheckNewVersion()
+        public async Task<bool?> CheckNewVersion()
         {
             bool? newVersionAvailableOrNullIfThrow = null;
             try
             {
-                newVersionAvailableOrNullIfThrow = this.synchronizationService.NewVersionAvailableAsync().Result;
+                newVersionAvailableOrNullIfThrow = (await this.synchronizationService.GetLatestApplicationVersionAsync()).Value > this.interviewerSettings.GetApplicationVersionCode();
             }
             catch
             {
