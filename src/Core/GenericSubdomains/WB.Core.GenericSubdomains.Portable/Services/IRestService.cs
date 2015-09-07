@@ -19,7 +19,9 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         Task<T> PostAsync<T>(string url, CancellationToken token, object request = null, RestCredentials credentials = null);
         Task PostAsync(string url, CancellationToken token, object request = null, RestCredentials credentials = null);
 
-        Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<decimal> progressPercentage,  object queryString = null, RestCredentials credentials = null);
-        Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<decimal> progressPercentage, object request = null, RestCredentials credentials = null);
+        Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object queryString = null, RestCredentials credentials = null);
+        Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null, RestCredentials credentials = null);
+
+        Task<byte[]> DownloadFileWithProgressAsync(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null, RestCredentials credentials = null);
     }
 }

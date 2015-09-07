@@ -13,26 +13,21 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
     public class RestService : IRestService
     {
         private readonly IRestServiceSettings restServiceSettings;
-        private readonly ILogger logger;
         private readonly INetworkService networkService;
-        private readonly IRestServicePointManager servicePointManager;
         private readonly IRestClientProvider restClientProvider;
 
         public RestService(
             IRestServiceSettings restServiceSettings, 
-            ILogger logger, 
             INetworkService networkService, 
             IRestServicePointManager servicePointManager, 
             IRestClientProvider restClientProvider)
         {
             this.restServiceSettings = restServiceSettings;
-            this.logger = logger;
             this.networkService = networkService;
-            this.servicePointManager = servicePointManager;
             this.restClientProvider = restClientProvider;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
-                this.AcceptUnsignedSslCertificate();
+                servicePointManager.AcceptUnsignedSslCertificate();
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(
@@ -68,11 +63,6 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
             {
                 throw new RestException(message: Resources.NoConnection, innerException: ex);
             }
-        }
-
-        private void AcceptUnsignedSslCertificate()
-        {
-            this.servicePointManager.AcceptUnsignedSslCertificate();
         }
 
         public async Task<T> GetAsync<T>(string url, object queryString = null, RestCredentials credentials = null)
@@ -117,18 +107,24 @@ namespace WB.Core.GenericSubdomains.Portable.Rest
             await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.PostJsonAsync(request), token: token);
         }
 
-        public async Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<decimal> progressPercentage, object queryString = null,
+        public async Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object queryString = null,
             RestCredentials credentials = null)
         {
             return await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: (client) => client.GetAsync(), token: token)
-                .ReceiveCompressedJsonWithProgressAsync<T>(token: token, progressPercentage: progressPercentage);
+                .ReceiveCompressedJsonWithProgressAsync<T>(token: token, onDownloadProgressChanged: onDownloadProgressChanged);
         }
 
-        public async Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<decimal> progressPercentage, object request = null,
+        public async Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null,
             RestCredentials credentials = null)
         {
             return await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.PostJsonAsync(request), token: token)
-                .ReceiveCompressedJsonWithProgressAsync<T>(token: token, progressPercentage: progressPercentage);
+                .ReceiveCompressedJsonWithProgressAsync<T>(token: token, onDownloadProgressChanged: onDownloadProgressChanged);
+        }
+
+        public async Task<byte[]> DownloadFileWithProgressAsync(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, RestCredentials credentials = null)
+        {
+            return await this.ExecuteRequestAsync(url: url, credentials: credentials, request: (client) => client.GetAsync(), token: token)
+                             .ReceiveBytesWithProgressAsync(token: token, onDownloadProgressChanged: onDownloadProgressChanged);
         }
     }
 }
