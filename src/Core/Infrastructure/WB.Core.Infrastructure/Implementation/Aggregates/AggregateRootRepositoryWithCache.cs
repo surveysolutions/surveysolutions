@@ -16,7 +16,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
     {
         static readonly ConcurrentDictionary<Type, IAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IAggregateRoot>();
 
-        public AggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore,
+        public AggregateRootRepositoryWithCache(IEventStoreWithGetAllIds eventStore, ISnapshotStore snapshotStore,
             IDomainRepository repository, IWriteSideCleanerRegistry writeSideCleanerRegistry)
             : base(eventStore, snapshotStore, repository)
         {

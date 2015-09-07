@@ -27,12 +27,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static readonly decimal[] EmptyRosterVector = { };
 
         protected Guid questionnaireId;
-        private Guid interviewerId;
+        protected Guid interviewerId;
 
         protected long questionnaireVersion;
         private bool wasCompleted;
         private bool wasHardDeleted;
-        private InterviewStatus status;
+        protected InterviewStatus status;
 
         private IInterviewExpressionStateV2 expressionProcessorStatePrototype = null;
         private IInterviewExpressionStateV2 ExpressionProcessorStatePrototype

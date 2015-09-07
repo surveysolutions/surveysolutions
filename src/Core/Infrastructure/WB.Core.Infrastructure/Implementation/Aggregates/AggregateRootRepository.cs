@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -10,11 +11,11 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class AggregateRootRepository : IAggregateRootRepository
     {
-        private readonly IEventStore eventStore;
+        private readonly IEventStoreWithGetAllIds eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository repository;
 
-        public AggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public AggregateRootRepository(IEventStoreWithGetAllIds eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
         {
             this.eventStore = eventStore;
             this.snapshotStore = snapshotStore;
@@ -36,7 +37,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public IEnumerable<IAggregateRoot> GetAll(Type aggregateType)
         {
-            throw new NotImplementedException();
+            var ids = this.eventStore.GetAllIds();
+            return ids.Select(aggregateId => this.GetLatest(aggregateType, aggregateId));
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -12,12 +14,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class DashboardViewModel : BaseViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IInterviewerDashboardFactory dashboardFactory;
         readonly IPrincipal principal;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
+            IInterviewerDashboardFactory dashboardFactory,
             IPrincipal principal)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.dashboardFactory = dashboardFactory;
             this.principal = principal;
         }
 
@@ -38,12 +43,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             CompletedInterviewsCount = 7;
             RejectedInterviewsCount = 2;
 
-            DashboardItems = new DashboardItemViewModel[]
-            {
-                new DashboardItemViewModel(), 
-                new DashboardItemViewModel(), 
-                new DashboardItemViewModel(), 
-            };
+            var dashboardItems = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
+            DashboardItems = dashboardItems.ToArray();
         }
 
         private string dashboardTitle;
