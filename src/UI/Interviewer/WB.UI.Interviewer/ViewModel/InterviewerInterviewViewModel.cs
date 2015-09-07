@@ -1,13 +1,13 @@
 using System.Linq;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -18,7 +18,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         readonly IStatefulInterviewRepository interviewRepository;
         readonly IViewModelNavigationService viewModelNavigationService;
-        readonly IDataCollectionAuthentication authenticationService;
+        private readonly IPrincipal principal;
 
         public InterviewerInterviewViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
@@ -30,14 +30,14 @@ namespace WB.UI.Interviewer.ViewModel
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
-            IDataCollectionAuthentication authenticationService,
+            IPrincipal principal,
             GroupStateViewModel groupState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
-            this.authenticationService = authenticationService;
+            this.principal = principal;
         }
 
 
@@ -55,8 +55,8 @@ namespace WB.UI.Interviewer.ViewModel
 
         void SignOut()
         {
-            authenticationService.LogOff();
-            this.viewModelNavigationService.NavigateTo<LoginActivityViewModel>();
+            this.principal.SignOut();
+            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
         public override void NavigateToPreviousViewModel()
