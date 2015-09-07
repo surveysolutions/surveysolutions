@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
 using WB.Core.SharedKernels.Enumerator.Entities;
@@ -405,7 +406,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string QuestionnaireId { get { return this.QuestionnaireIdentity.ToString(); } }
-
+        public Guid InterviewerId { get { return this.interviewerId; } }
+        public InterviewStatus Status { get { return status; } }
         public Guid Id { get; set; }
 
         public IReadOnlyDictionary<string, BaseInterviewAnswer> Answers

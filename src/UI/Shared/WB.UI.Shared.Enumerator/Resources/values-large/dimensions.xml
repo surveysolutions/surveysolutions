@@ -2,6 +2,7 @@
 
 <resources>
 
+  <dimen name="textsize_9">9sp</dimen>
   <dimen name="textsize_12">12sp</dimen>
   <dimen name="textsize_14">14sp</dimen>
   <dimen name="textsize_16">16sp</dimen>
