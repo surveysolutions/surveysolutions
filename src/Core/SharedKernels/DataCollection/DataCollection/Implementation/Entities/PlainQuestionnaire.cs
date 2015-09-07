@@ -21,8 +21,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
     {
         public ISubstitutionService SubstitutionService
         {
-            get { return ServiceLocator.Current.GetInstance<ISubstitutionService>(); }
+            get
+            {
+                return this.substitutionService ??
+                       (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
+            }
         }
+
+        private ISubstitutionService substitutionService;
 
         #region State
 
@@ -35,6 +41,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IComposite> entityCache = null;
         private List<Guid> sectionCache = null;
 
+        private Dictionary<string, HashSet<Guid>> cacheOfSubstitutionReferencedQuestions = null;
+
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroupsAndRosters = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingGroups = new Dictionary<Guid, IEnumerable<Guid>>();
         private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingRosters = new Dictionary<Guid, IEnumerable<Guid>>();
@@ -43,7 +51,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>(); 
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+
+
 
         internal QuestionnaireDocument QuestionnaireDocument
         {
@@ -75,7 +85,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return this.sectionCache ?? (this.sectionCache = this.innerDocument.Children.Cast<IGroup>().Where(x => x != null).Select(x => x.PublicKey).ToList());
             }
         }
-        
+
         private Dictionary<Guid, IQuestion> QuestionCache
         {
             get
@@ -100,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                             group => group));
             }
         }
-        
+
         #endregion
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
@@ -113,10 +123,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version, null) { }
+            : this(document, () => version, null)
+        { }
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? responsibleId)
-            : this(document, () => version, responsibleId) { }
+            : this(document, () => version, responsibleId)
+        { }
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
             Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
@@ -199,7 +211,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
         }
-        
+
         public string GetQuestionTitle(Guid questionId)
         {
             return this.GetQuestionOrThrow(questionId).QuestionText;
@@ -468,7 +480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Count(this.IsRosterGroup);
         }
 
-        
+
         public bool IsRosterGroup(Guid groupId)
         {
             IGroup @group = this.GetGroup(groupId);
@@ -530,7 +542,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             if (!this.cacheOfChildInterviewerQuestions.ContainsKey(groupId))
             {
-                this.cacheOfChildInterviewerQuestions[groupId] = 
+                this.cacheOfChildInterviewerQuestions[groupId] =
                     this.GetGroupOrThrow(groupId)
                         .Children.OfType<IQuestion>()
                         .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
@@ -663,7 +675,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetCascadingQuestionsThatDependUponQuestion(Guid questionId)
         {
             var result = new List<Guid>();
-            var foundItems = new List<Guid>{questionId};
+            var foundItems = new List<Guid> { questionId };
             bool itemsAdded = true;
 
             while (itemsAdded)
@@ -672,16 +684,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 foreach (var foundItem in foundItems)
                 {
                     foundItems = QuestionCache.Values.Where(x =>
+                    {
+                        var question = x as SingleQuestion;
+                        var isCascadingQuestion = question != null &&
+                            question.CascadeFromQuestionId.HasValue;
+                        if (isCascadingQuestion)
                         {
-                            var question = x as SingleQuestion;
-                            var isCascadingQuestion = question != null &&
-                                question.CascadeFromQuestionId.HasValue;
-                            if (isCascadingQuestion)
-                            {
-                                return question.CascadeFromQuestionId == foundItem;
-                            }
-                            return false;
-                        }).Select(x => x.PublicKey).ToList();
+                            return question.CascadeFromQuestionId == foundItem;
+                        }
+                        return false;
+                    }).Select(x => x.PublicKey).ToList();
 
                     itemsAdded = itemsAdded || foundItems.Count > 0;
                     result.AddRange(foundItems);
@@ -694,19 +706,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetCascadingQuestionsThatDirectlyDependUponQuestion(Guid id)
         {
             return questionCache.Values.Where(x =>
-                {
-                    var question = x as AbstractQuestion;
-                    return question != null && question.CascadeFromQuestionId.HasValue && question.CascadeFromQuestionId.Value == id;
-                }).Select(x => x.PublicKey);
+            {
+                var question = x as AbstractQuestion;
+                return question != null && question.CascadeFromQuestionId.HasValue && question.CascadeFromQuestionId.Value == id;
+            }).Select(x => x.PublicKey);
         }
 
         public IEnumerable<Guid> GetAllChildCascadingQuestions()
         {
             return questionCache.Values.Where(x =>
-                {
-                    var question = x as AbstractQuestion;
-                    return question != null && question.CascadeFromQuestionId.HasValue;
-                }).Select(x => x.PublicKey);
+            {
+                var question = x as AbstractQuestion;
+                return question != null && question.CascadeFromQuestionId.HasValue;
+            }).Select(x => x.PublicKey);
         }
 
         public bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue)
@@ -732,11 +744,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return parentValuesFromQuestion.Contains(parentValue);
         }
 
+        private Dictionary<string, HashSet<Guid>> GetAllSubstitutionReferences()
+        {
+            var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
+            foreach (var question in this.GetAllQuestions())
+            {
+                var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
+
+                foreach (var substitutedVariableName in substitutedVariableNames)
+                {
+                    if (!referenceOccurences.ContainsKey(substitutedVariableName))
+                        referenceOccurences.Add(substitutedVariableName, new HashSet<Guid>());
+                    if (!referenceOccurences[substitutedVariableName].Contains(question.PublicKey))
+                        referenceOccurences[substitutedVariableName].Add(question.PublicKey);
+                }
+            }
+            return referenceOccurences;
+        }
+
         public IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId)
         {
             string targetVariableName = this.GetQuestionVariableName(questionId);
 
-            foreach (var question in this.GetAllQuestions())
+            if (!string.IsNullOrWhiteSpace(targetVariableName))
+            {
+                if (cacheOfSubstitutionReferencedQuestions == null)
+                    cacheOfSubstitutionReferencedQuestions = GetAllSubstitutionReferences();
+
+                if (cacheOfSubstitutionReferencedQuestions.ContainsKey(targetVariableName))
+                {
+                    foreach (var guid in cacheOfSubstitutionReferencedQuestions[targetVariableName])
+                    {
+                        yield return guid;
+                    }
+                }
+            }
+
+            /*foreach (var question in this.GetAllQuestions())
             {
                 var substitutedVariableNames =
                     this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
@@ -744,7 +788,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 {
                     yield return question.PublicKey;
                 }
-            }
+            }*/
 
             var rostersAffectedByRosterTitleQuestion = this.GetRostersAffectedByRosterTitleQuestion(questionId);
             foreach (var rosterId in rostersAffectedByRosterTitleQuestion)
@@ -930,7 +974,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private static bool IsRosterGroup(IGroup group)
         {
-            return  group.IsRoster;
+            return group.IsRoster;
         }
 
         private Guid GetRosterSource(Guid rosterId)
@@ -953,7 +997,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IComposite GetGroupOrQuestionOrThrow(Guid groupOrQuestionId)
         {
-            var groupOrQuestion = (IComposite) this.GetGroup(groupOrQuestionId) ?? this.GetQuestion(groupOrQuestionId);
+            var groupOrQuestion = (IComposite)this.GetGroup(groupOrQuestionId) ?? this.GetQuestion(groupOrQuestionId);
 
             if (groupOrQuestion == null)
                 throw new QuestionnaireException(string.Format("Group or question with id '{0}' is not found.", groupOrQuestionId));
