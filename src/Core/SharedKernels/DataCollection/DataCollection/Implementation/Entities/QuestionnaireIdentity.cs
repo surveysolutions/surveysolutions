@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.SharedKernels.Enumerator.Entities
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     public struct QuestionnaireIdentity
     {
@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.Entities
 
         public override string ToString()
         {
-            return string.Format("{0}${1}", QuestionnaireId.FormatGuid(), this.Version);
+            return string.Format("{0}${1}", this.QuestionnaireId.FormatGuid(), this.Version);
         }
 
         public override int GetHashCode()
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Entities
             {
                 return false;
             }
-            return obj is QuestionnaireIdentity && Equals((QuestionnaireIdentity)obj);
+            return obj is QuestionnaireIdentity && this.Equals((QuestionnaireIdentity)obj);
         }
     }
 }

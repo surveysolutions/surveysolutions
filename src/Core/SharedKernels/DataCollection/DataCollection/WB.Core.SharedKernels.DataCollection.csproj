@@ -252,6 +252,7 @@
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
+    <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
@@ -306,6 +307,9 @@
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
     <Compile Include="Views\UserDocument.cs" />
+    <Compile Include="WebApi\InterviewApiView.cs" />
+    <Compile Include="WebApi\QuestionnaireApiView.cs" />
+    <Compile Include="WebApi\InterviewerApiView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
