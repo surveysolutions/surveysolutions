@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Practices.ServiceLocation;
 
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Accessors
 {
@@ -47,6 +49,11 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
         }
 
+        public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
@@ -85,6 +92,16 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
                 return null;
 
             return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
+        }
+
+        public Stream GetAssemblyAsStream(Guid questionnaireId, long questionnaireVersion)
+        {
+            return this.fileSystemAccessor.ReadFile(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
+        }
+
+        public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
+        {
+            return this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
         }
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
