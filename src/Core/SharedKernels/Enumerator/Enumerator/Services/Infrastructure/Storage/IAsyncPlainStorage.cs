@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
-namespace WB.Core.BoundedContexts.Tester.Services.Infrastructure
+namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
 {
     public interface IAsyncPlainStorage<TEntity> where TEntity : class, IPlainStorageEntity
     {
