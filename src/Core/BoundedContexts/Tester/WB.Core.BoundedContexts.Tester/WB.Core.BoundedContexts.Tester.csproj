@@ -42,8 +42,6 @@
     <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\TesterInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
-    <Compile Include="Services\Infrastructure\IAsyncPlainStorage.cs" />
-    <Compile Include="Services\Infrastructure\IPlainStorageEntity.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
@@ -144,7 +142,9 @@
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\Infrastructure\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>

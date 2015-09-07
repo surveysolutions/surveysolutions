@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -18,7 +19,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Controls;
+using WB.UI.Interviewer.Infrastructure.Internals.Security;
 using WB.UI.Interviewer.Utils;
 
 namespace WB.UI.Interviewer
@@ -144,14 +147,13 @@ namespace WB.UI.Interviewer
         {
             var interviewId = Guid.NewGuid();
 
-            Guid interviewUserId = Mvx.Resolve<IDataCollectionAuthentication>().CurrentUser.Id;
-            Guid supervisorId = Mvx.Resolve<IDataCollectionAuthentication>().SupervisorId;
+            var interviewerIdentity = (InterviewerIdentity)Mvx.Resolve<IPrincipal>().CurrentUserIdentity;
 
             try
             {
                 ServiceLocator.Current.GetInstance<ICommandService>()
-                    .Execute(new CreateInterviewOnClientCommand(interviewId, interviewUserId,
-                        questionnaireId, questionnaireVersion, DateTime.UtcNow, supervisorId));
+                    .Execute(new CreateInterviewOnClientCommand(interviewId, interviewerIdentity.UserId,
+                        questionnaireId, questionnaireVersion, DateTime.UtcNow, interviewerIdentity.SupervisorId));
 
                 this.LogManipulator.CreatePublicRecord(interviewId);
 

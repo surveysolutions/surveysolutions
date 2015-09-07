@@ -222,6 +222,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Globalization" />
+    <Reference Include="System.IO" />
     <Reference Include="System.Linq.Expressions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Primitives" />
@@ -274,20 +275,19 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
     <Compile Include="Infrastructure\Internals\FriendlyErrorMessageService.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\FlurlRestClient.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\FlurlRestClientProvider.cs" />
     <Compile Include="Infrastructure\Internals\Rest\ITesterNetworkService.cs" />
+    <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterUserIdentity.cs" />
     <Compile Include="Infrastructure\Internals\Settings\TesterSettings.cs" />
     <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
     <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
-    <Compile Include="Infrastructure\Internals\Json\NewtonJsonSerializer.cs" />
+    <Compile Include="Infrastructure\Internals\Json\NewtonJsonUtils.cs" />
     <Compile Include="Infrastructure\Internals\Log\XamarinInsightsLogger.cs" />
     <Compile Include="Infrastructure\Internals\Rest\TesterNetworkService.cs" />
-    <Compile Include="Infrastructure\Internals\Rest\RestExtensions.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestMessageHandler.cs" />
-    <Compile Include="Infrastructure\Internals\Rest\RestService.cs" />
-    <Compile Include="Infrastructure\Internals\Storage\SiaqodbPlainStorage.cs" />
-    <Compile Include="Infrastructure\ITesterSettings.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
     <Compile Include="Ninject\TesterUIModule.cs" />
@@ -408,7 +408,9 @@
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Infrastructure\Internals\Storage\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
