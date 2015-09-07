@@ -29,11 +29,12 @@ namespace WB.UI.Interviewer
 
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof(LoginActivityViewModel), typeof(LoginActivity)},
+                {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishIntallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
                 {typeof(SettingsViewModel), typeof(SettingsActivity)},
-                {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)}
+                {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
+                {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -62,7 +63,7 @@ namespace WB.UI.Interviewer
             return base.GetViewModelAssemblies().Union(new[]
             {
                 typeof(AndroidCoreRegistry).Assembly,
-                typeof(LoginActivityViewModel).Assembly,
+                typeof(LoginViewModel).Assembly,
 
             }).ToArray();
         }
