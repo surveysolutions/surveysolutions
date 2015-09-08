@@ -5,14 +5,17 @@ using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -25,6 +28,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly ICommandService commandService;
+        private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
+        private readonly ISyncPackageIdsStorage syncPackageIdsStorage;
+        private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
+        private readonly ICapiCleanUpService capiCleanUpService;
+        private readonly IPrincipal principal;
         private readonly CancellationTokenSource synchronizationCancellationTokenSource = new CancellationTokenSource();
 
         public SynchronizationViewModel(
@@ -34,7 +42,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IQuestionnaireModelBuilder questionnaireModelBuilder,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IPlainQuestionnaireRepository questionnaireRepository,
-            ICommandService commandService)
+            ICommandService commandService,
+            ICapiDataSynchronizationService capiDataSynchronizationService,
+            ISyncPackageIdsStorage syncPackageIdsStorage,
+            IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
+            ICapiCleanUpService capiCleanUpService,
+            IPrincipal principal)
         {
             this.synchronizationService = synchronizationService;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -43,6 +56,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.questionnaireModelRepository = questionnaireModelRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
+            this.capiDataSynchronizationService = capiDataSynchronizationService;
+            this.syncPackageIdsStorage = syncPackageIdsStorage;
+            this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
+            this.capiCleanUpService = capiCleanUpService;
+            this.principal = principal;
         }
 
         private bool isSynchronizationInProgress;
@@ -65,8 +83,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     return;
                 }
 
+                await this.UploadCompletedInterviewsAsync();
+                await this.UploadImagesByCompletedInterviewsAsync();
                 await this.DownloadCensusQuestionnairesAsync();
                 await this.DownloadInterviewsAsync();
+                await this.DownloadInterviewPackagesAsync();
             }
             catch (Exception ex)
             {
@@ -95,6 +116,57 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             foreach (var interview in interviews)
             {
                 await this.DownloadQuestionnaireIfDoesNotExistsAsync(interview.QuestionnaireIdentity);
+
+                #warning NEW SYNCHRONIZATION CODE BY INTERVIEWS SHOULD BE HERE
+            }
+        }
+
+        private async Task DownloadInterviewPackagesAsync()
+        {
+            var lastKnownPackageId = this.syncPackageIdsStorage.GetLastStoredPackageId();
+            var interviewPackages = await this.synchronizationService.GetInterviewPackagesAsync(lastKnownPackageId);
+
+            foreach (var synchronizationChunkMeta in interviewPackages)
+            {
+                var package = await this.synchronizationService.GetInterviewPackageAsync(
+                    packageId: synchronizationChunkMeta.Id,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: synchronizationCancellationTokenSource.Token);
+
+                this.capiDataSynchronizationService.ProcessDownloadedPackage(package, synchronizationChunkMeta.ItemType);
+                this.syncPackageIdsStorage.Append(package.PackageId, synchronizationChunkMeta.SortIndex);
+            }
+        }
+
+        private async Task UploadCompletedInterviewsAsync()
+        {
+            var dataByChuncks = this.capiDataSynchronizationService.GetItemsToPush();
+            foreach (var chunckDescription in dataByChuncks)
+            {
+                await this.synchronizationService.UploadInterviewAsync(
+                    interviewId: chunckDescription.EventSourceId,
+                    content: chunckDescription.Content,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: synchronizationCancellationTokenSource.Token);
+
+                this.interviewSynchronizationFileStorage.MoveInterviewImagesToSyncFolder(chunckDescription.EventSourceId);
+                this.capiCleanUpService.DeleteInterview(chunckDescription.EventSourceId);
+            }
+        }
+
+        private async Task UploadImagesByCompletedInterviewsAsync()
+        {
+            var images = this.interviewSynchronizationFileStorage.GetImagesByInterviews();
+            foreach (var image in images)
+            {
+                await this.synchronizationService.UploadInterviewImageAsync(
+                    interviewId: image.InterviewId,
+                    fileName: image.FileName,
+                    fileData: image.GetData(),
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: synchronizationCancellationTokenSource.Token);
+
+                this.interviewSynchronizationFileStorage.RemoveInterviewImage(image.InterviewId, image.FileName);
             }
         }
 
@@ -106,6 +178,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                    questionnaire: questionnaireIdentity,
                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                    token: synchronizationCancellationTokenSource.Token);
+
                 var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaire.Document);
                 this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
                 this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaire.Document);
@@ -118,6 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                    questionnaire: questionnaireIdentity,
                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                    token: synchronizationCancellationTokenSource.Token);
+
                 this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireAssembly);   
             }
         }

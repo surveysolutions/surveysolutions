@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.UI.Interviewer.Infrastructure
+namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
     public class NewtonJsonUtils : IJsonUtils
     {
@@ -43,7 +42,8 @@ namespace WB.UI.Interviewer.Infrastructure
                     }
                 };
 
-        public NewtonJsonUtils() : this(new JsonUtilsSettings{ TypeNameHandling = TypeSerializationSettings.ObjectsOnly})
+        public NewtonJsonUtils()
+            : this(new JsonUtilsSettings { TypeNameHandling = TypeSerializationSettings.ObjectsOnly })
         {
         }
 
@@ -75,7 +75,7 @@ namespace WB.UI.Interviewer.Infrastructure
         {
             return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
         }
-        
+
         public T Deserialize<T>(byte[] payload)
         {
             try

@@ -1,5 +1,5 @@
-using System.Net;
-using WB.Core.GenericSubdomains.Portable.Rest;
+﻿using System.Net;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Rest
 {

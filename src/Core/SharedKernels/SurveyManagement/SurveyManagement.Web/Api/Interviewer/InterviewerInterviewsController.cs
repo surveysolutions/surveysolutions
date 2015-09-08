@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -52,8 +53,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [Route("packages/{lastPackageId}")]
-        public IEnumerable<SynchronizationChunkMeta> GetPackages(string lastPackageId)
+        [Route("packages/{lastPackageId?}")]
+        public IEnumerable<SynchronizationChunkMeta> GetPackages(string lastPackageId = null)
         {
             return this.syncManager.GetInterviewPackageIdsWithOrder(
                 userId: this.globalInfoProvider.GetCurrentUser().Id,
@@ -82,15 +83,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpPost]
         [Route("{id:guid}/image")]
-        public HttpResponseMessage PostImage(Guid id, [FromBody]string fileName, [FromBody]byte[] image)
+        public HttpResponseMessage PostImage(PostFileRequest request)
         {
-            this.plainInterviewFileStorage.StoreInterviewBinaryData(id, fileName, image);
+            this.plainInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         private Guid GetInterviewerDeviceId()
         {
-            return Guid.Parse(this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId);
+            return this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId.ToGuid();
         }
     }
 }
