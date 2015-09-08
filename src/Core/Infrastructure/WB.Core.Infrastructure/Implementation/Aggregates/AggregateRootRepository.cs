@@ -11,11 +11,11 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class AggregateRootRepository : IAggregateRootRepository
     {
-        private readonly IEventStoreWithGetAllIds eventStore;
+        private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository repository;
 
-        public AggregateRootRepository(IEventStoreWithGetAllIds eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public AggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
         {
             this.eventStore = eventStore;
             this.snapshotStore = snapshotStore;
@@ -33,12 +33,6 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             CommittedEventStream eventStream = this.eventStore.ReadFrom(aggregateId, minVersion, int.MaxValue);
 
             return this.repository.Load(aggregateType, snapshot, eventStream);
-        }
-
-        public IEnumerable<IAggregateRoot> GetAll(Type aggregateType)
-        {
-            var ids = this.eventStore.GetAllIds();
-            return ids.Select(aggregateId => this.GetLatest(aggregateType, aggregateId));
         }
     }
 }
