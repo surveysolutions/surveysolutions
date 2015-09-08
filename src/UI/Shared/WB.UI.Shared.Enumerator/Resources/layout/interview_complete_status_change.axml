@@ -76,6 +76,10 @@
       <LinearLayout style="@style/Interview_Question_Answer">
         <EditText
             android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:gravity="top|left"
             style="@style/Interview_Question_Answer_TextEditor"
             local:MvxBind="Text CompleteComment; Hint Localization('TextQuestion_Hint');" />
       </LinearLayout>

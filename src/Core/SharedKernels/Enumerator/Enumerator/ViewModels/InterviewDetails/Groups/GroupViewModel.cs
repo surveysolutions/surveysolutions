@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             GroupModel groupModel;
             if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(navigationIdentity.TargetGroup.Id, out groupModel))
-                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(entityIdentity));
+                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(navigationIdentity.TargetGroup));
 
             this.Enablement.Init(interviewId, navigationIdentity.TargetGroup, navigationState);
             this.GroupState.Init(interviewId, navigationIdentity.TargetGroup);
