@@ -30,7 +30,7 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         {
             foreach (CommittedEvent committedEvent in history)
             {
-                if (!_mappingStrategy.CanHandleEvent(this, committedEvent.GetType()))
+                if (!_mappingStrategy.CanHandleEvent(this, committedEvent.Payload.GetType()))
                     return false;
             }
 
