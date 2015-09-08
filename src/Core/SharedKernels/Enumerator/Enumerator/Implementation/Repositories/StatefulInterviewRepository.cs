@@ -33,10 +33,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public IEnumerable<IStatefulInterview> GetAll()
         {
-//            eventStore
+            var ids = this.eventStore.GetAllIds();
 
-            var statefullInterview = this.aggregateRootRepository.GetAll(typeof(StatefulInterview));
-            return statefullInterview.Cast<IStatefulInterview>();
+            foreach (var aggregateId in ids)
+            {
+                var aggregateRoot = this.aggregateRootRepository.GetLatest(typeof (StatefulInterview), aggregateId);
+                
+                if (aggregateRoot != null)
+                    yield return (IStatefulInterview)aggregateRoot;
+            }
         }
     }
 }

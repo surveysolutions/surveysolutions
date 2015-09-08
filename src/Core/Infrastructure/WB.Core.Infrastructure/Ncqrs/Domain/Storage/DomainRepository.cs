@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Sourcing.Mapping;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.Infrastructure.Aggregates;
 
@@ -43,6 +44,12 @@ namespace Ncqrs.Domain.Storage
             if (committedEventStream.Count() > 0)
             {
                 aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+
+                var mappedAggregateRoot = aggregateRoot as MappedAggregateRoot;
+                if (mappedAggregateRoot != null
+                    && !mappedAggregateRoot.CanApplyAllEvents(committedEventStream))
+                    return null;
+                
                 aggregateRoot.InitializeFromHistory(committedEventStream);
             }
 
