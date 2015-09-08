@@ -36,9 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             foreach (var interview in interviewAggregateRoots)
             {
-//                if (interview.InterviewerId != interviewerId)
-//                    continue;
-
                 var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
                 DashboardItemViewModel dashboardItem = new DashboardItemViewModel();
