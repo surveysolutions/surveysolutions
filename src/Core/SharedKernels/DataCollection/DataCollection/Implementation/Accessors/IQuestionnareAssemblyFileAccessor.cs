@@ -16,7 +16,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 
         byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion);
 
-        Stream GetAssemblyAsStream(Guid questionnaireId, long questionnaireVersion);
         bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion);
     }
 }
