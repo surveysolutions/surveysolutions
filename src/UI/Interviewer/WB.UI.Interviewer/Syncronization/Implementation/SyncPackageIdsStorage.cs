@@ -8,14 +8,15 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Interviewer.Syncronization.Implementation
 {
     internal class SyncPackageIdsStorage : ISyncPackageIdsStorage, IBackupable
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IPrincipal principal;
         private readonly ISQLiteConnectionFactory connectionFactory;
-        private const string oldDbFileName = "syncPackages";
         private const string dbFileName = "synchronizationPackages";
 
         private string FullPathToDataBase
@@ -26,9 +27,10 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
             }
         }
 
-        public SyncPackageIdsStorage(IFileSystemAccessor fileSystemAccessor)
+        public SyncPackageIdsStorage(IFileSystemAccessor fileSystemAccessor, IPrincipal principal)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.principal = principal;
             PluginLoader.Instance.EnsureLoaded();
             this.connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
             using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
@@ -37,7 +39,7 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
             }
         }
 
-        public void Append(string packageId, string packageType, Guid userId, long sortIndex)
+        public void Append(string packageId, long sortIndex)
         {
             using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
             {
@@ -45,39 +47,21 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
                 {
                     PackageId = packageId,
                     SortIndex = sortIndex,
-                    UserId = userId.FormatGuid(),
-                    Type = packageType
+                    UserId = this.principal.CurrentUserIdentity.UserId.FormatGuid(),
+                    Type = "Interview"
                 };
 
                 connection.Insert(newId);
             }
         }
 
-        public string GetLastStoredPackageId(string type, Guid currentUserId)
+        public string GetLastStoredPackageId()
         {
-            return this.LastStoredPackageId(type, currentUserId);
-        }
-
-        public void CleanAllInterviewIdsForUser(Guid userId)
-        {
-            var userIdAsString = userId.FormatGuid();
-            using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
-            {
-                var interviewRecordsForUser = connection.Table<SyncPackageId>()
-                    .Where(x => x.Type == SyncItemType.Interview && x.UserId == userIdAsString)
-                    .ToList();
-
-                interviewRecordsForUser.ForEach(x => connection.Delete(x));
-            }
-        }
-
-        private string LastStoredPackageId(string type, Guid userId)
-        {
-            var userIdAsString = userId.FormatGuid();
+            var userIdAsString = this.principal.CurrentUserIdentity.UserId.FormatGuid();
             using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
             {
                 var lastStoredChunkId = connection.Table<SyncPackageId>()
-                    .Where(x => x.Type == type && x.UserId == userIdAsString)
+                    .Where(x => x.Type == "Interview" && x.UserId == userIdAsString)
                     .OrderBy(x => x.SortIndex)
                     .LastOrDefault();
 
@@ -90,14 +74,27 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
             }
         }
 
-        public string GetChunkBeforeChunkWithId(string lastKnownPackageId, Guid userId)
+        public void CleanAllInterviewIdsForUser()
+        {
+            var userIdAsString = this.principal.CurrentUserIdentity.UserId.FormatGuid();
+            using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
+            {
+                var interviewRecordsForUser = connection.Table<SyncPackageId>()
+                    .Where(x => x.Type == SyncItemType.Interview && x.UserId == userIdAsString)
+                    .ToList();
+
+                interviewRecordsForUser.ForEach(x => connection.Delete(x));
+            }
+        }
+
+        public string GetChunkBeforeChunkWithId(string lastKnownPackageId)
         {
             if (string.IsNullOrWhiteSpace(lastKnownPackageId))
             {
                 return null;
             }
 
-            var userIdAsString = userId.FormatGuid();
+            var userIdAsString = this.principal.CurrentUserIdentity.UserId.FormatGuid();
             var stringId = lastKnownPackageId;
             using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
             {

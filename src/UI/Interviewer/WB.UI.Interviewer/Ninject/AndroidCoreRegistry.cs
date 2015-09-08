@@ -8,7 +8,6 @@ using Ninject.Activation;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Rest;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
