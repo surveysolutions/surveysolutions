@@ -6,17 +6,13 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.InterviewMetaInfo;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -27,41 +23,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IChangeLogManipulator changelog;
         private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
         private readonly ICommandService commandService;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IJsonUtils jsonUtils;
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory;
-
-        private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
-        private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
+        private readonly IPrincipal principal;
 
         public CapiDataSynchronizationService(
             IChangeLogManipulator changelog,
             ICommandService commandService,
-            IPlainQuestionnaireRepository questionnaireRepository,
             ICapiCleanUpService capiCleanUpService,
             ILogger logger,
             ICapiSynchronizationCacheService capiSynchronizationCacheService,
             IJsonUtils jsonUtils,
             IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
-            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
-            IQuestionnaireModelBuilder questionnaireModelBuilder)
+            IPrincipal principal)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
             this.jsonUtils = jsonUtils;
             this.interviewIntoFactory = interviewIntoFactory;
+            this.principal = principal;
             this.changelog = changelog;
             this.commandService = commandService;
             this.capiCleanUpService = capiCleanUpService;
-            this.questionnaireRepository = questionnaireRepository;
-            this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
-            this.questionnaireModelRepository = questionnaireModelRepository;
-            this.questionnaireModelBuilder = questionnaireModelBuilder;
         }
 
-        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType, Guid synchronizedUserId)
+        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType)
         {
             switch (itemType)
             {
@@ -69,14 +55,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     this.UpdateInterview(item);
                     break;
                 case SyncItemType.DeleteInterview:
-                    this.DeleteInterview(item, synchronizedUserId);
+                    this.DeleteInterview(item, this.principal.CurrentUserIdentity.UserId);
                     break;
             }
         }
 
-        public IList<ChangeLogRecordWithContent> GetItemsToPush(Guid userId)
+        public IList<ChangeLogRecordWithContent> GetItemsToPush()
         {
-            var records = this.changelog.GetClosedDraftChunksIds(userId);
+            var records = this.changelog.GetClosedDraftChunksIds(this.principal.CurrentUserIdentity.UserId);
             return records.Select(chunk => new ChangeLogRecordWithContent(chunk.RecordId, chunk.EventSourceId, this.changelog.GetDraftRecordContent(chunk.RecordId))).ToList();
         }
 
