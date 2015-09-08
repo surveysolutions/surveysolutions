@@ -144,9 +144,6 @@
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
     <value>Linked question references question not under roster.</value>
   </data>
-  <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has validation condition referencing question from deeper roster level.</value>
-  </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title substitution cannot be marked as prefilled.</value>
   </data>
@@ -371,12 +368,6 @@
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
     <value>Max number of answers for roster size question cannot be greater then 40.</value>
-  </data>
-  <data name="WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has condition referencing question from deeper roster level.</value>
-  </data>
-  <data name="WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Group has condition referencing question from deeper roster level.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Sub-section can have no more than 10 parent sub-sections.</value>
