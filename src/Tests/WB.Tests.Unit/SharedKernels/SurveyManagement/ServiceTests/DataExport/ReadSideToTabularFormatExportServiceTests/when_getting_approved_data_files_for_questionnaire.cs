@@ -1,23 +1,28 @@
 ﻿using System;
+using System.IO;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.ReadSideToTabularFormatExportServiceTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.ReadSideToTabularFormatExportServiceTests
 {
-    internal class when_getting_approved_data_files_for_questionnaire : SqlToTabDataExportServiceTestContext
+    internal class when_getting_approved_data_files_for_questionnaire : ReadSideToTabularFormatExportServiceTestContext
     {
         Establish context = () =>
         {
-            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(false);
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName, "2.txt" });
+            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                .Returns<string, string>(Path.Combine);
             var approvedInterviewId = Guid.NewGuid();
             var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
 
@@ -42,31 +47,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 "id2");
 
             var questionnaireExportStructure = Create.QuestionnaireExportStructure();
-            questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), Create.HeaderStructureForLevel());
-            sqlToTabDataExportService = CreateSqlToTabDataExportService(csvWriterService: csvWriterServiceMock.Object,
+            var headerStructureForLevel = Create.HeaderStructureForLevel();
+            headerStructureForLevel.LevelName = "1";
+            questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);
+            readSideToTabularFormatExportService = CreateReadSideToTabularFormatExportService(csvWriterService: csvWriterServiceMock.Object,
                 fileSystemAccessor: fileSystemAccessor.Object, interviewStatuses: interviewStatuses, questionnaireExportStructure: questionnaireExportStructure);
         };
 
         Because of = () =>
-            filePaths = sqlToTabDataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, "");
-
-        It should_return_one_element = () =>
-            filePaths.Length.ShouldEqual(1);
+            readSideToTabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, "").WaitAndUnwrapException();
 
         It should_return_correct_file_name = () =>
-            filePaths[0].ShouldEqual(fileName);
+           fileSystemAccessor.Verify(x => x.OpenOrCreateFile(fileName, true), Times.Once);
 
         It should_record_one_completed_action = () =>
            csvWriterServiceMock.Verify(x => x.WriteField("Completed"), Times.Once);
 
         It should_record_one_approved_by_hq_action = () =>
-        csvWriterServiceMock.Verify(x => x.WriteField("ApprovedByHeadquarter"), Times.Once);
+            csvWriterServiceMock.Verify(x => x.WriteField("ApprovedByHeadquarter"), Times.Once);
 
-        private static SqlToDataExportService sqlToTabDataExportService;
+        private static ReadSideToTabularFormatExportService readSideToTabularFormatExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
-        private static string[] filePaths;
         private static string fileName = "1.tab";
         private static Mock<ICsvWriterService> csvWriterServiceMock = new Mock<ICsvWriterService>();
+        private static Mock<IFileSystemAccessor> fileSystemAccessor;
     }
 }

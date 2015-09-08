@@ -1,76 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using StatData.Core;
-using StatData.Writers;
-using System.Text;
-using System.Threading.Tasks;
 using ddidotnet;
 using Main.Core.Entities.SubEntities;
-using Polly;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Resources;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
     internal class SqlToDataExportService : IDataExportService
     {
-        private readonly ICsvWriterFactory csvWriterFactory;
         private readonly ITransactionManagerProvider transactionManager;
-        private readonly string separator;
-        private readonly Func<string, string> createDataFileName;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly string parentId = "ParentId";
-        private readonly string commentsFileName = "interview_comments";
-        private readonly string interviewActionsFileName = "interview_actions";
-        private readonly IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
-        private readonly IJsonUtils jsonUtils;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
 
         public SqlToDataExportService(
             IFileSystemAccessor fileSystemAccessor,
-            ICsvWriterFactory csvWriterFactory, 
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage, 
-            IJsonUtils jsonUtils, 
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             ITabFileReader tabReader,
             IDatasetWriterFactory datasetWriterFactory,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage, 
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage)
+            ITabularFormatExportService tabularFormatExportService)
         {
-            this.csvWriterFactory = csvWriterFactory;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
-            this.interviewExportedDataStorage = interviewExportedDataStorage;
-            this.interviewActionsDataStorage = interviewActionsDataStorage;
-            this.jsonUtils = jsonUtils;
             this.transactionManager = transactionManager;
-            this.createDataFileName = ExportFileSettings.GetContentFileName;
-            this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
 
@@ -78,59 +49,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.datasetWriterFactory = datasetWriterFactory;
 
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-            this.interviewCommentariesStorage = interviewCommentariesStorage;
+            this.tabularFormatExportService = tabularFormatExportService;
         }
 
-        public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string targetFolder)
-        {
-            var structure = 
-                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                 questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
-
-            if (structure == null)
-                return;
-
-            foreach (var levels in structure.HeaderToLevelMap.Values)
-            {
-                var dataFilePath =
-                    fileSystemAccessor.CombinePath(targetFolder, createDataFileName(levels.LevelName));
-
-                using (var fileStream = fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
-                using (var tabWriter = csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-                {
-                    CreateHeaderForDataFile(tabWriter, levels);
-                }
-            }
-        }
-
-        private string DataFileNameExtension { get { return ".tab"; } }
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] GetDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string allDataFolderPath)
-        {
-            if (!fileSystemAccessor.IsDirectoryExists(allDataFolderPath))
-            {
-                fileSystemAccessor.CreateDirectory(allDataFolderPath);
-
-                this.ExportToTabFile(questionnaireId, questionnaireVersion, allDataFolderPath);
-                
-            }
-
-            return fileSystemAccessor.GetFilesInDirectory(allDataFolderPath)
-                .Where(fileName => fileName.EndsWith(DataFileNameExtension)).ToArray();
-        }
-
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            var dataFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath); 
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, dataFiles);
+            tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
         
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            var dataFiles = GetDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, basePath);
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
+            tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
 
         private void CollectLabels(QuestionnaireExportStructure structure, out Dictionary<string, string> labels, out Dictionary<string, Dictionary<double, string>> varValueLabels)
@@ -239,15 +173,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string[] CreateAndGetStataDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
-            var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, dataFiles);
+            tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
-            var dataFiles = GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, questionnaireVersion, basePath);
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, dataFiles);
+            tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
 
         public string CreateAndGetDDIMetadataFileForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
@@ -375,350 +309,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
             variable.Name = columnName;
             return variable;
-        }
-
-        public string[] GetDataFilesForQuestionnaireByInterviewsInApprovedState(Guid questionnaireId, long questionnaireVersion, string approvedDataFolderPath)
-        {
-            if (!fileSystemAccessor.IsDirectoryExists(approvedDataFolderPath))
-            {
-                fileSystemAccessor.CreateDirectory(approvedDataFolderPath);
-                
-                this.ExportToTabFile(questionnaireId, questionnaireVersion, approvedDataFolderPath,
-                    InterviewExportedAction.ApprovedByHeadquarter);
-            }
-
-            return fileSystemAccessor.GetFilesInDirectory(approvedDataFolderPath)
-                .Where(fileName => fileName.EndsWith(DataFileNameExtension)).ToArray();
-        }
-
-        private void CreateHeaderForActionFile(ICsvWriterService fileWriter)
-        {
-            foreach (var actionFileColumn in actionFileColumns)
-            {
-                fileWriter.WriteField(actionFileColumn);
-            }
-            fileWriter.NextRecord();
-        }
-
-        private void CreateHeaderForCommentsFile(ICsvWriterService fileWriter, int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
-        {
-            fileWriter.WriteField("Order");
-            fileWriter.WriteField("Originator");
-            fileWriter.WriteField("Role");
-            fileWriter.WriteField("Date");
-            fileWriter.WriteField("Time");
-            fileWriter.WriteField("Variable");
-            
-            if (hasAtLeastOneRoster)
-                fileWriter.WriteField("Roster");
-            fileWriter.WriteField("InterviewId");
-
-            for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
-            {
-                fileWriter.WriteField(string.Format("Id{0}", i));
-            }
-            fileWriter.WriteField("Comment");
-
-            fileWriter.NextRecord();
-        }
-
-        private void CreateHeaderForDataFile(ICsvWriterService fileWriter, HeaderStructureForLevel headerStructureForLevel)
-        {
-            fileWriter.WriteField(headerStructureForLevel.LevelIdColumnName);
-
-            if (headerStructureForLevel.IsTextListScope)
-            {
-                foreach (var name in headerStructureForLevel.ReferencedNames)
-                {
-                    fileWriter.WriteField(name);
-                }
-            }
-
-            foreach (ExportedHeaderItem question in headerStructureForLevel.HeaderItems.Values)
-            {
-                foreach (var columnName in question.ColumnNames)
-                {
-                    fileWriter.WriteField(columnName);
-                }
-            }
-
-            for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
-            {
-                fileWriter.WriteField(string.Format("{0}{1}", parentId, i + 1));
-            }
-            fileWriter.NextRecord();
-        }
-
-        private string[][] QueryFromCommentsTable(Guid questionnaireId, long version, int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster, bool exportOnlyApproved)
-        {
-            Expression<Func<InterviewCommentaries, bool>> queryComments =
-               interviewComments =>
-                   interviewComments.QuestionnaireId == questionnaireId.FormatGuid() && interviewComments.QuestionnaireVersion == version;
-
-            if (exportOnlyApproved)
-            {
-                queryComments =
-                     interviewComments =>
-                   interviewComments.QuestionnaireId == questionnaireId.FormatGuid() && interviewComments.QuestionnaireVersion == version && interviewComments.IsApprovedByHQ;
-            }
-
-            var comments =
-                interviewCommentariesStorage.Query(
-                    _ =>
-                        _.Where(queryComments)
-                            .SelectMany(
-                                interviewComments => interviewComments.Commentaries,
-                                (interview, comment) => new {interview.InterviewId, Comments = comment})
-                            .Select(
-                                i =>
-                                    new
-                                    {
-                                        i.InterviewId,
-                                        i.Comments.CommentSequence,
-                                        i.Comments.OriginatorName,
-                                        i.Comments.OriginatorRole,
-                                        i.Comments.Timestamp,
-                                        i.Comments.Variable,
-                                        i.Comments.Roster,
-                                        i.Comments.RosterVector,
-                                        i.Comments.Comment
-                                    }).ToList());
-
-            var result = new List<string[]>();
-
-            foreach (var interview in comments)
-            {
-                var resultRow = new List<string>();
-                resultRow.Add(interview.CommentSequence.ToString());
-                resultRow.Add(interview.OriginatorName);
-                resultRow.Add(GetUserRole(interview.OriginatorRole));
-                resultRow.Add(interview.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-                resultRow.Add(interview.Timestamp.ToString("T", CultureInfo.InvariantCulture));
-
-                resultRow.Add(interview.Variable);
-
-                if (hasAtLeastOneRoster)
-                    resultRow.Add(interview.Roster);
-
-                resultRow.Add(interview.InterviewId);
-
-                for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
-                {
-                    resultRow.Add(interview.RosterVector.Length > i ? interview.RosterVector[i].ToString() : "");
-                }
-                
-                resultRow.Add(interview.Comment);
-
-                result.Add(resultRow.ToArray());
-            }
-            return result.ToArray();
-
-        }
-
-        private IEnumerable<string[]> QueryFromActionTable(InterviewExportedAction? action, Guid questionnaireId,
-            long questionnaireVersion)
-        {
-
-            Expression<Func<InterviewStatuses, bool>> queryActions =
-                interviewWithStatusHistory =>
-                    interviewWithStatusHistory.QuestionnaireId == questionnaireId && interviewWithStatusHistory.QuestionnaireVersion == questionnaireVersion;
-
-            if (action.HasValue)
-            {
-                queryActions =
-                    interviewWithStatusHistory =>
-                        interviewWithStatusHistory.QuestionnaireId == questionnaireId && 
-                        interviewWithStatusHistory.QuestionnaireVersion == questionnaireVersion &&
-                        interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status).Any(s => s == action.Value);
-            }
-
-            var interviews =
-                interviewActionsDataStorage.Query(
-                    _ =>
-                        _.Where(queryActions)
-                            .SelectMany(
-                                interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
-                                (interview, status) => new {interview.InterviewId, StatusHistory = status})
-                            .Select(
-                                i =>
-                                    new
-                                    {
-                                        i.InterviewId,
-                                        i.StatusHistory.Status,
-                                        i.StatusHistory.StatusChangeOriginatorName,
-                                        i.StatusHistory.StatusChangeOriginatorRole,
-                                        i.StatusHistory.Timestamp
-
-                                    }).ToList());
-
-            var result = new List<string[]>();
-
-            foreach (var interview in interviews)
-            {
-                var resultRow = new List<string>();
-                resultRow.Add(interview.InterviewId);
-                resultRow.Add(interview.Status.ToString());
-                resultRow.Add(interview.StatusChangeOriginatorName);
-                resultRow.Add(GetUserRole(interview.StatusChangeOriginatorRole));
-                resultRow.Add(interview.Timestamp.ToString("d", CultureInfo.InvariantCulture));
-                resultRow.Add(interview.Timestamp.ToString("T", CultureInfo.InvariantCulture));
-                result.Add(resultRow.ToArray());
-            }
-            return result;
-        }
-
-        private string GetUserRole(UserRoles userRole)
-        {
-            switch (userRole)
-            {
-                case UserRoles.Operator:
-                    return FileBasedDataExportRepositoryWriterMessages.Interviewer;
-                case UserRoles.Supervisor:
-                    return FileBasedDataExportRepositoryWriterMessages.Supervisor;
-                case UserRoles.Headquarter:
-                    return FileBasedDataExportRepositoryWriterMessages.Headquarter;
-                case UserRoles.Administrator:
-                    return FileBasedDataExportRepositoryWriterMessages.Administrator;
-            }
-            return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
-        }
-
-        void ExportToTabFile(Guid questionnaireId, long questionnaireVersion, string basePath,
-            InterviewExportedAction? action = null)
-        {
-            this.transactionManager.GetTransactionManager().BeginQueryTransaction();
-            try
-            {
-                var structure = questionnaireExportStructureWriter.AsVersioned()
-                    .Get(questionnaireId.FormatGuid(), questionnaireVersion);
-
-                if (structure == null)
-                    return;
-                this.CreateDataFiles(basePath, action, structure, questionnaireId, questionnaireVersion);
-                this.CreateFileForInterviewActions(action, basePath, questionnaireId, questionnaireVersion);
-                this.CreateFileForInterviewComments(
-                    action.HasValue && action.Value == InterviewExportedAction.ApprovedByHeadquarter, basePath,
-                    structure);
-            }
-            finally
-            {
-                this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
-            }
-        }
-
-        private void CreateDataFiles(string basePath, InterviewExportedAction? action, QuestionnaireExportStructure structure, Guid questionnaireId, long questionnaireVersion)
-        {
-            
-            foreach (var level in structure.HeaderToLevelMap.Values)
-            {
-                var dataFilePath =
-                    this.fileSystemAccessor.CombinePath(basePath, this.createDataFileName(level.LevelName));
-
-                
-                using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
-                using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-                {
-                    this.CreateHeaderForDataFile(tabWriter, level);
-                }
-            }
-
-            Expression<Func<InterviewExportedDataRecord, bool>> queryData =
-               (i) => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion;
-
-            if (action.HasValue)
-            {
-                queryData =
-                    (i) =>
-                        i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion &&
-                        i.LastAction == action.Value;
-            }
-
-            List<InterviewExportedDataRecord> interviewDatas = interviewExportedDataStorage.Query(
-                _ =>
-                    _.Where(queryData)
-                        .ToList());
-
-            foreach (var interviewExportedDataRecord in interviewDatas)
-            {
-                var data = jsonUtils.Deserialize<Dictionary<string, string[]>>(interviewExportedDataRecord.Data);
-                foreach (var levelName in data.Keys)
-                {
-                    var dataFilePath =
-                        this.fileSystemAccessor.CombinePath(basePath, this.createDataFileName(levelName));
-
-                    using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(dataFilePath, true))
-                    using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-                    {
-                        foreach (var dataByLevel in data[levelName])
-                        {
-                            var parsedData = dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile);
-
-                            foreach (var cell in parsedData)
-                            {
-                                tabWriter.WriteField(cell);
-                            }
-
-                            tabWriter.NextRecord();
-                        }
-                    }
-                }
-            }
-            
-        }
-
-        private void CreateFileForInterviewActions(InterviewExportedAction? action, string basePath, Guid questionnaireId, long questionnaireVersion)
-        {
-            var actionFilePath =
-                fileSystemAccessor.CombinePath(basePath, createDataFileName(interviewActionsFileName));
-
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(actionFilePath, true))
-            using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-            {
-                this.CreateHeaderForActionFile(tabWriter);
-                var dataSet = this.QueryFromActionTable(action, questionnaireId, questionnaireVersion);
-
-                foreach (var dataRow in dataSet)
-                {
-                    foreach (var cell in dataRow)
-                    {
-                        tabWriter.WriteField(cell);
-                    }
-
-                    tabWriter.NextRecord();
-                }
-            }
-        }
-
-        private void CreateFileForInterviewComments(bool exportOnlyApproved, string basePath,
-            QuestionnaireExportStructure questionnaireExportStructure)
-        {
-            string commentsFilePath =
-                fileSystemAccessor.CombinePath(basePath, createDataFileName(commentsFileName));
-
-            int maxRosterDepthInQuestionnaire =
-                questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
-
-            bool hasAtLeastOneRoster =
-                questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
-
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(commentsFilePath, true))
-            using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-            {
-                this.CreateHeaderForCommentsFile(tabWriter, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster);
-                var dataSet = this.QueryFromCommentsTable(questionnaireExportStructure.QuestionnaireId,
-                    questionnaireExportStructure.Version, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster,
-                    exportOnlyApproved);
-
-                foreach (var dataRow in dataSet)
-                {
-                    foreach (var cell in dataRow)
-                    {
-                        tabWriter.WriteField(cell);
-                    }
-
-                    tabWriter.NextRecord();
-                }
-            }
         }
     }
 }

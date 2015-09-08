@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName, "2.txt" });
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName});
             fileSystemAccessor.Setup(x => x.ChangeExtension(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns(fileNameExported);
 
             var tabFileReader = new Mock<ITabFileReader>();
@@ -41,12 +41,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
         Because of = () =>
             filePaths = sqlToTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, "");
-
-        private It should_return_one_element = () =>
-            filePaths.Length.ShouldEqual(1);
-
-        private It should_return_correct_file_name = () =>
-            filePaths[0].ShouldEqual(fileNameExported);
 
         private It should_call_write_to_file = () =>
             datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<string[,]>()), Times.Once());
