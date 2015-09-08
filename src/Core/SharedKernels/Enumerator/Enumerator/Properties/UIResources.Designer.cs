@@ -622,6 +622,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complete Interview.
+        /// </summary>
+        public static string Interview_NextCompleteInterview_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_NextCompleteInterview_ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {

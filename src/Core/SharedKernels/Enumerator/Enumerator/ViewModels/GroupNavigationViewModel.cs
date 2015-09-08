@@ -4,6 +4,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -56,9 +57,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, groupIdentity, this.navigationState);
             }
+
+            if (NavigateToIdentity.ScreenType == ScreenType.Group)
+            {
+                NavigationItemTitle = IsInSection
+                    ? UIResources.Interview_NextSection_ButtonText
+                    : UIResources.Interview_PreviousGroupNavigation_ButtonText;
+            }
+            else
+            {
+                NavigationItemTitle = UIResources.Interview_NextCompleteInterview_ButtonText;
+            }
         }
 
-        private Identity NavigateToIdentity { get; set; }
+        private NavigationIdentity NavigateToIdentity { get; set; }
+
+        public string NavigationItemTitle { get; set; }
 
         private bool isInSection;
         public bool IsInSection
@@ -76,15 +90,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (this.IsInSection)
             {
-                await this.navigationState.NavigateToAsync(new NavigationIdentity(this.NavigateToIdentity));
+                await this.navigationState.NavigateToAsync(this.NavigateToIdentity);
             }
             else
             {
-                await this.navigationState.NavigateToAsync(new NavigationIdentity(this.NavigateToIdentity, anchoredElementIdentity: this.groupIdentity));
+                await this.navigationState.NavigateToAsync(new NavigationIdentity(this.NavigateToIdentity.TargetGroup, anchoredElementIdentity: this.groupIdentity));
             }
         }
 
-        private Identity GetNavigateToIdentity(QuestionnaireModel questionnaire)
+        private NavigationIdentity GetNavigateToIdentity(QuestionnaireModel questionnaire)
         {
             if (this.IsInSection)
             {
@@ -96,25 +110,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private Identity GetParentIdentity(QuestionnaireModel questionnaire)
+        private NavigationIdentity GetParentIdentity(QuestionnaireModel questionnaire)
         {
             var parentId = questionnaire.GroupsParentIdMap[this.groupIdentity.Id].Value;
             int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[this.groupIdentity.Id];
             decimal[] parentRosterVector = this.groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
-            return new Identity(parentId, parentRosterVector);
+            return new NavigationIdentity(new Identity(parentId, parentRosterVector));
         }
 
-        private Identity GetNextSectionIdentity(QuestionnaireModel questionnaire)
+        private NavigationIdentity GetNextSectionIdentity(QuestionnaireModel questionnaire)
         {
             int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.groupIdentity.Id);
 
             if (currentSectionIndex >= questionnaire.GroupsHierarchy.Count - 1)
             {
-                return null;
+                return new NavigationIdentity(null, ScreenType.Complete);
             }
             else
             {
-                return new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]);
+                return new NavigationIdentity(new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]));
             }
         }
     }

@@ -470,4 +470,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="SynchronizationText" xml:space="preserve">
     <value>Synchronization</value>
   </data>
+  <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
+    <value>Complete Interview</value>
+  </data>
 </root>

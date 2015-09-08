@@ -874,6 +874,9 @@
     <AndroidResource Include="Resources\values\fonts.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\values\strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\values\styles-interview-group.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
