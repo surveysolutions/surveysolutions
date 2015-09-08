@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Views;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
