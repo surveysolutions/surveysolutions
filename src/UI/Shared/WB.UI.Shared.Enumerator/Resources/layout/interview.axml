@@ -31,11 +31,15 @@
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true">
-      
-      <FrameLayout
-        android:id="@+id/contentFrame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
+     <MvxRecyclerView
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res-auto"
+      style="@style/Interview_List"
+      android:id="@+id/interviewEntitiesList"
+      android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
+      android:scrollbars="vertical"
+      local:MvxBind="ItemsSource CurrentGroup.Items" />
       
     </ScrollView>
   </LinearLayout>

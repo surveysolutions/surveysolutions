@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
-
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
@@ -17,8 +16,7 @@ using WB.UI.Tester.Converters;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Ninject;
 using Xamarin;
-using Cirrious.MvvmCross.Droid.Views;
-using WB.UI.Shared.Enumerator.Activities;
+
 
 namespace WB.UI.Tester
 {
@@ -59,22 +57,6 @@ namespace WB.UI.Tester
             base.FillValueConverters(registry);
             
             registry.AddOrOverwrite("PublicBackground", new QuestionnairePublicityBackgroundConverter());
-        }
-
-        protected override IMvxAndroidViewPresenter CreateViewPresenter()
-        {
-            var presenter = Mvx.IocConstruct<FragmentPresenter>();
-
-            Mvx.RegisterSingleton<IMvxAndroidViewPresenter>(presenter);
-
-            return presenter;
-        }
-
-        protected override void InitializeIoC()
-        {
-            base.InitializeIoC();
-
-            Mvx.ConstructAndRegisterSingleton<IFragmentTypeLookup, FragmentTypeLookup>();
         }
 
         protected override Assembly[] GetViewModelAssemblies()
