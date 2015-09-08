@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -14,6 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IDataExportService dataExportService;
+        private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService; 
         private readonly ILogger logger;
 
@@ -32,13 +35,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IEnvironmentContentService environmentContentService, 
             ILogger logger, 
             IArchiveUtils archiveUtils, 
-            InterviewHistorySettings interviewHistorySettings)
+            InterviewDataExportSettings interviewDataExportSettings, 
+            ITabularFormatExportService tabularFormatExportService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportService = dataExportService;
             this.environmentContentService = environmentContentService;
             this.logger = logger;
             this.archiveUtils = archiveUtils;
+            this.tabularFormatExportService = tabularFormatExportService;
             this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
@@ -49,10 +54,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
 
-            if (interviewHistorySettings.EnableInterviewHistory)
+            if (interviewDataExportSettings.EnableInterviewHistory)
             {
-                this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewHistorySettings.DirectoryPath,
-                    interviewHistorySettings.ExportedDataFolderName);
+                this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
+                    interviewDataExportSettings.ExportedDataFolderName);
 
                 if (!fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
                     fileSystemAccessor.CreateDirectory(this.pathToHistoryFiles);
@@ -171,23 +176,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
             var filesToArchive = new List<string>();
-
+            var directoryWithExportedDataPath = GetAllDataFolder(questionnaireId, version);
             switch (exportDataType)
             {
                 case ExportDataType.Stata:
                 {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, GetAllDataFolder(questionnaireId, version)));
+                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, directoryWithExportedDataPath));
                     break;
                 }
                 case ExportDataType.Spss:
                 {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, GetAllDataFolder(questionnaireId, version)));
+                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, directoryWithExportedDataPath));
                     break;
                 }
                 case ExportDataType.Tab:
                 default:
                 {
-                    filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, GetAllDataFolder(questionnaireId, version)));
+                    this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, version, directoryWithExportedDataPath).WaitAndUnwrapException();
+                    var exportedDataFiles = fileSystemAccessor.GetFilesInDirectory(directoryWithExportedDataPath);
+                    filesToArchive.AddRange(exportedDataFiles);
                     filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
                     break;
                 }
@@ -229,26 +236,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             var filesToArchive = new List<string>();
 
-
+            var directoryWithExportedDataPath = GetApprovedDataFolder(questionnaireId, version);
             switch (exportDataType)
             {
                 case ExportDataType.Stata:
                     {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, GetApprovedDataFolder(questionnaireId, version)));
+                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, directoryWithExportedDataPath));
                         break;
                     }
                 case ExportDataType.Spss:
                     {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, GetApprovedDataFolder(questionnaireId, version)));
+                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, directoryWithExportedDataPath));
                         break;
                     }
                 case ExportDataType.Tab:
                 default:
-                    {
-                        filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, GetApprovedDataFolder(questionnaireId, version)));
-                        filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath)); 
-                        break;
-                    }
+                {
+                    this.tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId,
+                        version, directoryWithExportedDataPath).WaitAndUnwrapException();
+
+                    filesToArchive.AddRange(fileSystemAccessor.GetFilesInDirectory(directoryWithExportedDataPath));
+                    filesToArchive.AddRange(
+                        this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version,
+                            dataDirectoryPath));
+                    break;
+                }
             }
 
             archiveUtils.ZipFiles(filesToArchive, archiveFilePath);

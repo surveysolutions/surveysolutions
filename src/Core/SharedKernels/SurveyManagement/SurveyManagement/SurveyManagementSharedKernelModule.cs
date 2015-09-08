@@ -54,12 +54,12 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly bool isSupervisorFunctionsEnabled;
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly int? interviewLimitCount;
-        private readonly InterviewHistorySettings interviewHistorySettings;
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
-            InterviewHistorySettings interviewHistorySettings,
+            InterviewDataExportSettings interviewDataExportSettings,
             bool isSupervisorFunctionsEnabled,
             int? interviewLimitCount = null)
         {
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.applicationBuildVersion = applicationBuildVersion;
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
-            this.interviewHistorySettings = interviewHistorySettings;
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
         }
@@ -89,6 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExportService>().To<SqlToDataExportService>();
+            this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
             this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
             this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
@@ -169,11 +170,11 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
             this.Bind<IDeleteSupervisorService>().To<DeleteSupervisorService>().InSingletonScope();
 
-            this.Bind<InterviewHistorySettings>().ToConstant(interviewHistorySettings);
+            this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
 
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
 
-            if (interviewHistorySettings.EnableInterviewHistory)
+            if (this.interviewDataExportSettings.EnableInterviewHistory)
             {
                 this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();
                 this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();

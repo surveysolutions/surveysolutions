@@ -530,7 +530,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
     <Compile Include="Synchronization\SyncManagerTestContext.cs" />
     <Compile Include="Synchronization\when_getting_interview_ids_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
@@ -706,7 +707,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
@@ -2088,7 +2089,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_approved_data_and_archive_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_approved_data_and_archive_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_level_labels.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_no_questions.cs" />

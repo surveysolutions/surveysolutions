@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -12,38 +10,37 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using It = Moq.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.ReadSideToTabularFormatExportServiceTests
 {
-    [Subject(typeof (SqlToDataExportService))]
-    internal class SqlToTabDataExportServiceTestContext
+    [Subject(typeof(ReadSideToTabularFormatExportService))]
+    internal class ReadSideToTabularFormatExportServiceTestContext
     {
-        protected static SqlToDataExportService CreateSqlToTabDataExportService(
-            QuestionnaireExportStructure questionnaireExportStructure = null,
-            IFileSystemAccessor fileSystemAccessor = null,
-            ITabFileReader tabFileReader = null,
-            IDatasetWriterFactory datasetWriterFactory = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage = null)
+        protected static ReadSideToTabularFormatExportService CreateReadSideToTabularFormatExportService(
+            IFileSystemAccessor fileSystemAccessor=null,
+            ICsvWriterService csvWriterService = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses=null,
+             QuestionnaireExportStructure questionnaireExportStructure = null)
         {
-            fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new SqlToDataExportService(
-                fileSystemAccessor,
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure),
+            return new ReadSideToTabularFormatExportService(
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
-                Mock.Of<ILogger>(),
-                tabFileReader ?? Mock.Of<ITabFileReader>(),
-                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(),
-                questionnaireDocumentVersionedStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                Mock.Of<ITabularFormatExportService>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
+                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+                Mock.Of<IJsonUtils>(),new InterviewDataExportSettings("",false,10000), 
+                new TestInMemoryWriter<InterviewExportedDataRecord>(),
+                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
+                new TestInMemoryWriter<InterviewCommentaries>(),
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
+                    It.IsAny<string>()) == questionnaireExportStructure)
+                );
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
@@ -77,6 +74,38 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
             }
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
+        }
+
+        protected class CsvWriterServiceTestable : ICsvWriterService
+        {
+            private readonly List<object[]> recorderRows = new List<object[]>();
+            private readonly List<object> currentRow = new List<object>();
+
+            public void Dispose()
+            {
+            }
+
+            public void WriteField<T>(T cellValue)
+            {
+                currentRow.Add(cellValue);
+            }
+
+            public void NextRecord()
+            {
+                recorderRows.Add(currentRow.ToArray());
+                currentRow.Clear();
+            }
+
+            public List<object[]> Rows
+            {
+                get
+                {
+                    var result = recorderRows.ToList();
+                    if (currentRow.Count > 0)
+                        result.Add(currentRow.ToArray());
+                    return result;
+                }
+            }
         }
     }
 }
