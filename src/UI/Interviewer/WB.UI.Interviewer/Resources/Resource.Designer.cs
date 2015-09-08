@@ -608,6 +608,7 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.textsize_20 = global::WB.UI.Interviewer.Resource.Dimension.textsize_20;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.textsize_28 = global::WB.UI.Interviewer.Resource.Dimension.textsize_28;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.textsize_30 = global::WB.UI.Interviewer.Resource.Dimension.textsize_30;
+			global::WB.UI.Shared.Enumerator.Resource.Dimension.textsize_9 = global::WB.UI.Interviewer.Resource.Dimension.textsize_9;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.zero = global::WB.UI.Interviewer.Resource.Dimension.zero;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.abc_ab_share_pack_mtrl_alpha = global::WB.UI.Interviewer.Resource.Drawable.abc_ab_share_pack_mtrl_alpha;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.abc_btn_borderless_material = global::WB.UI.Interviewer.Resource.Drawable.abc_btn_borderless_material;
@@ -3428,17 +3429,17 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f090083
 			public const int ListStyle_Divider_height = 2131296387;
 			
-			// aapt resource value: 0x7f09009d
-			public const int Login_Element_margin_vertical_normal = 2131296413;
-			
 			// aapt resource value: 0x7f09009e
-			public const int Login_Element_margin_vertical_thin = 2131296414;
+			public const int Login_Element_margin_vertical_normal = 2131296414;
+			
+			// aapt resource value: 0x7f09009f
+			public const int Login_Element_margin_vertical_thin = 2131296415;
+			
+			// aapt resource value: 0x7f09009d
+			public const int Login_Element_width = 2131296413;
 			
 			// aapt resource value: 0x7f09009c
-			public const int Login_Element_width = 2131296412;
-			
-			// aapt resource value: 0x7f09009b
-			public const int Login_Holder_width = 2131296411;
+			public const int Login_Holder_width = 2131296412;
 			
 			// aapt resource value: 0x7f090086
 			public const int PrefilledQuestions_QuestionnaireTitle_Holder_height = 2131296390;
@@ -3449,11 +3450,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f090087
 			public const int PrefilledQuestions_StartButton_Holder_height = 2131296391;
 			
-			// aapt resource value: 0x7f09009a
-			public const int Splash_Logo_padding = 2131296410;
+			// aapt resource value: 0x7f09009b
+			public const int Splash_Logo_padding = 2131296411;
 			
-			// aapt resource value: 0x7f090099
-			public const int Splash_Logo_size = 2131296409;
+			// aapt resource value: 0x7f09009a
+			public const int Splash_Logo_size = 2131296410;
 			
 			// aapt resource value: 0x7f090081
 			public const int Theme_Button_min_height = 2131296385;
@@ -3653,8 +3654,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f09003e
 			public const int abc_text_size_title_material_toolbar = 2131296318;
 			
-			// aapt resource value: 0x7f090098
-			public const int button_corners_radius = 2131296408;
+			// aapt resource value: 0x7f090099
+			public const int button_corners_radius = 2131296409;
 			
 			// aapt resource value: 0x7f09007d
 			public const int button_shadow_margin = 2131296381;
@@ -3686,26 +3687,29 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f090044
 			public const int disabled_alpha_material_light = 2131296324;
 			
-			// aapt resource value: 0x7f090091
-			public const int textsize_12 = 2131296401;
-			
 			// aapt resource value: 0x7f090092
-			public const int textsize_14 = 2131296402;
+			public const int textsize_12 = 2131296402;
 			
 			// aapt resource value: 0x7f090093
-			public const int textsize_16 = 2131296403;
+			public const int textsize_14 = 2131296403;
 			
 			// aapt resource value: 0x7f090094
-			public const int textsize_18 = 2131296404;
+			public const int textsize_16 = 2131296404;
 			
 			// aapt resource value: 0x7f090095
-			public const int textsize_20 = 2131296405;
+			public const int textsize_18 = 2131296405;
 			
 			// aapt resource value: 0x7f090096
-			public const int textsize_28 = 2131296406;
+			public const int textsize_20 = 2131296406;
 			
 			// aapt resource value: 0x7f090097
-			public const int textsize_30 = 2131296407;
+			public const int textsize_28 = 2131296407;
+			
+			// aapt resource value: 0x7f090098
+			public const int textsize_30 = 2131296408;
+			
+			// aapt resource value: 0x7f090091
+			public const int textsize_9 = 2131296401;
 			
 			// aapt resource value: 0x7f09007c
 			public const int zero = 2131296380;

@@ -25,5 +25,16 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
             foreach (var handler in _mappingStrategy.GetEventHandlers(this))
                 RegisterHandler(handler);
         }
+
+        public bool CanApplyAllEvents(CommittedEventStream history)
+        {
+            foreach (CommittedEvent committedEvent in history)
+            {
+                if (!_mappingStrategy.CanHandleEvent(this, committedEvent.GetType()))
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

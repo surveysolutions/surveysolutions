@@ -1,4 +1,6 @@
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,13 +13,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class DashboardViewModel : BaseViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
         public readonly SynchronizationViewModel Synchronization;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
+            IInterviewerDashboardFactory dashboardFactory,
             IPrincipal principal, SynchronizationViewModel synchronization)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.dashboardFactory = dashboardFactory;
             this.principal = principal;
             this.Synchronization = synchronization;
         }
@@ -38,12 +43,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             CompletedInterviewsCount = 7;
             RejectedInterviewsCount = 2;
 
-            DashboardItems = new DashboardItemViewModel[]
-            {
-                new DashboardItemViewModel(), 
-                new DashboardItemViewModel(), 
-                new DashboardItemViewModel(), 
-            };
+            var dashboardItems = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
+            DashboardItems = dashboardItems.ToArray();
         }
 
         private bool isSynchronizationInfoShowed;
