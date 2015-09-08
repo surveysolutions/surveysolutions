@@ -44,8 +44,7 @@
 
       <MvxListView android:id="@+id/interviewsList"
                style="@style/Dashboard_InterviewsList"
-               local:MvxBind="ItemsSource DashboardItems; 
-                              ItemClick LoadQuestionnaireCommand;"
+               local:MvxBind="ItemsSource DashboardItems;"
                local:MvxItemTemplate="@layout/dashboard_item" />
 
   </ScrollView>

@@ -126,6 +126,9 @@
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
     <value>No New</value>
   </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>This interview is completed. Do you want to restart the interview?</value>
+  </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Rejected {3}</value>
   </data>
