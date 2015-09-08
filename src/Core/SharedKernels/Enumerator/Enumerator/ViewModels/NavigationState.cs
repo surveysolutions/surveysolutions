@@ -157,14 +157,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.CurrentGroup = navigationIdentity.TargetGroup;
             this.CurrentGroupType = navigationIdentity.ScreenType;
 
-            var groupChangedEventArgs = new GroupChangedEventArgs
+            if (this.GroupChanged != null)
             {
-                TargetGroup = navigationIdentity.TargetGroup,
-                AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
-                ScreenType = navigationIdentity.ScreenType
-            };
+                var groupChangedEventArgs = new GroupChangedEventArgs
+                {
+                    TargetGroup = navigationIdentity.TargetGroup,
+                    AnchoredElementIdentity =
+                        navigationIdentity.AnchoredElementIdentity,
+                    ScreenType = navigationIdentity.ScreenType
+                };
 
-            this.GroupChanged(groupChangedEventArgs);
+                this.GroupChanged(groupChangedEventArgs);
+            }
         }
     }
 
