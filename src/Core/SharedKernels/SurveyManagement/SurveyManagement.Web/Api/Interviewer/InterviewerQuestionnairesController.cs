@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -71,13 +72,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StreamContent(this.questionnareAssemblyFileAccessor.GetAssemblyAsStream(id, version))
+                Content = new StreamContent(File.OpenRead(this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(id, version)))
             };
 
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = string.Format("{0}.dll", new QuestionnaireIdentity(id, version))
-            };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
             return response;
         }

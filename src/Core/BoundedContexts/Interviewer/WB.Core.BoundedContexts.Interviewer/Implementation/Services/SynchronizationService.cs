@@ -6,6 +6,8 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -83,36 +85,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChangedInternal = (args) =>
-            {
-                if (onDownloadProgressChanged != null)
-                {
-                    onDownloadProgressChanged(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive);
-                }
-            };
-
             return await this.restService.DownloadFileWithProgressAsync(
-                        url: string.Format("{0}/{1}/{2}/assembly", this.questionnairesController, questionnaire.QuestionnaireId, questionnaire.Version),
-                        onDownloadProgressChanged: onDownloadProgressChangedInternal,
-                        token: token,
-                        credentials: this.restCredentials);
+                url: string.Format("{0}/{1}/{2}/assembly", this.questionnairesController, questionnaire.QuestionnaireId, questionnaire.Version),
+                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                token: token,
+                credentials: this.restCredentials);
         }
+
+        
 
         public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChangedInternal = (args) =>
-            {
-                if (onDownloadProgressChanged != null)
-                {
-                    onDownloadProgressChanged(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive);
-                }
-            };
-
             return await this.restService.GetWithProgressAsync<QuestionnaireApiView>(
-                        url: string.Format("{0}/{1}/{2}", this.questionnairesController, questionnaire.QuestionnaireId, questionnaire.Version),
-                        onDownloadProgressChanged : onDownloadProgressChangedInternal,
-                        token: token,
-                        credentials: this.restCredentials);
+                url: string.Format("{0}/{1}/{2}", this.questionnairesController, questionnaire.QuestionnaireId, questionnaire.Version),
+                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                token: token,
+                credentials: this.restCredentials);
         }
 
         public async Task<IEnumerable<QuestionnaireIdentity>> GetCensusQuestionnairesAsync()
@@ -129,6 +117,47 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<IEnumerable<InterviewApiView>> GetInterviewsAsync()
         {
             return await this.restService.GetAsync<IEnumerable<InterviewApiView>>(url: this.interviewsController, credentials: this.restCredentials);
+        }
+
+        public async Task<IEnumerable<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId)
+        {
+            return await this.restService.GetAsync<IEnumerable<SynchronizationChunkMeta>>(
+                url: string.Concat(this.interviewsController, "/packages/", lastPackageId), 
+                credentials: this.restCredentials);
+        }
+
+        public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        {
+            return await this.restService.GetWithProgressAsync<InterviewSyncPackageDto>(
+                url: string.Concat(this.interviewsController, "/package/", packageId), 
+                credentials: this.restCredentials,
+                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                token: token);
+        }
+
+        public async Task UploadInterviewAsync(Guid interviewId, string content, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        {
+            await this.restService.PostWithProgressAsync<string>(
+                url: string.Concat(this.interviewsController, "/package"),
+                request: content,
+                credentials: this.restCredentials,
+                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                token: token);
+        }
+
+        public async Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        {
+            await this.restService.PostWithProgressAsync<PostFileRequest>(
+                url: string.Concat(this.interviewsController, "/", interviewId, "/image"),
+                request: new PostFileRequest()
+                {
+                    InterviewId = interviewId,
+                    FileName = fileName,
+                    Data = Convert.ToBase64String(fileData)
+                },
+                credentials: this.restCredentials,
+                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                token: token);
         }
 
         #endregion
@@ -164,5 +193,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         #endregion
+
+        private static Action<DownloadProgressChangedEventArgs> ToDownloadProgressChangedEvent(Action<decimal, long, long> onDownloadProgressChanged)
+        {
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChangedInternal = (args) =>
+            {
+                if (onDownloadProgressChanged != null)
+                {
+                    onDownloadProgressChanged(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive ?? 0);
+                }
+            };
+            return onDownloadProgressChangedInternal;
+        }
     }
 }

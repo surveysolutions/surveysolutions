@@ -13,9 +13,9 @@ using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.GenericSubdomains.Native;
-using WB.Core.GenericSubdomains.Native.Rest;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Rest;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -210,9 +210,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
-            this.Bind<IRestServicePointManager>().To<RestServicePointManager>().InSingletonScope();
-            this.Bind<IRestClientProvider>().To<FlurlRestClientProvider>().InSingletonScope();
-            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null);
+            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
         }
     }
 }
