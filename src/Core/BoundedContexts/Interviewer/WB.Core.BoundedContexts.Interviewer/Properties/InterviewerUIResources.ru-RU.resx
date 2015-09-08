@@ -126,6 +126,9 @@
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
     <value>Нет новых</value>
   </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>Это интервтю завершено. Хотите переоткрыть его?</value>
+  </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Отклоненные {3}</value>
   </data>

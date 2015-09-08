@@ -20,7 +20,6 @@
   <string name="Yes">Yes</string>
   <string name="No">No</string>
   <string name="Send">Send</string>
-  <string name="Dashboard_Reinitialize_Interview_Message">This interview is completed. Do you want to restart the interview?</string>
   <string name="Cancel">Cancel</string>
   <string name="Warning">Warning</string>
   <string name="Initializing">Initializing</string>

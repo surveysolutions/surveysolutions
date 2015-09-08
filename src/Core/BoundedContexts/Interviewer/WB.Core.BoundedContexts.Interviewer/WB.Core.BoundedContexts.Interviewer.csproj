@@ -131,7 +131,10 @@
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
-    <Compile Include="Views\Dashboard\DashboardItemViewModel.cs" />
+    <Compile Include="Views\Dashboard\CensusModeDashboardItemViewModel.cs" />
+    <Compile Include="Views\Dashboard\DashboardInformation.cs" />
+    <Compile Include="Views\Dashboard\DashboardInterviewCategories.cs" />
+    <Compile Include="Views\Dashboard\InterviewDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
     <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
