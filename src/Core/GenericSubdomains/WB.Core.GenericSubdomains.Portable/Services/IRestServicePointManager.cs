@@ -1,4 +1,4 @@
-namespace WB.Core.GenericSubdomains.Portable.Rest
+﻿namespace WB.Core.GenericSubdomains.Portable.Services
 {
     public interface IRestServicePointManager
     {

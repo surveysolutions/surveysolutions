@@ -310,11 +310,6 @@
     <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
-    <Compile Include="Infrastructure\NewtonJsonUtils.cs" />
-    <Compile Include="Infrastructure\Rest\FlurlRestClient.cs" />
-    <Compile Include="Infrastructure\Rest\FlurlRestClientProvider.cs" />
-    <Compile Include="Infrastructure\Rest\RestMessageHandler.cs" />
-    <Compile Include="Infrastructure\Rest\RestServicePointManager.cs" />
     <Compile Include="InterviewerBoundedContextModule.cs" />
     <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />

@@ -1,8 +1,7 @@
 ﻿using Ninject.Modules;
-using WB.Core.GenericSubdomains.Portable.Rest;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Interviewer.Implementations.Services;
-using WB.UI.Interviewer.Infrastructure.Rest;
 
 namespace WB.UI.Interviewer
 {
@@ -11,9 +10,7 @@ namespace WB.UI.Interviewer
         public override void Load()
         {
             this.Bind<INetworkService>().To<AndroidNetworkService>().InSingletonScope();
-            this.Bind<IRestServicePointManager>().To<RestServicePointManager>().InSingletonScope();
-            this.Bind<IRestClientProvider>().To<FlurlRestClientProvider>().InSingletonScope();
-            this.Bind<IRestService>().To<RestService>().InSingletonScope();
+            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("restServicePointManager", _ => null);
         }
     }
 }
