@@ -45,7 +45,7 @@ namespace WB.UI.Interviewer.Syncronization
                 this.DeleteInterview(interviewId);
             }
 
-            this.syncPackageIdsStorage.CleanAllInterviewIdsForUser(userIdAsGuid);
+            this.syncPackageIdsStorage.CleanAllInterviewIdsForUser();
         }
 
         //dangerous operation

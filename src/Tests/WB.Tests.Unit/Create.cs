@@ -1333,7 +1333,7 @@ namespace WB.Tests.Unit
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
                 interviewSynchronizationFileStorage ??
                     Mock.Of<IInterviewSynchronizationFileStorage>(
-                        _ => _.GetBinaryFilesFromSyncFolder() == new List<InterviewBinaryDataDescriptor>()),
+                        _ => _.GetImagesByInterviews() == new List<InterviewBinaryDataDescriptor>()),
                 archiver ?? Mock.Of<IArchiveUtils>(),
                 Mock.Of<IPlainTransactionManager>(),
                 Mock.Of<ITransactionManager>());
