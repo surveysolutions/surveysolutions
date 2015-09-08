@@ -1,8 +1,11 @@
+using System;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -59,11 +62,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             get
             {
-                return synchronizationCommand ??
-                       (synchronizationCommand =
-                           new MvxCommand(async () => await this.Synchronization.SynchronizeAsync(),
-                               () => !this.Synchronization.IsSynchronizationInProgress));
+                return synchronizationCommand ?? (synchronizationCommand = new MvxCommand(this.RunSynchronization, () => !this.Synchronization.IsSynchronizationInProgress));
             }
+        }
+
+        private async void RunSynchronization()
+        {
+            await this.Synchronization.SynchronizeAsync();
+            
+            var dashboardItems = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
+            DashboardItems = dashboardItems.ToArray();
         }
 
         private string dashboardTitle;
