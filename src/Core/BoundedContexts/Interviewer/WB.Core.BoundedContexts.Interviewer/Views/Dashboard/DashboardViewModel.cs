@@ -3,10 +3,13 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -39,16 +42,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
 
             LoggedInUserName = this.principal.CurrentUserIdentity.Name;
-            DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, LoggedInUserName);
-
-            NewInterviewsCount = 5;
-            StartedInterviewsCount = 2;
-            CompletedInterviewsCount = 7;
-            RejectedInterviewsCount = 2;
-
-            var dashboardItems = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
-            DashboardItems = dashboardItems.ToArray();
+            currentDashboardCategory = DashboardInterviewCategories.New;
+            this.RefreshDashboard();
         }
+
+        private void RefreshDashboard()
+        {
+            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, this.LoggedInUserName);
+
+            this.NewInterviewsCount = 5;
+            this.StartedInterviewsCount = 2;
+            this.CompletedInterviewsCount = 7;
+            this.RejectedInterviewsCount = 2;
+
+            var items = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
+            this.DashboardItems = items;
+        }
+
+        private DashboardInterviewCategories currentDashboardCategory;
 
         private bool isSynchronizationInfoShowed;
         public bool IsSynchronizationInfoShowed
@@ -69,9 +80,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async void RunSynchronization()
         {
             await this.Synchronization.SynchronizeAsync();
-            
-            var dashboardItems = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
-            DashboardItems = dashboardItems.ToArray();
+
+            RefreshDashboard();
         }
 
         private string dashboardTitle;
@@ -156,8 +166,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return this.rejectedInterviewsCount > 0; }
         }
 
-        private DashboardItemViewModel[] dashboardItems;
-        public DashboardItemViewModel[] DashboardItems
+        private IEnumerable<InterviewDashboardItemViewModel> dashboardItems;
+        public IEnumerable<InterviewDashboardItemViewModel> DashboardItems
         {
             get { return this.dashboardItems; }
             set { this.dashboardItems = value;  this.RaisePropertyChanged(); }
@@ -165,27 +175,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand ShowNewItemsInterviewsCommand
         {
-            get { return new MvxCommand(() => SwitchTabCommand()); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.New)); }
         }
 
         public IMvxCommand ShowStartedInterviewsCommand
         {
-            get { return new MvxCommand(() => SwitchTabCommand()); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.InProgress)); }
         }
 
         public IMvxCommand ShowCompletedInterviewsCommand
         {
-            get { return new MvxCommand(() => SwitchTabCommand()); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.Complited)); }
         }
 
         public IMvxCommand ShowRejectedInterviewsCommand
         {
-            get { return new MvxCommand(() => SwitchTabCommand()); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.Rejected)); }
         }
 
-        private void SwitchTabCommand()
+        private void ShowInterviewsCommand(DashboardInterviewCategories category)
         {
-
+            this.currentDashboardCategory = category;
+            this.RefreshDashboard();
         }
 
         public IMvxCommand SignOutCommand
@@ -195,7 +206,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         void SignOut()
         {
-            principal.SignOut();
+            this.principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 

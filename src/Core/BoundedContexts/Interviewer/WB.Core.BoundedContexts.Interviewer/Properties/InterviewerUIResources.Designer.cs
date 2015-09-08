@@ -89,6 +89,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This interview is completed. Do you want to restart the interview?.
+        /// </summary>
+        public static string Dashboard_Reinitialize_Interview_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_Reinitialize_Interview_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rejected {3}.
         /// </summary>
         public static string Dashboard_RejectedLinkText {
