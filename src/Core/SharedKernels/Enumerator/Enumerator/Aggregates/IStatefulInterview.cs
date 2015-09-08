@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 
 namespace WB.Core.SharedKernels.Enumerator.Aggregates
@@ -10,6 +11,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
     {
         QuestionnaireIdentity QuestionnaireIdentity { get; }
         string QuestionnaireId { get; }
+        Guid InterviewerId { get; }
+        InterviewStatus Status { get; }
 
         Guid Id { get; }
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }

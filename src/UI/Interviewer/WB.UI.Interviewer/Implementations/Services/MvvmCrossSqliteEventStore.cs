@@ -12,7 +12,7 @@ using WB.UI.Interviewer.Extensions;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
-    public class MvvmCrossSqliteEventStore : IEventStore, IBackupable, IWriteSideCleaner
+    public class MvvmCrossSqliteEventStore : IEventStoreWithGetAllIds, IBackupable, IWriteSideCleaner
     {
         private readonly string folderName;
         private readonly ISQLiteConnectionFactory connectionFactory;
@@ -55,6 +55,12 @@ namespace WB.UI.Interviewer.Implementations.Services
         public void Store(UncommittedEventStream eventStream)
         {
             this.WrapConnection(eventStream.SourceId, connection => connection.InsertAll(eventStream.Select(x => x.ToStoredEvent())));
+        }
+
+        public IEnumerable<Guid> GetAllIds()
+        {
+            var directories = Directory.GetFiles(this.FullPathToFolder);
+            return directories.Select(f => Guid.Parse(Path.GetFileNameWithoutExtension(f)));
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)

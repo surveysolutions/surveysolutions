@@ -106,6 +106,7 @@
     <Compile Include="EventHandler\QuestionnaireRosterStructureDenormalizer.cs" />
     <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
+    <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Services\ICapiCleanUpService.cs" />
     <Compile Include="Services\ICapiDataSynchronizationService.cs" />
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
+    <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
