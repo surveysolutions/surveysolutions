@@ -3,7 +3,7 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', 
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys) {
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, $timeout) {
                 $scope.currentChapterId = $stateParams.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
@@ -12,12 +12,18 @@
 
                 var saveRoster = 'ctrl+s';
 
+                var addRosterTitle = 'enter';
+
                 if (hotkeys.get(saveRoster) !== false) {
                     hotkeys.del(saveRoster);
                 }
-                if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)
-                {
-                    
+
+                if (hotkeys.get(addRosterTitle) !== false) {
+                    hotkeys.del(addRosterTitle);
+                }
+
+                if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
+
                     hotkeys.bindTo($scope)
                         .add({
                             combo: saveRoster,
@@ -30,6 +36,35 @@
                             }
                         });
                 }
+                hotkeys.add({
+                        combo: addRosterTitle,
+                        description: 'Add roster title',
+                        allowIn: ["INPUT"],
+                        callback: function (event) {
+                            event.preventDefault();
+
+                            var target = $(event.target);
+                            if (target.parents(".fixed-roster-titles-editor").length <= 0) {
+                                return;
+                            }
+
+                            var fixedRosterTitleScope = angular.element(target).scope().title;
+                            var indexOfFixedRosterTitle = $scope.activeRoster.fixedRosterTitles.indexOf(fixedRosterTitleScope);
+                            if (indexOfFixedRosterTitle < 0)
+                                return;
+
+                            if (indexOfFixedRosterTitle === $scope.activeRoster.fixedRosterTitles.length - 1)
+                                $scope.addFixedTitle();
+
+                            $timeout(function () {
+                                var fixedRosterValueEditor = $(".fixed-roster-titles-editor input.fixed-roster-value-editor");
+                                var fixedRosterValueInput = $(fixedRosterValueEditor[indexOfFixedRosterTitle + 1]);
+                                fixedRosterValueInput.focus();
+                                fixedRosterValueInput.select();
+                            });
+                        }
+                    });
+                
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
                     $scope.activeRoster.variable = result.variableName;

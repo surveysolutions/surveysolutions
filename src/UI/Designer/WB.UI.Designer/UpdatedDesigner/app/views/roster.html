@@ -154,9 +154,9 @@
             <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
             <div class="singleOption">
                 <div class="table-holder">
-                    <div class="table-row" ng-repeat="title in activeRoster.fixedRosterTitles">
+                    <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">
                         <div class="column-2">
-                            <input type="text" ng-model="title.value" class="form-control">
+                            <input type="text" ng-model="title.value" class="form-control fixed-roster-value-editor">
                         </div>
                         <div class="column-3">
                             <input type="text" ng-model="title.title" class="form-control">
