@@ -18,7 +18,7 @@
     var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
     var $statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })';
     $(function () {
-        var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "SupervisorAndDependentInterviewers" })';
+        var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
         var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsiblesUrl, usersToAssignUrl, $commandExecutionUrl);
         model.IsNothingSelected.subscribe(function (value) {

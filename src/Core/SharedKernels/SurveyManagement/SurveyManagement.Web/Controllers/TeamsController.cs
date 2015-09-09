@@ -46,9 +46,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Supervisor")]
-        public UsersView SupervisorAndDependentInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
-            return this.teamViewFactory.GetSupervisorAndDependentInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.GlobalInfo.GetCurrentUser().Id);
+            return this.teamViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.GlobalInfo.GetCurrentUser().Id);
         }
     }
 }
