@@ -137,17 +137,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task UploadInterviewAsync(Guid interviewId, string content, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            await this.restService.PostWithProgressAsync<string>(
-                url: string.Concat(this.interviewsController, "/package"),
+            await this.restService.PostAsync(
+                url: string.Concat(this.interviewsController, "/package/", interviewId),
                 request: content,
                 credentials: this.restCredentials,
-                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token);
         }
 
         public async Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            await this.restService.PostWithProgressAsync<PostFileRequest>(
+            await this.restService.PostAsync(
                 url: string.Concat(this.interviewsController, "/", interviewId, "/image"),
                 request: new PostFileRequest()
                 {
@@ -156,7 +155,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     Data = Convert.ToBase64String(fileData)
                 },
                 credentials: this.restCredentials,
-                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token);
         }
 
