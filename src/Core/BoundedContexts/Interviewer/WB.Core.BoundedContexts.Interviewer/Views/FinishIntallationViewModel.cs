@@ -90,9 +90,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void Init()
         {
 #if DEBUG
-            this.ServerAddress = "http://192.168.1.146/headquarters";
-            this.Login = "int";
-            this.Password = "1";
+            this.ServerAddress = "http://192.168.88.163/headquarters";
+            this.Login = "in1sv1";
+            this.Password = "1234";
 #endif
         }
 

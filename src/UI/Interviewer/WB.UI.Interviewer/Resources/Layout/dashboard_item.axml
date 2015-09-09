@@ -12,12 +12,12 @@
     </LinearLayout>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
       <TextView style="@style/Dashboard_InterviewItem_Title"
-          android:text="DASHBOARD-ITEM" />
+          local:MvxBind="Text QuestionariName;" />
       <TextView android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="PREFILLED-ITEMS" />
+          local:MvxBind="Text QuestionariName;" />
       <TextView  style="@style/Dashboard_InterviewItem_Status"
-          android:text="ITEM-STATUS-DESCRIPTION" />
+          local:MvxBind="Text QuestionariName;" />
     </LinearLayout>
   </LinearLayout>
 
