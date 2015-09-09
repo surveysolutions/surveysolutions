@@ -9,7 +9,16 @@
                                      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                                      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView style="@style/ToolbarTitle"
-              local:MvxBind="Text Localization('Dashboard_ToolbarText')" />
+              local:MvxBind="Text Localization('Dashboard_ToolbarText'); Visible If(IsSearchVisible, false, true)" />
+    <ImageButton style="@style/Dashboard_SearchView_SearchButton"
+        local:MvxBind="Click ShowSearchCommand; Visible If(IsSearchVisible, false, true)"/>
+    <MvxLinearLayout style="@style/Dashboard_SearchView_Container"
+                     local:MvxBind="Visible IsSearchVisible;">
+      <EditText style="@style/Dashboard_SearchView_FilterInput"
+          local:MvxBind="Text SearchText; SetFocus IsSearchVisible" />
+      <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
+        local:MvxBind="Click ClearSearchCommand;"/>
+    </MvxLinearLayout>
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                local:MvxBind="ShowProgress IsInProgress" />
