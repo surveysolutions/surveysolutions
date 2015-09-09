@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Tester.Services.Infrastructure
 {

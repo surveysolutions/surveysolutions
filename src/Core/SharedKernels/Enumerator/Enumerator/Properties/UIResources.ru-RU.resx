@@ -461,4 +461,10 @@
   <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
     <value>Завершить интервью</value>
   </data>
+  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
+    <value>не обновлялись</value>
+  </data>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>обновлялись {0}</value>
+  </data>
 </root>
