@@ -143,7 +143,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return await this.ReceiveBytesWithProgressAsync(response: response, token: token, onDownloadProgressChanged: onDownloadProgressChanged);
         }
 
-        public async Task<T> ReceiveCompressedJsonAsync<T>(Task<HttpResponseMessage> response)
+        private async Task<T> ReceiveCompressedJsonAsync<T>(Task<HttpResponseMessage> response)
         {
             var responseMessage = await response;
             var responseContent = await responseMessage.Content.ReadAsByteArrayAsync();
@@ -152,7 +152,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         }
 
 
-        public async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
+        private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
             CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
             var responseMessage = await response;
@@ -161,7 +161,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return this.GetDecompressedJsonFromHttpResponseMessage<T>(responseMessage, responseContent);
         }
 
-        public async Task<byte[]> ReceiveBytesWithProgressAsync(Task<HttpResponseMessage> response,
+        private async Task<byte[]> ReceiveBytesWithProgressAsync(Task<HttpResponseMessage> response,
             CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
             var responseMessage = await response;
