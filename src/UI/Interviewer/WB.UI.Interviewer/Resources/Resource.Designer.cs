@@ -1003,7 +1003,9 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Layout.abc_select_dialog_material = global::WB.UI.Interviewer.Resource.Layout.abc_select_dialog_material;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.abc_simple_dropdown_hint = global::WB.UI.Interviewer.Resource.Layout.abc_simple_dropdown_hint;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview = global::WB.UI.Interviewer.Resource.Layout.interview;
+			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_active_group = global::WB.UI.Interviewer.Resource.Layout.interview_active_group;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_breadcrumb_item = global::WB.UI.Interviewer.Resource.Layout.interview_breadcrumb_item;
+			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_complete_screen = global::WB.UI.Interviewer.Resource.Layout.interview_complete_screen;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_complete_statistics = global::WB.UI.Interviewer.Resource.Layout.interview_complete_statistics;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_complete_status_change = global::WB.UI.Interviewer.Resource.Layout.interview_complete_status_change;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_disabled_group = global::WB.UI.Interviewer.Resource.Layout.interview_disabled_group;
@@ -1049,6 +1051,7 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Raw.gtm_analytics = global::WB.UI.Interviewer.Resource.Raw.gtm_analytics;
 			global::WB.UI.Shared.Enumerator.Resource.String.ApplicationName = global::WB.UI.Interviewer.Resource.String.ApplicationName;
 			global::WB.UI.Shared.Enumerator.Resource.String.Hello = global::WB.UI.Interviewer.Resource.String.Hello;
+			global::WB.UI.Shared.Enumerator.Resource.String.Interview_Complete_Screen_Description = global::WB.UI.Interviewer.Resource.String.Interview_Complete_Screen_Description;
 			global::WB.UI.Shared.Enumerator.Resource.String.abc_action_bar_home_description = global::WB.UI.Interviewer.Resource.String.abc_action_bar_home_description;
 			global::WB.UI.Shared.Enumerator.Resource.String.abc_action_bar_home_description_format = global::WB.UI.Interviewer.Resource.String.abc_action_bar_home_description_format;
 			global::WB.UI.Shared.Enumerator.Resource.String.abc_action_bar_home_subtitle_description_format = global::WB.UI.Interviewer.Resource.String.abc_action_bar_home_subtitle_description_format;
@@ -5408,157 +5411,163 @@ namespace WB.UI.Interviewer
 			public const int interview = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int interview_breadcrumb_item = 2130903076;
+			public const int interview_active_group = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int interview_complete_statistics = 2130903077;
+			public const int interview_breadcrumb_item = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int interview_complete_status_change = 2130903078;
+			public const int interview_complete_screen = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int interview_disabled_group = 2130903079;
+			public const int interview_complete_statistics = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int interview_disabled_question = 2130903080;
+			public const int interview_complete_status_change = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int interview_group = 2130903081;
+			public const int interview_disabled_group = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int interview_group_navigation = 2130903082;
+			public const int interview_disabled_question = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int interview_left_side_panel = 2130903083;
+			public const int interview_group = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int interview_left_side_panel_item = 2130903084;
+			public const int interview_group_navigation = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int interview_left_side_panel_item_group = 2130903085;
+			public const int interview_left_side_panel = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int interview_left_side_panel_item_section = 2130903086;
+			public const int interview_left_side_panel_item = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int interview_prefilled_question_template = 2130903087;
+			public const int interview_left_side_panel_item_group = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int interview_question__comments = 2130903088;
+			public const int interview_left_side_panel_item_section = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int interview_question__errors = 2130903089;
+			public const int interview_prefilled_question_template = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int interview_question__instructions = 2130903090;
+			public const int interview_question__comments = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int interview_question__title = 2130903091;
+			public const int interview_question__errors = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int interview_question_cascading_single_option = 2130903092;
+			public const int interview_question__instructions = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int interview_question_datetime = 2130903093;
+			public const int interview_question__title = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int interview_question_filtered_single_option = 2130903094;
+			public const int interview_question_cascading_single_option = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int interview_question_filtered_single_option_item = 2130903095;
+			public const int interview_question_datetime = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int interview_question_gps = 2130903096;
+			public const int interview_question_filtered_single_option = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int interview_question_integer = 2130903097;
+			public const int interview_question_filtered_single_option_item = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int interview_question_multi_option = 2130903098;
+			public const int interview_question_gps = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int interview_question_multi_option_item = 2130903099;
+			public const int interview_question_integer = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int interview_question_multimedia = 2130903100;
+			public const int interview_question_multi_option = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int interview_question_qrbarcode = 2130903101;
+			public const int interview_question_multi_option_item = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int interview_question_real = 2130903102;
+			public const int interview_question_multimedia = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int interview_question_single_option = 2130903103;
+			public const int interview_question_qrbarcode = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int interview_question_single_option_item = 2130903104;
+			public const int interview_question_real = 2130903104;
 			
 			// aapt resource value: 0x7f030041
-			public const int interview_question_text = 2130903105;
+			public const int interview_question_single_option = 2130903105;
 			
 			// aapt resource value: 0x7f030042
-			public const int interview_question_text_list = 2130903106;
+			public const int interview_question_single_option_item = 2130903106;
 			
 			// aapt resource value: 0x7f030043
-			public const int interview_question_text_list_item = 2130903107;
+			public const int interview_question_text = 2130903107;
 			
 			// aapt resource value: 0x7f030044
-			public const int interview_static_text = 2130903108;
+			public const int interview_question_text_list = 2130903108;
 			
 			// aapt resource value: 0x7f030045
-			public const int InterviewActionBar = 2130903109;
+			public const int interview_question_text_list_item = 2130903109;
 			
 			// aapt resource value: 0x7f030046
-			public const int Login = 2130903110;
+			public const int interview_static_text = 2130903110;
 			
 			// aapt resource value: 0x7f030047
-			public const int Main = 2130903111;
+			public const int InterviewActionBar = 2130903111;
 			
 			// aapt resource value: 0x7f030048
-			public const int mr_media_route_chooser_dialog = 2130903112;
+			public const int Login = 2130903112;
 			
 			// aapt resource value: 0x7f030049
-			public const int mr_media_route_controller_dialog = 2130903113;
+			public const int Main = 2130903113;
 			
 			// aapt resource value: 0x7f03004a
-			public const int mr_media_route_list_item = 2130903114;
+			public const int mr_media_route_chooser_dialog = 2130903114;
 			
 			// aapt resource value: 0x7f03004b
-			public const int prefilled_questions = 2130903115;
+			public const int mr_media_route_controller_dialog = 2130903115;
 			
 			// aapt resource value: 0x7f03004c
-			public const int prefilled_questions_start_button = 2130903116;
+			public const int mr_media_route_list_item = 2130903116;
 			
 			// aapt resource value: 0x7f03004d
-			public const int relink = 2130903117;
+			public const int prefilled_questions = 2130903117;
 			
 			// aapt resource value: 0x7f03004e
-			public const int scanner = 2130903118;
+			public const int prefilled_questions_start_button = 2130903118;
 			
 			// aapt resource value: 0x7f03004f
-			public const int select_dialog_item_material = 2130903119;
+			public const int relink = 2130903119;
 			
 			// aapt resource value: 0x7f030050
-			public const int select_dialog_multichoice_material = 2130903120;
+			public const int scanner = 2130903120;
 			
 			// aapt resource value: 0x7f030051
-			public const int select_dialog_singlechoice_material = 2130903121;
+			public const int select_dialog_item_material = 2130903121;
 			
 			// aapt resource value: 0x7f030052
-			public const int settings_dialog = 2130903122;
+			public const int select_dialog_multichoice_material = 2130903122;
 			
 			// aapt resource value: 0x7f030053
-			public const int splash = 2130903123;
+			public const int select_dialog_singlechoice_material = 2130903123;
 			
 			// aapt resource value: 0x7f030054
-			public const int support_simple_spinner_dropdown_item = 2130903124;
+			public const int settings_dialog = 2130903124;
 			
 			// aapt resource value: 0x7f030055
-			public const int sync_dialog = 2130903125;
+			public const int splash = 2130903125;
 			
 			// aapt resource value: 0x7f030056
-			public const int SyncLogin = 2130903126;
+			public const int support_simple_spinner_dropdown_item = 2130903126;
+			
+			// aapt resource value: 0x7f030057
+			public const int sync_dialog = 2130903127;
+			
+			// aapt resource value: 0x7f030058
+			public const int SyncLogin = 2130903128;
 			
 			static Layout()
 			{
@@ -5614,131 +5623,134 @@ namespace WB.UI.Interviewer
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f06003f
-			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099711;
-			
-			// aapt resource value: 0x7f06003c
-			public const int ApplicationName = 2131099708;
-			
-			// aapt resource value: 0x7f06003e
-			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099710;
-			
-			// aapt resource value: 0x7f060044
-			public const int AreYouSureYouWantToRestore = 2131099716;
-			
-			// aapt resource value: 0x7f06004a
-			public const int Cancel = 2131099722;
-			
-			// aapt resource value: 0x7f060043
-			public const int ConfirmDeviceChanging = 2131099715;
-			
-			// aapt resource value: 0x7f060055
-			public const int CreatingInformationPackage = 2131099733;
-			
-			// aapt resource value: 0x7f06004d
-			public const int DetailsFormat = 2131099725;
-			
-			// aapt resource value: 0x7f06003b
-			public const int Hello = 2131099707;
-			
-			// aapt resource value: 0x7f060054
-			public const int InformationPackage = 2131099732;
-			
-			// aapt resource value: 0x7f060051
-			public const int InformationPackageIsSuccessfullySent = 2131099729;
-			
-			// aapt resource value: 0x7f060056
-			public const int InformationPackageSizeWarningFormat = 2131099734;
-			
-			// aapt resource value: 0x7f06004c
-			public const int Initializing = 2131099724;
-			
-			// aapt resource value: 0x7f06004f
-			public const int InterviewLoadingError = 2131099727;
-			
-			// aapt resource value: 0x7f060050
-			public const int InterviewWithIdIsAbsentFormat = 2131099728;
-			
-			// aapt resource value: 0x7f060058
-			public const int MenuItem_Title_Dashboard = 2131099736;
-			
-			// aapt resource value: 0x7f06005a
-			public const int MenuItem_Title_Settings = 2131099738;
-			
-			// aapt resource value: 0x7f060059
-			public const int MenuItem_Title_SignOut = 2131099737;
-			
-			// aapt resource value: 0x7f06005b
-			public const int MenuItem_Title_Synchronization = 2131099739;
-			
-			// aapt resource value: 0x7f06005f
-			public const int NetworkStatus = 2131099743;
-			
-			// aapt resource value: 0x7f060063
-			public const int NewHtmlLine = 2131099747;
-			
-			// aapt resource value: 0x7f060048
-			public const int No = 2131099720;
-			
-			// aapt resource value: 0x7f06005c
-			public const int NoAssignments = 2131099740;
-			
-			// aapt resource value: 0x7f060060
-			public const int NowYouareConnectedToMobileNetwork = 2131099744;
-			
-			// aapt resource value: 0x7f060062
-			public const int NowYouareConnectedToWifiNetwork = 2131099746;
-			
-			// aapt resource value: 0x7f06004e
-			public const int Oops = 2131099726;
-			
-			// aapt resource value: 0x7f06005d
-			public const int PleaseCheckURLInSettingsFormat = 2131099741;
-			
-			// aapt resource value: 0x7f060067
-			public const int Prefs_EndpointSummary = 2131099751;
-			
-			// aapt resource value: 0x7f060066
-			public const int Prefs_EndpointTitle = 2131099750;
-			
-			// aapt resource value: 0x7f060065
-			public const int Prefs_VersionSummaryFormat = 2131099749;
-			
-			// aapt resource value: 0x7f060064
-			public const int Prefs_VersionTitle = 2131099748;
-			
-			// aapt resource value: 0x7f060049
-			public const int Send = 2131099721;
-			
-			// aapt resource value: 0x7f060057
-			public const int SendingInformationPackage = 2131099735;
-			
-			// aapt resource value: 0x7f060053
-			public const int SendingOfInformationPackageIsCanceled = 2131099731;
-			
 			// aapt resource value: 0x7f060040
-			public const int SendingOfInformationPackageIsCanceling = 2131099712;
+			public const int AnswerIsNotPresentInFilteredComboboxOptionsList = 2131099712;
+			
+			// aapt resource value: 0x7f06003d
+			public const int ApplicationName = 2131099709;
+			
+			// aapt resource value: 0x7f06003f
+			public const int AreYouSureYouWantToRemoveRowFromRosterFormat = 2131099711;
 			
 			// aapt resource value: 0x7f060045
-			public const int SyncIsFinished = 2131099717;
-			
-			// aapt resource value: 0x7f060046
-			public const int SyncIsFinishedUnsuccessfully = 2131099718;
-			
-			// aapt resource value: 0x7f060052
-			public const int ThankYouForPackage = 2131099730;
+			public const int AreYouSureYouWantToRestore = 2131099717;
 			
 			// aapt resource value: 0x7f06004b
-			public const int Warning = 2131099723;
+			public const int Cancel = 2131099723;
 			
-			// aapt resource value: 0x7f06005e
-			public const int WebErrorWithStatus = 2131099742;
+			// aapt resource value: 0x7f060044
+			public const int ConfirmDeviceChanging = 2131099716;
 			
-			// aapt resource value: 0x7f060047
-			public const int Yes = 2131099719;
+			// aapt resource value: 0x7f060056
+			public const int CreatingInformationPackage = 2131099734;
+			
+			// aapt resource value: 0x7f06004e
+			public const int DetailsFormat = 2131099726;
+			
+			// aapt resource value: 0x7f06003c
+			public const int Hello = 2131099708;
+			
+			// aapt resource value: 0x7f060055
+			public const int InformationPackage = 2131099733;
+			
+			// aapt resource value: 0x7f060052
+			public const int InformationPackageIsSuccessfullySent = 2131099730;
+			
+			// aapt resource value: 0x7f060057
+			public const int InformationPackageSizeWarningFormat = 2131099735;
+			
+			// aapt resource value: 0x7f06004d
+			public const int Initializing = 2131099725;
+			
+			// aapt resource value: 0x7f060050
+			public const int InterviewLoadingError = 2131099728;
+			
+			// aapt resource value: 0x7f060051
+			public const int InterviewWithIdIsAbsentFormat = 2131099729;
+			
+			// aapt resource value: 0x7f06003b
+			public const int Interview_Complete_Screen_Description = 2131099707;
+			
+			// aapt resource value: 0x7f060059
+			public const int MenuItem_Title_Dashboard = 2131099737;
+			
+			// aapt resource value: 0x7f06005b
+			public const int MenuItem_Title_Settings = 2131099739;
+			
+			// aapt resource value: 0x7f06005a
+			public const int MenuItem_Title_SignOut = 2131099738;
+			
+			// aapt resource value: 0x7f06005c
+			public const int MenuItem_Title_Synchronization = 2131099740;
+			
+			// aapt resource value: 0x7f060060
+			public const int NetworkStatus = 2131099744;
+			
+			// aapt resource value: 0x7f060064
+			public const int NewHtmlLine = 2131099748;
+			
+			// aapt resource value: 0x7f060049
+			public const int No = 2131099721;
+			
+			// aapt resource value: 0x7f06005d
+			public const int NoAssignments = 2131099741;
 			
 			// aapt resource value: 0x7f060061
-			public const int YouAreNotConnectedToAnyNetwork = 2131099745;
+			public const int NowYouareConnectedToMobileNetwork = 2131099745;
+			
+			// aapt resource value: 0x7f060063
+			public const int NowYouareConnectedToWifiNetwork = 2131099747;
+			
+			// aapt resource value: 0x7f06004f
+			public const int Oops = 2131099727;
+			
+			// aapt resource value: 0x7f06005e
+			public const int PleaseCheckURLInSettingsFormat = 2131099742;
+			
+			// aapt resource value: 0x7f060068
+			public const int Prefs_EndpointSummary = 2131099752;
+			
+			// aapt resource value: 0x7f060067
+			public const int Prefs_EndpointTitle = 2131099751;
+			
+			// aapt resource value: 0x7f060066
+			public const int Prefs_VersionSummaryFormat = 2131099750;
+			
+			// aapt resource value: 0x7f060065
+			public const int Prefs_VersionTitle = 2131099749;
+			
+			// aapt resource value: 0x7f06004a
+			public const int Send = 2131099722;
+			
+			// aapt resource value: 0x7f060058
+			public const int SendingInformationPackage = 2131099736;
+			
+			// aapt resource value: 0x7f060054
+			public const int SendingOfInformationPackageIsCanceled = 2131099732;
+			
+			// aapt resource value: 0x7f060041
+			public const int SendingOfInformationPackageIsCanceling = 2131099713;
+			
+			// aapt resource value: 0x7f060046
+			public const int SyncIsFinished = 2131099718;
+			
+			// aapt resource value: 0x7f060047
+			public const int SyncIsFinishedUnsuccessfully = 2131099719;
+			
+			// aapt resource value: 0x7f060053
+			public const int ThankYouForPackage = 2131099731;
+			
+			// aapt resource value: 0x7f06004c
+			public const int Warning = 2131099724;
+			
+			// aapt resource value: 0x7f06005f
+			public const int WebErrorWithStatus = 2131099743;
+			
+			// aapt resource value: 0x7f060048
+			public const int Yes = 2131099720;
+			
+			// aapt resource value: 0x7f060062
+			public const int YouAreNotConnectedToAnyNetwork = 2131099746;
 			
 			// aapt resource value: 0x7f060006
 			public const int abc_action_bar_home_description = 2131099654;
@@ -5887,17 +5899,17 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f06001a
 			public const int decline = 2131099674;
 			
-			// aapt resource value: 0x7f060042
-			public const int drawer_close = 2131099714;
+			// aapt resource value: 0x7f060043
+			public const int drawer_close = 2131099715;
 			
-			// aapt resource value: 0x7f060041
-			public const int drawer_open = 2131099713;
+			// aapt resource value: 0x7f060042
+			public const int drawer_open = 2131099714;
 			
 			// aapt resource value: 0x7f06003a
 			public const int font_fontFamily_medium = 2131099706;
 			
-			// aapt resource value: 0x7f06003d
-			public const int library_name = 2131099709;
+			// aapt resource value: 0x7f06003e
+			public const int library_name = 2131099710;
 			
 			// aapt resource value: 0x7f060000
 			public const int mr_media_route_button_content_description = 2131099648;
