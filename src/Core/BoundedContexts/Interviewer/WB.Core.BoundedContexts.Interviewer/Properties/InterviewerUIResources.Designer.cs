@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed {2}.
+        ///   Looks up a localized string similar to Completed {0}.
         /// </summary>
         public static string Dashboard_CompletedLinkText {
             get {
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected {3}.
+        ///   Looks up a localized string similar to Rejected {0}.
         /// </summary>
         public static string Dashboard_RejectedLinkText {
             get {
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Started {1}.
+        ///   Looks up a localized string similar to Started {0}.
         /// </summary>
         public static string Dashboard_StartedLinkText {
             get {

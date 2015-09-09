@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Completed {2}</value>
+    <value>Completed {0}</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>New {0}</value>
@@ -130,10 +130,10 @@
     <value>This interview is completed. Do you want to restart the interview?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Rejected {3}</value>
+    <value>Rejected {0}</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Started {1}</value>
+    <value>Started {0}</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} assignments for {1}</value>
