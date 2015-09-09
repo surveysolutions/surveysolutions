@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory = null,
             IMembershipUserService membershipUserService = null,
-            IDesignerExpressionsEngineVersionService expressionsEngineVersionService = null,
+            IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator=null,
             IJsonUtils jsonUtils=null)
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
                 Mock.Of<IQuestionnaireHelper>(),
-                expressionsEngineVersionService ?? Mock.Of<IDesignerExpressionsEngineVersionService>(),
+                engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
                 jsonUtils??Mock.Of<IJsonUtils>());
         }
     }

@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete file &apos;{0}&apos; from the list?.
+        ///   Looks up a localized string similar to Are you sure you want to delete file.
         /// </summary>
         internal static string AreYouSureYouWantToDeleteFormat {
             get {
@@ -372,6 +372,15 @@ namespace Resources {
         internal static string UploadUsersDescription {
             get {
                 return ResourceManager.GetString("UploadUsersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of files with preloaded users.
+        /// </summary>
+        internal static string UploadUsers_Title {
+            get {
+                return ResourceManager.GetString("UploadUsers_Title", resourceCulture);
             }
         }
         

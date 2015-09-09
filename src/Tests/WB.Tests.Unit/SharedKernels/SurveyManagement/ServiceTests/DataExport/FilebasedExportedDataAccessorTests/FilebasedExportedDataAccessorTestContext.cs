@@ -28,6 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             if (fileSystemAccessor == null)
             {
                 var fileSystemAccessorMock = CreateFileSystemAccessorMock();
+                fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>()))
+                    .Returns(dataFiles);
                 fileSystemAccessor = fileSystemAccessorMock.Object;
             }
             var archiveUtilsMock = new Mock<IArchiveUtils>();
@@ -36,13 +38,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                     .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
             return new FilebasedExportedDataAccessor(fileSystemAccessor, "",
-                Mock.Of<IDataExportService>(_ => _.GetDataFilesForQuestionnaire(
+                Mock.Of<IDataExportService>( /*_ => _.GetDataFilesForQuestionnaire(
                     It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles &&
                     _.GetDataFilesForQuestionnaireByInterviewsInApprovedState(
-                        It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles),
+                        It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles*/),
                 Mock.Of<IEnvironmentContentService>(
-                    _ => _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == environmentFiles),
-                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewHistorySettings(string.Empty,false));
+                    _ =>
+                        _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) ==
+                        environmentFiles),
+                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewDataExportSettings(string.Empty, false,10000),
+                Mock.Of<ITabularFormatExportService>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateFileSystemAccessorMock()

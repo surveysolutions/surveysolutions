@@ -141,7 +141,7 @@ namespace WB.Tests.Unit
             int? maxAnswerCount)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, enablementCondition,validationExpression, validationMessage, instructions, responsibleId, maxAnswerCount);
+            questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, maxAnswerCount, scope: QuestionScope.Interviewer);
         }
 
         public static void AddQRBarcodeQuestion(
@@ -158,7 +158,7 @@ namespace WB.Tests.Unit
             string validationMessage)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, enablementCondition, validation, validationMessage, instructions, responsibleId);
+            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, enablementCondition, validation, validationMessage, instructions, responsibleId, scope: QuestionScope.Interviewer);
         }
     }
 }

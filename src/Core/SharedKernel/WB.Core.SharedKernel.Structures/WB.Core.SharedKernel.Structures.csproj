@@ -60,6 +60,7 @@
     <Compile Include="Synchronization\InterviewMetaInfo.cs" />
     <Compile Include="Synchronization\SurveyManagement\HandshakePackageRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\InterviewSyncPackageDto.cs" />
+    <Compile Include="Synchronization\SurveyManagement\MarkPackageAsSuccessfullyHandledRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\PostPackageRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\PostFileRequest.cs" />
     <Compile Include="Synchronization\SurveyManagement\QuestionnaireSyncPackageDto.cs" />

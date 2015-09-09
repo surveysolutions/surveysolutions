@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -23,12 +24,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual event GroupChanged GroupChanged;
         public virtual event BeforeGroupChanged BeforeGroupChanged;
 
-        private bool isNavigating = false;
+        private bool isNavigatingInExecutionInCurrentMoment = false;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
+        public virtual ScreenType CurrentGroupType { get; private set; }
 
-        private readonly Stack<NavigationParams> navigationStack = new Stack<NavigationParams>();
+        private readonly Stack<NavigationIdentity> navigationStack = new Stack<NavigationIdentity>();
 
         protected NavigationState(IUserInteractionService userInteractionServiceAwaiter)
         {
@@ -56,19 +58,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireId = questionnaireId;
         }
 
-        public async Task NavigateToAsync(Identity groupIdentity, Identity anchoredElementIdentity = null)
+        public async Task NavigateToAsync(NavigationIdentity navigationItem)
         {
-            await this.DoNavigatinActionAsync((() => this.NavigateTo(groupIdentity, anchoredElementIdentity)));
+            await this.DoNavigationActionAsync((() => this.NavigateTo(navigationItem)));
         }       
         
-        private async Task DoNavigatinActionAsync(Action action)
+        private async Task DoNavigationActionAsync(Action action)
         {
-            if (isNavigating)
+            if (this.isNavigatingInExecutionInCurrentMoment)
                 return;
 
             try
             {
-                isNavigating = true;
+                this.isNavigatingInExecutionInCurrentMoment = true;
 
                 await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
                 await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
@@ -78,30 +80,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             finally 
             {
-                isNavigating = false;
+                this.isNavigatingInExecutionInCurrentMoment = false;
             }
         }
 
-        private void NavigateTo(Identity groupIdentity, Identity anchoredElementIdentity)
+        private void NavigateTo(NavigationIdentity navigationItem)
         {
-            if (!this.CanNavigateTo(groupIdentity))
-                return;
-
-            var navigationItem = new NavigationParams {TargetGroup = groupIdentity};
-
-            while (this.navigationStack.Contains(navigationItem))
+            if (navigationItem.ScreenType == ScreenType.Group)
             {
-                this.navigationStack.Pop();
-            }
+                if (!this.CanNavigateTo(navigationItem.TargetGroup)) return;
 
-            if (anchoredElementIdentity != null)
-            {
-                navigationItem.AnchoredElementIdentity = anchoredElementIdentity;
+                while (this.navigationStack.Any(x => x.TargetGroup!=null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
+                {
+                    this.navigationStack.Pop();
+                }
             }
 
             this.navigationStack.Push(navigationItem);
 
-            this.ChangeCurrentGroupAndFireEvent(groupIdentity, navigationItem);
+            this.ChangeCurrentGroupAndFireEvent(navigationItem);
         }
 
         private bool CanNavigateTo(Identity group)
@@ -113,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
         {
-            await this.DoNavigatinActionAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
+            await this.DoNavigationActionAsync((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
         }
 
         private void NavigateBack(Action navigateToIfHistoryIsEmpty)
@@ -131,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 navigateToIfHistoryIsEmpty.Invoke();
             else
             {
-                NavigationParams previousNavigationItem = this.navigationStack.Peek();
+                NavigationIdentity previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
                 while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) ||
@@ -146,27 +143,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     previousNavigationItem = this.navigationStack.Pop();
                 }
 
-                this.ChangeCurrentGroupAndFireEvent(previousNavigationItem.TargetGroup, previousNavigationItem);
+                this.ChangeCurrentGroupAndFireEvent(previousNavigationItem);
             }
         }
 
-        private void ChangeCurrentGroupAndFireEvent(Identity groupIdentity, NavigationParams navigationParams)
+        private void ChangeCurrentGroupAndFireEvent(NavigationIdentity navigationIdentity)
         {
             if (this.BeforeGroupChanged != null)
             {
-                this.BeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationParams.TargetGroup));
+                this.BeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationIdentity.TargetGroup));
             }
 
-            this.CurrentGroup = groupIdentity;
+            this.CurrentGroup = navigationIdentity.TargetGroup;
+            this.CurrentGroupType = navigationIdentity.ScreenType;
 
             if (this.GroupChanged != null)
             {
                 var groupChangedEventArgs = new GroupChangedEventArgs
                 {
-                    TargetGroup = navigationParams.TargetGroup,
-                    AnchoredElementIdentity = navigationParams.AnchoredElementIdentity
+                    TargetGroup = navigationIdentity.TargetGroup,
+                    AnchoredElementIdentity =
+                        navigationIdentity.AnchoredElementIdentity,
+                    ScreenType = navigationIdentity.ScreenType
                 };
-                
+
                 this.GroupChanged(groupChangedEventArgs);
             }
         }

@@ -10,8 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 
         public string Title { get; set; }
 
-        public Guid FinishGroupId = Guid.NewGuid();
-
         public Dictionary<Guid, GroupModel> GroupsWithFirstLevelChildrenAsReferences { set; get; }
 
         public Dictionary<Guid, BaseQuestionModel> Questions { get; set; }

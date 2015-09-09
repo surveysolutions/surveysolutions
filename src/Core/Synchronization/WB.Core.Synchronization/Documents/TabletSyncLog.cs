@@ -53,5 +53,6 @@ namespace WB.Core.Synchronization.Documents
         public virtual DateTime? PackageSyncTime { get; set; }
         public virtual string PackageType { get; set; }
         public virtual TabletSyncLogByUser TabletSyncLogByUser { get; set; }
+        public virtual bool ReceivedByClient { get; set; }
     }
 }

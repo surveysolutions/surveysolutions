@@ -52,6 +52,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             this.session = null;
         }
 
+        public bool IsTransactionStarted { get { return this.transaction != null; } }
+
         public void Dispose()
         {
             if (this.session != null)

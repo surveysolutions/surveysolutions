@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
@@ -8,7 +7,6 @@ using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -42,8 +40,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 
-            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
-
             this.SetSupportActionBar(this.toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             this.SupportActionBar.SetHomeButtonEnabled(true);
@@ -57,6 +53,8 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewModel = this.ViewModel;
                 viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
+
+            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
             this.layoutManager = new LinearLayoutManager(this);
             this.recyclerView.SetLayoutManager(this.layoutManager);
@@ -93,7 +91,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 Application.SynchronizationContext.Post(_ =>
                 {
                     this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
-                }, 
+                },
                 null);
             }
         }

@@ -22,7 +22,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IJsonUtils jsonUtils;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
-            IDesignerExpressionsEngineVersionService expressionsEngineVersionService, 
+            IDesignerEngineVersionService engineVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.engineVersionService = engineVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -60,7 +60,7 @@ namespace WB.UI.Designer.WebServices
             var clientSupportedQuestionnaireVersion = new Version(request.SupportedQuestionnaireVersion.Major,
                 request.SupportedQuestionnaireVersion.Minor, request.SupportedQuestionnaireVersion.Patch);
 
-            if (!expressionsEngineVersionService.IsClientVersionSupported(clientSupportedQuestionnaireVersion))
+            if (!this.engineVersionService.IsClientVersionSupported(clientSupportedQuestionnaireVersion))
             {
                 var message =
                     string.Format(ErrorMessages.ClientVersionIsNotSupported, clientSupportedQuestionnaireVersion);

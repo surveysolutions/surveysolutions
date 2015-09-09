@@ -90,21 +90,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
             ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerExpressionsEngineVersionService expressionsEngineVersionService)
+            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerEngineVersionService engineVersionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.substitutionService = substitutionService;
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.engineVersionService = engineVersionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -179,12 +179,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
                     Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),                 
 
-                    ErrorsByQuestionsAndGroupsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByCustomValidationExpressionsReferencesQuestionWithDeeperRosterLevel,
                     ErrorsByConditionAndValidationExpressions
                 };
             }
@@ -258,7 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             string resultAssembly;
 
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire,expressionsEngineVersionService.GetLatestSupportedVersion(), 
+                questionnaire,this.engineVersionService.GetLatestSupportedVersion(), 
                 out resultAssembly);
         }
 
@@ -1100,105 +1098,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Where(referencedQuestion => referencedQuestion != null)
                 .ToList();
             return incorrectReferencedQuestions;
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsAndGroupsWithCustomConditionReferencingQuestionsWithDeeperRosterLevel(
-            QuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var itemsWithConditionExpression = questionnaire.Find<IComposite>(q => !string.IsNullOrEmpty(GetCustomEnablementCondition(q)));
-
-            var errorByAllItemsWithCustomCondition = new List<QuestionnaireVerificationError>();
-
-            foreach (var itemWithConditionExpression in itemsWithConditionExpression)
-            {
-                IEnumerable<string> identifiersUsedInExpression =
-                    this.expressionProcessor.GetIdentifiersUsedInExpression(GetCustomEnablementCondition(itemWithConditionExpression));
-
-                Guid[] vectorOfRosterSizeQuestionsForQuestionWithCustomCondition =
-                    GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(itemWithConditionExpression, questionnaire);
-
-                if (vectorOfRosterSizeQuestionsForQuestionWithCustomCondition != null)
-                {
-                    foreach (var identifier in identifiersUsedInExpression)
-                    {
-                        IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
-
-                        if (questionsReferencedInExpression == null)
-                        {
-                            continue;
-                        }
-                        var rosterVectorForItemWithExpression = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(itemWithConditionExpression, questionnaire);
-                        var rosterVectorForQuestionsReferencedInExpression = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionsReferencedInExpression, questionnaire);
-                        if (rosterVectorForItemWithExpression.Length <
-                            rosterVectorForQuestionsReferencedInExpression.Length)
-                        {
-                            if (itemWithConditionExpression is IQuestion)
-                            {
-                                errorByAllItemsWithCustomCondition.Add(new QuestionnaireVerificationError("WB0006",
-                                    VerificationMessages
-                                        .WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel,
-                                    CreateReference(itemWithConditionExpression),
-                                    CreateReference(questionsReferencedInExpression)));
-                            }
-                            if (itemWithConditionExpression is IGroup)
-                            {
-                                errorByAllItemsWithCustomCondition.Add(new QuestionnaireVerificationError("WB0007",
-                                    VerificationMessages
-                                        .WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel,
-                                    CreateReference(itemWithConditionExpression),
-                                    CreateReference(questionsReferencedInExpression)));
-                            }
-                        }
-                    }
-
-                    VerifyEnumerableAndAccumulateErrorsToList(identifiersUsedInExpression, errorByAllItemsWithCustomCondition,
-                     identifier => GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
-                         itemWithConditionExpression, identifier, questionnaire));
-
-                }
-            }
-
-            return errorByAllItemsWithCustomCondition;
-        }
-
-        private IEnumerable<QuestionnaireVerificationError> ErrorsByCustomValidationExpressionsReferencesQuestionWithDeeperRosterLevel(QuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var questionsWithValidations =
-                questionnaire.Find<IQuestion>(q => !string.IsNullOrEmpty(q.ValidationExpression));
-
-            var errorByAllItemsWithCustomCondition = new List<QuestionnaireVerificationError>();
-
-            foreach (var questionsWithValidation in questionsWithValidations)
-            {
-                IEnumerable<string> identifiersUsedInExpression =
-                    this.expressionProcessor.GetIdentifiersUsedInExpression(questionsWithValidation.ValidationExpression);
-
-                foreach (var identifier in identifiersUsedInExpression)
-                {
-                    IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
-
-                    if (questionsReferencedInExpression == null)
-                    {
-                       continue;
-                    }
-
-                    var rosterVectorForItemWithExpression = GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(
-                        questionsWithValidation, questionnaire);
-                    var rosterVectorForQuestionsReferencedInExpression =
-                        GetAllRosterSizeQuestionsAsVectorOrNullIfSomeAreMissing(questionsReferencedInExpression,
-                            questionnaire);
-
-                    if(rosterVectorForItemWithExpression.Length <
-                           rosterVectorForQuestionsReferencedInExpression.Length)
-                        errorByAllItemsWithCustomCondition.Add(new QuestionnaireVerificationError("WB0014",
-                                    VerificationMessages
-                                        .WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel,
-                                    CreateReference(questionsWithValidation),
-                                    CreateReference(questionsReferencedInExpression)));
-                }
-            }
-
-            return errorByAllItemsWithCustomCondition;
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)

@@ -101,12 +101,13 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
             controller.Configuration = new HttpConfiguration(new HttpRouteCollection());
         }
 
-        protected static SyncPackageRequest CreateSyncPackageRequest(string packageId, Guid deviceId)
+        protected static SyncPackageRequest CreateSyncPackageRequest(string packageId, Guid deviceId, string previousSuccessfullyHandledPackageId=null)
         {
             return new SyncPackageRequest
             {
                 ClientRegistrationId = deviceId,
-                PackageId = packageId
+                PackageId = packageId,
+                PreviousSuccessfullyHandledPackageId = previousSuccessfullyHandledPackageId
             };
         }
 

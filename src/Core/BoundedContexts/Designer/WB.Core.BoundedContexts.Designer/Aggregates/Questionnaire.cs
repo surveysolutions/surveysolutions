@@ -477,7 +477,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.VariableLabel,
@@ -567,7 +567,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.Title,
                         e.VariableName,
                         e.VariableLabel,
@@ -605,7 +605,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.Multimedia,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.Title,
                         e.VariableName,
                         e.VariableLabel,
@@ -1851,7 +1851,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
             string enablementCondition,
             string validationExpression,
-            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount)
+            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount,
+            QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1876,13 +1877,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
-
+                QuestionScope = scope,
                 MaxAnswerCount = maxAnswerCount
             });
         }
 
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
-         string enablementCondition, string instructions, Guid responsibleId)
+         string enablementCondition, string instructions, Guid responsibleId,
+            QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1900,14 +1902,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
                 Instructions = instructions,
+                QuestionScope = scope,
                 ResponsibleId = responsibleId
             });
         }
 
         public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
             string enablementCondition,
-            string validationExpression, 
-            string validationMessage, string instructions, Guid responsibleId)
+            string validationExpression,
+            string validationMessage, string instructions, Guid responsibleId,
+            QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1927,6 +1931,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Instructions = instructions,
+                QuestionScope = scope,
                 ResponsibleId = responsibleId
             });
         }
@@ -2363,7 +2368,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isTooLong)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameMaxLength, "Variable name shouldn't be longer than 32 characters");
+                    DomainExceptionType.VariableNameMaxLength, "Variable name or roster ID shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
@@ -2371,21 +2376,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameSpecialCharacters,
-                    "Valid variable name should contain only letters, digits and underscore character");
+                    "Valid variable or roster ID name should contain only letters, digits and underscore character");
             }
 
             bool startsWithDigitOrUnderscore = Char.IsDigit(stataCaption[0]) || stataCaption[0] == '_';
             if (startsWithDigitOrUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit or underscore");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't starts with digit or underscore");
             }
 
             bool endsWithUnderscore = stataCaption[stataCaption.Length-1] == '_';
             if (endsWithUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't end with underscore");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't end with underscore");
             }
 
             var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
@@ -2396,7 +2401,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (isNotUnique)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
+                    DomainExceptionType.VarialbeNameNotUnique, "Variable name or roster ID should be unique in questionnaire's scope");
             }
             
             var keywords = this.variableNameValidator.GetAllReservedKeywords();
@@ -2404,7 +2409,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var keyword in keywords.Where(keyword => stataCaption.ToLower() == keyword)) {
                 throw new QuestionnaireException(
                     DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
-                    keyword + " is a keyword. Variable name shouldn't match with keywords");
+                    keyword + " is a keyword. Variable name or roster ID shouldn't match with keywords");
             }
         }
 
@@ -2552,7 +2557,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(QuestionScope scope)
         {
-            if (scope != QuestionScope.Interviewer)
+            if (scope == QuestionScope.Supervisor)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
