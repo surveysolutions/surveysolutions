@@ -26,37 +26,38 @@
                             event.preventDefault();
                         }
                     });
+
             }
-
             hotkeys.add({
-                combo: addOption,
-                description: 'Add option',
-                allowIn: ["INPUT"],
-                callback: function (event) {
-                    event.preventDefault();
+                    combo: addOption,
+                    description: 'Add option',
+                    allowIn: ["INPUT"],
+                    callback: function(event) {
+                        event.preventDefault();
 
-                    var target = $(event.target);
-                    if (target.parents(".question-options-editor").length <= 0) {
-                        return;
+                        var target = $(event.target);
+                        if (target.parents(".question-options-editor").length <= 0) {
+                            return;
+                        }
+
+                        var optionScope = angular.element(target).scope().option;
+                        var indexOfOption = $scope.activeQuestion.options.indexOf(optionScope);
+                        if (indexOfOption < 0)
+                            return;
+
+                        if (indexOfOption === $scope.activeQuestion.options.length - 1)
+                            $scope.addOption();
+
+                        $timeout(function() {
+                            var questionOptionValueEditor = $(".question-options-editor input.question-option-value-editor");
+                            var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
+                            optionValueInput.focus();
+                            optionValueInput.select();
+                        });
                     }
-
-                    var optionScope = angular.element(target).scope().option;
-                    var indexOfOption = $scope.activeQuestion.options.indexOf(optionScope);
-                    if (indexOfOption < 0)
-                        return;
-
-                    if (indexOfOption === $scope.activeQuestion.options.length - 1)
-                        $scope.addOption();
-
-                    $timeout(function () {
-                        var questionOptionValueEditor = $(".question-options-editor input.question-option-value-editor");
-                        var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
-                        optionValueInput.focus();
-                        optionValueInput.select();
-                    });
-                }
-            });
+                });
             
+
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
                 $scope.activeQuestion.breadcrumbs = question.breadcrumbs;
