@@ -10,6 +10,9 @@
                                      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView style="@style/ToolbarTitle"
               local:MvxBind="Text Localization('Dashboard_ToolbarText'); Visible If(IsSearchVisible, false, true)" />
+    <TextView style="@style/Dashboard_LastUpdated"
+              local:MvxBind="Text HumanizedLastUpdateDate; Visible If(IsSearchVisible, false, true)" />
+    
     <ImageButton style="@style/Dashboard_SearchView_SearchButton"
         local:MvxBind="Click ShowSearchCommand; Visible If(IsSearchVisible, false, true)"/>
     <MvxLinearLayout style="@style/Dashboard_SearchView_Container"
