@@ -48,15 +48,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshDashboard()
         {
+            var staistic = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
+
             this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, this.LoggedInUserName);
 
-            this.NewInterviewsCount = 5;
-            this.StartedInterviewsCount = 2;
-            this.CompletedInterviewsCount = 7;
-            this.RejectedInterviewsCount = 2;
+            this.NewInterviewsCount = staistic.NewInterviewsCount;
+            this.StartedInterviewsCount = staistic.StartedInterviewsCount;
+            this.CompletedInterviewsCount = staistic.CompletedInterviewsCount;
+            this.RejectedInterviewsCount = staistic.RejectedInterviewsCount;
 
-            var items = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
-            this.DashboardItems = items;
+            this.DashboardItems = staistic.DashboardItems;
         }
 
         private DashboardInterviewCategories currentDashboardCategory;
