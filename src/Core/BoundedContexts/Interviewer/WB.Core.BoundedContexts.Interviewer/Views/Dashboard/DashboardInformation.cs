@@ -9,6 +9,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
          public int CompletedInterviewsCount { get; set; }
          public int RejectedInterviewsCount { get; set; }
 
-         public List<InterviewDashboardItemViewModel> DashboardItems { get; set; }
+         public List<IDashboardItem> DashboardItems { get; set; }
     }
 }

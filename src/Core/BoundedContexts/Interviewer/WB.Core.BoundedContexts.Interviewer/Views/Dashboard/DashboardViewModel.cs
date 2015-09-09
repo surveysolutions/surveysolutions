@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshDashboard()
         {
-            var staistic = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId);
+            var staistic = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId, currentDashboardCategory);
 
             this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, this.LoggedInUserName);
 
@@ -167,8 +167,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return this.rejectedInterviewsCount > 0; }
         }
 
-        private IEnumerable<InterviewDashboardItemViewModel> dashboardItems;
-        public IEnumerable<InterviewDashboardItemViewModel> DashboardItems
+        private IEnumerable<IDashboardItem> dashboardItems;
+        public IEnumerable<IDashboardItem> DashboardItems
         {
             get { return this.dashboardItems; }
             set { this.dashboardItems = value;  this.RaisePropertyChanged(); }
