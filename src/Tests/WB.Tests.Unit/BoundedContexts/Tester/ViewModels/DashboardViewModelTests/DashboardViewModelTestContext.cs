@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IViewModelNavigationService viewModelNavigationService = null,
             IFriendlyErrorMessageService friendlyErrorMessageService = null,
             IUserInteractionService userInteractionService = null,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null)
+            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null)
         {
             return new DashboardViewModel(principal: principal,
                 designerApiService: designerApiService,
@@ -36,7 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 viewModelNavigationService: viewModelNavigationService,
                 friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
-                questionnaireListStorage: questionnaireListStorage);
+                questionnaireListStorage: questionnaireListStorage,
+                dashboardLastUpdateStorage: dashboardLastUpdateStorage);
         }
     }
 }
