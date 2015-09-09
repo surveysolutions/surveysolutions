@@ -26,7 +26,7 @@ angular.module('designerApp')
                 }
             });
            
-            if (hotkeys.get(focusTreePane) === false) {
+            if (hotkeys.get(focusTreePane) !== false) {
                 hotkeys.del(focusTreePane);
             }
             hotkeys.add({
@@ -39,7 +39,7 @@ angular.module('designerApp')
                     }
                 });
            
-            if (hotkeys.get(focusEditorPane) === false) {
+            if (hotkeys.get(focusEditorPane) !== false) {
                 hotkeys.del(focusEditorPane);
             }
             hotkeys.add({
@@ -52,7 +52,7 @@ angular.module('designerApp')
                     }
                 });
           
-            if (hotkeys.get(openChaptersPane) === false) {
+            if (hotkeys.get(openChaptersPane) !== false) {
                 hotkeys.del(openChaptersPane);
             }
             hotkeys.add(openChaptersPane, 'Open section', function (event) {

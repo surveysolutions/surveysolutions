@@ -12,7 +12,7 @@
 
                 var saveRoster = 'ctrl+s';
 
-                if (hotkeys.get(saveRoster) === false) {
+                if (hotkeys.get(saveRoster) !== false) {
                     hotkeys.del(saveRoster);
                 }
                 if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)
