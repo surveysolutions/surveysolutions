@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class InterviewDashboardItemViewModel
+    public class InterviewDashboardItemViewModel : IDashboardItem
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IAnswerToStringService answerToStringService;

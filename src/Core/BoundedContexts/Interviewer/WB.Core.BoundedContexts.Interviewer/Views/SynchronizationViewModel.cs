@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -33,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IPrincipal principal;
+        private readonly IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo;
         private readonly CancellationTokenSource synchronizationCancellationTokenSource = new CancellationTokenSource();
 
         public SynchronizationViewModel(
@@ -47,7 +49,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISyncPackageIdsStorage syncPackageIdsStorage,
             IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
             ICapiCleanUpService capiCleanUpService,
-            IPrincipal principal)
+            IPrincipal principal,
+            IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo)
         {
             this.synchronizationService = synchronizationService;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -61,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
             this.capiCleanUpService = capiCleanUpService;
             this.principal = principal;
+            this.plainStorageQuestionnireCensusInfo = plainStorageQuestionnireCensusInfo;
         }
 
         private bool isSynchronizationInProgress;
@@ -174,15 +178,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             if (this.questionnaireModelRepository.GetById(questionnaireIdentity.ToString()) == null)
             {
-                var questionnaire = await this.synchronizationService.GetQuestionnaireAsync(
+                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                    questionnaire: questionnaireIdentity,
                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                    token: synchronizationCancellationTokenSource.Token);
 
-                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaire.Document);
+                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireApiView.Document);
                 this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
-                this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaire.Document);
-                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaire.AllowCensus, string.Empty));   
+                this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.Document);
+                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.AllowCensus, string.Empty));
+
+                if (questionnaireApiView.AllowCensus)
+                {
+                    await this.plainStorageQuestionnireCensusInfo.StoreAsync(
+                        new CensusQuestionnireInfo() { Id = questionnaireIdentity.ToString() }
+                    );
+                }
             }
 
             if (!this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
