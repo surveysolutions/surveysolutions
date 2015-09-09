@@ -17,9 +17,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             var questionnaire = this.questionnaireRepository.GetById(id);
 
-            Title = questionnaire.Title;
+            QuestionariName = questionnaire.Title;
         }
 
-        public string Title { get; set; }
+        public string QuestionariName { get; set; }
     }
 }

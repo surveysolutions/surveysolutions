@@ -50,12 +50,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             var staistic = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId, currentDashboardCategory);
 
-            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(14, this.LoggedInUserName);
-
             this.NewInterviewsCount = staistic.NewInterviewsCount;
             this.StartedInterviewsCount = staistic.StartedInterviewsCount;
             this.CompletedInterviewsCount = staistic.CompletedInterviewsCount;
             this.RejectedInterviewsCount = staistic.RejectedInterviewsCount;
+            var numberOfAssignedInterviews = this.NewInterviewsCount + this.StartedInterviewsCount
+                                             + this.CompletedInterviewsCount + this.RejectedInterviewsCount;
+            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(
+                numberOfAssignedInterviews, this.LoggedInUserName);
 
             this.DashboardItems = staistic.DashboardItems;
         }

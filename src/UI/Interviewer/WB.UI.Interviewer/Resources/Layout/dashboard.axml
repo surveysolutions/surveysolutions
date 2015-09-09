@@ -41,11 +41,10 @@
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:fillViewport="true">
-
-      <MvxListView android:id="@+id/interviewsList"
-               style="@style/Dashboard_InterviewsList"
-               local:MvxBind="ItemsSource DashboardItems;"
-               local:MvxItemTemplate="@layout/dashboard_item" />
-
+    <MvxRecyclerView
+      style="@style/Dashboard_InterviewsList"
+      android:id="@+id/interviewsList"
+      android:scrollbars="vertical"
+      local:MvxBind="ItemsSource DashboardItems" />
   </ScrollView>
 </LinearLayout>

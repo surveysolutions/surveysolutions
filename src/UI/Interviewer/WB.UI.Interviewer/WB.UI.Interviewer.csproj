@@ -307,6 +307,7 @@
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
@@ -464,13 +465,14 @@
     <AndroidResource Include="Resources\Values\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_item.axml" />
+    <AndroidResource Include="Resources\Layout\dashboard_interview_item.axml" />
     <AndroidResource Include="Resources\Layout\dashboard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\relink.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
