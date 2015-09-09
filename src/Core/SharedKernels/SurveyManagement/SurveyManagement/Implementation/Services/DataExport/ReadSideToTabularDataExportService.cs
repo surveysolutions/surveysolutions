@@ -228,7 +228,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     var dataByTheLevelFilePath =
                         this.fileSystemAccessor.CombinePath(basePath, this.CreateFormatDataFileName(level.LevelName));
 
-                    WriteData(dataByTheLevelFilePath, actionsRecords[level.LevelName]);
+                    if (actionsRecords.ContainsKey(level.LevelName))
+                        WriteData(dataByTheLevelFilePath, actionsRecords[level.LevelName]);
                 }
             }
         }
