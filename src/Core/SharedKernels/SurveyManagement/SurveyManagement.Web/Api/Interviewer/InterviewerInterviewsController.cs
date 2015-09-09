@@ -63,9 +63,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [Route("package/{id}")]
-        public InterviewSyncPackageDto GetPackage(string id)
+        [Route("package/{id}/{previousSuccessfullyHandledPackageId?}")]
+        public InterviewSyncPackageDto GetPackage(string id, string previousSuccessfullyHandledPackageId = null)
         {
+            if (!string.IsNullOrEmpty(previousSuccessfullyHandledPackageId))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(previousSuccessfullyHandledPackageId, this.GetInterviewerDeviceId(), this.globalInfoProvider.GetCurrentUser().Id);
+
             return this.syncManager.ReceiveInterviewSyncPackage(
                 userId: this.globalInfoProvider.GetCurrentUser().Id,
                 deviceId: this.GetInterviewerDeviceId(), 
@@ -87,6 +90,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         {
             this.plainInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        [Route("package/{id}/logstate")]
+        public void LogPackageAsSuccessfullyHandled(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(id, this.GetInterviewerDeviceId(), this.globalInfoProvider.GetCurrentUser().Id);
         }
 
         private Guid GetInterviewerDeviceId()

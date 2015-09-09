@@ -5,9 +5,11 @@ using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
