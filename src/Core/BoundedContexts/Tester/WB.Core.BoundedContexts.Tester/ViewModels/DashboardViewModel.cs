@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+
+using Humanizer;
+
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
@@ -35,6 +38,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private readonly List<QuestionnaireListItem> questionnaireListStorageCache = new List<QuestionnaireListItem>();
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
+        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -46,7 +50,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
-            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage)
+            IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -55,6 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.questionnaireListStorage = questionnaireListStorage;
+            this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
@@ -75,8 +81,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
+
+            var lastUpdate = this.dashboardLastUpdateStorage.Query(query => query.FirstOrDefault(x => x.Id == this.principal.CurrentUserIdentity.Name));
+
+            this.HumanizeLasUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
         }
 
+       
         private void LoadFilteredListFromLocalStorage(string searchTerm)
         {
             var trimmedSearchText = (searchTerm ?? "").Trim();
@@ -109,6 +120,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             if (!IsPublicShowed) this.ShowMyQuestionnaires();
             else this.ShowPublicQuestionnaires();
+        }
+
+        private string humanizedLastUpdateDate;
+        public string HumanizedLastUpdateDate
+        {
+            get { return this.humanizedLastUpdateDate; }
+            set { this.humanizedLastUpdateDate = value; RaisePropertyChanged(); }
         }
 
         private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
@@ -236,6 +254,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IList<QuestionnaireListItem> myQuestionnaires;
         private IList<QuestionnaireListItem> publicQuestionnaires;
 
+       
+
         private void SignOut()
         {
             this.principal.SignOut();
@@ -337,6 +357,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             string errorMessage = null;
             try
             {
+                ClearSearch();
+
                 await this.questionnaireListStorage.RemoveAsync(this.myQuestionnaires);
                 await this.questionnaireListStorage.RemoveAsync(this.publicQuestionnaires);
                 questionnaireListStorageCache.Clear();
@@ -349,7 +371,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
 
-                LoadFilteredListFromLocalStorage(searchText);
+                var lastUpdateDate = DateTime.Now.ToLocalTime();
+
+                HumanizeLasUpdateDate(lastUpdateDate);
+
+                await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
+                        {
+                            Id = this.principal.CurrentUserIdentity.Name,
+                            LastUpdateDate = lastUpdateDate
+                        });
+
+                LoadFilteredListFromLocalStorage(null);
             }
             catch (RestException ex)
             {
@@ -367,6 +399,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 await this.userInteractionService.AlertAsync(errorMessage);
         }
 
+        private void HumanizeLasUpdateDate(DateTime? lastUpdate)
+        {
+            this.HumanizedLastUpdateDate = lastUpdate.HasValue 
+                ? string.Format(UIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate:false))
+                : UIResources.Dashboard_HasNotBeenUpdated;
+        }
 
         private List<QuestionnaireListItem> HightlightSearchTermInFilteredList(List<QuestionnaireListItem> questionnaireListItems, string searchTerm)
         {

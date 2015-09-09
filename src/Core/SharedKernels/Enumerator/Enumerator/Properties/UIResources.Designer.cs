@@ -190,11 +190,29 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to have not been updated.
+        /// </summary>
+        public static string Dashboard_HasNotBeenUpdated {
+            get {
+                return ResourceManager.GetString("Dashboard_HasNotBeenUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0:dd MMM HH:mm}.
         /// </summary>
         public static string Dashboard_LastEntryDate_Format {
             get {
                 return ResourceManager.GetString("Dashboard_LastEntryDate_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to were updated {0}.
+        /// </summary>
+        public static string Dashboard_LastUpdated {
+            get {
+                return ResourceManager.GetString("Dashboard_LastUpdated", resourceCulture);
             }
         }
         
