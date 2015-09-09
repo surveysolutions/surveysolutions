@@ -7,10 +7,12 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Cirrious.CrossCore;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
@@ -22,10 +24,12 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Interviewer.Controls;
+using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Syncronization;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
@@ -46,6 +50,14 @@ namespace WB.UI.Interviewer.Activities
             base.OnCreate(bundle);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+
+            var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewsList);
+            var layoutManager = new LinearLayoutManager(this);
+            recyclerView.SetLayoutManager(layoutManager);
+            recyclerView.HasFixedSize = true;
+
+            var adapter = new InterviewerDashboardAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+            recyclerView.Adapter = adapter;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
