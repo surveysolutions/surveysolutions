@@ -63,14 +63,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return result;
         }
 
-        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview)
+        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview, InterviewExportedAction action)
         {
             return new InterviewDataExportView(interview.InterviewId, interview.QuestionnaireId,
                 interview.QuestionnaireVersion,
                 exportStructure.HeaderToLevelMap.Values.Select(
                     exportStructureForLevel =>
-                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector, exportStructureForLevel.LevelName,
-                            this.BuildRecordsForHeader(interview, exportStructureForLevel), interview.InterviewId.FormatGuid())).ToArray());
+                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
+                            exportStructureForLevel.LevelName,
+                            this.BuildRecordsForHeader(interview, exportStructureForLevel),
+                            interview.InterviewId.FormatGuid())).ToArray(), action);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)

@@ -100,16 +100,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+            if (navigationParams.ScreenType != ScreenType.Group)
+            {
+                CreateCompleteScreen();
+                return;
+            }
 
-            if (navigationParams.TargetGroup.Id == this.questionnaire.FinishGroupId)
-            {
-                this.CreateCompleteScreen();
-            }
-            else
-            {
-                await this.CreateRegularGroupScreen(navigationParams, @group);
-            }
+            GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+            await this.CreateRegularGroupScreen(navigationParams, @group);
         }
 
         private void CreateCompleteScreen()
@@ -163,16 +161,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void LoadFromModel(Identity groupIdentity)
         {
+            this.Items = new ObservableRangeCollection<dynamic>();
+
             try
             {
                 userInterfaceStateService.NotifyRefreshStarted();
-
-                this.Items = new ObservableRangeCollection<dynamic>();
 
                 var interviewEntityViewModels = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
                     navigationState: this.navigationState);
+                
                 foreach (var x in interviewEntityViewModels)
                 {
                     this.Items.Add(x);

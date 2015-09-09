@@ -106,24 +106,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has condition referencing question from deeper roster level..
-        /// </summary>
-        internal static string WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel {
-            get {
-                return ResourceManager.GetString("WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Group has condition referencing question from deeper roster level..
-        /// </summary>
-        internal static string WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel {
-            get {
-                return ResourceManager.GetString("WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
         internal static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
@@ -156,15 +138,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
                 return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Question has validation condition referencing question from deeper roster level..
-        /// </summary>
-        internal static string WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel {
-            get {
-                return ResourceManager.GetString("WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
             }
         }
         
@@ -451,7 +424,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name cannot be a reserved word..
+        ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
         /// </summary>
         internal static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
             get {
@@ -532,7 +505,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster cannot have empty variable name..
+        ///   Looks up a localized string similar to Roster cannot have empty roster ID..
         /// </summary>
         internal static string WB0067_RosterHasEmptyVariableName {
             get {
@@ -541,7 +514,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another roster with the same variable name already exists..
+        ///   Looks up a localized string similar to Another roster with the same roster ID already exists..
         /// </summary>
         internal static string WB0068_RosterHasNotUniqueVariableName {
             get {
@@ -550,7 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has invalid variable name..
+        ///   Looks up a localized string similar to Roster has invalid roster ID..
         /// </summary>
         internal static string WB0069_RosterHasInvalidVariableName {
             get {
@@ -559,7 +532,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has variable name equal to questionnaire title..
+        ///   Looks up a localized string similar to Roster has roster ID equal to questionnaire title..
         /// </summary>
         internal static string WB0070_RosterHasVariableNameEqualToQuestionnaireTitle {
             get {

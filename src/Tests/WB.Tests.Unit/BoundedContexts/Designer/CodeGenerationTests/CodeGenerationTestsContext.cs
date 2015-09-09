@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static Version CreateQuestionnaireVersion()
         {
-            return new DesignerExpressionsEngineVersionService().GetLatestSupportedVersion();
+            return new DesignerEngineVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)

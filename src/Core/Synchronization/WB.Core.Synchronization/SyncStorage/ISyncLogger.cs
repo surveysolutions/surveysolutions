@@ -15,5 +15,7 @@ namespace WB.Core.Synchronization.SyncStorage
         void TrackPackageRequest(Guid deviceId, Guid userId, string packageType, string packageId);
 
         void TraceHandshake(Guid deviceId, Guid userId, string appVersion);
+
+        void MarkPackageAsSuccessfullyHandled(Guid deviceId, Guid userId, string successfullyHandledPackageId);
     }
 }

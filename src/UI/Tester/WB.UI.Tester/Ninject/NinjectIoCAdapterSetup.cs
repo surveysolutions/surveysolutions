@@ -34,6 +34,7 @@ namespace WB.UI.Tester.Ninject
 
                 new TesterBoundedContextModule().AsNinject(),
                 new TesterInfrastructureModule(),
+                new EnumeratorUIModule(),
                 new TesterUIModule());
         }
     }

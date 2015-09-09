@@ -1,4 +1,5 @@
 using Ninject.Modules;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -6,6 +7,7 @@ namespace WB.UI.Shared.Enumerator
     {
         public override void Load()
         {
+           // this.Bind<IFragmentTypeLookup>().To<FragmentTypeLookup>();
         }
     }
 }

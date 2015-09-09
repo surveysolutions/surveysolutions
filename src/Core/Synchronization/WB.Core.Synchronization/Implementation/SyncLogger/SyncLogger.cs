@@ -9,7 +9,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.Synchronization.Implementation.SyncLogger
 {
-    class SyncLogger : ISyncLogger
+    internal class SyncLogger : ISyncLogger
     {
         readonly IPlainStorageAccessor<TabletSyncLog> tabletLogWriter;
         const int LastSyncLimit = 15;
@@ -123,6 +123,26 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
                 {
                     currentState.UserSyncLog.RemoveAt(i);
                 }
+
+                return currentState;
+            });
+        }
+
+        public void MarkPackageAsSuccessfullyHandled(Guid deviceId, Guid userId, string successfullyHandledPackageId)
+        {
+            this.UpdateState(deviceId, currentState =>
+            {
+                if (!currentState.RegisteredUsersOnDevice.Contains(userId))
+                    return currentState;
+
+                var lastUserSyncLog = currentState.UserSyncLog.LastOrDefault(x => x.UserId == userId.FormatGuid());
+                if (lastUserSyncLog == null)
+                    return currentState;
+
+                var package = lastUserSyncLog.PackagesTrackingInfo.FirstOrDefault(x => x.PackageId == successfullyHandledPackageId);
+
+                if (package != null)
+                    package.ReceivedByClient = true;
 
                 return currentState;
             });

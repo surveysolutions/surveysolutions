@@ -40,7 +40,6 @@
                 $scope.activeQuestion.validationExpression = question.validationExpression;
                 $scope.activeQuestion.validationMessage = question.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
-                $scope.activeQuestion.notPrefilledQuestionScopeOptions = question.notPrefilledQuestionScopeOptions;
                 $scope.activeQuestion.instructions = question.instructions;
                 $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
                 $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
@@ -103,7 +102,9 @@
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
                             type: $scope.activeQuestion.type,
-                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
+                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId,
+                            hasCondition: ($scope.doesQuestionSupportEnablementConditions() &&$scope.activeQuestion.enablementCondition !== null && /\S/.test($scope.activeQuestion.enablementCondition)),
+                            hasValidation: ($scope.doesQuestionSupportValidations() && $scope.activeQuestion.validationExpression !== null && /\S/.test($scope.activeQuestion.validationExpression))
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -150,8 +151,8 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
-
-                if (type === 'TextList') {
+                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Prefilled';
+                if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -163,9 +164,14 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates') {
+                if (type === 'GpsCoordinates' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
+
+                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Prefilled') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
+                }
+
                 if (type !== "SingleOption" && type !== "MultyOption") {
                     $scope.setLinkSource(null);
                 }
@@ -273,6 +279,21 @@
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 $scope.questionForm.$setDirty();
+            };
+
+            $scope.getQuestionScopes = function (currentQuestion) {
+                if (!currentQuestion)
+                    return [];
+                var allScopes = currentQuestion.allQuestionScopeOptions;
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption']) < 0)
+                    return allScopes;
+
+                return allScopes.filter(function (o) {
+                    if (currentQuestion.type == 'MultyOption')
+                        return o.value !== 'Prefilled';
+
+                    return o.value !== 'Prefilled' && o.value !== 'Supervisor';
+                });
             };
 
             $scope.$watch('activeQuestion.isLinked', function (newValue) {

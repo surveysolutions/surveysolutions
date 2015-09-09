@@ -201,6 +201,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                    };
         }
 
+
+        public void MarkPackageAsSuccessfullyHandled(string successfullyHandledPackageId, Guid deviceId, Guid userId)
+        {
+            this.syncLogger.MarkPackageAsSuccessfullyHandled(deviceId, userId, successfullyHandledPackageId);
+        }
+
         private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages, string lastSyncedPackageId)
         {
             var deletedQuestionnaires = packages.Where(x => x.ItemType == SyncItemType.DeleteQuestionnaire);

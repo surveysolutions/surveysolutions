@@ -50,6 +50,7 @@ using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -179,8 +180,9 @@ namespace WB.UI.Headquarters
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath,
-                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
+                    new InterviewDataExportSettings(basePath,
+                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
+                        WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000)),
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));

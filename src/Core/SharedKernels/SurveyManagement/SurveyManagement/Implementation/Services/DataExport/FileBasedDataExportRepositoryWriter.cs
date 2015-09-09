@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -35,8 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataWriter;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IExportedDataAccessor exportedDataAccessor;
 
         private readonly InterviewExportedAction[] interviewActionsForDataUpdate = new[]
         {
@@ -53,10 +50,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IPlainInterviewFileStorage plainFileRepository,
             IReadSideKeyValueStorage<InterviewData> interviewDataWriter,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            IReadSideRepositoryWriter<UserDocument> users,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter,
             IExportViewFactory exportViewFactory, 
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, IExportedDataAccessor exportedDataAccessor)
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.dataExportWriter = dataExportWriter;
             this.environmentContentService = environmentContentService;
@@ -65,11 +61,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.plainFileRepository = plainFileRepository;
             this.interviewDataWriter = interviewDataWriter;
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
-            this.users = users;
             this.interviewSummaryWriter = interviewSummaryWriter;
             this.exportViewFactory = exportViewFactory;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.exportedDataAccessor = exportedDataAccessor;
         }
 
         public void Clear()
@@ -91,18 +85,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (interviewSummary == null)
                 return;
 
-            var dataFolderForQuestionnaire =
-                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(
-                    interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-
-            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
+            fileSystemAccessor.DeleteDirectory(filebasedExportedDataAccessor.GetAllDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
 
             if (action == InterviewExportedAction.ApprovedByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetApprovedDataFolder(dataFolderForQuestionnaire));
+                fileSystemAccessor.DeleteDirectory(filebasedExportedDataAccessor.GetApprovedDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
 
             if (interviewActionsForDataUpdate.Contains(action))
             {
-                var interviewDataExportView = this.CreateInterviewDataExportView(interviewId);
+                var interviewDataExportView = this.CreateInterviewDataExportView(interviewId, action);
 
                 if (interviewDataExportView == null)
                     return;
@@ -166,11 +156,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
 
-            var dataFolderForQuestionnaire =
-                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                    questionnaireVersion);
-
-            fileSystemAccessor.DeleteDirectory(exportedDataAccessor.GetAllDataFolder(dataFolderForQuestionnaire));
+            fileSystemAccessor.DeleteDirectory(filebasedExportedDataAccessor.GetAllDataFolder(questionnaireId,
+                    questionnaireVersion));
         }
 
         private void AddExportedDataByInterviewImpl(InterviewDataExportView interviewDataExportView)
@@ -226,7 +213,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return questionsWithAnswersOnMultimediaQuestions.Select(a => a.Answers[0]).ToArray();
         }
 
-        private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId,
+        private InterviewDataExportView CreateInterviewDataExportView(Guid interviewId, InterviewExportedAction action,
             QuestionnaireExportStructure questionnaireExportStructure = null)
         {
             var interview = interviewDataWriter.GetById(interviewId);
@@ -241,7 +228,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 if (questionnaireExportStructure == null)
                     return null;
             }
-            return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview);
+            return exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview, action);
         }
 
         public void EnableCache()

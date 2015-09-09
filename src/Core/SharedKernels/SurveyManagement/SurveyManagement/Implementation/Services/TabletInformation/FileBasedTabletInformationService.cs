@@ -145,12 +145,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
             var packagesFilteredByType = packages.Where(p => p.PackageType == packageType).ToArray();
 
             if (!packagesFilteredByType.Any())
-                return new PackagesTrackingInfo() {PackagesRequestInfo = new Dictionary<string, DateTime?>()};
-            
+                return new PackagesTrackingInfo() { PackagesRequestInfo = new List<SyncPackagesTrackingInfo>() };
+
             return new PackagesTrackingInfo()
             {
                 LastPackageId = packagesFilteredByType.Last().PackageId,
-                PackagesRequestInfo = packagesFilteredByType.ToDictionary(x => x.PackageId, x => x.PackageSyncTime)
+                PackagesRequestInfo =
+                    packagesFilteredByType.Select(x =>
+                            new SyncPackagesTrackingInfo()
+                            {
+                                IsPackageHandledByTheClient = x.ReceivedByClient,
+                                PackageId = x.PackageId,
+                                PackageRequestTime = x.PackageSyncTime,
+                                PackageType = x.PackageType
+                            }).ToList()
             };
         }
     }

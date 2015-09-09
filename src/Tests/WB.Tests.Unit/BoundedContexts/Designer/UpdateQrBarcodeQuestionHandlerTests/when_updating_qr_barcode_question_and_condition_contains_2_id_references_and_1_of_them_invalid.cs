@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "var",
                 variableLabel: null, enablementCondition: conditionExpression, instructions: null,
-                    responsibleId: responsibleId, validationExpression:null, validationMessage:null));
+                    responsibleId: responsibleId, validationExpression: null, validationMessage: null, scope: QuestionScope.Interviewer));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

@@ -121,7 +121,8 @@
                             $rootScope.$emit('rosterUpdated', {
                                 itemId: $scope.activeRoster.itemId,
                                 variable: $scope.activeRoster.variableName,
-                                title: $scope.activeRoster.title
+                                title: $scope.activeRoster.title,
+                                hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition))
                             });
                         });
                     }

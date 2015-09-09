@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
-        private readonly InterviewHistorySettings interviewHistorySettings;
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            InterviewHistorySettings interviewHistorySettings)
+            InterviewDataExportSettings interviewDataExportSettings)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -57,14 +57,14 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
-            this.interviewHistorySettings = interviewHistorySettings;
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
 
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
             return this.View();
         }
 
@@ -274,7 +274,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult DataExport()
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;
-            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

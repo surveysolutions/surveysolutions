@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.SurveySolutions.Services;
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ISubstitutionService substitutionService,
-            ILiteEventRegistry eventRegistry, 
+            ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
             IMvxMessenger messenger)
         {
@@ -53,10 +54,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Children = new List<SideBarSectionViewModel>();
         }
 
-        public void Init(string interviewId, 
-            Identity sectionIdentity,
-            SideBarSectionsViewModel root, 
-            SideBarSectionViewModel parent, 
+        public void Init(string interviewId,
+            NavigationIdentity navigationIdentity,
+            SideBarSectionsViewModel root,
+            SideBarSectionViewModel parent,
             GroupStateViewModel groupStateViewModel,
             NavigationState navigationState)
         {
@@ -64,33 +65,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            this.questionnaireId = interview.QuestionnaireId;
-            var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
-            var groupModel = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[sectionIdentity.Id];
 
-            groupStateViewModel.Init(interviewId, sectionIdentity);
-            this.root = root;
+            if (navigationIdentity.ScreenType == ScreenType.Group)
+            {
+                var interview = this.statefulInterviewRepository.Get(this.interviewId);
+                this.questionnaireId = interview.QuestionnaireId;
+                var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
+                var groupModel =
+                    questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[navigationIdentity.TargetGroup.Id];
+
+                groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
+                this.root = root;
+                this.Parent = parent;
+                this.SectionIdentity = navigationIdentity.TargetGroup;
+                this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
+                this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
+                this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
+                if (groupModel is RosterModel)
+                {
+                    string rosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
+                    this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
+                }
+                else
+                {
+                    this.Title = groupModel.Title;
+                }
+                if (this.Parent != null)
+                {
+                    this.IsSelected = this.Parent.IsSelected;
+                }
+            }
+            else if (navigationIdentity.ScreenType == ScreenType.Complete)
+            {
+                this.Parent = null;
+                this.HasChildren = false;
+                this.NodeDepth = 0;
+                this.IsCurrent = navigationState.CurrentGroupType == ScreenType.Complete;
+                this.Title = UIResources.Interview_Complete_Screen_Title;
+            }
             this.SideBarGroupState = groupStateViewModel;
-            this.Parent = parent;
-            this.SectionIdentity = sectionIdentity;
-            this.HasChildren = interview.GetEnabledSubgroups(sectionIdentity).Any();
-            this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
-            this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
-            if (groupModel is RosterModel)
-            {
-                string rosterTitle = interview.GetRosterTitle(sectionIdentity);
-                this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
-            }
-            else
-            {
-                this.Title = groupModel.Title;
-            }
-            if (this.Parent != null)
-            {
-                this.IsSelected = this.Parent.IsSelected;
-            }
-            
+            this.ScreenType = navigationIdentity.ScreenType;
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged += this.NavigationState_OnBeforeGroupChanged;
@@ -101,9 +115,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.IsCurrent = false;
         }
 
-        void NavigationState_OnGroupChanged(GroupChangedEventArgs newGroupIdentity)
+        void NavigationState_OnGroupChanged(GroupChangedEventArgs newNavigationIdentity)
         {
-            if (this.SectionIdentity.Equals(newGroupIdentity.TargetGroup))
+            if (this.ScreenType != newNavigationIdentity.ScreenType)
+                return;
+
+            if (newNavigationIdentity.ScreenType == ScreenType.Complete)
+            {
+                this.IsCurrent = true;
+            }
+            else if (this.SectionIdentity.Equals(newNavigationIdentity.TargetGroup))
             {
                 this.IsCurrent = true;
                 if (!this.Expanded)
@@ -115,8 +136,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public GroupStateViewModel SideBarGroupState { get; private set; }
 
-        public NavigationState NavigationState {get; set; }
+        public NavigationState NavigationState { get; set; }
         public Identity SectionIdentity { get; set; }
+        public ScreenType ScreenType { get; set; }
 
         private string title;
         public string Title
@@ -144,7 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set
             {
                 if (this.isCurrent == value) return;
-                this.isCurrent = value; 
+                this.isCurrent = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -177,7 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     else
                     {
                         this.Children.TreeToEnumerable(x => x.Children)
-                                .ToList() 
+                                .ToList()
                                 .ForEach(x => x.Dispose());
 
                         this.Children = new List<SideBarSectionViewModel>();
@@ -227,7 +249,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private async Task NavigateToSectionAsync()
         {
             this.messenger.Publish(new SectionChangeMessage(this));
-            await this.NavigationState.NavigateToAsync(this.SectionIdentity);
+
+            await this.NavigationState.NavigateToAsync(new NavigationIdentity(
+                this.ScreenType == ScreenType.Complete ? null : this.SectionIdentity, 
+                this.ScreenType));
         }
 
         private List<SideBarSectionViewModel> GenerateChildNodes()
@@ -235,7 +260,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
             var result = interview.GetEnabledSubgroups(this.SectionIdentity)
-                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, groupInstance, this.NavigationState, this.NavigationState.InterviewId));
+                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, new NavigationIdentity(groupInstance), this.NavigationState, this.NavigationState.InterviewId));
 
             return new List<SideBarSectionViewModel>(result);
         }
@@ -244,6 +269,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
+            if (ScreenType == ScreenType.Complete)
+                return;
+
             var myChangedInstance = @event.ChangedInstances.SingleOrDefault(x => x.RosterInstance.GetIdentity().Equals(this.SectionIdentity));
             if (myChangedInstance != null)
             {
@@ -274,6 +302,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void RefreshHasChildrenFlag()
         {
+            if (ScreenType == ScreenType.Complete)
+                return;
+
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             this.HasChildren = interview.GetEnabledSubgroups(this.SectionIdentity).Any();
         }

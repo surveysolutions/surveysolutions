@@ -19,7 +19,7 @@
 
                     <ul class="dropdown-menu " role="menu" aria-labelledby="questionTypeBtn">
                         <li role="presentation" ng-repeat="type in activeQuestion.questionTypeOptions">
-                            <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="setQuestionType(type.value)">
+                            <a role="menuitem" tabindex="-1" ng-click="setQuestionType(type.value)">
                                 <i class="icon {{answerTypeClass[type.value]}}"></i>
                                 {{type.text}}
                             </a>
@@ -69,19 +69,21 @@
             </div>
         </div>
 
-        <div class="form-group" ng-hide="!doesQuestionSupportEnablementConditions()">
-            <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
-            <div class="pseudo-form-control">
-                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
-            </div>
+    <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
+        <span class="enabling-group-marker">&#x26AB;</span>
+        <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression"/></label>
+        <div class="pseudo-form-control">
+            <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
         </div>
+    </div>
 
-        <div class="form-group" ng-show="doesQuestionSupportValidations()">
-            <label for="edit-question-validation-expression">Validation condition <help key="validationExpression" /></label>
-            <div class="pseudo-form-control">
-                <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
-            </div>
+    <div class="form-group validation-group" ng-show="doesQuestionSupportValidations()">
+        <span class="validation-group-marker">&#x26AB;</span>
+        <label for="edit-question-validation-expression">Validation condition <help key="validationExpression"/></label>
+        <div class="pseudo-form-control">
+            <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
         </div>
+    </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
             <label for="edit-question-validation-message">Error message <help key="validationMessage" /></label>
@@ -91,7 +93,7 @@
 
 
         <div class="form-group">
-                <div class="form-group pull-right" ng-hide="activeQuestion.type == 'TextList' || activeQuestion.type == 'QRBarcode'|| activeQuestion.type == 'Multimedia' || activeQuestion.type == 'GpsCoordinates' || activeQuestion.isCascade == true || activeQuestion.isLinked == true">
+                <div class="form-group pull-right">
                     <label for="Question-scope">Question scope&nbsp;</label>
                     <div class="btn-group dropup " dropdown>
                         <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
@@ -99,16 +101,9 @@
                             <span class="dropdown-arrow"></span>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1" ng-hide="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
-                            <li role="presentation" ng-repeat="scope in activeQuestion.allQuestionScopeOptions">
-                                <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
-                                    {{scope.text}}
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1" ng-show="activeQuestion.type == 'GpsCoordinates' || activeQuestion.type == 'MultyOption'">
-                            <li role="presentation" ng-repeat="scope in activeQuestion.notPrefilledQuestionScopeOptions">
-                                <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeQuestionScope(scope)">
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation" ng-repeat="scope in getQuestionScopes(activeQuestion)">
+                                <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
                                     {{scope.text}}
                                 </a>
                             </li>
