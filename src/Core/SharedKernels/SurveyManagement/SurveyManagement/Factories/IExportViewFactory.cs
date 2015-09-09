@@ -7,6 +7,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Factories
     public interface IExportViewFactory
     {
         QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire, long version);
-        InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview);
+        InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview, InterviewExportedAction action);
     }
 }

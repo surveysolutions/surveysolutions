@@ -87,6 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
+            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(new NavigationIdentity(null, ScreenType.Complete),  navigationState, interviewId));
+
             this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections);
             this.UpdateSideBarTree();
         }
@@ -101,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var allTreeElements = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections)
                 .TreeToEnumerable(x => x.Children).ToList();
             SideBarSectionViewModel selectedGroup = allTreeElements
-                .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+                .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
             var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
@@ -175,7 +177,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
@@ -220,7 +222,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             foreach (var groupIdentity in identities)
             {
-                var section = this.AllVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                var section = this.AllVisibleSections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
                 if (section != null)
                 {
                     if (section.Parent != null)
@@ -235,7 +237,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             foreach (var groupIdentity in identities)
             {
-                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
                 if (topLevelSectionToRemove != null)
                 {
                     this.Sections.Remove(topLevelSectionToRemove);
@@ -263,14 +265,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
         {
-            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
+            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, new NavigationIdentity(enabledSubgroupIdentity), this.navigationState, this.interviewId);
         }
 
         public ICommand UpdateStatuses
         {
             get
             {
-                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromModel())));
+                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.Where(x => x.ScreenType == ScreenType.Group).ForEach(x => x.SideBarGroupState.UpdateFromModel())));
             }
         }
     }

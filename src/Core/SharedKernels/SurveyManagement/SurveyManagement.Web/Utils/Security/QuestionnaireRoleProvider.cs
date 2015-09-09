@@ -31,6 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
+        private IReadSideStatusService readSideStatusService
+        {
+            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
+        }
+
         public override string ApplicationName
         {
             get
@@ -79,6 +84,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override string[] GetRolesForUser(string username)
         {
+             if (readSideStatusService.AreViewsBeingRebuiltNow())
+                 return new string[0];
+
             var transactionManager = this.TransactionProvider.GetTransactionManager();
             var shouldUseOwnTransaction = !transactionManager.IsQueryTransactionStarted;
 
@@ -125,6 +133,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         public override bool IsUserInRole(string username, string roleName)
         {
+            if (readSideStatusService.AreViewsBeingRebuiltNow())
+                return false;
+
             string contextKey = "user-in-role:" + username.ToLower() + ":" + roleName;
             var cachedValue = (bool?)HttpContext.Current.Items[contextKey];
 

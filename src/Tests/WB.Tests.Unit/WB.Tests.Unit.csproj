@@ -278,6 +278,7 @@
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_is_valid.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_view_is_absent.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_request_parameter_is_null.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_client_version_doesnt_support_questionnaire_document.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_client_version_is_not_supported.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_cant_be_compiled.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_but_questionnaire_cant_be_verified.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_changing_device_is_requested.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_not_that_expected.cs" />
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_that_expected.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
@@ -384,9 +386,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_condition_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_itself_in_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_title_has_invalid_characters.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_references_with_deeper_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_inside_roster_that_has_condition_references_with_deeper_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_inside_roster_that_has_validation_references_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_question_with_variable_name_equal_to_roster_service_variables.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_max_allowed_answers_more_then_40.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_more_then_40_options.cs" />
@@ -528,7 +527,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
     <Compile Include="Synchronization\SyncManagerTestContext.cs" />
     <Compile Include="Synchronization\when_getting_interview_ids_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_getting_interview_ids_and_device_is_registered_and_last_package_id_is_empty.cs" />
@@ -552,6 +552,7 @@
     <Compile Include="Synchronization\when_getting_user_sync_package_and_device_is_registered_and_package_is_present.cs" />
     <Compile Include="Synchronization\when_linking_user_to_device_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_linking_user_to_device_and_device_is_registered.cs" />
+    <Compile Include="Synchronization\when_mark_sync_package_as_successfully_handled.cs" />
     <Compile Include="Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archiving_process_thrown_an_exception.cs" />
@@ -703,7 +704,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
@@ -1234,9 +1235,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_lev__.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_and_parent_roster_has_custom_condition___.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_and_second_one_has_custom_condition___.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_inside_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QuestionnaireVerifierTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_validating_questionnaire_with_empty_variable_names.cs" />
@@ -2085,7 +2084,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_approved_data_and_archive_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\when_export_approved_data_and_archive_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\SqlToTabDataExportServiceTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\SqlToTabDataExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_level_labels.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_no_questions.cs" />

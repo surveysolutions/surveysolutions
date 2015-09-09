@@ -75,7 +75,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
         {
-            this.BuildBreadCrumbs(navigationParams.TargetGroup);
+            if (navigationParams.ScreenType != ScreenType.Group)
+            {
+                this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
+            }
+            else
+            {
+                this.BuildBreadCrumbs(navigationParams.TargetGroup);
+            }
         }
 
         private void BuildBreadCrumbs(Identity newGroupIdentity)

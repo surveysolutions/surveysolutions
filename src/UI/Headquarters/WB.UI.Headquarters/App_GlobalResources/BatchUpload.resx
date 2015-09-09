@@ -238,9 +238,12 @@
     <value>Verify</value>
   </data>
   <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Are you sure you want to delete file '{0}' from the list?</value>
+    <value>Are you sure you want to delete file</value>
   </data>
   <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
     <value>User preloading process is missing</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>List of files with preloaded users</value>
   </data>
 </root>

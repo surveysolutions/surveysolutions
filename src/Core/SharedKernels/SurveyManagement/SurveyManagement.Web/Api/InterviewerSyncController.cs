@@ -155,13 +155,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public UserSyncPackageDto GetUserSyncPackage(SyncPackageRequest request)
         {
-            return this.syncManager.ReceiveUserSyncPackage(request.ClientRegistrationId, request.PackageId, this.GlobalInfo.GetCurrentUser().Id);
+            if (!string.IsNullOrEmpty(request.PreviousSuccessfullyHandledPackageId))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(request.PreviousSuccessfullyHandledPackageId, request.ClientRegistrationId, this.GlobalInfo.GetCurrentUser().Id);
+
+            return this.syncManager.ReceiveUserSyncPackage(request.ClientRegistrationId, request.PackageId,
+                this.GlobalInfo.GetCurrentUser().Id);
+        }
+
+        [HttpPost]
+        [ApiBasicAuth]
+        public void MarkPackageAsSuccessfullyHandled(MarkPackageAsSuccessfullyHandledRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.PackageId))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(request.PackageId, request.ClientRegistrationId, this.GlobalInfo.GetCurrentUser().Id);
         }
 
         [HttpPost]
         [ApiBasicAuth]
         public QuestionnaireSyncPackageDto GetQuestionnaireSyncPackage(SyncPackageRequest request)
         {
+            if (!string.IsNullOrEmpty(request.PreviousSuccessfullyHandledPackageId))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(request.PreviousSuccessfullyHandledPackageId, request.ClientRegistrationId, this.GlobalInfo.GetCurrentUser().Id);
+
             return this.syncManager.ReceiveQuestionnaireSyncPackage(request.ClientRegistrationId, request.PackageId,
                 this.GlobalInfo.GetCurrentUser().Id);
         }
@@ -170,6 +185,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth]
         public InterviewSyncPackageDto GetInterviewSyncPackage(SyncPackageRequest request)
         {
+            if (!string.IsNullOrEmpty(request.PreviousSuccessfullyHandledPackageId))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(request.PreviousSuccessfullyHandledPackageId, request.ClientRegistrationId, this.GlobalInfo.GetCurrentUser().Id);
+
             return this.syncManager.ReceiveInterviewSyncPackage(request.ClientRegistrationId, request.PackageId,
                 this.GlobalInfo.GetCurrentUser().Id);
         }

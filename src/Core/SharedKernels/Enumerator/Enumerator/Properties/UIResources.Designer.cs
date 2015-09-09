@@ -352,7 +352,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application..
+        ///   Looks up a localized string similar to Your version of this application does not support this questionnaire.  Please update this application..
         /// </summary>
         public static string ImportQuestionnaire_Error_UpgradeRequired {
             get {
@@ -636,6 +636,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_LinkedQuestion_Empty {
             get {
                 return ResourceManager.GetString("Interview_LinkedQuestion_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete Interview.
+        /// </summary>
+        public static string Interview_NextCompleteInterview_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_NextCompleteInterview_ButtonText", resourceCulture);
             }
         }
         
