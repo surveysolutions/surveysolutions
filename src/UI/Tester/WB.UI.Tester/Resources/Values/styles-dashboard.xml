@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 
+  <style name="Dashboard_LastUpdated">
+    <item name="android:textColor">@color/colorToolbarText</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:layout_centerVertical">true</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">italic</item>
+  </style>
+  
   <style name="Dashboard_SearchView_SearchButton">
     <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>

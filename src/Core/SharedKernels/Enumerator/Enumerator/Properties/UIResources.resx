@@ -491,4 +491,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>If you relink to this device all data on the old one will be lost</value>
   </data>
+  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
+    <value>have not been updated</value>
+  </data>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>were updated {0}</value>
+  </data>
 </root>
