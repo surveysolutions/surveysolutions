@@ -134,12 +134,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 var package = await this.synchronizationService.GetInterviewPackageAsync(
                     packageId: synchronizationChunkMeta.Id,
+                    previousSuccessfullyHandledPackageId: lastKnownPackageId,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: synchronizationCancellationTokenSource.Token);
+
+                lastKnownPackageId = synchronizationChunkMeta.Id;
 
                 this.capiDataSynchronizationService.ProcessDownloadedPackage(package, synchronizationChunkMeta.ItemType);
                 this.syncPackageIdsStorage.Append(package.PackageId, synchronizationChunkMeta.SortIndex);
             }
+
+            await this.synchronizationService.LogPackageAsSuccessfullyHandledAsync(lastKnownPackageId);
         }
 
         private async Task UploadCompletedInterviewsAsync()
