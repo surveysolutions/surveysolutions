@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IExternalStatPackagesDataExportService>().To<TabularToExternalStatPackagesDataExportService>();
+            this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<IMetadataExportService>().To<MetadataExportService>();
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();

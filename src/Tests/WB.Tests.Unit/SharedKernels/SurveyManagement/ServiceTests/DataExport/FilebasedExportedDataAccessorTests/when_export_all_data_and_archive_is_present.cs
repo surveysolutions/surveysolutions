@@ -20,12 +20,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(
                 x => x.IsFileExists(Moq.It.IsAny<string>()))
                 .Returns(true);
-            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
-                   .Returns(new[] { "f1", "f2" });
 
             filebasedExportedDataAccessor = CreateFilebasedExportedDataAccessor(
                 fileSystemAccessor:fileSystemAccessorMock.Object,
                 environmentFiles: new[] { "e1", "e2" },
+                dataFiles:new[] { "f1", "f2" },
                 zipCallback: (f) => addedFiles = f.ToArray());
         };
 

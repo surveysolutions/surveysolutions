@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         Task ExportInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath);
         Task ExportApprovedInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath);
         void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath);
+        string[] GetTabularDataFilesFromFolder(string basePath);
     }
 }
