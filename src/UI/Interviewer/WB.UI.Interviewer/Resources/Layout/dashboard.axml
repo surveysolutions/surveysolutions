@@ -22,19 +22,23 @@
     <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
       <TextView style="@style/Dashboard_NewItemsLink"
                 local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
-                Click ShowNewItemsInterviewsCommand;" />
+                               Click ShowNewItemsInterviewsCommand;
+                               IsCurrentDashboardTab IsNewInterviewsCategorySelected;" />
       <TextView style="@style/Dashboard_StartedLink"
                 local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsCount); 
-                Click ShowStartedInterviewsCommand;
-                Visible IsExistsAnyStartedInterview;" />
+                               Click ShowStartedInterviewsCommand;
+                               Visible IsExistsAnyStartedInterview;
+                               IsCurrentDashboardTab IsStartedInterviewsCategorySelected;" />
       <TextView style="@style/Dashboard_CompletedLink"
                 local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsCount); 
-                Click ShowCompletedInterviewsCommand;
-                Visible IsExistsAnyCompletedInterview;" />
+                               Click ShowCompletedInterviewsCommand;
+                               Visible IsExistsAnyCompletedInterview;
+                               IsCurrentDashboardTab IsCompletedInterviewsCategorySelected;" />
       <TextView style="@style/Dashboard_RejectedLink"
                 local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsCount); 
-                Click ShowRejectedInterviewsCommand;
-                Visible IsExistsAnyRejectedInterview;" />
+                               Click ShowRejectedInterviewsCommand;
+                               Visible IsExistsAnyRejectedInterview;
+                               IsCurrentDashboardTab IsRejectedInterviewsCategorySelected;" />
     </LinearLayout>
   </LinearLayout>
  
