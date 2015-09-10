@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -34,8 +35,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns("1st");
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
+            filebasedExportedDataAccessorMock=new Mock<IFilebasedExportedDataAccessor>();
+
             fileBasedDataExportRepositoryWriter = CreateFileBasedDataExportService(fileSystemAccessorMock.Object,
-                interviewExportServiceMock.Object, interviewSummaryWriter: interviewSummaryWriter.Object);
+                interviewExportServiceMock.Object, interviewSummaryWriter: interviewSummaryWriter.Object, filebasedExportedDataAccessor: filebasedExportedDataAccessorMock.Object);
         };
 
         Because of = () =>
@@ -46,12 +49,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 x => x.DeleteInterviewRecords(interviewId), Times.Once);
 
         It should_delete_All_Data_folder = () =>
-         fileSystemAccessorMock.Verify(
-             x => x.DeleteDirectory("AllData"), Times.Once);
+         filebasedExportedDataAccessorMock.Verify(
+             x => x.DeleteAllDataFolder(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once);
 
         It should_not_delete_Approved_Data_folder = () =>
-           fileSystemAccessorMock.Verify(
-               x => x.DeleteDirectory("ApprovedData"), Times.Never);
+           filebasedExportedDataAccessorMock.Verify(
+               x => x.DeleteApprovedDataFolder(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Never);
 
         private static FileBasedDataExportRepositoryWriter fileBasedDataExportRepositoryWriter;
 
@@ -59,5 +62,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryWriter;
         private static Guid interviewId = Guid.NewGuid();
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
+        private static Mock<IFilebasedExportedDataAccessor> filebasedExportedDataAccessorMock;
     }
 }
