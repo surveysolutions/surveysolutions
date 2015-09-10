@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
@@ -28,8 +29,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
         private readonly string pathToHistoryFiles;
-        
 
+        private readonly ConcurrentDictionary<string, object> cancellationLockObjects = new ConcurrentDictionary<string, object>(); 
+        private readonly HashSet<string> dataFoldersToDelete=new HashSet<string>(); 
         public FilebasedExportedDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
             string folderPath, 
@@ -137,13 +139,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public void DeleteAllDataFolder(Guid questionnaireId, long version)
         {
             var dataFolder = GetAllDataFolder(questionnaireId, version);
-            fileSystemAccessor.DeleteDirectory(dataFolder);
+            dataFoldersToDelete.Add(dataFolder);
         }
 
         public void DeleteApprovedDataFolder(Guid questionnaireId, long version)
         {
             var dataFolder = GetApprovedDataFolder(questionnaireId, version);
-            fileSystemAccessor.DeleteDirectory(dataFolder);
+            dataFoldersToDelete.Add(dataFolder);
         }
 
         private string GetAllDataFolder(Guid questionnaireId, long version)
@@ -280,46 +282,70 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             var fileName = string.Format("{0}_{1}_{2}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath), exportDataType, fileSuffix);
             var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
-
+           
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
             var filesToArchive = new List<string>();
 
             var directoryWithExportedDataPath = getPathToDataFolder(questionnaireId, version);
-            if (!fileSystemAccessor.IsDirectoryExists(directoryWithExportedDataPath))
-            {
-                this.fileSystemAccessor.CreateDirectory(directoryWithExportedDataPath);
-                exportDataToFolderAsync(questionnaireId, version, directoryWithExportedDataPath).WaitAndUnwrapException();
-            }
 
-            var exportedTabularDataFiles = tabularFormatExportService.GetTabularDataFilesFromFolder(directoryWithExportedDataPath);
-            switch (exportDataType)
+            var folderLockObject = GetLockObjectForFolder(directoryWithExportedDataPath);
+
+            lock (folderLockObject)
             {
-                case ExportDataType.Stata:
-                    {
-                        filesToArchive.AddRange(this.tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, exportedTabularDataFiles));
-                        break;
-                    }
-                case ExportDataType.Spss:
-                    {
-                        filesToArchive.AddRange(this.tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, exportedTabularDataFiles));
-                        break;
-                    }
-                case ExportDataType.Tab:
-                default:
+                if (dataFoldersToDelete.Contains(directoryWithExportedDataPath))
                 {
-                    filesToArchive.AddRange(exportedTabularDataFiles);
-                    filesToArchive.AddRange(
-                        this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version,
-                            dataDirectoryPath));
-                    break;
+                    fileSystemAccessor.DeleteDirectory(directoryWithExportedDataPath);
+                    dataFoldersToDelete.Remove(directoryWithExportedDataPath);
                 }
+
+                if (!fileSystemAccessor.IsDirectoryExists(directoryWithExportedDataPath))
+                {
+                    this.fileSystemAccessor.CreateDirectory(directoryWithExportedDataPath);
+                    exportDataToFolderAsync(questionnaireId, version, directoryWithExportedDataPath)
+                        .WaitAndUnwrapException();
+                }
+
+                var exportedTabularDataFiles =
+                    tabularFormatExportService.GetTabularDataFilesFromFolder(directoryWithExportedDataPath);
+                switch (exportDataType)
+                {
+                    case ExportDataType.Stata:
+                    {
+                        filesToArchive.AddRange(
+                            this.tabularDataToExternalStatPackageExportService
+                                .CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version,
+                                    exportedTabularDataFiles));
+                        break;
+                    }
+                    case ExportDataType.Spss:
+                    {
+                        filesToArchive.AddRange(
+                            this.tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire
+                                (questionnaireId, version, exportedTabularDataFiles));
+                        break;
+                    }
+                    case ExportDataType.Tab:
+                    default:
+                    {
+                        filesToArchive.AddRange(exportedTabularDataFiles);
+                        filesToArchive.AddRange(
+                            this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version,
+                                dataDirectoryPath));
+                        break;
+                    }
+                }
+
+                archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
             }
 
-            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
-          
             return archiveFilePath;
+        }
+
+        private object GetLockObjectForFolder(string folder)
+        {
+            return cancellationLockObjects.GetOrAdd(folder, (f) => new object());
         }
     }
 }
