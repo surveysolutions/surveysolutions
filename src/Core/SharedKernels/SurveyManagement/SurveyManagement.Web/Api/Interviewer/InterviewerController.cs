@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     [RoutePrefix("api/interviewer/v1")]
+    [ProtobufJsonSerializer]
     public class InterviewerController : ApiController
     {
         private const string RESPONSEAPPLICATIONFILENAME = "interviewer.apk";

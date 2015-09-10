@@ -36,7 +36,6 @@ namespace WB.UI.Headquarters
             
             //support json for browser requests
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-            config.Formatters.Insert(0, new JsonFormatter());
 
             config.MessageHandlers.Add(new EnforceHttpsHandler());
         }

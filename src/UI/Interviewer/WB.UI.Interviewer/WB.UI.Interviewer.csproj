@@ -33,7 +33,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
@@ -308,6 +308,7 @@
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
+    <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
@@ -473,6 +474,7 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
+    <AndroidResource Include="Resources\Layout\synchronization_panel.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">

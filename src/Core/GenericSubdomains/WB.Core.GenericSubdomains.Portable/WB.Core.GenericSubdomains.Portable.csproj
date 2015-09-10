@@ -91,6 +91,7 @@
     <Compile Include="Services\IJsonUtils.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
+    <Compile Include="Services\IProtobufJsonUtils.cs" />
     <Compile Include="Services\IRestService.cs" />
     <Compile Include="Services\IRestServicePointManager.cs" />
     <Compile Include="Services\IRestServiceSettings.cs" />

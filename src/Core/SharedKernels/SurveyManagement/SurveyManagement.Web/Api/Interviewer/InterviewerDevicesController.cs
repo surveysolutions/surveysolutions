@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     [ApiBasicAuth]
     [RoutePrefix("api/interviewer/v1/devices")]
+    [ProtobufJsonSerializer]
     public class InterviewerDevicesController : ApiController
     {
         private readonly IGlobalInfoProvider globalInfoProvider;

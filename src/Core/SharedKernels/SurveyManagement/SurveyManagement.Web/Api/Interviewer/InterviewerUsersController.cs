@@ -9,6 +9,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     [ApiBasicAuth]
     [RoutePrefix("api/interviewer/v1/users")]
+    [ProtobufJsonSerializer]
     public class InterviewerUsersController : ApiController
     {
         private readonly IGlobalInfoProvider globalInfoProvider;
