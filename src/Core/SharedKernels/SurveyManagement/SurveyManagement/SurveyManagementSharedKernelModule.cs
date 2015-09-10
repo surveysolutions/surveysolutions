@@ -89,9 +89,11 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IDataExportService>().To<SqlToDataExportService>();
+            this.Bind<IMetadataExportService>().To<MetadataExportService>();
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
             this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
+            this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
             this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
