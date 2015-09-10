@@ -32,7 +32,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             this.jsonUtils = jsonUtils;
             this.stringCompressor = stringCompressor;
 
-            if (this.restServiceSettings.AcceptUnsignedSslCertificate)
+            if (this.restServiceSettings.AcceptUnsignedSslCertificate && restServicePointManager != null)
                 restServicePointManager.AcceptUnsignedSslCertificate();
         }
 
