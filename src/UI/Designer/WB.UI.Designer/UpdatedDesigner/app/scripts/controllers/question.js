@@ -124,6 +124,19 @@
                     });
             };
 
+            var hasQuestionEnablementConditions = function (question) {
+                return $scope.doesQuestionSupportEnablementConditions() &&
+                    question.enablementCondition !== null &&
+                    /\S/.test(question.enablementCondition);
+
+            }
+
+            var hasQuestionValidations = function (question) {
+                return $scope.doesQuestionSupportValidations() &&
+                    question.validationExpression !== null &&
+                    /\S/.test(question.validationExpression);
+            }
+
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
                     $scope.showOptionsInList();
@@ -137,8 +150,8 @@
                             variable: $scope.activeQuestion.variable,
                             type: $scope.activeQuestion.type,
                             linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId,
-                            hasCondition: ($scope.doesQuestionSupportEnablementConditions() &&$scope.activeQuestion.enablementCondition !== null && /\S/.test($scope.activeQuestion.enablementCondition)),
-                            hasValidation: ($scope.doesQuestionSupportValidations() && $scope.activeQuestion.validationExpression !== null && /\S/.test($scope.activeQuestion.validationExpression))
+                            hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
+                            hasValidation: hasQuestionValidations($scope.activeQuestion)
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -158,7 +171,7 @@
                     });
                 }
             };
-
+            
             var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
                 if (actualQuestion.type != "SingleOption")
                     return false;
