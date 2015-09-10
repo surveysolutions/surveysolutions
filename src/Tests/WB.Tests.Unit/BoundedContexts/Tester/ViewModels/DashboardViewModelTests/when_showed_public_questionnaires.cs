@@ -24,19 +24,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var userName = "Vasya";
-
             var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
             storageAccessor.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
                 .Returns(new List<QuestionnaireListItem>());
 
-            var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == Guid.Parse("11111111111111111111111111111111"));
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
-
-            viewModel = CreateDashboardViewModel(
-                principal: principal,
-                questionnaireListStorage: storageAccessor.Object,
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor.Object,
                 designerApiService: designerApiService);
             viewModel.Init();
         };
