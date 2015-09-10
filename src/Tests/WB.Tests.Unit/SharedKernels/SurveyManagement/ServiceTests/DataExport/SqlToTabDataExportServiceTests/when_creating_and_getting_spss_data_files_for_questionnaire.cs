@@ -33,18 +33,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
             datasetWriterFactory.Setup(x => x.CreateDatasetWriter(ExportDataType.Spss)).Returns(datasetWriter.Object);
 
-            sqlToTabDataExportService = CreateSqlToTabDataExportService(
+            _tabularToExternalStatPackagesTabDataExportService = CreateSqlToTabDataExportService(
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
                 tabFileReader: tabFileReader.Object, datasetWriterFactory: datasetWriterFactory.Object);
         };
 
         Because of = () =>
-            filePaths = sqlToTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, "");
+            filePaths = _tabularToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, "");
 
         private It should_call_write_to_file = () =>
             datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<string[,]>()), Times.Once());
 
-        private static SqlToDataExportService sqlToTabDataExportService;
+        private static TabularToExternalStatPackagesDataExportService _tabularToExternalStatPackagesTabDataExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static string[] filePaths;

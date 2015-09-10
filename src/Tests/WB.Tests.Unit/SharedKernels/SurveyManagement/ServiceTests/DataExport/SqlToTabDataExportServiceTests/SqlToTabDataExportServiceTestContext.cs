@@ -16,17 +16,17 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
 {
-    [Subject(typeof (SqlToDataExportService))]
+    [Subject(typeof (TabularToExternalStatPackagesDataExportService))]
     internal class SqlToTabDataExportServiceTestContext
     {
-        protected static SqlToDataExportService CreateSqlToTabDataExportService(
+        protected static TabularToExternalStatPackagesDataExportService CreateSqlToTabDataExportService(
             QuestionnaireExportStructure questionnaireExportStructure = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IDatasetWriterFactory datasetWriterFactory = null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new SqlToDataExportService(
+            return new TabularToExternalStatPackagesDataExportService(
                 fileSystemAccessor,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure),
