@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
+using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
+using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Converters;
+using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Ninject;
 
 namespace WB.UI.Interviewer
@@ -52,6 +56,14 @@ namespace WB.UI.Interviewer
 
             registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
         }
+
+        protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
+        {
+            registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
+
+            base.FillTargetFactories(registry);
+        }
+
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
