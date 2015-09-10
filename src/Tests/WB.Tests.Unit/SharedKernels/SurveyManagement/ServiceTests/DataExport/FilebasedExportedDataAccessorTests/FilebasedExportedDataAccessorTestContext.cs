@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
             if (fileSystemAccessor == null)
             {
                 var fileSystemAccessorMock = CreateFileSystemAccessorMock();
-                fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>()))
-                    .Returns(dataFiles);
+                fileSystemAccessorMock.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>()))
+                    .Returns<string, string>(Path.Combine);
                 fileSystemAccessor = fileSystemAccessorMock.Object;
             }
             var archiveUtilsMock = new Mock<IArchiveUtils>();
@@ -37,18 +37,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
                     .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
-            return new FilebasedExportedDataAccessor(fileSystemAccessor, "",
-                Mock.Of<IExternalStatPackagesDataExportService>( /*_ => _.GetDataFilesForQuestionnaire(
-                    It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles &&
-                    _.GetDataFilesForQuestionnaireByInterviewsInApprovedState(
-                        It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles*/),
+            return new FilebasedExportedDataAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
+                Mock.Of<ITabularDataToExternalStatPackageExportService>(),
                 Mock.Of<IMetadataExportService>(),
                 Mock.Of<IEnvironmentContentService>(
                     _ =>
                         _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) ==
                         environmentFiles),
                 Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewDataExportSettings(string.Empty, false,10000),
-                Mock.Of<ITabularFormatExportService>());
+                Mock.Of<ITabularFormatExportService>(_ => _.GetTabularDataFilesFromFolder(Moq.It.IsAny<string>()) == (dataFiles?? new string[0])));
         }
 
         protected static Mock<IFileSystemAccessor> CreateFileSystemAccessorMock()

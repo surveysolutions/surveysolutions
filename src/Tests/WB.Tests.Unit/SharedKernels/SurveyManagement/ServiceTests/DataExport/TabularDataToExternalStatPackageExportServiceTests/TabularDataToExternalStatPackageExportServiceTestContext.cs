@@ -14,27 +14,26 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Moq.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.TabularDataToExternalStatPackageExportServiceTests
 {
-    [Subject(typeof (TabularToExternalStatPackagesDataExportService))]
-    internal class SqlToTabDataExportServiceTestContext
+    [Subject(typeof (TabularDataToExternalStatPackageExportService))]
+    internal class TabularDataToExternalStatPackageExportServiceTestContext
     {
-        protected static TabularToExternalStatPackagesDataExportService CreateSqlToTabDataExportService(
+        protected static TabularDataToExternalStatPackageExportService CreateSqlToTabDataExportService(
             QuestionnaireExportStructure questionnaireExportStructure = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IDatasetWriterFactory datasetWriterFactory = null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new TabularToExternalStatPackagesDataExportService(
+            return new TabularDataToExternalStatPackageExportService(
                 fileSystemAccessor,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
-                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(),
-                Mock.Of<ITabularFormatExportService>());
+                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
