@@ -1,4 +1,10 @@
-﻿using Cirrious.MvvmCross.Test.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Cirrious.MvvmCross.Test.Core;
+
+using Moq;
 
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
@@ -19,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             base.Setup();
         }
 
-        public static DashboardViewModel CreateDashboardViewModel(IPrincipal principal = null,
+        public static DashboardViewModel CreateDashboardViewModel(
             ILogger logger = null,
             IDesignerApiService designerApiService = null,
             ICommandService commandService = null,
@@ -30,7 +36,18 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null)
         {
-            return new DashboardViewModel(principal: principal,
+            var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
+            mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
+
+            var localDashboardLastUpdateStorage = new Mock<IAsyncPlainStorage<DashboardLastUpdate>>();
+            localDashboardLastUpdateStorage.Setup(
+                x => x.Query(It.IsAny<Func<IQueryable<DashboardLastUpdate>, List<DashboardLastUpdate>>>()))
+                .Returns(new List<DashboardLastUpdate>
+                    {
+                        new DashboardLastUpdate { Id = userName, LastUpdateDate = DateTime.Now }
+                    });
+
+            return new DashboardViewModel(principal: mockOfPrincipal.Object,
                 designerApiService: designerApiService,
                 commandService: commandService,
                 questionnaireImportService: questionnaireImportService,
@@ -38,7 +55,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
                 questionnaireListStorage: questionnaireListStorage,
-                dashboardLastUpdateStorage: dashboardLastUpdateStorage);
+                dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorage.Object);
         }
+
+        protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");
+        protected static readonly string userName = "Vasya";
+        protected static readonly Mock<IPrincipal> mockOfPrincipal = new Mock<IPrincipal>();
     }
 }
