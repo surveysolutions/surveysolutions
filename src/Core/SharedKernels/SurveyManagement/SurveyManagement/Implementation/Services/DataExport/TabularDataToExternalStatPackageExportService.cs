@@ -1,42 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using StatData.Core;
-using ddidotnet;
-using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class TabularToExternalStatPackagesDataExportService : IExternalStatPackagesDataExportService
+    internal class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
     {
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ITabularFormatExportService tabularFormatExportService;
         
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
 
-        public TabularToExternalStatPackagesDataExportService(
+        public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             ITabFileReader tabReader,
-            IDatasetWriterFactory datasetWriterFactory,
-            ITabularFormatExportService tabularFormatExportService)
+            IDatasetWriterFactory datasetWriterFactory)
         {
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.transactionManager = transactionManager;
@@ -45,23 +37,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
-
-            this.tabularFormatExportService = tabularFormatExportService;
         }
 
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, tabularDataFiles);
         }
-        
-        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+
+        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, tabularDataFiles);
         }
        
 
@@ -128,20 +116,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     meta.AssociateValueSet(datasetVariable.VarName, valueSet);
                 }
             }
-        }
-
-        public string[] CreateAndGetStataDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
-            string basePath)
-        {
-            tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
-        }
-
-        public string[] CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
-            string basePath)
-        {
-            tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
     }
 }
