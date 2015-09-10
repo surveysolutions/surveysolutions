@@ -26,15 +26,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == Guid.Parse("11111111111111111111111111111111"));
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
-
             mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<decimal>>(),
                     Moq.It.IsAny<CancellationToken>())).Returns(Task.FromResult(downloadedQuestionnaire));
 
-            viewModel = CreateDashboardViewModel(
-                principal: principal,
-                designerApiService: mockOfDesignerApiService.Object,
+            viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,
                 commandService: mockOfCommandService.Object,
                 questionnaireImportService: mockOfQuestionnaireImportService.Object,
                 viewModelNavigationService: mockOfViewModelNavigationService.Object
