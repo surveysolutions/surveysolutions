@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
 {
-    internal class SqlToDataExportService : IDataExportService
+    internal class TabularToExternalStatPackagesDataExportService : IExternalStatPackagesDataExportService
     {
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
 
-        public SqlToDataExportService(
+        public TabularToExternalStatPackagesDataExportService(
             IFileSystemAccessor fileSystemAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             ITransactionManagerProvider transactionManager,
@@ -55,17 +55,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
             tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
         
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
             tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
        
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, string basePath, ExportDataType exportType, string[] dataFiles)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, ExportDataType exportType, string[] dataFiles)
         {
             string currentDataInfo = string.Empty;
             try
@@ -134,14 +134,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             string basePath)
         {
             tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(Guid questionnaireId, long questionnaireVersion,
             string basePath)
         {
             tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, basePath).WaitAndUnwrapException();
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, basePath, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
+            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, fileSystemAccessor.GetFilesInDirectory(basePath));
         }
     }
 }

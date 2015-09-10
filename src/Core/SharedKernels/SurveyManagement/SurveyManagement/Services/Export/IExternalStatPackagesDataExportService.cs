@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {
-    internal interface IDataExportService 
+    internal interface IExternalStatPackagesDataExportService 
     {
         string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath);
         string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath);
