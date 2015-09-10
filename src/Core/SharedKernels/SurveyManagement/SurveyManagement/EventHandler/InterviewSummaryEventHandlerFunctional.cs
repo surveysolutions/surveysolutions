@@ -34,7 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
-        IUpdateHandler<InterviewSummary, InterviewHardDeleted>
+        IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
+        IUpdateHandler<InterviewSummary, AnswerRemoved>
 
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
@@ -179,6 +180,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<TextQuestionAnswered> evnt)
         {
             return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+        }
+
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswerRemoved> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == evnt.Payload.QuestionId))
+                {
+                    interview.AnswerFeaturedQuestion(evnt.Payload.QuestionId, "");
+                }
+            });
         }
 
         public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
