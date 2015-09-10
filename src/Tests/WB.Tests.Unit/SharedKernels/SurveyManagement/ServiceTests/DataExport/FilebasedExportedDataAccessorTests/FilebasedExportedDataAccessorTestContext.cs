@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                     It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles &&
                     _.GetDataFilesForQuestionnaireByInterviewsInApprovedState(
                         It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles*/),
+                Mock.Of<IMetadataExportService>(),
                 Mock.Of<IEnvironmentContentService>(
                     _ =>
                         _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) ==
