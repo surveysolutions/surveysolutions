@@ -53,7 +53,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, FlagSetToAnswer>,
         IUpdateHandler<InterviewData, InterviewDeclaredInvalid>,
         IUpdateHandler<InterviewData, InterviewDeclaredValid>,
-        IUpdateHandler<InterviewData, InterviewHardDeleted>
+        IUpdateHandler<InterviewData, InterviewHardDeleted>,
+        IUpdateHandler<InterviewData, AnswerRemoved>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
@@ -489,6 +490,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
                         updatedQuestion.QuestionState &= ~QuestionState.Answered;
                     }));
+        }
+
+        public InterviewData Update(InterviewData currentState, IPublishedEvent<AnswerRemoved> evnt)
+        {
+            return UpdateQuestion(currentState, evnt.Payload.RosterVector, evnt.Payload.QuestionId, updatedQuestion =>
+            {
+                updatedQuestion.Answer = null;
+
+                updatedQuestion.QuestionState &= ~QuestionState.Answered;
+            });
         }
 
         public InterviewData Update(InterviewData currentState, IPublishedEvent<GroupsDisabled> evnt)
