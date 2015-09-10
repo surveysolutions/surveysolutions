@@ -9,7 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version);
         string GetFolderPathOfHistoryByQuestionnaire(Guid questionnaireId, long version);
 
-
         string GetFilePathToExportedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType);
         string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType);
 
@@ -25,8 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         void CleanExportFileFolder();
         void CleanExportHistoryFolder();
 
-
-        string GetAllDataFolder(Guid questionnaireId, long version);
-        string GetApprovedDataFolder(Guid questionnaireId, long version);
+        void DeleteAllDataFolder(Guid questionnaireId, long version);
+        void DeleteApprovedDataFolder(Guid questionnaireId, long version);
     }
 }
