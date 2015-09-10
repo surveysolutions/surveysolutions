@@ -208,6 +208,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No questionnaires found.
+        /// </summary>
+        public static string Dashboard_EmptySearchResult {
+            get {
+                return ResourceManager.GetString("Dashboard_EmptySearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to have not been updated.
         /// </summary>
         public static string Dashboard_HasNotBeenUpdated {
