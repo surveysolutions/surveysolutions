@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Machine.Specifications;
-
 using Moq;
-
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -27,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
             storageAccessor.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
-                .Returns(new List<QuestionnaireListItem>());
+                .Returns(MyQuestionnaires.ToList());
 
             viewModel = CreateDashboardViewModel(
                 designerApiService: designerApiService,
@@ -47,8 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static readonly IList<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = false},
-            new QuestionnaireListItem(){IsPublic = false}
+            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName},
+            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName}
         };
 
         private static readonly IList<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>

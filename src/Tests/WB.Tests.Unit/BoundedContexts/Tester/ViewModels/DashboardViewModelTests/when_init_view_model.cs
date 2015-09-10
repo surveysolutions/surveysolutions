@@ -23,8 +23,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var userName = "Vasya";
-
             var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
             storageAccessor.Setup(
                 x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
@@ -33,17 +31,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                     {
                         new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
                         new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
-                        new QuestionnaireListItem { IsPublic = true, OwnerName = userName},
-                        new QuestionnaireListItem { IsPublic = true, OwnerName = userName },
-                        new QuestionnaireListItem { IsPublic = true, OwnerName = userName }
+                        new QuestionnaireListItem { IsPublic = true },
+                        new QuestionnaireListItem { IsPublic = true },
+                        new QuestionnaireListItem { IsPublic = true }
                     });
 
-            var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == Guid.Parse("11111111111111111111111111111111"));
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
-
-            viewModel = CreateDashboardViewModel(
-                principal: principal,
-                designerApiService: designerApiService,
+            viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
                 questionnaireListStorage: storageAccessor.Object);
         };
 
@@ -60,8 +53,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static readonly IList<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = false},
-            new QuestionnaireListItem(){IsPublic = false}
+            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName},
+            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName}
         };
 
         private static readonly IList<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
