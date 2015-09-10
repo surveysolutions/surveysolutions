@@ -17,6 +17,7 @@
         local:MvxBind="Text DashboardTitle" />
   </android.support.v7.widget.Toolbar>
 
+  <include layout="@layout/synchronization_panel" />
   <LinearLayout style="@style/Dashboard_Interviews_Header">
     <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
       <TextView style="@style/Dashboard_NewItemsLink"
