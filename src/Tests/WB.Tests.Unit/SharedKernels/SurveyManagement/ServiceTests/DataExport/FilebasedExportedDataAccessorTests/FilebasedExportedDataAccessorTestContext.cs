@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                     .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
             return new FilebasedExportedDataAccessor(fileSystemAccessor, "",
-                Mock.Of<IDataExportService>( /*_ => _.GetDataFilesForQuestionnaire(
+                Mock.Of<IExternalStatPackagesDataExportService>( /*_ => _.GetDataFilesForQuestionnaire(
                     It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles &&
                     _.GetDataFilesForQuestionnaireByInterviewsInApprovedState(
                         It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles*/),
