@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServiceTests
@@ -22,10 +23,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
             changeLogManipulator.Setup(x => x.GetClosedDraftChunksIds(userId)).Returns(changeLogShortRecords);
             changeLogManipulator.Setup(x => x.GetDraftRecordContent(Moq.It.IsAny<Guid>())).Returns<Guid>(key => key.ToString());
 
-            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object);
+            var userIdentity = Mock.Of<IUserIdentity>(x => x.UserId == userId);
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == userIdentity);
+
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, principal: principal);
         };
 
-        Because of = () => result = capiDataSynchronizationService.GetItemsToPush(userId);
+        Because of = () => result = capiDataSynchronizationService.GetItemsToPush();
 
         It should_result_has_2_items = () => result.Count.ShouldEqual(2);
 

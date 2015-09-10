@@ -44,16 +44,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
 
             commandService = new Mock<ICommandService>();
             commandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewFromSynchronizationMetadata>(), null)).Throws<NullReferenceException>();
-
-            plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
-
             changeLogManipulator = new Mock<IChangeLogManipulator>();
             syncCacher = new Mock<ICapiSynchronizationCacheService>();
-            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null,
-                plainQuestionnaireRepositoryMock.Object, syncCacher.Object);
+            capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, commandService.Object, jsonUtilsMock.Object, null, syncCacher.Object);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.Interview, questionnaireMetadata.ResponsibleId));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedInterviewPackages(syncItem, SyncItemType.Interview));
 
         It should_call_ApplySynchronizationMetadata_once =
             () =>
@@ -79,7 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static InterviewSyncPackageDto syncItem;
         private static Mock<ICommandService> commandService;
-        private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
         private static Mock<ICapiSynchronizationCacheService> syncCacher;
         private static InterviewMetaInfo questionnaireMetadata;

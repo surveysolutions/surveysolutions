@@ -5597,7 +5597,10 @@ namespace WB.UI.Interviewer
 			public const int sync_dialog = 2130903127;
 			
 			// aapt resource value: 0x7f030058
-			public const int SyncLogin = 2130903128;
+			public const int synchronization_panel = 2130903128;
+			
+			// aapt resource value: 0x7f030059
+			public const int SyncLogin = 2130903129;
 			
 			static Layout()
 			{

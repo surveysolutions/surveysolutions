@@ -5,7 +5,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ICapiDataSynchronizationService {
-        void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType);
+        void ProcessDownloadedInterviewPackages(InterviewSyncPackageDto item, string itemType);
         IList<ChangeLogRecordWithContent> GetItemsToPush();
     }
 }
