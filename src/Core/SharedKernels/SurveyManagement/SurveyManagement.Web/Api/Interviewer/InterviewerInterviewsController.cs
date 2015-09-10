@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     [ApiBasicAuth]
     [RoutePrefix("api/interviewer/v1/interviews")]
+    [ProtobufJsonSerializer]
     public class InterviewerInterviewsController : ApiController
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
@@ -43,23 +44,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<InterviewApiView> Get()
+        public List<InterviewApiView> Get()
         {
             return this.interviewerInterviewsFactory.GetInProgressInterviews(this.globalInfoProvider.GetCurrentUser().Id).Select(interview => new InterviewApiView()
             {
                 Id = interview.Id,
                 QuestionnaireIdentity = interview.QuestionnaireIdentity
-            });
+            }).ToList();
         }
 
         [HttpGet]
         [Route("packages/{lastPackageId?}")]
-        public IEnumerable<SynchronizationChunkMeta> GetPackages(string lastPackageId = null)
+        public List<SynchronizationChunkMeta> GetPackages(string lastPackageId = null)
         {
             return this.syncManager.GetInterviewPackageIdsWithOrder(
                 userId: this.globalInfoProvider.GetCurrentUser().Id,
                 deviceId: this.GetInterviewerDeviceId(),
-                lastSyncedPackageId: lastPackageId).SyncPackagesMeta;
+                lastSyncedPackageId: lastPackageId).SyncPackagesMeta.ToList();
         }
 
         [HttpGet]

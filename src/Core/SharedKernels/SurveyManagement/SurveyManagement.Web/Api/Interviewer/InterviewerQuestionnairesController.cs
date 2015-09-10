@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -19,28 +20,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     [ApiBasicAuth]
     [RoutePrefix("api/interviewer/v1/questionnaires")]
+    [ProtobufJsonSerializer]
     public class InterviewerQuestionnairesController : ApiController
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IJsonUtils jsonUtils;
 
         public InterviewerQuestionnairesController(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IJsonUtils jsonUtils)
         {
             this.questionnaireStore = questionnaireStore;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.jsonUtils = jsonUtils;
         }
 
         [HttpGet]
         [Route("census")]
-        public IEnumerable<QuestionnaireIdentity> Census()
+        public List<QuestionnaireIdentity> Census()
         {
             var query = new QuestionnaireBrowseInputModel()
             {
@@ -49,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             };
 
             return this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
-                .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
+                .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version)).ToList();
         }
 
         [HttpGet]
@@ -58,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         {
             return new QuestionnaireApiView()
             {
-                Document = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version).Questionnaire,
+                QuestionnaireDocument = this.jsonUtils.Serialize(this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version).Questionnaire),
                 AllowCensus = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).AllowCensusMode
             };
         }

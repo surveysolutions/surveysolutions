@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
+using Main.Core.Documents;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,7 +16,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -34,6 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IPrincipal principal;
+        private readonly IJsonUtils jsonUtils;
         private readonly IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo;
         private readonly CancellationTokenSource synchronizationCancellationTokenSource = new CancellationTokenSource();
 
@@ -50,6 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage,
             ICapiCleanUpService capiCleanUpService,
             IPrincipal principal,
+            IJsonUtils jsonUtils,
             IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo)
         {
             this.synchronizationService = synchronizationService;
@@ -64,7 +71,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewSynchronizationFileStorage = interviewSynchronizationFileStorage;
             this.capiCleanUpService = capiCleanUpService;
             this.principal = principal;
+            this.jsonUtils = jsonUtils;
             this.plainStorageQuestionnireCensusInfo = plainStorageQuestionnireCensusInfo;
+        }
+
+        private bool isSynchronizationVisible;
+        public bool IsSynchronizationVisible
+        {
+            get { return this.isSynchronizationVisible; }
+            set { this.isSynchronizationVisible = value; this.RaisePropertyChanged(); }
         }
 
         private bool isSynchronizationInProgress;
@@ -76,6 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public async Task SynchronizeAsync()
         {
+            this.IsSynchronizationVisible = true;
             this.IsSynchronizationInProgress = true;
             try
             {
@@ -188,10 +204,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                    token: synchronizationCancellationTokenSource.Token);
 
-                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireApiView.Document);
+                var questionnaireDocument = this.jsonUtils.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument);
+                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocument);
                 this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
-                this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.Document);
-                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.AllowCensus, string.Empty));
+                this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
+                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.AllowCensus, string.Empty));   
 
                 if (questionnaireApiView.AllowCensus)
                 {
