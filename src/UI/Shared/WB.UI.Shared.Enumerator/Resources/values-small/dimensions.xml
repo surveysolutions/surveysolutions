@@ -2,7 +2,7 @@
 
 <resources>
 
-  <dimen name="textsize_9">8sp</dimen>
+  <dimen name="textsize_10">9sp</dimen>
   <dimen name="textsize_12">10sp</dimen>
   <dimen name="textsize_14">10sp</dimen>
   <dimen name="textsize_16">11sp</dimen>

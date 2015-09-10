@@ -30,7 +30,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public DashboardInformation GetDashboardItems(Guid interviewerId, DashboardInterviewCategories category)
         {
             DashboardInformation dashboardInformation = new DashboardInformation();
-            dashboardInformation.DashboardItems = new List<IDashboardItem>();
+            dashboardInformation.NewInterviews = new List<IDashboardItem>();
+            dashboardInformation.StartedInterviews = new List<IDashboardItem>();
+            dashboardInformation.RejectedInterviews = new List<IDashboardItem>();
+            dashboardInformation.CompletedInterviews = new List<IDashboardItem>();
 
             // show census mode for new tab
             if (category == DashboardInterviewCategories.New)
@@ -40,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 {
                     var censusQuestionnaireDashboardItem = Mvx.Resolve<CensusQuestionnaireDashboardItemViewModel>();
                     censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo.Id);
-                    dashboardInformation.DashboardItems.Add(censusQuestionnaireDashboardItem);
+                    dashboardInformation.NewInterviews.Add(censusQuestionnaireDashboardItem);
                 }
             }
 
@@ -50,15 +53,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             foreach (var interview in interviewAggregateRoots)
             {
                 var interviewCategory = this.GetDashboardCategoryForInterview(interview);
-                IncreaseDashboardStatisticCounter(dashboardInformation, interviewCategory);
-
-                if (category != interviewCategory)
-                    continue;
-
                 var interviewDashboardItem = Mvx.Resolve<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(interview);
-
-                dashboardInformation.DashboardItems.Add(interviewDashboardItem);
+                AddDashboardItemToCategoryCollection(dashboardInformation, interviewCategory, interviewDashboardItem);
             }
 
             return dashboardInformation;
@@ -87,21 +84,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        private void IncreaseDashboardStatisticCounter(DashboardInformation dashboardInformation, DashboardInterviewCategories category)
+        private void AddDashboardItemToCategoryCollection(DashboardInformation dashboardInformation, 
+            DashboardInterviewCategories category, InterviewDashboardItemViewModel interviewDashboardItem)
         {
             switch (category)
             {
                 case DashboardInterviewCategories.Rejected:
-                    dashboardInformation.RejectedInterviewsCount++;
+                    dashboardInformation.RejectedInterviews.Add(interviewDashboardItem);
                     break;
                 case DashboardInterviewCategories.Complited:
-                    dashboardInformation.CompletedInterviewsCount++;
+                    dashboardInformation.CompletedInterviews.Add(interviewDashboardItem);
                     break;
                 case DashboardInterviewCategories.New:
-                    dashboardInformation.NewInterviewsCount++;
+                    dashboardInformation.NewInterviews.Add(interviewDashboardItem);
                     break;
                 case DashboardInterviewCategories.InProgress:
-                    dashboardInformation.StartedInterviewsCount++;
+                    dashboardInformation.StartedInterviews.Add(interviewDashboardItem);
                     break;
             }
         }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
- <color name="capi_orange">#f7c942</color>
+  <color name="capi_orange">#f7c942</color>
 
   <color name="menu_hint_color">#9a9a9a</color>
+  
+  <color name="dashboard_new_tab">#6D6D6D</color>
+  <color name="dashboard_in_progress_tab">#4C8FD0</color>
+  <color name="dashboard_complited_tab">#4FCB38</color>
+  <color name="dashboard_rejected_tab">#F5724A</color>
 </resources>
