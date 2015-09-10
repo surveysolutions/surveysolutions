@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
         public UsersView GetInterviewers(int pageSize, string searchBy, Guid supervisorId)
         {
             var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>((users) =>
-                ApplyFilterByUsers(searchBy, supervisorId, users)
+                ApplyFilterByInterviewers(searchBy, supervisorId, users)
                     .OrderBy(user => user.UserName));
 
             return new UsersView()
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             return responsiblesFromInterviews;
         }
 
-        private static IQueryable<UserDocument> ApplyFilterByUsers(string searchBy, Guid supervisorId, IQueryable<UserDocument> users)
+        private static IQueryable<UserDocument> ApplyFilterByInterviewers(string searchBy, Guid supervisorId, IQueryable<UserDocument> users)
         {
             users = users.Where(user => !user.IsArchived && !user.IsLockedBySupervisor && !user.IsLockedByHQ)
                          .Where(user => (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId));
