@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.InterviewMetaInfo;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServiceTests
@@ -33,12 +34,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
 
             cleanUpExecutorMock = new Mock<ICapiCleanUpService>();
 
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>());
+
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(
                 capiCleanUpService: cleanUpExecutorMock.Object,
-                interviewMetaInfoFactory: viewFactory.Object);
+                interviewMetaInfoFactory: viewFactory.Object,
+                principal: principal);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview, Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"));
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedInterviewPackages(syncItem, SyncItemType.DeleteInterview);
 
         It should_not_cleanup_data_for_another_user =
             () => cleanUpExecutorMock.Verify(x => x.DeleteInterview(interviewId), Times.Never);

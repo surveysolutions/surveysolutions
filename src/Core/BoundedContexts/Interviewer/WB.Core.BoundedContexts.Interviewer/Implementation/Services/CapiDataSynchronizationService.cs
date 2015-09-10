@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.capiCleanUpService = capiCleanUpService;
         }
 
-        public void ProcessDownloadedPackage(InterviewSyncPackageDto item, string itemType)
+        public void ProcessDownloadedInterviewPackages(InterviewSyncPackageDto item, string itemType)
         {
             switch (itemType)
             {

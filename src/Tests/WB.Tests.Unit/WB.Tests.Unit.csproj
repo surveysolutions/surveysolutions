@@ -347,7 +347,6 @@
     <Compile Include="Applications\Supervisor\SyncControllerTests\when_handshaking_capi_with_supervisor_and_device_is_that_expected.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SynchronozationProcessorTests\SynchronozationProcessorTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
@@ -555,7 +554,6 @@
     <Compile Include="Synchronization\when_mark_sync_package_as_successfully_handled.cs" />
     <Compile Include="Synchronization\when_sync_is_initialized_and_device_is_not_registered.cs" />
     <Compile Include="Synchronization\when_sync_is_initialized_and_device_is_registered.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archiving_process_thrown_an_exception.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\NewtonJsonUtilsTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils.cs" />
     <Compile Include="Infrastructure\HybridEventBusTests\when_publishing_aggregate_root_events_and_publish_to_cqrs_event_bus_fails.cs" />
@@ -795,17 +793,8 @@
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_GetItemsForPush_called.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview_and_delete_throw_exception.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_questionnaire_with_broken_metadata.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_existing_user.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_broken_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_interview.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_user.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_assembly.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_assembly_with_broken_metadata.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_in_census_mode.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_questionnaire_with_broken_metadata.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_answer_is_1_and_mask_has_8_symbols.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_creating_mask_formatter_with_variety_of_symbols.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_FormatValue_called_for_1_and_mask_with_any_sumbol_and_lower_dashes.cs" />
@@ -1623,9 +1612,6 @@
     <Compile Include="Execute.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\CapiInformationServiceTestContext.cs" />
     <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\when_creating_information_package.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\TabletInformationSenderTestContext.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_is_missing.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\TabletInformationSenderTests\when_archive_was_sent_successfully_to_supervisor.cs" />
     <Compile Include="GenericSubdomains\Utils\MonadsTests\MonadsTests.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\PasswordHasherTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\when_hashing__hello_world__password.cs" />

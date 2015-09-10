@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 lastKnownPackageId = synchronizationChunkMeta.Id;
 
-                this.capiDataSynchronizationService.ProcessDownloadedPackage(package, synchronizationChunkMeta.ItemType);
+                this.capiDataSynchronizationService.ProcessDownloadedInterviewPackages(package, synchronizationChunkMeta.ItemType);
                 this.syncPackageIdsStorage.Append(package.PackageId, synchronizationChunkMeta.SortIndex);
             }
 

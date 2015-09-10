@@ -1,4 +1,4 @@
-﻿using WB.Core.GenericSubdomains.Native;
+﻿using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
