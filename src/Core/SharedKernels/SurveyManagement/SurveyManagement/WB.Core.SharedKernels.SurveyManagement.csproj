@@ -114,9 +114,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
+    <Compile Include="Implementation\Services\DataExport\IMetaDescriptionFactory.cs" />
+    <Compile Include="Implementation\Services\DataExport\MetaDescriptionFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\ReadSideToTabularDataExportService.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
+    <Compile Include="Services\Export\IMetadataExportService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
+    <Compile Include="Services\Export\MetadataExportService.cs" />
     <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
@@ -296,6 +300,7 @@
     <Compile Include="Views\DataExport\InterviewExportedActionUtils.cs" />
     <Compile Include="Views\DataExport\InterviewExportedDataRecord.cs" />
     <Compile Include="Views\DataExport\InterviewExportedLevel.cs" />
+    <Compile Include="Views\DataExport\QuestionnaireExportStructureExtentions.cs" />
     <Compile Include="Views\DetailsStatisticView.cs" />
     <Compile Include="Views\DetailsViewModel.cs" />
     <Compile Include="Views\Device\RegisterData.cs" />
