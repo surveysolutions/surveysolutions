@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, $timeout) {
+        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -35,25 +35,13 @@
                     callback: function(event) {
                         event.preventDefault();
 
-                        var target = $(event.target);
-                        if (target.parents(".question-options-editor").length <= 0) {
-                            return;
-                        }
-
-                        var optionScope = angular.element(target).scope().option;
-                        var indexOfOption = $scope.activeQuestion.options.indexOf(optionScope);
-                        if (indexOfOption < 0)
-                            return;
-
-                        if (indexOfOption === $scope.activeQuestion.options.length - 1)
-                            $scope.addOption();
-
-                        $timeout(function() {
-                            var questionOptionValueEditor = $(".question-options-editor input.question-option-value-editor");
-                            var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
-                            optionValueInput.focus();
-                            optionValueInput.select();
-                        });
+                        utilityService.moveFocusAndAddOptionIfNeeded(
+                            event.target,
+                            ".question-options-editor",
+                            ".question-options-editor input.question-option-value-editor",
+                            $scope.activeQuestion.options,
+                            function () { return $scope.addOption(); },
+                            "option");
                     }
                 });
             

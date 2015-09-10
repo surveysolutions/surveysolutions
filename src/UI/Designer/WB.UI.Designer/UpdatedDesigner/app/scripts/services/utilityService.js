@@ -37,7 +37,30 @@
                     });
                 };
                 
-                utilityService.createQuestionForDeleteConfirmationPopup = function(title) {
+                utilityService.moveFocusAndAddOptionIfNeeded = function (targetDomElement, optionEditorClassName, optionVauleEditorClassName, options, addOptionCallBack, optionPropertyName) {
+
+                    var target = $(targetDomElement);
+                    if (target.parents(optionEditorClassName).length <= 0) {
+                        return;
+                    }
+
+                    var optionScope = angular.element(target).scope()[optionPropertyName];
+                    var indexOfOption = options.indexOf(optionScope);
+                    if (indexOfOption < 0)
+                        return;
+
+                    if (indexOfOption === options.length - 1)
+                        addOptionCallBack();
+
+                    $timeout(function () {
+                        var questionOptionValueEditor = $(optionVauleEditorClassName);
+                        var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
+                        optionValueInput.focus();
+                        optionValueInput.select();
+                    });
+                };
+
+                utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
                     var trimmedTitle = title.substring(0, 25) + (title.length > 25 ? "..." : "");
                     var message = 'Are you sure you want to delete "' + trimmedTitle + '"?';
                     return {

@@ -3,7 +3,7 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl', 
-            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, $timeout) {
+            function ($rootScope, $scope, $stateParams, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys) {
                 $scope.currentChapterId = $stateParams.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
@@ -42,26 +42,13 @@
                         allowIn: ["INPUT"],
                         callback: function (event) {
                             event.preventDefault();
-
-                            var target = $(event.target);
-                            if (target.parents(".fixed-roster-titles-editor").length <= 0) {
-                                return;
-                            }
-
-                            var fixedRosterTitleScope = angular.element(target).scope().title;
-                            var indexOfFixedRosterTitle = $scope.activeRoster.fixedRosterTitles.indexOf(fixedRosterTitleScope);
-                            if (indexOfFixedRosterTitle < 0)
-                                return;
-
-                            if (indexOfFixedRosterTitle === $scope.activeRoster.fixedRosterTitles.length - 1)
-                                $scope.addFixedTitle();
-
-                            $timeout(function () {
-                                var fixedRosterValueEditor = $(".fixed-roster-titles-editor input.fixed-roster-value-editor");
-                                var fixedRosterValueInput = $(fixedRosterValueEditor[indexOfFixedRosterTitle + 1]);
-                                fixedRosterValueInput.focus();
-                                fixedRosterValueInput.select();
-                            });
+                            utilityService.moveFocusAndAddOptionIfNeeded(
+                                event.target,
+                                ".fixed-roster-titles-editor",
+                                ".fixed-roster-titles-editor input.fixed-roster-value-editor",
+                                $scope.activeRoster.fixedRosterTitles,
+                                function() { return $scope.addFixedTitle(); },
+                                "title");
                         }
                     });
                 
