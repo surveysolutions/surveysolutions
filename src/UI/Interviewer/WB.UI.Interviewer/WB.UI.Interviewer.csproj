@@ -307,6 +307,7 @@
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />

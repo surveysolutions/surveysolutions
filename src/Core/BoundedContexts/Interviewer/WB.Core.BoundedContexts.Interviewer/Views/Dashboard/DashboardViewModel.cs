@@ -41,26 +41,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
-            var userName = this.principal.CurrentUserIdentity.Name;
-            this.currentDashboardCategory = DashboardInterviewCategories.New;
-
-            dashboardInformation = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId, currentDashboardCategory);
-
-            this.NewInterviewsCount = dashboardInformation.NewInterviews.Count;
-            this.StartedInterviewsCount = dashboardInformation.StartedInterviews.Count;
-            this.CompletedInterviewsCount = dashboardInformation.CompletedInterviews.Count;
-            this.RejectedInterviewsCount = dashboardInformation.RejectedInterviews.Count;
-            var numberOfAssignedInterviews = this.NewInterviewsCount + this.StartedInterviewsCount
-                                             + this.CompletedInterviewsCount + this.RejectedInterviewsCount;
-            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(
-                numberOfAssignedInterviews, userName);
+            this.CurrentDashboardCategory = DashboardInterviewCategories.New;
 
             this.RefreshDashboard();
         }
 
         private void RefreshDashboard()
         {
-            switch (currentDashboardCategory)
+            this.dashboardInformation = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId,
+                this.currentDashboardCategory);
+
+            this.NewInterviewsCount = this.dashboardInformation.NewInterviews.Count;
+            this.StartedInterviewsCount = this.dashboardInformation.StartedInterviews.Count;
+            this.CompletedInterviewsCount = this.dashboardInformation.CompletedInterviews.Count;
+            this.RejectedInterviewsCount = this.dashboardInformation.RejectedInterviews.Count;
+            var numberOfAssignedInterviews = this.NewInterviewsCount + this.StartedInterviewsCount
+                                             + this.CompletedInterviewsCount + this.RejectedInterviewsCount;
+
+            var userName = this.principal.CurrentUserIdentity.Name;
+            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(
+                numberOfAssignedInterviews, userName);
+
+            this.RefreshTab();
+        }
+
+        private void RefreshTab()
+        {
+            switch (CurrentDashboardCategory)
             {
                  case DashboardInterviewCategories.New:
                     this.DashboardItems = dashboardInformation.NewInterviews;
@@ -79,6 +86,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private DashboardInformation dashboardInformation;
         private DashboardInterviewCategories currentDashboardCategory;
+        public bool IsNewInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.New; } }
+        public bool IsStartedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.InProgress; } }
+        public bool IsCompletedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.Complited; } }
+        public bool IsRejectedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.Rejected; } }
+
+        public DashboardInterviewCategories CurrentDashboardCategory
+        {
+            get { return this.currentDashboardCategory; }
+            set 
+            {
+                this.currentDashboardCategory = value; 
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(() => IsNewInterviewsCategorySelected);
+                this.RaisePropertyChanged(() => IsStartedInterviewsCategorySelected);
+                this.RaisePropertyChanged(() => IsCompletedInterviewsCategorySelected);
+                this.RaisePropertyChanged(() => IsRejectedInterviewsCategorySelected); 
+            }
+        }
 
         private bool isSynchronizationInfoShowed;
         public bool IsSynchronizationInfoShowed
@@ -122,11 +147,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public bool IsExistsAnyNewInterview
-        {
-            get { return this.newInterviewsCount > 0; }
-        }
-
         private int startedInterviewsCount;
         public int StartedInterviewsCount
         {
@@ -137,11 +157,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(() => IsExistsAnyStartedInterview);
             }
-        }
-
-        public bool IsExistsAnyStartedInterview
-        {
-            get { return this.startedInterviewsCount > 0; }
         }
 
         private int completedInterviewsCount;
@@ -156,11 +171,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public bool IsExistsAnyCompletedInterview
-        {
-            get { return this.completedInterviewsCount > 0; }
-        }
-
         private int rejectedInterviewsCount;
         public int RejectedInterviewsCount
         {
@@ -173,10 +183,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public bool IsExistsAnyRejectedInterview
-        {
-            get { return this.rejectedInterviewsCount > 0; }
-        }
+        public bool IsExistsAnyNewInterview { get { return this.newInterviewsCount > 0; } }
+        public bool IsExistsAnyStartedInterview { get { return this.startedInterviewsCount > 0; } }
+        public bool IsExistsAnyCompletedInterview { get { return this.completedInterviewsCount > 0; } }
+        public bool IsExistsAnyRejectedInterview { get { return this.rejectedInterviewsCount > 0; } }
 
         private IEnumerable<IDashboardItem> dashboardItems;
         public IEnumerable<IDashboardItem> DashboardItems
@@ -207,11 +217,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void ShowInterviewsCommand(DashboardInterviewCategories category)
         {
-            if (category == this.currentDashboardCategory)
+            if (category == this.CurrentDashboardCategory)
                 return;
 
-            this.currentDashboardCategory = category;
-            this.RefreshDashboard();
+            this.CurrentDashboardCategory = category;
+            this.RefreshTab();
         }
 
         public IMvxCommand SignOutCommand
