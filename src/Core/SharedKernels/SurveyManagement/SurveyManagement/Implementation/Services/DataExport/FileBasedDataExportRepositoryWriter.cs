@@ -85,10 +85,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (interviewSummary == null)
                 return;
 
-            fileSystemAccessor.DeleteDirectory(filebasedExportedDataAccessor.GetAllDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+            filebasedExportedDataAccessor.DeleteAllDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (action == InterviewExportedAction.ApprovedByHeadquarter)
-                fileSystemAccessor.DeleteDirectory(filebasedExportedDataAccessor.GetApprovedDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+                filebasedExportedDataAccessor.DeleteApprovedDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (interviewActionsForDataUpdate.Contains(action))
             {
@@ -156,8 +156,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
 
-            fileSystemAccessor.DeleteDirectory(filebasedExportedDataAccessor.GetAllDataFolder(questionnaireId,
-                    questionnaireVersion));
+            filebasedExportedDataAccessor.DeleteAllDataFolder(questionnaireId,
+                    questionnaireVersion);
         }
 
         private void AddExportedDataByInterviewImpl(InterviewDataExportView interviewDataExportView)

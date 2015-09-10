@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
-        private readonly IDataExportService dataExportService;
+        private readonly IExternalStatPackagesDataExportService externalStatPackagesDataExportService;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService; 
         private readonly ILogger logger;
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public FilebasedExportedDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
             string folderPath, 
-            IDataExportService dataExportService,
+            IExternalStatPackagesDataExportService externalStatPackagesDataExportService,
             IMetadataExportService metadataExportService,
             IEnvironmentContentService environmentContentService, 
             ILogger logger, 
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             ITabularFormatExportService tabularFormatExportService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.dataExportService = dataExportService;
+            this.externalStatPackagesDataExportService = externalStatPackagesDataExportService;
             this.metadataExportService = metadataExportService;
             this.environmentContentService = environmentContentService;
             this.logger = logger;
@@ -134,13 +134,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public string GetAllDataFolder(Guid questionnaireId, long version)
+        public void DeleteAllDataFolder(Guid questionnaireId, long version)
+        {
+            var dataFolder = GetAllDataFolder(questionnaireId, version);
+            fileSystemAccessor.DeleteDirectory(dataFolder);
+        }
+
+        public void DeleteApprovedDataFolder(Guid questionnaireId, long version)
+        {
+            var dataFolder = GetApprovedDataFolder(questionnaireId, version);
+            fileSystemAccessor.DeleteDirectory(dataFolder);
+        }
+
+        private string GetAllDataFolder(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(
                     questionnaireId, version), allDataFolder);
         }
 
-        public string GetApprovedDataFolder(Guid questionnaireId, long version)
+        private string GetApprovedDataFolder(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(
                     questionnaireId, version), approvedDataFolder);
@@ -185,12 +197,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 case ExportDataType.Stata:
                 {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, directoryWithExportedDataPath));
+                    filesToArchive.AddRange(this.externalStatPackagesDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, directoryWithExportedDataPath));
                     break;
                 }
                 case ExportDataType.Spss:
                 {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, directoryWithExportedDataPath));
+                    filesToArchive.AddRange(this.externalStatPackagesDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, directoryWithExportedDataPath));
                     break;
                 }
                 case ExportDataType.Tab:
@@ -245,12 +257,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 case ExportDataType.Stata:
                     {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, directoryWithExportedDataPath));
+                        filesToArchive.AddRange(this.externalStatPackagesDataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, directoryWithExportedDataPath));
                         break;
                     }
                 case ExportDataType.Spss:
                     {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, directoryWithExportedDataPath));
+                        filesToArchive.AddRange(this.externalStatPackagesDataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, directoryWithExportedDataPath));
                         break;
                     }
                 case ExportDataType.Tab:

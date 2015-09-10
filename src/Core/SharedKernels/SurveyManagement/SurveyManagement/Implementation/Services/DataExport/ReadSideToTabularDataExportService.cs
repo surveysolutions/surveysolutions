@@ -135,12 +135,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private async Task ExportInterviewsInTabularFormatImplAsync(
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
-            Expression<Func<InterviewStatuses, bool>> whereClauseForAction, 
-            Expression<Func<InterviewExportedDataRecord, bool>> whereClauseForInterviews ,
-            Guid questionnaireId, 
-            long questionnaireVersion, 
+            Expression<Func<InterviewStatuses, bool>> whereClauseForAction,
+            Expression<Func<InterviewExportedDataRecord, bool>> whereClauseForInterviews,
+            Guid questionnaireId,
+            long questionnaireVersion,
             string basePath)
         {
+            if (fileSystemAccessor.IsDirectoryExists(basePath))
+            {
+                return;
+            }
+
             QuestionnaireExportStructure questionnaireExportStructure =
                 this.transactionManagerProvider.GetTransactionManager()
                     .ExecuteInQueryTransaction(
@@ -151,10 +156,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (questionnaireExportStructure == null)
                 return;
 
-            if (!fileSystemAccessor.IsDirectoryExists(basePath))
-            {
-                fileSystemAccessor.CreateDirectory(basePath);
-            }
+            fileSystemAccessor.CreateDirectory(basePath);
 
             await Task.WhenAll(
                 this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath),
