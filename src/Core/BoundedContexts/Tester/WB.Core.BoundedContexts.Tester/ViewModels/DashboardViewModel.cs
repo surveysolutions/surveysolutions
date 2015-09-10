@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+
 using Cirrious.MvvmCross.ViewModels;
-
 using Humanizer;
-
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
@@ -86,7 +87,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.HumanizeLasUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
         }
-
        
         private void LoadFilteredListFromLocalStorage(string searchTerm)
         {
@@ -129,11 +129,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { this.humanizedLastUpdateDate = value; RaisePropertyChanged(); }
         }
 
-        private IList<QuestionnaireListItem> questionnaires = new QuestionnaireListItem[] { };
-        public IList<QuestionnaireListItem> Questionnaires
+        private ObservableCollection<QuestionnaireListItem> questionnaires = new ObservableCollection<QuestionnaireListItem>();
+        public ObservableCollection<QuestionnaireListItem> Questionnaires
         {
             get { return this.questionnaires; }
-            set { this.questionnaires = value; RaisePropertyChanged(); }
+            set { 
+                this.questionnaires = value; 
+                RaisePropertyChanged(); 
+            }
         }
 
         private bool showEmptyQuestionnaireListText;
@@ -191,10 +194,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return clearSearchCommand ?? (clearSearchCommand = new MvxCommand(this.ClearSearch)); }
         }
 
-        private IMvxCommand showSearchCommand;
         public IMvxCommand ShowSearchCommand
         {
-            get { return showSearchCommand ?? (showSearchCommand = new MvxCommand(this.ShowSearch, () => !this.IsInProgress)); }
+            get { return new MvxCommand(this.ShowSearch, () => !this.IsInProgress); }
         }
 
         private void ShowSearch()
@@ -251,10 +253,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private IList<QuestionnaireListItem> myQuestionnaires;
-        private IList<QuestionnaireListItem> publicQuestionnaires;
-
-       
+        private List<QuestionnaireListItem> myQuestionnaires;
+        private List<QuestionnaireListItem> publicQuestionnaires;
 
         private void SignOut()
         {
@@ -264,13 +264,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void ShowPublicQuestionnaires()
         {
-            this.Questionnaires = publicQuestionnaires;
+            this.Questionnaires.Clear();
+            publicQuestionnaires.ForEach(x => this.Questionnaires.Add(x));
+            RaisePropertyChanged(() => Questionnaires);
             this.IsPublicShowed = true;
         }
 
         private void ShowMyQuestionnaires()
         {
-            this.Questionnaires = myQuestionnaires;
+            this.Questionnaires.Clear();
+            myQuestionnaires.ForEach(x => this.Questionnaires.Add(x));
+            RaisePropertyChanged(() => Questionnaires);
             this.IsPublicShowed = false;
         }
 
@@ -376,10 +380,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 HumanizeLasUpdateDate(lastUpdateDate);
 
                 await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
-                        {
-                            Id = this.principal.CurrentUserIdentity.Name,
-                            LastUpdateDate = lastUpdateDate
-                        });
+                {
+                    Id = this.principal.CurrentUserIdentity.Name,
+                    LastUpdateDate = lastUpdateDate
+                });
 
                 LoadFilteredListFromLocalStorage(null);
             }
