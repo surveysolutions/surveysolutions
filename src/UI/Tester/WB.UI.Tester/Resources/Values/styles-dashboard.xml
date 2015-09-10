@@ -1,16 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
+  <style name="ToolbarTitle_Container">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
 
   <style name="Dashboard_LastUpdated">
     <item name="android:textColor">@color/colorToolbarText</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:layout_centerVertical">true</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textStyle">italic</item>
   </style>
-  
+
   <style name="Dashboard_SearchView_SearchButton">
     <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
@@ -26,7 +29,7 @@
     <item name="android:orientation">horizontal</item>
     <item name="android:background">@drawable/question_list_item_background</item>
   </style>
-  
+
   <style name="Dashboard_SearchView_FilterInput">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -48,7 +51,7 @@
     <item name="android:scaleType">fitCenter</item>
     <item name="android:background">@drawable/delete_button</item>
   </style>
-  
+
   <style name="Dashboard_MyQuestionnairesLink" parent="AppTheme">
     <item name="android:textColor">@color/dashboard_my_questionnaire_link</item>
     <item name="android:layout_width">wrap_content</item>
@@ -134,7 +137,7 @@
     <item name="android:layout_width">match_parent</item>
     <item name="android:background">@color/dashboard_questionnairelist_border_top</item>
   </style>
-  
+
   <style name="Dashboard_Questionnaires_Divider">
     <item name="android:layout_height">@dimen/ListStyle_Divider_height</item>
     <item name="android:layout_width">match_parent</item>

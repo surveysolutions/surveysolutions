@@ -8,11 +8,17 @@
                                      android:background="?attr/colorPrimary"
                                      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                                      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    <TextView style="@style/ToolbarTitle"
-              local:MvxBind="Text Localization('Dashboard_ToolbarText'); Visible If(IsSearchVisible, false, true)" />
-    <TextView style="@style/Dashboard_LastUpdated"
-              local:MvxBind="Text HumanizedLastUpdateDate; Visible If(IsSearchVisible, false, true)" />
-    
+    <RelativeLayout
+        style="@style/ToolbarTitle_Container"
+        local:MvxBind="Visible If(IsSearchVisible, false, true)">
+      <TextView style="@style/ToolbarTitle"
+                android:id="@+id/dashboadr_page_title"
+                local:MvxBind="Text Localization('Dashboard_ToolbarText');" />
+      <TextView style="@style/Dashboard_LastUpdated"
+                android:layout_alignBaseline="@+id/dashboadr_page_title"
+                android:layout_toRightOf="@+id/dashboadr_page_title"
+                local:MvxBind="Text HumanizedLastUpdateDate;" />
+    </RelativeLayout>
     <ImageButton style="@style/Dashboard_SearchView_SearchButton"
         local:MvxBind="Click ShowSearchCommand; Visible If(IsSearchVisible, false, true)"/>
     <MvxLinearLayout style="@style/Dashboard_SearchView_Container"
@@ -44,7 +50,10 @@
                 android:layout_height="match_parent">
 
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
-               local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible ShowEmptyQuestionnaireListText"/>
+               local:MvxBind="Text Localization('Dashboard_EmptySearchResult'); Visible IsSearchVisible"/>
+    
+    <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
+               local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible If(IsSearchVisible, false, true)"/>
   </LinearLayout>
 </LinearLayout>
 
