@@ -206,7 +206,7 @@
     <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\DataExport\TabularToExternalStatPackagesDataExportService.cs" />
+    <Compile Include="Implementation\Services\DataExport\TabularDataToExternalStatPackageExportService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
@@ -240,7 +240,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\Export\IExternalStatPackagesDataExportService.cs" />
+    <Compile Include="Services\Export\ITabularDataToExternalStatPackageExportService.cs" />
     <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthCheck.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />

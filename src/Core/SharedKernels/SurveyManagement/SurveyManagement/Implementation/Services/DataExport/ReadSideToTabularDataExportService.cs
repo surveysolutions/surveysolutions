@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
 
         private readonly string parentId = "ParentId";
+        private readonly string dataFileExtension = "tab";
 
         private readonly string separator;
         private readonly int returnRecordLimit;
@@ -133,6 +134,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
         }
 
+        public string[] GetTabularDataFilesFromFolder(string basePath)
+        {
+            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(basePath).Where(fileName => fileName.EndsWith("." + dataFileExtension)).ToArray();
+            return filesInDirectory;
+        }
+
         private async Task ExportInterviewsInTabularFormatImplAsync(
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction,
@@ -141,11 +148,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             long questionnaireVersion,
             string basePath)
         {
-            if (fileSystemAccessor.IsDirectoryExists(basePath))
-            {
-                return;
-            }
-
             QuestionnaireExportStructure questionnaireExportStructure =
                 this.transactionManagerProvider.GetTransactionManager()
                     .ExecuteInQueryTransaction(
@@ -155,8 +157,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (questionnaireExportStructure == null)
                 return;
-
-            fileSystemAccessor.CreateDirectory(basePath);
 
             await Task.WhenAll(
                 this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath),
@@ -437,9 +437,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private string CreateFormatDataFileName(string fileName)
         {
-            return String.Format("{0}.tab", fileName);
+            return String.Format("{0}.{1}", fileName, dataFileExtension);
         }
-
 
         private string GetUserRole(UserRoles userRole)
         {

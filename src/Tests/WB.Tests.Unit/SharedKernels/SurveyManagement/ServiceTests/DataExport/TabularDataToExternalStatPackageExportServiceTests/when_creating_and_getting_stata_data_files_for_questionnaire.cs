@@ -7,12 +7,11 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.TabularDataToExternalStatPackageExportServiceTests
 {
-    internal class when_creating_and_getting_stata_data_files_for_questionnaire : SqlToTabDataExportServiceTestContext
+    internal class when_creating_and_getting_stata_data_files_for_questionnaire : TabularDataToExternalStatPackageExportServiceTestContext
     {
         Establish context = () =>
         {
@@ -22,7 +21,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>())).Returns(new[] { fileName});
             fileSystemAccessor.Setup(x => x.ChangeExtension(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns(fileNameExported);
 
             var tabFileReader = new Mock<ITabFileReader>();
@@ -34,18 +32,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
             datasetWriterFactory.Setup(x => x.CreateDatasetWriter(ExportDataType.Stata)).Returns(datasetWriter.Object);
 
-            _tabularToExternalStatPackagesTabDataExportService = CreateSqlToTabDataExportService(
+            _tabularDataToExternalStatPackagesTabDataExportService = CreateSqlToTabDataExportService(
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
                 tabFileReader: tabFileReader.Object, datasetWriterFactory: datasetWriterFactory.Object);
         };
 
         Because of = () =>
-            filePaths = _tabularToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, "");
+            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName });
 
         private It should_call_write_to_file = () =>
             datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<string[,]>()), Times.Once());
 
-        private static TabularToExternalStatPackagesDataExportService _tabularToExternalStatPackagesTabDataExportService;
+        private static TabularDataToExternalStatPackageExportService _tabularDataToExternalStatPackagesTabDataExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static string[] filePaths;
