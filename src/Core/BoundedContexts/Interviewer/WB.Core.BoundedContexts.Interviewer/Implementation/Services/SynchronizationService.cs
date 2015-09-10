@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<IEnumerable<QuestionnaireIdentity>> GetCensusQuestionnairesAsync()
         {
-            return await this.restService.GetAsync<IEnumerable<QuestionnaireIdentity>>(
+            return await this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.questionnairesController, "/census"),
                 credentials: this.restCredentials);
         }
@@ -116,12 +116,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<IEnumerable<InterviewApiView>> GetInterviewsAsync()
         {
-            return await this.restService.GetAsync<IEnumerable<InterviewApiView>>(url: this.interviewsController, credentials: this.restCredentials);
+            return await this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController, credentials: this.restCredentials);
         }
 
         public async Task<IEnumerable<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId)
         {
-            return await this.restService.GetAsync<IEnumerable<SynchronizationChunkMeta>>(
+            return await this.restService.GetAsync<List<SynchronizationChunkMeta>>(
                 url: string.Concat(this.interviewsController, "/packages/", lastPackageId), 
                 credentials: this.restCredentials);
         }

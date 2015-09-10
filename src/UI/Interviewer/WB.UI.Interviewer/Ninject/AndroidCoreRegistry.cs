@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.Settings;
 
@@ -122,6 +123,7 @@ namespace WB.UI.Interviewer.Ninject
             base.Load();
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
+            this.Bind<IProtobufJsonUtils>().To<ProtobufSerializer>();
             this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
             this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
