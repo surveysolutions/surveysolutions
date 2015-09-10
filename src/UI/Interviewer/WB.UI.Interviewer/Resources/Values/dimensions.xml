@@ -8,4 +8,11 @@
   <dimen name="Login_Element_width">300dp</dimen>
   <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
   <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+
+  <dimen name="Dashboard_Layout_marginLeft">32dp</dimen>
+  <dimen name="Dashboard_Layout_marginRight">32dp</dimen>
+  <dimen name="Dashboard_TabMenu_marginTop">42dp</dimen>
+  <dimen name="Dashboard_TabMenu_marginBottom">32dp</dimen>
+  <dimen name="Dashboard_TabMenu_tab_marginLeft">32dp</dimen>
+  <dimen name="Dashboard_Items_space">12dp</dimen>
 </resources>

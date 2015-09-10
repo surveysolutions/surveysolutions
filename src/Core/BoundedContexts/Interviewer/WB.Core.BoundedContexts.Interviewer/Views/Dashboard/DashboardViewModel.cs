@@ -41,27 +41,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
-            LoggedInUserName = this.principal.CurrentUserIdentity.Name;
-            currentDashboardCategory = DashboardInterviewCategories.New;
+            var userName = this.principal.CurrentUserIdentity.Name;
+            this.currentDashboardCategory = DashboardInterviewCategories.New;
+
+            dashboardInformation = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId, currentDashboardCategory);
+
+            this.NewInterviewsCount = dashboardInformation.NewInterviews.Count;
+            this.StartedInterviewsCount = dashboardInformation.StartedInterviews.Count;
+            this.CompletedInterviewsCount = dashboardInformation.CompletedInterviews.Count;
+            this.RejectedInterviewsCount = dashboardInformation.RejectedInterviews.Count;
+            var numberOfAssignedInterviews = this.NewInterviewsCount + this.StartedInterviewsCount
+                                             + this.CompletedInterviewsCount + this.RejectedInterviewsCount;
+            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(
+                numberOfAssignedInterviews, userName);
+
             this.RefreshDashboard();
         }
 
         private void RefreshDashboard()
         {
-            var staistic = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId, currentDashboardCategory);
-
-            this.NewInterviewsCount = staistic.NewInterviewsCount;
-            this.StartedInterviewsCount = staistic.StartedInterviewsCount;
-            this.CompletedInterviewsCount = staistic.CompletedInterviewsCount;
-            this.RejectedInterviewsCount = staistic.RejectedInterviewsCount;
-            var numberOfAssignedInterviews = this.NewInterviewsCount + this.StartedInterviewsCount
-                                             + this.CompletedInterviewsCount + this.RejectedInterviewsCount;
-            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(
-                numberOfAssignedInterviews, this.LoggedInUserName);
-
-            this.DashboardItems = staistic.DashboardItems;
+            switch (currentDashboardCategory)
+            {
+                 case DashboardInterviewCategories.New:
+                    this.DashboardItems = dashboardInformation.NewInterviews;
+                    break;
+                 case DashboardInterviewCategories.InProgress:
+                    this.DashboardItems = dashboardInformation.StartedInterviews;
+                    break;
+                 case DashboardInterviewCategories.Complited:
+                    this.DashboardItems = dashboardInformation.CompletedInterviews;
+                    break;
+                 case DashboardInterviewCategories.Rejected:
+                    this.DashboardItems = dashboardInformation.RejectedInterviews;
+                    break;
+            }
         }
 
+        private DashboardInformation dashboardInformation;
         private DashboardInterviewCategories currentDashboardCategory;
 
         private bool isSynchronizationInfoShowed;
@@ -92,13 +108,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             get { return this.dashboardTitle; }
             set { this.dashboardTitle = value; this.RaisePropertyChanged(); }
-        }
-
-        private string loggedInUserName;
-        public string LoggedInUserName
-        {
-            get { return this.loggedInUserName; }
-            set { this.loggedInUserName = value; this.RaisePropertyChanged(); }
         }
 
         private int newInterviewsCount;
@@ -198,6 +207,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void ShowInterviewsCommand(DashboardInterviewCategories category)
         {
+            if (category == this.currentDashboardCategory)
+                return;
+
             this.currentDashboardCategory = category;
             this.RefreshDashboard();
         }
