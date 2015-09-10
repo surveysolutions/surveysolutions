@@ -9,32 +9,34 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Moq.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.SqlToTabDataExportServiceTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
 {
-    [Subject(typeof (SqlToDataExportService))]
-    internal class SqlToTabDataExportServiceTestContext
+    [Subject(typeof (MetadataExportService))]
+    internal class MetadataExportServiceTestContext
     {
-        protected static SqlToDataExportService CreateSqlToTabDataExportService(
+        protected static MetadataExportService CreateMetadataExportService(
             QuestionnaireExportStructure questionnaireExportStructure = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
-            IDatasetWriterFactory datasetWriterFactory = null)
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage = null,
+            IMetaDescriptionFactory metaDescriptionFactory = null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
-            return new SqlToDataExportService(
+
+            return new MetadataExportService(
                 fileSystemAccessor,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
-                tabFileReader ?? Mock.Of<ITabFileReader>(),
-                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(),
-                Mock.Of<ITabularFormatExportService>());
+                questionnaireDocumentVersionedStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                metaDescriptionFactory ?? Mock.Of< IMetaDescriptionFactory> ());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
@@ -57,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
         protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames = null)
         {
-            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type };
+            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type, VariableName = Guid.NewGuid().ToString()};
         }
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)

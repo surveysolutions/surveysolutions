@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService; 
         private readonly ILogger logger;
+        private IMetadataExportService metadataExportService;
 
         private const string ExportedDataFolderName = "ExportedData";
         private const string ExportedFilesFolderName = "ExportedFiles";
@@ -27,11 +28,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
         private readonly string pathToHistoryFiles;
+        
 
         public FilebasedExportedDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
             string folderPath, 
-            IDataExportService dataExportService, 
+            IDataExportService dataExportService,
+            IMetadataExportService metadataExportService,
             IEnvironmentContentService environmentContentService, 
             ILogger logger, 
             IArchiveUtils archiveUtils, 
@@ -40,6 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportService = dataExportService;
+            this.metadataExportService = metadataExportService;
             this.environmentContentService = environmentContentService;
             this.logger = logger;
             this.archiveUtils = archiveUtils;
@@ -294,7 +298,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             var filesToArchive = new List<string>
             {
-                this.dataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId, version,
+                this.metadataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId, version,
                     dataDirectoryPath)
             };
 

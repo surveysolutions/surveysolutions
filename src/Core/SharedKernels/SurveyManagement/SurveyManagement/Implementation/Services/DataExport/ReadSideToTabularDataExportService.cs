@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string commentsFileName = "interview_comments";
         private readonly string interviewActionsFileName = "interview_actions";
         private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
+
         private readonly string parentId = "ParentId";
 
         private readonly string separator;
