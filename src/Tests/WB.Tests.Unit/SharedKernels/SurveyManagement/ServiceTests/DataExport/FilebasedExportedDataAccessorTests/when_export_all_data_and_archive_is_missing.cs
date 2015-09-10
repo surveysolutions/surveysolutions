@@ -20,10 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            archiveName= filebasedExportedDataAccessor.GetFilePathToExportedCompressedData(questionnaireId,questionnaireVersion, ExportDataType.Tab);
+            archiveName =
+                filebasedExportedDataAccessor.GetFilePathToExportedCompressedData(questionnaireId, questionnaireVersion,
+                    ExportDataType.Tab);
 
         It should_archive_name_contain_questionnaire_id_and_version = () =>
-            archiveName.ShouldContain("exported_data_11111111-1111-1111-1111-111111111111_3");
+            archiveName.ShouldContain("exported_data_11111111-1111-1111-1111-111111111111_3_Tab_All");
 
         It should_archive_contain_data_files_and_environment_files = () =>
             addedFiles.ShouldEqual(new[] { "f1", "f2", "e1", "e2" });
