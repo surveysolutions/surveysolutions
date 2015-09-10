@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServiceTests
@@ -29,8 +30,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
 
             commandService = new Mock<ICommandService>();
 
-            plainQuestionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
-
             changeLogManipulator = new Mock<IChangeLogManipulator>();
 
             cleanUpExecutorMock = new Mock<ICapiCleanUpService>();
@@ -43,13 +42,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
             };
             viewFactory.SetReturnsDefault(existingInterview);
 
+            var userIdentity = Mock.Of<IUserIdentity>(x=>x.UserId == responsibleId);
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == userIdentity);
+
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(changeLogManipulator.Object, 
-                commandService.Object, null, null,
-                plainQuestionnaireRepositoryMock.Object, null, cleanUpExecutorMock.Object,
-                interviewMetaInfoFactory: viewFactory.Object);
+                commandService.Object, null, null, null, cleanUpExecutorMock.Object,
+                interviewMetaInfoFactory: viewFactory.Object, principal: principal);
         };
 
-        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview, responsibleId));
+        Because of = () => exception = Catch.Exception(() => capiDataSynchronizationService.ProcessDownloadedInterviewPackages(syncItem, SyncItemType.DeleteInterview));
 
         It should_never_call_any_command =
             () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);
@@ -63,7 +64,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
         private static CapiDataSynchronizationService capiDataSynchronizationService;
         private static InterviewSyncPackageDto syncItem;
         private static Mock<ICommandService> commandService;
-        private static Mock<IPlainQuestionnaireRepository> plainQuestionnaireRepositoryMock;
         private static Mock<IChangeLogManipulator> changeLogManipulator;
         private static Mock<ICapiCleanUpService> cleanUpExecutorMock;
         private static Guid interviewId;

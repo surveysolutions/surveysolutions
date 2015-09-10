@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using Moq;
-using WB.Core.GenericSubdomains.Native;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExportWriterTests

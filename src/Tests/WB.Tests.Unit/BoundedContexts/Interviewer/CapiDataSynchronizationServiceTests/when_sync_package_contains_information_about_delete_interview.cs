@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServiceTests
@@ -39,13 +40,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
             };
             viewFactory.SetReturnsDefault(existingInterview);
 
+            var userIdentity = Mock.Of<IUserIdentity>(x => x.UserId == responsibleId);
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == userIdentity);
+
             capiDataSynchronizationService = CreateCapiDataSynchronizationService(commandService: commandService.Object, 
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object, 
                 capiCleanUpService: cleanUpExecutorMock.Object,
-                interviewMetaInfoFactory: viewFactory.Object);
+                interviewMetaInfoFactory: viewFactory.Object, principal: principal);
         };
 
-        Because of = () => capiDataSynchronizationService.ProcessDownloadedPackage(syncItem, SyncItemType.DeleteInterview, responsibleId);
+        Because of = () => capiDataSynchronizationService.ProcessDownloadedInterviewPackages(syncItem, SyncItemType.DeleteInterview);
 
         It should_never_call_any_command =
             () => commandService.Verify(x => x.Execute(Moq.It.IsAny<ICommand>(), null), Times.Never);
