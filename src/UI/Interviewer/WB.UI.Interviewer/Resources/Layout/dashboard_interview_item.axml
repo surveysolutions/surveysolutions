@@ -9,22 +9,23 @@
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout"
     local:MvxBind="Click LoadDashboardItemCommand;">
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
-                  local:MvxBind="InterviewStatus Status;"/>
+                  local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
       
       <TextView style="@style/Dashboard_InterviewItem_Title"
           local:MvxBind="Text QuestionariName;" />
 
-      <MvxListView
-          style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+      <MvxListView style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           local:MvxBind="ItemsSource PrefilledQuestions;"
           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
 
-      <TextView  style="@style/Dashboard_InterviewItem_Comment"
-          local:MvxBind="Text DateComment;" />
+      <TextView style="@style/Dashboard_InterviewItem_Comment"
+          local:MvxBind="Text DateComment;
+                         TextColor InterviewStatusToColor(Status);" />
       
-      <TextView  style="@style/Dashboard_InterviewItem_Comment"
-          local:MvxBind="Text Comment;" />
+      <TextView style="@style/Dashboard_InterviewItem_Comment"
+          local:MvxBind="Text Comment;
+                         TextColor InterviewStatusToColor(Status);" />
       
     </LinearLayout>
   </LinearLayout>
