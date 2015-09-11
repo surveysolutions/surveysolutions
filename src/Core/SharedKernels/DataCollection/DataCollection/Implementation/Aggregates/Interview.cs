@@ -3681,11 +3681,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answerOnRosterSizeQuestion = getAnswer(state, rosterSizeQuestionIdentity);
 
-           /* if (answerOnRosterSizeQuestion == null)
-            {
-                return new Dictionary<decimal, Tuple<string, int?>>();
-            }*/
-
             var questionType = questionnaire.GetQuestionType(rosterSizeQuestionId.Value);
             switch (questionType)
             {

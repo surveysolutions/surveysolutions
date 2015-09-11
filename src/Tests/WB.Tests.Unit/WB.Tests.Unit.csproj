@@ -401,6 +401,7 @@
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingVerifierTests\UserPreloadingVerifierTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_equal_to_group_roster_vector.cs" />
