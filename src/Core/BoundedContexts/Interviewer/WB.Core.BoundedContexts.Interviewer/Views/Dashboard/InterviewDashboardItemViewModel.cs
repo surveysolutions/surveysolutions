@@ -28,24 +28,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPrincipal principal;
         private readonly IChangeLogManipulator changeLogManipulator;
 
-        public class PrefilledQuestion
-        {
-            public string Question { get; set; }
-            public string Answer { get; set; }
-        }
+
 
         public string QuestionariName { get; private set; }
-
         public Guid InterviewId { get; private set; }
-
         public DashboardInterviewCategories Status { get; private set; }
-
-        public DateTime? StartedDate { get; private set; }
-        public DateTime? ComplitedDate { get; private set; }
-        public DateTime? RejectedDate { get; private set; }
-
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
-
+        public string DateComment { get; private set; }
+        public string Comment { get; private set; }
 
         public InterviewDashboardItemViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IAnswerToStringService answerToStringService,
@@ -69,13 +59,54 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             InterviewId = interview.Id;
-            QuestionariName = questionnaire.Title;
-            ComplitedDate = DateTime.Now;
-            RejectedDate = DateTime.Now;
-            StartedDate = DateTime.Now;
             Status = interviewCategories;
+            QuestionariName = string.Format("{0} (v{1})", questionnaire.Title, interview.QuestionnaireVersion);
+            DateComment = GetInterviewDateCommentByStatus(interview, Status);
+            Comment = GetInterviewCommentByStatus(interview, Status);
+            PrefilledQuestions = this.GetPrefilledQuestions(interview, questionnaire);
+        }
 
-            PrefilledQuestions = new List<PrefilledQuestion>();
+        private string GetInterviewDateCommentByStatus(IStatefulInterview interview, DashboardInterviewCategories status)
+        {
+            switch (status)
+            {
+                case DashboardInterviewCategories.New:
+                    return "Created on {0}".FormatString(interview.CreatedDateTime);
+                case DashboardInterviewCategories.InProgress:
+                    return "Started on {0}".FormatString(interview.StartedDateTime);
+                case DashboardInterviewCategories.Complited:
+                case DashboardInterviewCategories.Rejected:
+                    return "Complited on {0}".FormatString(interview.ComplitedDateTime);
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private string GetInterviewCommentByStatus(IStatefulInterview interview, DashboardInterviewCategories status)
+        {
+            switch (status)
+            {
+                case DashboardInterviewCategories.New:
+                    return "Not started";
+                case DashboardInterviewCategories.InProgress:
+                    var answeredCount = interview.CountAnsweredQuestionsInInterview();
+                    return "Answered: {0}, Unanswered: {1}, Errors:{2}".FormatString(
+                        answeredCount,
+                        interview.CountActiveQuestionsInInterview() - answeredCount,
+                        interview.CountInvalidQuestionsInInterview());
+                case DashboardInterviewCategories.Complited:
+                    return interview.InterviewerCompliteComment;
+                case DashboardInterviewCategories.Rejected:
+                    return interview.SupervisorRejectComment;
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private List<PrefilledQuestion> GetPrefilledQuestions(IStatefulInterview interview, QuestionnaireModel questionnaire)
+        {
+            var listQuestions = new List<PrefilledQuestion>();
+
             var prefilledQuestionsIds = questionnaire.PrefilledQuestionsIds;
             foreach (var prefilledQuestionsId in prefilledQuestionsIds)
             {
@@ -89,10 +120,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 var prefilledQuestion = new PrefilledQuestion();
                 prefilledQuestion.Question = baseQuestionModel.Title;
-                prefilledQuestion.Answer = answerToStringService.AnswerToUIString(baseQuestionModel,
+                prefilledQuestion.Answer = this.answerToStringService.AnswerToUIString(baseQuestionModel,
                     baseInterviewAnswer, interview, questionnaire);
-                PrefilledQuestions.Add(prefilledQuestion);
+                listQuestions.Add(prefilledQuestion);
             }
+
+            return listQuestions;
         }
 
         public IMvxCommand LoadDashboardItemCommand

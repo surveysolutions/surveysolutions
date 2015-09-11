@@ -138,6 +138,7 @@
     <Compile Include="Views\Dashboard\IDashboardItem.cs" />
     <Compile Include="Views\Dashboard\InterviewDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
+    <Compile Include="Views\Dashboard\PrefilledQuestion.cs" />
     <Compile Include="Views\FinishIntallationViewModel.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />

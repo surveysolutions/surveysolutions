@@ -375,7 +375,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
+            this.InterviewerCompliteComment = @event.Comment;
             this.IsCompleted = true;
+        }
+
+        public new void Apply(InterviewRejected @event)
+        {
+            base.Apply(@event);
+
+            this.SupervisorRejectComment = @event.Comment;
         }
 
         public new void Apply(InterviewRestarted @event)
@@ -409,6 +417,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public Guid InterviewerId { get { return this.interviewerId; } }
         public InterviewStatus Status { get { return status; } }
         public Guid Id { get; set; }
+        public long QuestionnaireVersion { get { return questionnaireVersion; } }
+        public string InterviewerCompliteComment { get; private set; }
+        public string SupervisorRejectComment { get; private set; }
+        public DateTime? CreatedDateTime { get; private set; }
+        public DateTime? StartedDateTime { get; private set; }
+        public DateTime? ComplitedDateTime { get; private set; }
+
 
         public IReadOnlyDictionary<string, BaseInterviewAnswer> Answers
         {
