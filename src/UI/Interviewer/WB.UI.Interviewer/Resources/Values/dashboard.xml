@@ -65,7 +65,6 @@
   <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
     <item name="android:layout_width">14dp</item>
     <item name="android:layout_height">fill_parent</item>
-    <item name="android:background">#e32102</item>
   </style>
 
   <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">

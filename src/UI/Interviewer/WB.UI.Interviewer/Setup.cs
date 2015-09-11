@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
+using Android.Views;
 using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
@@ -60,6 +61,7 @@ namespace WB.UI.Interviewer
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
+            registry.RegisterCustomBindingFactory<View>("InterviewStatus", (view) => new ViewInterviewStatusBinding(view));
 
             base.FillTargetFactories(registry);
         }
