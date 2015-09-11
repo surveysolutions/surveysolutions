@@ -14,8 +14,8 @@
           local:MvxBind="Text QuestionariName;" />
 
       <Button style="@style/Dashboard_InterviewItem_CreateButton"
-        local:MvxBind="Text QuestionariName;
-                       Click CreateNewInterview;" />
+        local:MvxBind="Text Localization('Dashboard_CreateInterview');
+                       Click CreateNewInterviewCommand;" />
 
       <TextView  style="@style/Dashboard_InterviewItem_Comment"
           local:MvxBind="Text Comment;" />

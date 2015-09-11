@@ -120,6 +120,10 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Completed {0}</value>
   </data>
+  <data name="Dashboard_CreateInterview" xml:space="preserve">
+    <value>Create
+interview</value>
+  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>New {0}</value>
   </data>
