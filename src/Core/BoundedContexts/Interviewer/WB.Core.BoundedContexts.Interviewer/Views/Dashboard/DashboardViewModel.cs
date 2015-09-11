@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization = synchronization;
         }
 
-        public void Init()
+        public async void Init()
         {
             if (!this.principal.IsAuthenticated)
             {
@@ -45,10 +45,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.CurrentDashboardCategory = DashboardInterviewCategories.New;
 
-            this.RefreshDashboard();
+            await this.RefreshDashboardAsync();
         }
 
-        private async void RefreshDashboard()
+        private async Task RefreshDashboardAsync()
         {
             this.DashboardInformation = await this.dashboardFactory.GetDashboardItems(
                 this.principal.CurrentUserIdentity.UserId,
@@ -130,16 +130,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             get
             {
-                return synchronizationCommand ?? (synchronizationCommand = new MvxCommand(this.RunSynchronization, () => !this.Synchronization.IsSynchronizationInProgress));
+                return synchronizationCommand ??
+                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronization(),
+                           () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
 
-        private async void RunSynchronization()
+        private async Task RunSynchronization()
         {
             this.Synchronization = this.interviewViewModelFactory.GetNew<SynchronizationViewModel>();
             await this.Synchronization.SynchronizeAsync();
-
-            RefreshDashboard();
+            await this.RefreshDashboardAsync();
         }
 
         public string DashboardTitle
