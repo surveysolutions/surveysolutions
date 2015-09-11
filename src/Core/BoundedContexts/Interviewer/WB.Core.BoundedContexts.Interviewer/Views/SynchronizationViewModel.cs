@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 lastKnownPackageId = synchronizationChunkMeta.Id;
 
-                await this.SaveInterview(package, synchronizationChunkMeta);
+                await this.SaveInterviewAsync(package, synchronizationChunkMeta);
             }
 
             await this.synchronizationService.LogPackageAsSuccessfullyHandledAsync(lastKnownPackageId);
@@ -291,7 +291,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private async Task SaveInterview(InterviewSyncPackageDto package, SynchronizationChunkMeta synchronizationChunkMeta)
+        private async Task SaveInterviewAsync(InterviewSyncPackageDto package, SynchronizationChunkMeta synchronizationChunkMeta)
         {
             await Task.Run(() =>
             {
