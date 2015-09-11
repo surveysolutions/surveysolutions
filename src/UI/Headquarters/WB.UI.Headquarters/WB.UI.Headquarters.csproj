@@ -254,7 +254,7 @@
     <Content Include="Content\datepicker3.css" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\icons\binary.png" />
-    <Content Include="Content\icons\ddi.png" />
+    <Content Include="Content\icons\ddi.ico" />
     <Content Include="Content\icons\spss.png" />
     <Content Include="Content\icons\stata.gif" />
     <Content Include="Content\icons\tabs.png" />
