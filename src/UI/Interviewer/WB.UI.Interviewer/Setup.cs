@@ -56,12 +56,13 @@ namespace WB.UI.Interviewer
             base.FillValueConverters(registry);
 
             registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
+            registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
-            registry.RegisterCustomBindingFactory<View>("InterviewStatus", (view) => new ViewInterviewStatusBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
 
             base.FillTargetFactories(registry);
         }
