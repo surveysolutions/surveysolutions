@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -27,7 +28,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.plainStorageQuestionnireCensusInfo = plainStorageQuestionnireCensusInfo;
         }
 
-        public DashboardInformation GetDashboardItems(Guid interviewerId, DashboardInterviewCategories category)
+        public Task<DashboardInformation> GetDashboardItems(Guid interviewerId, DashboardInterviewCategories category)
+        {
+            return Task.Run(() => this.CollectDashboardInformation(category));
+        }
+
+        private DashboardInformation CollectDashboardInformation(DashboardInterviewCategories category)
         {
             DashboardInformation dashboardInformation = new DashboardInformation();
             dashboardInformation.NewInterviews = new List<IDashboardItem>();
@@ -48,14 +54,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
 
             // collect all interviews statistics ans show interview for current tab
-            var interviewAggregateRoots = aggregateRootRepository.GetAll();
+            var interviewAggregateRoots = this.aggregateRootRepository.GetAll();
 
             foreach (var interview in interviewAggregateRoots)
             {
                 var interviewCategory = this.GetDashboardCategoryForInterview(interview);
                 var interviewDashboardItem = Mvx.Resolve<InterviewDashboardItemViewModel>();
-                interviewDashboardItem.Init(interview);
-                AddDashboardItemToCategoryCollection(dashboardInformation, interviewCategory, interviewDashboardItem);
+                interviewDashboardItem.Init(interview, interviewCategory);
+                this.AddDashboardItemToCategoryCollection(dashboardInformation, interviewCategory, interviewDashboardItem);
             }
 
             return dashboardInformation;

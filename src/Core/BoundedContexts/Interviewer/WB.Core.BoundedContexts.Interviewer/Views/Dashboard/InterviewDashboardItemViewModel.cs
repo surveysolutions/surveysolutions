@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public Guid InterviewId { get; private set; }
 
-        public InterviewStatus Status { get; private set; }
+        public DashboardInterviewCategories Status { get; private set; }
 
         public DateTime? StartedDate { get; private set; }
         public DateTime? ComplitedDate { get; private set; }
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.changeLogManipulator = changeLogManipulator;
         }
 
-        public void Init(IStatefulInterview interview)
+        public void Init(IStatefulInterview interview, DashboardInterviewCategories interviewCategories)
         {
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             ComplitedDate = DateTime.Now;
             RejectedDate = DateTime.Now;
             StartedDate = DateTime.Now;
-            Status = interview.Status;
+            Status = interviewCategories;
 
             PrefilledQuestions = new List<PrefilledQuestion>();
             var prefilledQuestionsIds = questionnaire.PrefilledQuestionsIds;
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void LoadInterview()
         {
-            if (Status == InterviewStatus.Completed)
+            if (Status == DashboardInterviewCategories.Complited)
             {
                 var isReopen = await userInteractionService.ConfirmAsync(
                     InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
