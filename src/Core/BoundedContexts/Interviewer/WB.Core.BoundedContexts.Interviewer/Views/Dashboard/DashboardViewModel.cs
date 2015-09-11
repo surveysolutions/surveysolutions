@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void RefreshDashboard()
         {
-            this.dashboardInformation = await this.dashboardFactory.GetDashboardItems(
+            this.DashboardInformation = await this.dashboardFactory.GetDashboardItems(
                 this.principal.CurrentUserIdentity.UserId,
                 this.currentDashboardCategory);
 
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public SynchronizationViewModel Synchronization { get; set; }
-        private DashboardInformation dashboardInformation;
+        private DashboardInformation dashboardInformation = new DashboardInformation();
         private DashboardInterviewCategories currentDashboardCategory;
         public bool IsNewInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.New; } }
         public bool IsStartedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.InProgress; } }
