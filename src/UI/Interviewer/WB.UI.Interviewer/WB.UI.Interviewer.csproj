@@ -625,6 +625,10 @@
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
+    <AndroidResource Include="Resources\Drawable\ic_download.png" />
+    <AndroidResource Include="Resources\Drawable\ic_synchronization_fail.png" />
+    <AndroidResource Include="Resources\Drawable\ic_synchronization_success.png" />
+    <AndroidResource Include="Resources\Drawable\ic_upload.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
