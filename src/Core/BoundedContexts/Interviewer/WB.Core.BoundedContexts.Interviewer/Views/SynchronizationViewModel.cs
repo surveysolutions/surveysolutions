@@ -1,24 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IJsonUtils jsonUtils;
         private readonly IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo;
         private readonly CancellationTokenSource synchronizationCancellationTokenSource = new CancellationTokenSource();
+        private SychronizationState state;
 
         public SynchronizationViewModel(
             ISynchronizationService synchronizationService,
@@ -75,26 +76,46 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.plainStorageQuestionnireCensusInfo = plainStorageQuestionnireCensusInfo;
         }
 
-        private bool isSynchronizationVisible;
-        public bool IsSynchronizationVisible
+        private bool isSynchronizationInfoShowed;
+        public bool IsSynchronizationInfoShowed
         {
-            get { return this.isSynchronizationVisible; }
-            set { this.isSynchronizationVisible = value; this.RaisePropertyChanged(); }
+            get { return this.isSynchronizationInfoShowed; }
+            set { this.isSynchronizationInfoShowed = value; this.RaisePropertyChanged(); }
         }
 
-        private bool isSynchronizationInProgress;
-        public bool IsSynchronizationInProgress
+        public bool IsSynchronizationInProgress { get; private set; }
+
+        private string processOperation;
+        public string ProcessOperation
         {
-            get { return this.isSynchronizationInProgress; }
-            set { this.isSynchronizationInProgress = value; this.RaisePropertyChanged(); }
+            get { return this.processOperation; }
+            set
+            {
+                if (this.processOperation == value) return;
+
+                this.processOperation = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public string processOperationDescription;
+        public string ProcessOperationDescription
+        {
+            get { return this.processOperationDescription; }
+            set { this.processOperationDescription = value; this.RaisePropertyChanged(); }
         }
 
         public async Task SynchronizeAsync()
         {
-            this.IsSynchronizationVisible = true;
+            this.state = new SychronizationState();
+
+            this.IsSynchronizationInfoShowed = true;
             this.IsSynchronizationInProgress = true;
             try
             {
+                this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
+                    InterviewerUIResources.Synchronization_UserAuthentication_Description);
+
                 await this.synchronizationService.CheckInterviewerCompatibilityWithServerAsync();
 
                 if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync())
@@ -105,9 +126,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.UploadCompletedInterviewsAsync();
                 await this.UploadImagesByCompletedInterviewsAsync();
-                await this.DownloadCensusQuestionnairesAsync();
-                await this.DownloadInterviewsAsync();
+                await this.DownloadQuestionnairesByInterviewsAsync();
                 await this.DownloadInterviewPackagesAsync();
+
+                this.SetProgressOperation(InterviewerUIResources.Synchronization_Success_Title,
+                    InterviewerUIResources.Synchronization_Success_Description);
             }
             catch (Exception ex)
             {
@@ -119,25 +142,74 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private async Task DownloadCensusQuestionnairesAsync()
+        private void SetProgressOperation(string title, string description)
+        {
+            this.ProcessOperation = title;
+            this.ProcessOperationDescription = description;
+        }
+
+        private async Task DownloadQuestionnairesByInterviewsAsync()
         {
             var censusQuestionnaires = await this.synchronizationService.GetCensusQuestionnairesAsync();
+            var interviews = await this.synchronizationService.GetInterviewsAsync();
 
-            foreach (var censusQuestionnaire in censusQuestionnaires)
+            var questionnairesByInterviews = censusQuestionnaires.Union(interviews.Select(interview => interview.QuestionnaireIdentity)).Distinct();
+
+            await this.DownloadQuestionnairesAsync(questionnairesByInterviews);
+            await this.DownloadQuestionnaireAssembliesAsync(questionnairesByInterviews);
+
+            foreach (var interviewApiView in interviews)
             {
-                await this.DownloadQuestionnaireIfDoesNotExistsAsync(censusQuestionnaire);
+                #warning NEW SYNCHRONIZATION CODE BY INTERVIEWS SHOULD BE HERE
             }
         }
 
-        private async Task DownloadInterviewsAsync()
+        private async Task DownloadQuestionnaireAssembliesAsync(IEnumerable<QuestionnaireIdentity> questionnairesByInterviews)
         {
-            var interviews = await this.synchronizationService.GetInterviewsAsync();
+            var questionnaireAssembliesToDownload = questionnairesByInterviews
+                .Where(questionnaireIdentity => !this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
+                .ToList();
 
-            foreach (var interview in interviews)
+            foreach (var questionnaireIdentity in questionnaireAssembliesToDownload)
             {
-                await this.DownloadQuestionnaireIfDoesNotExistsAsync(interview.QuestionnaireIdentity);
+                this.state.DownloadedQuestionnaireAssemliesCount++;
+                var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
+                    questionnaire: questionnaireIdentity,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) =>
+                    {
+                        this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
+                            InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
+                                this.state.DownloadedQuestionnaireAssemliesCount, questionnaireAssembliesToDownload.Count,
+                                "conditions/validations of questionnaires", progressPercentage));
+                    },
+                    token: this.synchronizationCancellationTokenSource.Token);
 
-                #warning NEW SYNCHRONIZATION CODE BY INTERVIEWS SHOULD BE HERE
+                this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId,
+                    questionnaireIdentity.Version, questionnaireAssembly);
+            }
+        }
+
+        private async Task DownloadQuestionnairesAsync(IEnumerable<QuestionnaireIdentity> questionnairesByInterviews)
+        {
+            var questionnairesToDownload = questionnairesByInterviews
+                .Where(questionnaireIdentity => this.questionnaireModelRepository.GetById(questionnaireIdentity.ToString()) == null)
+                .ToList();
+
+            foreach (var questionnaireIdentity in questionnairesToDownload)
+            {
+                this.state.DownloadedQuestionnairesCount++;
+                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
+                    questionnaire: questionnaireIdentity,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) =>
+                    {
+                        this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
+                            InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
+                                this.state.DownloadedQuestionnairesCount, questionnairesToDownload.Count,
+                                "questionnaires", progressPercentage));
+                    },
+                    token: this.synchronizationCancellationTokenSource.Token);
+
+                await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);
             }
         }
 
@@ -148,10 +220,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             foreach (var synchronizationChunkMeta in interviewPackages)
             {
+                this.state.DownloadedInterviewsCount++;
+
                 var package = await this.synchronizationService.GetInterviewPackageAsync(
                     packageId: synchronizationChunkMeta.Id,
                     previousSuccessfullyHandledPackageId: lastKnownPackageId,
-                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) =>
+                    {
+                        this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
+                            InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
+                                this.state.DownloadedInterviewsCount, interviewPackages.Count, "interviews", progressPercentage));
+                    },
                     token: synchronizationCancellationTokenSource.Token);
 
                 lastKnownPackageId = synchronizationChunkMeta.Id;
@@ -168,11 +247,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var dataByChuncks = this.capiDataSynchronizationService.GetItemsToPush();
             foreach (var chunckDescription in dataByChuncks)
             {
+                this.state.UploadedInterviewsCount++;
                 await this.synchronizationService.UploadInterviewAsync(
                     interviewId: chunckDescription.EventSourceId,
                     content: chunckDescription.Content,
-                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                    token: synchronizationCancellationTokenSource.Token);
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) =>
+                    {
+                        this.SetProgressOperation(InterviewerUIResources.Synchronization_Upload_Title_Format.FormatString(InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
+                            InterviewerUIResources.Synchronization_Upload_Description_Format.FormatString(this.state.UploadedInterviewsCount, dataByChuncks.Count, InterviewerUIResources.Synchronization_Upload_Interviews_Text, progressPercentage));
+                    },
+                    token: this.synchronizationCancellationTokenSource.Token);
 
                 this.interviewSynchronizationFileStorage.MoveInterviewImagesToSyncFolder(chunckDescription.EventSourceId);
                 this.capiCleanUpService.DeleteInterview(chunckDescription.EventSourceId);
@@ -184,54 +268,51 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var images = this.interviewSynchronizationFileStorage.GetImagesByInterviews();
             foreach (var image in images)
             {
+                this.state.UploadedIterviewImagesCount++;
                 await this.synchronizationService.UploadInterviewImageAsync(
                     interviewId: image.InterviewId,
                     fileName: image.FileName,
                     fileData: image.GetData(),
-                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) =>
+                    {
+                        this.SetProgressOperation(InterviewerUIResources.Synchronization_Upload_Title_Format.FormatString(InterviewerUIResources.Synchronization_Upload_ImagesByInterviews_Text),
+                            InterviewerUIResources.Synchronization_Upload_Description_Format.FormatString(this.state.UploadedIterviewImagesCount, images.Count, InterviewerUIResources.Synchronization_Upload_Images_Text, progressPercentage));
+                    },
                     token: synchronizationCancellationTokenSource.Token);
 
                 this.interviewSynchronizationFileStorage.RemoveInterviewImage(image.InterviewId, image.FileName);
             }
         }
 
-        private async Task DownloadQuestionnaireIfDoesNotExistsAsync(QuestionnaireIdentity questionnaireIdentity)
+        private async Task SaveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireApiView questionnaireApiView)
         {
-            if (this.questionnaireModelRepository.GetById(questionnaireIdentity.ToString()) == null)
+            await Task.Run(() =>
             {
-                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
-                   questionnaire: questionnaireIdentity,
-                   onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                   token: synchronizationCancellationTokenSource.Token);
-
                 var questionnaireDocument = this.jsonUtils.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument);
                 var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocument);
                 this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
                 this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
-                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.AllowCensus, string.Empty));   
+                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.AllowCensus, string.Empty));
+            });
 
-                if (questionnaireApiView.AllowCensus)
-                {
-                    await this.plainStorageQuestionnireCensusInfo.StoreAsync(
-                        new CensusQuestionnireInfo() { Id = questionnaireIdentity.ToString() }
-                    );
-                }
-            }
-
-            if (!this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
+            if (questionnaireApiView.AllowCensus)
             {
-                var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
-                   questionnaire: questionnaireIdentity,
-                   onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                   token: synchronizationCancellationTokenSource.Token);
-
-                this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireAssembly);   
+                await this.plainStorageQuestionnireCensusInfo.StoreAsync(new CensusQuestionnireInfo() {Id = questionnaireIdentity.ToString()});
             }
         }
 
         public void CancelSynchronizaion()
         {
             this.synchronizationCancellationTokenSource.Cancel();
+        }
+
+        private class SychronizationState
+        {
+            public int DownloadedInterviewsCount = 0;
+            public int DownloadedQuestionnairesCount = 0;
+            public int DownloadedQuestionnaireAssemliesCount = 0;
+            public int UploadedInterviewsCount = 0;
+            public int UploadedIterviewImagesCount = 0;
         }
     }
 }

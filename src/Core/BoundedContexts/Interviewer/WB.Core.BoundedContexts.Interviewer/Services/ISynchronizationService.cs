@@ -19,15 +19,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
-        Task<IEnumerable<QuestionnaireIdentity>> GetCensusQuestionnairesAsync();
+        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync();
 
         Task<byte[]> GetApplicationAsync(CancellationToken token);
         Task<int?> GetLatestApplicationVersionAsync();
         Task CheckInterviewerCompatibilityWithServerAsync();
         Task SendTabletInformationAsync(string archive);
 
-        Task<IEnumerable<InterviewApiView>> GetInterviewsAsync();
-        Task<IEnumerable<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId);
+        Task<List<InterviewApiView>> GetInterviewsAsync();
+        Task<List<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId);
         Task LogPackageAsSuccessfullyHandledAsync(string packageId);
 
         Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);

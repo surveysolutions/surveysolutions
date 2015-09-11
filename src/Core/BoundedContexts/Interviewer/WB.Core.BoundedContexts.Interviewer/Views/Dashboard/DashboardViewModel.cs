@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
-        public readonly SynchronizationViewModel Synchronization;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerDashboardFactory dashboardFactory,
@@ -74,6 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
+        public SynchronizationViewModel Synchronization { get; set; }
         private DashboardInformation dashboardInformation;
         private DashboardInterviewCategories currentDashboardCategory;
         public bool IsNewInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.New; } }
@@ -112,14 +112,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.RaisePropertyChanged(() => DashboardTitle);
             }
         }
-
-        private bool isSynchronizationInfoShowed;
-        public bool IsSynchronizationInfoShowed
-        {
-            get { return this.isSynchronizationInfoShowed; }
-            set { this.isSynchronizationInfoShowed = value; this.RaisePropertyChanged(); }
-        }
-
         private IMvxCommand synchronizationCommand;
         public IMvxCommand SynchronizationCommand
         {

@@ -123,5 +123,203 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
                 return ResourceManager.GetString("Dashboard_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Synchronization_Cancel {
+            get {
+                return ResourceManager.GetString("Synchronization_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} {2} done ({3}%).
+        /// </summary>
+        public static string Synchronization_Download_Description_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_Description_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading new assignments.
+        /// </summary>
+        public static string Synchronization_Download_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some assignments were updated.
+        /// </summary>
+        public static string Synchronization_Fail_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} new interviews downloaded.
+        /// </summary>
+        public static string Synchronization_Fail_State_NewInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_NewInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} rejected interviews returned.
+        /// </summary>
+        public static string Synchronization_Fail_State_RejectedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_RejectedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} completed interviews uploaded.
+        /// </summary>
+        public static string Synchronization_Fail_State_UploadedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_UploadedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization was interupted, please try again.
+        /// </summary>
+        public static string Synchronization_Fail_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments are locked until synchronization is complete.
+        /// </summary>
+        public static string Synchronization_LockedAssignments_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_LockedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All assignments were updated.
+        /// </summary>
+        public static string Synchronization_Success_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} rejected interviews returned.
+        /// </summary>
+        public static string Synchronization_Success_State_NewInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_NewInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} new interviews downloaded.
+        /// </summary>
+        public static string Synchronization_Success_State_RejectedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_RejectedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} completed interviews uploaded.
+        /// </summary>
+        public static string Synchronization_Success_State_UploadedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_UploadedInterviews_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization succesfully completed.
+        /// </summary>
+        public static string Synchronization_Success_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to completed assignments.
+        /// </summary>
+        public static string Synchronization_Upload_CompletedAssignments_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_CompletedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} {2} done ({3}%).
+        /// </summary>
+        public static string Synchronization_Upload_Description_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Description_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to images.
+        /// </summary>
+        public static string Synchronization_Upload_Images_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Images_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to images by interviews.
+        /// </summary>
+        public static string Synchronization_Upload_ImagesByInterviews_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_ImagesByInterviews_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to interviews.
+        /// </summary>
+        public static string Synchronization_Upload_Interviews_Text {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Interviews_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading {0}.
+        /// </summary>
+        public static string Synchronization_Upload_Title_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Upload_Title_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing for synchronization.
+        /// </summary>
+        public static string Synchronization_UserAuthentication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_UserAuthentication_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User authentication.
+        /// </summary>
+        public static string Synchronization_UserAuthentication_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_UserAuthentication_Title", resourceCulture);
+            }
+        }
     }
 }
