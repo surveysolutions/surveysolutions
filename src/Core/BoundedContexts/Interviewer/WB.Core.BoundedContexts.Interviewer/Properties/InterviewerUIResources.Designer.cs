@@ -71,6 +71,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create
+        ///interview.
+        /// </summary>
+        public static string Dashboard_CreateInterview {
+            get {
+                return ResourceManager.GetString("Dashboard_CreateInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New {0}.
         /// </summary>
         public static string Dashboard_NewItemsLinkText {

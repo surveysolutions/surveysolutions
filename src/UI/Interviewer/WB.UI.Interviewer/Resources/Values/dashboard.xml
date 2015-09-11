@@ -133,7 +133,12 @@
   <style name="Dashboard_InterviewItem_CreateButton" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-  </style>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:layout_marginLeft">14dp</item>
+    <item name="android:layout_marginRight">14dp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+ </style>
 
 
 </resources>
