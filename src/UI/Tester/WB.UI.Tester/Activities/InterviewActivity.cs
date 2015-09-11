@@ -29,6 +29,7 @@ namespace WB.UI.Tester.Activities
                     break;
 
             }
+            this.Finish();
         }
     }
 }

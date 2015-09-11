@@ -127,5 +127,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable<dynamic> PrefilledQuestions { get; set; }
+
+        public void Unsubscribe()
+        {
+            this.navigationState.GroupChanged -= this.NavigationStateOnOnGroupChanged;
+            this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
+        }
     }
 }

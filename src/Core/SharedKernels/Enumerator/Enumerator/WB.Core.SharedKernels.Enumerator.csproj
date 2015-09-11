@@ -152,6 +152,7 @@
     <Compile Include="ViewModels\InterviewDetails\IInterviewEntityViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\EnumeratorInterviewViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\CompleteInterviewViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\InterviewCompleteMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\ISideBarSectionViewModelsFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\CascadingSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\DateTimeQuestionViewModel.cs" />
