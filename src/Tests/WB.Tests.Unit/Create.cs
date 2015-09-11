@@ -1212,7 +1212,7 @@ namespace WB.Tests.Unit
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null)
+            int? maxAnswerCount = null, string variable=null)
         {
             return new TextListQuestion("Question TL")
             {
@@ -1220,7 +1220,8 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
-                QuestionType = QuestionType.TextList
+                QuestionType = QuestionType.TextList,
+                StataExportCaption = variable
             };
         }
 
