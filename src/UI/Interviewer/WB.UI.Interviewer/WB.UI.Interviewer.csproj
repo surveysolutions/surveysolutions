@@ -627,6 +627,7 @@
     <AndroidResource Include="Resources\Drawable\ic_synchronization_fail.png" />
     <AndroidResource Include="Resources\Drawable\ic_synchronization_success.png" />
     <AndroidResource Include="Resources\Drawable\ic_upload.png" />
+    <AndroidResource Include="Resources\Values\login.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
