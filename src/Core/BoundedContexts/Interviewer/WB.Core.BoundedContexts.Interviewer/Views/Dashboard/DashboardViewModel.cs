@@ -46,21 +46,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RefreshDashboard();
         }
 
-        private void RefreshDashboard()
+        private async void RefreshDashboard()
         {
-            this.dashboardInformation = this.dashboardFactory.GetDashboardItems(this.principal.CurrentUserIdentity.UserId,
+            this.dashboardInformation = await this.dashboardFactory.GetDashboardItems(
+                this.principal.CurrentUserIdentity.UserId,
                 this.currentDashboardCategory);
-
-            this.NewInterviewsCount = this.dashboardInformation.NewInterviews.Count;
-            this.StartedInterviewsCount = this.dashboardInformation.StartedInterviews.Count;
-            this.CompletedInterviewsCount = this.dashboardInformation.CompletedInterviews.Count;
-            this.RejectedInterviewsCount = this.dashboardInformation.RejectedInterviews.Count;
-            var numberOfAssignedInterviews = this.NewInterviewsCount + this.StartedInterviewsCount
-                                             + this.CompletedInterviewsCount + this.RejectedInterviewsCount;
-
-            var userName = this.principal.CurrentUserIdentity.Name;
-            this.DashboardTitle = InterviewerUIResources.Dashboard_Title.FormatString(
-                numberOfAssignedInterviews, userName);
 
             this.RefreshTab();
         }
@@ -105,6 +95,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
+        public DashboardInformation DashboardInformation
+        {
+            get { return this.dashboardInformation; }
+            set
+            {
+                this.dashboardInformation = value;
+                this.RaisePropertyChanged(() => NewInterviewsCount);
+                this.RaisePropertyChanged(() => IsExistsAnyNewInterview);
+                this.RaisePropertyChanged(() => StartedInterviewsCount);
+                this.RaisePropertyChanged(() => IsExistsAnyStartedInterview);
+                this.RaisePropertyChanged(() => CompletedInterviewsCount);
+                this.RaisePropertyChanged(() => IsExistsAnyCompletedInterview);
+                this.RaisePropertyChanged(() => RejectedInterviewsCount);
+                this.RaisePropertyChanged(() => IsExistsAnyRejectedInterview);
+                this.RaisePropertyChanged(() => DashboardTitle);
+            }
+        }
+
         private bool isSynchronizationInfoShowed;
         public bool IsSynchronizationInfoShowed
         {
@@ -128,65 +136,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             RefreshDashboard();
         }
 
-        private string dashboardTitle;
         public string DashboardTitle
         {
-            get { return this.dashboardTitle; }
-            set { this.dashboardTitle = value; this.RaisePropertyChanged(); }
-        }
-
-        private int newInterviewsCount;
-        public int NewInterviewsCount
-        {
-            get { return this.newInterviewsCount; }
-            set 
-            { 
-                this.newInterviewsCount = value; 
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(() => IsExistsAnyNewInterview);
-            }
-        }
-
-        private int startedInterviewsCount;
-        public int StartedInterviewsCount
-        {
-            get { return this.startedInterviewsCount; }
-            set 
-            { 
-                this.startedInterviewsCount = value; 
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(() => IsExistsAnyStartedInterview);
-            }
-        }
-
-        private int completedInterviewsCount;
-        public int CompletedInterviewsCount
-        {
-            get { return this.completedInterviewsCount; }
-            set
+            get
             {
-                this.completedInterviewsCount = value; 
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(() => IsExistsAnyCompletedInterview);
+                var numberOfAssignedInterviews = this.NewInterviewsCount 
+                    + this.StartedInterviewsCount
+                    + this.CompletedInterviewsCount 
+                    + this.RejectedInterviewsCount;
+
+                var userName = this.principal.CurrentUserIdentity.Name;
+                return InterviewerUIResources.Dashboard_Title.FormatString(numberOfAssignedInterviews, userName);
             }
         }
 
-        private int rejectedInterviewsCount;
-        public int RejectedInterviewsCount
-        {
-            get { return this.rejectedInterviewsCount; }
-            set
-            {
-                this.rejectedInterviewsCount = value;
-                this.RaisePropertyChanged();
-                this.RaisePropertyChanged(() => IsExistsAnyRejectedInterview);
-            }
-        }
+        public int NewInterviewsCount { get { return this.dashboardInformation.NewInterviews.Count; } }
+        public int StartedInterviewsCount { get { return this.dashboardInformation.StartedInterviews.Count; } }
+        public int CompletedInterviewsCount { get { return this.dashboardInformation.CompletedInterviews.Count; } }
+        public int RejectedInterviewsCount { get { return this.dashboardInformation.RejectedInterviews.Count; } }
 
-        public bool IsExistsAnyNewInterview { get { return this.newInterviewsCount > 0; } }
-        public bool IsExistsAnyStartedInterview { get { return this.startedInterviewsCount > 0; } }
-        public bool IsExistsAnyCompletedInterview { get { return this.completedInterviewsCount > 0; } }
-        public bool IsExistsAnyRejectedInterview { get { return this.rejectedInterviewsCount > 0; } }
+        public bool IsExistsAnyNewInterview { get { return this.NewInterviewsCount > 0; } }
+        public bool IsExistsAnyStartedInterview { get { return this.StartedInterviewsCount > 0; } }
+        public bool IsExistsAnyCompletedInterview { get { return this.CompletedInterviewsCount > 0; } }
+        public bool IsExistsAnyRejectedInterview { get { return this.RejectedInterviewsCount > 0; } }
 
         private IEnumerable<IDashboardItem> dashboardItems;
         public IEnumerable<IDashboardItem> DashboardItems
