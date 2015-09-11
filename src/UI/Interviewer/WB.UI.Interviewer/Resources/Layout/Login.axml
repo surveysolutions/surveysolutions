@@ -4,80 +4,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="?attr/colorPrimary"
-      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    <TextView
-        style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
-  </android.support.v7.widget.Toolbar>
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:scrollbarStyle="outsideOverlay">
-    <LinearLayout
-          android:orientation="vertical"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:gravity="center">
-      <ImageView
-          android:layout_width="@dimen/Login_Element_width"
-          android:layout_height="wrap_content"
-          android:src="@drawable/login_logo"/>
-
-      <LinearLayout style="@style/VerticalFullWidthWrappingLayout"
-                    android:layout_width="@dimen/Login_Holder_width"
-                    local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(AreCredentialsWrong, true));">
-        <EditText
-            android:layout_width="@dimen/Login_Element_width"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:inputType="textVisiblePassword|textNoSuggestions"
-            local:MvxBind="Text Endpoint; Hint Localization('ServerAddressHint');" />
-        <EditText
-            android:layout_width="@dimen/Login_Element_width"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:inputType="textVisiblePassword|textNoSuggestions"
-            local:MvxBind="Text Login; Hint Localization('LoginNameHint');" />
-        <EditText
-            android:layout_width="@dimen/Login_Element_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
-            android:singleLine="true"
-            android:password="true"
-            local:MvxBind="Text Password; Hint Localization('PasswordHint')" />
-      </LinearLayout>
-      <LinearLayout
-                android:layout_width="@dimen/Login_Element_width"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            local:MvxBind="Click LoginCommand; Text Localization('LoginText');" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            local:MvxBind="Text Localization('Interviewer_Troubleshooting')" />
-      </LinearLayout>
-    </LinearLayout>
-  </ScrollView>
-  <LinearLayout style="@style/VerticalFullWidthWrappingLayout"
+            style="@style/ToolbarTitle"
+            local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
+    </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:layout_above="@+id/login_page_scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/login_page_footer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarStyle="outsideOverlay"
+            android:fillViewport="true">
+            <RelativeLayout
+                android:layout_above="@+id/login_page_screen_bottom"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/Login_Holder_width">
-
-    <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           local:MvxBind="Text Localization('')" />
-  </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/LoginPage_logo"
+                    android:layout_width="@dimen/Login_Element_width"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/login_logo" />
+                <EditText
+                    android:id="@+id/LoginPage_endpoint"
+                    android:layout_below="@+id/LoginPage_logo"
+                    android:layout_width="@dimen/Login_Element_width"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textVisiblePassword|textNoSuggestions"
+                    local:MvxBind="Text Endpoint; Hint Localization('ServerAddressHint');" />
+                <EditText
+                    android:layout_below="@+id/LoginPage_endpoint"
+                    android:id="@+id/LoginPage_login"
+                    android:layout_width="@dimen/Login_Element_width"
+                    android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:inputType="textVisiblePassword|textNoSuggestions"
+                    local:MvxBind="Text Login; Hint Localization('LoginNameHint');" />
+                <EditText
+                    android:id="@+id/LoginPage_password"
+                    android:layout_below="@+id/LoginPage_login"
+                    android:layout_width="@dimen/Login_Element_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
+                    android:singleLine="true"
+                    android:password="true"
+                    local:MvxBind="Text Password; Hint Localization('PasswordHint')" />
+                <Button
+                    android:id="@+id/LoginPage_login_button"
+                    android:layout_below="@+id/LoginPage_password"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    local:MvxBind="Click LoginCommand; Text Localization('LoginText');" />
+                <Button
+                    android:id="@+id/LoginPage_troubleshooting_button"
+                    android:layout_toRightOf="@+id/LoginPage_login_button"
+                    android:layout_below="@+id/LoginPage_password"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    local:MvxBind="Click LoginCommand; Text Localization('Interviewer_Troubleshooting');" />
+            </RelativeLayout>
+        </ScrollView>
+        <LinearLayout
+            style="@style/Login_Footer"
+            android:id="@+id/login_page_footer"
+            android:layout_alignParentBottom="true">
+            <TextView
+                style="@style/Login_Footer_Message"
+                android:text="version 1687" />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

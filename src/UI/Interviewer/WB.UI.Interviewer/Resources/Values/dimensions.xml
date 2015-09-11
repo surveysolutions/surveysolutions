@@ -5,7 +5,7 @@
   <dimen name="Splash_Logo_padding">72dp</dimen>
 
   <dimen name="Login_Holder_width">328dp</dimen>
-  <dimen name="Login_Element_width">300dp</dimen>
+  <dimen name="Login_Element_width">320dp</dimen>
   <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
   <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
 
