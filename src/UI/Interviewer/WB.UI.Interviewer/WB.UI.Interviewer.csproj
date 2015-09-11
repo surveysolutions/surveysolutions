@@ -477,6 +477,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
     <AndroidResource Include="Resources\Layout\synchronization_panel.axml" />
+    <AndroidResource Include="Resources\Layout\dashboard_item_prefilled_question.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">

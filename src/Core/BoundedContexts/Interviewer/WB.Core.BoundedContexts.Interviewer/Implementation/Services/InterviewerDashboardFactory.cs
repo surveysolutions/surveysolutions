@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var listCensusQuestionnires = this.plainStorageQuestionnireCensusInfo.Query(_ => _);
                 foreach (var censusQuestionnireInfo in listCensusQuestionnires)
                 {
-                    var censusQuestionnaireDashboardItem = Mvx.Resolve<CensusQuestionnaireDashboardItemViewModel>();
+                    var censusQuestionnaireDashboardItem = Load<CensusQuestionnaireDashboardItemViewModel>();
                     censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo.Id);
                     dashboardInformation.NewInterviews.Add(censusQuestionnaireDashboardItem);
                 }
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             foreach (var interview in interviewAggregateRoots)
             {
                 var interviewCategory = this.GetDashboardCategoryForInterview(interview);
-                var interviewDashboardItem = Mvx.Resolve<InterviewDashboardItemViewModel>();
+                var interviewDashboardItem = Load<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(interview, interviewCategory);
                 this.AddDashboardItemToCategoryCollection(dashboardInformation, interviewCategory, interviewDashboardItem);
             }
@@ -104,6 +104,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     dashboardInformation.StartedInterviews.Add(interviewDashboardItem);
                     break;
             }
+        }
+
+        private static T Load<T>() where T : class
+        {
+            return Mvx.Resolve<T>();
         }
     }
 }
