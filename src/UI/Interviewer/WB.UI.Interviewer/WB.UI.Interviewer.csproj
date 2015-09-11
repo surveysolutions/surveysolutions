@@ -298,7 +298,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
-    <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
@@ -458,9 +457,6 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\InterviewActionBar.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\FinishInstallation.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\splash.axml">
