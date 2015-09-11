@@ -142,6 +142,48 @@ interview</value>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} assignments for {1}</value>
   </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>Application version:</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>Number of bytes for package by receiving/transmitting data from/to supervisor application</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>Communication package size</value>
+  </data>
+  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
+    <value>Client Registration ID:</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Connection settings</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>Device ID:</value>
+  </data>
+  <data name="Prefs_EndpointSummary" xml:space="preserve">
+    <value>URL that is used to communicate with supervisor application</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>Supervisor URL</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Number of seconds to wait for coordinates</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>GPS Receive timeout</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Number of seconds to wait until server response</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Server Response timeout</value>
+  </data>
+  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
+    <value>Installation ID:</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value />
+  </data>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>

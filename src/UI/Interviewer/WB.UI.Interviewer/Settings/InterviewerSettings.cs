@@ -1,6 +1,7 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
+using Android.Preferences;
 using Java.Util;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -36,7 +37,7 @@ namespace WB.UI.Interviewer.Settings
 
         public string GetSyncAddressPoint()
         {
-            return GetSetting(SettingsNames.SyncAddressSettingsName);
+            return GetSetting(SettingsNames.Endpoint);
         }
 
         public string GetApplicationVersionName()
@@ -67,7 +68,7 @@ namespace WB.UI.Interviewer.Settings
                 throw new ArgumentException(Properties.Resources.InvalidSyncPointAddressUrl, "syncAddressPoint");
             }
 
-            SetSetting(SettingsNames.SyncAddressSettingsName, syncAddressPoint.Trim());
+            SetSetting(SettingsNames.Endpoint, syncAddressPoint.Trim());
         }
 
 
@@ -78,17 +79,20 @@ namespace WB.UI.Interviewer.Settings
 
         private static string GetSetting(string settingName, string defaultValue)
         {
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private);
-            return prefs.GetString(settingName, defaultValue);
+            return SharedPreferences.GetString(settingName, defaultValue);
         }
 
         private static void SetSetting(string settingName, string settingValue)
         {
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private);
-            ISharedPreferencesEditor prefEditor = prefs.Edit();
+            ISharedPreferencesEditor prefEditor = SharedPreferences.Edit();
             prefEditor.PutString(settingName, settingValue);
             prefEditor.Commit();
 
+        }
+
+        private static ISharedPreferences SharedPreferences
+        {
+            get { return PreferenceManager.GetDefaultSharedPreferences(Application.Context); }
         }
     }
 }
