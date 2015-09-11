@@ -3,29 +3,59 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="250dp"
-              android:background="#FFFF00FF"
+              android:layout_height="wrap_content"
               local:MvxBind="Visible Synchronization.IsSynchronizationInfoShowed;">
-  <LinearLayout
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="150dp"
-              android:background="#FFFFFF00">
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               local:MvxBind="ShowProgress Synchronization.IsSynchronizationInProgress" />
+
+  <LinearLayout android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+              android:layout_marginLeft="32dp"
+              android:layout_marginTop="42dp"
+                android:layout_marginBottom="42dp"
+                android:layout_marginRight="32dp">
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_download"/>
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:src="@drawable/ic_download"
+              android:layout_marginRight="5dp"/>
     <LinearLayout
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content" 
-              android:layout_gravity="center_vertical">
-      <TextView
-            style="@style/ToolbarTitle"
-            local:MvxBind="Text Synchronization.ProcessOperation" />
-      <TextView
-            style="@style/ToolbarTitle"
-            local:MvxBind="Text Synchronization.ProcessOperationDescription" />
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+      <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        <TextView
+              style="@style/Dashboard_Synchronization_Operation_Title"
+              local:MvxBind="Text Synchronization.ProcessOperation" />
+        <TextView
+              style="@style/Dashboard_Synchronization_Operation_Title"
+              local:MvxBind="Text Synchronization.ProcessOperationDescription" />
+      </LinearLayout>
+      <LinearLayout
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 local:MvxBind="Visible Synchronization.IsSynchronizationInProgress">
+        <TextView
+              android:layout_width="0dp"
+              android:layout_weight=".50"
+              android:layout_gravity="bottom"
+              style="@style/Dashboard_Synchronization_State_Text"
+              local:MvxBind="Text Localization('Synchronization_LockedAssignments_Text')" />
+        <TextView
+              android:layout_width="0dp"
+              android:layout_weight=".50"
+              android:layout_gravity="bottom"
+              android:gravity="right"
+              style="@style/Dashboard_Synchronization_Cancel_Text"
+              local:MvxBind="Text Localization('Synchronization_Cancel'); Click Synchronization.CancelSynchronizationCommand; Visible Synchronization.IsSynchronizationInProgress"
+              />
+      </LinearLayout>
     </LinearLayout>
   </LinearLayout>
+  <View style="@style/Dashboard_Synchronization_Divider"></View>
 </LinearLayout>
