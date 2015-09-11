@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:local="http://schemas.android.com/apk/res-auto" 
-              android:orientation="vertical" 
-              android:layout_width="fill_parent" 
-              android:layout_height="200dp" 
-              android:background="#FFFF00FF" 
-              local:MvxBind="Visible Synchronization.IsSynchronizationVisible;">
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="250dp"
+              android:background="#FFFF00FF"
+              local:MvxBind="Visible Synchronization.IsSynchronizationInfoShowed;">
+  <LinearLayout
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="150dp"
+              android:background="#FFFFFF00">
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_download"/>
+    <LinearLayout
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" 
+              android:layout_gravity="center_vertical">
+      <TextView
+            style="@style/ToolbarTitle"
+            local:MvxBind="Text Synchronization.ProcessOperation" />
+      <TextView
+            style="@style/ToolbarTitle"
+            local:MvxBind="Text Synchronization.ProcessOperationDescription" />
+    </LinearLayout>
+  </LinearLayout>
 </LinearLayout>
