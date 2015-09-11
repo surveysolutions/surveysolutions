@@ -59,11 +59,4 @@
   <string name="YouAreNotConnectedToAnyNetwork">You are not connected to any network.</string>
   <string name="NowYouareConnectedToWifiNetwork">Now you are connected to wi-fi network: {0}.</string>
   <string name="NewHtmlLine"> <![CDATA[<br/>]]></string>
-
-
-
-  <string name="Prefs_VersionTitle">Application version</string>
-  <string name="Prefs_VersionSummaryFormat">Version: {0}</string>
-  <string name="Prefs_EndpointTitle">Supervisor URL</string>
-  <string name="Prefs_EndpointSummary">URL that is used to communicate with supervisor application</string>
 </resources>

@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private DashboardInformation dashboardInformation;
+        private DashboardInformation dashboardInformation = new DashboardInformation();
         private DashboardInterviewCategories currentDashboardCategory;
         public bool IsNewInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.New; } }
         public bool IsStartedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.InProgress; } }

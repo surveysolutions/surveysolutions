@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Infrastructure.Internals.Security;
 using WB.UI.Interviewer.Settings;
-using InterviewerSettings = WB.UI.Interviewer.Infrastructure.Internals.Settings.InterviewerSettings;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -33,9 +32,9 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
 
-            this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
+            this.Bind<IEnumeratorSettings>().To<EnumeratorSettings>();
             this.Bind<IPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
-            this.Bind<IRestServiceSettings>().To<RestServiceSettings>();
+            this.Bind<IRestServiceSettings>().To<EnumeratorSettings>();
 
             this.Bind<ICapiDataSynchronizationService>().To<CapiDataSynchronizationService>();
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
