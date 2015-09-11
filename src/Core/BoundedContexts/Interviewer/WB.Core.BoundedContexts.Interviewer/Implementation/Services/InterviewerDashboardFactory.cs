@@ -36,10 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private DashboardInformation CollectDashboardInformation(DashboardInterviewCategories category)
         {
             DashboardInformation dashboardInformation = new DashboardInformation();
-            dashboardInformation.NewInterviews = new List<IDashboardItem>();
-            dashboardInformation.StartedInterviews = new List<IDashboardItem>();
-            dashboardInformation.RejectedInterviews = new List<IDashboardItem>();
-            dashboardInformation.CompletedInterviews = new List<IDashboardItem>();
 
             // show census mode for new tab
             if (category == DashboardInterviewCategories.New)
