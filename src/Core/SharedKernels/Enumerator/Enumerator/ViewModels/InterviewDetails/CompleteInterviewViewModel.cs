@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public class CompleteInterviewViewModel : MvxNotifyPropertyChanged
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-
+        private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IInterviewCompletionService completionService;
@@ -24,13 +26,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ICommandService commandService,
             IPrincipal principal, 
             IInterviewCompletionService completionService, 
-            IStatefulInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository, 
+            IMvxMessenger messenger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
             this.completionService = completionService;
             this.interviewRepository = interviewRepository;
+            this.messenger = messenger;
         }
 
         Guid interviewId;
@@ -88,6 +92,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.completionService.CompleteInterview(this.interviewId, this.principal.CurrentUserIdentity.UserId);
 
             this.viewModelNavigationService.NavigateToDashboard();
+
+            messenger.Publish(new InterviewCompleteMessage(this));
         }
 
     }

@@ -19,6 +19,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
+        private MvxSubscriptionToken finishInterviewActivityToken;
 
         private Toolbar toolbar;
 
@@ -70,11 +71,18 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            this.finishInterviewActivityToken = messenger.Subscribe<InterviewCompleteMessage>(this.OnFinishInterviewActivity);
             base.OnStart();
+        }
+
+        private void OnFinishInterviewActivity(InterviewCompleteMessage obj)
+        {
+            this.Finish();
         }
 
         protected override void OnDestroy()
         {
+            ViewModel.Unsubscribe();
             base.OnDestroy();
             this.Dispose();
         }
@@ -101,6 +109,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(this.scrollToAnchorSubscriptionToken);
+            messenger.Unsubscribe<InterviewCompleteMessage>(this.finishInterviewActivityToken);
             base.OnStop();
         }
 
