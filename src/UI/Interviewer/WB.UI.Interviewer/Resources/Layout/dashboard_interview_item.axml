@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:local="http://schemas.android.com/apk/res-auto"
@@ -12,13 +11,21 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
                   local:MvxBind="InterviewStatus Status;"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
+      
       <TextView style="@style/Dashboard_InterviewItem_Title"
           local:MvxBind="Text QuestionariName;" />
-      <TextView android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          local:MvxBind="Text QuestionariName;" />
-      <TextView  style="@style/Dashboard_InterviewItem_Status"
-          local:MvxBind="Text QuestionariName;" />
+
+      <MvxListView
+          style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+          local:MvxBind="ItemsSource PrefilledQuestions;"
+          local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
+
+      <TextView  style="@style/Dashboard_InterviewItem_Comment"
+          local:MvxBind="Text DateComment;" />
+      
+      <TextView  style="@style/Dashboard_InterviewItem_Comment"
+          local:MvxBind="Text Comment;" />
+      
     </LinearLayout>
   </LinearLayout>
 
