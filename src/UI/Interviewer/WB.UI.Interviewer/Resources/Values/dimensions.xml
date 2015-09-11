@@ -15,4 +15,6 @@
   <dimen name="Dashboard_TabMenu_marginBottom">32dp</dimen>
   <dimen name="Dashboard_TabMenu_tab_marginLeft">32dp</dimen>
   <dimen name="Dashboard_Items_space">12dp</dimen>
+
+  <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
 </resources>

@@ -21,14 +21,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerDashboardFactory dashboardFactory,
-            IPrincipal principal, SynchronizationViewModel synchronization)
+            IPrincipal principal, SynchronizationViewModel synchronization,
+            IInterviewViewModelFactory interviewViewModelFactory)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;
             this.principal = principal;
+            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Synchronization = synchronization;
         }
 
@@ -72,9 +75,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     break;
             }
         }
+        
+        private SynchronizationViewModel synchronization;
+        public SynchronizationViewModel Synchronization
+        {
+            get { return synchronization; }
+            set
+            {
+                this.synchronization = value;
+                this.RaisePropertyChanged();
+            }
+        }
 
-        public SynchronizationViewModel Synchronization { get; set; }
-        private DashboardInformation dashboardInformation = new DashboardInformation();
+        private DashboardInformation dashboardInformation;
         private DashboardInterviewCategories currentDashboardCategory;
         public bool IsNewInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.New; } }
         public bool IsStartedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.InProgress; } }
@@ -123,6 +136,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void RunSynchronization()
         {
+            this.Synchronization = this.interviewViewModelFactory.GetNew<SynchronizationViewModel>();
             await this.Synchronization.SynchronizeAsync();
 
             RefreshDashboard();
