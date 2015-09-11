@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     this.interviewerAsyncPlainStorage.RemoveAsync(currentInterviver.Id);   
                 }
 
-                this.viewModelNavigationService.NavigateTo<FinishIntallationViewModel>();
+                this.viewModelNavigationService.NavigateTo<LoginViewModel>();
 
             }
             else
