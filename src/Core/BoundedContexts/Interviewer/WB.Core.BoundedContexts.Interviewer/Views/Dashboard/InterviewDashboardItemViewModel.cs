@@ -81,6 +81,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             {
                 var baseQuestionModel = questionnaire.Questions[prefilledQuestionsId.Id];
                 var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(prefilledQuestionsId.Id, new decimal[0]);
+
+                if (!interview.Answers.ContainsKey(identityAsString))
+                    continue;
+
                 var baseInterviewAnswer = interview.Answers[identityAsString];
 
                 var prefilledQuestion = new PrefilledQuestion();
