@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of {1} {2} done ({3}%).
+        ///   Looks up a localized string similar to {0} of {1} {2} done.
         /// </summary>
         public static string Synchronization_Download_Description_Format {
             get {
@@ -270,7 +270,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of {1} {2} done ({3}%).
+        ///   Looks up a localized string similar to {0} of {1} {2} done.
         /// </summary>
         public static string Synchronization_Upload_Description_Format {
             get {

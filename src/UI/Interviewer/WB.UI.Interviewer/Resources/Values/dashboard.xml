@@ -140,6 +140,36 @@
     <item name="android:textAllCaps">true</item>
  </style>
 
+  <style name="Dashboard_Synchronization_Divider">
+    <item name="android:layout_height">@dimen/Dashboard_Synchronization_Divider_Height</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:background">@color/dashboard_synchronization_delimiter</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Operation_Title" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_State_Text" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/dashboard_synchronization_state_text</item>
+  </style>
+  
+<style name="Dashboard_Synchronization_Cancel_Text" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
+  </style>
 
 </resources>
 

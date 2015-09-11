@@ -146,7 +146,7 @@ interview</value>
     <value>Cancel</value>
   </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
-    <value>{0} of {1} {2} done ({3}%)</value>
+    <value>{0} of {1} {2} done</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Downloading new assignments</value>
@@ -188,7 +188,7 @@ interview</value>
     <value>completed assignments</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
-    <value>{0} of {1} {2} done ({3}%)</value>
+    <value>{0} of {1} {2} done</value>
   </data>
   <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
     <value>images by interviews</value>
