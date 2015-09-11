@@ -135,6 +135,132 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application version:.
+        /// </summary>
+        public static string Prefs_ApplicationVersionTitle {
+            get {
+                return ResourceManager.GetString("Prefs_ApplicationVersionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of bytes for package by receiving/transmitting data from/to supervisor application.
+        /// </summary>
+        public static string Prefs_BufferSizeSummary {
+            get {
+                return ResourceManager.GetString("Prefs_BufferSizeSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Communication package size.
+        /// </summary>
+        public static string Prefs_BufferSizeTitle {
+            get {
+                return ResourceManager.GetString("Prefs_BufferSizeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client Registration ID:.
+        /// </summary>
+        public static string Prefs_ClientRegistrationIdTitle {
+            get {
+                return ResourceManager.GetString("Prefs_ClientRegistrationIdTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection settings.
+        /// </summary>
+        public static string Prefs_ConnectionSettings {
+            get {
+                return ResourceManager.GetString("Prefs_ConnectionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device ID:.
+        /// </summary>
+        public static string Prefs_DeviceIdTitle {
+            get {
+                return ResourceManager.GetString("Prefs_DeviceIdTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL that is used to communicate with supervisor application.
+        /// </summary>
+        public static string Prefs_EndpointSummary {
+            get {
+                return ResourceManager.GetString("Prefs_EndpointSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor URL.
+        /// </summary>
+        public static string Prefs_EndpointTitle {
+            get {
+                return ResourceManager.GetString("Prefs_EndpointTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seconds to wait for coordinates.
+        /// </summary>
+        public static string Prefs_GpsReceiveTimeoutSecSummary {
+            get {
+                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPS Receive timeout.
+        /// </summary>
+        public static string Prefs_GpsReceiveTimeoutSecTitle {
+            get {
+                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seconds to wait until server response.
+        /// </summary>
+        public static string Prefs_HttpResponseTimeoutSummary {
+            get {
+                return ResourceManager.GetString("Prefs_HttpResponseTimeoutSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server Response timeout.
+        /// </summary>
+        public static string Prefs_HttpResponseTimeoutTitle {
+            get {
+                return ResourceManager.GetString("Prefs_HttpResponseTimeoutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installation ID:.
+        /// </summary>
+        public static string Prefs_InstallationIdTitle {
+            get {
+                return ResourceManager.GetString("Prefs_InstallationIdTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Prefs_Title {
+            get {
+                return ResourceManager.GetString("Prefs_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Synchronization_Cancel {
