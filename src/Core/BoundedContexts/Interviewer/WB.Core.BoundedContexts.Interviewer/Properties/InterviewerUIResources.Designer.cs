@@ -270,6 +270,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to conditions/validations.
+        /// </summary>
+        public static string Synchronization_Conditions_Validations {
+            get {
+                return ResourceManager.GetString("Synchronization_Conditions_Validations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} {2} done.
         /// </summary>
         public static string Synchronization_Download_Description_Format {
@@ -333,11 +342,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to interviews.
+        /// </summary>
+        public static string Synchronization_Interviews {
+            get {
+                return ResourceManager.GetString("Synchronization_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignments are locked until synchronization is complete.
         /// </summary>
         public static string Synchronization_LockedAssignments_Text {
             get {
                 return ResourceManager.GetString("Synchronization_LockedAssignments_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to questionnaires.
+        /// </summary>
+        public static string Synchronization_Questionnaires {
+            get {
+                return ResourceManager.GetString("Synchronization_Questionnaires", resourceCulture);
             }
         }
         

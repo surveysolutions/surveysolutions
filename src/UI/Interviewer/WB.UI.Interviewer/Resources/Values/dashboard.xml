@@ -154,12 +154,12 @@
     <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
   </style>
 
-  <style name="Dashboard_Synchronization_State_Text" parent="AppTheme">
+  <style name="Dashboard_Synchronization_Statistics_Text" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:textColor">@color/dashboard_synchronization_state_text</item>
+    <item name="android:textColor">@color/dashboard_synchronization_statistics_text</item>
   </style>
   
 <style name="Dashboard_Synchronization_Cancel_Text" parent="AppTheme">

@@ -50,31 +50,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [User Api]
 
-        public async Task<InterviewerApiView> GetCurrentInterviewerAsync(string login, string password)
+        public async Task<InterviewerApiView> GetCurrentInterviewerAsync(string login, string password, CancellationToken token)
         {
             return await this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
-                        credentials: new RestCredentials() {Login = login, Password = password});
+                        credentials: new RestCredentials() {Login = login, Password = password}, token: token);
         }
 
-        public async Task<bool> HasCurrentInterviewerDeviceAsync()
+        public async Task<bool> HasCurrentInterviewerDeviceAsync(CancellationToken token)
         {
-            return await this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"), credentials: this.restCredentials);
+            return await this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"), credentials: this.restCredentials, token: token);
         }
 
         #endregion
 
         #region [Device Api]
 
-        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync()
+        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(CancellationToken token)
         {
-            return await this.restService.GetAsync<bool>(url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId()), credentials: this.restCredentials);
+            return await this.restService.GetAsync<bool>(url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId()), credentials: this.restCredentials, token: token);
         }
 
-        public async Task LinkCurrentInterviewerToDeviceAsync()
+        public async Task LinkCurrentInterviewerToDeviceAsync(CancellationToken token)
         {
             await this.restService.PostAsync(
                 url: string.Concat(this.devicesController, "/link/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
-                credentials: this.restCredentials);
+                credentials: this.restCredentials, token: token);
         }
 
         #endregion
@@ -103,34 +103,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials);
         }
 
-        public async Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync()
+        public async Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
             return await this.restService.GetAsync<List<QuestionnaireIdentity>>(
                 url: string.Concat(this.questionnairesController, "/census"),
-                credentials: this.restCredentials);
+                credentials: this.restCredentials, token: token);
         }
 
         #endregion
 
         #region [Interview Api]
 
-        public async Task<List<InterviewApiView>> GetInterviewsAsync()
+        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
-            return await this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController, credentials: this.restCredentials);
+            return await this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController, credentials: this.restCredentials, token: token);
         }
 
-        public async Task<List<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId)
+        public async Task<List<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token)
         {
             return await this.restService.GetAsync<List<SynchronizationChunkMeta>>(
                 url: string.Concat(this.interviewsController, "/packages/", lastPackageId), 
-                credentials: this.restCredentials);
+                credentials: this.restCredentials, token: token);
         }
 
-        public async Task LogPackageAsSuccessfullyHandledAsync(string packageId)
+        public async Task LogPackageAsSuccessfullyHandledAsync(string packageId, CancellationToken token)
         {
             await this.restService.PostAsync(
                 url: string.Concat(this.interviewsController, "/package/", packageId, "/logstate"), 
-                credentials: this.restCredentials);
+                credentials: this.restCredentials, token: token);
         }
 
         public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
@@ -169,9 +169,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [Application Api]
 
-        public async Task CheckInterviewerCompatibilityWithServerAsync()
+        public async Task CheckInterviewerCompatibilityWithServerAsync(CancellationToken token)
         {
-            await this.restService.GetAsync(url: string.Concat(interviewerApiUrl, "/compatibility/", this.syncProtocolVersionProvider.GetProtocolVersion()), credentials: this.restCredentials);
+            await this.restService.GetAsync(url: string.Concat(interviewerApiUrl, "/compatibility/", this.syncProtocolVersionProvider.GetProtocolVersion()), credentials: this.restCredentials, token: token);
         }
 
         public async Task<byte[]> GetApplicationAsync(CancellationToken token)
@@ -179,12 +179,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return await this.restService.DownloadFileWithProgressAsync(url: interviewerApiUrl, token: token, credentials: this.restCredentials);
         }
 
-        public async Task<int?> GetLatestApplicationVersionAsync()
+        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
-            return await this.restService.GetAsync<int?>(url: string.Concat(interviewerApiUrl, "/latestversion"), credentials: this.restCredentials);
+            return await this.restService.GetAsync<int?>(url: string.Concat(interviewerApiUrl, "/latestversion"), credentials: this.restCredentials, token: token);
         }
 
-        public async Task SendTabletInformationAsync(string archive)
+        public async Task SendTabletInformationAsync(string archive, CancellationToken token)
         {
             await this.restService.PostAsync(
                 url: string.Concat(interviewerApiUrl, "/troubleshooting/tabletInfo"),
@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     Content = archive,
                     AndroidId = this.interviewerSettings.GetDeviceId(),
                     ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value
-                });
+                }, token: token);
         }
 
         #endregion

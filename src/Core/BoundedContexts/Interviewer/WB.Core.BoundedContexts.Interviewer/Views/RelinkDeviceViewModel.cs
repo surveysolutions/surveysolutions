@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
         {
-            await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync();
+            await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken));
             this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userIdentity.UserId);
             this.viewModelNavigationService.NavigateToDashboard();
         }

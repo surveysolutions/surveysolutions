@@ -307,8 +307,12 @@
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="Converters\IsSynchronizationFailConverter.cs" />
+    <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
+    <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
+    <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
@@ -617,7 +621,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\login_logo.png" />
     <AndroidResource Include="Resources\Drawable\capi_splash.png" />
-    <AndroidResource Include="Resources\Values\dashboard.xml" />
+    <AndroidResource Include="Resources\Values\dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
@@ -631,6 +637,20 @@
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_fail_process_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_success_process_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_upload_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\synchronization_download_indicator.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\anim\slide_down.xml" />
+    <AndroidResource Include="Resources\anim\slide_up.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
