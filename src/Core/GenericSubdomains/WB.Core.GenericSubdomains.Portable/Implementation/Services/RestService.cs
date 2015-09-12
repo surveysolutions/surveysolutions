@@ -63,6 +63,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 return await request(restClient);
             }
+            catch (TaskCanceledException)
+            {
+                throw new RestException("Request cancelled", type: RestExceptionType.RequestCancelled);
+            }
             catch (FlurlHttpTimeoutException ex)
             {
                 throw new RestException(message: "Request timeout", statusCode: HttpStatusCode.RequestTimeout, innerException: ex);

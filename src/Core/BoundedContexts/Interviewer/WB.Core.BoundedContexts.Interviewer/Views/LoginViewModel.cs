@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Cirrious.MvvmCross.Plugins.Network.Droid;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using Cirrious.MvvmCross.ViewModels;
-
+using Ncqrs.Domain.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -179,7 +180,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 InterviewerApiView interviewer;
                 try
                 {
-                    interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(login: userName, password: hashedPassword);
+                    interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(login: userName, password: hashedPassword, token: default(CancellationToken));
                 }
                 catch (Exception exception)
                 {
@@ -191,11 +192,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     return;
                 }
 
-                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync())
+                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(token: default(CancellationToken)))
                 {
-                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync();
+                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken));
                 }
-                else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync())
+                else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: default(CancellationToken)))
                 {
                     this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(new { redirectedFromFinishInstallation = true });
                     this.IsInProgress = false;

@@ -21,17 +21,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
-        private readonly IInterviewViewModelFactory interviewViewModelFactory;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerDashboardFactory dashboardFactory,
-            IPrincipal principal, SynchronizationViewModel synchronization,
-            IInterviewViewModelFactory interviewViewModelFactory)
+            IPrincipal principal, SynchronizationViewModel synchronization)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;
             this.principal = principal;
-            this.interviewViewModelFactory = interviewViewModelFactory;
             this.Synchronization = synchronization;
         }
 
@@ -131,14 +128,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get
             {
                 return synchronizationCommand ??
-                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronization(),
+                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronizationAsync(),
                            () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
 
-        private async Task RunSynchronization()
+        private async Task RunSynchronizationAsync()
         {
-            this.Synchronization = this.interviewViewModelFactory.GetNew<SynchronizationViewModel>();
             await this.Synchronization.SynchronizeAsync();
             await this.RefreshDashboardAsync();
         }
