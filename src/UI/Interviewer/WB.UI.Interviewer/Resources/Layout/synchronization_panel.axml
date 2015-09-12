@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/synchronization_panel"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -10,20 +11,20 @@
 
   <LinearLayout android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
               android:layout_marginLeft="32dp"
-              android:layout_marginTop="42dp"
-                android:layout_marginBottom="42dp"
+              android:layout_marginTop="36dp"
+                android:layout_marginBottom="36dp"
                 android:layout_marginRight="32dp">
     <ImageView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:src="@drawable/ic_download"
-              android:layout_marginRight="5dp"/>
+              android:layout_marginRight="5dp"
+              local:MvxBind="BackgroundStyle SynchronizationStatusToDrawable(Synchronization.Status)"/>
     <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
+                android:layout_height="match_parent">
 
       <LinearLayout
                 android:orientation="vertical"
@@ -31,10 +32,10 @@
                 android:layout_height="wrap_content">
         <TextView
               style="@style/Dashboard_Synchronization_Operation_Title"
-              local:MvxBind="Text Synchronization.ProcessOperation" />
+              local:MvxBind="Text Synchronization.ProcessOperation; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
         <TextView
               style="@style/Dashboard_Synchronization_Operation_Title"
-              local:MvxBind="Text Synchronization.ProcessOperationDescription" />
+              local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
       </LinearLayout>
       <LinearLayout
                  android:layout_height="match_parent"
@@ -44,7 +45,7 @@
               android:layout_width="0dp"
               android:layout_weight=".50"
               android:layout_gravity="bottom"
-              style="@style/Dashboard_Synchronization_State_Text"
+              style="@style/Dashboard_Synchronization_Statistics_Text"
               local:MvxBind="Text Localization('Synchronization_LockedAssignments_Text')" />
         <TextView
               android:layout_width="0dp"
@@ -55,6 +56,34 @@
               local:MvxBind="Text Localization('Synchronization_Cancel'); Click Synchronization.CancelSynchronizationCommand; Visible Synchronization.IsSynchronizationInProgress"
               />
       </LinearLayout>
+      <RelativeLayout android:layout_height="match_parent"
+                      android:layout_width="match_parent">
+        <LinearLayout android:orientation="vertical"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:layout_alignParentBottom="true"
+                      local:MvxBind="Visible IsSynchronizationFail(Synchronization.Status)">
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.UploadedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsToUpload)" />
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_RejectedInterviews_Format'), Synchronization.Statistics.DownloadedInterviewsCount, Synchronization.Statistics.TotalRejectedInterviews)" />
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.DownloadedInterviewsCount, Synchronization.Statistics.TotalInterviewsToDownload)" />
+        </LinearLayout>
+
+        <LinearLayout android:orientation="vertical"
+                      android:layout_height="wrap_content"
+                      android:layout_width="match_parent"
+                      android:layout_alignParentBottom="true"
+                      local:MvxBind="Visible And(If(IsSynchronizationFail(Synchronization.Status), false, true), If(Synchronization.IsSynchronizationInProgress, false, true))">
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.TotalCompletedInterviewsToUpload)" />
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviews)" />
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalInterviewsToDownload)" />
+        </LinearLayout>
+      </RelativeLayout>
     </LinearLayout>
   </LinearLayout>
   <View style="@style/Dashboard_Synchronization_Divider"></View>

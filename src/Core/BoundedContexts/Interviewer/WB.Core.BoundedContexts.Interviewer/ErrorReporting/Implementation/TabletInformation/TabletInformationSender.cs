@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.Tabl
                     this.ExitIfCanceled();
 
                     await this.synchronizationService.SendTabletInformationAsync(
-                            Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToInfoArchive)));
+                            Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToInfoArchive)), this.tokenSource.Token);
 
                 }
                 catch (OperationCanceledException)

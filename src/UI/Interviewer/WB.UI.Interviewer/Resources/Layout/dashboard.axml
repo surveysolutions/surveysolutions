@@ -18,38 +18,55 @@
   </android.support.v7.widget.Toolbar>
 
   <include layout="@layout/synchronization_panel" />
-  <LinearLayout style="@style/Dashboard_Interviews_Header">
-    <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
-      <TextView style="@style/Dashboard_NewItemsLink"
-                local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
+
+  <FrameLayout android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+    <LinearLayout style="@style/Dashboard_Interviews_Header">
+      <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
+        <TextView style="@style/Dashboard_NewItemsLink"
+                  local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
                                Click ShowNewItemsInterviewsCommand;
                                IsCurrentDashboardTab IsNewInterviewsCategorySelected;" />
-      <TextView style="@style/Dashboard_StartedLink"
-                local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsCount); 
+        <TextView style="@style/Dashboard_StartedLink"
+                  local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsCount); 
                                Click ShowStartedInterviewsCommand;
                                Visible IsExistsAnyStartedInterview;
                                IsCurrentDashboardTab IsStartedInterviewsCategorySelected;" />
-      <TextView style="@style/Dashboard_CompletedLink"
-                local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsCount); 
+        <TextView style="@style/Dashboard_CompletedLink"
+                  local:MvxBind="Text Format(Localization('Dashboard_CompletedLinkText'), CompletedInterviewsCount); 
                                Click ShowCompletedInterviewsCommand;
                                Visible IsExistsAnyCompletedInterview;
                                IsCurrentDashboardTab IsCompletedInterviewsCategorySelected;" />
-      <TextView style="@style/Dashboard_RejectedLink"
-                local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsCount); 
+        <TextView style="@style/Dashboard_RejectedLink"
+                  local:MvxBind="Text Format(Localization('Dashboard_RejectedLinkText'), RejectedInterviewsCount); 
                                Click ShowRejectedInterviewsCommand;
                                Visible IsExistsAnyRejectedInterview;
                                IsCurrentDashboardTab IsRejectedInterviewsCategorySelected;" />
+      </LinearLayout>
     </LinearLayout>
-  </LinearLayout>
- 
-  <ScrollView
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:fillViewport="true">
-    <MvxRecyclerView
-      style="@style/Dashboard_InterviewsList"
-      android:id="@+id/interviewsList"
-      android:scrollbars="vertical"
-      local:MvxBind="ItemsSource DashboardItems" />
-  </ScrollView>
+    <LinearLayout style="@style/Interview_GroupWithDivider"
+                  local:MvxBind="Enabled If(Synchronization.IsSynchronizationInProgress, false, true)"
+                  android:layout_height="match_parent">
+    </LinearLayout>
+  </FrameLayout>
+
+  <FrameLayout android:layout_width="match_parent"
+               android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+      <MvxRecyclerView
+        style="@style/Dashboard_InterviewsList"
+        android:id="@+id/interviewsList"
+        android:scrollbars="vertical"
+        local:MvxBind="ItemsSource DashboardItems" />
+    </ScrollView>
+    <LinearLayout style="@style/Interview_GroupWithDivider"
+                  local:MvxBind="Enabled If(Synchronization.IsSynchronizationInProgress, false, true)"
+                  android:layout_height="match_parent">
+    </LinearLayout>
+  </FrameLayout>
+  
+  
 </LinearLayout>

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -67,7 +68,7 @@ namespace WB.UI.Interviewer.Syncronization.Update
             bool? newVersionAvailableOrNullIfThrow = null;
             try
             {
-                newVersionAvailableOrNullIfThrow = (await this.synchronizationService.GetLatestApplicationVersionAsync()).Value > this.interviewerSettings.GetApplicationVersionCode();
+                newVersionAvailableOrNullIfThrow = (await this.synchronizationService.GetLatestApplicationVersionAsync(token: default(CancellationToken))).Value > this.interviewerSettings.GetApplicationVersionCode();
             }
             catch
             {
