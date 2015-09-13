@@ -58,6 +58,9 @@ namespace WB.UI.Interviewer.Activities
 
             var interviewerSettings = Mvx.Resolve<IInterviewerSettings>();
 
+
+            this.SetPreferenceTitleAndSummary("common_category", InterviewerUIResources.Prefs_CommonSettings, string.Empty);
+            this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication, string.Empty);
             this.SetPreferenceTitleAndSummary("dev_settings_category", InterviewerUIResources.Prefs_ConnectionSettings, string.Empty);
             this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
             this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
