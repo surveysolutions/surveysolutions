@@ -135,6 +135,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About application.
+        /// </summary>
+        public static string Prefs_AboutApplication {
+            get {
+                return ResourceManager.GetString("Prefs_AboutApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application version:.
         /// </summary>
         public static string Prefs_ApplicationVersionTitle {
@@ -167,6 +176,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Prefs_ClientRegistrationIdTitle {
             get {
                 return ResourceManager.GetString("Prefs_ClientRegistrationIdTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Common settings.
+        /// </summary>
+        public static string Prefs_CommonSettings {
+            get {
+                return ResourceManager.GetString("Prefs_CommonSettings", resourceCulture);
             }
         }
         
