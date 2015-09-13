@@ -142,7 +142,7 @@
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
-    <Compile Include="Views\CensusQuestionnireInfo.cs" />
+    <Compile Include="Views\QuestionnireInfo.cs" />
     <Compile Include="Views\Dashboard\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
     <Compile Include="Views\Dashboard\DashboardInterviewCategories.cs" />

@@ -396,7 +396,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} rejected interviews returned.
+        ///   Looks up a localized string similar to {0} new interviews downloaded.
         /// </summary>
         public static string Synchronization_Success_State_NewInterviews_Format {
             get {
@@ -405,7 +405,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} new interviews downloaded.
+        ///   Looks up a localized string similar to {0} rejected interviews returned.
         /// </summary>
         public static string Synchronization_Success_State_RejectedInterviews_Format {
             get {

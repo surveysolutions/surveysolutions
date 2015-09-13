@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -119,11 +118,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return await this.restService.GetAsync<List<InterviewApiView>>(url: this.interviewsController, credentials: this.restCredentials, token: token);
         }
 
-        public async Task<List<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token)
+        public async Task<InterviewPackagesApiView> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token)
         {
-            return await this.restService.GetAsync<List<SynchronizationChunkMeta>>(
+            var interviewPackages = await this.restService.GetAsync<InterviewPackagesApiView>(
                 url: string.Concat(this.interviewsController, "/packages/", lastPackageId), 
                 credentials: this.restCredentials, token: token);
+
+            interviewPackages.Interviews = interviewPackages.Interviews ?? new List<InterviewApiView>();
+            interviewPackages.Packages = interviewPackages.Packages ?? new List<SynchronizationChunkMeta>();
+
+            return interviewPackages;
         }
 
         public async Task LogPackageAsSuccessfullyHandledAsync(string packageId, CancellationToken token)

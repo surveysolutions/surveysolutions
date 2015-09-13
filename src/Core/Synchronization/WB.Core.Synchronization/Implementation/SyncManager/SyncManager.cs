@@ -135,7 +135,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             List<SynchronizationChunkMeta> updateFromLastPackageByInterview =
                 allUpdatesFromLastPackage.Select(
-                    x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType))
+                    x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType) { InterviewId = x.InterviewId })
                     .ToList();
 
             this.TrackArIdsRequest(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPackageByInterview);
