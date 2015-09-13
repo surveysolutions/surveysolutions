@@ -230,10 +230,10 @@ interview</value>
     <value>All assignments were updated</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} rejected interviews returned</value>
+    <value>{0} new interviews downloaded</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} new interviews downloaded</value>
+    <value>{0} rejected interviews returned</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} completed interviews uploaded</value>

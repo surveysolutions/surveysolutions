@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -27,7 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SendTabletInformationAsync(string archive, CancellationToken token);
 
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
-        Task<List<SynchronizationChunkMeta>> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token);
+        Task<InterviewPackagesApiView> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token);
         Task LogPackageAsSuccessfullyHandledAsync(string packageId, CancellationToken token);
 
         Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);

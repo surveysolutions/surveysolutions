@@ -6,5 +6,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     public interface IInterviewerInterviewsFactory
     {
         IEnumerable<InterviewerInterview> GetInProgressInterviews(Guid interviewerId);
+        IEnumerable<InterviewerInterview> GetInterviewsByIds(Guid[] interviewIds);
     }
 }

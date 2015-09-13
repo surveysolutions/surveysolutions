@@ -38,8 +38,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 .Select(interview => new InterviewerInterview()
                 {
                     Id = interview.InterviewId,
-                    QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion)
+                    QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
+                    IsRejected = interview.WasRejectedBySupervisor
                 });
+        }
+
+        public IEnumerable<InterviewerInterview> GetInterviewsByIds(Guid[] interviewIds)
+        {
+            var filteredinterviews = this.reader.Query(
+                interviews => interviews.Where(interview => interviewIds.Contains(interview.InterviewId)).ToList());
+
+            return filteredinterviews.Select(interview => new InterviewerInterview()
+            {
+                Id = interview.InterviewId,
+                QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
+                IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor
+            });
         }
     }
 }
