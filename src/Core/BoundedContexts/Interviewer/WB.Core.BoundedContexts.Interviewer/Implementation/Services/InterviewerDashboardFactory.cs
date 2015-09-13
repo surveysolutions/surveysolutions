@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -19,10 +20,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerDashboardFactory : IInterviewerDashboardFactory
     {
         private readonly IStatefulInterviewRepository aggregateRootRepository;
-        private readonly IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo;
+        private readonly IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireCensusInfo;
 
         public InterviewerDashboardFactory(IStatefulInterviewRepository aggregateRootRepository,
-            IAsyncPlainStorage<CensusQuestionnireInfo> plainStorageQuestionnireCensusInfo)
+            IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireCensusInfo)
         {
             this.aggregateRootRepository = aggregateRootRepository;
             this.plainStorageQuestionnireCensusInfo = plainStorageQuestionnireCensusInfo;
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             // show census mode for new tab
             if (category == DashboardInterviewCategories.New)
             {
-                var listCensusQuestionnires = this.plainStorageQuestionnireCensusInfo.Query(_ => _);
+                var listCensusQuestionnires = this.plainStorageQuestionnireCensusInfo.Query(_ => _.Where(questionnaire=>questionnaire.AllowCensus).ToList());
                 foreach (var censusQuestionnireInfo in listCensusQuestionnires)
                 {
                     var censusQuestionnaireDashboardItem = Load<CensusQuestionnaireDashboardItemViewModel>();

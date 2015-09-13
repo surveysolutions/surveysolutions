@@ -64,11 +64,11 @@
                       android:layout_alignParentBottom="true"
                       local:MvxBind="Visible IsSynchronizationFail(Synchronization.Status)">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.UploadedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsToUpload)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.NewInterviewsCount, Synchronization.Statistics.TotalNewInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_RejectedInterviews_Format'), Synchronization.Statistics.DownloadedInterviewsCount, Synchronization.Statistics.TotalRejectedInterviews)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_RejectedInterviews_Format'), Synchronization.Statistics.RejectedInterviewsCount, Synchronization.Statistics.TotalRejectedInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.DownloadedInterviewsCount, Synchronization.Statistics.TotalInterviewsToDownload)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.CompletedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsCount)" />
         </LinearLayout>
 
         <LinearLayout android:orientation="vertical"
@@ -77,11 +77,11 @@
                       android:layout_alignParentBottom="true"
                       local:MvxBind="Visible And(If(IsSynchronizationFail(Synchronization.Status), false, true), If(Synchronization.IsSynchronizationInProgress, false, true))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.TotalCompletedInterviewsToUpload)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.TotalCompletedInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviews)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
-                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalInterviewsToDownload)" />
+                    local:MvxBind="Text Format(Localization('Synchronization_Success_State_NewInterviews_Format'), Synchronization.Statistics.TotalNewInterviewsCount)" />
         </LinearLayout>
       </RelativeLayout>
     </LinearLayout>

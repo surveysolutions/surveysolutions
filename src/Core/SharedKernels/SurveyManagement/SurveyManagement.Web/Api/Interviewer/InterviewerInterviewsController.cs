@@ -49,18 +49,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             return this.interviewerInterviewsFactory.GetInProgressInterviews(this.globalInfoProvider.GetCurrentUser().Id).Select(interview => new InterviewApiView()
             {
                 Id = interview.Id,
-                QuestionnaireIdentity = interview.QuestionnaireIdentity
+                QuestionnaireIdentity = interview.QuestionnaireIdentity,
+                IsRejected = interview.IsRejected
             }).ToList();
         }
 
         [HttpGet]
         [Route("packages/{lastPackageId?}")]
-        public List<SynchronizationChunkMeta> GetPackages(string lastPackageId = null)
+        public InterviewPackagesApiView GetPackages(string lastPackageId = null)
         {
-            return this.syncManager.GetInterviewPackageIdsWithOrder(
+            var interviewPackages = this.syncManager.GetInterviewPackageIdsWithOrder(
                 userId: this.globalInfoProvider.GetCurrentUser().Id,
                 deviceId: this.GetInterviewerDeviceId(),
                 lastSyncedPackageId: lastPackageId).SyncPackagesMeta.ToList();
+
+            var interviewsByPackages =
+                this.interviewerInterviewsFactory.GetInterviewsByIds(
+                    interviewPackages.Where(package=>package.ItemType == SyncItemType.Interview).Select(package => package.InterviewId).Distinct().ToArray());
+
+            return new InterviewPackagesApiView()
+            {
+                Packages = interviewPackages,
+                Interviews = interviewsByPackages.Select(interview => new InterviewApiView()
+                {
+                    Id = interview.Id,
+                    QuestionnaireIdentity = interview.QuestionnaireIdentity,
+                    IsRejected = interview.IsRejected
+                }).ToList()
+            };
         }
 
         [HttpGet]

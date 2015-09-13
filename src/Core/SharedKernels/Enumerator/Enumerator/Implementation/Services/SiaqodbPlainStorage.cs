@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public TEntity GetById(string id)
         {
-            return this.Storage.Query<TEntity>().FirstOrDefault(_ => _.Id == id);
+            return this.Query(entities=>entities.FirstOrDefault(_ => _.Id == id));
         }
 
         public async Task RemoveAsync(string id)
