@@ -779,7 +779,6 @@
     <Content Include="UpdatedDesigner\vendor\console-shim\test\index.html" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\.gitignore" />
-    <Content Include="UpdatedDesigner\vendor\es5-shim\.travis.yml" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\CHANGES" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\CONTRIBUTORS.md" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\es5-sham.js" />
