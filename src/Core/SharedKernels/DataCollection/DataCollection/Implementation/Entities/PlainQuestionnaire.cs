@@ -111,6 +111,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private Dictionary<string, HashSet<Guid>> CacheOfSubstitutionReferencedQuestions
+        {
+            get {
+                return this.cacheOfSubstitutionReferencedQuestions ??
+                       (this.cacheOfSubstitutionReferencedQuestions = this.GetAllSubstitutionReferences());
+            }
+        }
+
         #endregion
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
@@ -768,27 +776,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (!string.IsNullOrWhiteSpace(targetVariableName))
             {
-                if (cacheOfSubstitutionReferencedQuestions == null)
-                    cacheOfSubstitutionReferencedQuestions = GetAllSubstitutionReferences();
-
-                if (cacheOfSubstitutionReferencedQuestions.ContainsKey(targetVariableName))
+                if (this.CacheOfSubstitutionReferencedQuestions.ContainsKey(targetVariableName))
                 {
-                    foreach (var guid in cacheOfSubstitutionReferencedQuestions[targetVariableName])
+                    foreach (var guid in this.CacheOfSubstitutionReferencedQuestions[targetVariableName])
                     {
                         yield return guid;
                     }
                 }
             }
-
-            /*foreach (var question in this.GetAllQuestions())
-            {
-                var substitutedVariableNames =
-                    this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
-                if (substitutedVariableNames.Contains(targetVariableName))
-                {
-                    yield return question.PublicKey;
-                }
-            }*/
 
             var rostersAffectedByRosterTitleQuestion = this.GetRostersAffectedByRosterTitleQuestion(questionId);
             foreach (var rosterId in rostersAffectedByRosterTitleQuestion)
