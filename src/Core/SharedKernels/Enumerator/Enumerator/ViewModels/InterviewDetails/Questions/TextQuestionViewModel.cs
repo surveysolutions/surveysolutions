@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -17,13 +18,17 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel, 
-        ILiteEventHandler<TextQuestionAnswered>
+        IInterviewEntityViewModel,
+        ILiteEventHandler<TextQuestionAnswered>,
+        ILiteEventHandler<AnswerRemoved>
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+
+        public event EventHandler AnswerRemoved;
+
         private Identity questionIdentity;
         private string interviewId;
 
@@ -103,6 +108,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerTextQuestionCommand)); }
         }
 
+        private IMvxCommand answerRemoveCommand;
+
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return this.answerRemoveCommand ??
+                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
+            }
+        }
+
+        private async Task RemoveAnswer()
+        {
+            var command = new RemoveAnswerCommand(
+                interviewId: Guid.Parse(this.interviewId),
+                userId: this.principal.CurrentUserIdentity.UserId,
+                questionId: this.questionIdentity.Id,
+                rosterVector: this.questionIdentity.RosterVector,
+                answerTime: DateTime.UtcNow);
+
+            try
+            {
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+
+            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
+        }
+
         private async void SendAnswerTextQuestionCommand(string text)
         {
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
@@ -148,6 +186,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public void Handle(TextQuestionAnswered @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                this.UpdateSelfFromModel();
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
         {
             if (@event.QuestionId == this.questionIdentity.Id &&
                 @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))

@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<QRBarcodeQuestionAnswered>,
         ILiteEventHandler<SingleOptionLinkedQuestionAnswered>,
         ILiteEventHandler<SingleOptionQuestionAnswered>,
-        ILiteEventHandler<TextListQuestionAnswered>
+        ILiteEventHandler<TextListQuestionAnswered>,
+        ILiteEventHandler<AnswerRemoved>
     {
         private readonly ILiteEventRegistry registry;
         private Guid? questionId;
@@ -143,6 +144,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var handler = this.QuestionAnswered;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            this.RaiseEventIfNeeded(@event);
         }
     }
 }
