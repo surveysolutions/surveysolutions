@@ -254,7 +254,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 var package = await this.synchronizationService.GetInterviewPackageAsync(
                     packageId: interviewPackage.Id,
-                    previousSuccessfullyHandledPackageId: lastKnownPackageId,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 
@@ -263,18 +262,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.SaveInterviewAsync(package, interviewPackage);
                 await this.synchronizationService.LogPackageAsSuccessfullyHandledAsync(lastKnownPackageId, this.Token);
 
-                if (interviewPackage.ItemType == SyncItemType.Interview)
+                if (!listOfProcessedInterviews.Contains(interviewPackage.InterviewId)) listOfProcessedInterviews.Add(interviewPackage.InterviewId);
+
+                if (interviewInfo != null)
                 {
-                    if (!listOfProcessedInterviews.Contains(interviewPackage.InterviewId)) listOfProcessedInterviews.Add(interviewPackage.InterviewId);
-
-                    var interviewInfo = interviewPackages.Interviews.Find(interview => interview.Id == interviewPackage.InterviewId);
-                    await this.DownloadQuestionnaireAsync(interviewInfo.QuestionnaireIdentity);
-
                     if (interviewInfo.IsRejected)
                         this.Statistics.RejectedInterviewsCount++;
                     else
-                        this.Statistics.NewInterviewsCount++;  
-                };
+                        this.Statistics.NewInterviewsCount++;
+                }
             }
         }
 
