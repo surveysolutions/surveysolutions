@@ -53,18 +53,7 @@
 
   <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
     
-    <LinearLayout style="@style/Dashboard_NoInterviewsPanel" 
-                  local:MvxBind="Visible And(Not(IsExistsAnyNewInterview), IsLoaded);">
-      <TextView style="@style/Dashboard_NoInterviewsTitle"
-                local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
 
-      <TextView style="@style/Dashboard_NoInterviewsText"
-                local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
-
-      <Button style="@style/Dashboard_NoInterviewsSyncButton"
-                local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
-                               Click SynchronizationCommand;" />
-    </LinearLayout>
   
     <ScrollView
         android:layout_width="match_parent"
@@ -76,6 +65,18 @@
         android:scrollbars="vertical"
         local:MvxBind="ItemsSource DashboardItems" />
     </ScrollView>
+    <LinearLayout style="@style/Dashboard_NoInterviewsPanel" 
+                  local:MvxBind="Visible And(Not(IsExistsAnyNewInterview), IsLoaded);">
+      <TextView style="@style/Dashboard_NoInterviewsTitle"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
+
+      <TextView style="@style/Dashboard_NoInterviewsText"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
+
+      <Button style="@style/Dashboard_NoInterviewsSyncButton"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+                               Click SynchronizationCommand;" />
+    </LinearLayout>    
     <LinearLayout style="@style/Interview_GroupWithDivider"
                   local:MvxBind="Enabled If(Synchronization.IsSynchronizationInProgress, false, true)"
                   android:layout_height="match_parent">
