@@ -252,6 +252,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         listOfProcessedInterviews.Count, interviewPackages.Interviews.Count,
                         InterviewerUIResources.Synchronization_Interviews));
 
+                var interviewInfo = interviewPackages.Interviews.Find(interview => interview.Id == interviewPackage.InterviewId);
+                if (interviewInfo != null)
+                {
+                    await this.DownloadQuestionnaireAsync(interviewInfo.QuestionnaireIdentity);
+                };
+
                 var package = await this.synchronizationService.GetInterviewPackageAsync(
                     packageId: interviewPackage.Id,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
