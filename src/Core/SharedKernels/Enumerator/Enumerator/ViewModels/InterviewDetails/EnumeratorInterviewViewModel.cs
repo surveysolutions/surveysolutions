@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class EnumeratorInterviewViewModel : BaseViewModel
+    public abstract class EnumeratorInterviewViewModel : BaseViewModel, IDisposable
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string QuestionnaireTitle { get; set; }
         public IEnumerable<dynamic> PrefilledQuestions { get; set; }
 
-        public void Unsubscribe()
+        public void Dispose()
         {
             this.navigationState.GroupChanged -= this.NavigationStateOnOnGroupChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;

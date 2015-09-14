@@ -24,6 +24,7 @@ namespace WB.UI.Interviewer.Activities
                     break;
 
             }
+            this.Finish();
         }
     }
 }
