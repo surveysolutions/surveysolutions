@@ -14,11 +14,13 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Text DashboardTitle" />
+        local:MvxBind="Text DashboardTitle;
+                       Visible IsLoaded;" />
   </android.support.v7.widget.Toolbar>
 
   <include layout="@layout/synchronization_panel" />
 
+  <LinearLayout style="@style/Dashboard_Interviews_Header" local:MvxBind="Visible IsLoaded;">
   <FrameLayout android:layout_width="match_parent"
                android:layout_height="wrap_content">
     <LinearLayout style="@style/Dashboard_Interviews_Header">
@@ -52,6 +54,19 @@
 
   <FrameLayout android:layout_width="match_parent"
                android:layout_height="match_parent">
+  <LinearLayout style="@style/Dashboard_NoInterviewsPanel" local:MvxBind="Visible And(Not(IsExistsAnyNewInterview), IsLoaded);">
+    <TextView style="@style/Dashboard_NoInterviewsTitle"
+          local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
+
+    <TextView style="@style/Dashboard_NoInterviewsText"
+          local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
+
+    <Button style="@style/Dashboard_NoInterviewsSyncButton"
+          local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+                          Click SynchronizationCommand;" />
+
+  </LinearLayout>
+  
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
