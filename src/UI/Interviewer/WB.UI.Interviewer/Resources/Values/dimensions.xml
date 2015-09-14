@@ -13,7 +13,9 @@
   <dimen name="Login_ErrorMessage_marginBottom">24dp</dimen>
   <dimen name="Login_Password_Editor_marginBottom">24dp</dimen>
   <dimen name="Login_Troubleshooting_Button_marginLeft">24dp</dimen>
-
+  <dimen name="Login_Footer_paddingBottom">36dp</dimen>
+  <dimen name="Login_Button_padding">10dp</dimen>
+  
   <dimen name="Dashboard_Layout_marginLeft">32dp</dimen>
   <dimen name="Dashboard_Layout_marginRight">32dp</dimen>
   <dimen name="Dashboard_TabMenu_marginTop">42dp</dimen>
