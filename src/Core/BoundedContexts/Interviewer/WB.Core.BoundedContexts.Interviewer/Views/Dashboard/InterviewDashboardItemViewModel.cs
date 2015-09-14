@@ -64,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             DateComment = GetInterviewDateCommentByStatus(interview, Status);
             Comment = GetInterviewCommentByStatus(interview, Status);
             PrefilledQuestions = this.GetPrefilledQuestions(interview, questionnaire);
+            //IsSupportedRemove = interview.
         }
 
         private string GetInterviewDateCommentByStatus(IStatefulInterview interview, DashboardInterviewCategories status)
@@ -126,6 +127,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
 
             return listQuestions;
+        }
+
+        public bool IsSupportedRemove { get; set; }
+
+        public IMvxCommand RemoveInterviewCommand
+        {
+            get { return new MvxCommand(RemoveInterview); }
+        }
+
+        private async void RemoveInterview()
+        {
+            var isNeedDelete = await userInteractionService.ConfirmAsync(
+                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(QuestionariName),
+                okButton: UIResources.Yes,
+                cancelButton: UIResources.No);
+
+            if (!isNeedDelete)
+                return;
+
+            var deleteInterviewCommand = new DeleteInterviewCommand(InterviewId, principal.CurrentUserIdentity.UserId);
+            await commandService.ExecuteAsync(deleteInterviewCommand);
+            changeLogManipulator.CleanUpChangeLogByEventSourceId(InterviewId);
         }
 
         public IMvxCommand LoadDashboardItemCommand

@@ -146,6 +146,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this interview &quot;{0}&quot; ?.
+        /// </summary>
+        public static string Dashboard_RemoveInterviewQuestion {
+            get {
+                return ResourceManager.GetString("Dashboard_RemoveInterviewQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Started {0}.
         /// </summary>
         public static string Dashboard_StartedLinkText {
