@@ -121,16 +121,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RemoveAnswer()
         {
-            var command = new RemoveAnswerCommand(
-                interviewId: Guid.Parse(this.interviewId),
+            try
+            {
+                await this.Answering.SendRemoveAnswerCommandAsync(interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow);
-
-            try
-            {
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                removeTime: DateTime.UtcNow);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)

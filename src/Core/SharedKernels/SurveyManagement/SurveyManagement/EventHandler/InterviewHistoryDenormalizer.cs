@@ -224,7 +224,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerRemoved> evnt)
         {
             AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, evnt.Payload.UserId,
-                evnt.Payload.AnswerTimeUtc, CreateQuestionParameters(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+                evnt.Payload.RemoveTimeUtc, CreateQuestionParameters(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
 
             return view;
         }

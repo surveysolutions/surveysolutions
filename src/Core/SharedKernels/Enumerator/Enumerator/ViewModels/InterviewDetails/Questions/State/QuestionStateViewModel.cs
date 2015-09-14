@@ -3,13 +3,15 @@ using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
-        ILiteEventHandler<TAnswerEvent>
+        ILiteEventHandler<TAnswerEvent>/*,
+        ILiteEventHandler<AnswerRemoved>*/
         where TAnswerEvent : QuestionAnswered
     {
         public QuestionHeaderViewModel Header { get; private set; }
@@ -87,6 +89,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.Enablement.Enabled)
             {
                 this.Comments.ShowCommentInEditor();
+            }
+        }
+
+        public virtual void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                IsAnswered = false;
             }
         }
     }

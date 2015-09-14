@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -41,6 +42,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
+        {
+            await SendQuestionCommandAsync(answerCommand);
+        }
+
+        public virtual async Task SendRemoveAnswerCommandAsync(Guid interviewId, Guid userId, Guid questionId,
+            decimal[] rosterVector,
+            DateTime removeTime)
+        {
+            var command = new RemoveAnswerCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: questionId,
+                rosterVector: rosterVector,
+                removeTime: removeTime);
+            await SendQuestionCommandAsync(command);
+        }
+
+        private async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 

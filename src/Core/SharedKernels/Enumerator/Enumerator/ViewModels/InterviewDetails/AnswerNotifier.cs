@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        private void RaiseEventIfNeeded(QuestionAnswered @event)
+        private void RaiseEventIfNeeded(QuestionActiveEvent @event)
         {
             var shouldNotifyAboutSingleAnswer = this.questionId.HasValue && @event.QuestionId == this.questionId;
             var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
