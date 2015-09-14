@@ -800,11 +800,9 @@
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\lib\jasmine.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\lib\jasmine_favicon.png" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\lib\json2.js" />
-    <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\helpers-jasmine.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-array.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-date.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-function.js" />
-    <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-global.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-number.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-object.js" />
     <Content Include="UpdatedDesigner\vendor\es5-shim\tests\spec\s-string.js" />
