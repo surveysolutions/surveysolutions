@@ -1420,8 +1420,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IInterviewExpressionStateV2 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
-       //     expressionProcessorState.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, selectedRosterVector);
-
             InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerRemove(this.interviewState,
                 userId, questionId, rosterVector, removeTime, questionnaire, expressionProcessorState);
 
@@ -2711,8 +2709,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //Update State
             RemoveAnswerFromExpressionProcessorState(expressionProcessorState, questionId, rosterVector);
 
-            var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
-
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
 
@@ -2723,15 +2719,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionProcessorState.UpdateRosterTitle(rosterInstancesWithAffectedTitle.GroupId,
                     rosterInstancesWithAffectedTitle.OuterRosterVector,
                     rosterInstancesWithAffectedTitle.RosterInstanceId, null);
-            }
-
-            foreach (var rosterIdentityToAdd in rosterInstancesToAdd)
-            {
-                expressionProcessorState.AddRoster(rosterIdentityToAdd.Key.GroupId, rosterIdentityToAdd.Key.OuterRosterVector,
-                    rosterIdentityToAdd.Key.RosterInstanceId, rosterIdentityToAdd.Key.SortIndex);
-                expressionProcessorState.UpdateRosterTitle(rosterIdentityToAdd.Key.GroupId,
-                    rosterIdentityToAdd.Key.OuterRosterVector, rosterIdentityToAdd.Key.RosterInstanceId,
-                    rosterIdentityToAdd.Value);
             }
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
@@ -2752,8 +2739,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
-                //AnswerChangeType.NumericInteger is dummy here
-                new AnswerChange(AnswerChangeType.NumericInteger, userId, questionId, rosterVector, removeTime, null)
+                new AnswerChange(AnswerChangeType.RemoveAnswer, userId, questionId, rosterVector, removeTime, null)
             };
 
             var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, getRosterInstanceIds));
@@ -4133,58 +4119,63 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
             IInterviewExpressionState expressionProcessorState)
         {
-            if (answerChange.Answer == null)
-            {
-                RemoveAnswerFromExpressionProcessorState(expressionProcessorState, answerChange.QuestionId,
-                    answerChange.RosterVector);
-                return;
-            }
             switch (answerChange.InterviewChangeType)
             {
+                case AnswerChangeType.RemoveAnswer:
+                    RemoveAnswerFromExpressionProcessorState(expressionProcessorState, answerChange.QuestionId,
+                        answerChange.RosterVector);
+                    break;
                 case AnswerChangeType.Text:
-                    expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
+                    expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (string) answerChange.Answer);
                     break;
                 case AnswerChangeType.DateTime:
-                    expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector, (DateTime)answerChange.Answer);
+                    expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (DateTime) answerChange.Answer);
                     break;
                 case AnswerChangeType.TextList:
                     expressionProcessorState.UpdateTextListAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (Tuple<decimal, string>[])answerChange.Answer);
+                        (Tuple<decimal, string>[]) answerChange.Answer);
                     break;
                 case AnswerChangeType.GeoLocation:
-                    {
-                        var answer = answerChange.Answer as GeoLocationPoint;
-                        expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                            answer.Latitude,
-                            answer.Longitude,
-                            answer.Accuracy,
-                            answer.Altitude);
-                    }
+                {
+                    var answer = answerChange.Answer as GeoLocationPoint;
+                    expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        answer.Latitude,
+                        answer.Longitude,
+                        answer.Accuracy,
+                        answer.Altitude);
+                }
                     break;
                 case AnswerChangeType.QRBarcode:
-                    expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
+                    expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (string) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericInteger:
-                    expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId, answerChange.RosterVector, (int)answerChange.Answer);
+                    expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId,
+                        answerChange.RosterVector, (int) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericReal:
-                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector, Convert.ToDouble(answerChange.Answer));
+                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        Convert.ToDouble(answerChange.Answer));
                     break;
                 case AnswerChangeType.SingleOptionLinked:
-                    expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[])answerChange.Answer);
+                    expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId,
+                        answerChange.RosterVector,
+                        (decimal[]) answerChange.Answer);
                     break;
                 case AnswerChangeType.SingleOption:
                     expressionProcessorState.UpdateSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal)answerChange.Answer);
+                        (decimal) answerChange.Answer);
                     break;
                 case AnswerChangeType.MultipleOptionsLinked:
-                    expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[][])answerChange.Answer);
+                    expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId,
+                        answerChange.RosterVector,
+                        (decimal[][]) answerChange.Answer);
                     break;
                 case AnswerChangeType.MultipleOptions:
                     expressionProcessorState.UpdateMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[])answerChange.Answer);
+                        (decimal[]) answerChange.Answer);
                     break;
             }
         }

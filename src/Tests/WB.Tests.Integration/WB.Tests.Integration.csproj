@@ -191,6 +191,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and____.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_question_disables_roster_size_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_roster_size_question_of_nested_roster_increase_row_count_but_row_is_disabled.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_top_level_question_which_enables_nested_roster.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC.cs" />
@@ -240,7 +241,7 @@
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-	<None Include="..\..\..\packages\EventStore.Client.Embedded.3.0.2\native\x64\js1.dll" />
+    <None Include="..\..\..\packages\EventStore.Client.Embedded.3.0.2\native\x64\js1.dll" />
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
