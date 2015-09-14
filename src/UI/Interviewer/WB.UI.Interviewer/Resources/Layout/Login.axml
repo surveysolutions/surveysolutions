@@ -89,8 +89,12 @@
         android:id="@+id/login_page_footer"
         android:layout_alignParentBottom="true">
       <TextView
+         style="@style/Login_Footer_Message"
+         local:MvxBind="Html Format(Localization('Login_FinishInstallation_Message'), Version); Visible IsFinishInstallationMode" />
+      <TextView
           style="@style/Login_Footer_Message"
-          android:text="version 1687" />
+          local:MvxBind="Text If(EndpointWasReached, Localization('Login_EndpointWasReached'), Localization('Login_EndpointWasNotReached'));
+          Visible If(IsFinishInstallationMode, false, true)" />
     </LinearLayout>
   </RelativeLayout>
 </LinearLayout>
