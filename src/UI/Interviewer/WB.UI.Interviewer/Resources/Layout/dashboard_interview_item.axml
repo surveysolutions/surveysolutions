@@ -11,10 +11,17 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
                   local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
-      
-      <TextView style="@style/Dashboard_InterviewItem_Title"
-          local:MvxBind="Text QuestionariName;" />
 
+      <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+        <Button style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
+          android:text="\u2573"
+          local:MvxBind="Click RemoveInterviewCommand;
+                         Visible IsSupportedRemove;" />
+        <TextView style="@style/Dashboard_InterviewItem_Title"
+          local:MvxBind="Text QuestionariName;" />
+      </RelativeLayout>
+      
       <MvxListView style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           local:MvxBind="ItemsSource PrefilledQuestions;"
           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
