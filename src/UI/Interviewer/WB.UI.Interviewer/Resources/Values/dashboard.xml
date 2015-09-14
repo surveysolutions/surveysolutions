@@ -82,15 +82,27 @@
     <item name="android:layout_marginTop">14dp</item>
     <item name="android:layout_marginBottom">14dp</item>
     <item name="android:layout_marginLeft">14dp</item>
-    <item name="android:layout_marginRight">14dp</item>
+    <item name="android:layout_marginRight">1dp</item>
     <item name="android:orientation">vertical</item>
   </style>
 
   <style name="Dashboard_InterviewItem_Title" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
+    <item name="android:layout_alignParentLeft">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+    <item name="android:background">@color/dashboard_interview_background</item>
+    <item name="android:layout_alignParentRight">true</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:layout_marginTop">-20dp</item>
+    <item name="android:layout_marginRight">-15dp</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
@@ -124,7 +136,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:textColor">#000000</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:textStyle">bold</item>
   </style>
 
@@ -210,7 +222,7 @@
     <item name="android:textColor">@color/dashboard_synchronization_statistics_text</item>
   </style>
   
-<style name="Dashboard_Synchronization_Cancel_Text" parent="AppTheme">
+  <style name="Dashboard_Synchronization_Cancel_Text" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
