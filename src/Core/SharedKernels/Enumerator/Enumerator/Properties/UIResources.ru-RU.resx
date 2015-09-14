@@ -470,4 +470,7 @@
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>Опросники не найдены</value>
   </data>
+  <data name="Login_Validation_EndpointIsUnreachable" xml:space="preserve">
+    <value>Невозможно подключиться к введенному домену. Проверьте настройки подключения или введи правильный домен</value>
+  </data>
 </root>

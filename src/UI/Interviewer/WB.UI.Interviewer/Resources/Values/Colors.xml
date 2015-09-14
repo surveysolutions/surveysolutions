@@ -3,7 +3,10 @@
   <color name="capi_orange">#f7c942</color>
 
   <color name="menu_hint_color">#9a9a9a</color>
-  
+  <color name="login_footer_color">#9a9a9a</color>
+  <color name="login_Input_border_valid_color">#EDEDED</color>
+  <color name="login_Input_border_invalid_color">#FFE32102</color>
+
   <color name="dashboard_interview_title">#000000</color>
   <color name="dashboard_interview_background">#FFFFFF</color>
   <color name="dashboard_new_tab">#6D6D6D</color>

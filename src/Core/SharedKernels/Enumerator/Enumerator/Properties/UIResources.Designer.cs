@@ -928,6 +928,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entered endpoint is unreachable. Check internet connection or enter correct url.
+        /// </summary>
+        public static string Login_Validation_EndpointIsUnreachable {
+            get {
+                return ResourceManager.GetString("Login_Validation_EndpointIsUnreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login.
         /// </summary>
         public static string LoginNameHint {
