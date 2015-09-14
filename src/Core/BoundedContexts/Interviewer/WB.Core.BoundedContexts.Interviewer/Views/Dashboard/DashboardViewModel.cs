@@ -52,6 +52,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.currentDashboardCategory);
 
             this.RefreshTab();
+
+            IsLoaded = true;
         }
 
         private void RefreshTab()
@@ -90,6 +92,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public bool IsStartedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.InProgress; } }
         public bool IsCompletedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.Complited; } }
         public bool IsRejectedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.Rejected; } }
+
+        private bool isLoaded;
+        public bool IsLoaded
+        {
+            get { return this.isLoaded; }
+            set { this.isLoaded = value; this.RaisePropertyChanged(); }
+        }
 
         public DashboardInterviewCategories CurrentDashboardCategory
         {
