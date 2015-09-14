@@ -654,6 +654,12 @@
     </AndroidResource>
     <AndroidResource Include="Resources\anim\slide_down.xml" />
     <AndroidResource Include="Resources\anim\slide_up.xml" />
+    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
+    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_disabled.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_pressed.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_unpressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

@@ -473,4 +473,19 @@
   <data name="Login_Validation_EndpointIsUnreachable" xml:space="preserve">
     <value>Невозможно подключиться к введенному домену. Проверьте настройки подключения или введи правильный домен</value>
   </data>
+  <data name="Login_App_Version" xml:space="preserve">
+    <value>версия {0}</value>
+  </data>
+  <data name="Login_App_NewVersionAvailable" xml:space="preserve">
+    <value>доступна новая версия</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолдения работы необходимо подключение к сети</value>
+  </data>
+  <data name="Login_EndpointWasNotReached" xml:space="preserve">
+    <value>Связь с доменом не установлена</value>
+  </data>
+  <data name="Login_EndpointWasReached" xml:space="preserve">
+    <value>Связь с доменом установлена</value>
+  </data>
 </root>

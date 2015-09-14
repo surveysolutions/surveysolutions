@@ -4,7 +4,9 @@
 
   <color name="menu_hint_color">#9a9a9a</color>
   <color name="login_footer_color">#9a9a9a</color>
-  <color name="login_Input_border_valid_color">#EDEDED</color>
+  <color name="login_Input_disabled_color">#D0D0D0</color>
+  <color name="login_Input_border_valid_disabled_color">#D0D0D0</color>
+  <color name="login_Input_border_valid_color">#D0D0D0</color>
   <color name="login_Input_border_invalid_color">#FFE32102</color>
 
   <color name="dashboard_interview_title">#000000</color>

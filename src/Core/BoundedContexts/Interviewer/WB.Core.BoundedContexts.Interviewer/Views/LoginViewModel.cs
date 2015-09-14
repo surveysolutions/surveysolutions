@@ -69,8 +69,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.password = value; RaisePropertyChanged(); }
         }
 
-        public string Version { get; set; }
-
         public bool IsEndpointValid
         {
             get { return this.isEndpointValid; }
@@ -110,6 +108,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public bool IsFinishInstallationMode { get; set; }
 
+        public bool IsNewVersionAvailable { get; set; }
+
+        public bool EndpointWasReached { get; set; }
+
         public void Init()
         {
 #if DEBUG
@@ -117,10 +119,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Login = "inter";
             this.Password = "Qwerty1234";
 #endif
+            IsNewVersionAvailable = false;
             IsLoginValid = true;
             IsEndpointValid = true;
             IsPasswordValid = true;
-
+            
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
 
             if (currentInterviewer == null)
@@ -130,6 +133,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             else
             {
                 Login = currentInterviewer.Name;
+
+                EndpointWasReached = this.reachability.IsHostReachable(this.Endpoint);
             }
         }
 
@@ -170,6 +175,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (this.IsFinishInstallationMode)
             {
+                var restCredentials = new RestCredentials { Login = userName, Password = hashedPassword };
+
                 if (!this.reachability.IsHostReachable(this.Endpoint))
                 {
                     ErrorMessage = UIResources.Login_Validation_EndpointIsUnreachable;
@@ -199,7 +206,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 bool interviewerHasLinkedDevice;
                 try
                 {
-                    interviewerHasLinkedDevice = await this.synchronizationService.HasCurrentInterviewerDeviceAsync();
+                    interviewerHasLinkedDevice = await this.synchronizationService.HasCurrentInterviewerDeviceAsync(token: default(CancellationToken), credentials: restCredentials);
                 }
                 catch (RestException exception)
                 {
@@ -211,14 +218,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (!interviewerHasLinkedDevice)
                 {
-                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken));
+                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken), credentials: restCredentials);
                 }
                 else
                 {
                     bool isAnotherDeviceLinkedToInterviewer;
                     try
                     {
-                        isAnotherDeviceLinkedToInterviewer = await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync();
+                        isAnotherDeviceLinkedToInterviewer = await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: default(CancellationToken), credentials: restCredentials);
                     }
                     catch (RestException exception)
                     {
@@ -245,23 +252,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                             Name = userName,
                             Password = hashedPassword
                         });
-
-                this.LoginUserOffline(userName, hashedPassword);
-
-                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
             }
-            else
-            {
-                this.LoginUserOffline(userName, hashedPassword);
-            }
+          
+            this.LoginUserOfflineAndGoToDashboard(userName, hashedPassword);
+
             IsInProgress = false;
         }
 
-        private void LoginUserOffline(string userName, string hashedPassword)
+        private void LoginUserOfflineAndGoToDashboard(string userName, string hashedPassword)
         {
             try
             {
                 this.principal.SignIn(userName, hashedPassword, true);
+
+                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
             }
             catch (UnauthorizedAccessException exception)
             {
