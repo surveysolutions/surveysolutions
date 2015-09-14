@@ -58,6 +58,7 @@ namespace WB.UI.Interviewer
             registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
+            registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("IsSynchronizationFail", new IsSynchronizationFailConverter());
             registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
         }
@@ -65,6 +66,7 @@ namespace WB.UI.Interviewer
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
 
             base.FillTargetFactories(registry);

@@ -500,4 +500,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>No questionnaires found</value>
   </data>
+  <data name="Login_Validation_EndpointIsUnreachable" xml:space="preserve">
+    <value>Entered endpoint is unreachable. Check internet connection or enter correct url</value>
+  </data>
 </root>
