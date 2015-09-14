@@ -75,10 +75,11 @@
 
       <Button style="@style/Dashboard_NoInterviewsSyncButton"
                 local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+                               Enabled Not(Synchronization.IsSynchronizationInProgress);
                                Click SynchronizationCommand;" />
     </LinearLayout>    
     <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled If(Synchronization.IsSynchronizationInProgress, false, true)"
+                  local:MvxBind="Enabled Not(Synchronization.IsSynchronizationInProgress);"
                   android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>
