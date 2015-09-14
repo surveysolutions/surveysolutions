@@ -139,10 +139,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials, token: token);
         }
 
-        public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             return await this.restService.GetWithProgressAsync<InterviewSyncPackageDto>(
-                url: string.Concat(this.interviewsController, "/package/", packageId, "/", previousSuccessfullyHandledPackageId), 
+                url: string.Concat(this.interviewsController, "/package/", packageId), 
                 credentials: this.restCredentials,
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token);
