@@ -90,6 +90,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronize.
+        /// </summary>
+        public static string Dashboard_NoInterviewsSyncButton {
+            get {
+                return ResourceManager.GetString("Dashboard_NoInterviewsSyncButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize to get new tasks
+        ///or contact your supervisor
+        ///for thurther instructions.
+        /// </summary>
+        public static string Dashboard_NoInterviewsText {
+            get {
+                return ResourceManager.GetString("Dashboard_NoInterviewsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no new assigments.
+        /// </summary>
+        public static string Dashboard_NoInterviewsTitle {
+            get {
+                return ResourceManager.GetString("Dashboard_NoInterviewsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No New.
         /// </summary>
         public static string Dashboard_NoNewItemsLinkText {

@@ -127,6 +127,17 @@ interview</value>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>New {0}</value>
   </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>Synchronize</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Synchronize to get new tasks
+or contact your supervisor
+for thurther instructions</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>You have no new assigments</value>
+  </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
     <value>No New</value>
   </data>

@@ -2,9 +2,9 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardBackgroundColor="@color/dashboard_new_interview_status"
     card_view:cardCornerRadius="4dp"
-    android:clickable="true"
+    card_view:cardPreventCornerOverlap="true"
     style="@style/Dashboard_InterviewListItem">
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout"
     local:MvxBind="Click LoadDashboardItemCommand;">
