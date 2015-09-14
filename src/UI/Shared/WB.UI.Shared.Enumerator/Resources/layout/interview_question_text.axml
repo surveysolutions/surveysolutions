@@ -8,16 +8,18 @@
       <include layout="@layout/interview_question__instructions" />
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-
-        <MaskedEditText
-          style="@style/Interview_Question_Answer_TextEditor"
-          local:MvxBind="Hint Hint; 
+        <LinearLayout  style="@style/Interview_Question_Border" local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+          <MaskedEditText
+            style="@style/Interview_Question_Answer_Text_Editor"
+            local:MvxBind="Hint Hint; 
                          Mask Mask; 
                          Text Answer; 
                          IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 
-                         FocusValueChanged ValueChangeCommand; 
-                         BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
-
+                         FocusValueChanged ValueChangeCommand; " />
+          <ImageButton style="@style/Interview_Question_Answer_Text_DeleteButton"
+                       local:MvxBind="Click RemoveAnswerCommand; 
+                       Visible  QuestionState.IsAnswered;" />
+        </LinearLayout>
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />
       <include layout="@layout/interview_question__comments" />
