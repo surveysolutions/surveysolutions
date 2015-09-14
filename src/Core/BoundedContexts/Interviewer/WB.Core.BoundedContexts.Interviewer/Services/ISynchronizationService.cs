@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<InterviewPackagesApiView> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token);
         Task LogPackageAsSuccessfullyHandledAsync(string packageId, CancellationToken token);
 
-        Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+        Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task UploadInterviewAsync(Guid interviewId, string content, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
     }
