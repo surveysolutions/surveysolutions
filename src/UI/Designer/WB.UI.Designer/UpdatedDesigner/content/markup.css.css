@@ -6773,16 +6773,12 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
 .wb-label > span > a {
   color: #2a81cb;
 }
-
-
 .enabling-group-marker {
-    color:#D89400;
+  color: #D89400;
 }
-
 .validation-group-marker {
-    color:#2075bf;
- }
-
+  color: #2075bf;
+}
 .width100 {
   width: 100%;
 }
@@ -6884,7 +6880,6 @@ input.wb-radio:checked:disabled + label span {
 .form-group.input-variable-name > input {
   color: #3da802;
 }
-
 textarea {
   resize: vertical;
 }
@@ -7967,18 +7962,15 @@ textarea#edit-group-description {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
 }
-
-.highlighted-add .item .item-body .qname-block .conditions-block{
-  vertical-align: middle; 
-  display: inline-block;                                         
+.highlighted-add .item .item-body .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
 }
-
-  .highlighted-add .item .item-body .qname-block .condition-item{
-  height: 12px; 
+.highlighted-add .item .item-body .qname-block .condition-item {
+  height: 12px;
   line-height: 17px;
   font-size: 10px;
 }
-
 .highlighted-add .item.selected .qname-block {
   background-color: #ffffff;
 }
@@ -7989,18 +7981,15 @@ textarea#edit-group-description {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
-
-.highlighted-add .item.selected .qname-block .conditions-block{
-  vertical-align: middle; 
-  display: inline-block;                                         
+.highlighted-add .item.selected .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
 }
-
-  .highlighted-add .item.selected .qname-block .condition-item{
-  height: 12px; 
+.highlighted-add .item.selected .qname-block .condition-item {
+  height: 12px;
   line-height: 17px;
   font-size: 10px;
 }
-
 li.chapter-panel-item {
   position: relative;
   display: block;
@@ -8339,18 +8328,15 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00dbdfe2', endColorstr='#ffdbdfe2', GradientType=1);
 }
-
-.item .item-body .qname-block .conditions-block{
-  vertical-align: middle; 
-  display: inline-block;                                         
+.item .item-body .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
 }
-
-.item .item-body .qname-block .condition-item{
-  height: 12px; 
+.item .item-body .qname-block .condition-item {
+  height: 12px;
   line-height: 17px;
   font-size: 10px;
 }
-
 .item.group > .item-body {
   text-transform: uppercase;
   font-weight: bold;
@@ -8401,18 +8387,15 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
-
-.item.selected:hover .qname-block .conditions-block{
-  vertical-align: middle; 
-  display: inline-block;                                         
+.item.selected:hover .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
 }
-
-.item.selected:hover .qname-block .condition-item{
-  height: 12px; 
+.item.selected:hover .qname-block .condition-item {
+  height: 12px;
   line-height: 17px;
   font-size: 10px;
 }
-
 .item.selected .dropdown {
   z-index: 501;
 }
@@ -8429,17 +8412,15 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
-.item.selected .qname-block .conditions-block{
-  vertical-align: middle; 
-  display: inline-block;                                         
+.item.selected .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
 }
-
-.item.selected .qname-block .condition-item{
-  height: 12px; 
+.item.selected .qname-block .condition-item {
+  height: 12px;
   line-height: 17px;
   font-size: 10px;
 }
-
 .item:hover {
   position: relative;
   padding-top: 2px;
@@ -8470,14 +8451,12 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
 }
-
-.item:hover .qname-block .conditions-block{
-  vertical-align: middle; 
-  display: inline-block;                                         
+.item:hover .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
 }
-
-.item:hover .qname-block .condition-item{
-  height: 12px; 
+.item:hover .qname-block .condition-item {
+  height: 12px;
   line-height: 17px;
   font-size: 10px;
 }
@@ -8518,19 +8497,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .position-fixed {
   position: fixed;
   z-index: 500;
-}
-.dropdown ul.dropdown-menu > li > a {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 30px;
-  color: #2a81cb;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-}
-.dropdown ul.dropdown-menu > li > a:hover {
-  background: #edeff1;
 }
 #show-reload-details-promt {
   position: absolute;
