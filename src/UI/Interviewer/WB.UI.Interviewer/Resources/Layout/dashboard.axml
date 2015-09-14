@@ -20,10 +20,9 @@
 
   <include layout="@layout/synchronization_panel" />
 
-  <LinearLayout style="@style/Dashboard_Interviews_Header" local:MvxBind="Visible IsLoaded;">
-  <FrameLayout android:layout_width="match_parent"
-               android:layout_height="wrap_content">
-    <LinearLayout style="@style/Dashboard_Interviews_Header">
+  <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+    
+    <LinearLayout style="@style/Dashboard_Interviews_Header" local:MvxBind="Visible IsLoaded;">
       <LinearLayout  style="@style/Dashboard_Interviews_Header_Body">
         <TextView style="@style/Dashboard_NewItemsLink"
                   local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
@@ -52,20 +51,20 @@
     </LinearLayout>
   </FrameLayout>
 
-  <FrameLayout android:layout_width="match_parent"
-               android:layout_height="match_parent">
-  <LinearLayout style="@style/Dashboard_NoInterviewsPanel" local:MvxBind="Visible And(Not(IsExistsAnyNewInterview), IsLoaded);">
-    <TextView style="@style/Dashboard_NoInterviewsTitle"
-          local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
+  <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+    
+    <LinearLayout style="@style/Dashboard_NoInterviewsPanel" 
+                  local:MvxBind="Visible And(Not(IsExistsAnyNewInterview), IsLoaded);">
+      <TextView style="@style/Dashboard_NoInterviewsTitle"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
 
-    <TextView style="@style/Dashboard_NoInterviewsText"
-          local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
+      <TextView style="@style/Dashboard_NoInterviewsText"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
 
-    <Button style="@style/Dashboard_NoInterviewsSyncButton"
-          local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
-                          Click SynchronizationCommand;" />
-
-  </LinearLayout>
+      <Button style="@style/Dashboard_NoInterviewsSyncButton"
+                local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+                               Click SynchronizationCommand;" />
+    </LinearLayout>
   
     <ScrollView
         android:layout_width="match_parent"

@@ -2780,29 +2780,29 @@ namespace WB.UI.Interviewer
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f09008e
-			public const int abc_background_cache_hint_selector_material_dark = 2131296398;
-			
 			// aapt resource value: 0x7f09008f
-			public const int abc_background_cache_hint_selector_material_light = 2131296399;
+			public const int abc_background_cache_hint_selector_material_dark = 2131296399;
+			
+			// aapt resource value: 0x7f090090
+			public const int abc_background_cache_hint_selector_material_light = 2131296400;
 			
 			// aapt resource value: 0x7f090004
 			public const int abc_input_method_navigation_guard = 2131296260;
 			
-			// aapt resource value: 0x7f090090
-			public const int abc_primary_text_disable_only_material_dark = 2131296400;
-			
 			// aapt resource value: 0x7f090091
-			public const int abc_primary_text_disable_only_material_light = 2131296401;
+			public const int abc_primary_text_disable_only_material_dark = 2131296401;
 			
 			// aapt resource value: 0x7f090092
-			public const int abc_primary_text_material_dark = 2131296402;
+			public const int abc_primary_text_disable_only_material_light = 2131296402;
 			
 			// aapt resource value: 0x7f090093
-			public const int abc_primary_text_material_light = 2131296403;
+			public const int abc_primary_text_material_dark = 2131296403;
 			
 			// aapt resource value: 0x7f090094
-			public const int abc_search_url_text = 2131296404;
+			public const int abc_primary_text_material_light = 2131296404;
+			
+			// aapt resource value: 0x7f090095
+			public const int abc_search_url_text = 2131296405;
 			
 			// aapt resource value: 0x7f090005
 			public const int abc_search_url_text_normal = 2131296261;
@@ -2813,11 +2813,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f090007
 			public const int abc_search_url_text_selected = 2131296263;
 			
-			// aapt resource value: 0x7f090095
-			public const int abc_secondary_text_material_dark = 2131296405;
-			
 			// aapt resource value: 0x7f090096
-			public const int abc_secondary_text_material_light = 2131296406;
+			public const int abc_secondary_text_material_dark = 2131296406;
+			
+			// aapt resource value: 0x7f090097
+			public const int abc_secondary_text_material_light = 2131296407;
 			
 			// aapt resource value: 0x7f090008
 			public const int accent_material_dark = 2131296264;
@@ -2840,8 +2840,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f09000d
 			public const int background_material_light = 2131296269;
 			
-			// aapt resource value: 0x7f090097
-			public const int bread_crumb_transparency = 2131296407;
+			// aapt resource value: 0x7f090098
+			public const int bread_crumb_transparency = 2131296408;
 			
 			// aapt resource value: 0x7f09000e
 			public const int bright_foreground_disabled_material_dark = 2131296270;
@@ -2939,11 +2939,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f09003c
 			public const int common_signin_btn_light_text_pressed = 2131296316;
 			
-			// aapt resource value: 0x7f090098
-			public const int common_signin_btn_text_dark = 2131296408;
-			
 			// aapt resource value: 0x7f090099
-			public const int common_signin_btn_text_light = 2131296409;
+			public const int common_signin_btn_text_dark = 2131296409;
+			
+			// aapt resource value: 0x7f09009a
+			public const int common_signin_btn_text_light = 2131296410;
 			
 			// aapt resource value: 0x7f09007f
 			public const int complete_screen_statistics_answered_color = 2131296383;
@@ -2978,20 +2978,23 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f090085
 			public const int dashboard_new_tab = 2131296389;
 			
+			// aapt resource value: 0x7f09008c
+			public const int dashboard_no_interviews_text = 2131296396;
+			
 			// aapt resource value: 0x7f090088
 			public const int dashboard_rejected_tab = 2131296392;
 			
 			// aapt resource value: 0x7f09008a
 			public const int dashboard_synchronization_delimiter = 2131296394;
 			
-			// aapt resource value: 0x7f09008d
-			public const int dashboard_synchronization_fail_title = 2131296397;
+			// aapt resource value: 0x7f09008e
+			public const int dashboard_synchronization_fail_title = 2131296398;
 			
 			// aapt resource value: 0x7f09008b
 			public const int dashboard_synchronization_regular_title = 2131296395;
 			
-			// aapt resource value: 0x7f09008c
-			public const int dashboard_synchronization_statistics_text = 2131296396;
+			// aapt resource value: 0x7f09008d
+			public const int dashboard_synchronization_statistics_text = 2131296397;
 			
 			// aapt resource value: 0x7f090069
 			public const int default_input_button_disabled = 2131296361;
@@ -3152,8 +3155,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f09006b
 			public const int question_input_button_unpressed = 2131296363;
 			
-			// aapt resource value: 0x7f09009a
-			public const int question_title_text = 2131296410;
+			// aapt resource value: 0x7f09009b
+			public const int question_title_text = 2131296411;
 			
 			// aapt resource value: 0x7f09002d
 			public const int ripple_material_dark = 2131296301;
@@ -3200,11 +3203,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f090034
 			public const int switch_thumb_disabled_material_light = 2131296308;
 			
-			// aapt resource value: 0x7f09009b
-			public const int switch_thumb_material_dark = 2131296411;
-			
 			// aapt resource value: 0x7f09009c
-			public const int switch_thumb_material_light = 2131296412;
+			public const int switch_thumb_material_dark = 2131296412;
+			
+			// aapt resource value: 0x7f09009d
+			public const int switch_thumb_material_light = 2131296413;
 			
 			// aapt resource value: 0x7f090035
 			public const int switch_thumb_normal_material_dark = 2131296309;
@@ -3251,11 +3254,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f09004d
 			public const int wallet_link_text_light = 2131296333;
 			
-			// aapt resource value: 0x7f09009d
-			public const int wallet_primary_text_holo_light = 2131296413;
-			
 			// aapt resource value: 0x7f09009e
-			public const int wallet_secondary_text_holo_dark = 2131296414;
+			public const int wallet_primary_text_holo_light = 2131296414;
+			
+			// aapt resource value: 0x7f09009f
+			public const int wallet_secondary_text_holo_dark = 2131296415;
 			
 			static Color()
 			{
@@ -6530,23 +6533,35 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f080192
 			public const int Dashboard_NewItemsLink = 2131231122;
 			
+			// aapt resource value: 0x7f0801a3
+			public const int Dashboard_NoInterviewsPanel = 2131231139;
+			
+			// aapt resource value: 0x7f0801a6
+			public const int Dashboard_NoInterviewsSyncButton = 2131231142;
+			
+			// aapt resource value: 0x7f0801a5
+			public const int Dashboard_NoInterviewsText = 2131231141;
+			
+			// aapt resource value: 0x7f0801a4
+			public const int Dashboard_NoInterviewsTitle = 2131231140;
+			
 			// aapt resource value: 0x7f080195
 			public const int Dashboard_RejectedLink = 2131231125;
 			
 			// aapt resource value: 0x7f080193
 			public const int Dashboard_StartedLink = 2131231123;
 			
-			// aapt resource value: 0x7f0801a6
-			public const int Dashboard_Synchronization_Cancel_Text = 2131231142;
+			// aapt resource value: 0x7f0801aa
+			public const int Dashboard_Synchronization_Cancel_Text = 2131231146;
 			
-			// aapt resource value: 0x7f0801a3
-			public const int Dashboard_Synchronization_Divider = 2131231139;
+			// aapt resource value: 0x7f0801a7
+			public const int Dashboard_Synchronization_Divider = 2131231143;
 			
-			// aapt resource value: 0x7f0801a4
-			public const int Dashboard_Synchronization_Operation_Title = 2131231140;
+			// aapt resource value: 0x7f0801a8
+			public const int Dashboard_Synchronization_Operation_Title = 2131231144;
 			
-			// aapt resource value: 0x7f0801a5
-			public const int Dashboard_Synchronization_Statistics_Text = 2131231141;
+			// aapt resource value: 0x7f0801a9
+			public const int Dashboard_Synchronization_Statistics_Text = 2131231145;
 			
 			// aapt resource value: 0x7f080191
 			public const int Dashboard_TabLink = 2131231121;
@@ -6815,17 +6830,17 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f08017e
 			public const int Interview_Sidebar_Title = 2131231102;
 			
-			// aapt resource value: 0x7f0801a7
-			public const int Login_Footer = 2131231143;
+			// aapt resource value: 0x7f0801ab
+			public const int Login_Footer = 2131231147;
 			
-			// aapt resource value: 0x7f0801a8
-			public const int Login_Footer_Message = 2131231144;
+			// aapt resource value: 0x7f0801ac
+			public const int Login_Footer_Message = 2131231148;
 			
-			// aapt resource value: 0x7f0801a9
-			public const int Menu_Hint = 2131231145;
+			// aapt resource value: 0x7f0801ad
+			public const int Menu_Hint = 2131231149;
 			
-			// aapt resource value: 0x7f0801aa
-			public const int Menu_Hint_Bold = 2131231146;
+			// aapt resource value: 0x7f0801ae
+			public const int Menu_Hint_Bold = 2131231150;
 			
 			// aapt resource value: 0x7f080085
 			public const int Platform_AppCompat = 2131230853;
@@ -7106,8 +7121,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f080001
 			public const int Theme_MediaRouter_Light = 2131230721;
 			
-			// aapt resource value: 0x7f0801ab
-			public const int Theme_SplashBackground = 2131231147;
+			// aapt resource value: 0x7f0801af
+			public const int Theme_SplashBackground = 2131231151;
 			
 			// aapt resource value: 0x7f0800d0
 			public const int ThemeOverlay_AppCompat = 2131230928;
