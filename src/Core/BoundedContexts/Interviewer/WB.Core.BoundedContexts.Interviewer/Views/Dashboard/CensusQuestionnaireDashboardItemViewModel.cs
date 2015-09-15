@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.UI.Interviewer.ViewModel.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -34,14 +35,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private Guid questionnaireId;
-        private int questionnaireVersion;
+        private long questionnaireVersion;
 
-        public void Init(string id)
+        public void Init(SurveyDto surveyDto)
         {
-            var questionnaire = this.questionnaireRepository.GetById(id);
-            questionnaireId = questionnaire.Id;
-            questionnaireVersion = 1;
-            QuestionariName = questionnaire.Title;
+            //var questionnaire = this.questionnaireRepository.GetById(id);
+            questionnaireId = surveyDto.QuestionnaireId.ToGuid();
+            questionnaireVersion = surveyDto.QuestionnaireVersion;
+            QuestionariName = surveyDto.SurveyTitle;
             Comment = "Census mode, Interviews created: 0 / 1 / 100";
         }
 
