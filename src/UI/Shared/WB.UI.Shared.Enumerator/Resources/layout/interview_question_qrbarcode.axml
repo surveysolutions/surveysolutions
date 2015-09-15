@@ -10,8 +10,13 @@
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
         <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <TextView style="@style/Interview_Question_TextAnswer"
-            local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" /> />
+          <LinearLayout style="@style/FullWidthWrappingLayout">
+            <TextView style="@style/Interview_Question_TextAnswer"
+              local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
+            <!--<ImageButton style="@style/Interview_Question_RemoveAnswer"
+                             local:MvxBind="HideKeyboardOnClick .; 
+                                            Click RemoveAnswerCommand;" />-->
+          </LinearLayout>
           <Button style="@style/Interview_Question_InputButton"
             local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 

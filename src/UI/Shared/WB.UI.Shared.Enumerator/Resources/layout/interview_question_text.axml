@@ -16,9 +16,10 @@
                          Text Answer; 
                          IsMaskedQuestionAnswered IsMaskedQuestionAnswered; 
                          FocusValueChanged ValueChangeCommand; " />
-          <ImageButton style="@style/Interview_Question_Answer_Text_DeleteButton"
+          <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                       android:layout_gravity="right"
                        local:MvxBind="Click RemoveAnswerCommand; 
-                       Visible  QuestionState.IsAnswered;" />
+                                      Visible  QuestionState.IsAnswered;" />
         </LinearLayout>
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />
