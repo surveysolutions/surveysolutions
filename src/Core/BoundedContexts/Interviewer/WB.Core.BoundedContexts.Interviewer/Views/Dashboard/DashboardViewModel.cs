@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             switch (CurrentDashboardCategory)
             {
                  case DashboardInterviewCategories.New:
-                    this.DashboardItems = dashboardInformation.NewInterviews;
+                    this.DashboardItems = dashboardInformation.CensusQuestionniories.Union(dashboardInformation.NewInterviews);
                     break;
                  case DashboardInterviewCategories.InProgress:
                     this.DashboardItems = dashboardInformation.StartedInterviews;
@@ -167,7 +167,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public int CompletedInterviewsCount { get { return this.dashboardInformation.CompletedInterviews.Count; } }
         public int RejectedInterviewsCount { get { return this.dashboardInformation.RejectedInterviews.Count; } }
 
-        public bool IsExistsAnyNewInterview { get { return this.NewInterviewsCount > 0; } }
+        public bool IsExistsAnyCensusQuestionniories { get { return this.dashboardInformation.CensusQuestionniories.Count > 0; } }
+        public bool IsExistsAnyNewInterview { get { return this.dashboardInformation.CensusQuestionniories.Count > 0 && this.NewInterviewsCount > 0; } }
         public bool IsExistsAnyStartedInterview { get { return this.StartedInterviewsCount > 0; } }
         public bool IsExistsAnyCompletedInterview { get { return this.CompletedInterviewsCount > 0; } }
         public bool IsExistsAnyRejectedInterview { get { return this.RejectedInterviewsCount > 0; } }

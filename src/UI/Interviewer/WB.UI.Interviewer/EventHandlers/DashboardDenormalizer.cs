@@ -47,18 +47,18 @@ namespace WB.UI.Interviewer.EventHandlers
                                       IEventHandler<InterviewerAssigned>,
                                       IEventHandler<SupervisorAssigned>
     {
-        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtOdocumentStorage;
+        private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage;
         private readonly IReadSideRepositoryWriter<SurveyDto> surveyDtoDocumentStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly QuestionType[] questionTypesWithOptions = new[] { QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.YesNo };
 
-        public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDTOdocumentStorage,
+        public DashboardDenormalizer(IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage,
                                      IReadSideRepositoryWriter<SurveyDto> surveyDTOdocumentStorage,
                                      IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage,
                                      IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            this.questionnaireDtOdocumentStorage = questionnaireDTOdocumentStorage;
+            this.questionnaireDtoDocumentStorage = questionnaireDtoDocumentStorage;
             this.surveyDtoDocumentStorage = surveyDTOdocumentStorage;
             this.questionnaireStorage = questionnaireStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -66,12 +66,12 @@ namespace WB.UI.Interviewer.EventHandlers
 
         public override object[] Writers
         {
-            get { return new object[] { this.questionnaireDtOdocumentStorage, this.surveyDtoDocumentStorage}; }
+            get { return new object[] { this.questionnaireDtoDocumentStorage, this.surveyDtoDocumentStorage}; }
         }
 
         public override object[] Readers
         {
-            get { return new object[] { this.questionnaireDtOdocumentStorage}; }
+            get { return new object[] { this.questionnaireDtoDocumentStorage}; }
         }
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
@@ -123,7 +123,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 items.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
             }
             
-            this.questionnaireDtOdocumentStorage.Store(
+            this.questionnaireDtoDocumentStorage.Store(
                 new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
                                      items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
         }
@@ -213,20 +213,20 @@ namespace WB.UI.Interviewer.EventHandlers
 
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt)
         {
-            var questionnaire = this.questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            var questionnaire = this.questionnaireDtoDocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
             questionnaire.Valid = true;
-            this.questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
+            this.questionnaireDtoDocumentStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
         {
-            var questionnaire = this.questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            var questionnaire = this.questionnaireDtoDocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
             questionnaire.Valid = false;
-            this.questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
+            this.questionnaireDtoDocumentStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
@@ -234,13 +234,13 @@ namespace WB.UI.Interviewer.EventHandlers
             if(!this.IsInterviewCompletedOrRestarted(evnt.Payload.Status))
                 return;
 
-            QuestionnaireDTO questionnaire = this.questionnaireDtOdocumentStorage.GetById(evnt.EventSourceId);
+            QuestionnaireDTO questionnaire = this.questionnaireDtoDocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
             questionnaire.Status = (int)evnt.Payload.Status;
             questionnaire.Comments = evnt.Payload.Comment;
 
-            this.questionnaireDtOdocumentStorage.Store(questionnaire, evnt.EventSourceId);
+            this.questionnaireDtoDocumentStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
@@ -260,7 +260,7 @@ namespace WB.UI.Interviewer.EventHandlers
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer)
         {
-            QuestionnaireDTO questionnaire = this.questionnaireDtOdocumentStorage.GetById(interviewId);
+            QuestionnaireDTO questionnaire = this.questionnaireDtoDocumentStorage.GetById(interviewId);
 
             if (questionnaire == null) return;
 
@@ -274,7 +274,7 @@ namespace WB.UI.Interviewer.EventHandlers
 
             questionnaire.SetProperties(featuredItems);
 
-            this.questionnaireDtOdocumentStorage.Store(questionnaire, interviewId);
+            this.questionnaireDtoDocumentStorage.Store(questionnaire, interviewId);
         }
 
         private string getAnswer(FeaturedItem featuredQuestion, object answer)

@@ -111,9 +111,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void Init()
         {
 #if DEBUG
-            this.Endpoint = "http://192.168.173.1/headquarters";
-            this.Login = "inter";
-            this.Password = "P@$$w0rd";
+            this.Endpoint = "http://192.168.88.163/headquarters";
+            this.Login = "in1sv1";
+            this.Password = "1234";
 #endif
             IsLoginValid = true;
             IsEndpointValid = true;
@@ -128,6 +128,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             else
             {
                 Login = currentInterviewer.Name;
+                viewModelNavigationService.NavigateToDashboard();
             }
         }
 
@@ -181,6 +182,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 try
                 {
                     interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(login: userName, password: hashedPassword, token: default(CancellationToken));
+
+                    await this.interviewersPlainStorage.StoreAsync(
+                        new InterviewerIdentity
+                        {
+                            Id = interviewer.Id.FormatGuid(),
+                            UserId = interviewer.Id,
+                            SupervisorId = interviewer.SupervisorId,
+                            Name = userName,
+                            Password = hashedPassword
+                        });
+
+                    this.LoginUserOffline(userName, hashedPassword);
                 }
                 catch (Exception exception)
                 {
@@ -202,18 +215,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     this.IsInProgress = false;
                     return;
                 }
-
-                await this.interviewersPlainStorage.StoreAsync(
-                        new InterviewerIdentity
-                        {
-                            Id = interviewer.Id.FormatGuid(),
-                            UserId = interviewer.Id,
-                            SupervisorId = interviewer.SupervisorId,
-                            Name = userName,
-                            Password = hashedPassword
-                        });
-
-                this.LoginUserOffline(userName, hashedPassword);
 
                 this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
             }
