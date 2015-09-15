@@ -1,11 +1,12 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
-using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomControls;
+
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
@@ -27,8 +28,9 @@ namespace WB.UI.Tester.Activities
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
-            var questionnairesList = this.FindViewById<MvxListView>(Resource.Id.questionnairesList);
-            questionnairesList.EmptyView = this.FindViewById<LinearLayout>(Resource.Id.emptyView);
+            var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnairesList);
+            var layoutManager = new LinearLayoutManager(this);
+            recyclerView.SetLayoutManager(layoutManager);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
