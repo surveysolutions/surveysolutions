@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,16 +16,21 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,IDisposable
+    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        public event EventHandler AnswerRemoved;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private Identity questionIdentity;
         private string interviewId;
 
         public QuestionStateViewModel<DateTimeQuestionAnswered> QuestionState { get; private set; }
+        private readonly ILiteEventRegistry liteEventRegistry;
         public AnsweringViewModel Answering { get; private set; }
 
         public DateTimeQuestionViewModel(
@@ -30,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -38,6 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.liteEventRegistry = liteEventRegistry;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -48,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
+            this.liteEventRegistry.Subscribe(this, interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetDateTimeAnswer(entityIdentity);
@@ -60,6 +70,38 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxCommand AnswerCommand
         {
             get { return new MvxCommand<DateTime>(this.SendAnswerCommand); }
+        }
+
+        private IMvxCommand answerRemoveCommand;
+
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return this.answerRemoveCommand ??
+                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
+            }
+        }
+
+        private async Task RemoveAnswer()
+        {
+            try
+            {
+                var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
+                    this.principal.CurrentUserIdentity.UserId,
+                    this.questionIdentity.Id,
+                    this.questionIdentity.RosterVector,
+                    DateTime.UtcNow);
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
+
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+
+            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
         private async void SendAnswerCommand(DateTime answerValue)
@@ -99,6 +141,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.QuestionState.Dispose();
+            this.liteEventRegistry.Unsubscribe(this, interviewId); 
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+              @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                QuestionState.IsAnswered = false;
+                this.Answer = String.Empty;
+            }
         }
     }
 }
