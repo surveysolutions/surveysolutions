@@ -16,9 +16,9 @@
                   android:scaleType="centerCrop"
                   android:adjustViewBounds="true"
                   local:MvxBind="Bitmap Answer,Converter=InMemoryImage;"/>
-                <ImageButton style="@style/Interview_Question_Answer_Text_DeleteButton"
-                           local:MvxBind="HideKeyboardOnClick .; 
-                                          Click RemoveAnswerCommand;" />
+                <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                             local:MvxBind="HideKeyboardOnClick .; 
+                                            Click RemoveAnswerCommand;" />
             </TableRow>
             <TableRow>
               <FrameLayout android:layout_height="wrap_content" 
