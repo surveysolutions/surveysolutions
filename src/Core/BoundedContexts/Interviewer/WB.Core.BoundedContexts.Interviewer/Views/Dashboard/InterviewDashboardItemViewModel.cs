@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
@@ -21,7 +22,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class InterviewDashboardItemViewModel : IDashboardItem
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
 
-        public InterviewDashboardItemViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+        public InterviewDashboardItemViewModel(
             IAnswerToStringService answerToStringService,
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
@@ -46,7 +46,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPrincipal principal,
             IChangeLogManipulator changeLogManipulator)
         {
-            this.questionnaireRepository = questionnaireRepository;
             this.answerToStringService = answerToStringService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
@@ -55,79 +54,57 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.changeLogManipulator = changeLogManipulator;
         }
 
-        public void Init(DashboardQuestionnaireItem item, DashboardInterviewCategories interviewCategories)
+        public void Init(DashboardQuestionnaireItem item)
         {
-            //var questionnaire = this.questionnaireRepository.GetById(item.QuestionnaireId);
-
             InterviewId = item.SurveyKey;
-            Status = interviewCategories;
+            Status = item.Status;
             QuestionariName = string.Format("{0} (v{1})", item.Title, item.QuestionnaireVersion);
-//            DateComment = GetInterviewDateCommentByStatus(item, Status);
-//            Comment = GetInterviewCommentByStatus(item, Status);
-//            PrefilledQuestions = this.GetPrefilledQuestions(item, questionnaire);
+            DateComment = GetInterviewDateCommentByStatus(item, Status);
+            Comment = GetInterviewCommentByStatus(item);
+            PrefilledQuestions = this.GetPrefilledQuestions(item.Properties);
             IsSupportedRemove = item.CanBeDeleted;
         }
 
-        private string GetInterviewDateCommentByStatus(IStatefulInterview interview, DashboardInterviewCategories status)
+        private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewCategories status)
         {
             switch (status)
             {
                 case DashboardInterviewCategories.New:
-                    return "Created on {0}".FormatString(interview.CreatedDateTime);
+                    return item.CreatedDateTime.HasValue ? "Created on {0}".FormatString(item.CreatedDateTime) : string.Empty;
                 case DashboardInterviewCategories.InProgress:
-                    return "Started on {0}".FormatString(interview.StartedDateTime);
+                    return item.StartedDateTime.HasValue ? "Started on {0}".FormatString(item.StartedDateTime) : string.Empty;
                 case DashboardInterviewCategories.Complited:
                 case DashboardInterviewCategories.Rejected:
-                    return "Complited on {0}".FormatString(interview.ComplitedDateTime);
+                    return item.ComplitedDateTime.HasValue ? "Complited on {0}".FormatString(item.ComplitedDateTime) : string.Empty;
                 default:
                     return string.Empty;
             }
         }
 
-        private string GetInterviewCommentByStatus(IStatefulInterview interview, DashboardInterviewCategories status)
+        private string GetInterviewCommentByStatus(DashboardQuestionnaireItem item)
         {
-            switch (status)
+            switch (item.Status)
             {
                 case DashboardInterviewCategories.New:
                     return "Not started";
                 case DashboardInterviewCategories.InProgress:
-                    var answeredCount = interview.CountAnsweredQuestionsInInterview();
-                    return "Answered: {0}, Unanswered: {1}, Errors:{2}".FormatString(
-                        answeredCount,
-                        interview.CountActiveQuestionsInInterview() - answeredCount,
-                        interview.CountInvalidQuestionsInInterview());
+                    return "Answered: {0}, Unanswered: {1}, Errors:{2}";
                 case DashboardInterviewCategories.Complited:
-                    return interview.InterviewerCompliteComment;
+                    return item.Comments;
                 case DashboardInterviewCategories.Rejected:
-                    return interview.SupervisorRejectComment;
+                    return item.Comments;
                 default:
                     return string.Empty;
             }
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(IStatefulInterview interview, QuestionnaireModel questionnaire)
+        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<FeaturedItem> featuredItems)
         {
-            var listQuestions = new List<PrefilledQuestion>();
-
-            var prefilledQuestionsIds = questionnaire.PrefilledQuestionsIds;
-            foreach (var prefilledQuestionsId in prefilledQuestionsIds)
-            {
-                var baseQuestionModel = questionnaire.Questions[prefilledQuestionsId.Id];
-                var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(prefilledQuestionsId.Id, new decimal[0]);
-
-                if (!interview.Answers.ContainsKey(identityAsString))
-                    continue;
-
-                var baseInterviewAnswer = interview.Answers[identityAsString];
-
-                var prefilledQuestion = new PrefilledQuestion();
-                prefilledQuestion.Question = baseQuestionModel.Title;
-                prefilledQuestion.Answer = this.answerToStringService.AnswerToUIString(baseQuestionModel,
-                    baseInterviewAnswer, interview, questionnaire);
-                listQuestions.Add(prefilledQuestion);
-            }
-
-            return listQuestions;
+            return featuredItems.Select(fi => new PrefilledQuestion()
+                {
+                    Answer = fi.Value,
+                    Question = fi.Title
+                }).ToList();
         }
 
         public bool IsSupportedRemove { get; set; }

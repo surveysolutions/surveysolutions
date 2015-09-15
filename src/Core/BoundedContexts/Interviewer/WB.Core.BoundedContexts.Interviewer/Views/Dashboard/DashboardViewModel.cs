@@ -8,6 +8,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,19 +17,24 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardViewModel : BaseViewModel
+    public class DashboardViewModel : BaseViewModel, 
+        ILiteEventHandler<DeleteInterviewCommand>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
+        private readonly ILiteEventRegistry liteEventRegistry;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerDashboardFactory dashboardFactory,
-            IPrincipal principal, SynchronizationViewModel synchronization)
+            IPrincipal principal, 
+            SynchronizationViewModel synchronization,
+            ILiteEventRegistry liteEventRegistry)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;
             this.principal = principal;
+            this.liteEventRegistry = liteEventRegistry;
             this.Synchronization = synchronization;
         }
 
@@ -40,13 +46,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
-            this.CurrentDashboardCategory = DashboardInterviewCategories.New;
-
             await this.RefreshDashboardAsync();
         }
 
         private async Task RefreshDashboardAsync()
         {
+            this.CurrentDashboardCategory = DashboardInterviewCategories.New;
+
             this.DashboardInformation = await this.dashboardFactory.GetDashboardItems(
                 this.principal.CurrentUserIdentity.UserId,
                 this.currentDashboardCategory);
@@ -223,6 +229,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override void NavigateToPreviousViewModel()
         {
             
+        }
+
+        public void Handle(DeleteInterviewCommand @event)
+        {
+            throw new NotImplementedException();
         }
     }
 }
