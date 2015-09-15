@@ -9,30 +9,29 @@
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-        <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <LinearLayout style="@style/VerticalFullWidthWrappingLayout"
-            android:layout_marginBottom="@dimen/Interview_Question_Answer_MediaBlock_margin_bottom"
-            local:MvxBind="Visible QuestionState.IsAnswered">
-            <LinearLayout style="@style/VerticalFullWidthWrappingLayout"
-              android:background="@drawable/media_question_white_border"
-              android:layout_height="@dimen/Interview_Question_Answer_Media_height">
-
-              <ImageView
-                android:layout_margin="@dimen/Interview_Question_Answer_Media_Image_margin"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                local:MvxBind="Bitmap Answer,Converter=InMemoryImage"/>
-
-            </LinearLayout>
-          </LinearLayout>
-          <Button style="@style/Interview_Question_InputButton"
-            local:MvxBind="HideKeyboardOnClick .; 
-                           Click RequestAnswerCommand; 
-                           Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');
-                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
-        </LinearLayout>
+          <TableLayout style="@style/FullWidthWrappingLayout"
+              android:stretchColumns="0">
+            <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+                <ImageView style="@style/Interview_Question_Multimedia_Picture"
+                  android:scaleType="centerCrop"
+                  android:adjustViewBounds="true"
+                  local:MvxBind="Bitmap Answer,Converter=InMemoryImage;"/>
+                <ImageButton style="@style/Interview_Question_Answer_Text_DeleteButton"
+                           local:MvxBind="HideKeyboardOnClick .; 
+                                          Click RemoveAnswerCommand;" />
+            </TableRow>
+            <TableRow>
+              <FrameLayout android:layout_height="wrap_content" 
+                           android:layout_width="wrap_content"
+                           android:layout_marginTop="@dimen/Interview_Question_InputButton_margin_Bottom">
+                <Button style="@style/Interview_Question_InputButton"
+                        local:MvxBind="HideKeyboardOnClick .; 
+                                       Click RequestAnswerCommand; 
+                                       Text Localization('Interview_Questions_Multimedia_TapToTakePhoto');
+                                       BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+              </FrameLayout>
+            </TableRow>
+          </TableLayout>
 
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />
@@ -40,6 +39,6 @@
     </LinearLayout>
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-    local:MvxBind="ShowProgress Answering.InProgress" />
+               local:MvxBind="ShowProgress Answering.InProgress" />
   <View style="@style/Interview_Question_Divider" />
 </LinearLayout>
