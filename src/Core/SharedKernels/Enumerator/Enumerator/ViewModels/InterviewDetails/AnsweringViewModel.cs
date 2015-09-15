@@ -43,23 +43,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
-            await SendQuestionCommandAsync(answerCommand);
+            await this.ExecuteCommand(answerCommand);
         }
 
-        public virtual async Task SendRemoveAnswerCommandAsync(Guid interviewId, Guid userId, Guid questionId,
-            decimal[] rosterVector,
-            DateTime removeTime)
+        public virtual async Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
         {
-            var command = new RemoveAnswerCommand(
-                interviewId: interviewId,
-                userId: userId,
-                questionId: questionId,
-                rosterVector: rosterVector,
-                removeTime: removeTime);
-            await SendQuestionCommandAsync(command);
+            await this.ExecuteCommand(command);
         }
 
-        private async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
+        private async Task ExecuteCommand(ICommand answerCommand)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -67,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.StartInProgressIndicator();
 
-                await userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
 
                 lock (this.cancellationLockObject)
                 {
@@ -78,9 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 await
                     this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token);
             }
-            catch (OperationCanceledException)
-            {
-            }
+            catch (OperationCanceledException) {}
             finally
             {
                 lock (this.cancellationLockObject)
