@@ -8267,6 +8267,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   border-bottom: 2px solid #edeff1;
   position: relative;
   padding-left: 29px;
+  outline: none;
 }
 .item .item-body .icon {
   position: absolute;
@@ -8404,6 +8405,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .item.selected .item-body {
   border-bottom: none;
+  outline: none;
 }
 .item.selected .qname-block {
   background-color: #ffffff;
@@ -8440,6 +8442,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .item:hover .item-body {
   border-bottom: none;
+  outline: none;
 }
 .item:hover .dropdown {
   z-index: 500;
