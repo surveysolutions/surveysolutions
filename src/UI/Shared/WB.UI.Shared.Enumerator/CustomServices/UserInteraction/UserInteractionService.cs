@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Text;
+
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -89,8 +91,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(message)
-                            .SetTitle(title)
+                            .SetMessage(Html.FromHtml(message))
+                            .SetTitle(Html.FromHtml(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(true); }); })
                             .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(false); }); })
                             .SetCancelable(false)
@@ -123,8 +125,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(message)
-                            .SetTitle(title)
+                            .SetMessage(Html.FromHtml(message))
+                            .SetTitle(Html.FromHtml(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(); }); })
                             .SetCancelable(false)
                             .Show();

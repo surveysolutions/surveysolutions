@@ -190,6 +190,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { isSearchVisible = value; RaisePropertyChanged(); }
         }
 
+        public bool IsListEmpty
+        {
+            get { return this.isListEmpty; }
+            set { this.isListEmpty = value; RaisePropertyChanged(); }
+        }
+
         private IMvxCommand clearSearchCommand;
         public IMvxCommand ClearSearchCommand
         {
@@ -258,6 +264,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private List<QuestionnaireListItem> myQuestionnaires;
         private List<QuestionnaireListItem> publicQuestionnaires;
 
+        private bool isListEmpty;
+
         private void SignOut()
         {
             this.principal.SignOut();
@@ -266,18 +274,22 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void ShowPublicQuestionnaires()
         {
-            this.Questionnaires.Clear();
-            publicQuestionnaires.ForEach(x => this.Questionnaires.Add(x));
-            RaisePropertyChanged(() => Questionnaires);
+            this.ChangeQuestionnairesList(this.publicQuestionnaires);
             this.IsPublicShowed = true;
         }
 
         private void ShowMyQuestionnaires()
         {
-            this.Questionnaires.Clear();
-            myQuestionnaires.ForEach(x => this.Questionnaires.Add(x));
-            RaisePropertyChanged(() => Questionnaires);
+            this.ChangeQuestionnairesList(this.myQuestionnaires);
             this.IsPublicShowed = false;
+        }
+
+        private void ChangeQuestionnairesList(List<QuestionnaireListItem> questionnaireListItems)
+        {
+            this.Questionnaires.Clear();
+            questionnaireListItems.ForEach(x => this.Questionnaires.Add(x));
+            this.RaisePropertyChanged(() => this.Questionnaires);
+            IsListEmpty = !this.Questionnaires.Any();
         }
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
@@ -377,9 +389,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
 
-                var lastUpdateDate = DateTime.Now.ToLocalTime();
+                var lastUpdateDate = DateTime.Now;
 
                 HumanizeLasUpdateDate(lastUpdateDate);
+
+                await this.dashboardLastUpdateStorage.RemoveAsync(this.principal.CurrentUserIdentity.Name);
 
                 await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
                 {
@@ -424,7 +438,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private static QuestionnaireListItem HightlightTitleInListItem(QuestionnaireListItem x, string searchTerm)
         {
-            var index = x.Title.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
+            var loweredSearchTerm = searchTerm.ToLower();
+            var index = x.Title.ToLower().IndexOf(loweredSearchTerm, StringComparison.CurrentCultureIgnoreCase);
 
             var title = index >= 0
                 ? Regex.Replace(x.Title, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)

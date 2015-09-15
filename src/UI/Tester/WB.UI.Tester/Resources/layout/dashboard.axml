@@ -40,20 +40,21 @@
     </LinearLayout>
     <View style="@style/Dashboard_Filters_Divider"></View>
   </LinearLayout>
-  <MvxListView android:id="@+id/questionnairesList"
+  <MvxRecyclerView android:id="@+id/questionnairesList"
                style="@style/Dashboard_QuestionnairesList"
-               local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand; BackgroundStyle PublicBackground(IsPublicShowed)"
+               local:MvxBind="ItemsSource Questionnaires; ItemClick LoadQuestionnaireCommand; Visible If(IsListEmpty, false, true)"
                local:MvxItemTemplate="@layout/questionnaire_list_item" />
   <!-- empty view -->
-  <LinearLayout android:id="@+id/emptyView"
+  <MvxLinearLayout android:id="@+id/emptyView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                local:MvxBind="Visible IsListEmpty">
 
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
                local:MvxBind="Text Localization('Dashboard_EmptySearchResult'); Visible IsSearchVisible"/>
-    
+
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
                local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible If(IsSearchVisible, false, true)"/>
-  </LinearLayout>
+  </MvxLinearLayout>
 </LinearLayout>
 
