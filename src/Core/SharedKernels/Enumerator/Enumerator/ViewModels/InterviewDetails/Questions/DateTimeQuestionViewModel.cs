@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class DateTimeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel,IDisposable
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -94,6 +94,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             get { return this.answer; }
             set { this.answer = value; this.RaisePropertyChanged(); }
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

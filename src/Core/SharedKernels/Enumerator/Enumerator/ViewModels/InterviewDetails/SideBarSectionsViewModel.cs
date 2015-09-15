@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>
+        ILiteEventHandler<GroupsDisabled>, IDisposable
     {
         private NavigationState navigationState;
 
@@ -274,6 +274,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.Where(x => x.ScreenType == ScreenType.Group).ForEach(x => x.SideBarGroupState.UpdateFromModel())));
             }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.navigationState.GroupChanged -= this.NavigationStateGroupChanged;
         }
     }
 }

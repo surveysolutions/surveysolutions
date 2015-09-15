@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventHandler<MultipleOptionsQuestionAnswered>
+        ILiteEventHandler<MultipleOptionsQuestionAnswered>,
+        IDisposable
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
@@ -85,6 +86,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
             this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select((x, index) => this.ToViewModel(x, existingAnswer, index)).ToList());
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
         }
 
         public ReadOnlyCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }

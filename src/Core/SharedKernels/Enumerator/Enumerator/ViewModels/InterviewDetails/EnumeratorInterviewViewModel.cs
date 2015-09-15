@@ -132,6 +132,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.navigationState.GroupChanged -= this.NavigationStateOnOnGroupChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
+            this.CurrentGroup.Dispose();
+            this.answerNotifier.Dispose();
+            this.BreadCrumbs.Dispose();
+            this.Sections.Dispose();
         }
     }
 }

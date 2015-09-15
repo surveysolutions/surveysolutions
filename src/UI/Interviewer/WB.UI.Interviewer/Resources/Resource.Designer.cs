@@ -1304,7 +1304,6 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Answer_Option_Input = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Answer_Option_Input;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Answer_Options = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Answer_Options;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Answer_TextEditor = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Answer_TextEditor;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Answer_Text_DeleteButton = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Answer_Text_DeleteButton;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Answer_Text_Editor = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Answer_Text_Editor;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Body = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Body;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Border = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Border;
@@ -1326,6 +1325,7 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_MultiOptionOrder = global::WB.UI.Interviewer.Resource.Style.Interview_Question_MultiOptionOrder;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Multimedia_Picture = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Multimedia_Picture;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Progress_Indicator = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Progress_Indicator;
+			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_RemoveAnswer = global::WB.UI.Interviewer.Resource.Style.Interview_Question_RemoveAnswer;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_TextAnswer = global::WB.UI.Interviewer.Resource.Style.Interview_Question_TextAnswer;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Question_Title = global::WB.UI.Interviewer.Resource.Style.Interview_Question_Title;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Roster = global::WB.UI.Interviewer.Resource.Style.Interview_Roster;
@@ -6502,9 +6502,6 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f070137
 			public const int Interview_Question_Answer_TextEditor = 2131165495;
 			
-			// aapt resource value: 0x7f070146
-			public const int Interview_Question_Answer_Text_DeleteButton = 2131165510;
-			
 			// aapt resource value: 0x7f070138
 			public const int Interview_Question_Answer_Text_Editor = 2131165496;
 			
@@ -6567,6 +6564,9 @@ namespace WB.UI.Interviewer
 			
 			// aapt resource value: 0x7f070153
 			public const int Interview_Question_Progress_Indicator = 2131165523;
+			
+			// aapt resource value: 0x7f070146
+			public const int Interview_Question_RemoveAnswer = 2131165510;
 			
 			// aapt resource value: 0x7f070149
 			public const int Interview_Question_TextAnswer = 2131165513;
