@@ -111,6 +111,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials, token: token);
         }
 
+        public async Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire, CancellationToken token)
+        {
+            await this.restService.PostAsync(
+                url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/logstate"),
+                credentials: this.restCredentials, token: token);
+        }
+
+        public async Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire, CancellationToken token)
+        {
+            await this.restService.PostAsync(
+                url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/assembly/logstate"),
+                credentials: this.restCredentials, token: token);
+        }
+
         #endregion
 
         #region [Interview Api]

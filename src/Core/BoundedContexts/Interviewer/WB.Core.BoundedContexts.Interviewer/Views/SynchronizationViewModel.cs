@@ -225,7 +225,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                    token: this.Token);
 
-                await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);   
+                await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);
+                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity, this.Token);
             }
 
             if (!this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
@@ -237,6 +238,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version, questionnaireAssembly);
+                await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity, this.Token);
             }
         }
 
