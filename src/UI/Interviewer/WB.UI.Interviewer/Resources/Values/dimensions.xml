@@ -24,4 +24,7 @@
   <dimen name="Dashboard_Items_space">12dp</dimen>
 
   <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
+
+  <dimen name="Dashboard_Synchronization_Statistics_Height">120dp</dimen>
+  <dimen name="Dashboard_Synchronization_Statistics_Width">250dp</dimen>
 </resources>
