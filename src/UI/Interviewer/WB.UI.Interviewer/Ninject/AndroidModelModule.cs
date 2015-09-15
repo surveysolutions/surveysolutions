@@ -108,7 +108,7 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();
             this.Bind<IChangeLogStore>().ToConstant(changeLogStore);
             this.Bind<ICapiSynchronizationCacheService>().ToConstant(syncCacher);
-            this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
+            //this.Bind<IViewFactory<DashboardInput, DashboardModel>>().To<DashboardFactory>();
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             this.Bind<SqlitePlainStore>().ToConstant(plainStore);
