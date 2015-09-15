@@ -919,11 +919,65 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to new version available.
+        /// </summary>
+        public static string Login_App_NewVersionAvailable {
+            get {
+                return ResourceManager.GetString("Login_App_NewVersionAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to version {0}.
+        /// </summary>
+        public static string Login_App_Version {
+            get {
+                return ResourceManager.GetString("Login_App_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Endpoint was not reached.
+        /// </summary>
+        public static string Login_EndpointWasNotReached {
+            get {
+                return ResourceManager.GetString("Login_EndpointWasNotReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Endpoint was reached.
+        /// </summary>
+        public static string Login_EndpointWasReached {
+            get {
+                return ResourceManager.GetString("Login_EndpointWasReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
         /// </summary>
         public static string Login_Error_NotFound {
             get {
                 return ResourceManager.GetString("Login_Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed.
+        /// </summary>
+        public static string Login_FinishInstallation_Message {
+            get {
+                return ResourceManager.GetString("Login_FinishInstallation_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered endpoint is unreachable. Check internet connection or enter correct url.
+        /// </summary>
+        public static string Login_Validation_EndpointIsUnreachable {
+            get {
+                return ResourceManager.GetString("Login_Validation_EndpointIsUnreachable", resourceCulture);
             }
         }
         

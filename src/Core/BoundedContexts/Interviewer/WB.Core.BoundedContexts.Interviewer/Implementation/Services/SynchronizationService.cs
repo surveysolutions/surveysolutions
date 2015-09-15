@@ -55,25 +55,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         credentials: new RestCredentials() {Login = login, Password = password}, token: token);
         }
 
-        public async Task<bool> HasCurrentInterviewerDeviceAsync(CancellationToken token)
+        public async Task<bool> HasCurrentInterviewerDeviceAsync(CancellationToken token, RestCredentials credentials = null)
         {
-            return await this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"), credentials: this.restCredentials, token: token);
+            return await this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"), 
+                credentials: credentials ?? this.restCredentials, token: token);
         }
 
         #endregion
 
         #region [Device Api]
 
-        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(CancellationToken token)
+        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(CancellationToken token, RestCredentials credentials = null)
         {
-            return await this.restService.GetAsync<bool>(url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId()), credentials: this.restCredentials, token: token);
+            return await this.restService.GetAsync<bool>(url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId()), 
+                credentials: credentials ?? this.restCredentials, token: token);
         }
 
-        public async Task LinkCurrentInterviewerToDeviceAsync(CancellationToken token)
+        public async Task LinkCurrentInterviewerToDeviceAsync(CancellationToken token, RestCredentials credentials = null)
         {
             await this.restService.PostAsync(
                 url: string.Concat(this.devicesController, "/link/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
-                credentials: this.restCredentials, token: token);
+                credentials: credentials ?? this.restCredentials, token: token);
         }
 
         #endregion
@@ -137,10 +139,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials, token: token);
         }
 
-        public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             return await this.restService.GetWithProgressAsync<InterviewSyncPackageDto>(
-                url: string.Concat(this.interviewsController, "/package/", packageId, "/", previousSuccessfullyHandledPackageId), 
+                url: string.Concat(this.interviewsController, "/package/", packageId), 
                 credentials: this.restCredentials,
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token);

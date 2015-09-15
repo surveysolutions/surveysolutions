@@ -5,10 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
+using Flurl.Http.Content;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
 
@@ -107,8 +109,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public async Task<T> GetAsync<T>(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: async (client) => await client.GetAsync(token));
-            return await this.ReceiveCompressedJsonAsync<T>(response: response);
+            return await this.GetWithProgressAsync<T>(url: url, token: token, queryString: queryString,credentials: credentials, onDownloadProgressChanged: null);
         }
 
         public async Task GetAsync(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null)
@@ -118,27 +119,31 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public async Task<T> PostAsync<T>(string url, CancellationToken token, object request = null, RestCredentials credentials = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) => await client.PostJsonAsync(request, token));
-            return await this.ReceiveCompressedJsonAsync<T>(response: response);
+            return await this.PostWithProgressAsync<T>(url: url, token: token, request: request, credentials: credentials, onDownloadProgressChanged: null);
         }
 
         public async Task PostAsync(string url, CancellationToken token, object request = null, RestCredentials credentials = null)
         {
-            await this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) =>await client.PostJsonAsync(request, token));
+            await this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) =>await client.SendAsync(HttpMethod.Post, this.CreateJsonContent(request), token));
         }
 
         public async Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object queryString = null,
             RestCredentials credentials = null)
         {
-            var response =  this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: async (client) =>await client.SendAsync(HttpMethod.Get, null, token));
+            var response =  this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: async (client) => await client.SendAsync(HttpMethod.Get, null, token));
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token, onDownloadProgressChanged: onDownloadProgressChanged);
         }
 
         public async Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null,
             RestCredentials credentials = null)
         {
-            var response =  this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) => await client.PostJsonAsync(request, token));
+            var response =  this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) => await client.SendAsync(HttpMethod.Post, this.CreateJsonContent(request), token));
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token, onDownloadProgressChanged: onDownloadProgressChanged);
+        }
+
+        private HttpContent CreateJsonContent(object data)
+        {
+            return new CapturedStringContent(this.jsonUtils.Serialize(data), Encoding.UTF8, "application/json");
         }
 
         public async Task<byte[]> DownloadFileWithProgressAsync(string url, CancellationToken token,
