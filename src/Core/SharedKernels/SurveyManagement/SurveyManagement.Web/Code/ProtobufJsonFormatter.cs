@@ -42,9 +42,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             return true;
         }
 
-        public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
+        public override async Task<object> ReadFromStreamAsync(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
         {
-            return Task.FromResult(this.jsonUtils.DeserializeFromStream(stream: readStream, type: type));
+            return await Task.Run(() =>
+            {
+                var bytesOfStream = Convert.FromBase64String(new StreamReader(readStream).ReadToEnd());
+                return this.jsonUtils.DeserializeFromStream(stream: new MemoryStream(bytesOfStream), type: type);
+            });
         }
         
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
