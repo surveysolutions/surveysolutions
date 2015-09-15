@@ -6,6 +6,10 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
+  <style name="VerticalContentHeightWrappingLayout" parent="VerticalFullWidthWrappingLayout">
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
   <style name="VerticalFullWidthWrappingLayout" parent="FullWidthWrappingLayout">
     <item name="android:orientation">vertical</item>
   </style>
