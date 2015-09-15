@@ -10,8 +10,10 @@ using Ncqrs.Domain.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -33,10 +35,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
-            IPasswordHasher passwordHasher, 
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
-            IInterviewerSettings interviewerSettings, 
-            ISynchronizationService synchronizationService, 
+            IPasswordHasher passwordHasher,
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+            IInterviewerSettings interviewerSettings,
+            ISynchronizationService synchronizationService,
             IMvxReachability reachability, ILogger logger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -66,8 +68,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.password; }
             set { this.password = value; RaisePropertyChanged(); }
         }
-
-        public string Version { get; set; }
 
         public bool IsEndpointValid
         {
@@ -108,6 +108,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public bool IsFinishInstallationMode { get; set; }
 
+        public bool IsNewVersionAvailable { get; set; }
+
+        public bool EndpointWasReached { get; set; }
+
         public void Init()
         {
 #if DEBUG
@@ -115,10 +119,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Login = "in1sv1";
             this.Password = "1234";
 #endif
+            IsNewVersionAvailable = false;
             IsLoginValid = true;
             IsEndpointValid = true;
             IsPasswordValid = true;
-
+            
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
 
             if (currentInterviewer == null)
@@ -128,7 +133,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             else
             {
                 Login = currentInterviewer.Name;
-                viewModelNavigationService.NavigateToDashboard();
+
+                EndpointWasReached = this.reachability.IsHostReachable(this.Endpoint);
             }
         }
 
@@ -169,13 +175,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (this.IsFinishInstallationMode)
             {
+                var restCredentials = new RestCredentials { Login = userName, Password = hashedPassword };
+
                 if (!this.reachability.IsHostReachable(this.Endpoint))
                 {
+                    ErrorMessage = UIResources.Login_Validation_EndpointIsUnreachable;
                     this.IsEndpointValid = false;
                     this.IsInProgress = false;
                     return;
                 }
 
+                this.IsEndpointValid = true;
                 this.interviewerSettings.SetSyncAddressPoint(this.Endpoint);
 
                 InterviewerApiView interviewer;
@@ -205,35 +215,66 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     return;
                 }
 
-                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(token: default(CancellationToken)))
+                bool interviewerHasLinkedDevice;
+                try
                 {
-                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken));
+                    interviewerHasLinkedDevice = await this.synchronizationService.HasCurrentInterviewerDeviceAsync(token: default(CancellationToken), credentials: restCredentials);
                 }
-                else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: default(CancellationToken)))
+                catch (RestException exception)
                 {
-                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(new { redirectedFromFinishInstallation = true });
+                    ErrorMessage = "Error. " + exception.Message;
                     this.IsInProgress = false;
+                    logger.Error(string.Format("Error occured while checking user {0} device linking status.", userName), exception);
                     return;
                 }
 
-                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
+                if (!interviewerHasLinkedDevice)
+                {
+                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken), credentials: restCredentials);
+                }
+                else
+                {
+                    bool isAnotherDeviceLinkedToInterviewer;
+                    try
+                    {
+                        isAnotherDeviceLinkedToInterviewer = await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: default(CancellationToken), credentials: restCredentials);
+                    }
+                    catch (RestException exception)
+                    {
+                        ErrorMessage = "Error. " + exception.Message;
+                        this.IsInProgress = false;
+                        logger.Error(string.Format("Error occured while checking user {0} device.", userName), exception);
+                        return;
+                    }
+
+                    if (!isAnotherDeviceLinkedToInterviewer)
+                    {
+                        this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(new { redirectedFromFinishInstallation = true });
+                        this.IsInProgress = false;
+                        return;
+                    }
+                }
             }
-            else
-            {
-                this.LoginUserOffline(userName, hashedPassword);
-            }
+          
+            this.LoginUserOfflineAndGoToDashboard(userName, hashedPassword);
+
             IsInProgress = false;
         }
 
-        private void LoginUserOffline(string userName, string hashedPassword)
+        private void LoginUserOfflineAndGoToDashboard(string userName, string hashedPassword)
         {
             try
             {
                 this.principal.SignIn(userName, hashedPassword, true);
+
+                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
             }
             catch (UnauthorizedAccessException exception)
             {
-                IsLoginValid = false;
+                if (IsFinishInstallationMode)
+                {
+                    IsLoginValid = false;
+                }
                 IsPasswordValid = false;
                 logger.Error(string.Format("Error occured while authorizing user {0} offline.", userName), exception);
                 ErrorMessage = exception.Message;
@@ -242,7 +283,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override void NavigateToPreviousViewModel()
         {
-            
+
         }
     }
 }

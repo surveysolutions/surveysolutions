@@ -80,12 +80,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [Route("package/{id}/{previousSuccessfullyHandledPackageId?}")]
-        public InterviewSyncPackageDto GetPackage(string id, string previousSuccessfullyHandledPackageId = null)
+        [Route("package/{id}")]
+        public InterviewSyncPackageDto GetPackage(string id)
         {
-            if (!string.IsNullOrEmpty(previousSuccessfullyHandledPackageId))
-                this.syncManager.MarkPackageAsSuccessfullyHandled(previousSuccessfullyHandledPackageId, this.GetInterviewerDeviceId(), this.globalInfoProvider.GetCurrentUser().Id);
-
             return this.syncManager.ReceiveInterviewSyncPackage(
                 userId: this.globalInfoProvider.GetCurrentUser().Id,
                 deviceId: this.GetInterviewerDeviceId(), 

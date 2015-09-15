@@ -311,6 +311,7 @@
     <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
+    <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
@@ -623,6 +624,8 @@
     <AndroidResource Include="Resources\Drawable\ic_synchronization_success.png" />
     <AndroidResource Include="Resources\Drawable\ic_upload.png" />
     <AndroidResource Include="Resources\Values\login.xml" />
+    <AndroidResource Include="Resources\Drawable\textedit_invalid.xml" />
+    <AndroidResource Include="Resources\Drawable\textedit_valid.xml" />
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -640,6 +643,12 @@
     </AndroidResource>
     <AndroidResource Include="Resources\anim\slide_down.xml" />
     <AndroidResource Include="Resources\anim\slide_up.xml" />
+    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
+    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_disabled.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_pressed.xml" />
+    <AndroidResource Include="Resources\Drawable\transparent_input_button_unpressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
