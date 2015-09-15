@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel
+        IInterviewEntityViewModel, IDisposable
     {
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -133,6 +133,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private static string NullableDecimalToAnswerString(decimal? answer)
         {
             return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

@@ -21,7 +21,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<SingleOptionLinkedQuestionAnswered>,
         ILiteEventHandler<SingleOptionQuestionAnswered>,
         ILiteEventHandler<TextListQuestionAnswered>,
-        ILiteEventHandler<AnswerRemoved>
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly ILiteEventRegistry registry;
         private Guid? questionId;
@@ -149,6 +150,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(AnswerRemoved @event)
         {
             this.RaiseEventIfNeeded(@event);
+        }
+
+        public void Dispose()
+        {
+            this.registry.Unsubscribe(this, interviewId);
         }
     }
 }
