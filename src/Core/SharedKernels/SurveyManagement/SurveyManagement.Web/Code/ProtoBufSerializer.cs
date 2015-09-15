@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using ProtoBuf.Meta;
 using WB.Core.GenericSubdomains.Portable.Services;
 
@@ -14,7 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
     {
         public string Serialize(object item)
         {
-            return Encoding.UTF8.GetString(this.SerializeToByteArray(item));
+            throw new NotImplementedException();
         }
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
@@ -24,27 +23,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public byte[] SerializeToByteArray(object item)
         {
-            using (var ms = new MemoryStream())
-            {
-                this.SerializeToStream(item, null, ms);
-                return ms.ToArray();
-            }
+            throw new NotImplementedException();
+        }
+
+        public T Deserialize<T>(string payload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T Deserialize<T>(byte[] payload)
+        {
+            throw new NotImplementedException();
         }
 
         public void SerializeToStream(object value, Type type, Stream stream)
         {
             SerializerBuilder.Build(type);
             ProtoBuf.Serializer.NonGeneric.Serialize(stream, value);
-        }
-
-        public T Deserialize<T>(string payload)
-        {
-            return this.Deserialize<T>(Encoding.UTF8.GetBytes(payload ?? ""));
-        }
-
-        public T Deserialize<T>(byte[] payload)
-        {
-            return (T) this.DeserializeFromStream(new MemoryStream(payload), typeof (T));
         }
 
         public object DeserializeFromStream(Stream stream, Type type)
