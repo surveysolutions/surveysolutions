@@ -123,11 +123,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                await this.Answering.SendRemoveAnswerCommandAsync(interviewId: Guid.Parse(this.interviewId),
-                userId: this.principal.CurrentUserIdentity.UserId,
-                questionId: this.questionIdentity.Id,
-                rosterVector: this.questionIdentity.RosterVector,
-                removeTime: DateTime.UtcNow);
+                var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId), 
+                    this.principal.CurrentUserIdentity.UserId,
+                    this.questionIdentity.Id,
+                    this.questionIdentity.RosterVector,
+                    DateTime.UtcNow);
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
+
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
