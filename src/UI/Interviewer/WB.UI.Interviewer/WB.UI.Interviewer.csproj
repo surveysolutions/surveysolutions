@@ -315,6 +315,8 @@
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
+    <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />
+    <Compile Include="Implementations\DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
@@ -374,9 +376,6 @@
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="FileStorage\IFileStorageService.cs" />
-    <Compile Include="Implementations\DenormalizerStorage\DenormalizerRow.cs" />
-    <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />
-    <Compile Include="Implementations\DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
     <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStorageAccessor.cs" />
     <Compile Include="Implementations\PlainStorage\SqlitePlainStore.cs" />
@@ -411,16 +410,6 @@
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardQuestionnaireItem.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardSurveyItem.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalItem.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedCategoricalOption.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
-    <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
-    <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
@@ -699,6 +688,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ViewModel\Dashboard\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>

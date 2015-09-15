@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.UI.Interviewer.ViewModel.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -54,16 +55,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.changeLogManipulator = changeLogManipulator;
         }
 
-        public void Init(IStatefulInterview interview, DashboardInterviewCategories interviewCategories)
+        public void Init(DashboardQuestionnaireItem item, DashboardInterviewCategories interviewCategories)
         {
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            //var questionnaire = this.questionnaireRepository.GetById(item.QuestionnaireId);
 
-            InterviewId = interview.Id;
+            InterviewId = item.SurveyKey;
             Status = interviewCategories;
-            QuestionariName = string.Format("{0} (v{1})", questionnaire.Title, interview.QuestionnaireVersion);
-            DateComment = GetInterviewDateCommentByStatus(interview, Status);
-            Comment = GetInterviewCommentByStatus(interview, Status);
-            PrefilledQuestions = this.GetPrefilledQuestions(interview, questionnaire);
+            QuestionariName = string.Format("{0} (v{1})", item.Title, "item.QuestionnaireVersion");
+//            DateComment = GetInterviewDateCommentByStatus(item, Status);
+//            Comment = GetInterviewCommentByStatus(item, Status);
+//            PrefilledQuestions = this.GetPrefilledQuestions(item, questionnaire);
             //IsSupportedRemove = interview.
         }
 

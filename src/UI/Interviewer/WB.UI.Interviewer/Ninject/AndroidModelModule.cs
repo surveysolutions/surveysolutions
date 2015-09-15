@@ -112,7 +112,7 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>().ToConstant(interviewMetaInfoFactory);
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope();
             this.Bind<SqlitePlainStore>().ToConstant(plainStore);
-            this.Bind<IInterviewerDashboardFactory>().To<InterviewerDashboardFactory>();
+            this.Bind<IInterviewerDashboardFactory>().To<InterviewerDashboardFactory2>();
 
             var backupable = new List<IBackupable>()
             {
