@@ -137,6 +137,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
                         (InterviewStatus)questionnaire.Status,
                         questionnaire.GetProperties(), 
                         survey.SurveyTitle, 
+                        survey.QuestionnaireVersion,
                         questionnaire.Comments, 
                         questionnaire.CreatedOnClient,
                         questionnaire.JustInitilized.HasValue && questionnaire.JustInitilized.Value));

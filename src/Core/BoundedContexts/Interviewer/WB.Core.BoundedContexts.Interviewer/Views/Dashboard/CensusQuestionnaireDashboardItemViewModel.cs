@@ -40,9 +40,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Init(SurveyDto surveyDto)
         {
             //var questionnaire = this.questionnaireRepository.GetById(id);
-            questionnaireId = surveyDto.QuestionnaireId.ToGuid();
+            questionnaireId = Guid.Parse(surveyDto.QuestionnaireId);
             questionnaireVersion = surveyDto.QuestionnaireVersion;
-            QuestionariName = surveyDto.SurveyTitle;
+            QuestionariName = string.Format("{0} (v{1})", surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion); 
             Comment = "Census mode, Interviews created: 0 / 1 / 100";
         }
 
