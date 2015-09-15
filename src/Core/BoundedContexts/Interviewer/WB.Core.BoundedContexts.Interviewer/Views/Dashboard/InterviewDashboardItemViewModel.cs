@@ -61,11 +61,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             InterviewId = item.SurveyKey;
             Status = interviewCategories;
-            QuestionariName = string.Format("{0} (v{1})", item.Title, "item.QuestionnaireVersion");
+            QuestionariName = string.Format("{0} (v{1})", item.Title, item.QuestionnaireVersion);
 //            DateComment = GetInterviewDateCommentByStatus(item, Status);
 //            Comment = GetInterviewCommentByStatus(item, Status);
 //            PrefilledQuestions = this.GetPrefilledQuestions(item, questionnaire);
-            //IsSupportedRemove = interview.
+            IsSupportedRemove = item.CanBeDeleted;
         }
 
         private string GetInterviewDateCommentByStatus(IStatefulInterview interview, DashboardInterviewCategories status)
