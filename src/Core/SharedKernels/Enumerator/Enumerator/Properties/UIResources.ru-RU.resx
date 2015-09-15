@@ -488,4 +488,7 @@
   <data name="Login_EndpointWasReached" xml:space="preserve">
     <value>Связь с доменом установлена</value>
   </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Домен синхронизации</value>
+  </data>
 </root>

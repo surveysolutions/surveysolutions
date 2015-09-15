@@ -55,7 +55,7 @@
               android:layout_below="@+id/LoginPage_error_message"
               android:singleLine="true"
               android:inputType="textVisiblePassword|textNoSuggestions"
-              local:MvxBind="Text Endpoint; Hint Localization('ServerAddressHint'); Visible IsFinishInstallationMode; BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
+              local:MvxBind="Text Endpoint; Hint Localization('EndpointHint'); Visible IsFinishInstallationMode; BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
           <EditText
               style="@style/Login_Login_Editor"
               android:layout_below="@+id/LoginPage_endpoint"
@@ -80,7 +80,7 @@
               android:id="@+id/LoginPage_troubleshooting_button"
               android:layout_toRightOf="@+id/LoginPage_singin_button"
               android:layout_below="@+id/LoginPage_password"
-              local:MvxBind="Text Localization('Interviewer_Troubleshooting');" />
+              local:MvxBind="Click NavigateToTroubleshootingPageCommand; Text Localization('Interviewer_Troubleshooting');" />
         </RelativeLayout>
       </LinearLayout>
     </ScrollView>

@@ -44,7 +44,6 @@
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
-    <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ITesterExpressionsEngineVersionService.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
