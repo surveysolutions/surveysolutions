@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
     {
         private bool isInProgress;
         public bool IsInProgress
@@ -144,6 +144,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

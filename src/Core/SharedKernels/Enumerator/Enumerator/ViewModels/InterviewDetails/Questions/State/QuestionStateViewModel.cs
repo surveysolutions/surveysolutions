@@ -10,7 +10,8 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionStateViewModel<TAnswerEvent>: MvxNotifyPropertyChanged,
-        ILiteEventHandler<TAnswerEvent>
+        ILiteEventHandler<TAnswerEvent>,
+        IDisposable
         where TAnswerEvent : QuestionAnswered
     {
         public QuestionHeaderViewModel Header { get; private set; }
@@ -89,6 +90,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.Comments.ShowCommentInEditor();
             }
+        }
+
+        public void Dispose()
+        {
+            this.liteEventRegistry.Unsubscribe(this, interviewId);
+            Header.Dispose();
+            Validity.Dispose();
+            Enablement.Dispose();
         }
     }
 }

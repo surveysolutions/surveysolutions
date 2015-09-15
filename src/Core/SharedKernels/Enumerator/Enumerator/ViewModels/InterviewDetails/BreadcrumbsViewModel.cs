@@ -16,7 +16,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class BreadCrumbsViewModel : MvxNotifyPropertyChanged, 
-        ILiteEventHandler<RosterInstancesTitleChanged>
+        ILiteEventHandler<RosterInstancesTitleChanged>,IDisposable
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -138,6 +138,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get { return this.items; }
             set { this.items = value; this.RaisePropertyChanged(); }
+        }
+
+        public void Dispose()
+        {
+            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
+            this.eventRegistry.Unsubscribe(this, interviewId);
         }
     }
 }

@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<TextQuestionAnswered>,
-        ILiteEventHandler<AnswerRemoved>
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPrincipal principal;
@@ -67,6 +68,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.InitQuestionSettings();
             this.UpdateSelfFromModel();
+        }
+
+        public void Dispose()
+        {
+            this.liteEventRegistry.Unsubscribe(this, interviewId); 
+            this.QuestionState.Dispose();
         }
 
         private string answer;

@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
     {
         public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
@@ -114,6 +114,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.IsInProgress = false;
             }
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

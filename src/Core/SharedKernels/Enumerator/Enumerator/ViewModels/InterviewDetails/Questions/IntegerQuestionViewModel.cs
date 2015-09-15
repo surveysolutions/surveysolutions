@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
     {
         const int RosterUpperBoundDefaultValue = 40;
 
@@ -168,6 +168,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private static string NullableIntToAnswerString(int? answer)
         {
             return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

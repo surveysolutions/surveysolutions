@@ -3,6 +3,7 @@ using System.IO;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.PictureChooser;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -21,7 +22,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswerRemoved>
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -172,6 +174,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string GetPictureFileName()
         {
             return String.Format("{0}{1}.jpg", this.variableName, string.Join("-", this.questionIdentity.RosterVector));
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
         }
     }
 }
