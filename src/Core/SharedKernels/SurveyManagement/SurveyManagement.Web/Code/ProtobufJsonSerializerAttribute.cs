@@ -1,21 +1,16 @@
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web.Http.Filters;
+using System;
+using System.Web.Http.Controllers;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
-    public class ProtobufJsonSerializerAttribute : ActionFilterAttribute
+    public class ProtobufJsonSerializerAttribute : Attribute, IControllerConfiguration
     {
-        private static readonly ProtobufJsonFormatter protobufJsonFormatter = new ProtobufJsonFormatter();
-        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
         {
-            ObjectContent content = actionExecutedContext.Response.Content as ObjectContent;
-            if (content == null) return;
+            //controllerSettings.ParameterBindingRules.Insert(0,
+            //    parameterDescriptor => new FromUriOrBodyParameterBinding(parameterDescriptor));
 
-            if (content.Formatter is JsonMediaTypeFormatter)
-            {
-                actionExecutedContext.Response.Content = new ObjectContent(content.ObjectType, content.Value, protobufJsonFormatter);
-            }
+            controllerSettings.Formatters.Insert(0, new ProtobufJsonFormatter());
         }
     }
 }
