@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override void NavigateToPreviousViewModel()
         {
-            this.navigationState.NavigateBackAsync(this.NavigateBack).WaitAndUnwrapException();
+            this.NavigateBack();
         }
 
         void NavigateBack()
