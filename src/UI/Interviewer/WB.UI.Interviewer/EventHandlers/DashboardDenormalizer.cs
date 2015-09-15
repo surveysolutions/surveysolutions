@@ -83,8 +83,9 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.Status, 
                 evnt.Payload.Comments,
                 evnt.Payload.FeaturedQuestionsMeta, 
-                evnt.Payload.CreatedOnClient, 
-                false);
+                evnt.Payload.CreatedOnClient,
+                false,
+                evnt.EventTimeStamp);
         }
 
 
@@ -98,7 +99,8 @@ namespace WB.UI.Interviewer.EventHandlers
                 null,
                 new AnsweredQuestionSynchronizationDto[0], 
                 true, 
-                true);
+                true,
+                evnt.EventTimeStamp);
         }
 
 
@@ -110,7 +112,8 @@ namespace WB.UI.Interviewer.EventHandlers
             string comments, 
             IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions,
             bool createdOnClient, 
-            bool canBeDeleted)
+            bool canBeDeleted,
+            DateTime createdDateTime)
         {
             var questionnaireTemplate = this.questionnaireStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
             if (questionnaireTemplate == null)
@@ -122,10 +125,10 @@ namespace WB.UI.Interviewer.EventHandlers
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
                 items.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
             }
-            
-            this.questionnaireDtoDocumentStorage.Store(
-                new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                                     items, questionnaireTemplate.Version, comments, createdOnClient, canBeDeleted), interviewId);
+
+            var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
+                items, questionnaireTemplate.Version, comments, createdDateTime, createdOnClient, canBeDeleted);
+            this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
         }
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
@@ -180,8 +183,9 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.InterviewData.Status,
                 evnt.Payload.InterviewData.Comments, 
                 evnt.Payload.InterviewData.Answers, 
-                evnt.Payload.InterviewData.CreatedOnClient, 
-                canBeDeleted: false);
+                evnt.Payload.InterviewData.CreatedOnClient,
+                canBeDeleted: false,
+                createdDateTime: evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -237,6 +241,10 @@ namespace WB.UI.Interviewer.EventHandlers
             QuestionnaireDTO questionnaire = this.questionnaireDtoDocumentStorage.GetById(evnt.EventSourceId);
             if (questionnaire == null)
                 return;
+
+            if (evnt.Payload.Status == InterviewStatus.Completed)
+                questionnaire.ComplitedDateTime = evnt.EventTimeStamp;
+
             questionnaire.Status = (int)evnt.Payload.Status;
             questionnaire.Comments = evnt.Payload.Comment;
 
@@ -258,7 +266,7 @@ namespace WB.UI.Interviewer.EventHandlers
             //do nothing
         }
 
-        private void AnswerQuestion(Guid interviewId, Guid questionId, object answer)
+        private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
             QuestionnaireDTO questionnaire = this.questionnaireDtoDocumentStorage.GetById(interviewId);
 
@@ -268,11 +276,19 @@ namespace WB.UI.Interviewer.EventHandlers
 
             var preFilledQuestion = featuredItems.FirstOrDefault(question => question.PublicKey == questionId);
 
-            if (preFilledQuestion == null) return;
-
-            preFilledQuestion.Value = this.getAnswer(preFilledQuestion, answer);
-
-            questionnaire.SetProperties(featuredItems);
+            if (preFilledQuestion != null)
+            {
+                preFilledQuestion.Value = this.getAnswer(preFilledQuestion, answer);
+                questionnaire.SetProperties(featuredItems);
+            }
+            else if (!questionnaire.StartedDateTime.HasValue)
+            {
+                questionnaire.StartedDateTime = answerTimeUtc;
+            }
+            else
+            {
+                return;
+            }
 
             this.questionnaireDtoDocumentStorage.Store(questionnaire, interviewId);
         }
@@ -297,53 +313,53 @@ namespace WB.UI.Interviewer.EventHandlers
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
         }
 
         
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValue);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValue, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
                 new GeoPosition(latitude: evnt.Payload.Latitude, longitude: evnt.Payload.Longitude,
-                    accuracy: evnt.Payload.Accuracy, altitude:evnt.Payload.Altitude, 
-                    timestamp: evnt.Payload.Timestamp));
+                    accuracy: evnt.Payload.Accuracy, altitude:evnt.Payload.Altitude,
+                    timestamp: evnt.Payload.Timestamp), evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
         {
             foreach (var question in evnt.Payload.Questions)
             {
-                this.AnswerQuestion(evnt.EventSourceId, question.Id, string.Empty);
+                this.AnswerQuestion(evnt.EventSourceId, question.Id, string.Empty, evnt.EventTimeStamp);
             }
         }
 

@@ -67,7 +67,7 @@ namespace WB.UI.Interviewer.ViewModel
         private void NavigateBack()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            if (this.PrefilledQuestions.Any() && interview.CreatedOnClient)
+            if (this.PrefilledQuestions != null && this.PrefilledQuestions.Any() && interview.CreatedOnClient)
             {
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
             }

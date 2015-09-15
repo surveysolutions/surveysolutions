@@ -16,7 +16,8 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         }
 
         public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties,
-            long surveyVersion, string comments, bool? createdOnClient = false, bool justInitilized = false)
+            long surveyVersion, string comments, DateTime createdDateTime,
+            bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
             this.Status = (int)status;
@@ -26,6 +27,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.JustInitilized = justInitilized;
             this.SurveyVersion = surveyVersion;
             this.Comments = comments;
+            this.CreatedDateTime = createdDateTime;
 
             this.SetProperties(properties);
         }
@@ -44,6 +46,10 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public bool? JustInitilized { get; set; }
         public bool? CreatedOnClient { get; set; }
         public long SurveyVersion { get; set; }
+
+        public DateTime? StartedDateTime { get; set; }
+        public DateTime? ComplitedDateTime { get; set; }
+        public DateTime? CreatedDateTime { get; set; }
 
         public IEnumerable<FeaturedItem> GetProperties()
         {
