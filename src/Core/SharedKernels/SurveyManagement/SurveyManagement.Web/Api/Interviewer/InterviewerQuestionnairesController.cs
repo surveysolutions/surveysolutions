@@ -10,11 +10,15 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
@@ -28,19 +32,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IJsonUtils jsonUtils;
+        private readonly ISyncLogger syncLogger;
+        private readonly IGlobalInfoProvider globalInfoProvider;
+        private readonly IUserWebViewFactory userInfoViewFactory;
 
         public InterviewerQuestionnairesController(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IJsonUtils jsonUtils)
+            IJsonUtils jsonUtils,
+            ISyncLogger syncLogger,
+            IGlobalInfoProvider globalInfoProvider,
+            IUserWebViewFactory userInfoViewFactory)
         {
             this.questionnaireStore = questionnaireStore;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.jsonUtils = jsonUtils;
+            this.syncLogger = syncLogger;
+            this.globalInfoProvider = globalInfoProvider;
+            this.userInfoViewFactory = userInfoViewFactory;
         }
 
         [HttpGet]
@@ -83,6 +96,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
             return response;
+        }
+
+        [HttpPost]
+        [Route("{id:guid}/{version:int}/logstate")]
+        public void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
+        {
+            this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
+                this.globalInfoProvider.GetCurrentUser().Id, SyncItemType.Questionnaire,
+                new QuestionnaireIdentity(id, version).ToString());
+        }
+
+        [HttpPost]
+        [Route("{id:guid}/{version:int}/assembly/logstate")]
+        public void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
+        {
+            this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
+                this.globalInfoProvider.GetCurrentUser().Id, SyncItemType.QuestionnaireAssembly,
+                new QuestionnaireIdentity(id, version).ToString());
+        }
+
+        private Guid GetInterviewerDeviceId()
+        {
+            return this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId.ToGuid();
         }
     }
 }

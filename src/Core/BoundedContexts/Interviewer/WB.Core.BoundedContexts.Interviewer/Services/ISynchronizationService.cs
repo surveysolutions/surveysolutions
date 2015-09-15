@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
+        Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire, CancellationToken token);
+        Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire, CancellationToken token);
 
         Task<byte[]> GetApplicationAsync(CancellationToken token);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
