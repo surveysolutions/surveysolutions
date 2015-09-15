@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IsLoginValid = true;
             IsEndpointValid = true;
             IsPasswordValid = true;
-            
+
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
 
             if (currentInterviewer == null)
@@ -192,18 +192,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 try
                 {
                     interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(login: userName, password: hashedPassword, token: default(CancellationToken));
-
-                    await this.interviewersPlainStorage.StoreAsync(
-                        new InterviewerIdentity
-                        {
-                            Id = interviewer.Id.FormatGuid(),
-                            UserId = interviewer.Id,
-                            SupervisorId = interviewer.SupervisorId,
-                            Name = userName,
-                            Password = hashedPassword
-                        });
-
-                    this.LoginUserOffline(userName, hashedPassword);
                 }
                 catch (Exception exception)
                 {
@@ -254,8 +242,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         return;
                     }
                 }
+
+                await this.interviewersPlainStorage.StoreAsync(
+                        new InterviewerIdentity
+                        {
+                            Id = interviewer.Id.FormatGuid(),
+                            UserId = interviewer.Id,
+                            SupervisorId = interviewer.SupervisorId,
+                            Name = userName,
+                            Password = hashedPassword
+                        });
             }
-          
+
             this.LoginUserOfflineAndGoToDashboard(userName, hashedPassword);
 
             IsInProgress = false;
