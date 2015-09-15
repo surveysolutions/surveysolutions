@@ -8038,6 +8038,7 @@ li.chapter-panel-item.current {
 li.chapter-panel-item.current .holder .inner a.chapter-panel-item-body {
   border-bottom: none;
   padding-top: 16px;
+  outline: none;
 }
 li.chapter-panel-item.current > .holder > .inner {
   background-color: #ffffff;
@@ -8060,6 +8061,7 @@ li.chapter-panel-item:hover {
 li.chapter-panel-item:hover .holder .inner a.chapter-panel-item-body {
   border-bottom: none;
   padding-top: 16px;
+  outline: none;
 }
 li.chapter-panel-item:hover > .holder > .inner {
   background-color: #dbdfe2;
@@ -8340,6 +8342,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .item.group > .item-body {
   text-transform: uppercase;
   font-weight: bold;
+  outline: none;
 }
 .item.roster .item-text {
   color: #2075bf;
