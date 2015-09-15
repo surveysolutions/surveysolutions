@@ -518,4 +518,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Login_EndpointWasReached" xml:space="preserve">
     <value>Endpoint was reached</value>
   </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Synchronization endpoint</value>
+  </data>
 </root>

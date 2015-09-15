@@ -32,6 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
 
+            this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
+
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.Valid, command.CreatedOnClient))

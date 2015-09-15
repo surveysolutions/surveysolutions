@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
@@ -63,7 +64,6 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IStringCompressor>().To<JsonCompressor>();
 
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
-            this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
 

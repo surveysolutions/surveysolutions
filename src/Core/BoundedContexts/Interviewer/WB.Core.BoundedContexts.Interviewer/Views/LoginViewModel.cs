@@ -2,11 +2,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Cirrious.MvvmCross.Plugins.Network.Droid;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using Cirrious.MvvmCross.ViewModels;
-using Ncqrs.Domain.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -31,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ISynchronizationService synchronizationService;
         private readonly IMvxReachability reachability;
         private readonly ILogger logger;
+        private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -39,7 +37,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IInterviewerSettings interviewerSettings,
             ISynchronizationService synchronizationService,
-            IMvxReachability reachability, ILogger logger)
+            IMvxReachability reachability, 
+            ILogger logger, 
+            IFriendlyErrorMessageService friendlyErrorMessageService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationService = synchronizationService;
             this.reachability = reachability;
             this.logger = logger;
+            this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         public string Endpoint
@@ -161,7 +162,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.loginCommand ?? (this.loginCommand = new MvxCommand(async () => await this.LoginAsync(), () => !IsInProgress)); }
         }
 
-        public IMvxCommand NavigateToSettingsCommand
+        public IMvxCommand NavigateToTroubleshootingPageCommand
         {
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<SettingsViewModel>()); }
         }
@@ -193,11 +194,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(login: userName, password: hashedPassword, token: default(CancellationToken));
                 }
-                catch (Exception exception)
+                catch (RestException exception)
                 {
+                    ErrorMessage = friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(exception);
                     IsLoginValid = false;
                     IsPasswordValid = false;
-                    ErrorMessage = exception.Message;
                     this.IsInProgress = false;
                     logger.Error(string.Format("Error occured while authorizing user {0} online.", userName), exception);
                     return;
@@ -210,7 +211,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
                 catch (RestException exception)
                 {
-                    ErrorMessage = "Error. " + exception.Message;
+                    ErrorMessage = friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(exception);
                     this.IsInProgress = false;
                     logger.Error(string.Format("Error occured while checking user {0} device linking status.", userName), exception);
                     return;
@@ -229,7 +230,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     }
                     catch (RestException exception)
                     {
-                        ErrorMessage = "Error. " + exception.Message;
+                        ErrorMessage = friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(exception);
                         this.IsInProgress = false;
                         logger.Error(string.Format("Error occured while checking user {0} device.", userName), exception);
                         return;
