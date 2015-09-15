@@ -1,4 +1,5 @@
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
@@ -33,7 +34,8 @@ namespace WB.UI.Interviewer.Activities
             switch (item.ItemId)
             {
                 case Resource.Id.menu_settings:
-                    this.ViewModel.NavigateToSettingsCommand.Execute();
+                    Intent intent = new Intent(this, typeof(PrefsActivity));
+                    this.StartActivity(intent);
                     break;
             }
             return base.OnOptionsItemSelected(item);

@@ -1,14 +1,14 @@
 ﻿using System.Net;
-using WB.Core.BoundedContexts.Tester.Services;
+
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
-namespace WB.UI.Tester.Infrastructure.Internals
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    internal class FriendlyErrorMessageService : IFriendlyErrorMessageService
+    public class FriendlyErrorMessageService : IFriendlyErrorMessageService
     {
         readonly ILogger logger;
 

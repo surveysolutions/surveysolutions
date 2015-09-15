@@ -289,6 +289,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization endpoint.
+        /// </summary>
+        public static string EndpointHint {
+            get {
+                return ResourceManager.GetString("EndpointHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web Service Endpoint:.
         /// </summary>
         public static string EndpointText {
