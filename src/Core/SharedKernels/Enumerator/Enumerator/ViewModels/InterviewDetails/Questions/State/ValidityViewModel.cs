@@ -14,7 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<AnswersDeclaredValid>,
-        ILiteEventHandler<AnswersDeclaredInvalid>
+        ILiteEventHandler<AnswersDeclaredInvalid>,
+        IDisposable
     {
         public class ErrorMessage
         {
@@ -42,6 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+        }
+
+        public void Dispose()
+        {
+            this.liteEventRegistry.Unsubscribe(this, interviewId);
         }
 
         private string interviewId;

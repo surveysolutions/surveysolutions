@@ -61,7 +61,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void NavigateToPreviousViewModel()
         {
-            this.navigationState.NavigateBackAsync(this.NavigateBack).WaitAndUnwrapException();
+            this.NavigateBack();
         }
 
         private void NavigateBack()

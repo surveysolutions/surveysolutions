@@ -26,7 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>
+        ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IDisposable
     {
         private readonly AnswerNotifier answerNotifier;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -89,6 +90,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answerNotifier.QuestionAnswered += this.LinkedToQuestionAnswered;
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.GenerateOptions(interview, questionnaire));
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.answerNotifier.QuestionAnswered -= this.LinkedToQuestionAnswered;
+            this.QuestionState.Dispose();
         }
 
         private void LinkedToQuestionAnswered(object sender, EventArgs e)

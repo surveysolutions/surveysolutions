@@ -52,7 +52,7 @@
 
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
                local:MvxBind="Text Localization('Dashboard_EmptySearchResult'); Visible IsSearchVisible"/>
-
+    
     <TextView  style="@style/Dashboard_EmptyQuestionnaireListText"
                local:MvxBind="Text Localization('Dashboard_EmptyQuestionnairesList'); Visible If(IsSearchVisible, false, true)"/>
   </MvxLinearLayout>

@@ -31,8 +31,16 @@ HLP.kill(Function.prototype, [
     'bind'
 ]);
 
+HLP.kill(Array, [
+    'isArray'
+]);
+
 HLP.kill(String.prototype, [
     "trim"
+]);
+
+HLP.kill(Object, [
+    'keys'
 ]);
 
 HLP.kill(Number.prototype, [
@@ -48,23 +56,9 @@ HLP.kill(Date.prototype, [
 ]);
 
 HLP.kill(Array.prototype, [
-    'some', 'every',
+    'forEach', 'some', 'every',
     'indexOf', 'lastIndexOf',
+    'map', 'filter',
     'reduce', 'reduceRight'
 ]);
 
-/* Kill a few more functions, unless we're running under node */
-/* (these are used internally by 'require' in node) */
-if (typeof process === 'undefined') {
-    HLP.kill(Array, [
-        'isArray'
-    ]);
-
-    HLP.kill(Object, [
-        'keys'
-    ]);
-
-    HLP.kill(Array.prototype, [
-        'forEach', 'map', 'filter',
-    ]);
-}

@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>
+        ILiteEventHandler<QuestionsDisabled>, 
+        IDisposable
     {
         private string name;
         public string Name
@@ -117,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var completeScreenItems = this.interviewViewModelFactory
                 .GetCompleteScreenEntities(this.navigationState.InterviewId);
 
-            completeScreenItems.ForEach(x => this.Items.Add(x)); ;
+            completeScreenItems.ForEach(x => this.Items.Add(x)); 
             this.Name = UIResources.Interview_Complete_Screen_Title;
         }
 
@@ -249,6 +250,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 if (interviewEntity != null)
                     this.Items[this.Items.IndexOf(interviewEntity)] = interviewEntity;
+            }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
+            var disposableItems = this.Items.OfType<IDisposable>().ToArray();
+
+            foreach (var disposableItem in disposableItems)
+            {
+                disposableItem.Dispose();
             }
         }
     }

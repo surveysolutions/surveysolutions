@@ -20,7 +20,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<QRBarcodeQuestionAnswered>,
         ILiteEventHandler<SingleOptionLinkedQuestionAnswered>,
         ILiteEventHandler<SingleOptionQuestionAnswered>,
-        ILiteEventHandler<TextListQuestionAnswered>
+        ILiteEventHandler<TextListQuestionAnswered>,
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly ILiteEventRegistry registry;
         private Guid? questionId;
@@ -65,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.registry.Subscribe(this, interviewId);
         }
 
-        private void RaiseEventIfNeeded(QuestionAnswered @event)
+        private void RaiseEventIfNeeded(QuestionActiveEvent @event)
         {
             var shouldNotifyAboutSingleAnswer = this.questionId.HasValue && @event.QuestionId == this.questionId;
             var shouldNotifyAboutListOfAnswers = this.questions.Length > 0 && 
@@ -143,6 +145,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var handler = this.QuestionAnswered;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            this.RaiseEventIfNeeded(@event);
+        }
+
+        public void Dispose()
+        {
+            this.registry.Unsubscribe(this, interviewId);
         }
     }
 }

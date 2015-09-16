@@ -246,6 +246,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             );
         }
 
+        internal new void Apply(AnswerRemoved @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
+            if (this.Answers.ContainsKey(questionId))
+                this.Answers[questionId].RemoveAnswer();
+        }
+
         public new void Apply(AnswersDeclaredValid @event)
         {
             base.Apply(@event);
