@@ -6,7 +6,5 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
     public interface IStatefulInterviewRepository
     {
         IStatefulInterview Get(string interviewId);
-
-        IEnumerable<IStatefulInterview> GetAll();
     }
 }
