@@ -452,7 +452,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                        OwnerName = x.OwnerName,
                        Title = title
                    };
-                   };
         }
 
         public override void NavigateToPreviousViewModel()
