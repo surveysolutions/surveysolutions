@@ -1,19 +1,16 @@
-using System;
-using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -46,16 +43,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
+            liteEventRegistry.SubscribeOnAllAggregateRoots(this);
+
             await this.RefreshDashboardAsync();
         }
 
         private async Task RefreshDashboardAsync()
         {
-            this.CurrentDashboardCategory = DashboardInterviewCategories.New;
-
             this.DashboardInformation = await this.dashboardFactory.GetDashboardItems(
                 this.principal.CurrentUserIdentity.UserId,
-                this.currentDashboardCategory);
+                this.currentDashboardStatus);
+
+            if ((CurrentDashboardStatus == DashboardInterviewStatus.Complited && this.CompletedInterviewsCount == 0)
+                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0))
+            {
+                this.CurrentDashboardStatus = DashboardInterviewStatus.New;
+            }
+
 
             this.RefreshTab();
 
@@ -64,18 +68,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshTab()
         {
-            switch (CurrentDashboardCategory)
+            switch (this.CurrentDashboardStatus)
             {
-                 case DashboardInterviewCategories.New:
+                 case DashboardInterviewStatus.New:
                     this.DashboardItems = dashboardInformation.CensusQuestionniories.Union(dashboardInformation.NewInterviews);
                     break;
-                 case DashboardInterviewCategories.InProgress:
+                 case DashboardInterviewStatus.InProgress:
                     this.DashboardItems = dashboardInformation.StartedInterviews;
                     break;
-                 case DashboardInterviewCategories.Complited:
+                 case DashboardInterviewStatus.Complited:
                     this.DashboardItems = dashboardInformation.CompletedInterviews;
                     break;
-                 case DashboardInterviewCategories.Rejected:
+                 case DashboardInterviewStatus.Rejected:
                     this.DashboardItems = dashboardInformation.RejectedInterviews;
                     break;
             }
@@ -93,11 +97,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private DashboardInformation dashboardInformation = new DashboardInformation();
-        private DashboardInterviewCategories currentDashboardCategory;
-        public bool IsNewInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.New; } }
-        public bool IsStartedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.InProgress; } }
-        public bool IsCompletedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.Complited; } }
-        public bool IsRejectedInterviewsCategorySelected { get { return CurrentDashboardCategory == DashboardInterviewCategories.Rejected; } }
+        private DashboardInterviewStatus currentDashboardStatus;
+        public bool IsNewInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.New; } }
+        public bool IsStartedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.InProgress; } }
+        public bool IsCompletedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Complited; } }
+        public bool IsRejectedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Rejected; } }
 
         private bool isLoaded;
         public bool IsLoaded
@@ -106,12 +110,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set { this.isLoaded = value; this.RaisePropertyChanged(); }
         }
 
-        public DashboardInterviewCategories CurrentDashboardCategory
+        public DashboardInterviewStatus CurrentDashboardStatus
         {
-            get { return this.currentDashboardCategory; }
+            get { return this.currentDashboardStatus; }
             set 
             {
-                this.currentDashboardCategory = value; 
+                this.currentDashboardStatus = value; 
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(() => IsNewInterviewsCategorySelected);
                 this.RaisePropertyChanged(() => IsStartedInterviewsCategorySelected);
@@ -188,30 +192,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand ShowNewItemsInterviewsCommand
         {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.New)); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.New)); }
         }
 
         public IMvxCommand ShowStartedInterviewsCommand
         {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.InProgress)); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.InProgress)); }
         }
 
         public IMvxCommand ShowCompletedInterviewsCommand
         {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.Complited)); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.Complited)); }
         }
 
         public IMvxCommand ShowRejectedInterviewsCommand
         {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewCategories.Rejected)); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.Rejected)); }
         }
 
-        private void ShowInterviewsCommand(DashboardInterviewCategories category)
+        private void ShowInterviewsCommand(DashboardInterviewStatus status)
         {
-            if (category == this.CurrentDashboardCategory)
+            if (status == this.CurrentDashboardStatus)
                 return;
 
-            this.CurrentDashboardCategory = category;
+            this.CurrentDashboardStatus = status;
             this.RefreshTab();
         }
 
@@ -231,9 +235,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             
         }
 
-        public void Handle(DeleteInterviewCommand @event)
+        public async void Handle(DeleteInterviewCommand @event)
         {
-            throw new NotImplementedException();
+            await this.RefreshDashboardAsync();
         }
     }
 }

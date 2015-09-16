@@ -7,7 +7,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
     public class DashboardQuestionnaireItem
     {
-        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, DashboardInterviewCategories status, IEnumerable<FeaturedItem> properties,
+        public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, DashboardInterviewStatus status, IEnumerable<FeaturedItem> properties,
             string title, long questionnaireVersion, string comments, DateTime? startedDateTime,
             DateTime? complitedDateTime, DateTime? createdDateTime, bool? createdOnClient = false, 
             bool canBeDeleted = false)
@@ -40,7 +40,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 
         public bool CanBeDeleted { get; set; }
 
-        public DashboardInterviewCategories Status { get; private set; }
+        public DashboardInterviewStatus Status { get; private set; }
 
         public string Comments { get; private set; }
 
