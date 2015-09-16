@@ -24,6 +24,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
+        public void SubscribeOnAllAggregateRoots(ILiteEventHandler handler)
+        {
+            Subscribe(handler, null);
+        }
+
         public void Unsubscribe(ILiteEventHandler handler, string eventSourceId)
         {
             var eventTypes = GetHandledEventTypes(handler);
@@ -37,20 +42,35 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
         public IEnumerable<Action<object>> GetHandlers(UncommittedEvent @event)
         {
             Type eventType = @event.Payload.GetType();
-            string eventKey = GetEventKey(eventType, @event.EventSourceId.FormatGuid());
+            string eventKey = GetEventKey(eventType);
 
             lock (LockObject)
             {
-                List<WeakReference<ILiteEventHandler>> handlersForEventType;
-                if (!handlers.TryGetValue(eventKey, out handlersForEventType))
-                {
+                var existedHandlersForEventType = this.GetAllHandlersForEvent(eventKey);
+
+                if (existedHandlersForEventType.Count == 0)
                     return Enumerable.Empty<Action<object>>();
-                }
 
-                var actualHandlers = GetExistingHandlers(eventKey, handlersForEventType);
-
-                return actualHandlers.Select(GetActionHandler);
+                return existedHandlersForEventType.Select(GetActionHandler);
             }
+        }
+
+        private List<ILiteEventHandler> GetAllHandlersForEvent(string eventKey)
+        {
+            List<ILiteEventHandler> allHandlersForEventType = new List<ILiteEventHandler>();
+            var allHandlersKeys = handlers.Keys.Where(k => k.StartsWith(eventKey)).ToList();
+
+            foreach (var handlersKey in allHandlersKeys)
+            {
+                List<WeakReference<ILiteEventHandler>> handlersForEventType;
+                if (handlers.TryGetValue(handlersKey, out handlersForEventType))
+                {
+                    var actualHandlers = GetExistingHandlers(handlersKey, handlersForEventType);
+                    allHandlersForEventType.AddRange(actualHandlers);
+                }
+            }
+
+            return allHandlersForEventType;
         }
 
         private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, string eventSourceId)
@@ -67,7 +87,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        static string GetEventKey(Type eventType, string eventSourceId)
+        static string GetEventKey(Type eventType, string eventSourceId = null)
         {
             return eventType.Name + "$" + eventSourceId;
         }

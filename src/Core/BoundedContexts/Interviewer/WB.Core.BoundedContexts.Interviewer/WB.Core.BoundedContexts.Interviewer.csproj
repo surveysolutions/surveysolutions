@@ -122,7 +122,6 @@
     <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
     <Compile Include="Implementation\DenormalizerStorage\DenormalizerRow.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
-    <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
@@ -155,13 +154,13 @@
     <Compile Include="Views\Dashboard\Old\FeaturedCategoricalItem.cs" />
     <Compile Include="Views\Dashboard\Old\FeaturedCategoricalOption.cs" />
     <Compile Include="Views\Dashboard\Old\FeaturedItem.cs" />
-    <Compile Include="Implementation\Services\InterviewerDashboardFactory2.cs" />
+    <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Views\Dashboard\Old\QuestionnaireDTO.cs" />
     <Compile Include="Views\Dashboard\Old\SurveyDTO.cs" />
     <Compile Include="Views\QuestionnireInfo.cs" />
     <Compile Include="Views\Dashboard\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
-    <Compile Include="Views\Dashboard\DashboardInterviewCategories.cs" />
+    <Compile Include="Views\Dashboard\DashboardInterviewStatus.cs" />
     <Compile Include="Views\Dashboard\IDashboardItem.cs" />
     <Compile Include="Views\Dashboard\InterviewDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
