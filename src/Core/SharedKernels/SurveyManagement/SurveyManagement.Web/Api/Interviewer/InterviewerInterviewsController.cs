@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly ISyncManager syncManager;
+        private readonly ISyncLogger syncLogger;
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IUserWebViewFactory userInfoViewFactory;
         private readonly IInterviewerInterviewsFactory interviewerInterviewsFactory;
@@ -33,13 +35,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             ISyncManager syncManager,
             IGlobalInfoProvider globalInfoProvider,
             IUserWebViewFactory userInfoViewFactory,
-            IInterviewerInterviewsFactory interviewerInterviewsFactory)
+            IInterviewerInterviewsFactory interviewerInterviewsFactory, 
+            ISyncLogger syncLogger)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.syncManager = syncManager;
             this.globalInfoProvider = globalInfoProvider;
             this.userInfoViewFactory = userInfoViewFactory;
             this.interviewerInterviewsFactory = interviewerInterviewsFactory;
+            this.syncLogger = syncLogger;
         }
 
         [HttpGet]
@@ -58,14 +62,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [Route("packages/{lastPackageId?}")]
         public InterviewPackagesApiView GetPackages(string lastPackageId = null)
         {
+            var deviceId = this.GetInterviewerDeviceId();
+            var userId = this.globalInfoProvider.GetCurrentUser().Id;
             var interviewPackages = this.syncManager.GetInterviewPackageIdsWithOrder(
-                userId: this.globalInfoProvider.GetCurrentUser().Id,
-                deviceId: this.GetInterviewerDeviceId(),
+                userId: userId,
+                deviceId: deviceId,
                 lastSyncedPackageId: lastPackageId).SyncPackagesMeta.ToList();
 
             var interviewsByPackages =
                 this.interviewerInterviewsFactory.GetInterviewsByIds(
                     interviewPackages.Where(package=>package.ItemType == SyncItemType.Interview).Select(package => package.InterviewId).Distinct().ToArray());
+
+            this.syncLogger.TraceHandshake(deviceId, userId, "v1");
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.Interview, interviewPackages.Select(x => x.Id).ToArray());
 
             return new InterviewPackagesApiView()
             {
@@ -80,9 +89,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [Route("package/{id}")]
-        public InterviewSyncPackageDto GetPackage(string id)
+        [Route("package/{id}/{previousSuccessfullyHandledPackageId?}")]
+        public InterviewSyncPackageDto GetPackage(string id, string previousSuccessfullyHandledPackageId = null)
         {
+            if (!string.IsNullOrEmpty(previousSuccessfullyHandledPackageId))
+                this.syncManager.MarkPackageAsSuccessfullyHandled(previousSuccessfullyHandledPackageId, this.GetInterviewerDeviceId(), this.globalInfoProvider.GetCurrentUser().Id);
+
             return this.syncManager.ReceiveInterviewSyncPackage(
                 userId: this.globalInfoProvider.GetCurrentUser().Id,
                 deviceId: this.GetInterviewerDeviceId(), 

@@ -60,7 +60,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
             });
         }
 
-        public void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string lastSyncedPackageId,
+        public void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType,
             string[] updateFromLastPakage)
         {
             this.UpdateState(deviceId, currentState =>

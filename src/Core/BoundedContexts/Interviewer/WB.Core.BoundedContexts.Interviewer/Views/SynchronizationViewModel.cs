@@ -244,8 +244,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task DownloadInterviewPackagesAsync(InterviewPackagesApiView interviewPackages)
         {
-            var lastKnownPackageId = this.syncPackageIdsStorage.GetLastStoredPackageId();
-            
+            var previousSuccessfullyHandledPackageId = this.syncPackageIdsStorage.GetLastStoredPackageId();
+
             var listOfProcessedInterviews = new List<Guid>();
             foreach (var interviewPackage in interviewPackages.Packages)
             {
@@ -254,23 +254,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         listOfProcessedInterviews.Count, interviewPackages.Interviews.Count,
                         InterviewerUIResources.Synchronization_Interviews));
 
-                var interviewInfo = interviewPackages.Interviews.Find(interview => interview.Id == interviewPackage.InterviewId);
+                var interviewInfo =
+                    interviewPackages.Interviews.Find(interview => interview.Id == interviewPackage.InterviewId);
                 if (interviewInfo != null)
                 {
                     await this.DownloadQuestionnaireAsync(interviewInfo.QuestionnaireIdentity);
-                };
+                }
 
                 var package = await this.synchronizationService.GetInterviewPackageAsync(
                     packageId: interviewPackage.Id,
+                    previousSuccessfullyHandledPackageId: previousSuccessfullyHandledPackageId,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 
-                lastKnownPackageId = interviewPackage.Id;
+                previousSuccessfullyHandledPackageId = interviewPackage.Id;
 
                 await this.SaveInterviewAsync(package, interviewPackage);
-                await this.synchronizationService.LogPackageAsSuccessfullyHandledAsync(lastKnownPackageId, this.Token);
 
-                if (!listOfProcessedInterviews.Contains(interviewPackage.InterviewId)) listOfProcessedInterviews.Add(interviewPackage.InterviewId);
+                if (!listOfProcessedInterviews.Contains(interviewPackage.InterviewId))
+                    listOfProcessedInterviews.Add(interviewPackage.InterviewId);
 
                 if (interviewInfo != null)
                 {
@@ -280,6 +282,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         this.Statistics.NewInterviewsCount++;
                 }
             }
+            await
+                this.synchronizationService.LogPackageAsSuccessfullyHandledAsync(previousSuccessfullyHandledPackageId,
+                    this.Token);
         }
 
         private async Task UploadCompletedInterviewsAsync(IList<ChangeLogRecordWithContent> dataByChuncks)

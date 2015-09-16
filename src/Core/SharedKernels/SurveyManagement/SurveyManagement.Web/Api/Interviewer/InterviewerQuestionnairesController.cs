@@ -66,14 +66,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 PageSize = int.MaxValue
             };
 
-            return this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
+            var questionnaireToSend= this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
                 .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version)).ToList();
+
+            return questionnaireToSend;
         }
 
         [HttpGet]
         [Route("{id:guid}/{version:int}")]
         public QuestionnaireApiView Get(Guid id, int version)
         {
+            this.TrackQuestionnairePackageRequest(id, version, SyncItemType.Questionnaire);
+
             return new QuestionnaireApiView()
             {
                 QuestionnaireDocument = this.jsonUtils.Serialize(this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version).Questionnaire),
@@ -85,6 +89,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [Route("{id:guid}/{version:int}/assembly")]
         public HttpResponseMessage GetAssembly(Guid id, int version)
         {
+            this.TrackQuestionnairePackageRequest(id, version, SyncItemType.QuestionnaireAssembly);
+
             if (!this.questionnareAssemblyFileAccessor.IsQuestionnaireAssemblyExists(id, version))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
@@ -98,27 +104,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             return response;
         }
 
+        private void TrackQuestionnairePackageRequest(Guid id, int version, string packageType)
+        {
+            var deviceId = this.GetInterviewerDeviceId();
+            var userId = this.globalInfoProvider.GetCurrentUser().Id;
+            var packageId = GetQuestionnaireDocumentPackageId(id, version, packageType);
+
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType,
+                new[] {packageId});
+
+            this.syncLogger.TrackPackageRequest(deviceId, userId, packageType, packageId);
+        }
+
         [HttpPost]
         [Route("{id:guid}/{version:int}/logstate")]
         public void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
         {
-            this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
-                this.globalInfoProvider.GetCurrentUser().Id, SyncItemType.Questionnaire,
-                new QuestionnaireIdentity(id, version).ToString());
+            this.syncLogger.MarkPackageAsSuccessfullyHandled(this.GetInterviewerDeviceId(),
+                this.globalInfoProvider.GetCurrentUser().Id, GetQuestionnaireDocumentPackageId(id, version, SyncItemType.Questionnaire));
         }
 
         [HttpPost]
         [Route("{id:guid}/{version:int}/assembly/logstate")]
         public void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
         {
-            this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
-                this.globalInfoProvider.GetCurrentUser().Id, SyncItemType.QuestionnaireAssembly,
-                new QuestionnaireIdentity(id, version).ToString());
+            this.syncLogger.MarkPackageAsSuccessfullyHandled(this.GetInterviewerDeviceId(),
+                this.globalInfoProvider.GetCurrentUser().Id, GetQuestionnaireDocumentPackageId(id, version, SyncItemType.QuestionnaireAssembly));
         }
 
         private Guid GetInterviewerDeviceId()
         {
             return this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId.ToGuid();
+        }
+
+        private string GetQuestionnaireDocumentPackageId(Guid id, int version, string packageType)
+        {
+            return string.Format("{0}${1}${2}", id.FormatGuid(), version, packageType);
         }
     }
 }

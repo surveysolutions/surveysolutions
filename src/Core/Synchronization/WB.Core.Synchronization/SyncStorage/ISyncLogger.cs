@@ -8,7 +8,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         void TrackUserLinkingRequest(Guid deviceId, Guid userId);
 
-        void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string lastSyncedPackageId, string[] packagesToDownload);
+        void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string[] packagesToDownload);
 
         void UnlinkUserFromDevice(Guid oldDeviceId, Guid userId);
 
