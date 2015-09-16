@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -27,12 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IQuestionDataParser dataParser;
         private readonly IUserViewFactory userViewFactory;
         readonly ITransactionManagerProvider transactionManagerProvider;
-
-
-        private const string IdColumnName = "Id";
-        private const string ParentIdColumnName = "ParentId";
-        private const string SupervisorNameColumnName = "_Supervisor";
-
+        
         private Dictionary<string, IQuestion> questionsCache = null;
         private Dictionary<string, IQuestion> QuestionsCache {
             get {
@@ -166,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
         {
-            return GetColumnIndexByHeaderName(dataFile, IdColumnName);
+            return GetColumnIndexByHeaderName(dataFile, ServiceColumns.Id);
         }
 
         public int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName)
@@ -190,10 +184,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             for (int i = 0; i < dataFile.Header.Length; i++)
             {
                 var columnName = dataFile.Header[i];
-                if (!columnName.StartsWith(ParentIdColumnName, StringComparison.InvariantCultureIgnoreCase))
+                if (!columnName.StartsWith(ServiceColumns.ParentId, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
-                var parentNumberString = columnName.Substring(ParentIdColumnName.Length);
+                var parentNumberString = columnName.Substring(ServiceColumns.ParentId.Length);
                 int parentNumber;
                 if (int.TryParse(parentNumberString, out parentNumber))
                 {
@@ -270,7 +264,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private int GetSupervisorNameIndex(PreloadedDataByFile dataFile)
         {
-            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, SupervisorNameColumnName, StringComparison.InvariantCultureIgnoreCase));
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.SupervisorName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private string CheckAndGetSupervisorNameForLevel(string[] row, int supervisorNameIndex)

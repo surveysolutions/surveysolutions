@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 new[]
                 {
                     new InterviewDataExportRecord(interviewId, "name.tex", new string[0], new string[0],
-                        new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { fileName }), })
+                        new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { fileName }), }, new string[0])
                 }, Guid.NewGuid().FormatGuid());
 
             interviewToExport = new InterviewDataExportView(interviewId, Guid.NewGuid(), 1,

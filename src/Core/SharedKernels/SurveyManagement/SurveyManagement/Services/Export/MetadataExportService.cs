@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -19,8 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
-
-        private readonly string parentId = "ParentId";
 
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
@@ -121,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
                     for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
                     {
                         var v1 = hhDataFile.AddVariable(DdiDataType.DynString);
-                        v1.Name = string.Format("{0}{1}", parentId, i + 1);
+                        v1.Name = string.Format("{0}{1}", ServiceColumns.ParentId, i + 1);
                     }
                 }
 

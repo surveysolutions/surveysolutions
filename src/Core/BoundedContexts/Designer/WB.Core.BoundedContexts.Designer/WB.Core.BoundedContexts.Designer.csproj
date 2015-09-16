@@ -223,6 +223,24 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV2.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV2.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.cs">
+      <DependentUpon>RosterScopeTemplateV2.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
@@ -564,6 +582,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WB.Core.SharedKernels.DataCollection.Portable.Profile24.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\Services\CodeGeneration\V2\Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV2.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV2.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV2.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />

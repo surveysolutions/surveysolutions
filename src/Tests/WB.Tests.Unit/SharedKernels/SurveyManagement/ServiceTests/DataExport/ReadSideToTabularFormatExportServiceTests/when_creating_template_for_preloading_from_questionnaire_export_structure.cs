@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
@@ -28,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             csvWriterServiceTestable.Rows.Count.ShouldEqual(2);
 
         It should_add_first_header_that_corresponds_to_interview = () =>
-            csvWriterServiceTestable.Rows[0].ShouldEqual(new object[] { "Id" ,"1","a"});
+            csvWriterServiceTestable.Rows[0].ShouldEqual(new object[] { "Id", "1","a", "_IRnd"});
 
         It should_add_second_header_that_corresponds_to_nested_roster_level_of_the_interview = () =>
             csvWriterServiceTestable.Rows[1].ShouldEqual(new object[] { "Id", "r1", "r2", "1", "a", "ParentId1", "ParentId2" });
