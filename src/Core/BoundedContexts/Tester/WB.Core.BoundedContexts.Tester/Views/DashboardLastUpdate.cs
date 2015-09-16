@@ -1,6 +1,6 @@
 ﻿using System;
 
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Tester.Views
 {

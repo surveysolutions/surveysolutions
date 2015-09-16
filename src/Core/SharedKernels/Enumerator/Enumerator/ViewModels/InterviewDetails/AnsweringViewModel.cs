@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -42,13 +43,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
+            await this.ExecuteCommand(answerCommand);
+        }
+
+        public virtual async Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
+        {
+            await this.ExecuteCommand(command);
+        }
+
+        private async Task ExecuteCommand(ICommand answerCommand)
+        {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             try
             {
                 this.StartInProgressIndicator();
 
-                await userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
 
                 lock (this.cancellationLockObject)
                 {
@@ -59,9 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 await
                     this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token);
             }
-            catch (OperationCanceledException)
-            {
-            }
+            catch (OperationCanceledException) {}
             finally
             {
                 lock (this.cancellationLockObject)

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
+            mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<decimal>>(),
                     Moq.It.IsAny<CancellationToken>())).Returns(Task.FromResult(downloadedQuestionnaire));
 
             viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,

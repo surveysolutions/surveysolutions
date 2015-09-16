@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
             {
                 case QuestionType.Numeric:
                     variable = hhDataFile.AddVariable(DdiDataType.Numeric);
-                    variable.VariableScale = DdiVariableScale.Ordinal;
+                    variable.VariableScale = DdiVariableScale.Scale;
                     break;
                 case QuestionType.SingleOption:
                 case QuestionType.MultyOption:
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
                     break;
                 case QuestionType.GpsCoordinates:
                     variable = hhDataFile.AddVariable(DdiDataType.Numeric);
-                    variable.VariableScale = DdiVariableScale.Ordinal;
+                    variable.VariableScale = DdiVariableScale.Scale;
                     break;
 
                 default:

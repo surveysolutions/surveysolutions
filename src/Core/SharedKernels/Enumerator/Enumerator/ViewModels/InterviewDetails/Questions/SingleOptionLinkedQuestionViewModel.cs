@@ -24,8 +24,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel, 
-        ILiteEventHandler<AnswersRemoved>
+        IInterviewEntityViewModel,
+        ILiteEventHandler<AnswersRemoved>,
+        IDisposable
     {
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
@@ -108,6 +109,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
             this.eventRegistry.Subscribe(this, interviewId);
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
         }
 
         private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)

@@ -275,12 +275,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private void ShowPublicQuestionnaires()
         {
             this.ChangeQuestionnairesList(this.publicQuestionnaires);
+
             this.IsPublicShowed = true;
         }
 
         private void ShowMyQuestionnaires()
         {
             this.ChangeQuestionnairesList(this.myQuestionnaires);
+
             this.IsPublicShowed = false;
         }
 
@@ -389,11 +391,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
 
-                var lastUpdateDate = DateTime.Now;
+                var lastUpdateDate = DateTime.Now.ToLocalTime();
 
                 HumanizeLasUpdateDate(lastUpdateDate);
-
-                await this.dashboardLastUpdateStorage.RemoveAsync(this.principal.CurrentUserIdentity.Name);
 
                 await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
                 {
@@ -438,8 +438,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private static QuestionnaireListItem HightlightTitleInListItem(QuestionnaireListItem x, string searchTerm)
         {
-            var loweredSearchTerm = searchTerm.ToLower();
-            var index = x.Title.ToLower().IndexOf(loweredSearchTerm, StringComparison.CurrentCultureIgnoreCase);
+            var index = x.Title.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
 
             var title = index >= 0
                 ? Regex.Replace(x.Title, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)
@@ -452,6 +451,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                        LastEntryDate = x.LastEntryDate,
                        OwnerName = x.OwnerName,
                        Title = title
+                   };
                    };
         }
 

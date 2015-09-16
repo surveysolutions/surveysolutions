@@ -39,7 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                AnsweringViewModelMock.Object);
+                AnsweringViewModelMock.Object,
+                Mock.Of<ILiteEventRegistry>());
         }
 
         protected static void SetUp()

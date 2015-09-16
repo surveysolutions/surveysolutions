@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -17,14 +19,20 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class IntegerQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class IntegerQuestionViewModel : 
+        MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel, 
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         const int RosterUpperBoundDefaultValue = 40;
 
-        private readonly IPrincipal principal;
+        private readonly IPrincipal principal; 
+        private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
+        public event EventHandler AnswerRemoved;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -54,6 +62,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxCommand ValueChangeCommand
         {
             get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync())); }
+        }  
+        
+        private IMvxCommand answerRemoveCommand;
+
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return this.answerRemoveCommand ??
+                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
+            }
+        }
+
+        private async Task RemoveAnswer()
+        {
+            try
+            {
+                var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
+                    this.principal.CurrentUserIdentity.UserId,
+                    this.questionIdentity,
+                    DateTime.UtcNow);
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
+
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+
+            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
         public IntegerQuestionViewModel(
@@ -62,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -71,6 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.userInteractionService = userInteractionService;
             this.Answering = answering;
+            this.liteEventRegistry = liteEventRegistry;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -82,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
-
+            this.liteEventRegistry.Subscribe(this, interviewId);
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
@@ -168,6 +208,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private static string NullableIntToAnswerString(int? answer)
         {
             return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
+        }
+
+        public void Dispose()
+        {
+            this.liteEventRegistry.Unsubscribe(this, interviewId); 
+            this.QuestionState.Dispose();
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                QuestionState.IsAnswered = false;
+                this.AnswerAsString = "";
+            }
         }
     }
 }
