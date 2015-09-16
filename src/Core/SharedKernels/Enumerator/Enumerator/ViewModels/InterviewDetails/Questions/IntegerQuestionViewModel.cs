@@ -77,6 +77,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RemoveAnswer()
         {
+            if (!QuestionState.IsAnswered)
+            {
+                AnswerAsString = "";
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                return;
+            }
             try
             {
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
@@ -86,13 +92,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
             }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-
-            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
         public IntegerQuestionViewModel(
