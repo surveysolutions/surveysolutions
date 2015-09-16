@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var sectionIdentity = new Identity(section.Id, new decimal[0]);
             var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
             var index = questionnaire.GroupsHierarchy
-                .Where(s => interview.IsEnabled(sectionIdentity))
+                .Where(s => interview.IsEnabled(new Identity(s.Id, new decimal[0])))
                 .ToList()
                 .IndexOf(section);
             this.Sections.Insert(index, sectionViewModel);
