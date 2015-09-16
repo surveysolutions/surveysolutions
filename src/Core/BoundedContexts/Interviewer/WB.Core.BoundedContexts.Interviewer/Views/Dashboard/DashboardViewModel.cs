@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -15,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class DashboardViewModel : BaseViewModel, 
-        ILiteEventHandler<DeleteInterviewCommand>
+        ILiteEventHandler<InterviewDeleted>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
@@ -235,7 +237,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             
         }
 
-        public async void Handle(DeleteInterviewCommand @event)
+        public async void Handle(InterviewDeleted @event)
         {
             await this.RefreshDashboardAsync();
         }

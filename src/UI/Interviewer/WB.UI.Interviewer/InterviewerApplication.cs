@@ -135,6 +135,7 @@ namespace WB.UI.Interviewer
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
             bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
             bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireDeleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(PlainQuestionnaireRegistered));
 
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));
