@@ -99,7 +99,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var updateFromLastPackageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPackageByQuestionnaire, lastSyncedPackageId);
 
-            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPackageByQuestionnaire);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Questionnaire, updateFromLastPackageByQuestionnaire);
 
             return new SyncItemsMetaContainer
             {
@@ -118,7 +118,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             updateFromLastPackageByUser = updateFromLastPackageByUser.Skip(Math.Max(0, updateFromLastPackageByUser.Count() - 1)).Take(1).ToList();
 
-            this.TrackArIdsRequest(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPackageByUser);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.User, updateFromLastPackageByUser);
 
             return new SyncItemsMetaContainer
             {
@@ -138,7 +138,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                     x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType) { InterviewId = x.InterviewId })
                     .ToList();
 
-            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPackageByInterview);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Interview, updateFromLastPackageByInterview);
 
             return new SyncItemsMetaContainer
             {
@@ -365,9 +365,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.syncLogger.TraceHandshake(deviceId, userId, appVersion);
         }
 
-        private void TrackArIdsRequest(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
+        private void TrackArIdsRequest(Guid userId, Guid deviceId, string packageType, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
         {
-            this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType, lastSyncedPackageId, updateFromLastPakage.Select(x => x.Id).ToArray());
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType,updateFromLastPakage.Select(x => x.Id).ToArray());
         }
 
         private void TrackDeviceRegistration(Guid deviceId, Guid userId, string appVersion, string androidId)
