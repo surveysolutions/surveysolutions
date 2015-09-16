@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -210,6 +210,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             optionViewModel.ItemDeleted += this.ListItemDeleted;
 
             return optionViewModel;
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

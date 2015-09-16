@@ -8,6 +8,7 @@
     <TextView style="@style/Dashboard_QuestionnaireListItem_Title"
               local:MvxBind="Html Title"/>
     <TextView style="@style/Dashboard_QuestionnaireListItem_ModifiedDate"
+            local:MvxBind="Html Title"/>
               local:MvxBind="Text Format(Localization('Dashboard_LastEntryDate_Format'), LastEntryDate)"/>
   </LinearLayout>
   <View style="@style/Dashboard_Questionnaires_Divider"></View>

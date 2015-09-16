@@ -521,4 +521,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="EndpointHint" xml:space="preserve">
     <value>Synchronization endpoint</value>
   </data>
+  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
+    <value>have not been updated</value>
+  </data>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>were updated {0}</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>No questionnaires found</value>
+  </data>
 </root>

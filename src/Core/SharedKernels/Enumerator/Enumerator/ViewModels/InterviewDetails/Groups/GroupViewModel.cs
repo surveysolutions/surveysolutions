@@ -15,7 +15,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel
+    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel,
+        IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -141,6 +142,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             {
                 this.RosterTitle = changedInstance.Title;
             }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId);
+
+            this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
         }
     }
 }

@@ -46,7 +46,8 @@ namespace WB.UI.Interviewer.EventHandlers
 
                                       IEventHandler<InterviewOnClientCreated>,
                                       IEventHandler<InterviewerAssigned>,
-                                      IEventHandler<SupervisorAssigned>
+                                      IEventHandler<SupervisorAssigned>,
+                                      IEventHandler<AnswerRemoved>
     {
         private readonly IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage;
@@ -368,6 +369,11 @@ namespace WB.UI.Interviewer.EventHandlers
             {
                 this.AnswerQuestion(evnt.EventSourceId, question.Id, string.Empty, evnt.EventTimeStamp);
             }
+        }
+
+        public void Handle(IPublishedEvent<AnswerRemoved> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
         }
 
         private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)

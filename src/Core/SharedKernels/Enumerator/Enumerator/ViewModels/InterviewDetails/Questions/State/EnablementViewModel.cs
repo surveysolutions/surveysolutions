@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>
+        ILiteEventHandler<QuestionsDisabled>, IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
@@ -87,6 +87,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.UpdateSelfFromModel();
             }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId);
         }
     }
 }

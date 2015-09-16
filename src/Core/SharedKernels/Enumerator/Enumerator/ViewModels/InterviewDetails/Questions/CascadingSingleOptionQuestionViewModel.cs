@@ -23,7 +23,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
          IInterviewEntityViewModel,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
-         ILiteEventHandler<AnswersRemoved>
+         ILiteEventHandler<AnswersRemoved>,
+         IDisposable
     {
         public class CascadingComboboxItemViewModel 
         {
@@ -321,6 +322,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
         }
     }
 }
