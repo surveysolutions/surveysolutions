@@ -2219,5 +2219,20 @@ namespace WB.Tests.Unit
         {
             return new HeaderStructureForLevel() {LevelScopeVector = new ValueVector<Guid>()};
         }
+
+        public static InterviewCommentaries InterviewCommentaries(Guid? questionnaireId = null, long? questionnaireVersion = null,params InterviewComment[] comments)
+        {
+            return new InterviewCommentaries()
+            {
+                QuestionnaireId = (questionnaireId ?? Guid.NewGuid()).FormatGuid(),
+                QuestionnaireVersion = questionnaireVersion ?? 1,
+                Commentaries = comments
+            };
+        }
+
+        public static InterviewComment InterviewComment(string comment=null)
+        {
+            return new InterviewComment() {Comment = comment};
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string commentsFileName = "interview_comments";
         private readonly string interviewActionsFileName = "interview_actions";
         private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
-
+        private readonly Regex removeNewLineRegEx = new Regex(@"\t|\n|\r");
         private readonly string parentId = "ParentId";
         private readonly string dataFileExtension = "tab";
 
@@ -465,7 +466,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 {
                     foreach (var cell in dataRow)
                     {
-                        tabWriter.WriteField(cell);
+                        var valueToWrite = string.IsNullOrEmpty(cell) ? "" : removeNewLineRegEx.Replace(cell, "");
+                        tabWriter.WriteField(valueToWrite);
                     }
 
                     tabWriter.NextRecord();
