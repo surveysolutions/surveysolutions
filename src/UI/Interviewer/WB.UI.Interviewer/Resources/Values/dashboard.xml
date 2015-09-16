@@ -103,6 +103,7 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:layout_marginTop">-20dp</item>
     <item name="android:layout_marginRight">-15dp</item>
+    <item name="android:padding">15dp</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
@@ -198,7 +199,7 @@
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:layout_marginTop">20dp</item>
-    <item name="android:drawableLeft">@drawable/dashboard_sync_button_icon</item>
+    <item name="android:drawableLeft">@drawable/btn-sync</item>
   </style>
 
   <style name="Dashboard_Synchronization_Divider">

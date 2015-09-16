@@ -614,7 +614,6 @@
     <AndroidResource Include="Resources\Values\dashboard.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
@@ -649,7 +648,7 @@
     <AndroidResource Include="Resources\Drawable\transparent_input_button_disabled.xml" />
     <AndroidResource Include="Resources\Drawable\transparent_input_button_pressed.xml" />
     <AndroidResource Include="Resources\Drawable\transparent_input_button_unpressed.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_sync_button_icon.png" />
+    <AndroidResource Include="Resources\Drawable\btn-sync.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

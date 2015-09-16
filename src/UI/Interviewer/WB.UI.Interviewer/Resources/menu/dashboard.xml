@@ -4,7 +4,7 @@
   <item
       android:id="@+id/menu_synchronization"
       local:showAsAction="always"
-      android:icon="@drawable/dashboard_sync_icon" />
+      android:icon="@drawable/btn-sync" />
   <item
       android:id="@+id/menu_settings"
       local:showAsAction="never"
