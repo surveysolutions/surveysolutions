@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Cirrious.CrossCore;
@@ -75,6 +76,20 @@ namespace WB.UI.Interviewer
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new NinjectMvxIocProvider(InterviewerApplication.Kernel);
+        }
+
+        protected override IList<Assembly> AndroidViewAssemblies
+        {
+            get
+            {
+                var toReturn = base.AndroidViewAssemblies;
+
+                // Add assemblies with other views we use.  When the XML is inflated
+                // MvvmCross knows about the types and won't complain about them.  This
+                // speeds up inflation noticeably.
+                toReturn.Add(typeof(CardView).Assembly);
+                return toReturn;
+            }
         }
 
         protected override Assembly[] GetViewModelAssemblies()
