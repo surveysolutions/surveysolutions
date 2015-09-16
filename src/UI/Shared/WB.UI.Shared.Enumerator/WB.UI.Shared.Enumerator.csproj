@@ -157,6 +157,7 @@
     <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
+    <Compile Include="Converters\IsStringNotEmptyConverter.cs" />
     <Compile Include="Converters\ToSpannableGroupTitleConverter.cs" />
     <Compile Include="Converters\GroupStateToColorConverter.cs" />
     <Compile Include="Converters\LocalizationValueConverter.cs" />
