@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,7 +18,11 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class GpsCoordinatesQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
+    public class GpsCoordinatesQuestionViewModel :
+        MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel, 
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private bool isInProgress;
         public bool IsInProgress
@@ -37,9 +44,44 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(async () => await this.SaveAnswerAsync(), () => !this.IsInProgress)); }
         }
 
+        private IMvxCommand answerRemoveCommand;
+
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return this.answerRemoveCommand ??
+                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
+            }
+        }
+
+        private async Task RemoveAnswer()
+        {
+            try
+            {
+                var command = new RemoveAnswerCommand(
+                    this.interviewId,
+                    this.userId,
+                    new Identity(this.questionIdentity.Id,
+                        this.questionIdentity.RosterVector),
+                    DateTime.UtcNow);
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
+
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+
+            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
+        }
+
         private readonly Guid userId;
+        public event EventHandler AnswerRemoved;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
+        private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IGpsLocationService locationService;
 
         private Identity questionIdentity;
@@ -54,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IEnumeratorSettings settings,
             IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -63,6 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.liteEventRegistry = liteEventRegistry;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -73,7 +116,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
-            
+
+            this.liteEventRegistry.Subscribe(this, interviewId);
+
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
@@ -149,6 +194,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.QuestionState.Dispose();
+            this.liteEventRegistry.Unsubscribe(this, interviewId.FormatGuid()); 
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                QuestionState.IsAnswered = false;
+                this.Answer = null;
+            }
         }
     }
 }
