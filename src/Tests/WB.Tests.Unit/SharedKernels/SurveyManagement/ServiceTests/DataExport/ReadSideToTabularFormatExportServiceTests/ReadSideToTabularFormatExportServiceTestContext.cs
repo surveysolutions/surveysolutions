@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             IFileSystemAccessor fileSystemAccessor=null,
             ICsvWriterService csvWriterService = null,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses=null,
-             QuestionnaireExportStructure questionnaireExportStructure = null)
+             QuestionnaireExportStructure questionnaireExportStructure = null,
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
         {
             return new ReadSideToTabularFormatExportService(
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 Mock.Of<IJsonUtils>(),new InterviewDataExportSettings("",false,10000), 
                 new TestInMemoryWriter<InterviewExportedDataRecord>(),
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
-                new TestInMemoryWriter<InterviewCommentaries>(),
+                interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure)
                 );
