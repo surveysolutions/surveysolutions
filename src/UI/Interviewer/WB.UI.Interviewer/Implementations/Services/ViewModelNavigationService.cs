@@ -20,7 +20,7 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void NavigateToDashboard()
         {
-             this.NavigateTo<DashboardViewModel>();
+             this.NavigateTo<DashboardViewModel>(new { });
         }
 
         public void NavigateToPrefilledQuestions(string interviewId)

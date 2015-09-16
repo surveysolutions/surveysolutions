@@ -30,6 +30,7 @@ namespace WB.UI.Interviewer.EventHandlers
                                       IEventHandler<InterviewStatusChanged>, 
                                       IEventHandler<TemplateImported>,
                                       IEventHandler<QuestionnaireDeleted>,
+                                      IEventHandler<InterviewDeleted>,
                                       IEventHandler<PlainQuestionnaireRegistered>,
 
                                       IEventHandler<TextQuestionAnswered>,
@@ -204,6 +205,12 @@ namespace WB.UI.Interviewer.EventHandlers
             long version = evnt.Payload.QuestionnaireVersion;
 
             this.RemoveSurveyDto(id, version);
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            Guid interviewId = evnt.EventSourceId;
+            this.questionnaireDtoDocumentStorage.Remove(interviewId);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
