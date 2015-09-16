@@ -55,5 +55,10 @@ namespace WB.Core.SharedKernels.DataCollection
             if (obj.GetType() != this.GetType()) return false;
             return this.Equals((Identity) obj);
         }
+
+        public bool Equals(Guid id, RosterVector rosterVector)
+        {
+            return Equals(new Identity(id, rosterVector));
+        }
     }
 }

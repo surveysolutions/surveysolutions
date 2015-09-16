@@ -136,8 +136,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         await this.Answering.SendRemoveAnswerCommandAsync(
                             new RemoveAnswerCommand(this.interviewId,
-                                this.userId, this.questionIdentity.Id,
-                                this.questionIdentity.RosterVector,
+                                this.userId, 
+                                this.questionIdentity,
                                 DateTime.UtcNow));
                         this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }
