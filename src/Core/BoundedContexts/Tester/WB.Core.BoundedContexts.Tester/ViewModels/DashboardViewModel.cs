@@ -391,7 +391,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
 
-                var lastUpdateDate = DateTime.Now.ToLocalTime();
+                var lastUpdateDate = DateTime.Now;
 
                 HumanizeLasUpdateDate(lastUpdateDate);
 
