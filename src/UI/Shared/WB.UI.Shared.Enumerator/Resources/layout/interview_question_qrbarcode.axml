@@ -10,13 +10,19 @@
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
         <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <LinearLayout style="@style/FullWidthWrappingLayout">
-            <TextView style="@style/Interview_Question_TextAnswer"
-              local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
-            <!--<ImageButton style="@style/Interview_Question_RemoveAnswer"
+          <TableLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+            <TableRow>
+                <TextView style="@style/Interview_Question_TextAnswer"
+                          android:layout_gravity="center_horizontal"
+                          local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
+                <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                             android:layout_marginLeft="@dimen/Interview_Question_InputButton_padding"
                              local:MvxBind="HideKeyboardOnClick .; 
-                                            Click RemoveAnswerCommand;" />-->
-          </LinearLayout>
+                                            Click RemoveAnswerCommand;
+                                            Visible QuestionState.IsAnswered" />
+              </TableRow>
+          </TableLayout>
           <Button style="@style/Interview_Question_InputButton"
             local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
