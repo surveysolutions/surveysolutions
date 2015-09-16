@@ -398,6 +398,7 @@
     <Compile Include="BoundedContexts\Headquarters\UserBatchCreatorTests\UserBatchCreatorTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingServiceTests\UserPreloadingServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingVerifierTests\UserPreloadingVerifierTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
