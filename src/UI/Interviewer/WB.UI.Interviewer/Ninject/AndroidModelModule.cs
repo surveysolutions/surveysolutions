@@ -87,7 +87,6 @@ namespace WB.UI.Interviewer.Ninject
             var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>(this.Kernel.Get<IJsonUtils>());
 
             this.Bind<IEventStore>().ToConstant(evenStore);
-            this.Bind<IEventStoreWithGetAllIds>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             this.Bind<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>().ToConstant(templateStore);
             this.Bind<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);

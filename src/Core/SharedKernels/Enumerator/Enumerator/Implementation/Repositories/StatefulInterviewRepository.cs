@@ -12,10 +12,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
     internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {
         private readonly IAggregateRootRepository aggregateRootRepository;
-        private readonly IEventStoreWithGetAllIds eventStore;
+        private readonly IEventStore eventStore;
 
         public StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository,
-            IEventStoreWithGetAllIds eventStore)
+            IEventStore eventStore)
         {
             if (aggregateRootRepository == null) throw new ArgumentNullException("aggregateRootRepository");
 
@@ -29,19 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
             var statefullInterview = (StatefulInterview) this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), Guid.Parse(interviewId));
             return statefullInterview;
-        }
-
-        public IEnumerable<IStatefulInterview> GetAll()
-        {
-            var ids = this.eventStore.GetAllIds();
-
-            foreach (var aggregateId in ids)
-            {
-                var aggregateRoot = this.aggregateRootRepository.GetLatest(typeof (StatefulInterview), aggregateId);
-                
-                if (aggregateRoot != null)
-                    yield return (IStatefulInterview)aggregateRoot;
-            }
         }
     }
 }
