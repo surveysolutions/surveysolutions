@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -34,8 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasHardDeleted;
         protected InterviewStatus status;
 
-        private IInterviewExpressionStateV2 expressionProcessorStatePrototype = null;
-        private IInterviewExpressionStateV2 ExpressionProcessorStatePrototype
+        private IInterviewExpressionStateV4 expressionProcessorStatePrototype = null;
+        private IInterviewExpressionStateV4 ExpressionProcessorStatePrototype
         {
             get
             {
@@ -43,6 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var stateProvider = this.expressionProcessorStatePrototypeProvider;
                     this.expressionProcessorStatePrototype = stateProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion);
+                    this.expressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
                 }
 
                 return this.expressionProcessorStatePrototype;
@@ -89,6 +91,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.wasCompleted = @event.InterviewData.WasCompleted;
             this.ExpressionProcessorStatePrototype =
                 this.expressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
+
+            this.ExpressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
 
             this.interviewState.AnswersSupportedInExpressions = @event.InterviewData.Answers == null
                 ? new Dictionary<string, object>()

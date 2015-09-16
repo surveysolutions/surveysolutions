@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
 
 // ReSharper disable InconsistentNaming
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    internal class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
+    internal class StronglyTypedInterviewEvaluator : AbstractInterviewExpressionStateV2, IInterviewExpressionStateV2, IInterviewExpressionStateV4 
     {
         public StronglyTypedInterviewEvaluator()
         {
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
         }
 
-        private StronglyTypedInterviewEvaluator(Dictionary<string, IExpressionExecutable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
+        private StronglyTypedInterviewEvaluator(Dictionary<string, IExpressionExecutableV2> interviewScopes, Dictionary<string, List<string>> siblingRosters)
         {
             var newScopes = interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers(this.GetRosterInstances));
 
@@ -102,6 +103,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 rosterLevel.SetRowName(rosterTitle);
         }
 
+        public void SetInterviewProperties(IInterviewProperties properties)
+        {
+            this.InterviewProperties = properties;
+            foreach (var item in this.InterviewScopes.Values)
+            {
+                item.SetInterviewProperties(properties);
+            }
+        }
+
+        IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()
+        {
+            return Clone() as IInterviewExpressionStateV4;
+        }
+
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -125,175 +140,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 }
             }
         }
-
-        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.persons_count)
-            {
-                (targetLevel as QuestionnaireLevel).persons_count = answer;
-            }
-
-            if (questionId == IdOf.age)
-            {
-                (targetLevel as HhMember_type).age = answer;
-            }
-
-            if (questionId == IdOf.times_per_week)
-            {
-                (targetLevel as FoodConsumption_type).times_per_week = answer;
-            }
-        }
-
-        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.price_for_food)
-            {
-                (targetLevel as FoodConsumption_type).price_for_food = answer;
-            }
-        }
-
-        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.date)
-            {
-                (targetLevel as HhMember_type).date = answer;
-            }
-        }
-
-        public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-        }
-
-        public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.id)
-            {
-                (targetLevel as QuestionnaireLevel).id = answer;
-            }
-
-            if (questionId == IdOf.name)
-            {
-                (targetLevel as HhMember_type).name = answer;
-            }
-
-            if (questionId == IdOf.job_title)
-            {
-                (targetLevel as HhMember_type).job_title = answer;
-            }
-
-            if (questionId == IdOf.person_id)
-            {
-                (targetLevel as HhMember_type).person_id = answer;
-            }
-        }
         
-        public override void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-        }
-
-        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.sex)
-            {
-                (targetLevel as HhMember_type).sex = answer;
-            }
-
-            if (questionId == IdOf.role)
-            {
-                (targetLevel as HhMember_type).role = answer;
-            }
-
-            if (questionId == IdOf.has_job)
-            {
-                (targetLevel as HhMember_type).has_job = answer;
-            }
-
-            if (questionId == IdOf.marital_status)
-            {
-                (targetLevel as HhMember_type).marital_status = answer;
-            }
-
-            if (questionId == IdOf.edu_visit)
-            {
-                (targetLevel as QuestionnaireLevel).edu_visit = answer;
-            }
-
-            if (questionId == IdOf.edu)
-            {
-                (targetLevel as Education_type).edu = answer;
-            }
-        }
-
-        public override void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.food)
-            {
-                (targetLevel as HhMember_type).food = answer;
-            }
-        }
-
-        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy, double altitude)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-        }
-
-        public override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-        }
-
-        public override void 
-            UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.best_job_owner)
-            {
-                (targetLevel as HhMember_type).best_job_owner = selectedPropagationVector;
-            }
-        }
-
-        public override void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            if (questionId == IdOf.married_with)
-            {
-                (targetLevel as HhMember_type).married_with = answer;
-            }
-        }
-
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
             return IdOf.parentScopeMap;
         }
 
+        
         public override IInterviewExpressionState Clone()
         {
             return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
@@ -303,10 +156,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             return new StronglyTypedInterviewEvaluator(this.InterviewScopes, this.SiblingRosters);
         }
+        
 
-        public class QuestionnaireLevel : AbstractConditionalLevel<QuestionnaireLevel>, IExpressionExecutable
+        public class QuestionnaireLevel : AbstractConditionalLevelInstanceV4<QuestionnaireLevel>, IExpressionExecutableV2
         {
-            public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
+            public QuestionnaireLevel(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
@@ -341,7 +195,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 set { this.__edu_visit = value; }
             }
 
-            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            public override IExpressionExecutableV2 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances)
             {
                 var level = new QuestionnaireLevel(this.RosterVector, this.RosterKey, getInstances, this.ConditionalDependencies, this.StructuralDependencies);
 
@@ -361,9 +215,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 return level;
             }
 
+            public void SetParent(IExpressionExecutableV2 parentLevel)
+            {
+                
+            }
+
+            IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
+            {
+                return null;
+            }
+
             private bool edu_visit_IsEnabled()
             {
                 return true;
+            }
+
+            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            {
+                throw new NotImplementedException();
             }
 
             public void SetParent(IExpressionExecutable parentLevel)
@@ -409,16 +278,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         //roster first level
-        public class HhMember_type : AbstractConditionalLevel<HhMember_type>, IRosterLevel<HhMember_type>, IExpressionExecutable
+        public class HhMember_type : AbstractConditionalLevelInstanceV4<HhMember_type>, IRosterLevel<HhMember_type>, IExpressionExecutableV2
         {
-            public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid,
-                IEnumerable<IExpressionExecutable>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
+            public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutableV2 parent, Func<Identity[], Guid,
+                IEnumerable<IExpressionExecutableV2>> getInstances, Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
                 this.@__parent = parent as QuestionnaireLevel;
             }
 
-            public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
+            public HhMember_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
@@ -622,7 +491,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 return (this.role == 3 && this.hhMembers.Where(x => x.role < 3).Any(x => x.age < this.age + 10)) || this.role != 3;
             }
 
-            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            public override IExpressionExecutableV2 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances)
             {
                 var level = new HhMember_type(this.RosterVector, this.RosterKey, getInstances, this.ConditionalDependencies, this.StructuralDependencies)
                 {
@@ -654,7 +523,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 return level;
             }
 
+            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            {
+                throw new NotImplementedException();
+            }
+
             public void SetParent(IExpressionExecutable parentLevel)
+            {
+                this.@__parent = parentLevel as QuestionnaireLevel;
+            }
+
+            IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
+            {
+                return this.@__parent;
+            }
+
+            public void SetParent(IExpressionExecutableV2 parentLevel)
             {
                 this.@__parent = parentLevel as QuestionnaireLevel;
             }
@@ -690,19 +574,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             {
                 get { return @__parent.hhMembers; }
             }
+            
         }
 
         //roster second level
-        public class FoodConsumption_type : AbstractConditionalLevel<FoodConsumption_type>, IRosterLevel<FoodConsumption_type>, IExpressionExecutable
+        public class FoodConsumption_type : AbstractConditionalLevelInstanceV4<FoodConsumption_type>, IRosterLevel<FoodConsumption_type>, IExpressionExecutableV2
         {
-            public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
+            public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutableV2 parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
                 this.@__parent = parent as HhMember_type;
             }
 
-            public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
+            public FoodConsumption_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
@@ -837,7 +722,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 get { return @__parent.foodConsumption; }
             }
 
-            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            public override IExpressionExecutableV2 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances)
             {
                 var level = new FoodConsumption_type(this.RosterVector, this.RosterKey, getInstances, this.ConditionalDependencies, this.StructuralDependencies)
                 {
@@ -859,7 +744,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 return level;
             }
 
+            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            {
+                return null;
+            }
+
             public void SetParent(IExpressionExecutable parentLevel)
+            {
+                this.@__parent = parentLevel as HhMember_type;
+            }
+
+            IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
+            {
+                return this.@__parent;
+            }
+
+            public void SetParent(IExpressionExecutableV2 parentLevel)
             {
                 this.@__parent = parentLevel as HhMember_type;
             }
@@ -881,16 +781,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             }
         }
 
-        public class Education_type : AbstractConditionalLevel<Education_type>, IRosterLevel<Education_type>, IExpressionExecutable
+        public class Education_type : AbstractConditionalLevelInstanceV4<Education_type>, IRosterLevel<Education_type>, IExpressionExecutableV2
         {
-            public Education_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
+            public Education_type(decimal[] rosterVector, Identity[] rosterKey, IExpressionExecutable parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
                 this.@__parent = parent as QuestionnaireLevel;
             }
 
-            public Education_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances,
+            public Education_type(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances,
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
                 : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
             {
@@ -922,7 +822,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 }
             }
 
-            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            public override IExpressionExecutableV2 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances)
             {
                 var level = new Education_type(this.RosterVector, this.RosterKey, getInstances, this.ConditionalDependencies, this.StructuralDependencies)
                 {
@@ -940,6 +840,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 }
 
                 return level;
+            }
+
+            public void SetParent(IExpressionExecutableV2 parentLevel)
+            {
+                this.@__parent = parentLevel as QuestionnaireLevel;
+            }
+
+            IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
+            {
+                return this.@__parent;
+            }
+
+            public IExpressionExecutable CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances)
+            {
+                return null;
             }
 
             public void SetParent(IExpressionExecutable parentLevel)

@@ -24,15 +24,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
         private readonly IUserViewFactory userViewFactory;
-
-
-        private static class ServiceColumns
-        {
-            public const string Id = "Id";
-            public const string ParentId = "ParentId";
-
-            public const string SupervisorName = "_Supervisor";
-        }
         
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
@@ -239,7 +230,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private IEnumerable<string> GetListOfPermittedExtraColumnsForLevel(HeaderStructureForLevel levelExportStructure)
         {
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
+            {
                 yield return ServiceColumns.SupervisorName;
+                foreach (var systemVariable in ServiceColumns.SystemVariables)
+                {
+                    yield return systemVariable.VariableExportColumnName;
+                }
+            }
+            
         }
 
         private IEnumerable<PreloadedDataVerificationReference> OrphanRosters(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,

@@ -11,7 +11,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -28,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly string interviewActionsFileName = "interview_actions";
         private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
         private readonly Regex removeNewLineRegEx = new Regex(@"\t|\n|\r");
-        private readonly string parentId = "ParentId";
+
         private readonly string dataFileExtension = "tab";
 
         private readonly string separator;
@@ -264,10 +263,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         interviewLevelHeader.Add(columnName);
                     }
                 }
+                
+                if (level.LevelScopeVector.Length == 0)
+                {
+                    foreach (var systemVariable in ServiceColumns.SystemVariables)
+                    {
+                        interviewLevelHeader.Add(systemVariable.VariableExportColumnName);
+                    }
+                }
 
                 for (int i = 0; i < level.LevelScopeVector.Length; i++)
                 {
-                    interviewLevelHeader.Add(string.Format("{0}{1}", parentId, i + 1));
+                    interviewLevelHeader.Add(string.Format("{0}{1}", ServiceColumns.ParentId, i + 1));
                 }
 
                 WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() });

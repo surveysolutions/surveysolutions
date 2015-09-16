@@ -8,11 +8,13 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -89,6 +91,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     ? interview.InterviewId.FormatGuid()
                     : dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
+                string[] systemVariableValues = new string[0];
+                if (vectorLength == 0)
+                    systemVariableValues = GetSystemValues(interview, ServiceColumns.SystemVariables);
+
                 var parentRecordIds = new string[dataByLevel.RosterVector.Length];
                 if (parentRecordIds.Length > 0)
                 {
@@ -112,7 +118,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 }
 
                 dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
-                    this.GetQuestionsForExport(dataByLevel, headerStructureForLevel)));
+                    this.GetQuestionsForExport(dataByLevel, headerStructureForLevel), systemVariableValues));
             }
 
             return dataRecords.ToArray();
@@ -121,6 +127,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
             return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
+        }
+
+        private string[] GetSystemValues(InterviewData interview, ServiceVariable[] variables)
+        {
+            List<string> values = new List<string>();
+
+            foreach (var header in variables)
+            {
+                values.Add(this.GetSystemValue(interview, header));
+            }
+            return values.ToArray();
+
+        }
+
+        private string GetSystemValue(InterviewData interview, ServiceVariable serviceVariable)
+        {
+            switch (serviceVariable.VariableType)
+            {
+                case ServiceVariableType.InterviewRandom :
+                        return interview.InterviewId.GetRandomDouble().ToString(CultureInfo.InvariantCulture);
+            }
+            
+            return String.Empty;
         }
 
         private string GetTextValueForTextListQuestion(InterviewData interview, decimal[] rosterVector, Guid id)
@@ -193,7 +222,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         {
             var headerStructureForLevel = new HeaderStructureForLevel();
             headerStructureForLevel.LevelScopeVector = levelVector;
-            headerStructureForLevel.LevelIdColumnName = "Id";
+            headerStructureForLevel.LevelIdColumnName = ServiceColumns.Id;
 
             headerStructureForLevel.LevelName = levelTitle;
 

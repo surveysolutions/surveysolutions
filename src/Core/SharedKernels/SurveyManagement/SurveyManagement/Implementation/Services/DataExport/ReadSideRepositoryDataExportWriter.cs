@@ -58,6 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         parametersToConcatenate.AddRange(exportedQuestion.Answers.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
                     }
 
+                    parametersToConcatenate.AddRange(interviewDataExportRecord.SystemVariableValues);
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
 
                     recordsByLevel.Add(string.Join(stringSeparator,
