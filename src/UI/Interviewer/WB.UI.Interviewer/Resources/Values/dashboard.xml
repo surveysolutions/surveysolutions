@@ -198,6 +198,7 @@
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:layout_marginTop">20dp</item>
+    <item name="android:drawableLeft">@drawable/dashboard_sync_button_icon</item>
   </style>
 
   <style name="Dashboard_Synchronization_Divider">
