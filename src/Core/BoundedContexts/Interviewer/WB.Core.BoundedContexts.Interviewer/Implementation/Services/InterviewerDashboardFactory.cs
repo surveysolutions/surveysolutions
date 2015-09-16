@@ -39,20 +39,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var surveys = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
             List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
-            CollectCensusQuestionnaries(surveys, dashboardInformation);
+            CollectCensusQuestionnaries(questionnaires, surveys, dashboardInformation);
             this.CollectInterviews(questionnaires, surveys, dashboardInformation);
 
             return dashboardInformation;
         }
 
-        private static void CollectCensusQuestionnaries(List<SurveyDto> surveys, DashboardInformation dashboardInformation)
+        private static void CollectCensusQuestionnaries(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
         {
             var listCensusQuestionnires = surveys.Where(s => s.AllowCensusMode);
             // show census mode for new tab
             foreach (var censusQuestionnireInfo in listCensusQuestionnires)
             {
+                var countInterviewsFromCurrentQuestionnare = questionnaires.Count(questionnaire => IsQuestionnareRelatedToInterview(censusQuestionnireInfo, questionnaire));
                 var censusQuestionnaireDashboardItem = Load<CensusQuestionnaireDashboardItemViewModel>();
-                censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo);
+                censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo, countInterviewsFromCurrentQuestionnare);
                 dashboardInformation.CensusQuestionniories.Add(censusQuestionnaireDashboardItem);
             }
         }
@@ -63,18 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             foreach (var questionnaire in questionnaires)
             {
-                var survey = surveys.First(surveyDto =>
-                {
-                    if (string.IsNullOrEmpty(surveyDto.QuestionnaireId))
-                    {
-                        return questionnaire.Survey == surveyDto.Id;
-                    }
-                    else
-                    {
-                        return questionnaire.Survey == surveyDto.QuestionnaireId
-                               && questionnaire.SurveyVersion == surveyDto.QuestionnaireVersion;
-                    }
-                });
+                var survey = surveys.First(surveyDto => IsQuestionnareRelatedToInterview(surveyDto, questionnaire));
 
                 var interviewCategory = this.GetDashboardCategoryForInterview((InterviewStatus)questionnaire.Status, questionnaire.StartedDateTime);
 
@@ -99,6 +89,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var interviewDashboardItem = Load<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(dashboardQuestionnaireItem);
                 this.AddDashboardItemToCategoryCollection(dashboardInformation, interviewDashboardItem);
+            }
+        }
+
+        private static bool IsQuestionnareRelatedToInterview(SurveyDto surveyDto, QuestionnaireDTO questionnaire)
+        {
+            if (string.IsNullOrEmpty(surveyDto.QuestionnaireId))
+            {
+                return questionnaire.Survey == surveyDto.Id;
+            }
+            else
+            {
+                return questionnaire.Survey == surveyDto.QuestionnaireId
+                       && questionnaire.SurveyVersion == surveyDto.QuestionnaireVersion;
             }
         }
 
