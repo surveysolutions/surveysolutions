@@ -373,7 +373,7 @@ namespace WB.UI.Interviewer.EventHandlers
 
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty, evnt.EventTimeStamp);
         }
 
         private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
