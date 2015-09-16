@@ -1,6 +1,7 @@
 ﻿using System;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -15,19 +16,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class CensusQuestionnaireDashboardItemViewModel : IDashboardItem
     {
         private readonly ICommandService commandService;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IChangeLogManipulator changeLogManipulator;
         private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
         public CensusQuestionnaireDashboardItemViewModel(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ICommandService commandService,
             IChangeLogManipulator changeLogManipulator,
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService)
         {
-            this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
             this.changeLogManipulator = changeLogManipulator;
             this.principal = principal;
@@ -37,13 +35,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private Guid questionnaireId;
         private long questionnaireVersion;
 
-        public void Init(SurveyDto surveyDto)
+        public void Init(SurveyDto surveyDto, int countInterviewsFromCurrentQuestionnare)
         {
-            //var questionnaire = this.questionnaireRepository.GetById(id);
             questionnaireId = Guid.Parse(surveyDto.QuestionnaireId);
             questionnaireVersion = surveyDto.QuestionnaireVersion;
-            QuestionariName = string.Format("{0} (v{1})", surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion); 
-            Comment = "Census mode, Interviews created: 0 / 1 / 100";
+            QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion);
+            Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
         }
 
         public string QuestionariName { get; set; }

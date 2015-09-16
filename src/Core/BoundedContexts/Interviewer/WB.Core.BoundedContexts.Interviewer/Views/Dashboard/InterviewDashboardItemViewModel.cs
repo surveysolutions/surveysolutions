@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             InterviewId = item.PublicKey;
             Status = item.Status;
-            QuestionariName = string.Format("{0} (v{1})", item.Title, item.QuestionnaireVersion);
+            QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
             DateComment = GetInterviewDateCommentByStatus(item, Status);
             Comment = GetInterviewCommentByStatus(item);
             PrefilledQuestions = this.GetPrefilledQuestions(item.Properties);
@@ -59,12 +59,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             switch (status)
             {
                 case DashboardInterviewStatus.New:
-                    return item.CreatedDateTime.HasValue ? "Created on {0}".FormatString(item.CreatedDateTime) : string.Empty;
+                    return item.CreatedDateTime.HasValue ? InterviewerUIResources.DashboardItem_CreatedOn.FormatString(item.CreatedDateTime) : string.Empty;
                 case DashboardInterviewStatus.InProgress:
-                    return item.StartedDateTime.HasValue ? "Started on {0}".FormatString(item.StartedDateTime) : string.Empty;
+                    return item.StartedDateTime.HasValue ? InterviewerUIResources.DashboardItem_StartedOn.FormatString(item.StartedDateTime) : string.Empty;
                 case DashboardInterviewStatus.Complited:
                 case DashboardInterviewStatus.Rejected:
-                    return item.ComplitedDateTime.HasValue ? "Complited on {0}".FormatString(item.ComplitedDateTime) : string.Empty;
+                    return item.ComplitedDateTime.HasValue ? InterviewerUIResources.DashboardItem_ComplitedOn.FormatString(item.ComplitedDateTime) : string.Empty;
                 default:
                     return string.Empty;
             }
@@ -75,9 +75,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             switch (item.Status)
             {
                 case DashboardInterviewStatus.New:
-                    return "Not started";
+                    return InterviewerUIResources.DashboardItem_NotStarted;
                 case DashboardInterviewStatus.InProgress:
-                    return string.Empty;
+                    return InterviewerUIResources.DashboardItem_InProgress;
                 case DashboardInterviewStatus.Complited:
                     return item.Comments;
                 case DashboardInterviewStatus.Rejected:

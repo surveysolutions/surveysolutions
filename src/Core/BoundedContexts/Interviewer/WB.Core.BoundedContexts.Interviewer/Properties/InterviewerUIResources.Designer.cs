@@ -173,6 +173,69 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Census mode, Interviews created: {0}.
+        /// </summary>
+        public static string DashboardItem_CensusModeComment {
+            get {
+                return ResourceManager.GetString("DashboardItem_CensusModeComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complited on {0}.
+        /// </summary>
+        public static string DashboardItem_ComplitedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_ComplitedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created on {0}.
+        /// </summary>
+        public static string DashboardItem_CreatedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_CreatedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In progress.
+        /// </summary>
+        public static string DashboardItem_InProgress {
+            get {
+                return ResourceManager.GetString("DashboardItem_InProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not started.
+        /// </summary>
+        public static string DashboardItem_NotStarted {
+            get {
+                return ResourceManager.GetString("DashboardItem_NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Started on {0}.
+        /// </summary>
+        public static string DashboardItem_StartedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_StartedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (v{1}).
+        /// </summary>
+        public static string DashboardItem_Title {
+            get {
+                return ResourceManager.GetString("DashboardItem_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About application.
         /// </summary>
         public static string Prefs_AboutApplication {
