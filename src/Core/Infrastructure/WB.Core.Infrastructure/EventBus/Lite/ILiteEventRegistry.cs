@@ -9,6 +9,8 @@ namespace WB.Core.Infrastructure.EventBus.Lite
     {
         void Subscribe(ILiteEventHandler handler, string eventSourceId);
 
+        void SubscribeOnAllAggregateRoots(ILiteEventHandler handler);
+
         void Unsubscribe(ILiteEventHandler handler, string eventSourceId);
 
         IEnumerable<Action<object>> GetHandlers(UncommittedEvent @event);

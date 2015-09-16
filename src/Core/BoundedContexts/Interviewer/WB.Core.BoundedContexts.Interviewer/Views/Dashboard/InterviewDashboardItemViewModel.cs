@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -22,31 +16,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class InterviewDashboardItemViewModel : IDashboardItem
     {
-        private readonly IAnswerToStringService answerToStringService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IChangeLogManipulator changeLogManipulator;
 
-
-
         public string QuestionariName { get; private set; }
         public Guid InterviewId { get; private set; }
-        public DashboardInterviewCategories Status { get; private set; }
+        public DashboardInterviewStatus Status { get; private set; }
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
 
         public InterviewDashboardItemViewModel(
-            IAnswerToStringService answerToStringService,
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
             ICommandService commandService,
             IPrincipal principal,
             IChangeLogManipulator changeLogManipulator)
         {
-            this.answerToStringService = answerToStringService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.commandService = commandService;
@@ -56,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Init(DashboardQuestionnaireItem item)
         {
-            InterviewId = item.SurveyKey;
+            InterviewId = item.PublicKey;
             Status = item.Status;
             QuestionariName = string.Format("{0} (v{1})", item.Title, item.QuestionnaireVersion);
             DateComment = GetInterviewDateCommentByStatus(item, Status);
@@ -65,16 +54,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IsSupportedRemove = item.CanBeDeleted;
         }
 
-        private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewCategories status)
+        private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
         {
             switch (status)
             {
-                case DashboardInterviewCategories.New:
+                case DashboardInterviewStatus.New:
                     return item.CreatedDateTime.HasValue ? "Created on {0}".FormatString(item.CreatedDateTime) : string.Empty;
-                case DashboardInterviewCategories.InProgress:
+                case DashboardInterviewStatus.InProgress:
                     return item.StartedDateTime.HasValue ? "Started on {0}".FormatString(item.StartedDateTime) : string.Empty;
-                case DashboardInterviewCategories.Complited:
-                case DashboardInterviewCategories.Rejected:
+                case DashboardInterviewStatus.Complited:
+                case DashboardInterviewStatus.Rejected:
                     return item.ComplitedDateTime.HasValue ? "Complited on {0}".FormatString(item.ComplitedDateTime) : string.Empty;
                 default:
                     return string.Empty;
@@ -85,13 +74,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             switch (item.Status)
             {
-                case DashboardInterviewCategories.New:
+                case DashboardInterviewStatus.New:
                     return "Not started";
-                case DashboardInterviewCategories.InProgress:
-                    return "Answered: {0}, Unanswered: {1}, Errors:{2}";
-                case DashboardInterviewCategories.Complited:
+                case DashboardInterviewStatus.InProgress:
+                    return string.Empty;
+                case DashboardInterviewStatus.Complited:
                     return item.Comments;
-                case DashboardInterviewCategories.Rejected:
+                case DashboardInterviewStatus.Rejected:
                     return item.Comments;
                 default:
                     return string.Empty;
@@ -136,7 +125,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void LoadInterview()
         {
-            if (Status == DashboardInterviewCategories.Complited)
+            if (Status == DashboardInterviewStatus.Complited)
             {
                 var isReopen = await userInteractionService.ConfirmAsync(
                     InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,

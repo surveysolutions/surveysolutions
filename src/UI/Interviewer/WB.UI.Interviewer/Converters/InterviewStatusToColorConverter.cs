@@ -7,22 +7,22 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Interviewer.Converters
 {
-    public class InterviewStatusToColorConverter : MvxValueConverter<DashboardInterviewCategories, int>
+    public class InterviewStatusToColorConverter : MvxValueConverter<DashboardInterviewStatus, int>
     {
-        protected override int Convert(DashboardInterviewCategories status, Type targetType, object parameter, CultureInfo culture)
+        protected override int Convert(DashboardInterviewStatus status, Type targetType, object parameter, CultureInfo culture)
         {
             switch (status)
             {
-                case DashboardInterviewCategories.New:
+                case DashboardInterviewStatus.New:
                     return Resource.Color.dashboard_new_interview_status;
 
-                case DashboardInterviewCategories.InProgress:
+                case DashboardInterviewStatus.InProgress:
                     return Resource.Color.dashboard_in_progress_tab;
 
-                case DashboardInterviewCategories.Complited:
+                case DashboardInterviewStatus.Complited:
                     return Resource.Color.dashboard_complited_tab;
 
-                case DashboardInterviewCategories.Rejected:
+                case DashboardInterviewStatus.Rejected:
                     return Resource.Color.dashboard_rejected_tab;
             }
 
