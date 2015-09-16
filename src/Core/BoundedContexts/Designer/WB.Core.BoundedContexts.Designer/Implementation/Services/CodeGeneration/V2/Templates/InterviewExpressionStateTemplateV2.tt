@@ -16,40 +16,23 @@ using System.Text.RegularExpressions;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionState
-	 <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionStateV2
+    <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
 	 , <#=additionInterface#>
 	<#}#>
-	
-    {
-        public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() 
+
+	{
+	    public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() : base()
         {
             var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
             var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies);
-            this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);
+            this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);				
         }
+		
 
-        private <#=QuestionnaireTemplateStructure.GeneratedClassName#>(Dictionary<string, IExpressionExecutable> interviewScopes, Dictionary<string, List<string>> siblingRosters)
-        {
-            var newScopes = interviewScopes.ToDictionary(interviewScope => interviewScope.Key, interviewScope => interviewScope.Value.CopyMembers(this.GetRosterInstances));
-
-            var newSiblingRosters = siblingRosters
-                .ToDictionary(
-                    interviewScope => interviewScope.Key,
-                    interviewScope => new List<string>(interviewScope.Value)); 
-
-            //set parents
-            foreach (var interviewScope in interviewScopes)
-            {
-                var parent = interviewScope.Value.GetParent();
-                if (parent != null)
-                    newScopes[interviewScope.Key].SetParent(newScopes[Util.GetRosterStringKey(parent.GetRosterKey())]);
-            }
-
-            this.InterviewScopes = newScopes;
-            this.SiblingRosters = newSiblingRosters;
-        }
+		public <#=QuestionnaireTemplateStructure.GeneratedClassName#>(Dictionary<string, IExpressionExecutableV2> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
+		 :base(interviewScopes, siblingRosters, interviewProperties){}
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
         {
@@ -79,11 +62,10 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
-		 <#if(QuestionnaireTemplateStructure.ShouldGenerateUpdateRosterTitleMethods){#>
-
+		 
 		 public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
-        {
+         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
             {
                 return;
@@ -97,7 +79,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             if (rosterLevel != null)
                 rosterLevel.SetRowName(rosterTitle);
         }
-		 <#}#>
+		 
+
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
@@ -120,129 +103,43 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             }
         }
 
-        public override void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
+		public void SetInterviewProperties(IInterviewProperties properties)
         {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateNumericIntegerAnswer(questionId, answer);
+            this.InterviewProperties = properties;
+            foreach (var item in this.InterviewScopes.Values)
+            {
+                item.SetInterviewProperties(properties);
+            }
         }
 
-        public override void UpdateNumericRealAnswer(Guid questionId, decimal[] rosterVector, double? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateNumericRealAnswer(questionId, answer);
-        }
-
-        public override void UpdateDateAnswer(Guid questionId, decimal[] rosterVector, DateTime? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateDateTimeAnswer(questionId, answer);
-        }
-
-        public override void UpdateMediaAnswer(Guid questionId, decimal[] rosterVector, string answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateMediaAnswer(questionId, answer);
-        }
-
-        public override void UpdateTextAnswer(Guid questionId, decimal[] rosterVector, string answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateTextAnswer(questionId, answer);
-        }
+        public override IInterviewExpressionState Clone()
+		{
+			return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
+		}
         
-        public override void UpdateQrBarcodeAnswer(Guid questionId, decimal[] rosterVector, string answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateQrBarcodeAnswer(questionId, answer);
-        }
-
-        public override void UpdateSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal? answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateSingleOptionAnswer(questionId, answer);
-        }
-
-        public override void UpdateMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateMultiOptionAnswer(questionId, answer);
-        }
-
-        public override void UpdateGeoLocationAnswer(Guid questionId, decimal[] rosterVector, double latitude, double longitude, double accuracy, double altitude)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateGeoLocationAnswer(questionId, latitude,  longitude,  accuracy, altitude);
-        }
-
-        public override void UpdateTextListAnswer(Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateTextListAnswer(questionId, answers);
-        }
-
-        public override void UpdateLinkedSingleOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[] selectedPropagationVector)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-            
-            targetLevel.UpdateLinkedSingleOptionAnswer(questionId, selectedPropagationVector);
-        }
-
-        public override void UpdateLinkedMultiOptionAnswer(Guid questionId, decimal[] rosterVector, decimal[][] answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector);
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateLinkedMultiOptionAnswer(questionId, answer);
-        }
-        
-        public override Dictionary<Guid, Guid[]> GetParentsMap()
-        {
-            return IdOf.parentScopeMap;
-        }
-
-		public override IInterviewExpressionState Clone ()
-        {
-            return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters);
-        }
-
-	    <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+		<#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
 	    <#=additionInterface#> <#=additionInterface#>.Clone()
         {
             return Clone () as <#=additionInterface#>;
         }
 		<#}#>
-    }
+
+        public override Dictionary<Guid, Guid[]> GetParentsMap()
+        {
+            return IdOf.parentScopeMap;
+        }
+
+	}
         //generate QuestionnaireLevel
         <#    
-            QuestionnaireLevelTemplate questionnairetemplate = CreateQuestionnaireLevelTemplate();
+            QuestionnaireLevelTemplateV2 questionnairetemplate = CreateQuestionnaireLevelTemplate();
             this.Write(questionnairetemplate.TransformText());                           
          #>
 
         //generating rosters
         <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
            {
-                RosterScopeTemplate template = CreateRosterScopeTemplate(rosterGroup.Value);
+                RosterScopeTemplateV2 template = CreateRosterScopeTemplate(rosterGroup.Value);
                 this.Write(template.TransformText());
            }
         #>

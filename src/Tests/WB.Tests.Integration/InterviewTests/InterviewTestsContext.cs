@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -60,7 +61,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            var expressionState = new Mock<IInterviewExpressionStateV2>();
+            var expressionState = new Mock<IInterviewExpressionStateV4>();
 
             var emptyList = new List<Identity>();
 
@@ -85,7 +86,7 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV2 precompiledState = null)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV4 precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -96,7 +97,7 @@ namespace WB.Tests.Integration.InterviewTests
                     && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
                     && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
 
-            IInterviewExpressionStateV2 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            IInterviewExpressionStateV4 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -154,7 +155,7 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStateV4 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
             var fileSystemAccessor = new FileSystemIOAccessor(); 
             var questionnaireVersionProvider =new DesignerEngineVersionService();

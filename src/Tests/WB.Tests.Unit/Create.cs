@@ -1738,7 +1738,7 @@ namespace WB.Tests.Unit
             params ExportedQuestion[] questions)
         {
             return new InterviewDataExportRecord(interviewId, "test", new string[0], new string[0],
-                questions);
+                questions, new string [0]);
         }
 
         public static ExportedQuestion ExportedQuestion()

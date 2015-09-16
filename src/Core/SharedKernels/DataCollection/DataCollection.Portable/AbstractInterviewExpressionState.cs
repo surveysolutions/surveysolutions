@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public Dictionary<string, IExpressionExecutable> InterviewScopes = new Dictionary<string, IExpressionExecutable>();
         public Dictionary<string, List<string>> SiblingRosters = new Dictionary<string, List<string>>();
+        
 
         public abstract void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex);
 

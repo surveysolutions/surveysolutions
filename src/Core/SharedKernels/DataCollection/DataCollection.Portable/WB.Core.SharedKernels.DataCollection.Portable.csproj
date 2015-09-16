@@ -46,8 +46,10 @@
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
     <Compile Include="IInterviewExpressionStateUpgrader.cs" />
+    <Compile Include="IInterviewProperties.cs" />
     <Compile Include="InterviewExpressionStateExtensions.cs" />
     <Compile Include="InterviewExpressionStateUpgrader.cs" />
+    <Compile Include="InterviewProperties.cs" />
     <Compile Include="QuestionnaireVersion.cs" />
     <Compile Include="RosterVector.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
@@ -71,6 +73,12 @@
     <Compile Include="V2\IInterviewExpressionStateV2.cs" />
     <Compile Include="V2\InterviewExpressionStateV1ToV2Adapter.cs" />
     <Compile Include="V3\CustomFunctions\AbstractConditionalLevelInstanceV3.cs" />
+    <Compile Include="V4\AbstractInterviewExpressionStateV2.cs" />
+    <Compile Include="V4\AbstractConditionalLevelInstanceV4.cs" />
+    <Compile Include="V4\CustomFunctions\ExtentionsV4.cs" />
+    <Compile Include="V4\IExpressionExecutableV2.cs" />
+    <Compile Include="V4\IInterviewExpressionStateV4.cs" />
+    <Compile Include="V4\InterviewExpressionStateV2ToV4Adapter.cs" />
     <Compile Include="ValidityChanges.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +108,7 @@
       <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
