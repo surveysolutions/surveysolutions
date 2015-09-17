@@ -1,23 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory android:key="common_category">
+  <PreferenceCategory android:key="interview_settings_category">
     <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" android:defaultValue="@integer/GpsReceiveTimeoutSec"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory android:key="connection_settings_category">
+    <EditTextPreference android:key="Endpoint" android:defaultValue="@string/Endpoint"/>
+    <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer" android:defaultValue="@integer/HttpResponseTimeout"/>
+    <EditTextPreference android:key="BufferSize" android:numeric="integer" android:defaultValue="@integer/BufferSize"/>
   </PreferenceCategory>
 
   <PreferenceCategory android:key="about_category">
     <Preference android:key="deviceid" />
-    <Preference android:key="installationid" />
-    <Preference android:key="clientregistrationid" />
     <Preference android:key="version" />
   </PreferenceCategory>
-
-  <PreferenceCategory android:key="dev_settings_category">
-    <EditTextPreference android:key="Endpoint" android:defaultValue="@string/Endpoint"/>
-    <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer" android:defaultValue="@integer/HttpResponseTimeout"/>
-    <EditTextPreference android:key="BufferSize" android:numeric="integer" android:defaultValue="@integer/BufferSize"/>
-
-  </PreferenceCategory>
-
 
 </PreferenceScreen>
