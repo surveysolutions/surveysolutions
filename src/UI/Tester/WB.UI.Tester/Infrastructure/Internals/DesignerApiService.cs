@@ -58,7 +58,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         {
             Questionnaire downloadedQuestionnaire = null;
 
-            downloadedQuestionnaire = await this.restService.GetWithProgressAsync<Questionnaire>(
+            downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
                 url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
                 credentials:
                     new RestCredentials

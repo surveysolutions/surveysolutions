@@ -183,8 +183,8 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
   </data>
-  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Your version of this application does not support this questionnaire.  Please update this application.</value>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>New version of application was released. Please, update the application</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
     <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
@@ -529,5 +529,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>No questionnaires found</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Your account doesn't have Interviewer role</value>
+  </data>
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>No internet access to supervisor application. Check server adddress and(or) network settings</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>No network. Check your network settings</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>Request cancelled by user</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>Unexpected error</value>
   </data>
 </root>

@@ -327,7 +327,6 @@
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
-    <Compile Include="Implementations\Services\AndroidNetworkService.cs" />
     <Compile Include="Implementations\Services\GeoService.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\EmailReporterAttribute.cs" />
