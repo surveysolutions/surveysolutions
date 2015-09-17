@@ -102,6 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.NodeDepth = 0;
                 this.IsCurrent = navigationState.CurrentGroupType == ScreenType.Complete;
                 this.Title = UIResources.Interview_Complete_Screen_Title;
+                groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup, navigationIdentity.ScreenType);
             }
             this.SideBarGroupState = groupStateViewModel;
             this.ScreenType = navigationIdentity.ScreenType;
