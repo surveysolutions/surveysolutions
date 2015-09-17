@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
@@ -12,7 +10,6 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -25,7 +22,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -42,7 +38,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
         private readonly ISyncPackageIdsStorage syncPackageIdsStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
-        private readonly IPrincipal principal;
         private readonly IJsonUtils jsonUtils;
         private readonly IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
@@ -60,7 +55,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ICapiDataSynchronizationService capiDataSynchronizationService,
             ISyncPackageIdsStorage syncPackageIdsStorage,
             ICapiCleanUpService capiCleanUpService,
-            IPrincipal principal,
             IJsonUtils jsonUtils,
             IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo,
             IPlainInterviewFileStorage plainInterviewFileStorage,
@@ -76,7 +70,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.capiDataSynchronizationService = capiDataSynchronizationService;
             this.syncPackageIdsStorage = syncPackageIdsStorage;
             this.capiCleanUpService = capiCleanUpService;
-            this.principal = principal;
             this.jsonUtils = jsonUtils;
             this.plainStorageQuestionnireInfo = plainStorageQuestionnireInfo;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
@@ -225,17 +218,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            if (this.plainStorageQuestionnireInfo.GetById(questionnaireIdentity.ToString()) == null)
-            {
-                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
-                   questionnaire: questionnaireIdentity,
-                   onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                   token: this.Token);
-
-                await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);
-                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
-            }
-
             if (!this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
@@ -246,6 +228,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version, questionnaireAssembly);
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
+            }
+
+            if (this.plainStorageQuestionnireInfo.GetById(questionnaireIdentity.ToString()) == null)
+            {
+                var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
+                   questionnaire: questionnaireIdentity,
+                   onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                   token: this.Token);
+
+                await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);
+                await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
         }
 
