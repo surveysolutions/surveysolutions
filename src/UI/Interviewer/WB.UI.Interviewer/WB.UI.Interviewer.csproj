@@ -649,6 +649,7 @@
     <AndroidResource Include="Resources\Drawable\transparent_input_button_pressed.xml" />
     <AndroidResource Include="Resources\Drawable\transparent_input_button_unpressed.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
+    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
