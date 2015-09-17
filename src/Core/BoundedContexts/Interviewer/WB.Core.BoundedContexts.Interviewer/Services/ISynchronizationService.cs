@@ -21,8 +21,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
-        Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire, CancellationToken token);
-        Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire, CancellationToken token);
+        Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
+        Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
 
         Task<byte[]> GetApplicationAsync(CancellationToken token);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
@@ -32,9 +32,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
         Task<InterviewPackagesApiView> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token);
 
-        Task LogPackageAsSuccessfullyHandledAsync(string packageId, CancellationToken token);
+        Task LogPackageAsSuccessfullyHandledAsync(string packageId);
 
-        Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId,string previousSuccessfullyHandledPackageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+        Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task UploadInterviewAsync(Guid interviewId, string content, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
     }
