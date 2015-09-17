@@ -159,6 +159,7 @@
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Views\Dashboard\Old\QuestionnaireDTO.cs" />
     <Compile Include="Views\Dashboard\Old\SurveyDTO.cs" />
+    <Compile Include="Services\IInterviewerApplicationUpdater.cs" />
     <Compile Include="Views\QuestionnireInfo.cs" />
     <Compile Include="Views\Dashboard\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
@@ -171,7 +172,7 @@
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
-    <Compile Include="Views\SettingsViewModel.cs" />
+    <Compile Include="Views\TroubleshootingViewModel.cs" />
     <Compile Include="Views\SychronizationStatistics.cs" />
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />

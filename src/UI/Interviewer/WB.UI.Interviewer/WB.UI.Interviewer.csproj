@@ -302,7 +302,7 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Activities\SettingsActivity.cs" />
+    <Compile Include="Activities\TroubleshootingActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
@@ -327,7 +327,6 @@
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
-    <Compile Include="Implementations\Services\GeoService.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\EmailReporterAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\GoogleFormReporterAttribute.cs" />
@@ -394,7 +393,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
-    <Compile Include="Services\IGeoService.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="Settings\EnumeratorSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
@@ -408,7 +406,7 @@
     <Compile Include="Syncronization\ChangeLogManipulator.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
-    <Compile Include="Syncronization\Update\UpdateProcessor.cs" />
+    <Compile Include="Implementations\Services\InterviewerApplicationUpdater.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
@@ -440,7 +438,7 @@
     <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\settings_dialog.axml">
+    <AndroidResource Include="Resources\Layout\Troubleshooting.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\sync_dialog.axml">
@@ -648,6 +646,7 @@
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_layout_border.xml" />
+    <AndroidResource Include="Resources\Values\troubleshooting.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -696,6 +695,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Syncronization\Update\" />
     <Folder Include="ViewModel\Dashboard\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>

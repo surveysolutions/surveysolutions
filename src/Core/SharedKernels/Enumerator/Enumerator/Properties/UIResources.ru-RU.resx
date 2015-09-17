@@ -252,8 +252,8 @@
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Нет связи с дизайнером Survey Solutions</value>
   </data>
-  <data name="SettingsText" xml:space="preserve">
-    <value>Настройки</value>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Устранение неполадок</value>
   </data>
   <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
     <value>Разрешить отправлять анонимную информацию о всех крушениях приложения</value>
@@ -490,5 +490,41 @@
   </data>
   <data name="EndpointHint" xml:space="preserve">
     <value>Домен синхронизации</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Возникла проблема при создании резервной копии. Обратитесь к разработчиками или повторите попытку позже</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Резервная копия была создана и сохранена в файл {0}</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>Cуществует более поздняя версия. Вы хотите загрузить обновление?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>У вас последняя версия приложения</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Произошла ошибка во время проверки версии. Проверьте настройке и повторите попытку позже</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Возникла проблема при восстановлении из резервной копии. Обратитесь к разработчиками или повторите попытку позже</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Данные успешно восстановлены из резервной копии</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>Все данные будут перетерты. Вы уверены, что хотите продолжить? Если да, то убедитесь, что файл с резервной копией находится по следующему пути {0}</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Создать резервную копию</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Версия {0}. Проверить наличие обновлений</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Восстановить из резервной копии</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Отправить информацию о таблете</value>
   </data>
 </root>

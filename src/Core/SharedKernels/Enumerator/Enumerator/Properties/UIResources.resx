@@ -258,8 +258,8 @@
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>No connection to the Survey Solutions Designer. Please make sure that the website is available.</value>
   </data>
-  <data name="SettingsText" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Troubleshooting</value>
   </data>
   <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
     <value>Allow to send an anonymous information about crashes of application</value>
@@ -521,15 +521,6 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="EndpointHint" xml:space="preserve">
     <value>Synchronization endpoint</value>
   </data>
-  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
-    <value>have not been updated</value>
-  </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>were updated {0}</value>
-  </data>
-  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
-    <value>No questionnaires found</value>
-  </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>Your account doesn't have Interviewer role</value>
   </data>
@@ -544,5 +535,41 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="UnexpectedException" xml:space="preserve">
     <value>Unexpected error</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Something went wrong and backup failed to be created</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Backup was saved to {0}</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>New version exists. Would you like to download and update application?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>You have the latest version of application</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Error occurred on version check. Please, check settings or try again later.</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Something went wrong and tabled failed to be restored</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Tablet was successfully restored</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Create backup</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Version: {0}. Check for a new version</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Restore from backup</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Send tablet's information</value>
   </data>
 </root>
