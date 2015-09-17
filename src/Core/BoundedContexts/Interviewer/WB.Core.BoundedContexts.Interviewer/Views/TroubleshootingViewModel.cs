@@ -44,10 +44,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void Init()
         {
             Version = this.interviewerSettings.GetApplicationVersionName();
+            IsRestoreVisible = false;
+        }
+
+        public bool IsRestoreVisible
+        {
+            get { return this.isRestoreVisible; }
+            set { this.isRestoreVisible = value; this.RaisePropertyChanged(); }
         }
 
         public string Version { get; set; }
 
+        private int clickCount = 0;
+        const int NUMBER_CLICK = 10;
+
+        private IMvxCommand countClicksCommand;
+        public IMvxCommand CountClicksCommand
+        {
+            get { return this.countClicksCommand ?? (this.countClicksCommand = new MvxCommand(this.CountClicks, () => !IsInProgress)); }
+        }
+
+        private void CountClicks()
+        {
+            clickCount++;
+            if (this.clickCount != NUMBER_CLICK)
+            {
+                return;
+            }
+
+            this.clickCount = 0;
+            this.IsRestoreVisible = true;
+        }
 
         private IMvxCommand checkNewVersionCommand;
         public IMvxCommand CheckNewVersionCommand
@@ -169,6 +196,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
 
         private bool isInProgress;
+
+        private bool isRestoreVisible;
+
         public bool IsInProgress
         {
             get { return this.isInProgress; }
