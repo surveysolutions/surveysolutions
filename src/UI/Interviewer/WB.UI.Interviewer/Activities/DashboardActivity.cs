@@ -1,10 +1,8 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Views.Animations;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.CustomControls;
@@ -40,17 +38,6 @@ namespace WB.UI.Interviewer.Activities
             recyclerView.Adapter = adapter;
         }
 
-        protected override void OnViewModelSet()
-        {
-            base.OnViewModelSet();
-
-            this.ViewModel.Synchronization.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == "IsSynchronizationInfoShowed")
-                    this.SlideDown(this.FindViewById<View>(Resource.Id.synchronization_panel), this.ViewModel.Synchronization.IsSynchronizationInfoShowed);
-            };
-        }
-
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
@@ -75,16 +62,5 @@ namespace WB.UI.Interviewer.Activities
             }
             return base.OnOptionsItemSelected(item);
         }
-
-        private void SlideDown(View androidControl, bool expand)
-        {
-            if (androidControl == null) throw new ArgumentException("androidControl");
-
-            var slideDownAnimation = AnimationUtils.LoadAnimation(this, expand ? Resource.Animation.slide_down : Resource.Animation.slide_up);
-            slideDownAnimation.Reset();
-            androidControl.ClearAnimation();
-            androidControl.StartAnimation(slideDownAnimation);
-        }
-
     }
 }
