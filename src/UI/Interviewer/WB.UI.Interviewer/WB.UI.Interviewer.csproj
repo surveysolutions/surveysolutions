@@ -639,8 +639,6 @@
     <AndroidResource Include="Resources\Drawable\synchronization_download_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\anim\slide_down.xml" />
-    <AndroidResource Include="Resources\anim\slide_up.xml" />
     <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
     <AndroidResource Include="Resources\Drawable\transparent_input_button.xml" />
