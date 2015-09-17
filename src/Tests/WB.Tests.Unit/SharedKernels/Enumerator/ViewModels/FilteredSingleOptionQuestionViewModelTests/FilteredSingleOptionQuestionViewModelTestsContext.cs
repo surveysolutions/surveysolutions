@@ -1,4 +1,5 @@
 ﻿using Moq;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -23,6 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 principal ?? Mock.Of<IPrincipal>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<ILiteEventRegistry>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<SingleOptionQuestionAnswered>>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
         }
