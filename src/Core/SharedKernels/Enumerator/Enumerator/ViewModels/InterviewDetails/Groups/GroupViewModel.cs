@@ -101,8 +101,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            if (navigationIdentity.ScreenType!=ScreenType.Group)
+            if (navigationIdentity.ScreenType != ScreenType.Group)
+            {
+                this.GroupState.Init(interviewId, null, navigationIdentity.ScreenType);
                 return;
+            }
 
             GroupModel groupModel;
             if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(navigationIdentity.TargetGroup.Id, out groupModel))
@@ -125,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void QuestionAnswered(object sender, EventArgs e)
         {
-            this.GroupState.UpdateFromModel();
+            this.GroupState.UpdateFromGroupModel();
             this.RaisePropertyChanged(() => this.GroupState);
         }
 

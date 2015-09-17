@@ -92,7 +92,11 @@
 
     <Button
         style="@style/Interview_Complete_Screen_Button"
-        local:MvxBind="HideKeyboardOnClick .; Click CompleteInterviewCommand; Text Localization('Interview_Complete_Button');"/>
+        local:MvxBind="HideKeyboardOnClick .; 
+        Click CompleteInterviewCommand; 
+        Text Localization('Interview_Complete_Button'); 
+        ButtonGroupStyle InterviewState; "/>
+    
     <LinearLayout style="@style/Interview_Question_Header">
       <TextView
           style="@style/Interview_Complete_Screen_Text"

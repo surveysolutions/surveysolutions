@@ -82,7 +82,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void NavigationStateOnOnGroupChanged(GroupChangedEventArgs newGroupIdentity)
         {
             if (newGroupIdentity.ScreenType != ScreenType.Group)
-                return; 
+            {
+                UpdateInterviewStatus(null, ScreenType.Complete);
+                return;
+            }
 
             var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
             IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
@@ -92,9 +95,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateInterviewStatus(newGroupIdentity.TargetGroup);
         }
 
-        private void UpdateInterviewStatus(Identity groupIdentity)
+        private void UpdateInterviewStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
         {
-            this.groupState.Init(this.navigationState.InterviewId, groupIdentity);
+            this.groupState.Init(this.navigationState.InterviewId, groupIdentity, type);
 
             this.Status = this.groupState.Status;
         }
