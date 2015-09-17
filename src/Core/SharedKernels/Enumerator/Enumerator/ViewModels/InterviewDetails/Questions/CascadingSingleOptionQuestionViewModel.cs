@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
          IInterviewEntityViewModel,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
          ILiteEventHandler<AnswersRemoved>,
+         ILiteEventHandler<AnswerRemoved>,
          IDisposable
     {
         public class CascadingComboboxItemViewModel 
@@ -145,6 +146,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return new MvxCommand(async () =>
+                {
+                    if (!QuestionState.IsAnswered)
+                    {
+                        ResetTextInEditor = "";
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                        return;
+                    }
+                    try
+                    {
+                        await this.Answering.SendRemoveAnswerCommandAsync(
+                            new RemoveAnswerCommand(this.interviewId,
+                                this.principal.CurrentUserIdentity.UserId,
+                                this.questionIdentity,
+                                DateTime.UtcNow));
+
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    }
+                    catch (InterviewException exception)
+                    {
+                        this.QuestionState.Validity.ProcessException(exception);
+                    }
+                });
+            }
+        }
+
         private CascadingComboboxItemViewModel selectedObject;
         public CascadingComboboxItemViewModel SelectedObject
         {
@@ -181,6 +212,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.UpdateSuggestionsList(this.filterText);
 
                 this.isInitialized = true;
+
+                this.RaisePropertyChanged(); 
             }
         }
 
@@ -328,6 +361,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
             this.QuestionState.Dispose();
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                InvokeOnMainThread(() =>
+                {
+                    this.QuestionState.IsAnswered = false;
+                    this.ResetTextInEditor = string.Empty;
+                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                });
+            }
         }
     }
 }
