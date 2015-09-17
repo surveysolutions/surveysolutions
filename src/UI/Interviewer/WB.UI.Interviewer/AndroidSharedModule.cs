@@ -2,7 +2,7 @@
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Interviewer.Implementations.Services;
+using WB.UI.Shared.Enumerator.CustomServices;
 
 namespace WB.UI.Interviewer
 {

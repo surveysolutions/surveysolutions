@@ -5,9 +5,9 @@ using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.UI.Interviewer.Implementations.Services
+namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    internal class AndroidNetworkService : INetworkService
+    public class AndroidNetworkService : INetworkService
     {
         private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
         private readonly IMvxReachability mvxReachability;
