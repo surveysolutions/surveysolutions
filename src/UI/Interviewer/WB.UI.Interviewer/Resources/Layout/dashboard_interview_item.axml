@@ -23,7 +23,8 @@
       </RelativeLayout>
       
       <MvxListView style="@style/Dashboard_InterviewItem_PrefilledQuestions"
-          local:MvxBind="ItemsSource PrefilledQuestions;"
+          local:MvxBind="ItemsSource PrefilledQuestions;
+                         ItemClick LoadDashboardItemCommand;"
           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
 
       <TextView style="@style/Dashboard_InterviewItem_Comment"
