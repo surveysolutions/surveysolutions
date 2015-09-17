@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -27,7 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IPrincipal principal, 
             IInterviewCompletionService completionService, 
             IStatefulInterviewRepository interviewRepository, 
-            IMvxMessenger messenger)
+            IMvxMessenger messenger,
+            GroupStateViewModel interviewState)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
@@ -35,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.completionService = completionService;
             this.interviewRepository = interviewRepository;
             this.messenger = messenger;
+            this.InterviewState = interviewState;
         }
 
         Guid interviewId;
@@ -43,11 +46,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.interviewId = Guid.Parse(interviewId);
 
-            var interview = this.interviewRepository.Get(interviewId);
+            InterviewState.Init(interviewId, null, ScreenType.Complete);
 
-            var questionsCount = interview.CountActiveQuestionsInInterview();
-            this.AnsweredCount = interview.CountAnsweredQuestionsInInterview();
-            this.ErrorsCount = interview.CountInvalidQuestionsInInterview();
+            var questionsCount = InterviewState.QuestionsCount;//  interview.CountActiveQuestionsInInterview();
+            this.AnsweredCount = InterviewState.AnsweredQuestionsCount;// interview.CountAnsweredQuestionsInInterview();
+            this.ErrorsCount = InterviewState.InvalidAnswersCount;// interview.CountInvalidQuestionsInInterview();
             this.UnansweredCount = questionsCount - this.AnsweredCount;
         }
 
@@ -56,6 +59,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public int UnansweredCount { get; set; }
 
         public int ErrorsCount { get; set; }
+
+
+        public GroupStateViewModel InterviewState { get; set; }
 
         private IMvxCommand completeInterviewCommand;
         public IMvxCommand CompleteInterviewCommand

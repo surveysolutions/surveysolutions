@@ -1009,8 +1009,6 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview = global::WB.UI.Interviewer.Resource.Layout.interview;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_active_group = global::WB.UI.Interviewer.Resource.Layout.interview_active_group;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_breadcrumb_item = global::WB.UI.Interviewer.Resource.Layout.interview_breadcrumb_item;
-			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_complete_screen = global::WB.UI.Interviewer.Resource.Layout.interview_complete_screen;
-			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_complete_statistics = global::WB.UI.Interviewer.Resource.Layout.interview_complete_statistics;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_complete_status_change = global::WB.UI.Interviewer.Resource.Layout.interview_complete_status_change;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_disabled_group = global::WB.UI.Interviewer.Resource.Layout.interview_disabled_group;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_disabled_question = global::WB.UI.Interviewer.Resource.Layout.interview_disabled_question;

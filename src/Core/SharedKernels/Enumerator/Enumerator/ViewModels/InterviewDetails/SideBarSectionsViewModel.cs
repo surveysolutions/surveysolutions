@@ -272,7 +272,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.Where(x => x.ScreenType == ScreenType.Group).ForEach(x => x.SideBarGroupState.UpdateFromModel())));
+                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel())));
             }
         }
 
