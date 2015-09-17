@@ -82,9 +82,14 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnDestroy()
         {
-            ViewModel.Dispose();
             base.OnDestroy();
-            this.Dispose();
+
+            if (IsFinishing)
+            {
+                this.Dispose();
+
+                ViewModel.Dispose();
+            }
         }
 
         private void OnSectionChange(SectionChangeMessage msg)
