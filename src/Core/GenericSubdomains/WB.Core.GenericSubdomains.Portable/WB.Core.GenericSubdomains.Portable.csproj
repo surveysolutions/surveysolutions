@@ -66,6 +66,7 @@
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="Implementation\RestException.cs" />
+    <Compile Include="Implementation\RestExceptionType.cs" />
     <Compile Include="Implementation\Services\RestService.cs" />
     <Compile Include="Implementation\TopologicalSorter.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
