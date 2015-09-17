@@ -97,21 +97,6 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             this.SiblingRosters[siblingsKey].Add(rosterStringKey);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public Dictionary<string, IExpressionExecutableV2> InterviewScopes = new Dictionary<string, IExpressionExecutableV2>();
 
         public IInterviewProperties InterviewProperties { set; get; }

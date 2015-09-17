@@ -58,8 +58,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line default
             #line hidden
             this.Write(@"(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances, 
-                Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
-            : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
+                Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
+            : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
         {
         
         ");
@@ -218,7 +218,7 @@ foreach (var @roster in Model.Rosters)
             #line default
             #line hidden
             this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, thi" +
-                    "s.StructuralDependencies));\r\n        ");
+                    "s.StructuralDependencies, this.Quest));\r\n        ");
             
             #line 39 "C:\Work\surveysolutions-slave\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.tt"
  }
@@ -270,7 +270,7 @@ foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Mo
             
             #line default
             #line hidden
-            this.Write(@"(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies)
+            this.Write(@"(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
             {
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),

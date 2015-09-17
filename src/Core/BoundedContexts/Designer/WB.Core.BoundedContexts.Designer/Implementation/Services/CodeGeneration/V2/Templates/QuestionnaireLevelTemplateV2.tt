@@ -8,8 +8,8 @@
     internal partial class <#=Model.GeneratedTypeName#> : <#=this.Model.AbstractConditionalLevelClassName#><<#=this.Model.GeneratedTypeName#>>, IExpressionExecutableV2
     {
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances, 
-                Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
-            : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies)
+                Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
+            : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
         {
         
         <#foreach (var @group in Model.Groups) 
@@ -35,7 +35,7 @@
         <# }#>
         <#foreach (var @roster in Model.Rosters) 
         {#>    
-            RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
+            RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
         <# }#>
 
         <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
@@ -47,7 +47,7 @@
 
         public override IExpressionExecutableV2 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances)
         {
-            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies)
+            var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
             {
                 ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
