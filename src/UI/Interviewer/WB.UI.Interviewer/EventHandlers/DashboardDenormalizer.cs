@@ -87,7 +87,8 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.FeaturedQuestionsMeta, 
                 evnt.Payload.CreatedOnClient,
                 false,
-                evnt.EventTimeStamp);
+                evnt.EventTimeStamp,
+                null);
         }
 
 
@@ -102,6 +103,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 new AnsweredQuestionSynchronizationDto[0], 
                 true, 
                 true,
+                evnt.EventTimeStamp,
                 evnt.EventTimeStamp);
         }
 
@@ -115,7 +117,8 @@ namespace WB.UI.Interviewer.EventHandlers
             IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions,
             bool createdOnClient, 
             bool canBeDeleted,
-            DateTime createdDateTime)
+            DateTime createdDateTime,
+            DateTime? startedDateTime)
         {
             var questionnaireTemplate = this.questionnaireStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
             if (questionnaireTemplate == null)
@@ -129,7 +132,7 @@ namespace WB.UI.Interviewer.EventHandlers
             }
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                items, questionnaireTemplate.Version, comments, createdDateTime, createdOnClient, canBeDeleted);
+                items, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, createdOnClient, canBeDeleted);
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
         }
 
@@ -187,7 +190,8 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.InterviewData.Answers, 
                 evnt.Payload.InterviewData.CreatedOnClient,
                 canBeDeleted: false,
-                createdDateTime: evnt.EventTimeStamp);
+                createdDateTime: evnt.EventTimeStamp,
+                startedDateTime: null);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
