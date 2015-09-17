@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<SettingsViewModel>()); }
+            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
         }
 
         private async Task LoginAsync()

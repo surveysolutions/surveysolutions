@@ -1189,15 +1189,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        public static string SettingsText {
-            get {
-                return ResourceManager.GetString("SettingsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sign out.
         /// </summary>
         public static string SignOutText {
@@ -1248,6 +1239,123 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string TextQuestion_MaskHint {
             get {
                 return ResourceManager.GetString("TextQuestion_MaskHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create backup.
+        /// </summary>
+        public static string Troubleshooting_Backup {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong and backup failed to be created.
+        /// </summary>
+        public static string Troubleshooting_BackupErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup was saved to {0}.
+        /// </summary>
+        public static string Troubleshooting_BackupWasSaved {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupWasSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: {0}. Check for a new version.
+        /// </summary>
+        public static string Troubleshooting_CurrentVersion_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("Troubleshooting_CurrentVersion_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        /// </summary>
+        public static string Troubleshooting_NewVerisonExist {
+            get {
+                return ResourceManager.GetString("Troubleshooting_NewVerisonExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of application.
+        /// </summary>
+        public static string Troubleshooting_NoNewVersion {
+            get {
+                return ResourceManager.GetString("Troubleshooting_NoNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong and tabled failed to be restored.
+        /// </summary>
+        public static string Troubleshooting_RestorationErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestorationErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore from backup.
+        /// </summary>
+        public static string Troubleshooting_Restore {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}.
+        /// </summary>
+        public static string Troubleshooting_RestoreConfirmation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoreConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet was successfully restored.
+        /// </summary>
+        public static string Troubleshooting_RestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send tablet&apos;s information.
+        /// </summary>
+        public static string Troubleshooting_SendTabletInformation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendTabletInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string Troubleshooting_Title {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred on version check. Please, check settings or try again later..
+        /// </summary>
+        public static string Troubleshooting_Unknown_ErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Unknown_ErrorMessage", resourceCulture);
             }
         }
         
