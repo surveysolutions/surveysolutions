@@ -49,8 +49,16 @@ namespace WB.UI.Interviewer.Settings
         {
             get
             {
-                return SharedPreferences.GetInt(BufferSizeParameterName,
-                    Application.Context.Resources.GetInteger(Resource.Integer.BufferSize));
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize);
+                string bufferSize = SharedPreferences.GetString(BufferSizeParameterName,
+                    defValue.ToString());
+                int result;
+                if (int.TryParse(bufferSize, out result))
+                {
+                    return result;
+                }
+
+                return defValue;
             }
         }
 

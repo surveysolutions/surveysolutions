@@ -80,6 +80,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account doesn&apos;t have Interviewer role.
+        /// </summary>
+        public static string AccountIsNotAnInterviewer {
+            get {
+                return ResourceManager.GetString("AccountIsNotAnInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first..
         /// </summary>
         public static string AccountIsNotApprovedOnServer {
@@ -334,6 +343,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No internet access to supervisor application. Check server adddress and(or) network settings.
+        /// </summary>
+        public static string HostUnreachable {
+            get {
+                return ResourceManager.GetString("HostUnreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connecting to server.
         /// </summary>
         public static string ImportQuestionnaire_CheckConnectionToServer {
@@ -384,15 +402,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_PreconditionFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your version of this application does not support this questionnaire.  Please update this application..
-        /// </summary>
-        public static string ImportQuestionnaire_Error_UpgradeRequired {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_Error_UpgradeRequired", resourceCulture);
             }
         }
         
@@ -1036,6 +1045,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No network. Check your network settings.
+        /// </summary>
+        public static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Android version:.
         /// </summary>
         public static string OSVersionText {
@@ -1086,6 +1104,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string RealQuestion_Hint {
             get {
                 return ResourceManager.GetString("RealQuestion_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request cancelled by user.
+        /// </summary>
+        public static string RequestCanceledByUser {
+            get {
+                return ResourceManager.GetString("RequestCanceledByUser", resourceCulture);
             }
         }
         
@@ -1239,6 +1266,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error.
+        /// </summary>
+        public static string UnexpectedException {
+            get {
+                return ResourceManager.GetString("UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version of application was released. Please, update the application.
+        /// </summary>
+        public static string UpgradeRequired {
+            get {
+                return ResourceManager.GetString("UpgradeRequired", resourceCulture);
             }
         }
         

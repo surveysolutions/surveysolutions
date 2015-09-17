@@ -41,14 +41,27 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(
             string url, 
-            Func<FlurlClient, Task<HttpResponseMessage>> request,
+            HttpMethod method,
             object queryString = null, 
-            RestCredentials credentials = null)
+            object request = null,
+            RestCredentials credentials = null,
+            CancellationToken? userCancellationToken = null)
         {
-            if (this.networkService != null && !this.networkService.IsNetworkEnabled())
+            if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
+                throw new RestException("Invalid url", type: RestExceptionType.InvalidUrl);
+
+            if (this.networkService != null)
             {
-                throw new RestException(Resources.NoNetwork);
+                if (!this.networkService.IsNetworkEnabled())
+                    throw new RestException("No network", type: RestExceptionType.NoNetwork);
+
+                if(!this.networkService.IsHostReachable(this.restServiceSettings.Endpoint))
+                    throw new RestException("Host unreachable", type: RestExceptionType.HostUnreachable);
             }
+
+            var requestTimeoutToken = new CancellationTokenSource(this.restServiceSettings.Timeout).Token;
+            var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
+                userCancellationToken ?? default(CancellationToken));
 
             var fullUrl = this.restServiceSettings.Endpoint
                 .AppendPathSegment(url)
@@ -63,109 +76,88 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
-                return await request(restClient);
-            }
-            catch (TaskCanceledException)
-            {
-                throw new RestException("Request cancelled", type: RestExceptionType.RequestCancelled);
-            }
-            catch (FlurlHttpTimeoutException ex)
-            {
-                throw new RestException(message: "Request timeout", statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                return await restClient.SendAsync(method, this.CreateJsonContent(request),
+                            linkedCancellationTokenSource.Token);
             }
             catch (FlurlHttpException ex)
             {
+                if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
+                {
+                    if (requestTimeoutToken.IsCancellationRequested)
+                    {
+                        throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout, 
+                            statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                    }
+
+                    if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
+                    {
+                        throw new RestException("Request cancelled by user",
+                               type: RestExceptionType.RequestCanceledByUser, innerException: ex);   
+                    }
+                }
+
                 if (ex.Call.Response != null)
+                {
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
-                        innerException: ex);
+                           innerException: ex);   
+                }
 
-                throw new RestException(message: "No connection", innerException: ex);
-            }
-            catch (WebException ex)
-            {
-                throw new RestException(message: "No connection", innerException: ex);
+                throw new RestException(message: "Unexpected web exception", innerException: ex);
             }
         }
 
-        public async Task<T> GetAsync<T>(string url, object queryString = null, RestCredentials credentials = null)
+        public async Task GetAsync(string url, object queryString = null, RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return await this.GetAsync<T>(url: url, queryString: queryString, credentials: credentials, token: default(CancellationToken));
+            await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials,
+                    method: HttpMethod.Get, userCancellationToken: token);
         }
 
-        public async Task GetAsync(string url, object queryString = null, RestCredentials credentials = null)
+        public async Task PostAsync(string url, object request = null, RestCredentials credentials = null,
+            CancellationToken? token = null)
         {
-            await this.GetAsync(url: url, queryString: queryString, credentials: credentials, token: default(CancellationToken));
+            await this.ExecuteRequestAsync(url: url, credentials: credentials, method:HttpMethod.Post,
+                userCancellationToken: token);
         }
 
-        public async Task<T> PostAsync<T>(string url, object request = null, RestCredentials credentials = null)
+        public async Task<T> GetAsync<T>(string url,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object queryString = null,
+            RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return await this.PostAsync<T>(url: url, credentials: credentials, request: request, token: default(CancellationToken));
+            var response = this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, method: HttpMethod.Get,
+                userCancellationToken: token);
+
+            return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
+                onDownloadProgressChanged: onDownloadProgressChanged);
         }
 
-        public async Task PostAsync(string url, object request = null, RestCredentials credentials = null)
+        public async Task<T> PostAsync<T>(string url,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null,
+            RestCredentials credentials = null, CancellationToken? token = null)
         {
-            await this.PostAsync(url: url, credentials: credentials, request: request, token: default(CancellationToken));
+            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
+                userCancellationToken: token);
+
+            return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
+                onDownloadProgressChanged: onDownloadProgressChanged);
         }
 
-        public async Task<T> GetAsync<T>(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null)
+        public async Task<byte[]> DownloadFileAsync(string url,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, RestCredentials credentials = null,
+            CancellationToken? token = null)
         {
-            return await this.GetWithProgressAsync<T>(url: url, token: token, queryString: queryString,credentials: credentials, onDownloadProgressChanged: null);
-        }
+            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
+                userCancellationToken: token);
 
-        public async Task GetAsync(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null)
-        {
-            await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: async (client) => await client.GetAsync(token));
-        }
+            var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token ?? default(CancellationToken),
+                        onDownloadProgressChanged: onDownloadProgressChanged);
 
-        public async Task<T> PostAsync<T>(string url, CancellationToken token, object request = null, RestCredentials credentials = null)
-        {
-            return await this.PostWithProgressAsync<T>(url: url, token: token, request: request, credentials: credentials, onDownloadProgressChanged: null);
-        }
-
-        public async Task PostAsync(string url, CancellationToken token, object request = null, RestCredentials credentials = null)
-        {
-            await this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) =>await client.SendAsync(HttpMethod.Post, this.CreateJsonContent(request), token));
-        }
-
-        public async Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object queryString = null,
-            RestCredentials credentials = null)
-        {
-            var response =  this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, request: async (client) => await client.SendAsync(HttpMethod.Get, null, token));
-            return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token, onDownloadProgressChanged: onDownloadProgressChanged);
-        }
-
-        public async Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null,
-            RestCredentials credentials = null)
-        {
-            var response =  this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) => await client.SendAsync(HttpMethod.Post, this.CreateJsonContent(request), token));
-            return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token, onDownloadProgressChanged: onDownloadProgressChanged);
+            return restResponse.Response;
         }
 
         private HttpContent CreateJsonContent(object data)
         {
-            return new CapturedStringContent(this.jsonUtils.Serialize(data), Encoding.UTF8, "application/json");
+            return data == null ? null : new CapturedStringContent(this.jsonUtils.Serialize(data), Encoding.UTF8, "application/json");
         }
-
-        public async Task<byte[]> DownloadFileWithProgressAsync(string url, CancellationToken token,
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, RestCredentials credentials = null)
-        {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, request: async (client) => await client.SendAsync(HttpMethod.Get, null, token));
-            var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token, onDownloadProgressChanged: onDownloadProgressChanged);
-            return restResponse.Response;
-        }
-
-        private async Task<T> ReceiveCompressedJsonAsync<T>(Task<HttpResponseMessage> response)
-        {
-            var responseMessage = await response;
-
-            return this.GetDecompressedJsonFromHttpResponseMessage<T>(new RestResponse()
-            {
-                Response = await responseMessage.Content.ReadAsByteArrayAsync(),
-                ContentType = this.GetContentType(responseMessage.Content.Headers.ContentType.MediaType),
-                ContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers)
-            });
-        }
-
 
         private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
             CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
@@ -274,6 +266,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
             }
 
+        }
+
+        private bool IsValidHostAddress(string url)
+        {
+            Uri uriResult;
+            return Uri.TryCreate(url, UriKind.Absolute, out uriResult) && (uriResult.Scheme == "http" || uriResult.Scheme == "https");
         }
 
         internal class RestResponse
