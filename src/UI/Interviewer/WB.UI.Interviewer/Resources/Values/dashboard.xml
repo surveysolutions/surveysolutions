@@ -67,13 +67,16 @@
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">fill_parent</item>
     <item name="android:orientation">horizontal</item>
-    <item name="android:background">@android:color/white</item>
+    <item name="android:background">@drawable/dashboard_item_layout_border</item>
 
   </style>
 
   <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
     <item name="android:layout_width">14dp</item>
     <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_marginTop">1dp</item>
+    <item name="android:layout_marginBottom">1dp</item>
+    <item name="android:layout_marginLeft">1dp</item>
   </style>
 
   <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">
@@ -84,6 +87,7 @@
     <item name="android:layout_marginLeft">14dp</item>
     <item name="android:layout_marginRight">1dp</item>
     <item name="android:orientation">vertical</item>
+    <item name="android:background">@android:color/white</item>
   </style>
 
   <style name="Dashboard_InterviewItem_Title" parent="AppTheme">
@@ -103,9 +107,7 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:layout_marginTop">-20dp</item>
     <item name="android:layout_marginRight">-15dp</item>
-<!--
     <item name="android:padding">15dp</item>
--->
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
