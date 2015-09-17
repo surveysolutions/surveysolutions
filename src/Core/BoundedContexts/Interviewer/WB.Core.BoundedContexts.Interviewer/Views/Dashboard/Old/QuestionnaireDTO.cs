@@ -15,8 +15,9 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
         }
 
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties,
-            long surveyVersion, string comments, DateTime createdDateTime,
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, 
+            IEnumerable<FeaturedItem> properties,
+            long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime,
             bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
@@ -28,6 +29,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.SurveyVersion = surveyVersion;
             this.Comments = comments;
             this.CreatedDateTime = createdDateTime;
+            this.StartedDateTime = startedDateTime;
 
             this.SetProperties(properties);
         }
