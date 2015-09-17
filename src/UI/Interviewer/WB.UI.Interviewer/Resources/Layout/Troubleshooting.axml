@@ -13,7 +13,7 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('Troubleshooting_Title')" />
+        local:MvxBind="Click CountClicksCommand; Text Localization('Troubleshooting_Title')" />
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
             local:MvxBind="ShowProgress IsInProgress" />
@@ -33,6 +33,7 @@
       <Button style="@style/Troubleshooting_Button"
           local:MvxBind="
             Click RestoreCommand; 
+            Visible IsRestoreVisible;
             Text Localization('Troubleshooting_Restore');" />
 
       <wb.ui.interviewer.controls.TabletInformationReportButton
