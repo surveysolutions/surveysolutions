@@ -8,6 +8,7 @@ using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -45,6 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IJsonUtils jsonUtils;
         private readonly IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly ILogger logger;
         private CancellationTokenSource synchronizationCancellationTokenSource;
 
         public SynchronizationViewModel(
@@ -61,7 +63,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IJsonUtils jsonUtils,
             IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo,
-            IPlainInterviewFileStorage plainInterviewFileStorage)
+            IPlainInterviewFileStorage plainInterviewFileStorage,
+            ILogger logger)
         {
             this.synchronizationService = synchronizationService;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -77,6 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.jsonUtils = jsonUtils;
             this.plainStorageQuestionnireInfo = plainStorageQuestionnireInfo;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.logger = logger;
         }
 
         private CancellationToken Token { get { return this.synchronizationCancellationTokenSource.Token; } }
@@ -169,21 +173,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Success_Title,
                     InterviewerUIResources.Synchronization_Success_Description);
             }
-            catch (RestException ex)
+            catch (SynchronizationException ex)
             {
                 switch (ex.Type)
                 {
-                        case RestExceptionType.RequestCancelled:
+                    case SynchronizationExceptionType.RequestCanceledByUser:
                         this.IsSynchronizationInfoShowed = false;
                         break;
                 }
+
+                this.Status = SynchronizationStatus.Fail;
+                this.SetProgressOperation(InterviewerUIResources.Synchronization_Fail_Title, ex.Message);
             }
             catch (Exception ex)
             {
-                Mvx.Trace(MvxTraceLevel.Error, ex.Message);
                 this.Status = SynchronizationStatus.Fail;
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Fail_Title,
-                    InterviewerUIResources.Synchronization_Fail_Description);
+                    InterviewerUIResources.Synchronization_Fail_UnexpectedException);
+                this.logger.Error("Synchronization. Unexpected exception", ex);
             }
             finally
             {
