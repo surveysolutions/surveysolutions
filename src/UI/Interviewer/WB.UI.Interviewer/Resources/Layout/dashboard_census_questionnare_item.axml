@@ -3,8 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     card_view:cardBackgroundColor="@android:color/white"
-    card_view:cardCornerRadius="4dp"
-    android:clickable="true"
+    card_view:cardCornerRadius="3dp"
     style="@style/Dashboard_InterviewListItem">
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel" />
