@@ -3,8 +3,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     card_view:cardBackgroundColor="@color/dashboard_new_interview_status"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardPreventCornerOverlap="true"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="0dp"
     style="@style/Dashboard_InterviewListItem">
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout"
     local:MvxBind="Click LoadDashboardItemCommand;">
