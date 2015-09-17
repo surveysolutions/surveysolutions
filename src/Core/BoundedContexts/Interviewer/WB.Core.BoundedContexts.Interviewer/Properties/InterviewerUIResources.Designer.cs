@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Synchronize to get new tasks
         ///or contact your supervisor
-        ///for thurther instructions.
+        ///for further instructions.
         /// </summary>
         public static string Dashboard_NoInterviewsText {
             get {

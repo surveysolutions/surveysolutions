@@ -103,18 +103,26 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:layout_marginTop">-20dp</item>
     <item name="android:layout_marginRight">-15dp</item>
+<!--
     <item name="android:padding">15dp</item>
+-->
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:focusable">false</item>
+    <item name="android:focusableInTouchMode">false</item>
+    <item name="android:listSelector">@android:color/transparent</item>
+    <item name="android:cacheColorHint">@android:color/transparent</item>
+    <item name="android:divider">@android:color/transparent</item>
+    <item name="android:dividerHeight">0dp</item>
     <item name="android:layout_marginTop">18dp</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestion" parent="AppTheme">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_height">@dimen/textsize_28</item>
     <item name="android:orientation">horizontal</item>
     <item name="android:textSize">@dimen/textsize_20</item>
   </style>
