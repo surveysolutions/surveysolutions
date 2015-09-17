@@ -281,15 +281,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Common settings.
-        /// </summary>
-        public static string Prefs_CommonSettings {
-            get {
-                return ResourceManager.GetString("Prefs_CommonSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Connection settings.
         /// </summary>
         public static string Prefs_ConnectionSettings {
@@ -367,6 +358,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Prefs_InstallationIdTitle {
             get {
                 return ResourceManager.GetString("Prefs_InstallationIdTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview settings.
+        /// </summary>
+        public static string Prefs_InterviewSettings {
+            get {
+                return ResourceManager.GetString("Prefs_InterviewSettings", resourceCulture);
             }
         }
         
