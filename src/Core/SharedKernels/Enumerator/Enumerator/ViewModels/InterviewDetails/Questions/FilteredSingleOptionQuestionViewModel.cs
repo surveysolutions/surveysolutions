@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -17,7 +18,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
+    public class FilteredSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel, 
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         public class FilteredComboboxItemViewModel 
         {
@@ -33,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly ILiteEventRegistry eventRegistry;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -44,6 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
+            ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
@@ -54,6 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.eventRegistry = eventRegistry;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -92,6 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.AutoCompleteSuggestions = this.Options;
             }
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private FilteredComboboxItemViewModel ToViewModel(OptionModel model)
@@ -111,6 +119,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerFilteredComboboxQuestionCommand)); }
         }
 
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return new MvxCommand(async () =>
+                {
+                    try
+                    {
+                        await this.Answering.SendRemoveAnswerCommandAsync(
+                            new RemoveAnswerCommand(this.interviewId,
+                                this.principal.CurrentUserIdentity.UserId,
+                                this.questionIdentity,
+                                DateTime.UtcNow));
+
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    }
+                    catch (InterviewException exception)
+                    {
+                        this.QuestionState.Validity.ProcessException(exception);
+                    }
+                });
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                InvokeOnMainThread(() =>
+                {
+                    this.QuestionState.IsAnswered = false;
+                    this.DefaultText = string.Empty;
+                    this.ResetTextInEditor = string.Empty;
+                });
+            }
+        }
+
         private FilteredComboboxItemViewModel selectedObject;
         public FilteredComboboxItemViewModel SelectedObject
         {
@@ -122,7 +167,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public string DefaultText { get; set; } 
+        private string defaultText;
+
+        public string DefaultText
+        {
+            get
+            {
+                return defaultText;
+            }
+            set
+            {
+                this.defaultText = value;
+                this.RaisePropertyChanged();
+            }
+        }
 
         private string filterText;
         public string FilterText
@@ -145,18 +203,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private string resetTextInEditor;
+        public string ResetTextInEditor
+        {
+            get { return this.resetTextInEditor; }
+            set
+            {
+                this.resetTextInEditor = value;
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    this.SelectedObject = null;
+                    this.FilterText = null;
+                }
+                this.RaisePropertyChanged();
+            }
+        }
+
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string textHint)
         {
-            var upperTextHint = textHint.ToUpper();
-
             foreach (var model in this.Options)
             {
                 if (model.Text.IsNullOrEmpty())
                     continue;
 
-                string upperText = model.Text.ToUpper();
-
-                var index = upperText.IndexOf(upperTextHint, StringComparison.CurrentCulture);
+                var index = model.Text.IndexOf(textHint, StringComparison.CurrentCultureIgnoreCase);
                 if (index >= 0)
                 {
                     yield return new FilteredComboboxItemViewModel()
@@ -223,6 +293,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.QuestionState.Dispose();
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
         }
     }
 }
