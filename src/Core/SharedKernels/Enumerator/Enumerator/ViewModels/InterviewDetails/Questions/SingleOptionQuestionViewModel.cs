@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,16 +17,21 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
+    public class SingleOptionQuestionViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel, 
+        IDisposable,
+        ILiteEventHandler<AnswerRemoved>
     {
         private readonly Guid userId;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly ILiteEventRegistry eventRegistry;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
+            ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
@@ -36,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = principal.CurrentUserIdentity.UserId;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.eventRegistry = eventRegistry;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -48,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        public bool HasOptions 
+        public bool HasOptions
         {
             get { return true; }
         }
@@ -75,11 +82,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .Options
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
-            var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
+            var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionQuestionCommand(
@@ -126,13 +134,45 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             };
             optionViewModel.QuestionState = this.QuestionState;
             optionViewModel.BeforeSelected += this.OptionSelected;
+            optionViewModel.AnswerRemoved += this.RemoveAnswer;
 
             return optionViewModel;
         }
 
+        private async void RemoveAnswer(object sender, EventArgs e)
+        {
+            try
+            {
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.userId,
+                        this.questionIdentity,
+                        DateTime.UtcNow));
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            foreach (var option in this.Options.Where(option => option.Selected)) 
+            {
+                option.Selected = false;
+            }
+        }
+
         public void Dispose()
         {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
             this.QuestionState.Dispose();
+            foreach (var option in Options)
+            {
+                option.BeforeSelected -= this.OptionSelected;
+                option.AnswerRemoved -= this.RemoveAnswer;
+            }
         }
     }
 }
