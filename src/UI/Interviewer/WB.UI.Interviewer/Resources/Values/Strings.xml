@@ -14,7 +14,6 @@
   
   <string name="ApplicationName">CAPI</string>
   <string name="ConfirmDeviceChanging">Tablet changing confirmation</string>
-  <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
   <string name="SyncIsFinished">Sync is finished</string>
   <string name="SyncIsFinishedUnsuccessfully">Synchronization not finished. The problem might be caused by unstable connection. Please try synchronizing again in 5-10 minutes or in a different location</string>
   <string name="Yes">Yes</string>

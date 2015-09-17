@@ -38,7 +38,7 @@ namespace WB.UI.Interviewer
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
-                {typeof(SettingsViewModel), typeof(SettingsActivity)},
+                {typeof(TroubleshootingViewModel), typeof(TroubleshootingActivity)},
                 {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)}
             };

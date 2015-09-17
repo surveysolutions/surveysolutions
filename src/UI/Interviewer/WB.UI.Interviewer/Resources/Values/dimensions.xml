@@ -16,6 +16,10 @@
   <dimen name="Login_Footer_paddingBottom">36dp</dimen>
   <dimen name="Login_Button_padding">10dp</dimen>
   
+  <dimen name="Troubleshooting_padding">36dp</dimen>
+  <dimen name="Troubleshooting_Element_width">320dp</dimen>
+  <dimen name="Troubleshooting_Button_marginBottom">16dp</dimen>
+
   <dimen name="Dashboard_Layout_marginLeft">32dp</dimen>
   <dimen name="Dashboard_Layout_marginRight">32dp</dimen>
   <dimen name="Dashboard_TabMenu_marginTop">42dp</dimen>
