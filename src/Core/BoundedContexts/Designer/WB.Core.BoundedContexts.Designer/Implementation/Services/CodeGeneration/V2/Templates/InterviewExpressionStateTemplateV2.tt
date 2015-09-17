@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         {
             var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies);
+            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies, this.InterviewProperties);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);				
         }
 		
@@ -58,6 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
 
             var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
+			rosterLevel.SetInterviewProperties(this.InterviewProperties);
 
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
