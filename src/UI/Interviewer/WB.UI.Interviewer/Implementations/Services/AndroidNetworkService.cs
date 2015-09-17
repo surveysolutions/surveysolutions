@@ -1,25 +1,34 @@
 using System.Linq;
 using Android.Content;
 using Android.Net;
+using Cirrious.CrossCore.Droid.Platform;
+using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class AndroidNetworkService : INetworkService
     {
-        private readonly Context context;
+        private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
+        private readonly IMvxReachability mvxReachability;
 
-        public AndroidNetworkService(Context context)
+        public AndroidNetworkService(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity, IMvxReachability mvxReachability)
         {
-            this.context = context;
+            this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
+            this.mvxReachability = mvxReachability;
         }
 
         public bool IsNetworkEnabled()
         {
-            var cm = (ConnectivityManager)this.context.GetSystemService(Context.ConnectivityService);
+            var cm = (ConnectivityManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.ConnectivityService);
 
             return cm.GetAllNetworkInfo().Where(networkInfo => networkInfo.Type == ConnectivityType.Wifi || networkInfo.Type == ConnectivityType.Mobile)
                      .Any(networkInfo => networkInfo.IsConnectedOrConnecting);
+        }
+
+        public bool IsHostReachable(string host)
+        {
+            return this.mvxReachability.IsHostReachable(host);
         }
     }
 }

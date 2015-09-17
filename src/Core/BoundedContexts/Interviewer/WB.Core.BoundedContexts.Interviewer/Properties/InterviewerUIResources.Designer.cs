@@ -461,6 +461,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unexpected exception.
+        /// </summary>
+        public static string Synchronization_Fail_UnexpectedException {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to interviews.
         /// </summary>
         public static string Synchronization_Interviews {

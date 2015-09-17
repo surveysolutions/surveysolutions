@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return UIResources.RequestTimeout;
 
                 case HttpStatusCode.UpgradeRequired:
-                    return UIResources.ImportQuestionnaire_Error_UpgradeRequired;
+                    return UIResources.UpgradeRequired;
 
                 case HttpStatusCode.NotFound:
                     this.logger.Warn("Server error", ex);

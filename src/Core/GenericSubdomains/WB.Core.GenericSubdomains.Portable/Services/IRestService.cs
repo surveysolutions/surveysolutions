@@ -8,20 +8,17 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 {
     public interface IRestService
     {
-        Task<T> GetAsync<T>(string url, object queryString = null, RestCredentials credentials = null);
-        Task GetAsync(string url, object queryString = null, RestCredentials credentials = null);
-        Task<T> PostAsync<T>(string url, object request = null, RestCredentials credentials = null);
-        Task PostAsync(string url, object request = null, RestCredentials credentials = null);
+        Task GetAsync(string url, object queryString = null, RestCredentials credentials = null, CancellationToken? token = null);
+        Task PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
+        Task<T> GetAsync<T>(string url, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+            object queryString = null, RestCredentials credentials = null, CancellationToken? token = null);
 
-        Task<T> GetAsync<T>(string url, CancellationToken token,  object queryString = null, RestCredentials credentials = null);
-        Task GetAsync(string url, CancellationToken token, object queryString = null, RestCredentials credentials = null);
-        Task<T> PostAsync<T>(string url, CancellationToken token, object request = null, RestCredentials credentials = null);
-        Task PostAsync(string url, CancellationToken token, object request = null, RestCredentials credentials = null);
+        Task<T> PostAsync<T>(string url, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+            object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
-        Task<T> GetWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object queryString = null, RestCredentials credentials = null);
-        Task<T> PostWithProgressAsync<T>(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null, RestCredentials credentials = null);
-
-        Task<byte[]> DownloadFileWithProgressAsync(string url, CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null, RestCredentials credentials = null);
+        Task<byte[]> DownloadFileAsync(string url,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+            RestCredentials credentials = null, CancellationToken? token = null);
     }
 }
