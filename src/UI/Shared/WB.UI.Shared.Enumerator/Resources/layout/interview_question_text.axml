@@ -19,7 +19,7 @@
           <ImageButton style="@style/Interview_Question_RemoveAnswer"
                        android:layout_gravity="right"
                        local:MvxBind="Click RemoveAnswerCommand; 
-                       HideKeyboardOnClick .; 
+                                      HideKeyboardOnClick .; 
                                       Visible  QuestionState.IsAnswered;" />
         </LinearLayout>
       </LinearLayout>
