@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
+        ILiteEventHandler<AnswerRemoved>,
         IDisposable
     {
         private readonly Guid userId;
@@ -115,6 +116,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
             this.QuestionState.Dispose();
+
+            foreach (var option in Options)
+            {
+                option.BeforeSelected -= this.OptionSelected;
+                option.AnswerRemoved -= this.RemoveAnswer;
+            }
         }
 
         private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)
@@ -137,6 +144,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async void OptionSelected(object sender, EventArgs eventArgs)
         {
             await this.OptionSelectedAsync(sender);
+        }
+
+        private async void RemoveAnswer(object sender, EventArgs e)
+        {
+            try
+            {
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.userId,
+                        this.questionIdentity,
+                        DateTime.UtcNow));
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
+            }
         }
 
         internal async Task OptionSelectedAsync(object sender)
@@ -189,6 +213,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
                         this.RaisePropertyChanged(() => this.HasOptions);
                     }
+                }
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+               @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                foreach (var option in this.Options.Where(option => option.Selected))
+                {
+                    option.Selected = false;
                 }
             }
         }
@@ -264,7 +300,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             };
 
             optionViewModel.BeforeSelected += this.OptionSelected;
-
+            optionViewModel.AnswerRemoved += this.RemoveAnswer;
             return optionViewModel;
         }
 
