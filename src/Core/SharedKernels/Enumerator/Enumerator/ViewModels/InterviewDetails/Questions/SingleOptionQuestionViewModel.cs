@@ -158,9 +158,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswerRemoved @event)
         {
-            foreach (var option in this.Options.Where(option => option.Selected)) 
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                option.Selected = false;
+                foreach (var option in this.Options.Where(option => option.Selected))
+                {
+                    option.Selected = false;
+                }
             }
         }
 
