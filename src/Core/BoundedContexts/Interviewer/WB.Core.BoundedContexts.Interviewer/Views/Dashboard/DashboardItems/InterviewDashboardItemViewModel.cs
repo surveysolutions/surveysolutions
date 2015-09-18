@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -142,7 +143,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 this.changeLogManipulator.CreateOrReopenDraftRecord(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
             }
 
-            this.viewModelNavigationService.NavigateToInterview(this.InterviewId.FormatGuid());
+            await Task.Run(() =>
+            {
+                RaiseStartingLongOperation();
+                this.viewModelNavigationService.NavigateToInterview(this.InterviewId.FormatGuid());
+            });
+        }
+
+        public event EventHandler<EventArgs> StartingLongOperation;
+
+        private void RaiseStartingLongOperation()
+        {
+            if (StartingLongOperation != null)
+                StartingLongOperation.Invoke(this, EventArgs.Empty);
         }
     }
 }
