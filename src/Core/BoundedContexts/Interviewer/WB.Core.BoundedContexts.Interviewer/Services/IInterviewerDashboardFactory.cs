@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface IInterviewerDashboardFactory
     {
-        Task<DashboardInformation> GetDashboardItems(Guid interviewerId,  DashboardInterviewStatus status);
+        Task<DashboardInformation> GetDashboardItems(Guid interviewerId);
     }
 }

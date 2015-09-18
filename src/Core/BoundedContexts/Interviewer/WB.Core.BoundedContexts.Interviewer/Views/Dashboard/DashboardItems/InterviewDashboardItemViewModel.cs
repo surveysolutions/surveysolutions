@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class InterviewDashboardItemViewModel : IDashboardItem
     {
@@ -45,13 +45,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Init(DashboardQuestionnaireItem item)
         {
-            InterviewId = item.PublicKey;
-            Status = item.Status;
-            QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
-            DateComment = GetInterviewDateCommentByStatus(item, Status);
-            Comment = GetInterviewCommentByStatus(item) ?? "-";
-            PrefilledQuestions = this.GetPrefilledQuestions(item.Properties, 3);
-            IsSupportedRemove = item.CanBeDeleted;
+            this.InterviewId = item.PublicKey;
+            this.Status = item.Status;
+            this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
+            this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
+            this.Comment = this.GetInterviewCommentByStatus(item) ?? "-";
+            this.PrefilledQuestions = this.GetPrefilledQuestions(item.Properties, 3);
+            this.IsSupportedRemove = item.CanBeDeleted;
         }
 
         private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
@@ -100,34 +100,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand RemoveInterviewCommand
         {
-            get { return new MvxCommand(RemoveInterview); }
+            get { return new MvxCommand(this.RemoveInterview); }
         }
 
         private async void RemoveInterview()
         {
-            var isNeedDelete = await userInteractionService.ConfirmAsync(
-                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(QuestionariName),
+            var isNeedDelete = await this.userInteractionService.ConfirmAsync(
+                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionariName),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
 
             if (!isNeedDelete)
                 return;
 
-            var deleteInterviewCommand = new DeleteInterviewCommand(InterviewId, principal.CurrentUserIdentity.UserId);
-            await commandService.ExecuteAsync(deleteInterviewCommand);
-            changeLogManipulator.CleanUpChangeLogByEventSourceId(InterviewId);
+            var deleteInterviewCommand = new DeleteInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
+            await this.commandService.ExecuteAsync(deleteInterviewCommand);
+            this.changeLogManipulator.CleanUpChangeLogByEventSourceId(this.InterviewId);
         }
 
         public IMvxCommand LoadDashboardItemCommand
         {
-            get { return new MvxCommand(LoadInterview); }
+            get { return new MvxCommand(this.LoadInterview); }
         }
 
         private async void LoadInterview()
         {
-            if (Status == DashboardInterviewStatus.Completed)
+            if (this.Status == DashboardInterviewStatus.Completed)
             {
-                var isReopen = await userInteractionService.ConfirmAsync(
+                var isReopen = await this.userInteractionService.ConfirmAsync(
                     InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
                     okButton: UIResources.Yes,
                     cancelButton: UIResources.No);
@@ -137,12 +137,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     return;
                 }
 
-                var restartInterviewCommand = new RestartInterviewCommand(InterviewId, principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                await commandService.ExecuteAsync(restartInterviewCommand);
-                changeLogManipulator.CreateOrReopenDraftRecord(InterviewId, principal.CurrentUserIdentity.UserId);
+                var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                await this.commandService.ExecuteAsync(restartInterviewCommand);
+                this.changeLogManipulator.CreateOrReopenDraftRecord(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
             }
 
-            viewModelNavigationService.NavigateToInterview(InterviewId.FormatGuid());
+            this.viewModelNavigationService.NavigateToInterview(this.InterviewId.FormatGuid());
         }
     }
 }

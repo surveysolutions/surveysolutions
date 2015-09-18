@@ -4,14 +4,12 @@ using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class CensusQuestionnaireDashboardItemViewModel : IDashboardItem
     {
@@ -37,10 +35,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Init(SurveyDto surveyDto, int countInterviewsFromCurrentQuestionnare)
         {
-            questionnaireId = Guid.Parse(surveyDto.QuestionnaireId);
-            questionnaireVersion = surveyDto.QuestionnaireVersion;
-            QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion);
-            Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
+            this.questionnaireId = Guid.Parse(surveyDto.QuestionnaireId);
+            this.questionnaireVersion = surveyDto.QuestionnaireVersion;
+            this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion);
+            this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
         }
 
         public string QuestionariName { get; set; }
@@ -56,11 +54,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async void CreateNewInterview()
         {
             var interviewId = Guid.NewGuid();
-            var interviewerIdentity = (InterviewerIdentity)principal.CurrentUserIdentity;
+            var interviewerIdentity = (InterviewerIdentity)this.principal.CurrentUserIdentity;
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId, interviewerIdentity.UserId, questionnaireId, questionnaireVersion, DateTime.UtcNow, interviewerIdentity.SupervisorId);
-            await commandService.ExecuteAsync(createInterviewOnClientCommand);
-            changeLogManipulator.CreatePublicRecord(interviewId);
+            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId, interviewerIdentity.UserId, this.questionnaireId, this.questionnaireVersion, DateTime.UtcNow, interviewerIdentity.SupervisorId);
+            await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
+            this.changeLogManipulator.CreatePublicRecord(interviewId);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }
     }
