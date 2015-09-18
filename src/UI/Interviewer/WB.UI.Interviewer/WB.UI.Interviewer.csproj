@@ -426,15 +426,6 @@
     <AndroidResource Include="Resources\Layout\ActionBar.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_survey_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_survey_property_item.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_survey_row.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -491,9 +482,6 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\SurveyShape.xml" />
     <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
-    <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Values\Themes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -505,7 +493,9 @@
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\Values\Colors.xml" />
+    <AndroidResource Include="Resources\Values\Colors.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
