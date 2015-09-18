@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -42,6 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly ILogger logger;
+        private readonly IPrincipal principal;
         private CancellationTokenSource synchronizationCancellationTokenSource;
 
         public SynchronizationViewModel(
@@ -58,7 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IJsonUtils jsonUtils,
             IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo,
             IPlainInterviewFileStorage plainInterviewFileStorage,
-            ILogger logger)
+            ILogger logger,
+            IPrincipal principal)
         {
             this.synchronizationService = synchronizationService;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -74,6 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.plainStorageQuestionnireInfo = plainStorageQuestionnireInfo;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.logger = logger;
+            this.principal = principal;
         }
 
         private CancellationToken Token { get { return this.synchronizationCancellationTokenSource.Token; } }
@@ -144,7 +148,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: this.Token))
                 {
-                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>();
+                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(this.principal.CurrentUserIdentity);
                     return;
                 }
 

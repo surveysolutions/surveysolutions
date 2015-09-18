@@ -572,4 +572,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
     <value>Send tablet's information</value>
   </data>
+  <data name="Login_WrondPassword" xml:space="preserve">
+    <value>Wrong password</value>
+  </data>
 </root>

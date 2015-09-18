@@ -4966,26 +4966,26 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0011
 			public const int IsInterviewLocal = 2131492881;
 			
-			// aapt resource value: 0x7f0c007e
-			public const int LoginPage_endpoint = 2131492990;
+			// aapt resource value: 0x7f0c007a
+			public const int LoginPage_endpoint = 2131492986;
 			
-			// aapt resource value: 0x7f0c007c
-			public const int LoginPage_error_message = 2131492988;
-			
-			// aapt resource value: 0x7f0c007f
-			public const int LoginPage_login = 2131492991;
+			// aapt resource value: 0x7f0c0078
+			public const int LoginPage_error_message = 2131492984;
 			
 			// aapt resource value: 0x7f0c007b
-			public const int LoginPage_logo = 2131492987;
+			public const int LoginPage_login = 2131492987;
 			
-			// aapt resource value: 0x7f0c0080
-			public const int LoginPage_password = 2131492992;
+			// aapt resource value: 0x7f0c0077
+			public const int LoginPage_logo = 2131492983;
 			
-			// aapt resource value: 0x7f0c0081
-			public const int LoginPage_singin_button = 2131492993;
+			// aapt resource value: 0x7f0c007c
+			public const int LoginPage_password = 2131492988;
 			
-			// aapt resource value: 0x7f0c0082
-			public const int LoginPage_troubleshooting_button = 2131492994;
+			// aapt resource value: 0x7f0c007d
+			public const int LoginPage_singin_button = 2131492989;
+			
+			// aapt resource value: 0x7f0c007e
+			public const int LoginPage_troubleshooting_button = 2131492990;
 			
 			// aapt resource value: 0x7f0c0009
 			public const int MvxBindingTagUnique = 2131492873;
@@ -5134,8 +5134,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c003c
 			public const int donate_with_google = 2131492924;
 			
-			// aapt resource value: 0x7f0c0075
-			public const int drawer_layout = 2131492981;
+			// aapt resource value: 0x7f0c007f
+			public const int drawer_layout = 2131492991;
 			
 			// aapt resource value: 0x7f0c0025
 			public const int dropdown = 2131492901;
@@ -5188,8 +5188,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0047
 			public const int image = 2131492935;
 			
-			// aapt resource value: 0x7f0c0076
-			public const int interviewEntitiesList = 2131492982;
+			// aapt resource value: 0x7f0c0080
+			public const int interviewEntitiesList = 2131492992;
 			
 			// aapt resource value: 0x7f0c009e
 			public const int interview_dashboard = 2131493022;
@@ -5212,14 +5212,14 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0084
 			public const int llSurveyHolder = 2131492996;
 			
-			// aapt resource value: 0x7f0c007a
-			public const int login_page_footer = 2131492986;
-			
-			// aapt resource value: 0x7f0c007d
-			public const int login_page_screen_bottom = 2131492989;
+			// aapt resource value: 0x7f0c0076
+			public const int login_page_footer = 2131492982;
 			
 			// aapt resource value: 0x7f0c0079
-			public const int login_page_scroll_container = 2131492985;
+			public const int login_page_screen_bottom = 2131492985;
+			
+			// aapt resource value: 0x7f0c0075
+			public const int login_page_scroll_container = 2131492981;
 			
 			// aapt resource value: 0x7f0c0038
 			public const int match_parent = 2131492920;
@@ -5278,8 +5278,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c004c
 			public const int parentPanel = 2131492940;
 			
-			// aapt resource value: 0x7f0c0077
-			public const int prefilledQuestions_questionnaireTitle_holder = 2131492983;
+			// aapt resource value: 0x7f0c0081
+			public const int prefilledQuestions_questionnaireTitle_holder = 2131492993;
 			
 			// aapt resource value: 0x7f0c008c
 			public const int preview_view = 2131493004;
@@ -5416,8 +5416,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0074
 			public const int tvSyncResult = 2131492980;
 			
-			// aapt resource value: 0x7f0c0078
-			public const int txtTitle = 2131492984;
+			// aapt resource value: 0x7f0c0082
+			public const int txtTitle = 2131492994;
 			
 			// aapt resource value: 0x7f0c0008
 			public const int up = 2131492872;
@@ -5578,163 +5578,172 @@ namespace WB.UI.Interviewer
 			public const int ErrorScreen = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int interview = 2130903071;
+			public const int finish_installation = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int interview_active_group = 2130903072;
+			public const int interview = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int interview_breadcrumb_item = 2130903073;
+			public const int interview_active_group = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int interview_complete_status_change = 2130903074;
+			public const int interview_breadcrumb_item = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int interview_disabled_group = 2130903075;
+			public const int interview_complete_screen = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int interview_disabled_question = 2130903076;
+			public const int interview_complete_statistics = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int interview_group = 2130903077;
+			public const int interview_complete_status_change = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int interview_group_navigation = 2130903078;
+			public const int interview_disabled_group = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int interview_left_side_panel = 2130903079;
+			public const int interview_disabled_question = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int interview_left_side_panel_item = 2130903080;
+			public const int interview_group = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int interview_left_side_panel_item_group = 2130903081;
+			public const int interview_group_navigation = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int interview_left_side_panel_item_section = 2130903082;
+			public const int interview_left_side_panel = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int interview_prefilled_question_template = 2130903083;
+			public const int interview_left_side_panel_item = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int interview_question__comments = 2130903084;
+			public const int interview_left_side_panel_item_group = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int interview_question__errors = 2130903085;
+			public const int interview_left_side_panel_item_section = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int interview_question__instructions = 2130903086;
+			public const int interview_prefilled_question_template = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int interview_question__title = 2130903087;
+			public const int interview_question__comments = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int interview_question_cascading_single_option = 2130903088;
+			public const int interview_question__errors = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int interview_question_datetime = 2130903089;
+			public const int interview_question__instructions = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int interview_question_filtered_single_option = 2130903090;
+			public const int interview_question__title = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int interview_question_filtered_single_option_item = 2130903091;
+			public const int interview_question_cascading_single_option = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int interview_question_gps = 2130903092;
+			public const int interview_question_datetime = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int interview_question_integer = 2130903093;
+			public const int interview_question_filtered_single_option = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int interview_question_multi_option = 2130903094;
+			public const int interview_question_filtered_single_option_item = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int interview_question_multi_option_item = 2130903095;
+			public const int interview_question_gps = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int interview_question_multimedia = 2130903096;
+			public const int interview_question_integer = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int interview_question_qrbarcode = 2130903097;
+			public const int interview_question_multi_option = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int interview_question_real = 2130903098;
+			public const int interview_question_multi_option_item = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int interview_question_single_option = 2130903099;
+			public const int interview_question_multimedia = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int interview_question_single_option_item = 2130903100;
+			public const int interview_question_qrbarcode = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int interview_question_text = 2130903101;
+			public const int interview_question_real = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int interview_question_text_list = 2130903102;
+			public const int interview_question_single_option = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int interview_question_text_list_item = 2130903103;
+			public const int interview_question_single_option_item = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int interview_static_text = 2130903104;
+			public const int interview_question_text = 2130903104;
 			
 			// aapt resource value: 0x7f030041
-			public const int InterviewActionBar = 2130903105;
+			public const int interview_question_text_list = 2130903105;
 			
 			// aapt resource value: 0x7f030042
-			public const int Login = 2130903106;
+			public const int interview_question_text_list_item = 2130903106;
 			
 			// aapt resource value: 0x7f030043
-			public const int Main = 2130903107;
+			public const int interview_static_text = 2130903107;
 			
 			// aapt resource value: 0x7f030044
-			public const int mr_media_route_chooser_dialog = 2130903108;
+			public const int InterviewActionBar = 2130903108;
 			
 			// aapt resource value: 0x7f030045
-			public const int mr_media_route_controller_dialog = 2130903109;
+			public const int Login = 2130903109;
 			
 			// aapt resource value: 0x7f030046
-			public const int mr_media_route_list_item = 2130903110;
+			public const int Main = 2130903110;
 			
 			// aapt resource value: 0x7f030047
-			public const int prefilled_questions = 2130903111;
+			public const int mr_media_route_chooser_dialog = 2130903111;
 			
 			// aapt resource value: 0x7f030048
-			public const int prefilled_questions_start_button = 2130903112;
+			public const int mr_media_route_controller_dialog = 2130903112;
 			
 			// aapt resource value: 0x7f030049
-			public const int relink = 2130903113;
+			public const int mr_media_route_list_item = 2130903113;
 			
 			// aapt resource value: 0x7f03004a
-			public const int scanner = 2130903114;
+			public const int prefilled_questions = 2130903114;
 			
 			// aapt resource value: 0x7f03004b
-			public const int select_dialog_item_material = 2130903115;
+			public const int prefilled_questions_start_button = 2130903115;
 			
 			// aapt resource value: 0x7f03004c
-			public const int select_dialog_multichoice_material = 2130903116;
+			public const int relink = 2130903116;
 			
 			// aapt resource value: 0x7f03004d
-			public const int select_dialog_singlechoice_material = 2130903117;
+			public const int scanner = 2130903117;
 			
 			// aapt resource value: 0x7f03004e
-			public const int splash = 2130903118;
+			public const int select_dialog_item_material = 2130903118;
 			
 			// aapt resource value: 0x7f03004f
-			public const int support_simple_spinner_dropdown_item = 2130903119;
+			public const int select_dialog_multichoice_material = 2130903119;
 			
 			// aapt resource value: 0x7f030050
-			public const int sync_dialog = 2130903120;
+			public const int select_dialog_singlechoice_material = 2130903120;
 			
 			// aapt resource value: 0x7f030051
-			public const int synchronization_panel = 2130903121;
+			public const int splash = 2130903121;
 			
 			// aapt resource value: 0x7f030052
-			public const int SyncLogin = 2130903122;
+			public const int support_simple_spinner_dropdown_item = 2130903122;
 			
 			// aapt resource value: 0x7f030053
-			public const int Troubleshooting = 2130903123;
+			public const int sync_dialog = 2130903123;
+			
+			// aapt resource value: 0x7f030054
+			public const int synchronization_panel = 2130903124;
+			
+			// aapt resource value: 0x7f030055
+			public const int SyncLogin = 2130903125;
+			
+			// aapt resource value: 0x7f030056
+			public const int Troubleshooting = 2130903126;
 			
 			static Layout()
 			{

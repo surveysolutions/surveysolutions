@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -101,22 +102,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
         }
 
-        public void Init(RestCredentials credentials)
+        public void Init(InterviewerIdentity userIdentity)
         {
-#if DEBUG
-            this.Endpoint = "http://192.168.88.196/headquarters";
-            this.UserName = "int";
-            this.Password = "1";
-#endif
             this.IsUserValid = true;
             this.IsEndpointValid = true;
             this.Endpoint = this.interviewerSettings.GetSyncAddressPoint();
 
-            if (credentials != null)
-            {
-                this.UserName = credentials.Login;
-                this.Password = credentials.Password;
-            }
+            this.UserName = userIdentity.Name;
         }
 
         private async Task SignInAsync()
@@ -136,25 +128,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 var interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(restCredentials);
+                var interviewerIdentity = new InterviewerIdentity
+                {
+                    Id = interviewer.Id.FormatGuid(),
+                    UserId = interviewer.Id,
+                    SupervisorId = interviewer.SupervisorId,
+                    Name = restCredentials.Login,
+                    Password = restCredentials.Password
+                };
                 if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(credentials: restCredentials))
                 {
                     await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(credentials: restCredentials);
                 }
                 else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(credentials: restCredentials))
                 {
-                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(restCredentials);
+                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
                     return;
                 }
-
-                await this.interviewersPlainStorage.StoreAsync(
-                    new InterviewerIdentity
-                    {
-                        Id = interviewer.Id.FormatGuid(),
-                        UserId = interviewer.Id,
-                        SupervisorId = interviewer.SupervisorId,
-                        Name = restCredentials.Login,
-                        Password = restCredentials.Password
-                    });
+                await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
 
                 this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
                 this.viewModelNavigationService.NavigateToDashboard();
@@ -179,6 +170,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (Exception ex)
             {
+                this.ErrorMessage = InterviewerUIResources.UnexpectedException;
                 this.logger.Error("Login view model. Unexpected exception", ex);
             }
             finally
