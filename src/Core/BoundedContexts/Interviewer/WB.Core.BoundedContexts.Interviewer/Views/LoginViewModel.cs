@@ -1,16 +1,6 @@
-using System;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Network.Reachability;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -24,142 +14,38 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IPrincipal principal;
         private readonly IPasswordHasher passwordHasher;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IInterviewerSettings interviewerSettings;
-        private readonly ISynchronizationService synchronizationService;
-        private readonly IMvxReachability reachability;
-        private readonly ILogger logger;
-        private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage,
-            IInterviewerSettings interviewerSettings,
-            ISynchronizationService synchronizationService,
-            IMvxReachability reachability, 
-            ILogger logger, 
-            IFriendlyErrorMessageService friendlyErrorMessageService)
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
-            this.interviewerSettings = interviewerSettings;
-            this.synchronizationService = synchronizationService;
-            this.reachability = reachability;
-            this.logger = logger;
-            this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public string Endpoint
-        {
-            get { return this.endpoint; }
-            set { this.endpoint = value; RaisePropertyChanged(); }
-        }
+        public string UserName { get; set; }
 
-        public string Login
-        {
-            get { return this.login; }
-            set { this.login = value; RaisePropertyChanged(); }
-        }
-
+        private string password;
         public string Password
         {
             get { return this.password; }
             set { this.password = value; RaisePropertyChanged(); }
         }
 
-        public bool IsEndpointValid
+        private bool isUserValid;
+        public bool IsUserValid
         {
-            get { return this.isEndpointValid; }
-            set { this.isEndpointValid = value; RaisePropertyChanged(); }
+            get { return this.isUserValid; }
+            set { this.isUserValid = value; RaisePropertyChanged(); }
         }
 
-        public bool IsLoginValid
+        public IMvxCommand SignInCommand
         {
-            get { return this.isLoginValid; }
-            set { this.isLoginValid = value; RaisePropertyChanged(); }
-        }
-
-        public bool IsPasswordValid
-        {
-            get { return this.isPasswordValid; }
-            set { this.isPasswordValid = value; RaisePropertyChanged(); }
-        }
-
-        public string ErrorMessage
-        {
-            get { return this.errorMessage; }
-            set { this.errorMessage = value; RaisePropertyChanged(); }
-        }
-
-        private bool areCredentialsWrong = false;
-        public bool AreCredentialsWrong
-        {
-            get { return this.areCredentialsWrong; }
-            set { this.areCredentialsWrong = value; this.RaisePropertyChanged(); }
-        }
-
-        public bool IsInProgress
-        {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; RaisePropertyChanged(); }
-        }
-
-        public bool IsFinishInstallationMode { get; set; }
-
-        public bool IsNewVersionAvailable { get; set; }
-
-        public bool EndpointWasReached { get; set; }
-
-        public void Init()
-        {
-#if DEBUG
-            this.Endpoint = "http://192.168.88.163/headquarters";
-            this.Login = "in1sv1";
-            this.Password = "1234";
-#endif
-            IsNewVersionAvailable = false;
-            IsLoginValid = true;
-            IsEndpointValid = true;
-            IsPasswordValid = true;
-
-            InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
-
-            if (currentInterviewer == null)
-            {
-                IsFinishInstallationMode = true;
-            }
-            else
-            {
-                Login = currentInterviewer.Name;
-
-                EndpointWasReached = this.reachability.IsHostReachable(this.Endpoint);
-            }
-        }
-
-        private bool isEndpointValid;
-
-        private bool isLoginValid;
-
-        private bool isPasswordValid;
-
-        private IMvxCommand loginCommand;
-
-        private bool isInProgress;
-
-        private string password;
-
-        private string login;
-
-        private string endpoint;
-
-        private string errorMessage;
-
-        public IMvxCommand LoginCommand
-        {
-            get { return this.loginCommand ?? (this.loginCommand = new MvxCommand(async () => await this.LoginAsync(), () => !IsInProgress)); }
+            get { return new MvxCommand(this.SignIn); }
         }
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
@@ -167,117 +53,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
         }
 
-        private async Task LoginAsync()
+        public void Init()
         {
-            IsInProgress = true;
+            InterviewerIdentity currentInterviewer =
+                this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
 
-            var userName = this.Login;
-            var hashedPassword = this.passwordHasher.Hash(this.Password);
-
-            if (this.IsFinishInstallationMode)
+            if (currentInterviewer == null)
             {
-                var restCredentials = new RestCredentials { Login = userName, Password = hashedPassword };
-
-                if (!this.reachability.IsHostReachable(this.Endpoint))
-                {
-                    ErrorMessage = UIResources.Login_Validation_EndpointIsUnreachable;
-                    this.IsEndpointValid = false;
-                    this.IsInProgress = false;
-                    return;
-                }
-
-                this.IsEndpointValid = true;
-                this.interviewerSettings.SetSyncAddressPoint(this.Endpoint);
-
-                InterviewerApiView interviewer;
-                try
-                {
-                    interviewer = await this.synchronizationService.GetCurrentInterviewerAsync(login: userName, password: hashedPassword, token: default(CancellationToken));
-                }
-                catch (RestException exception)
-                {
-                    ErrorMessage = friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(exception);
-                    IsLoginValid = false;
-                    IsPasswordValid = false;
-                    this.IsInProgress = false;
-                    logger.Error(string.Format("Error occured while authorizing user {0} online.", userName), exception);
-                    return;
-                }
-
-                bool interviewerHasLinkedDevice;
-                try
-                {
-                    interviewerHasLinkedDevice = await this.synchronizationService.HasCurrentInterviewerDeviceAsync(token: default(CancellationToken), credentials: restCredentials);
-                }
-                catch (RestException exception)
-                {
-                    ErrorMessage = friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(exception);
-                    this.IsInProgress = false;
-                    logger.Error(string.Format("Error occured while checking user {0} device linking status.", userName), exception);
-                    return;
-                }
-
-                if (!interviewerHasLinkedDevice)
-                {
-                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken), credentials: restCredentials);
-                }
-                else
-                {
-                    bool isAnotherDeviceLinkedToInterviewer;
-                    try
-                    {
-                        isAnotherDeviceLinkedToInterviewer = await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: default(CancellationToken), credentials: restCredentials);
-                    }
-                    catch (RestException exception)
-                    {
-                        ErrorMessage = friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(exception);
-                        this.IsInProgress = false;
-                        logger.Error(string.Format("Error occured while checking user {0} device.", userName), exception);
-                        return;
-                    }
-
-                    if (!isAnotherDeviceLinkedToInterviewer)
-                    {
-                        this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(new { redirectedFromFinishInstallation = true });
-                        this.IsInProgress = false;
-                        return;
-                    }
-                }
-
-                await this.interviewersPlainStorage.StoreAsync(
-                        new InterviewerIdentity
-                        {
-                            Id = interviewer.Id.FormatGuid(),
-                            UserId = interviewer.Id,
-                            SupervisorId = interviewer.SupervisorId,
-                            Name = userName,
-                            Password = hashedPassword
-                        });
+                this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>();
+                return;
             }
 
-            this.LoginUserOfflineAndGoToDashboard(userName, hashedPassword);
-
-            IsInProgress = false;
+            this.IsUserValid = true;
+            this.UserName = currentInterviewer.Name;
         }
 
-        private void LoginUserOfflineAndGoToDashboard(string userName, string hashedPassword)
+        private void SignIn()
         {
-            try
-            {
-                this.principal.SignIn(userName, hashedPassword, true);
+            var userName = this.UserName;
+            var hashedPassword = this.passwordHasher.Hash(this.Password);
 
-                this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                if (IsFinishInstallationMode)
-                {
-                    IsLoginValid = false;
-                }
-                IsPasswordValid = false;
-                logger.Error(string.Format("Error occured while authorizing user {0} offline.", userName), exception);
-                ErrorMessage = exception.Message;
-            }
+            this.IsUserValid = this.principal.SignIn(userName, hashedPassword, true);
+
+            if (this.IsUserValid)
+                this.viewModelNavigationService.NavigateToDashboard();
         }
 
         public override void NavigateToPreviousViewModel()

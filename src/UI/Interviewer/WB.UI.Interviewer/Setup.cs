@@ -37,6 +37,7 @@ namespace WB.UI.Interviewer
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
+                {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
                 {typeof(TroubleshootingViewModel), typeof(TroubleshootingActivity)},
                 {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
