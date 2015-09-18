@@ -58,13 +58,22 @@
               android:id="@+id/LoginPage_password"
               android:layout_below="@+id/LoginPage_login"
               android:singleLine="true"
-              android:password="true"
-              local:MvxBind="Text Password; Hint Localization('PasswordHint'); BackgroundStyle ValidationStyleBackground(IsUserValid);" />
+              android:inputType="textPassword"
+              local:MvxBind="Text Password; 
+                Hint Localization('PasswordHint'); 
+                BackgroundStyle ValidationStyleBackground(IsUserValid);
+                FocusValueChanged SignInCommand; " />
           <Button
               style="@style/Login_Singin_Button"
               android:id="@+id/LoginPage_singin_button"
               android:layout_below="@+id/LoginPage_password"
               local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
+          <Button
+              style="@style/Login_Troubleshotting_Button"
+              android:id="@+id/LoginPage_troubleshooting_button"
+              android:layout_toRightOf="@+id/LoginPage_singin_button"
+              android:layout_below="@+id/LoginPage_password"
+              local:MvxBind="Click NavigateToTroubleshootingPageCommand; Text Localization('Interviewer_Troubleshooting');" />
         </RelativeLayout>
       </LinearLayout>
     </ScrollView>

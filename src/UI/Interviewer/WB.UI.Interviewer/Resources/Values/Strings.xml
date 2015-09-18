@@ -31,8 +31,10 @@
   <string name="InformationPackage">Information package</string>
   <string name="CreatingInformationPackage">Creating information package</string>
   <string name="SendingInformationPackage">Sending information package</string>
+  <string name="InformationPackageSizeWarningFormat">Information package of size {0} will be sent via network. Are you sure you want to send it?</string>
+  <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>
+  <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
 
-  
   <string name="MenuItem_Title_Dashboard">Dashboard</string>
   <string name="MenuItem_Title_SignOut">Sign out</string>
   <string name="MenuItem_Title_Settings">Settings</string>

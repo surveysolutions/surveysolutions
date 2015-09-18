@@ -55,20 +55,22 @@
               android:layout_below="@+id/LoginPage_error_message"
               android:singleLine="true"
               android:inputType="textVisiblePassword|textNoSuggestions"
+              android:imeOptions="actionNext"
               local:MvxBind="Text Endpoint; Hint Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
           <EditText
               style="@style/Login_Login_Editor"
               android:layout_below="@+id/LoginPage_endpoint"
               android:id="@+id/LoginPage_login"
               android:singleLine="true"
-              android:inputType="textVisiblePassword|textNoSuggestions"
+              android:inputType="textUri"
+              android:imeOptions="actionNext"
               local:MvxBind="Text UserName; Hint Localization('LoginNameHint'); BackgroundStyle ValidationStyleBackground(IsUserValid);" />
           <EditText
               style="@style/Login_Password_Editor"
               android:id="@+id/LoginPage_password"
               android:layout_below="@+id/LoginPage_login"
               android:singleLine="true"
-              android:password="true"
+              android:inputType="textPassword"
               local:MvxBind="Text Password; Hint Localization('PasswordHint');BackgroundStyle ValidationStyleBackground(IsUserValid);" />
           <Button
               style="@style/Login_Singin_Button"
