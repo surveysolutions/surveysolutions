@@ -13,7 +13,7 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('SynchronizationText')" />
+        local:MvxBind="Text Localization('Troubleshooting_Title')" />
   </android.support.v7.widget.Toolbar>
   <ScrollView
       android:layout_width="fill_parent"
@@ -23,12 +23,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
+
       <Button
-          android:id="@+id/btnSync"
+          android:id="@+id/btnVersion"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
-          android:layout_margin="15px"
-          android:text="Sync" />
+          android:layout_margin="10px"
+          android:text="Version" />
+
       <View
           android:layout_width="fill_parent"
           android:layout_height="1dp"
@@ -40,7 +42,8 @@
           android:layout_height="wrap_content"
           android:layout_margin="15px"
           android:text="Backup" />
-      <wb.ui.interviewer.controls.TabletInformationReportButton
+
+      <wb.ui.interviewer.customcontrols.TabletInformationReportButton
           android:id="@+id/btnSendTabletInfo"
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"

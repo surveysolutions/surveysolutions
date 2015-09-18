@@ -110,6 +110,7 @@
     <Compile Include="ErrorReporting\ErrorReportingModule.cs" />
     <Compile Include="ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs" />
     <Compile Include="ErrorReporting\Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
+    <Compile Include="ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs" />
     <Compile Include="ErrorReporting\Resources\TabletInformationSenderStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -162,6 +163,7 @@
     <Compile Include="Views\Dashboard\OldDashboardCapability\SurveyDTO.cs" />
     <Compile Include="Services\IInterviewerApplicationUpdater.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
+    <Compile Include="Views\MvvmcrossTroubleshootingViewModel.cs" />
     <Compile Include="Views\QuestionnireInfo.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
@@ -174,10 +176,10 @@
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
-    <Compile Include="Views\TroubleshootingViewModel.cs" />
     <Compile Include="Views\SychronizationStatistics.cs" />
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />
+    <Compile Include="Views\TroubleshootingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -234,9 +236,7 @@
       <LastGenOutput>InterviewerUIResources.ru-RU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ErrorReporting\Implementation\TabletInformation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

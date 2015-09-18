@@ -220,6 +220,7 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
+    <Reference Include="Mono.CSharp" />
     <Reference Include="MWBarcodeScanner">
       <HintPath>..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
     </Reference>
@@ -303,6 +304,7 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\MvvmcrossTroubleshootingActivity.cs" />
     <Compile Include="Activities\TroubleshootingActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
@@ -317,9 +319,11 @@
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
+    <Compile Include="CustomControls\TabletInformationReportButton.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteReadSideRepositoryAccessor.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
+    <Compile Include="Implementations\Services\UpdateProcessor.cs" />
     <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
@@ -429,7 +433,7 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\Troubleshooting.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\sync_dialog.axml">
       <SubType>Designer</SubType>

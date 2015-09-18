@@ -225,16 +225,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task SendTabletInformationAsync(string archive, CancellationToken token)
         {
+            var tabletInformationPackage = new TabletInformationPackage
+            {
+                Content = archive,
+                AndroidId = this.interviewerSettings.GetDeviceId()
+            };
             await this.TryGetRestResponseOrThrowAsync(async () => 
             await this.restService.PostAsync(
                 url: string.Concat(interviewerApiUrl, "/troubleshooting/tabletInfo"),
                 credentials: this.restCredentials,
-                request: new TabletInformationPackage()
-                {
-                    Content = archive,
-                    AndroidId = this.interviewerSettings.GetDeviceId(),
-                    ClientRegistrationId = this.interviewerSettings.GetClientRegistrationId().Value
-                }, token: token));
+                request: tabletInformationPackage, 
+                token: token));
         }
 
         #endregion
