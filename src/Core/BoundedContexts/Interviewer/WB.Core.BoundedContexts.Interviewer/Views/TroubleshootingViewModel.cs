@@ -1,11 +1,17 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Cirrious.MvvmCross.Plugins.Network.Droid;
 using Cirrious.MvvmCross.ViewModels;
+
+using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -23,13 +29,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewerApplicationUpdater updater;
         private readonly IBackup backupManager;
 
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ICapiInformationService capiInformationService;
+
         public TroubleshootingViewModel(
             IViewModelNavigationService viewModelNavigationService, 
             IInterviewerSettings interviewerSettings,
             INetworkService networkService, 
             IUserInteractionService userInteractionService, 
             ISynchronizationService synchronizationService, 
-            ILogger logger, IInterviewerApplicationUpdater updater, IBackup backupManager)
+            ILogger logger, 
+            IInterviewerApplicationUpdater updater, 
+            IBackup backupManager, 
+            IFileSystemAccessor fileSystemAccessor, 
+            ICapiInformationService capiInformationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
@@ -39,6 +52,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.logger = logger;
             this.updater = updater;
             this.backupManager = backupManager;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.capiInformationService = capiInformationService;
         }
 
         public void Init()
@@ -46,6 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             Version = this.interviewerSettings.GetApplicationVersionName();
             IsRestoreVisible = false;
         }
+
+
 
         public bool IsRestoreVisible
         {
@@ -94,6 +111,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.restoreCommand ?? (this.restoreCommand = new MvxCommand(async () => await this.Restore(), () => !IsInProgress)); }
         }
 
+        private IMvxCommand sendTabletInformationCommand;
+        public IMvxCommand SendTabletInformationCommand
+        {
+            get { return this.sendTabletInformationCommand ?? (this.sendTabletInformationCommand = new MvxCommand(async () => await this.SendTabletInformation(), () => !IsInProgress)); }
+        }
+
         private async Task Backup()
         {
             IsInProgress = true;
@@ -126,7 +149,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 string.Format(UIResources.Troubleshooting_RestoreConfirmation, this.backupManager.RestorePath));
 
             if (!shouldWeProceedRestore) return;
-
+            var wasErrorHappened = false;
             IsInProgress = true;
             try
             {
@@ -137,8 +160,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             catch (Exception exception)
             {
                 logger.Error("Error occured during Restore. ", exception);
-                //await userInteractionService.AlertAsync(UIResources.Troubleshooting_RestorationErrorMessage);
+                wasErrorHappened = true;
+                
             }
+            if (wasErrorHappened)
+            {
+                await userInteractionService.AlertAsync(UIResources.Troubleshooting_RestorationErrorMessage);
+            }
+
             IsInProgress = false;
         }
 
@@ -151,7 +180,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             IsInProgress = true;
-
+            string errorMessageHappened = null;
             bool isNewVersionAvailable = false;
             try
             {
@@ -160,13 +189,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (SynchronizationException)
             {
-                //await userInteractionService.AlertAsync(ex.Message);
-                IsInProgress = false;
-                return;
+                this.logger.Error("Check new version. SynchronizationException. ", ex);
+                errorMessageHappened = ex.Message;
             }
             catch (Exception ex)
             {
                 this.logger.Error("Check new version. Unexpected exception", ex);
+                errorMessageHappened = ex.Message;
+            }
+
+            if (!string.IsNullOrEmpty(errorMessageHappened))
+            {
+                await userInteractionService.AlertAsync(errorMessageHappened);
                 IsInProgress = false;
                 return;
             }
@@ -184,6 +218,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     catch (Exception exception)
                     {
                         this.logger.Error("Check new version. Unexpected exception when downloading app", exception);
+                        errorMessageHappened = UIResources.Troubleshooting_Unknown_ErrorMessage;
                     }
                 }
             }
@@ -192,11 +227,59 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await userInteractionService.AlertAsync(UIResources.Troubleshooting_NoNewVersion);
             }
 
+            if (!string.IsNullOrEmpty(errorMessageHappened))
+            {
+                await userInteractionService.AlertAsync(errorMessageHappened);
+            }
+            IsInProgress = false;
+        }
+
+        private async Task SendTabletInformation()
+        {
+            IsInProgress = true;
+
+            var tokenSource = new CancellationTokenSource();
+
+            string pathToInfoArchive = string.Empty;
+            string errorMessageHappened = null;
+            try
+            {
+                pathToInfoArchive = await this.capiInformationService.CreateInformationPackage(tokenSource.Token);
+
+                if (string.IsNullOrEmpty(pathToInfoArchive) || !this.fileSystemAccessor.IsFileExists(pathToInfoArchive))
+                {
+                    await userInteractionService.AlertAsync("No file");
+                    IsInProgress = false;
+                    return;
+                }
+
+                var formattedFileSize = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(pathToInfoArchive));
+                var shouldWeSendTabletInformation = await userInteractionService.ConfirmAsync(string.Format(UIResources.Troubleshooting_InformationPackageSizeWarningFormat, formattedFileSize));
+
+                if (shouldWeSendTabletInformation)
+                {
+                    await this.synchronizationService.SendTabletInformationAsync(Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToInfoArchive)), tokenSource.Token);
+                    await userInteractionService.AlertAsync(UIResources.Troubleshooting_InformationPackageIsSuccessfullySent);
+                }
+            }
+            catch (Exception exception)
+            {
+                logger.Error("Error occured during Restore. ", exception);
+                errorMessageHappened = UIResources.Troubleshooting_SendingOfInformationPackageErrorMessage;
+            }
+            finally
+            {
+                if (this.fileSystemAccessor.IsFileExists(pathToInfoArchive))
+                    this.fileSystemAccessor.DeleteFile(pathToInfoArchive);
+            }
+            if (string.IsNullOrEmpty(errorMessageHappened))
+            {
+                await userInteractionService.AlertAsync(errorMessageHappened);
+            }
             IsInProgress = false;
         }
 
         private bool isInProgress;
-
         private bool isRestoreVisible;
 
         public bool IsInProgress

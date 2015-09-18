@@ -110,7 +110,6 @@
     <Compile Include="ErrorReporting\ErrorReportingModule.cs" />
     <Compile Include="ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs" />
     <Compile Include="ErrorReporting\Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
-    <Compile Include="ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs" />
     <Compile Include="ErrorReporting\Resources\TabletInformationSenderStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -234,6 +233,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.ru-RU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ErrorReporting\Implementation\TabletInformation\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
