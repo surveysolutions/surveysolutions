@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 isNewVersionAvailable = (await this.synchronizationService.GetLatestApplicationVersionAsync(token: default(CancellationToken))).Value 
                     > this.interviewerSettings.GetApplicationVersionCode();
             }
-            catch (SynchronizationException)
+            catch (SynchronizationException ex)
             {
                 this.logger.Error("Check new version. SynchronizationException. ", ex);
                 errorMessageHappened = ex.Message;
