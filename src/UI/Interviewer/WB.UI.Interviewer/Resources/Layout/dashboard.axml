@@ -17,7 +17,10 @@
         local:MvxBind="Text DashboardTitle;
                        Visible IsLoaded;" />
   </android.support.v7.widget.Toolbar>
-
+  
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               local:MvxBind="ShowProgress IsInProgress" />
+  
   <include layout="@layout/synchronization_panel" />
 
   <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
@@ -46,7 +49,8 @@
       </LinearLayout>
     </LinearLayout>
     <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled If(Synchronization.IsSynchronizationInProgress, false, true)"
+                  local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress));
+                                 Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress);"
                   android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>
@@ -79,7 +83,8 @@
                                Click SynchronizationCommand;" />
     </LinearLayout>    
     <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled Not(Synchronization.IsSynchronizationInProgress);"
+                  local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress));
+                                 Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress);"
                   android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>

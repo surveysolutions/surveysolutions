@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -45,7 +46,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string Comment { get; set; }
 
 
-
         public IMvxCommand CreateNewInterviewCommand
         {
             get { return new MvxCommand(this.CreateNewInterview); }
@@ -53,13 +53,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private async void CreateNewInterview()
         {
+            RaiseStartingLongOperation();
             var interviewId = Guid.NewGuid();
-            var interviewerIdentity = (InterviewerIdentity)this.principal.CurrentUserIdentity;
+            var interviewerIdentity = (InterviewerIdentity) this.principal.CurrentUserIdentity;
 
-            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId, interviewerIdentity.UserId, this.questionnaireId, this.questionnaireVersion, DateTime.UtcNow, interviewerIdentity.SupervisorId);
+            var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
+                interviewerIdentity.UserId, this.questionnaireId, this.questionnaireVersion, DateTime.UtcNow,
+                interviewerIdentity.SupervisorId);
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
-            this.changeLogManipulator.CreatePublicRecord(interviewId);
-            this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+
+            await Task.Run(() =>
+            {
+                this.changeLogManipulator.CreatePublicRecord(interviewId);
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+            });
+        }
+
+
+        public event EventHandler<EventArgs> StartingLongOperation;
+
+        private void RaiseStartingLongOperation()
+        {
+            if (StartingLongOperation != null)
+                StartingLongOperation.Invoke(this, EventArgs.Empty);
         }
     }
 }

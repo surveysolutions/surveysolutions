@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -70,6 +71,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshTab()
         {
+            if (DashboardItems != null)
+            {
+                DashboardItems.ForEach(di => di.StartingLongOperation -= DashboardItemOnStartingLongOperation);
+            }
+
             switch (this.CurrentDashboardStatus)
             {
                  case DashboardInterviewStatus.New:
@@ -85,8 +91,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.DashboardItems = dashboardInformation.RejectedInterviews;
                     break;
             }
+
+            if (DashboardItems != null)
+            {
+                DashboardItems.ForEach(di => di.StartingLongOperation += DashboardItemOnStartingLongOperation);
+            }
         }
-        
+
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return this.isInProgress; }
+            set { this.isInProgress = value; this.RaisePropertyChanged(); }
+        }
+
+        private void DashboardItemOnStartingLongOperation(object sender, EventArgs eventArgs)
+        {
+            IsInProgress = true;
+        }
+
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization
         {
@@ -218,6 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
 
             this.CurrentDashboardStatus = status;
+
             this.RefreshTab();
         }
 
