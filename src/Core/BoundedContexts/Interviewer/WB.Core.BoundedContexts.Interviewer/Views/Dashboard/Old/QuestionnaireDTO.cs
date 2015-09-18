@@ -50,7 +50,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public long SurveyVersion { get; set; }
 
         public DateTime? StartedDateTime { get; set; }
-        public DateTime? ComplitedDateTime { get; set; }
+        public DateTime? CompletedDateTime { get; set; }
         public DateTime? CreatedDateTime { get; set; }
 
         public IEnumerable<FeaturedItem> GetProperties()

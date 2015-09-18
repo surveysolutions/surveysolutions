@@ -18,9 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         long QuestionnaireVersion { get; }
         string InterviewerCompliteComment { get; }
         string SupervisorRejectComment { get; }
-        DateTime? CreatedDateTime { get; }
-        DateTime? StartedDateTime { get; }
-        DateTime? ComplitedDateTime { get; }
 
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
         IReadOnlyDictionary<string, List<Identity>> RosterInstancesIds { get; }

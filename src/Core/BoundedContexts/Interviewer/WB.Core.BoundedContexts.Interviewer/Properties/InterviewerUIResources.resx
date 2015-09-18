@@ -120,8 +120,8 @@
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
     <value>Census mode, Interviews created: {0}</value>
   </data>
-  <data name="DashboardItem_ComplitedOn" xml:space="preserve">
-    <value>Complited on {0}</value>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>Completed on {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
     <value>Created on {0}</value>

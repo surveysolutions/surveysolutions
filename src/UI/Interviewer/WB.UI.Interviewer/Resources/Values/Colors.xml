@@ -13,7 +13,7 @@
   <color name="dashboard_interview_background">#FFFFFF</color>
   <color name="dashboard_new_tab">#6D6D6D</color>
   <color name="dashboard_in_progress_tab">#4C8FD0</color>
-  <color name="dashboard_complited_tab">#4FCB38</color>
+  <color name="dashboard_completed_tab">#4FCB38</color>
   <color name="dashboard_rejected_tab">#F5724A</color>
   <color name="dashboard_new_interview_status">#E9E9E9</color>
   <color name="dashboard_no_interviews_text">#A7A7A7</color>

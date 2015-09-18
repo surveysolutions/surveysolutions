@@ -182,11 +182,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complited on {0}.
+        ///   Looks up a localized string similar to Completed on {0}.
         /// </summary>
-        public static string DashboardItem_ComplitedOn {
+        public static string DashboardItem_CompletedOn {
             get {
-                return ResourceManager.GetString("DashboardItem_ComplitedOn", resourceCulture);
+                return ResourceManager.GetString("DashboardItem_CompletedOn", resourceCulture);
             }
         }
         

@@ -4,7 +4,7 @@
     {
         New,
         InProgress,
-        Complited,
+        Completed,
         Rejected
     }
 }
