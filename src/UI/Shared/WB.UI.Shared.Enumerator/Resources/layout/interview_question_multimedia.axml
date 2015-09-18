@@ -11,7 +11,7 @@
 
           <TableLayout style="@style/FullWidthWrappingLayout"
               android:stretchColumns="0">
-            <TableRow>
+            <TableRow local:MvxBind="Visible QuestionState.IsAnswered;">
                 <ImageView style="@style/Interview_Question_Multimedia_Picture"
                   android:scaleType="centerCrop"
                   android:adjustViewBounds="true"
@@ -19,13 +19,12 @@
                                  Visible QuestionState.IsAnswered"/>
                 <ImageButton style="@style/Interview_Question_RemoveAnswer"
                              local:MvxBind="HideKeyboardOnClick .; 
-                                            Visible QuestionState.IsAnswered
+                                            Visible QuestionState.IsAnswered;
                                             Click RemoveAnswerCommand;" />
             </TableRow>
             <TableRow>
               <FrameLayout android:layout_height="wrap_content" 
-                           android:layout_width="wrap_content"
-                           android:layout_marginTop="@dimen/Interview_Question_InputButton_margin_Bottom">
+                           android:layout_width="wrap_content">
                 <Button style="@style/Interview_Question_InputButton"
                         local:MvxBind="HideKeyboardOnClick .; 
                                        Click RequestAnswerCommand; 
