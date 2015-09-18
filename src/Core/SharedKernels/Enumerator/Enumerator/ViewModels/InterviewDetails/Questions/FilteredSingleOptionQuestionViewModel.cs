@@ -94,6 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
+                this.ResetTextInEditor = this.DefaultText;
             }
             else
             {
