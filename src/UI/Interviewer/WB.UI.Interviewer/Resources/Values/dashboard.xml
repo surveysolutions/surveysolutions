@@ -107,7 +107,7 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:layout_marginTop">-20dp</item>
     <item name="android:layout_marginRight">-15dp</item>
-    <item name="android:padding">15dp</item>
+    <item name="android:padding">20dp</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
