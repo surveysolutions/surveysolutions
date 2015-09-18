@@ -1000,6 +1000,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wrong password.
+        /// </summary>
+        public static string Login_WrondPassword {
+            get {
+                return ResourceManager.GetString("Login_WrondPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login.
         /// </summary>
         public static string LoginNameHint {

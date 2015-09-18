@@ -74,13 +74,12 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
             }
         }
 
-        public void CleanAllInterviewIdsForUser()
+        public void CleanAllInterviewIdsForUser(string userId)
         {
-            var userIdAsString = this.principal.CurrentUserIdentity.UserId.FormatGuid();
             using (var connection = this.connectionFactory.Create(this.FullPathToDataBase))
             {
                 var interviewRecordsForUser = connection.Table<SyncPackageId>()
-                    .Where(x => x.Type == SyncItemType.Interview && x.UserId == userIdAsString)
+                    .Where(x => x.Type == SyncItemType.Interview && x.UserId == userId)
                     .ToList();
 
                 interviewRecordsForUser.ForEach(x => connection.Delete(x));

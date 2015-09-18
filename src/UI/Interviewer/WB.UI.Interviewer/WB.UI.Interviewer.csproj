@@ -496,9 +496,7 @@
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\Values\Colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\Values\Colors.xml" />
     <AndroidResource Include="Resources\Values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
