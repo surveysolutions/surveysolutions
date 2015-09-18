@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<AnswersDeclaredValid>,
         ILiteEventHandler<AnswersDeclaredInvalid>,
+        ILiteEventHandler<QuestionsEnabled>,
         IDisposable
     {
         public class ErrorMessage
@@ -114,6 +115,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public void Handle(AnswersDeclaredInvalid @event)
+        {
+            if (@event.Questions.Contains(this.questionIdentity))
+            {
+                this.UpdateValidState();
+            }
+        }
+
+        public void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.questionIdentity))
             {
