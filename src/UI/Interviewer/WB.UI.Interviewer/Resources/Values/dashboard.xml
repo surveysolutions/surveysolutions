@@ -34,7 +34,7 @@
 
   <style name="Dashboard_CompletedLink" parent="Dashboard_TabLink">
     <item name="android:layout_marginLeft">@dimen/Dashboard_TabMenu_tab_marginLeft</item>
-    <item name="android:textColor">@color/dashboard_complited_tab</item>
+    <item name="android:textColor">@color/dashboard_completed_tab</item>
   </style>
 
   <style name="Dashboard_RejectedLink" parent="Dashboard_TabLink">

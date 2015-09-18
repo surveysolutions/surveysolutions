@@ -430,10 +430,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public long QuestionnaireVersion { get { return questionnaireVersion; } }
         public string InterviewerCompliteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }
-        public DateTime? CreatedDateTime { get; private set; }
-        public DateTime? StartedDateTime { get; private set; }
-        public DateTime? ComplitedDateTime { get; private set; }
-
 
         public IReadOnlyDictionary<string, BaseInterviewAnswer> Answers
         {

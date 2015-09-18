@@ -255,7 +255,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 return;
 
             if (evnt.Payload.Status == InterviewStatus.Completed)
-                questionnaire.ComplitedDateTime = evnt.EventTimeStamp;
+                questionnaire.CompletedDateTime = evnt.EventTimeStamp;
 
             questionnaire.Status = (int)evnt.Payload.Status;
             questionnaire.Comments = evnt.Payload.Comment;

@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.principal.CurrentUserIdentity.UserId,
                 this.currentDashboardStatus);
 
-            if ((CurrentDashboardStatus == DashboardInterviewStatus.Complited && this.CompletedInterviewsCount == 0)
+            if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
                 || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0))
             {
                 this.CurrentDashboardStatus = DashboardInterviewStatus.New;
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                  case DashboardInterviewStatus.InProgress:
                     this.DashboardItems = dashboardInformation.StartedInterviews;
                     break;
-                 case DashboardInterviewStatus.Complited:
+                 case DashboardInterviewStatus.Completed:
                     this.DashboardItems = dashboardInformation.CompletedInterviews;
                     break;
                  case DashboardInterviewStatus.Rejected:
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private DashboardInterviewStatus currentDashboardStatus;
         public bool IsNewInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.New; } }
         public bool IsStartedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.InProgress; } }
-        public bool IsCompletedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Complited; } }
+        public bool IsCompletedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Completed; } }
         public bool IsRejectedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Rejected; } }
 
         private bool isLoaded;
@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand ShowCompletedInterviewsCommand
         {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.Complited)); }
+            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.Completed)); }
         }
 
         public IMvxCommand ShowRejectedInterviewsCommand
