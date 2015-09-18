@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -8,20 +10,18 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
-    internal class InterviewerApplicationUpdater : IInterviewerApplicationUpdater
+    public class UpdateProcessor
     {
-        const string ApplicationFileName = "interviewer.apk";
-        const string SyncGetlatestVersion = "/api/InterviewerSync/GetLatestVersion";
-
         private const string DownloadFolder = "download";
         private readonly string pathToFolder = Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, DownloadFolder);
         private readonly ILogger logger;
-
+        private readonly ISynchronizationService synchronizationService;
         private readonly IInterviewerSettings interviewerSettings;
 
-        public InterviewerApplicationUpdater(ILogger logger, IInterviewerSettings interviewerSettings)
+        public UpdateProcessor(ILogger logger, ISynchronizationService synchronizationService, IInterviewerSettings interviewerSettings)
         {
             this.logger = logger;
+            this.synchronizationService = synchronizationService;
             this.interviewerSettings = interviewerSettings;
 
             if (!Directory.Exists(this.pathToFolder))
@@ -30,14 +30,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             }
         }
 
-        public void GetLatestVersion()
-        {
-            var uri = new Uri(new Uri(this.interviewerSettings.GetSyncAddressPoint()), SyncGetlatestVersion);
-            this.GetLatestVersion(uri, SyncGetlatestVersion);
-            this.StartUpdate(ApplicationFileName);
-        }
-
-        private void GetLatestVersion(Uri uri, string fileName)
+        public void GetLatestVersion(Uri uri, string fileName)
         {
             try
             {
@@ -56,18 +49,31 @@ namespace WB.UI.Interviewer.Implementations.Services
             }
         }
 
-        private void StartUpdate(string fileName)
+        public void StartUpdate(string fileName)
         {
             string pathToFile = Path.Combine(this.pathToFolder, fileName);
 
             if (File.Exists(pathToFile))
             {
-                Intent promptInstall = 
-                    new Intent(Intent.ActionView).SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathToFile)), 
+                Intent promptInstall =
+                    new Intent(Intent.ActionView).SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathToFile)),
                                                                  "application/vnd.android.package-archive");
                 promptInstall.AddFlags(ActivityFlags.NewTask);
                 Application.Context.StartActivity(promptInstall);
             }
+        }
+
+        public async Task<bool?> CheckNewVersion()
+        {
+            bool? newVersionAvailableOrNullIfThrow = null;
+            try
+            {
+                newVersionAvailableOrNullIfThrow = (await this.synchronizationService.GetLatestApplicationVersionAsync(token: default(CancellationToken))).Value > this.interviewerSettings.GetApplicationVersionCode();
+            }
+            catch
+            {
+            }
+            return newVersionAvailableOrNullIfThrow;
         }
     }
 }
