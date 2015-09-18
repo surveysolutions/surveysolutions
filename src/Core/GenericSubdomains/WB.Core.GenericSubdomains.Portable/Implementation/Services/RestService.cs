@@ -48,7 +48,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             CancellationToken? userCancellationToken = null)
         {
             if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
-                throw new RestException("Invalid url", type: RestExceptionType.InvalidUrl);
+                throw new RestException("Invalid URL", type: RestExceptionType.InvalidUrl);
 
             if (this.networkService != null)
             {
@@ -91,7 +91,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
                     if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
                     {
-                        throw new RestException("Request cancelled by user",
+                        throw new RestException("Request canceled by user",
                                type: RestExceptionType.RequestCanceledByUser, innerException: ex);   
                     }
                 }
