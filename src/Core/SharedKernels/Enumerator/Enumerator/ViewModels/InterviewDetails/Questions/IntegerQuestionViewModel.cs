@@ -32,7 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
-        public event EventHandler AnswerRemoved;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -92,8 +91,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
-
-                if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
             }
             catch (InterviewException ex)
             {
@@ -229,6 +226,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 QuestionState.IsAnswered = false;
                 this.AnswerAsString = "";
+
+                this.previousAnswer = null;
             }
         }
     }
