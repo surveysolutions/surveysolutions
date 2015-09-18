@@ -9,7 +9,7 @@ using WB.UI.Shared.Enumerator.Activities;
 namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
-    public class FinishInstallationActivity : BaseActivity<LoginViewModel>
+    public class FinishInstallationActivity : BaseActivity<FinishInstallationViewModel>
     {
         protected override int ViewResourceId
         {
