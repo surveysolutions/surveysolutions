@@ -575,4 +575,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Login_WrondPassword" xml:space="preserve">
     <value>Wrong password</value>
   </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Information package is successfully sent</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Information package of size {0} will be sent via network. Are you sure you want to send it?</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Sending of information package is failed</value>
+  </data>
 </root>

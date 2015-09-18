@@ -36,11 +36,11 @@
             Visible IsRestoreVisible;
             Text Localization('Troubleshooting_Restore');" />
 
-      <wb.ui.interviewer.controls.TabletInformationReportButton
-         style="@style/Troubleshooting_Button"
-         android:id="@+id/btnSendTabletInfo"
-         android:text="Send tablet's information"/>
-       <!--local:MvxBind="Text Localization('Troubleshooting_SendTabletInformation');"--> 
+      <Button style="@style/Troubleshooting_Button"
+            local:MvxBind="
+            Click SendTabletInformationCommand; 
+            Text Localization('Troubleshooting_SendTabletInformation');" />
+
     </LinearLayout>
   </ScrollView>
 </LinearLayout>
