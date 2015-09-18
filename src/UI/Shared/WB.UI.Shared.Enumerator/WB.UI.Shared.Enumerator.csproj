@@ -174,7 +174,7 @@
     <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
-    <Compile Include="Converters\ArrayOfBytesToImageConverter.cs" />
+    <Compile Include="Converters\InMemoryImageValueWithDefaultConverter.cs" />
     <Compile Include="Converters\IsStringNotEmptyConverter.cs" />
     <Compile Include="Converters\ToSpannableGroupTitleConverter.cs" />
     <Compile Include="Converters\GroupStateToColorConverter.cs" />
@@ -983,6 +983,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\complete_screen_statistics_column_background.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\no_image_found.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
