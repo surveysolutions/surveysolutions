@@ -158,7 +158,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 isNewVersionAvailable = (await this.synchronizationService.GetLatestApplicationVersionAsync(token: default(CancellationToken))).Value 
                     > this.interviewerSettings.GetApplicationVersionCode();
             }
-            catch (SynchronizationException ex)
+            catch (SynchronizationException)
             {
                 //await userInteractionService.AlertAsync(ex.Message);
                 IsInProgress = false;
