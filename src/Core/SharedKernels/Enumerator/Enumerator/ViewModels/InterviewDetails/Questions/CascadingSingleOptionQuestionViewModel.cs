@@ -348,11 +348,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var question in @event.Questions)
             {
-                if (question.Id == this.questionIdentity.Id && question.RosterVector.Identical(this.questionIdentity.RosterVector))
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.ResetTextInEditor = null;
                     this.QuestionState.IsAnswered = false;
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
                 }
             }
         }
@@ -367,12 +366,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                InvokeOnMainThread(() =>
-                {
-                    this.QuestionState.IsAnswered = false;
-                    this.ResetTextInEditor = string.Empty;
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
-                });
+                this.QuestionState.IsAnswered = false;
+                this.ResetTextInEditor = string.Empty;
             }
         }
     }
