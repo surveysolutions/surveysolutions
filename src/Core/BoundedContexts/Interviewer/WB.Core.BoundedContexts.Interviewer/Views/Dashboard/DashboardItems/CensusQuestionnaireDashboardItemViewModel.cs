@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -18,17 +20,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IChangeLogManipulator changeLogManipulator;
         private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IMvxMessenger messenger;
 
         public CensusQuestionnaireDashboardItemViewModel(
             ICommandService commandService,
             IChangeLogManipulator changeLogManipulator,
             IPrincipal principal,
-            IViewModelNavigationService viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            IMvxMessenger messenger)
         {
             this.commandService = commandService;
             this.changeLogManipulator = changeLogManipulator;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.messenger = messenger;
         }
 
         private Guid questionnaireId;
@@ -69,13 +74,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             });
         }
 
-
-        public event EventHandler<EventArgs> StartingLongOperation;
-
         private void RaiseStartingLongOperation()
         {
-            if (StartingLongOperation != null)
-                StartingLongOperation.Invoke(this, EventArgs.Empty);
+            messenger.Publish(new StartingLongOperationMessage(this));
         }
     }
 }
