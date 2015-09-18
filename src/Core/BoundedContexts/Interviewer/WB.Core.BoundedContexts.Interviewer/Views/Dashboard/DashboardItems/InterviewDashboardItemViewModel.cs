@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -22,6 +25,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IChangeLogManipulator changeLogManipulator;
+        private readonly ICapiCleanUpService capiCleanUpService;
+        private readonly IMvxMessenger messenger;
 
         public string QuestionariName { get; private set; }
         public Guid InterviewId { get; private set; }
@@ -35,13 +40,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IUserInteractionService userInteractionService,
             ICommandService commandService,
             IPrincipal principal,
-            IChangeLogManipulator changeLogManipulator)
+            IChangeLogManipulator changeLogManipulator,
+            ICapiCleanUpService capiCleanUpService,
+            IMvxMessenger messenger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.commandService = commandService;
             this.principal = principal;
             this.changeLogManipulator = changeLogManipulator;
+            this.capiCleanUpService = capiCleanUpService;
+            this.messenger = messenger;
         }
 
         public void Init(DashboardQuestionnaireItem item)
@@ -114,9 +123,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             if (!isNeedDelete)
                 return;
 
-            var deleteInterviewCommand = new DeleteInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
-            await this.commandService.ExecuteAsync(deleteInterviewCommand);
-            this.changeLogManipulator.CleanUpChangeLogByEventSourceId(this.InterviewId);
+            capiCleanUpService.DeleteInterview(this.InterviewId);
+            RaiseRemovedDashboardItem();
         }
 
         public IMvxCommand LoadDashboardItemCommand
@@ -150,12 +158,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             });
         }
 
-        public event EventHandler<EventArgs> StartingLongOperation;
-
         private void RaiseStartingLongOperation()
         {
-            if (StartingLongOperation != null)
-                StartingLongOperation.Invoke(this, EventArgs.Empty);
+            messenger.Publish(new StartingLongOperationMessage(this));
+        }
+
+        private void RaiseRemovedDashboardItem()
+        {
+            messenger.Publish(new RemovedDashboardItemMessage(this));
         }
     }
 }
