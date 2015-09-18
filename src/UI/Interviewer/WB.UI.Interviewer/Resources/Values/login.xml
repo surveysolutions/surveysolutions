@@ -35,6 +35,7 @@
     <item name="android:layout_width">@dimen/Login_Element_width</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/textedit_color_selector</item>
+    <item name="android:textCursorDrawable">@null</item>
   </style>
 
   <style name="Login_Endpoint_Editor" parent="Login_Editor">
