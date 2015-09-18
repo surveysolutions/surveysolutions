@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -18,24 +18,26 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardViewModel : BaseViewModel, 
-        ILiteEventHandler<InterviewDeleted>
+    public class DashboardViewModel : BaseViewModel, IDisposable
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
-        private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IMvxMessenger messenger;
+
+        private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken removedDashboardItemMessageSubscriptionToken;
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerDashboardFactory dashboardFactory,
             IPrincipal principal, 
             SynchronizationViewModel synchronization,
-            ILiteEventRegistry liteEventRegistry)
+            IMvxMessenger messenger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;
             this.principal = principal;
-            this.liteEventRegistry = liteEventRegistry;
+            this.messenger = messenger;
             this.Synchronization = synchronization;
         }
 
@@ -47,7 +49,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
-            liteEventRegistry.SubscribeOnAllAggregateRoots(this);
+            startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            removedDashboardItemMessageSubscriptionToken = messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
 
             await this.RefreshDashboardAsync();
         }
@@ -71,11 +74,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshTab()
         {
-            if (DashboardItems != null)
-            {
-                DashboardItems.ForEach(di => di.StartingLongOperation -= DashboardItemOnStartingLongOperation);
-            }
-
             switch (this.CurrentDashboardStatus)
             {
                  case DashboardInterviewStatus.New:
@@ -91,11 +89,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     this.DashboardItems = dashboardInformation.RejectedInterviews;
                     break;
             }
+        }
 
-            if (DashboardItems != null)
-            {
-                DashboardItems.ForEach(di => di.StartingLongOperation += DashboardItemOnStartingLongOperation);
-            }
+        private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)
+        {
+            await this.RefreshDashboardAsync();
         }
 
         private bool isInProgress;
@@ -105,7 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
 
-        private void DashboardItemOnStartingLongOperation(object sender, EventArgs eventArgs)
+        private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
         {
             IsInProgress = true;
         }
@@ -261,9 +259,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             
         }
 
-        public async void Handle(InterviewDeleted @event)
+        public void Dispose()
         {
-            await this.RefreshDashboardAsync();
+            messenger.Unsubscribe<StartingLongOperationMessage>(startingLongOperationMessageSubscriptionToken);
+            messenger.Unsubscribe<RemovedDashboardItemMessage>(removedDashboardItemMessageSubscriptionToken);
         }
     }
 }

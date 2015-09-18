@@ -56,6 +56,10 @@
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.File.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.File.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Messenger, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.Messenger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.Network, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Network.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.Network.dll</HintPath>
       <Private>True</Private>
@@ -148,6 +152,8 @@
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
+    <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
+    <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\DashboardQuestionnaireItem.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalItem.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalOption.cs" />
