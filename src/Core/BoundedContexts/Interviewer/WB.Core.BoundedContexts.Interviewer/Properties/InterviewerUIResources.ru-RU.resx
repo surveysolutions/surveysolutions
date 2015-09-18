@@ -120,7 +120,7 @@
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
     <value>Census режим, Создано интервью: {0}</value>
   </data>
-  <data name="DashboardItem_ComplitedOn" xml:space="preserve">
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
     <value>Закончено {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">

@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         survey.QuestionnaireVersion,
                         questionnaire.Comments,
                         questionnaire.StartedDateTime,
-                        questionnaire.ComplitedDateTime,
+                        questionnaire.CompletedDateTime,
                         questionnaire.CreatedDateTime,
                         questionnaire.CreatedOnClient,
                         questionnaire.JustInitilized.HasValue && questionnaire.JustInitilized.Value));
@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 case InterviewStatus.RejectedBySupervisor:
                     return DashboardInterviewStatus.Rejected;
                 case InterviewStatus.Completed:
-                    return DashboardInterviewStatus.Complited;
+                    return DashboardInterviewStatus.Completed;
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
                 case InterviewStatus.InterviewerAssigned:
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 case DashboardInterviewStatus.Rejected:
                     dashboardInformation.RejectedInterviews.Add(interviewDashboardItem);
                     break;
-                case DashboardInterviewStatus.Complited:
+                case DashboardInterviewStatus.Completed:
                     dashboardInformation.CompletedInterviews.Add(interviewDashboardItem);
                     break;
                 case DashboardInterviewStatus.New:

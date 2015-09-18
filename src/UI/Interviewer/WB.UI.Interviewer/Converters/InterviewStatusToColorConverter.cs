@@ -19,8 +19,8 @@ namespace WB.UI.Interviewer.Converters
                 case DashboardInterviewStatus.InProgress:
                     return Resource.Color.dashboard_in_progress_tab;
 
-                case DashboardInterviewStatus.Complited:
-                    return Resource.Color.dashboard_complited_tab;
+                case DashboardInterviewStatus.Completed:
+                    return Resource.Color.dashboard_completed_tab;
 
                 case DashboardInterviewStatus.Rejected:
                     return Resource.Color.dashboard_rejected_tab;

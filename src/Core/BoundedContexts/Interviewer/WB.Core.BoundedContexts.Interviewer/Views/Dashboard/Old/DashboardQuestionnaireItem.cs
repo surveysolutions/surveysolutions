@@ -9,7 +9,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
     {
         public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, DashboardInterviewStatus status, IEnumerable<FeaturedItem> properties,
             string title, long questionnaireVersion, string comments, DateTime? startedDateTime,
-            DateTime? complitedDateTime, DateTime? createdDateTime, bool? createdOnClient = false, 
+            DateTime? completedDateTime, DateTime? createdDateTime, bool? createdOnClient = false, 
             bool canBeDeleted = false)
         {
             this.PublicKey = publicKey;
@@ -20,7 +20,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.QuestionnaireVersion = questionnaireVersion;
             this.Comments = comments;
             this.StartedDateTime = startedDateTime;
-            this.ComplitedDateTime = complitedDateTime;
+            this.CompletedDateTime = completedDateTime;
             this.CreatedDateTime = createdDateTime;
             this.CreatedOnClient = createdOnClient;
             this.CanBeDeleted = canBeDeleted;
@@ -46,7 +46,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 
         public DateTime? StartedDateTime { get; private set; }
         
-        public DateTime? ComplitedDateTime { get; private set; }
+        public DateTime? CompletedDateTime { get; private set; }
 
         public DateTime? CreatedDateTime { get; private set; }
     }

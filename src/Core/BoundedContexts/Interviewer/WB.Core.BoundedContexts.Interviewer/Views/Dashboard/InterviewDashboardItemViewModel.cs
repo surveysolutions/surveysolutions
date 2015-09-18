@@ -49,8 +49,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             Status = item.Status;
             QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
             DateComment = GetInterviewDateCommentByStatus(item, Status);
-            Comment = GetInterviewCommentByStatus(item);
-            PrefilledQuestions = this.GetPrefilledQuestions(item.Properties);
+            Comment = GetInterviewCommentByStatus(item) ?? "-";
+            PrefilledQuestions = this.GetPrefilledQuestions(item.Properties, 3);
             IsSupportedRemove = item.CanBeDeleted;
         }
 
@@ -62,9 +62,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     return item.CreatedDateTime.HasValue ? InterviewerUIResources.DashboardItem_CreatedOn.FormatString(item.CreatedDateTime) : string.Empty;
                 case DashboardInterviewStatus.InProgress:
                     return item.StartedDateTime.HasValue ? InterviewerUIResources.DashboardItem_StartedOn.FormatString(item.StartedDateTime) : string.Empty;
-                case DashboardInterviewStatus.Complited:
+                case DashboardInterviewStatus.Completed:
                 case DashboardInterviewStatus.Rejected:
-                    return item.ComplitedDateTime.HasValue ? InterviewerUIResources.DashboardItem_ComplitedOn.FormatString(item.ComplitedDateTime) : string.Empty;
+                    return item.CompletedDateTime.HasValue ? InterviewerUIResources.DashboardItem_CompletedOn.FormatString(item.CompletedDateTime) : string.Empty;
                 default:
                     return string.Empty;
             }
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     return InterviewerUIResources.DashboardItem_NotStarted;
                 case DashboardInterviewStatus.InProgress:
                     return InterviewerUIResources.DashboardItem_InProgress;
-                case DashboardInterviewStatus.Complited:
+                case DashboardInterviewStatus.Completed:
                     return item.Comments;
                 case DashboardInterviewStatus.Rejected:
                     return item.Comments;
@@ -87,13 +87,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<FeaturedItem> featuredItems)
+        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<FeaturedItem> featuredItems, int count)
         {
             return featuredItems.Select(fi => new PrefilledQuestion()
                 {
                     Answer = fi.Value,
                     Question = fi.Title
-                }).ToList();
+                }).Take(count).ToList();
         }
 
         public bool IsSupportedRemove { get; set; }
@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void LoadInterview()
         {
-            if (Status == DashboardInterviewStatus.Complited)
+            if (Status == DashboardInterviewStatus.Completed)
             {
                 var isReopen = await userInteractionService.ConfirmAsync(
                     InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
