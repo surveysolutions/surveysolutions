@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {

@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 

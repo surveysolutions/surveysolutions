@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -25,16 +26,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.surveyDtoDocumentStorage = surveyDtoDocumentStorage;
         }
 
-        public Task<DashboardInformation> GetDashboardItems(Guid interviewerId, DashboardInterviewStatus status)
+        public Task<DashboardInformation> GetDashboardItems(Guid interviewerId)
         {
-            return Task.Run(() => this.CollectDashboardInformation(new DashboardInput(interviewerId)));
+            return Task.Run(() => this.CollectDashboardInformation(interviewerId));
         }
 
-        private DashboardInformation CollectDashboardInformation(DashboardInput input)
+        private DashboardInformation CollectDashboardInformation(Guid interviewerId)
         {
             var dashboardInformation = new DashboardInformation();
 
-            var userId = input.UserId.FormatGuid();
+            var userId = interviewerId.FormatGuid();
 
             var surveys = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
             List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();

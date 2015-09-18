@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -53,8 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async Task RefreshDashboardAsync()
         {
             this.DashboardInformation = await this.dashboardFactory.GetDashboardItems(
-                this.principal.CurrentUserIdentity.UserId,
-                this.currentDashboardStatus);
+                this.principal.CurrentUserIdentity.UserId);
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
                 || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0))
