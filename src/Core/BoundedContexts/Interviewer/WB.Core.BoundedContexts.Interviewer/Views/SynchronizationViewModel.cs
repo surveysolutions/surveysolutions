@@ -140,9 +140,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
                     InterviewerUIResources.Synchronization_UserAuthentication_Description);
 
-                await this.synchronizationService.CheckInterviewerCompatibilityWithServerAsync(this.Token);
+                await this.synchronizationService.CheckInterviewerCompatibilityWithServerAsync(token: this.Token);
 
-                if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(this.Token))
+                if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: this.Token))
                 {
                     this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>();
                     return;

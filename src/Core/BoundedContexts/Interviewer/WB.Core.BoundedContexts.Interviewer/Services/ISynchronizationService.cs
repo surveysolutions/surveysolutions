@@ -12,11 +12,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ISynchronizationService
     {
-        Task<InterviewerApiView> GetCurrentInterviewerAsync(string login, string password, CancellationToken token);
-        Task<bool> HasCurrentInterviewerDeviceAsync(CancellationToken token, RestCredentials credentials = null);
+        Task<InterviewerApiView> GetCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);
+        Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
-        Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(CancellationToken token, RestCredentials credentials = null);
-        Task LinkCurrentInterviewerToDeviceAsync(CancellationToken token, RestCredentials credentials = null);
+        Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);
+        Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);

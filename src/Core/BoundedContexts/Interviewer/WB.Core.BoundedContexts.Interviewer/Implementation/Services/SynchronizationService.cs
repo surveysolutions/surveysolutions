@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -54,14 +55,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [User Api]
 
-        public async Task<InterviewerApiView> GetCurrentInterviewerAsync(string login, string password, CancellationToken token)
+        public async Task<InterviewerApiView> GetCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
-                credentials: new RestCredentials() {Login = login, Password = password}, token: token));
+                credentials: credentials ?? this.restCredentials, token: token));
             
         }
 
-        public async Task<bool> HasCurrentInterviewerDeviceAsync(CancellationToken token, RestCredentials credentials = null)
+        public async Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"), 
                 credentials: credentials ?? this.restCredentials, token: token));
@@ -71,13 +72,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [Device Api]
 
-        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(CancellationToken token, RestCredentials credentials = null)
+        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<bool>(url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId()), 
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        public async Task LinkCurrentInterviewerToDeviceAsync(CancellationToken token, RestCredentials credentials = null)
+        public async Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
                 url: string.Concat(this.devicesController, "/link/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
@@ -268,28 +269,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private SynchronizationException CreateSynchronizationExceptionByRestException(RestException ex)
         {
-            string exceptionMessage = UIResources.UnexpectedException;
+            string exceptionMessage = InterviewerUIResources.UnexpectedException;
             SynchronizationExceptionType exceptionType = SynchronizationExceptionType.Unexpected;
             switch (ex.Type)
             {
                 case RestExceptionType.RequestByTimeout:
-                    exceptionMessage = UIResources.RequestTimeout;
+                    exceptionMessage = InterviewerUIResources.RequestTimeout;
                     exceptionType = SynchronizationExceptionType.RequestByTimeout;
                     break;
                 case RestExceptionType.RequestCanceledByUser:
-                    exceptionMessage = UIResources.RequestCanceledByUser;
+                    exceptionMessage = InterviewerUIResources.RequestCanceledByUser;
                     exceptionType = SynchronizationExceptionType.RequestCanceledByUser;
                     break;
                 case RestExceptionType.HostUnreachable:
-                    exceptionMessage = UIResources.HostUnreachable;
+                    exceptionMessage = InterviewerUIResources.HostUnreachable;
                     exceptionType = SynchronizationExceptionType.HostUnreachable;
                     break;
                     case RestExceptionType.InvalidUrl:
-                    exceptionMessage = UIResources.InvalidEndpoint;
+                    exceptionMessage = InterviewerUIResources.InvalidEndpoint;
                     exceptionType = SynchronizationExceptionType.InvalidUrl;
                     break;
                     case RestExceptionType.NoNetwork:
-                    exceptionMessage = UIResources.NoNetwork;
+                    exceptionMessage = InterviewerUIResources.NoNetwork;
                     exceptionType = SynchronizationExceptionType.NoNetwork;
                     break;
                     case RestExceptionType.Unexpected:
@@ -298,22 +299,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         case HttpStatusCode.Unauthorized:
                             if (ex.Message.Contains("lock"))
                             {
-                                exceptionMessage = UIResources.AccountIsLockedOnServer;
+                                exceptionMessage = InterviewerUIResources.AccountIsLockedOnServer;
                                 exceptionType = SynchronizationExceptionType.UserLocked;
                             }
                             else if (ex.Message.Contains("not approved"))
                             {
-                                exceptionMessage = UIResources.AccountIsNotApprovedOnServer;
+                                exceptionMessage = InterviewerUIResources.AccountIsNotApprovedOnServer;
                                 exceptionType = SynchronizationExceptionType.UserNotApproved;
                             }
                             else if (ex.Message.Contains("not have an interviewer role"))
                             {
-                                exceptionMessage = UIResources.AccountIsNotAnInterviewer;
+                                exceptionMessage = InterviewerUIResources.AccountIsNotAnInterviewer;
                                 exceptionType = SynchronizationExceptionType.UserIsNotInterviewer;
                             }
                             else
                             {
-                                exceptionMessage = UIResources.Unauthorized;
+                                exceptionMessage = InterviewerUIResources.Unauthorized;
                                 exceptionType = SynchronizationExceptionType.Unauthorized;   
                             }
                             break;
@@ -322,36 +323,36 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                             if (isMaintenance)
                             {
-                                exceptionMessage = UIResources.Maintenance;
+                                exceptionMessage = InterviewerUIResources.Maintenance;
                                 exceptionType = SynchronizationExceptionType.Maintenance;   
                             }
                             else
                             {
                                 this.logger.Warn("Server error", ex);
 
-                                exceptionMessage = UIResources.ServiceUnavailable;
+                                exceptionMessage = InterviewerUIResources.ServiceUnavailable;
                                 exceptionType = SynchronizationExceptionType.ServiceUnavailable;   
                             }
                             break;
                         case HttpStatusCode.UpgradeRequired:
-                            exceptionMessage = UIResources.UpgradeRequired;
+                            exceptionMessage = InterviewerUIResources.UpgradeRequired;
                             exceptionType = SynchronizationExceptionType.UpgradeRequired;
                             break;
                         case HttpStatusCode.NotFound:
                             this.logger.Warn("Server error", ex);
 
-                            exceptionMessage = UIResources.InvalidEndpoint;
+                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
                         case HttpStatusCode.BadRequest:
                         case HttpStatusCode.Redirect:
-                            exceptionMessage = UIResources.InvalidEndpoint;
+                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
                         case HttpStatusCode.InternalServerError:
                             this.logger.Warn("Server error", ex);
 
-                            exceptionMessage = UIResources.InternalServerError;
+                            exceptionMessage = InterviewerUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
                     }

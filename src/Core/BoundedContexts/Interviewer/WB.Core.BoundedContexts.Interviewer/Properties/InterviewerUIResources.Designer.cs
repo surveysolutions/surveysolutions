@@ -62,6 +62,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your user account is locked. Please contact to your supervisor..
+        /// </summary>
+        public static string AccountIsLockedOnServer {
+            get {
+                return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account doesn&apos;t have Interviewer role.
+        /// </summary>
+        public static string AccountIsNotAnInterviewer {
+            get {
+                return ResourceManager.GetString("AccountIsNotAnInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account is not approved. Please contact to your supervisor..
+        /// </summary>
+        public static string AccountIsNotApprovedOnServer {
+            get {
+                return ResourceManager.GetString("AccountIsNotApprovedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed {0}.
         /// </summary>
         public static string Dashboard_CompletedLinkText {
@@ -236,6 +263,51 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server adddress and(or) network settings.
+        /// </summary>
+        public static string HostUnreachable {
+            get {
+                return ResourceManager.GetString("HostUnreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions..
+        /// </summary>
+        public static string InternalServerError {
+            get {
+                return ResourceManager.GetString("InternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided Synchronization entpoint is invalid. Check settings..
+        /// </summary>
+        public static string InvalidEndpoint {
+            get {
+                return ResourceManager.GetString("InvalidEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The website of Survey Solutions Supervisor is on the maintenance mode now. Sorry for the inconvenience.
+        /// </summary>
+        public static string Maintenance {
+            get {
+                return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No network. Check your network settings.
+        /// </summary>
+        public static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About application.
         /// </summary>
         public static string Prefs_AboutApplication {
@@ -376,6 +448,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Prefs_Title {
             get {
                 return ResourceManager.GetString("Prefs_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request cancelled by user.
+        /// </summary>
+        public static string RequestCanceledByUser {
+            get {
+                return ResourceManager.GetString("RequestCanceledByUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout when connecting to the Survey Solutions Supervisor website. Check your internet connection..
+        /// </summary>
+        public static string RequestTimeout {
+            get {
+                return ResourceManager.GetString("RequestTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No connection to the Survey Solutions Supervisor. Please make sure that the website is available..
+        /// </summary>
+        public static string ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
         }
         
@@ -610,6 +709,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_UserAuthentication_Title {
             get {
                 return ResourceManager.GetString("Synchronization_UserAuthentication_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your login or password is incorrect.
+        /// </summary>
+        public static string Unauthorized {
+            get {
+                return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error.
+        /// </summary>
+        public static string UnexpectedException {
+            get {
+                return ResourceManager.GetString("UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version of application was released. Please, update the application.
+        /// </summary>
+        public static string UpgradeRequired {
+            get {
+                return ResourceManager.GetString("UpgradeRequired", resourceCulture);
             }
         }
     }

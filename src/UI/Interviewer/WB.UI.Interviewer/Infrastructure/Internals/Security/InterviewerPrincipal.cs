@@ -27,16 +27,18 @@ namespace WB.UI.Interviewer.Infrastructure.Internals.Security
             this.InitializeIdentity();
         }
 
-        public void SignIn(string userName, string password, bool staySignedIn)
+        public bool SignIn(string userName, string password, bool staySignedIn)
         {
             var localInterviewer = this.interviewersPlainStorage.Query(
                 query => query.FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase) 
                     && interviewer.Password == password));
 
-            if(localInterviewer == null) throw new UnauthorizedAccessException();
+            if (localInterviewer == null) return false;
 
             this.settingsService.AddOrUpdateValue(UserNameParameterName, userName);
             this.currentUserIdentity = localInterviewer;
+
+            return true;
         }
 
         public void SignOut()
