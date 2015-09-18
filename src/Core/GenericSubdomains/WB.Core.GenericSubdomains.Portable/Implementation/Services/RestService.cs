@@ -115,7 +115,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         public async Task PostAsync(string url, object request = null, RestCredentials credentials = null,
             CancellationToken? token = null)
         {
-            await this.ExecuteRequestAsync(url: url, credentials: credentials, method:HttpMethod.Post,
+            await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post, request: request,
                 userCancellationToken: token);
         }
 
@@ -134,7 +134,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, object request = null,
             RestCredentials credentials = null, CancellationToken? token = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
+            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post, request: request,
                 userCancellationToken: token);
 
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
