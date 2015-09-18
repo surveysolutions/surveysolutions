@@ -323,7 +323,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return { count: 0 }; // initial state
         },
         $any: function (state, event) {
-            if (event.metadata.EventSourceId.indexOf(""$"") !== 0) {
+            if (event.metadata.EventSourceId && event.metadata.EventSourceId.indexOf(""$"") !== 0) {
                 state.count += 1;
             }
             return state;
