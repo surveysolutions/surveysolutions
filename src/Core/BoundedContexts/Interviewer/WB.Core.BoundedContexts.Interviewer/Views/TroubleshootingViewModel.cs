@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             catch (Exception exception)
             {
                 logger.Error("Error occured during Restore. ", exception);
-                await userInteractionService.AlertAsync(UIResources.Troubleshooting_RestorationErrorMessage);
+                //await userInteractionService.AlertAsync(UIResources.Troubleshooting_RestorationErrorMessage);
             }
             IsInProgress = false;
         }
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (SynchronizationException ex)
             {
-                await userInteractionService.AlertAsync(ex.Message);
+                //await userInteractionService.AlertAsync(ex.Message);
                 IsInProgress = false;
                 return;
             }
