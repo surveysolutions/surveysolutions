@@ -1,8 +1,11 @@
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -13,23 +16,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class RelinkDeviceViewModel : BaseViewModel
     {
         private readonly ICapiCleanUpService cleanUpExecutor;
+        private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
-        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewerAsyncPlainStorage;
-        private readonly IUserIdentity userIdentity;
+        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
         public RelinkDeviceViewModel(
             ICapiCleanUpService cleanUpExecutor, 
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IAsyncPlainStorage<InterviewerIdentity> interviewerAsyncPlainStorage)
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
         {
             this.cleanUpExecutor = cleanUpExecutor;
+            this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.synchronizationService = synchronizationService;
-            this.interviewerAsyncPlainStorage = interviewerAsyncPlainStorage;
-            this.userIdentity = principal.CurrentUserIdentity;
+            this.interviewersPlainStorage = interviewersPlainStorage;
+        }
+
+        private string errorMessage;
+        public string ErrorMessage
+        {
+            get { return this.errorMessage; }
+            set { this.errorMessage = value; RaisePropertyChanged(); }
+        }
+
+        private bool isInProgress;
+        public bool IsInProgress
+        {
+            get { return this.isInProgress; }
+            set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
         public IMvxCommand CancelCommand
@@ -37,40 +54,71 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(this.ReturnBack); }
         }
 
+        private IMvxCommand relinkCommand;
         public IMvxCommand RelinkCommand
         {
-            get { return new MvxCommand(async () => await this.RelinkCurrentInterviewerToDeviceAsync()); }
+            get
+            {
+                return relinkCommand ?? (relinkCommand =
+                    new MvxCommand(async () => await this.RelinkCurrentInterviewerToDeviceAsync(),
+                        () => !this.IsInProgress));
+            }
         }
 
-        private bool shouldReturnToFinishInstallation;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private InterviewerIdentity userIdentityToRelink;
 
-        public void Init(bool redirectedFromFinishInstallation)
+        public void Init(InterviewerIdentity userIdentity)
         {
-            this.shouldReturnToFinishInstallation = redirectedFromFinishInstallation;
+            this.userIdentityToRelink = userIdentity;
         }
 
         private void ReturnBack()
         {
-            if (shouldReturnToFinishInstallation)
+            this.cancellationTokenSource.Cancel();
+            if (this.principal.IsAuthenticated)
             {
-                var currentInterviver = this.interviewerAsyncPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
-                if (currentInterviver != null)
-                {
-                    this.interviewerAsyncPlainStorage.RemoveAsync(currentInterviver.Id);   
-                }
-
-                this.viewModelNavigationService.NavigateTo<LoginViewModel>();
-
+                this.viewModelNavigationService.NavigateToDashboard();
             }
             else
-                this.viewModelNavigationService.NavigateToDashboard();
+            {
+                this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
+            }
         }
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
         {
-            await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(token: default(CancellationToken));
-            this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userIdentity.UserId);
-            this.viewModelNavigationService.NavigateToDashboard();
+            this.IsInProgress = true;
+            this.cancellationTokenSource = new CancellationTokenSource();
+            try
+            {
+                await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(
+                    credentials: new RestCredentials()
+                    {
+                        Login = this.userIdentityToRelink.Name,
+                        Password = this.userIdentityToRelink.Password
+                    },
+                    token: this.cancellationTokenSource.Token);
+
+                this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userIdentityToRelink.UserId);
+
+                await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
+                this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
+                this.viewModelNavigationService.NavigateToDashboard();
+            }
+            catch (SynchronizationException ex)
+            {
+                this.ErrorMessage = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+                this.ErrorMessage = InterviewerUIResources.UnexpectedException;   
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
         }
 
         public override void NavigateToPreviousViewModel()

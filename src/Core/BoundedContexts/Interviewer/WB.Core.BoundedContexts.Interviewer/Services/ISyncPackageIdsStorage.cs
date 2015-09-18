@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         void Append(string packageId, long sortIndex);
         string GetChunkBeforeChunkWithId(string lastKnownPackageId);
         string GetLastStoredPackageId();
-        void CleanAllInterviewIdsForUser();
+        void CleanAllInterviewIdsForUser(string userId);
     }
 }
