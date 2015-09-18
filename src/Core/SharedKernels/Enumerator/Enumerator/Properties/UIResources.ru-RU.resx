@@ -527,4 +527,13 @@
   <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
     <value>Отправить информацию о таблете</value>
   </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Инофрмация о таблете успешно отправлена</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Пакета с информацией о таблете размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его?</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Произошла ошибка при отправке пакета с информацией о таблете</value>
+  </data>
 </root>

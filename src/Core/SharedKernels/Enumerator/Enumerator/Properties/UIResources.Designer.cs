@@ -1288,6 +1288,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Information package is successfully sent.
+        /// </summary>
+        public static string Troubleshooting_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package of size {0} will be sent via network. Are you sure you want to send it?.
+        /// </summary>
+        public static string Troubleshooting_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
         /// </summary>
         public static string Troubleshooting_NewVerisonExist {
@@ -1338,6 +1356,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Troubleshooting_RestoredSuccessfully {
             get {
                 return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending of information package is failed.
+        /// </summary>
+        public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendingOfInformationPackageErrorMessage", resourceCulture);
             }
         }
         

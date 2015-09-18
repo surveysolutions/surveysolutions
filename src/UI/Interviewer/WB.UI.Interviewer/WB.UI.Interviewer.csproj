@@ -370,7 +370,6 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="InterviewerApplication.cs" />
     <Compile Include="Controls\DashboardAdapter.cs" />
-    <Compile Include="Controls\TabletInformationReportButton.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />

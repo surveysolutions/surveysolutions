@@ -1,10 +1,8 @@
 using System;
-using System.Threading;
 using Android.App;
 using Android.OS;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.UI.Interviewer.Controls;
 using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -13,15 +11,6 @@ namespace WB.UI.Interviewer.Activities
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
     public class TroubleshootingActivity : BaseActivity<TroubleshootingViewModel>
     {
-        private CancellationTokenSource cancelSource;
-
-        protected EventHandler<EventArgs> versionCheckEventHandler;
-
-        protected TabletInformationReportButton btnSendTabletInfo
-        {
-            get { return this.FindViewById<TabletInformationReportButton>(Resource.Id.btnSendTabletInfo); }
-        }
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -30,9 +19,6 @@ namespace WB.UI.Interviewer.Activities
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
         }
-
-        private int clickCount = 0;
-        const int NUMBER_CLICK=10;
 
         protected override void OnDestroy()
         {

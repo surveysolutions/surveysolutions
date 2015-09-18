@@ -1,7 +1,6 @@
 ﻿using Ninject.Modules;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.CapiInformation;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.InfoFileSupplierRegistry;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.TabletInformation;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -20,7 +19,6 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting
         public override void Load()
         {
             this.Bind<IInfoFileSupplierRegistry>().To<DefaultInfoFileSupplierRegistry>().InSingletonScope();
-            this.Bind<ITabletInformationSender>().To<TabletInformationSender>().WithConstructorArgument("pathToTemporaryFolder", this.pathToTemporaryFolder);
         
             this.Bind<ICapiInformationService>()
                 .To<CapiInformationService>()
