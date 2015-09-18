@@ -15,7 +15,7 @@
                 <ImageView style="@style/Interview_Question_Multimedia_Picture"
                   android:scaleType="centerCrop"
                   android:adjustViewBounds="true"
-                  local:MvxBind="Bitmap Answer,Converter=InMemoryImage;"/>
+                  local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault;"/>
                 <ImageButton style="@style/Interview_Question_RemoveAnswer"
                              local:MvxBind="HideKeyboardOnClick .; 
                                             Click RemoveAnswerCommand;" />
