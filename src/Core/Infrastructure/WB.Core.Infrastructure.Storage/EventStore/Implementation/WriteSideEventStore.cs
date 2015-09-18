@@ -99,7 +99,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 nextSliceStart = currentSlice.NextEventNumber;
 
                 streamEvents.AddRange(currentSlice.Events);
-            } while (!currentSlice.IsEndOfStream && streamEvents.Count < batchSize);
+            } while (!currentSlice.IsEndOfStream);
 
             var storedEvents = streamEvents.Select(this.ToCommittedEvent).ToList();
 
