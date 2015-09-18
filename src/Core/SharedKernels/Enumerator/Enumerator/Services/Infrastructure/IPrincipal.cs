@@ -4,7 +4,7 @@
     {
         bool IsAuthenticated { get; }
         IUserIdentity CurrentUserIdentity { get; }
-        void SignIn(string userName, string password, bool staySignedIn);
+        bool SignIn(string userName, string password, bool staySignedIn);
         void SignOut();
     }
 }
