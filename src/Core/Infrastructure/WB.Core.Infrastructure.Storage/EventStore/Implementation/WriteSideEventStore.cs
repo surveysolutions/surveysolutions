@@ -27,10 +27,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
     {
         const string CountProjectionName = "AllEventsCount";
         const string EventsPrefix = EventsCategory + "-";
+        private const int maxAllowedBatchSize = 4096;
         private readonly IEventTypeResolver eventTypeResolver;
         const string EventsCategory = "WB";
         static readonly Encoding Encoding = Encoding.UTF8;
         static long lastUsedGlobalSequence = -1;
+        
 
         static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -83,7 +85,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
 
             var streamEvents = new List<ResolvedEvent>();
-            var batchSize = normalMax - normalMin;
+            var batchSize = Math.Min(maxAllowedBatchSize, normalMax - normalMin);
 
             StreamEventsSlice currentSlice;
             var nextSliceStart = StreamPosition.Start + normalMin;
