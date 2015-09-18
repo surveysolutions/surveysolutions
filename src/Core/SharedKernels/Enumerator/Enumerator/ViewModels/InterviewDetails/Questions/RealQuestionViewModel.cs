@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
-        public event EventHandler AnswerRemoved;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -84,8 +83,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-
-            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
         public int? CountOfDecimalPlaces
