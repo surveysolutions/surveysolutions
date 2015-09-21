@@ -1,7 +1,5 @@
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -72,7 +70,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        public override void NavigateToPreviousViewModel()
+        public void NavigateToPreviousViewModel()
         {
             this.NavigateBack();
         }

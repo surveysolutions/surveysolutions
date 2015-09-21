@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ISynchronizationService synchronizationService;
         private readonly IRemoteAuthorizationService remoteAuthorizationService;
         private readonly ILogger logger;
+        private CancellationTokenSource cancellationTokenSource;
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -127,10 +129,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 Password = this.passwordHasher.Hash(this.Password)
             };
 
+            cancellationTokenSource = new CancellationTokenSource();
             this.IsInProgress = true;
             try
             {
-                var interviewer = await this.remoteAuthorizationService.GetInterviewerAsync(restCredentials);
+                var interviewer = await this.remoteAuthorizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token);
                 var interviewerIdentity = new InterviewerIdentity
                 {
                     Id = interviewer.Id.FormatGuid(),
@@ -139,11 +142,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     Name = restCredentials.Login,
                     Password = restCredentials.Password
                 };
-                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(credentials: restCredentials))
+                if (!await this.synchronizationService.HasCurrentInterviewerDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token))
                 {
-                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(credentials: restCredentials);
+                    await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token);
                 }
-                else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(credentials: restCredentials))
+                else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(credentials: restCredentials, token: cancellationTokenSource.Token))
                 {
                     this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
                     return;
@@ -178,13 +181,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             finally
             {
-                this.IsInProgress = false;   
+                this.IsInProgress = false;
+                cancellationTokenSource = null;
             }
         }
 
-        public override void NavigateToPreviousViewModel()
+        public void CancellInProgressTask()
         {
-
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+            }
         }
     }
 }

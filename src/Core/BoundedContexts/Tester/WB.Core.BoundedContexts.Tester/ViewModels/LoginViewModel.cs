@@ -97,10 +97,5 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             if (!string.IsNullOrEmpty(errorMessage))
                 await this.userInteractionService.AlertAsync(errorMessage);
         }
-
-        public override void NavigateToPreviousViewModel()
-        {
-            
-        }
     }
 }

@@ -12,7 +12,11 @@ namespace WB.UI.Tester.Activities
     public class InterviewActivity : EnumeratorInterviewActivity<InterviewViewModel>
     {
         protected override int MenuResourceId { get { return Resource.Menu.interview; } }
-      
+
+        public override void OnBackPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel();
+        }
         protected override void OnMenuItemSelected(int resourceId)
         {
             switch (resourceId)

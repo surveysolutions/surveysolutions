@@ -291,11 +291,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
         }
 
-        public override void NavigateToPreviousViewModel()
-        {
-            
-        }
-
         public IMvxCommand NavigateToDashboardCommand
         {
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard()); }
