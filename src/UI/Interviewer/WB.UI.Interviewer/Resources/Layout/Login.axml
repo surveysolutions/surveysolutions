@@ -35,22 +35,23 @@
         <ImageView
             style="@style/Login_Logo"
             android:id="@+id/LoginPage_logo" />
-        <TextView
-            style="@style/Login_ErrorMessage"
-            android:id="@+id/LoginPage_error_message"
-            android:layout_below="@+id/LoginPage_logo"
-            android:layout_width="wrap_content"
-            local:MvxBind="Text Localization('Login_WrondPassword'); Visible Not(IsUserValid)"/>
        <TextView
             style="@style/Login_ErrorMessage"
             android:id="@+id/LoginPage_online_login_explanation_message"
-            android:layout_below="@+id/LoginPage_error_message"
+            android:layout_below="@+id/LoginPage_logo"
             android:layout_width="wrap_content"
             local:MvxBind="Text Localization('Login_Online_Signin_Explanation_message'); Visible IsOnlineLoginButtonVisible;"/>
+        
+        <TextView
+            style="@style/Login_ErrorMessage"
+            android:id="@+id/LoginPage_error_message"
+            android:layout_below="@+id/LoginPage_online_login_explanation_message"
+            android:layout_width="wrap_content"
+            local:MvxBind="Text Localization('Login_WrondPassword'); Visible Not(IsUserValid)"/>
         <TextView
             style="@style/Login_ErrorMessage"
             android:id="@+id/LoginPage_online_Error_message"
-            android:layout_below="@+id/LoginPage_online_login_explanation_message"
+            android:layout_below="@+id/LoginPage_error_message"
             android:layout_width="wrap_content"
             local:MvxBind="Text ErrorMessage; Visible IsStringNotEmpty(ErrorMessage)"/>
         
