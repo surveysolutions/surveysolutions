@@ -204,14 +204,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task DownloadCensusAsync()
         {
-            var censusQuestionnaires = await this.synchronizationService.GetCensusQuestionnairesAsync(this.Token);
+            var downloadedCensusQuestionnaires = await this.synchronizationService.GetCensusQuestionnairesAsync(this.Token);
+
+            var localCensusQuestionnaires = this.plainStorageQuestionnireInfo.Query(
+                questionnaires => questionnaires.Where(questionnaire => questionnaire.AllowCensus).ToList());
+
+            var downloadedCensusQuestionnaireIds = downloadedCensusQuestionnaires.Select(questionnaire => questionnaire.ToString());
+
+            var localCensusQuestionnairesToDelete = localCensusQuestionnaires.Where(
+                    questionnaire => !downloadedCensusQuestionnaireIds.Contains(questionnaire.Id)).ToList();
+
+            foreach (var questionnaireInfo in localCensusQuestionnairesToDelete)
+            {
+                await this.DeleteQuestionnaireAsync(new QuestionnaireIdentity(questionnaireInfo.QuestionnaireId, questionnaireInfo.QuestionnaireVersion));   
+            }
 
             var processedQuestionnaires = 0;
-            foreach (var censusQuestionnaire in censusQuestionnaires)
+            foreach (var censusQuestionnaire in downloadedCensusQuestionnaires)
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
                             InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
-                                processedQuestionnaires, censusQuestionnaires.Count,
+                                processedQuestionnaires, downloadedCensusQuestionnaires.Count,
                                 InterviewerUIResources.Synchronization_Questionnaires));
 
                 await this.DownloadQuestionnaireAsync(censusQuestionnaire);
@@ -324,6 +337,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             });
         }
 
+        private async Task DeleteQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            await Task.Run(() =>
+            {
+                    this.commandService.Execute(new DisableQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, null));
+                    this.questionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+                    this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+                    this.questionnaireModelRepository.Remove(questionnaireIdentity.ToString());
+
+                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, null));
+                
+            });
+        }
+
         private async Task SaveInterviewAsync(InterviewSyncPackageDto package, SynchronizationChunkMeta synchronizationChunkMeta)
         {
             await Task.Run(() =>
@@ -355,6 +382,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             await this.plainStorageQuestionnireInfo.StoreAsync(new QuestionnireInfo()
             {
                 Id = questionnaireIdentity.ToString(),
+                QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                QuestionnaireVersion = questionnaireIdentity.Version,
                 AllowCensus = questionnaireApiView.AllowCensus
             });
         }
