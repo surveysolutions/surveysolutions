@@ -232,10 +232,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
             {
                 yield return ServiceColumns.SupervisorName;
-                foreach (var systemVariable in ServiceColumns.SystemVariables)
-                {
-                    yield return systemVariable.VariableExportColumnName;
-                }
             }
             
         }
