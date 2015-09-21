@@ -90,10 +90,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
-            Func<QuestionnaireListItem, bool> epmtyFilter = x => true;
+            Func<QuestionnaireListItem, bool> emptyFilter = x => true;
             Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText);
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
-                ? epmtyFilter
+                ? emptyFilter
                 : titleSearchFilter;
 
             var myQuestionnaireListItems = questionnaireListStorageCache
@@ -200,11 +200,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand ShowSearchCommand
         {
-            get { return new MvxCommand(this.ShowSearch, () => !this.IsInProgress); }
+            get { return new MvxCommand(this.ShowSearch); }
         }
 
         private void ShowSearch()
         {
+            if (IsInProgress)
+                return;
             IsSearchVisible = true;
         }
 
