@@ -32,4 +32,5 @@
   <dimen name="Interview_Question_Answer_FilteredComboBox_padding">10dp</dimen>
   <dimen name="Interview_Question_Answer_FilteredComboBox_verticalOffset">6dp</dimen>
   <dimen name="Interview_Group_button_padding">17dp</dimen>
+  <dimen name="Interview_Confirmation_EditText_margin">16dp</dimen>
 </resources>

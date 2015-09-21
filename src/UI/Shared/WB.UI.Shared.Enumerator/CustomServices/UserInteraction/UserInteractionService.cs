@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content.Res;
 using Android.Text;
-
+using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
 {
@@ -32,6 +34,19 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
         {
             var tcs = new TaskCompletionSource<bool>();
             this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton);
+            return tcs.Task;
+        }
+
+        public Task<string> ConfirmWithTextInputAsync(
+           string message,
+           string title = "",
+           string okButton = "OK",
+           string cancelButton = "Cancel")
+        {
+            var tcs = new TaskCompletionSource<string>();
+            this.ConfirmWithTextInputImpl(message,Resource.Layout.popup_edit_text, k => tcs.TrySetResult(k ?? String.Empty),
+                () => tcs.TrySetResult(null), title,
+                okButton, cancelButton);
             return tcs.Task;
         }
 
@@ -95,6 +110,61 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
                             .SetTitle(Html.FromHtml(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(true); }); })
                             .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(false); }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }
+
+        private void ConfirmWithTextInputImpl(string message, int customEditTextResourceId, Action<string> okCallback, Action cancelCallBack, string title, string okButton, string cancelButton)
+        {
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        var inflatedView = (LinearLayout)this.CurrentActivity.LayoutInflater.Inflate(customEditTextResourceId, null);
+                        EditText editText = null;
+                        for (int i = 0; i < inflatedView.ChildCount; i++)
+                        {
+                            var child = inflatedView.GetChildAt(i);
+                            editText = child as EditText;
+                            if(editText!=null)
+                                break;
+                        }
+                        new AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(Html.FromHtml(message))
+                            .SetTitle(Html.FromHtml(title)).SetView(inflatedView)
+                            .SetPositiveButton(okButton,
+                                delegate
+                                {
+                                    HandleDialogClose(userInteractionId, () => { if (okCallback != null) okCallback(editText.Text); });
+
+                                    this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
+                                })
+                            .SetNegativeButton(cancelButton,
+                                delegate
+                                {
+                                    HandleDialogClose(userInteractionId,
+                                        () => { if (cancelCallBack != null) cancelCallBack(); });
+                                    this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
+                                })
                             .SetCancelable(false)
                             .Show();
                     },
