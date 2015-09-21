@@ -462,6 +462,7 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_BreadCrumbs_padding_top = global::WB.UI.Interviewer.Resource.Dimension.Interview_BreadCrumbs_padding_top;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Comments_Details_margin_bottom = global::WB.UI.Interviewer.Resource.Dimension.Interview_Comments_Details_margin_bottom;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Comments_Title_margin_bottom = global::WB.UI.Interviewer.Resource.Dimension.Interview_Comments_Title_margin_bottom;
+			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Confirmation_EditText_margin = global::WB.UI.Interviewer.Resource.Dimension.Interview_Confirmation_EditText_margin;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Entity_Divider_height = global::WB.UI.Interviewer.Resource.Dimension.Interview_Entity_Divider_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Entity_Element_margin_horizontal = global::WB.UI.Interviewer.Resource.Dimension.Interview_Entity_Element_margin_horizontal;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Entity_Title_margin_vertical = global::WB.UI.Interviewer.Resource.Dimension.Interview_Entity_Title_margin_vertical;
@@ -893,6 +894,7 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Id.checkbox = global::WB.UI.Interviewer.Resource.Id.checkbox;
 			global::WB.UI.Shared.Enumerator.Resource.Id.classic = global::WB.UI.Interviewer.Resource.Id.classic;
 			global::WB.UI.Shared.Enumerator.Resource.Id.collapseActionView = global::WB.UI.Interviewer.Resource.Id.collapseActionView;
+			global::WB.UI.Shared.Enumerator.Resource.Id.confirmationEditText = global::WB.UI.Interviewer.Resource.Id.confirmationEditText;
 			global::WB.UI.Shared.Enumerator.Resource.Id.contentPanel = global::WB.UI.Interviewer.Resource.Id.contentPanel;
 			global::WB.UI.Shared.Enumerator.Resource.Id.custom = global::WB.UI.Interviewer.Resource.Id.custom;
 			global::WB.UI.Shared.Enumerator.Resource.Id.customPanel = global::WB.UI.Interviewer.Resource.Id.customPanel;
@@ -1010,6 +1012,7 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Layout.abc_search_view = global::WB.UI.Interviewer.Resource.Layout.abc_search_view;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.abc_select_dialog_material = global::WB.UI.Interviewer.Resource.Layout.abc_select_dialog_material;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.abc_simple_dropdown_hint = global::WB.UI.Interviewer.Resource.Layout.abc_simple_dropdown_hint;
+			global::WB.UI.Shared.Enumerator.Resource.Layout.confirmation_edit_text = global::WB.UI.Interviewer.Resource.Layout.confirmation_edit_text;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview = global::WB.UI.Interviewer.Resource.Layout.interview;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_active_group = global::WB.UI.Interviewer.Resource.Layout.interview_active_group;
 			global::WB.UI.Shared.Enumerator.Resource.Layout.interview_breadcrumb_item = global::WB.UI.Interviewer.Resource.Layout.interview_breadcrumb_item;
@@ -1278,6 +1281,8 @@ namespace WB.UI.Interviewer
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Complete_Screen_Statistics_Unanswered_Counter = global::WB.UI.Interviewer.Resource.Style.Interview_Complete_Screen_Statistics_Unanswered_Counter;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Complete_Screen_Statistics_Unanswered_Label = global::WB.UI.Interviewer.Resource.Style.Interview_Complete_Screen_Statistics_Unanswered_Label;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Complete_Screen_Text = global::WB.UI.Interviewer.Resource.Style.Interview_Complete_Screen_Text;
+			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Confirmation_Editor = global::WB.UI.Interviewer.Resource.Style.Interview_Confirmation_Editor;
+			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Confirmation_Layout = global::WB.UI.Interviewer.Resource.Style.Interview_Confirmation_Layout;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_DisabledQuestionWithDivider = global::WB.UI.Interviewer.Resource.Style.Interview_DisabledQuestionWithDivider;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_DisabledQuestion_Header = global::WB.UI.Interviewer.Resource.Style.Interview_DisabledQuestion_Header;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_DisabledQuestion_Title = global::WB.UI.Interviewer.Resource.Style.Interview_DisabledQuestion_Title;
@@ -3305,32 +3310,32 @@ namespace WB.UI.Interviewer
 		public partial class Dimension
 		{
 			
-			// aapt resource value: 0x7f0a00b6
-			public const int Dashboard_Items_space = 2131361974;
-			
-			// aapt resource value: 0x7f0a00b1
-			public const int Dashboard_Layout_marginLeft = 2131361969;
+			// aapt resource value: 0x7f0a00b7
+			public const int Dashboard_Items_space = 2131361975;
 			
 			// aapt resource value: 0x7f0a00b2
-			public const int Dashboard_Layout_marginRight = 2131361970;
-			
-			// aapt resource value: 0x7f0a00b7
-			public const int Dashboard_Synchronization_Divider_Height = 2131361975;
-			
-			// aapt resource value: 0x7f0a00b8
-			public const int Dashboard_Synchronization_Statistics_Height = 2131361976;
-			
-			// aapt resource value: 0x7f0a00b9
-			public const int Dashboard_Synchronization_Statistics_Width = 2131361977;
-			
-			// aapt resource value: 0x7f0a00b4
-			public const int Dashboard_TabMenu_marginBottom = 2131361972;
+			public const int Dashboard_Layout_marginLeft = 2131361970;
 			
 			// aapt resource value: 0x7f0a00b3
-			public const int Dashboard_TabMenu_marginTop = 2131361971;
+			public const int Dashboard_Layout_marginRight = 2131361971;
+			
+			// aapt resource value: 0x7f0a00b8
+			public const int Dashboard_Synchronization_Divider_Height = 2131361976;
+			
+			// aapt resource value: 0x7f0a00b9
+			public const int Dashboard_Synchronization_Statistics_Height = 2131361977;
+			
+			// aapt resource value: 0x7f0a00ba
+			public const int Dashboard_Synchronization_Statistics_Width = 2131361978;
 			
 			// aapt resource value: 0x7f0a00b5
-			public const int Dashboard_TabMenu_tab_marginLeft = 2131361973;
+			public const int Dashboard_TabMenu_marginBottom = 2131361973;
+			
+			// aapt resource value: 0x7f0a00b4
+			public const int Dashboard_TabMenu_marginTop = 2131361972;
+			
+			// aapt resource value: 0x7f0a00b6
+			public const int Dashboard_TabMenu_tab_marginLeft = 2131361974;
 			
 			// aapt resource value: 0x7f0a0048
 			public const int Interview_BreadCrumbs_padding_top = 2131361864;
@@ -3340,6 +3345,9 @@ namespace WB.UI.Interviewer
 			
 			// aapt resource value: 0x7f0a0065
 			public const int Interview_Comments_Title_margin_bottom = 2131361893;
+			
+			// aapt resource value: 0x7f0a0097
+			public const int Interview_Confirmation_EditText_margin = 2131361943;
 			
 			// aapt resource value: 0x7f0a0047
 			public const int Interview_Entity_Divider_height = 2131361863;
@@ -3545,41 +3553,41 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0a0085
 			public const int ListStyle_Divider_height = 2131361925;
 			
-			// aapt resource value: 0x7f0a00ad
-			public const int Login_Button_padding = 2131361965;
-			
-			// aapt resource value: 0x7f0a00a4
-			public const int Login_Element_margin_vertical_normal = 2131361956;
-			
-			// aapt resource value: 0x7f0a00a3
-			public const int Login_Element_width = 2131361955;
-			
-			// aapt resource value: 0x7f0a00a8
-			public const int Login_ErrorMessage_Padding = 2131361960;
-			
-			// aapt resource value: 0x7f0a00a9
-			public const int Login_ErrorMessage_marginBottom = 2131361961;
-			
-			// aapt resource value: 0x7f0a00ac
-			public const int Login_Footer_paddingBottom = 2131361964;
-			
-			// aapt resource value: 0x7f0a00a2
-			public const int Login_Holder_width = 2131361954;
-			
-			// aapt resource value: 0x7f0a00a7
-			public const int Login_Input_border_width = 2131361959;
+			// aapt resource value: 0x7f0a00ae
+			public const int Login_Button_padding = 2131361966;
 			
 			// aapt resource value: 0x7f0a00a5
-			public const int Login_Input_marginBottom = 2131361957;
+			public const int Login_Element_margin_vertical_normal = 2131361957;
 			
-			// aapt resource value: 0x7f0a00a6
-			public const int Login_Input_padding = 2131361958;
+			// aapt resource value: 0x7f0a00a4
+			public const int Login_Element_width = 2131361956;
+			
+			// aapt resource value: 0x7f0a00a9
+			public const int Login_ErrorMessage_Padding = 2131361961;
 			
 			// aapt resource value: 0x7f0a00aa
-			public const int Login_Password_Editor_marginBottom = 2131361962;
+			public const int Login_ErrorMessage_marginBottom = 2131361962;
+			
+			// aapt resource value: 0x7f0a00ad
+			public const int Login_Footer_paddingBottom = 2131361965;
+			
+			// aapt resource value: 0x7f0a00a3
+			public const int Login_Holder_width = 2131361955;
+			
+			// aapt resource value: 0x7f0a00a8
+			public const int Login_Input_border_width = 2131361960;
+			
+			// aapt resource value: 0x7f0a00a6
+			public const int Login_Input_marginBottom = 2131361958;
+			
+			// aapt resource value: 0x7f0a00a7
+			public const int Login_Input_padding = 2131361959;
 			
 			// aapt resource value: 0x7f0a00ab
-			public const int Login_Troubleshooting_Button_marginLeft = 2131361963;
+			public const int Login_Password_Editor_marginBottom = 2131361963;
+			
+			// aapt resource value: 0x7f0a00ac
+			public const int Login_Troubleshooting_Button_marginLeft = 2131361964;
 			
 			// aapt resource value: 0x7f0a0088
 			public const int PrefilledQuestions_QuestionnaireTitle_Holder_height = 2131361928;
@@ -3590,11 +3598,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0a0089
 			public const int PrefilledQuestions_StartButton_Holder_height = 2131361929;
 			
-			// aapt resource value: 0x7f0a00a1
-			public const int Splash_Logo_padding = 2131361953;
+			// aapt resource value: 0x7f0a00a2
+			public const int Splash_Logo_padding = 2131361954;
 			
-			// aapt resource value: 0x7f0a00a0
-			public const int Splash_Logo_size = 2131361952;
+			// aapt resource value: 0x7f0a00a1
+			public const int Splash_Logo_size = 2131361953;
 			
 			// aapt resource value: 0x7f0a0083
 			public const int Theme_Button_min_height = 2131361923;
@@ -3614,14 +3622,14 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0a0086
 			public const int Toolbar_margin_horizontal = 2131361926;
 			
+			// aapt resource value: 0x7f0a00b1
+			public const int Troubleshooting_Button_marginBottom = 2131361969;
+			
 			// aapt resource value: 0x7f0a00b0
-			public const int Troubleshooting_Button_marginBottom = 2131361968;
+			public const int Troubleshooting_Element_width = 2131361968;
 			
 			// aapt resource value: 0x7f0a00af
-			public const int Troubleshooting_Element_width = 2131361967;
-			
-			// aapt resource value: 0x7f0a00ae
-			public const int Troubleshooting_padding = 2131361966;
+			public const int Troubleshooting_padding = 2131361967;
 			
 			// aapt resource value: 0x7f0a0003
 			public const int abc_action_bar_content_inset_material = 2131361795;
@@ -3803,8 +3811,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0a003e
 			public const int abc_text_size_title_material_toolbar = 2131361854;
 			
-			// aapt resource value: 0x7f0a009f
-			public const int button_corners_radius = 2131361951;
+			// aapt resource value: 0x7f0a00a0
+			public const int button_corners_radius = 2131361952;
 			
 			// aapt resource value: 0x7f0a007f
 			public const int button_shadow_margin = 2131361919;
@@ -3836,29 +3844,29 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0a0044
 			public const int disabled_alpha_material_light = 2131361860;
 			
-			// aapt resource value: 0x7f0a0097
-			public const int textsize_10 = 2131361943;
-			
 			// aapt resource value: 0x7f0a0098
-			public const int textsize_12 = 2131361944;
+			public const int textsize_10 = 2131361944;
 			
 			// aapt resource value: 0x7f0a0099
-			public const int textsize_14 = 2131361945;
+			public const int textsize_12 = 2131361945;
 			
 			// aapt resource value: 0x7f0a009a
-			public const int textsize_16 = 2131361946;
+			public const int textsize_14 = 2131361946;
 			
 			// aapt resource value: 0x7f0a009b
-			public const int textsize_18 = 2131361947;
+			public const int textsize_16 = 2131361947;
 			
 			// aapt resource value: 0x7f0a009c
-			public const int textsize_20 = 2131361948;
+			public const int textsize_18 = 2131361948;
 			
 			// aapt resource value: 0x7f0a009d
-			public const int textsize_28 = 2131361949;
+			public const int textsize_20 = 2131361949;
 			
 			// aapt resource value: 0x7f0a009e
-			public const int textsize_30 = 2131361950;
+			public const int textsize_28 = 2131361950;
+			
+			// aapt resource value: 0x7f0a009f
+			public const int textsize_30 = 2131361951;
 			
 			// aapt resource value: 0x7f0a007e
 			public const int zero = 2131361918;
@@ -4966,32 +4974,32 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0011
 			public const int IsInterviewLocal = 2131492881;
 			
-			// aapt resource value: 0x7f0c007a
-			public const int LoginPage_endpoint = 2131492986;
-			
-			// aapt resource value: 0x7f0c0078
-			public const int LoginPage_error_message = 2131492984;
-			
 			// aapt resource value: 0x7f0c007b
-			public const int LoginPage_login = 2131492987;
+			public const int LoginPage_endpoint = 2131492987;
 			
-			// aapt resource value: 0x7f0c0077
-			public const int LoginPage_logo = 2131492983;
+			// aapt resource value: 0x7f0c0079
+			public const int LoginPage_error_message = 2131492985;
 			
 			// aapt resource value: 0x7f0c007c
-			public const int LoginPage_password = 2131492988;
+			public const int LoginPage_login = 2131492988;
+			
+			// aapt resource value: 0x7f0c0078
+			public const int LoginPage_logo = 2131492984;
 			
 			// aapt resource value: 0x7f0c007d
-			public const int LoginPage_singin_button = 2131492989;
+			public const int LoginPage_password = 2131492989;
 			
 			// aapt resource value: 0x7f0c007e
-			public const int LoginPage_troubleshooting_button = 2131492990;
+			public const int LoginPage_singin_button = 2131492990;
+			
+			// aapt resource value: 0x7f0c007f
+			public const int LoginPage_troubleshooting_button = 2131492991;
 			
 			// aapt resource value: 0x7f0c0009
 			public const int MvxBindingTagUnique = 2131492873;
 			
-			// aapt resource value: 0x7f0c0083
-			public const int MyLayout = 2131492995;
+			// aapt resource value: 0x7f0c0084
+			public const int MyLayout = 2131492996;
 			
 			// aapt resource value: 0x7f0c000c
 			public const int PrpagationKey = 2131492876;
@@ -5002,8 +5010,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0010
 			public const int QuestionnaireVersion = 2131492880;
 			
-			// aapt resource value: 0x7f0c008b
-			public const int RelativeLayout1 = 2131493003;
+			// aapt resource value: 0x7f0c008c
+			public const int RelativeLayout1 = 2131493004;
 			
 			// aapt resource value: 0x7f0c000b
 			public const int ScreenId = 2131492875;
@@ -5062,8 +5070,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c001f
 			public const int always = 2131492895;
 			
-			// aapt resource value: 0x7f0c0090
-			public const int anchorInCenter = 2131493008;
+			// aapt resource value: 0x7f0c0091
+			public const int anchorInCenter = 2131493009;
 			
 			// aapt resource value: 0x7f0c001c
 			public const int beginning = 2131492892;
@@ -5071,23 +5079,23 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0039
 			public const int book_now = 2131492921;
 			
-			// aapt resource value: 0x7f0c0094
-			public const int btnBackup = 2131493012;
-			
-			// aapt resource value: 0x7f0c0099
-			public const int btnCancel = 2131493017;
+			// aapt resource value: 0x7f0c0095
+			public const int btnBackup = 2131493013;
 			
 			// aapt resource value: 0x7f0c009a
-			public const int btnLogin = 2131493018;
+			public const int btnCancel = 2131493018;
 			
-			// aapt resource value: 0x7f0c0095
-			public const int btnRestore = 2131493013;
+			// aapt resource value: 0x7f0c009b
+			public const int btnLogin = 2131493019;
 			
-			// aapt resource value: 0x7f0c0073
-			public const int btnSendTabletInfo = 2131492979;
+			// aapt resource value: 0x7f0c0096
+			public const int btnRestore = 2131493014;
 			
-			// aapt resource value: 0x7f0c0093
-			public const int btnVersion = 2131493011;
+			// aapt resource value: 0x7f0c0074
+			public const int btnSendTabletInfo = 2131492980;
+			
+			// aapt resource value: 0x7f0c0094
+			public const int btnVersion = 2131493012;
 			
 			// aapt resource value: 0x7f0c0055
 			public const int buttonPanel = 2131492949;
@@ -5109,6 +5117,9 @@ namespace WB.UI.Interviewer
 			
 			// aapt resource value: 0x7f0c0020
 			public const int collapseActionView = 2131492896;
+			
+			// aapt resource value: 0x7f0c0070
+			public const int confirmationEditText = 2131492976;
 			
 			// aapt resource value: 0x7f0c0050
 			public const int contentPanel = 2131492944;
@@ -5134,8 +5145,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c003c
 			public const int donate_with_google = 2131492924;
 			
-			// aapt resource value: 0x7f0c007f
-			public const int drawer_layout = 2131492991;
+			// aapt resource value: 0x7f0c0080
+			public const int drawer_layout = 2131492992;
 			
 			// aapt resource value: 0x7f0c0025
 			public const int dropdown = 2131492901;
@@ -5152,8 +5163,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0056
 			public const int expanded_menu = 2131492950;
 			
-			// aapt resource value: 0x7f0c008e
-			public const int flashButton = 2131493006;
+			// aapt resource value: 0x7f0c008f
+			public const int flashButton = 2131493007;
 			
 			// aapt resource value: 0x7f0c003e
 			public const int grayscale = 2131492926;
@@ -5188,17 +5199,17 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0047
 			public const int image = 2131492935;
 			
-			// aapt resource value: 0x7f0c0080
-			public const int interviewEntitiesList = 2131492992;
-			
-			// aapt resource value: 0x7f0c009e
-			public const int interview_dashboard = 2131493022;
+			// aapt resource value: 0x7f0c0081
+			public const int interviewEntitiesList = 2131492993;
 			
 			// aapt resource value: 0x7f0c009f
-			public const int interview_signout = 2131493023;
+			public const int interview_dashboard = 2131493023;
 			
-			// aapt resource value: 0x7f0c0071
-			public const int interviewsList = 2131492977;
+			// aapt resource value: 0x7f0c00a0
+			public const int interview_signout = 2131493024;
+			
+			// aapt resource value: 0x7f0c0072
+			public const int interviewsList = 2131492978;
 			
 			// aapt resource value: 0x7f0c0012
 			public const int listMode = 2131492882;
@@ -5206,50 +5217,50 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0049
 			public const int list_item = 2131492937;
 			
-			// aapt resource value: 0x7f0c0092
-			public const int llContainer = 2131493010;
+			// aapt resource value: 0x7f0c0093
+			public const int llContainer = 2131493011;
 			
-			// aapt resource value: 0x7f0c0084
-			public const int llSurveyHolder = 2131492996;
+			// aapt resource value: 0x7f0c0085
+			public const int llSurveyHolder = 2131492997;
+			
+			// aapt resource value: 0x7f0c0077
+			public const int login_page_footer = 2131492983;
+			
+			// aapt resource value: 0x7f0c007a
+			public const int login_page_screen_bottom = 2131492986;
 			
 			// aapt resource value: 0x7f0c0076
-			public const int login_page_footer = 2131492982;
-			
-			// aapt resource value: 0x7f0c0079
-			public const int login_page_screen_bottom = 2131492985;
-			
-			// aapt resource value: 0x7f0c0075
-			public const int login_page_scroll_container = 2131492981;
+			public const int login_page_scroll_container = 2131492982;
 			
 			// aapt resource value: 0x7f0c0038
 			public const int match_parent = 2131492920;
 			
-			// aapt resource value: 0x7f0c0088
-			public const int media_route_control_frame = 2131493000;
-			
 			// aapt resource value: 0x7f0c0089
-			public const int media_route_disconnect_button = 2131493001;
+			public const int media_route_control_frame = 2131493001;
 			
-			// aapt resource value: 0x7f0c0085
-			public const int media_route_list = 2131492997;
+			// aapt resource value: 0x7f0c008a
+			public const int media_route_disconnect_button = 2131493002;
 			
 			// aapt resource value: 0x7f0c0086
-			public const int media_route_volume_layout = 2131492998;
+			public const int media_route_list = 2131492998;
 			
 			// aapt resource value: 0x7f0c0087
-			public const int media_route_volume_slider = 2131492999;
+			public const int media_route_volume_layout = 2131492999;
 			
-			// aapt resource value: 0x7f0c00a0
-			public const int menu_dashboard = 2131493024;
+			// aapt resource value: 0x7f0c0088
+			public const int media_route_volume_slider = 2131493000;
 			
-			// aapt resource value: 0x7f0c009c
-			public const int menu_settings = 2131493020;
+			// aapt resource value: 0x7f0c00a1
+			public const int menu_dashboard = 2131493025;
 			
 			// aapt resource value: 0x7f0c009d
-			public const int menu_signout = 2131493021;
+			public const int menu_settings = 2131493021;
 			
-			// aapt resource value: 0x7f0c009b
-			public const int menu_synchronization = 2131493019;
+			// aapt resource value: 0x7f0c009e
+			public const int menu_signout = 2131493022;
+			
+			// aapt resource value: 0x7f0c009c
+			public const int menu_synchronization = 2131493020;
 			
 			// aapt resource value: 0x7f0c001e
 			public const int middle = 2131492894;
@@ -5269,8 +5280,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0013
 			public const int normal = 2131492883;
 			
-			// aapt resource value: 0x7f0c008d
-			public const int overlayImage = 2131493005;
+			// aapt resource value: 0x7f0c008e
+			public const int overlayImage = 2131493006;
 			
 			// aapt resource value: 0x7f0c006e
 			public const int pagesSpinner = 2131492974;
@@ -5278,11 +5289,11 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c004c
 			public const int parentPanel = 2131492940;
 			
-			// aapt resource value: 0x7f0c0081
-			public const int prefilledQuestions_questionnaireTitle_holder = 2131492993;
+			// aapt resource value: 0x7f0c0082
+			public const int prefilledQuestions_questionnaireTitle_holder = 2131492994;
 			
-			// aapt resource value: 0x7f0c008c
-			public const int preview_view = 2131493004;
+			// aapt resource value: 0x7f0c008d
+			public const int preview_view = 2131493005;
 			
 			// aapt resource value: 0x7f0c0033
 			public const int production = 2131492915;
@@ -5293,8 +5304,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0006
 			public const int progress_horizontal = 2131492870;
 			
-			// aapt resource value: 0x7f0c008a
-			public const int questionnaireEntitiesList = 2131493002;
+			// aapt resource value: 0x7f0c008b
+			public const int questionnaireEntitiesList = 2131493003;
 			
 			// aapt resource value: 0x7f0c0059
 			public const int radio = 2131492953;
@@ -5359,8 +5370,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c001a
 			public const int showTitle = 2131492890;
 			
-			// aapt resource value: 0x7f0c0091
-			public const int splash_image = 2131493009;
+			// aapt resource value: 0x7f0c0092
+			public const int splash_image = 2131493010;
 			
 			// aapt resource value: 0x7f0c0007
 			public const int split_action_bar = 2131492871;
@@ -5380,17 +5391,17 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c006a
 			public const int submit_area = 2131492970;
 			
-			// aapt resource value: 0x7f0c0096
-			public const int synchronization_panel = 2131493014;
+			// aapt resource value: 0x7f0c0097
+			public const int synchronization_panel = 2131493015;
 			
 			// aapt resource value: 0x7f0c0014
 			public const int tabMode = 2131492884;
 			
-			// aapt resource value: 0x7f0c0097
-			public const int teLogin = 2131493015;
-			
 			// aapt resource value: 0x7f0c0098
-			public const int tePassword = 2131493016;
+			public const int teLogin = 2131493016;
+			
+			// aapt resource value: 0x7f0c0099
+			public const int tePassword = 2131493017;
 			
 			// aapt resource value: 0x7f0c0030
 			public const int terrain = 2131492912;
@@ -5404,20 +5415,20 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c004e
 			public const int title_template = 2131492942;
 			
-			// aapt resource value: 0x7f0c0070
-			public const int toolbar = 2131492976;
+			// aapt resource value: 0x7f0c0071
+			public const int toolbar = 2131492977;
 			
 			// aapt resource value: 0x7f0c004d
 			public const int topPanel = 2131492941;
 			
-			// aapt resource value: 0x7f0c0072
-			public const int tvMessage = 2131492978;
+			// aapt resource value: 0x7f0c0073
+			public const int tvMessage = 2131492979;
 			
-			// aapt resource value: 0x7f0c0074
-			public const int tvSyncResult = 2131492980;
+			// aapt resource value: 0x7f0c0075
+			public const int tvSyncResult = 2131492981;
 			
-			// aapt resource value: 0x7f0c0082
-			public const int txtTitle = 2131492994;
+			// aapt resource value: 0x7f0c0083
+			public const int txtTitle = 2131492995;
 			
 			// aapt resource value: 0x7f0c0008
 			public const int up = 2131492872;
@@ -5434,8 +5445,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c0026
 			public const int wrap_content = 2131492902;
 			
-			// aapt resource value: 0x7f0c008f
-			public const int zoomButton = 2131493007;
+			// aapt resource value: 0x7f0c0090
+			public const int zoomButton = 2131493008;
 			
 			static Id()
 			{
@@ -5563,187 +5574,190 @@ namespace WB.UI.Interviewer
 			public const int ActionBar = 2130903065;
 			
 			// aapt resource value: 0x7f03001a
-			public const int dashboard = 2130903066;
+			public const int confirmation_edit_text = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int dashboard_census_questionnare_item = 2130903067;
+			public const int dashboard = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int dashboard_interview_item = 2130903068;
+			public const int dashboard_census_questionnare_item = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int dashboard_item_prefilled_question = 2130903069;
+			public const int dashboard_interview_item = 2130903069;
 			
 			// aapt resource value: 0x7f03001e
-			public const int ErrorScreen = 2130903070;
+			public const int dashboard_item_prefilled_question = 2130903070;
 			
 			// aapt resource value: 0x7f03001f
-			public const int finish_installation = 2130903071;
+			public const int ErrorScreen = 2130903071;
 			
 			// aapt resource value: 0x7f030020
-			public const int interview = 2130903072;
+			public const int finish_installation = 2130903072;
 			
 			// aapt resource value: 0x7f030021
-			public const int interview_active_group = 2130903073;
+			public const int interview = 2130903073;
 			
 			// aapt resource value: 0x7f030022
-			public const int interview_breadcrumb_item = 2130903074;
+			public const int interview_active_group = 2130903074;
 			
 			// aapt resource value: 0x7f030023
-			public const int interview_complete_screen = 2130903075;
+			public const int interview_breadcrumb_item = 2130903075;
 			
 			// aapt resource value: 0x7f030024
-			public const int interview_complete_statistics = 2130903076;
+			public const int interview_complete_screen = 2130903076;
 			
 			// aapt resource value: 0x7f030025
-			public const int interview_complete_status_change = 2130903077;
+			public const int interview_complete_statistics = 2130903077;
 			
 			// aapt resource value: 0x7f030026
-			public const int interview_disabled_group = 2130903078;
+			public const int interview_complete_status_change = 2130903078;
 			
 			// aapt resource value: 0x7f030027
-			public const int interview_disabled_question = 2130903079;
+			public const int interview_disabled_group = 2130903079;
 			
 			// aapt resource value: 0x7f030028
-			public const int interview_group = 2130903080;
+			public const int interview_disabled_question = 2130903080;
 			
 			// aapt resource value: 0x7f030029
-			public const int interview_group_navigation = 2130903081;
+			public const int interview_group = 2130903081;
 			
 			// aapt resource value: 0x7f03002a
-			public const int interview_left_side_panel = 2130903082;
+			public const int interview_group_navigation = 2130903082;
 			
 			// aapt resource value: 0x7f03002b
-			public const int interview_left_side_panel_item = 2130903083;
+			public const int interview_left_side_panel = 2130903083;
 			
 			// aapt resource value: 0x7f03002c
-			public const int interview_left_side_panel_item_group = 2130903084;
+			public const int interview_left_side_panel_item = 2130903084;
 			
 			// aapt resource value: 0x7f03002d
-			public const int interview_left_side_panel_item_section = 2130903085;
+			public const int interview_left_side_panel_item_group = 2130903085;
 			
 			// aapt resource value: 0x7f03002e
-			public const int interview_prefilled_question_template = 2130903086;
+			public const int interview_left_side_panel_item_section = 2130903086;
 			
 			// aapt resource value: 0x7f03002f
-			public const int interview_question__comments = 2130903087;
+			public const int interview_prefilled_question_template = 2130903087;
 			
 			// aapt resource value: 0x7f030030
-			public const int interview_question__errors = 2130903088;
+			public const int interview_question__comments = 2130903088;
 			
 			// aapt resource value: 0x7f030031
-			public const int interview_question__instructions = 2130903089;
+			public const int interview_question__errors = 2130903089;
 			
 			// aapt resource value: 0x7f030032
-			public const int interview_question__title = 2130903090;
+			public const int interview_question__instructions = 2130903090;
 			
 			// aapt resource value: 0x7f030033
-			public const int interview_question_cascading_single_option = 2130903091;
+			public const int interview_question__title = 2130903091;
 			
 			// aapt resource value: 0x7f030034
-			public const int interview_question_datetime = 2130903092;
+			public const int interview_question_cascading_single_option = 2130903092;
 			
 			// aapt resource value: 0x7f030035
-			public const int interview_question_filtered_single_option = 2130903093;
+			public const int interview_question_datetime = 2130903093;
 			
 			// aapt resource value: 0x7f030036
-			public const int interview_question_filtered_single_option_item = 2130903094;
+			public const int interview_question_filtered_single_option = 2130903094;
 			
 			// aapt resource value: 0x7f030037
-			public const int interview_question_gps = 2130903095;
+			public const int interview_question_filtered_single_option_item = 2130903095;
 			
 			// aapt resource value: 0x7f030038
-			public const int interview_question_integer = 2130903096;
+			public const int interview_question_gps = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int interview_question_multi_option = 2130903097;
+			public const int interview_question_integer = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int interview_question_multi_option_item = 2130903098;
+			public const int interview_question_multi_option = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int interview_question_multimedia = 2130903099;
+			public const int interview_question_multi_option_item = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int interview_question_qrbarcode = 2130903100;
+			public const int interview_question_multimedia = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int interview_question_real = 2130903101;
+			public const int interview_question_qrbarcode = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int interview_question_single_option = 2130903102;
+			public const int interview_question_real = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int interview_question_single_option_item = 2130903103;
+			public const int interview_question_single_option = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int interview_question_text = 2130903104;
+			public const int interview_question_single_option_item = 2130903104;
 			
 			// aapt resource value: 0x7f030041
-			public const int interview_question_text_list = 2130903105;
+			public const int interview_question_text = 2130903105;
 			
 			// aapt resource value: 0x7f030042
-			public const int interview_question_text_list_item = 2130903106;
+			public const int interview_question_text_list = 2130903106;
 			
 			// aapt resource value: 0x7f030043
-			public const int interview_static_text = 2130903107;
+			public const int interview_question_text_list_item = 2130903107;
 			
 			// aapt resource value: 0x7f030044
-			public const int InterviewActionBar = 2130903108;
+			public const int interview_static_text = 2130903108;
 			
 			// aapt resource value: 0x7f030045
-			public const int Login = 2130903109;
+			public const int InterviewActionBar = 2130903109;
 			
 			// aapt resource value: 0x7f030046
-			public const int Main = 2130903110;
+			public const int Login = 2130903110;
 			
 			// aapt resource value: 0x7f030047
-			public const int mr_media_route_chooser_dialog = 2130903111;
+			public const int Main = 2130903111;
 			
 			// aapt resource value: 0x7f030048
-			public const int mr_media_route_controller_dialog = 2130903112;
+			public const int mr_media_route_chooser_dialog = 2130903112;
 			
 			// aapt resource value: 0x7f030049
-			public const int mr_media_route_list_item = 2130903113;
+			public const int mr_media_route_controller_dialog = 2130903113;
 			
 			// aapt resource value: 0x7f03004a
-			public const int prefilled_questions = 2130903114;
+			public const int mr_media_route_list_item = 2130903114;
 			
 			// aapt resource value: 0x7f03004b
-			public const int prefilled_questions_start_button = 2130903115;
+			public const int prefilled_questions = 2130903115;
 			
 			// aapt resource value: 0x7f03004c
-			public const int relink = 2130903116;
+			public const int prefilled_questions_start_button = 2130903116;
 			
 			// aapt resource value: 0x7f03004d
-			public const int scanner = 2130903117;
+			public const int relink = 2130903117;
 			
 			// aapt resource value: 0x7f03004e
-			public const int select_dialog_item_material = 2130903118;
+			public const int scanner = 2130903118;
 			
 			// aapt resource value: 0x7f03004f
-			public const int select_dialog_multichoice_material = 2130903119;
+			public const int select_dialog_item_material = 2130903119;
 			
 			// aapt resource value: 0x7f030050
-			public const int select_dialog_singlechoice_material = 2130903120;
+			public const int select_dialog_multichoice_material = 2130903120;
 			
 			// aapt resource value: 0x7f030051
-			public const int splash = 2130903121;
+			public const int select_dialog_singlechoice_material = 2130903121;
 			
 			// aapt resource value: 0x7f030052
-			public const int support_simple_spinner_dropdown_item = 2130903122;
+			public const int splash = 2130903122;
 			
 			// aapt resource value: 0x7f030053
-			public const int sync_dialog = 2130903123;
+			public const int support_simple_spinner_dropdown_item = 2130903123;
 			
 			// aapt resource value: 0x7f030054
-			public const int synchronization_panel = 2130903124;
+			public const int sync_dialog = 2130903124;
 			
 			// aapt resource value: 0x7f030055
-			public const int SyncLogin = 2130903125;
+			public const int synchronization_panel = 2130903125;
 			
 			// aapt resource value: 0x7f030056
-			public const int Troubleshooting = 2130903126;
+			public const int SyncLogin = 2130903126;
+			
+			// aapt resource value: 0x7f030057
+			public const int Troubleshooting = 2130903127;
 			
 			static Layout()
 			{
@@ -6538,104 +6552,104 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f08018d
 			public const int CheckBoxTheme = 2131231117;
 			
-			// aapt resource value: 0x7f080199
-			public const int Dashboard_CompletedLink = 2131231129;
-			
-			// aapt resource value: 0x7f0801a7
-			public const int Dashboard_InterviewItem_Comment = 2131231143;
-			
-			// aapt resource value: 0x7f0801a8
-			public const int Dashboard_InterviewItem_CreateButton = 2131231144;
-			
-			// aapt resource value: 0x7f08019f
-			public const int Dashboard_InterviewItem_InformationBlock = 2131231135;
-			
-			// aapt resource value: 0x7f08019d
-			public const int Dashboard_InterviewItem_Layout = 2131231133;
-			
-			// aapt resource value: 0x7f0801a3
-			public const int Dashboard_InterviewItem_PrefilledQuestion = 2131231139;
-			
-			// aapt resource value: 0x7f0801a6
-			public const int Dashboard_InterviewItem_PrefilledQuestion_Answer = 2131231142;
-			
-			// aapt resource value: 0x7f0801a5
-			public const int Dashboard_InterviewItem_PrefilledQuestion_Delimiter = 2131231141;
-			
-			// aapt resource value: 0x7f0801a4
-			public const int Dashboard_InterviewItem_PrefilledQuestion_Question = 2131231140;
-			
-			// aapt resource value: 0x7f0801a2
-			public const int Dashboard_InterviewItem_PrefilledQuestions = 2131231138;
-			
-			// aapt resource value: 0x7f0801a1
-			public const int Dashboard_InterviewItem_RemoveInterviewButton = 2131231137;
-			
-			// aapt resource value: 0x7f08019e
-			public const int Dashboard_InterviewItem_StatusPanel = 2131231134;
-			
-			// aapt resource value: 0x7f0801a0
-			public const int Dashboard_InterviewItem_Title = 2131231136;
-			
-			// aapt resource value: 0x7f08019c
-			public const int Dashboard_InterviewListItem = 2131231132;
-			
 			// aapt resource value: 0x7f08019b
-			public const int Dashboard_InterviewsList = 2131231131;
-			
-			// aapt resource value: 0x7f080194
-			public const int Dashboard_Interviews_Header = 2131231124;
-			
-			// aapt resource value: 0x7f080195
-			public const int Dashboard_Interviews_Header_Body = 2131231125;
-			
-			// aapt resource value: 0x7f080197
-			public const int Dashboard_NewItemsLink = 2131231127;
+			public const int Dashboard_CompletedLink = 2131231131;
 			
 			// aapt resource value: 0x7f0801a9
-			public const int Dashboard_NoInterviewsPanel = 2131231145;
-			
-			// aapt resource value: 0x7f0801ac
-			public const int Dashboard_NoInterviewsSyncButton = 2131231148;
-			
-			// aapt resource value: 0x7f0801ab
-			public const int Dashboard_NoInterviewsText = 2131231147;
+			public const int Dashboard_InterviewItem_Comment = 2131231145;
 			
 			// aapt resource value: 0x7f0801aa
-			public const int Dashboard_NoInterviewsTitle = 2131231146;
+			public const int Dashboard_InterviewItem_CreateButton = 2131231146;
 			
-			// aapt resource value: 0x7f08019a
-			public const int Dashboard_RejectedLink = 2131231130;
+			// aapt resource value: 0x7f0801a1
+			public const int Dashboard_InterviewItem_InformationBlock = 2131231137;
 			
-			// aapt resource value: 0x7f080198
-			public const int Dashboard_StartedLink = 2131231128;
+			// aapt resource value: 0x7f08019f
+			public const int Dashboard_InterviewItem_Layout = 2131231135;
 			
-			// aapt resource value: 0x7f0801b1
-			public const int Dashboard_Synchronization_Cancel_Text = 2131231153;
+			// aapt resource value: 0x7f0801a5
+			public const int Dashboard_InterviewItem_PrefilledQuestion = 2131231141;
 			
-			// aapt resource value: 0x7f0801ad
-			public const int Dashboard_Synchronization_Divider = 2131231149;
+			// aapt resource value: 0x7f0801a8
+			public const int Dashboard_InterviewItem_PrefilledQuestion_Answer = 2131231144;
 			
-			// aapt resource value: 0x7f0801b2
-			public const int Dashboard_Synchronization_Holder = 2131231154;
+			// aapt resource value: 0x7f0801a7
+			public const int Dashboard_InterviewItem_PrefilledQuestion_Delimiter = 2131231143;
 			
-			// aapt resource value: 0x7f0801b3
-			public const int Dashboard_Synchronization_Image = 2131231155;
+			// aapt resource value: 0x7f0801a6
+			public const int Dashboard_InterviewItem_PrefilledQuestion_Question = 2131231142;
 			
-			// aapt resource value: 0x7f0801b0
-			public const int Dashboard_Synchronization_Lock_Text = 2131231152;
+			// aapt resource value: 0x7f0801a4
+			public const int Dashboard_InterviewItem_PrefilledQuestions = 2131231140;
 			
-			// aapt resource value: 0x7f0801ae
-			public const int Dashboard_Synchronization_Operation_Title = 2131231150;
+			// aapt resource value: 0x7f0801a3
+			public const int Dashboard_InterviewItem_RemoveInterviewButton = 2131231139;
 			
-			// aapt resource value: 0x7f0801b4
-			public const int Dashboard_Synchronization_Statistics_Holder = 2131231156;
+			// aapt resource value: 0x7f0801a0
+			public const int Dashboard_InterviewItem_StatusPanel = 2131231136;
 			
-			// aapt resource value: 0x7f0801af
-			public const int Dashboard_Synchronization_Statistics_Text = 2131231151;
+			// aapt resource value: 0x7f0801a2
+			public const int Dashboard_InterviewItem_Title = 2131231138;
+			
+			// aapt resource value: 0x7f08019e
+			public const int Dashboard_InterviewListItem = 2131231134;
+			
+			// aapt resource value: 0x7f08019d
+			public const int Dashboard_InterviewsList = 2131231133;
 			
 			// aapt resource value: 0x7f080196
-			public const int Dashboard_TabLink = 2131231126;
+			public const int Dashboard_Interviews_Header = 2131231126;
+			
+			// aapt resource value: 0x7f080197
+			public const int Dashboard_Interviews_Header_Body = 2131231127;
+			
+			// aapt resource value: 0x7f080199
+			public const int Dashboard_NewItemsLink = 2131231129;
+			
+			// aapt resource value: 0x7f0801ab
+			public const int Dashboard_NoInterviewsPanel = 2131231147;
+			
+			// aapt resource value: 0x7f0801ae
+			public const int Dashboard_NoInterviewsSyncButton = 2131231150;
+			
+			// aapt resource value: 0x7f0801ad
+			public const int Dashboard_NoInterviewsText = 2131231149;
+			
+			// aapt resource value: 0x7f0801ac
+			public const int Dashboard_NoInterviewsTitle = 2131231148;
+			
+			// aapt resource value: 0x7f08019c
+			public const int Dashboard_RejectedLink = 2131231132;
+			
+			// aapt resource value: 0x7f08019a
+			public const int Dashboard_StartedLink = 2131231130;
+			
+			// aapt resource value: 0x7f0801b3
+			public const int Dashboard_Synchronization_Cancel_Text = 2131231155;
+			
+			// aapt resource value: 0x7f0801af
+			public const int Dashboard_Synchronization_Divider = 2131231151;
+			
+			// aapt resource value: 0x7f0801b4
+			public const int Dashboard_Synchronization_Holder = 2131231156;
+			
+			// aapt resource value: 0x7f0801b5
+			public const int Dashboard_Synchronization_Image = 2131231157;
+			
+			// aapt resource value: 0x7f0801b2
+			public const int Dashboard_Synchronization_Lock_Text = 2131231154;
+			
+			// aapt resource value: 0x7f0801b0
+			public const int Dashboard_Synchronization_Operation_Title = 2131231152;
+			
+			// aapt resource value: 0x7f0801b6
+			public const int Dashboard_Synchronization_Statistics_Holder = 2131231158;
+			
+			// aapt resource value: 0x7f0801b1
+			public const int Dashboard_Synchronization_Statistics_Text = 2131231153;
+			
+			// aapt resource value: 0x7f080198
+			public const int Dashboard_TabLink = 2131231128;
 			
 			// aapt resource value: 0x7f08018b
 			public const int Divider_ListStyle = 2131231115;
@@ -6705,6 +6719,12 @@ namespace WB.UI.Interviewer
 			
 			// aapt resource value: 0x7f080160
 			public const int Interview_Complete_Screen_Text = 2131231072;
+			
+			// aapt resource value: 0x7f080194
+			public const int Interview_Confirmation_Editor = 2131231124;
+			
+			// aapt resource value: 0x7f080195
+			public const int Interview_Confirmation_Layout = 2131231125;
 			
 			// aapt resource value: 0x7f08012d
 			public const int Interview_DisabledQuestionWithDivider = 2131231021;
@@ -6913,47 +6933,47 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f080183
 			public const int Interview_Sidebar_Title = 2131231107;
 			
-			// aapt resource value: 0x7f0801bc
-			public const int Login_Button = 2131231164;
-			
-			// aapt resource value: 0x7f0801b8
-			public const int Login_Editor = 2131231160;
-			
-			// aapt resource value: 0x7f0801b9
-			public const int Login_Endpoint_Editor = 2131231161;
-			
-			// aapt resource value: 0x7f0801b6
-			public const int Login_ErrorMessage = 2131231158;
-			
-			// aapt resource value: 0x7f0801bf
-			public const int Login_Footer = 2131231167;
-			
-			// aapt resource value: 0x7f0801c0
-			public const int Login_Footer_Message = 2131231168;
-			
-			// aapt resource value: 0x7f0801b7
-			public const int Login_FormContainer = 2131231159;
+			// aapt resource value: 0x7f0801be
+			public const int Login_Button = 2131231166;
 			
 			// aapt resource value: 0x7f0801ba
-			public const int Login_Login_Editor = 2131231162;
-			
-			// aapt resource value: 0x7f0801b5
-			public const int Login_Logo = 2131231157;
+			public const int Login_Editor = 2131231162;
 			
 			// aapt resource value: 0x7f0801bb
-			public const int Login_Password_Editor = 2131231163;
+			public const int Login_Endpoint_Editor = 2131231163;
 			
-			// aapt resource value: 0x7f0801bd
-			public const int Login_Singin_Button = 2131231165;
-			
-			// aapt resource value: 0x7f0801be
-			public const int Login_Troubleshotting_Button = 2131231166;
+			// aapt resource value: 0x7f0801b8
+			public const int Login_ErrorMessage = 2131231160;
 			
 			// aapt resource value: 0x7f0801c1
-			public const int Menu_Hint = 2131231169;
+			public const int Login_Footer = 2131231169;
 			
 			// aapt resource value: 0x7f0801c2
-			public const int Menu_Hint_Bold = 2131231170;
+			public const int Login_Footer_Message = 2131231170;
+			
+			// aapt resource value: 0x7f0801b9
+			public const int Login_FormContainer = 2131231161;
+			
+			// aapt resource value: 0x7f0801bc
+			public const int Login_Login_Editor = 2131231164;
+			
+			// aapt resource value: 0x7f0801b7
+			public const int Login_Logo = 2131231159;
+			
+			// aapt resource value: 0x7f0801bd
+			public const int Login_Password_Editor = 2131231165;
+			
+			// aapt resource value: 0x7f0801bf
+			public const int Login_Singin_Button = 2131231167;
+			
+			// aapt resource value: 0x7f0801c0
+			public const int Login_Troubleshotting_Button = 2131231168;
+			
+			// aapt resource value: 0x7f0801c3
+			public const int Menu_Hint = 2131231171;
+			
+			// aapt resource value: 0x7f0801c4
+			public const int Menu_Hint_Bold = 2131231172;
 			
 			// aapt resource value: 0x7f080085
 			public const int Platform_AppCompat = 2131230853;
@@ -7234,8 +7254,8 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f080001
 			public const int Theme_MediaRouter_Light = 2131230721;
 			
-			// aapt resource value: 0x7f0801c3
-			public const int Theme_SplashBackground = 2131231171;
+			// aapt resource value: 0x7f0801c5
+			public const int Theme_SplashBackground = 2131231173;
 			
 			// aapt resource value: 0x7f0800d0
 			public const int ThemeOverlay_AppCompat = 2131230928;
@@ -7255,14 +7275,14 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f080172
 			public const int ToolbarTitle = 2131231090;
 			
+			// aapt resource value: 0x7f0801c8
+			public const int Troubleshooting_Button = 2131231176;
+			
+			// aapt resource value: 0x7f0801c7
+			public const int Troubleshooting_Container = 2131231175;
+			
 			// aapt resource value: 0x7f0801c6
-			public const int Troubleshooting_Button = 2131231174;
-			
-			// aapt resource value: 0x7f0801c5
-			public const int Troubleshooting_Container = 2131231173;
-			
-			// aapt resource value: 0x7f0801c4
-			public const int Troubleshooting_ScrollableContainer = 2131231172;
+			public const int Troubleshooting_ScrollableContainer = 2131231174;
 			
 			// aapt resource value: 0x7f08016e
 			public const int VerticalContentHeightWrappingLayout = 2131231086;
