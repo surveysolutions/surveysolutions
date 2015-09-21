@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         public SurveysAndStatusesReportView Load(SurveysAndStatusesReportInputModel input)
         {
-            var lines = this.interviewSummaryReader.Query(_ =>
+            var inteviewsGroupByTemplateAndStatus = this.interviewSummaryReader.Query(_ =>
             {
                 var filetredInterviews = ApplyFilter(input, _);
 
@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         QuestionnaireId =               questionnaire.QuestionnaireId,
                         QuestionnaireVersion =          questionnaire.QuestionnaireVersion,
                         QuestionnaireTitle =            questionnaire.QuestionnaireTitle,
+                        
                         SupervisorAssignedCount =       Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned).InterviewsCount),
                         CompletedCount =                Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.Completed).InterviewsCount),
@@ -58,18 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 return statistics;
             });
 
-
-            var overallCount = this.interviewSummaryReader.Query(_ =>
-            {
-                var result = ApplyFilter(input, _)
-                    .Select(x => x.QuestionnaireId)
-                    .Distinct()
-                    .Count();
-                    
-                return result;
-            }); 
-
-            var currentPage = lines
+            var currentPage = inteviewsGroupByTemplateAndStatus
                            .Select(doc => new HeadquarterSurveysAndStatusesReportLine
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
@@ -87,12 +77,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    QuestionnaireVersion = doc.QuestionnaireVersion,
                                    QuestionnaireTitle = doc.QuestionnaireTitle,
 
-                                   ResponsibleId = doc.ResponsibleId
-                               }).ToList();
+                                   Responsible = !string.IsNullOrEmpty(input.TeamLeadName) ? input.TeamLeadName : input.ResponsibleName
+                           }).ToList();
 
             return new SurveysAndStatusesReportView
                 {
-                    TotalCount = overallCount,
+                    TotalCount = currentPage.Count(),
                     Items = currentPage
                 };
         }
@@ -104,18 +94,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         private static IQueryable<InterviewSummary> ApplyFilter(SurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
         {
-            var filetredInterviews = _.Where(x => !x.IsDeleted);
+            var filteredInterviews = _.Where(x => !x.IsDeleted);
 
             if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower());
+                filteredInterviews = filteredInterviews.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower());
             }
             if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadName == input.TeamLeadName);
+                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName == input.TeamLeadName);
             }
 
-            return filetredInterviews;
+            return filteredInterviews;
         }
 
         class CounterObject
