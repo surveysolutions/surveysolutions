@@ -512,6 +512,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_initializing.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_roster_title_substitution_is_used.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\SectionsViewModelTestContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_sections_model_has_disabled_items.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_get_disable_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
