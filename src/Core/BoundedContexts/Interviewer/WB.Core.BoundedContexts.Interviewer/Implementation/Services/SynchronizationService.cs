@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             };
             await this.TryGetRestResponseOrThrowAsync(async () => 
             await this.restService.PostAsync(
-                url: string.Concat(interviewerApiUrl, "/troubleshooting/tabletInfo"),
+                url: string.Concat(interviewerApiUrl, "/tabletInfo"),
                 credentials: this.restCredentials,
                 request: tabletInformationPackage, 
                 token: token));
