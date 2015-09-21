@@ -77,7 +77,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             try
             {
                 return await restClient.SendAsync(method, this.CreateJsonContent(request),
-                            linkedCancellationTokenSource.Token);
+                    linkedCancellationTokenSource.Token);
+            }
+            catch (TaskCanceledException ex)
+            {
+                // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
+                throw new FlurlHttpException(null, ex);
             }
             catch (FlurlHttpException ex)
             {
