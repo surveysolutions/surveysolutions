@@ -910,6 +910,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Try sign in online.
+        /// </summary>
+        public static string Interviewer_TryOnlineLogin {
+            get {
+                return ResourceManager.GetString("Interviewer_TryOnlineLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Provided Survey Solutions Designer URL is invalid. Check settings..
         /// </summary>
         public static string InvalidEndpoint {
@@ -987,6 +996,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Login_FinishInstallation_Message {
             get {
                 return ResourceManager.GetString("Login_FinishInstallation_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you forget your password and headquarter has reset it you could try sign in online.
+        /// </summary>
+        public static string Login_Online_Signin_Explanation_message {
+            get {
+                return ResourceManager.GetString("Login_Online_Signin_Explanation_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your login or password is incorrect on the remote server too. Please check your credentials with the supervisor.
+        /// </summary>
+        public static string Login_Online_SignIn_Failed {
+            get {
+                return ResourceManager.GetString("Login_Online_SignIn_Failed", resourceCulture);
             }
         }
         
