@@ -239,6 +239,7 @@ namespace WB.UI.Interviewer
 
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
             this.kernel.Bind<ISynchronizationService>().To<SynchronizationService>().InSingletonScope();
+            this.kernel.Bind<IRemoteAuthorizationService>().To<RemoteAuthorizationService>().InSingletonScope();
 
             this.kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
