@@ -19,5 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
         public long? QuestionnaireVersion { get; set; }
 
         public Guid ResponsibleId { get; set; }
+
+        public string Responsible { get; set; }
     }
 }
