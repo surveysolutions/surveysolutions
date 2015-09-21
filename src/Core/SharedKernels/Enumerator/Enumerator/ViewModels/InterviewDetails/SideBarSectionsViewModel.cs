@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateSideBarTree();
         }
 
-        void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
+        private void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
         {
             this.HighlightCurrentSection(navigationParams);
         }
@@ -163,7 +163,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateSideBarTree();
         }
 
-        void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
+        private void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
         {
             var sectionIdentity = new Identity(section.Id, new decimal[0]);
             var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
