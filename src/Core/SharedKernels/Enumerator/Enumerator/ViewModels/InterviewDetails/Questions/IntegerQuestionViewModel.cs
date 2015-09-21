@@ -84,6 +84,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             try
             {
+                if (isRosterSizeQuestion)
+                {
+                    var amountOfRostersToRemove = this.previousAnswer;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                        amountOfRostersToRemove);
+                    if (!(await this.userInteractionService.ConfirmAsync(message)))
+                    {
+                        this.AnswerAsString = NullableIntToAnswerString(this.previousAnswer);
+                        return;
+                    }
+                }
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
                     this.questionIdentity,
