@@ -3,7 +3,7 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_Confirmation_Layout">
   <EditText style="@style/Interview_Confirmation_Editor"
+           android:id="@+id/confirmationEditText"
            android:singleLine="true"
-           android:password="true" 
-            android:layout_margin="@dimen/Interview_Confirmation_EditText_margin" />
+           android:layout_margin="@dimen/Interview_Confirmation_EditText_margin" />
 </LinearLayout>

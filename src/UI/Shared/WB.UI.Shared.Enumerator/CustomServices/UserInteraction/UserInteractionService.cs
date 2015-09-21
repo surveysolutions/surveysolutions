@@ -41,12 +41,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
            string message,
            string title = "",
            string okButton = "OK",
-           string cancelButton = "Cancel")
+           string cancelButton = "Cancel",
+           bool isTextInputPassword=false)
         {
             var tcs = new TaskCompletionSource<string>();
-            this.ConfirmWithTextInputImpl(message,Resource.Layout.popup_edit_text, k => tcs.TrySetResult(k ?? String.Empty),
+            this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? String.Empty),
                 () => tcs.TrySetResult(null), title,
-                okButton, cancelButton);
+                okButton, cancelButton, isTextInputPassword);
             return tcs.Task;
         }
 
@@ -122,7 +123,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
             }
         }
 
-        private void ConfirmWithTextInputImpl(string message, int customEditTextResourceId, Action<string> okCallback, Action cancelCallBack, string title, string okButton, string cancelButton)
+        private void ConfirmWithTextInputImpl(string message, Action<string> okCallback, Action cancelCallBack, string title, string okButton, string cancelButton, bool isTextInputPassword)
         {
             var userInteractionId = Guid.NewGuid();
 
@@ -139,14 +140,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
                             return;
                         }
 
-                        var inflatedView = (LinearLayout)this.CurrentActivity.LayoutInflater.Inflate(customEditTextResourceId, null);
-                        EditText editText = null;
-                        for (int i = 0; i < inflatedView.ChildCount; i++)
+                        var inflatedView = (LinearLayout)this.CurrentActivity.LayoutInflater.Inflate(Resource.Layout.confirmation_edit_text, null);
+                        EditText editText = inflatedView.FindViewById<EditText>(Resource.Id.confirmationEditText);
+                        if (isTextInputPassword)
                         {
-                            var child = inflatedView.GetChildAt(i);
-                            editText = child as EditText;
-                            if(editText!=null)
-                                break;
+                            editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
                         new AlertDialog.Builder(this.CurrentActivity)
                             .SetMessage(Html.FromHtml(message))
