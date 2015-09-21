@@ -538,6 +538,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />
