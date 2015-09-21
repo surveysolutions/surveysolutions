@@ -118,37 +118,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 throw;
             }
         }
-
-        //private void DeleteQuestionnaire(QuestionnaireSyncPackageDto item)
-        //{
-        //    QuestionnaireMetadata metadata;
-        //    try
-        //    {
-        //        metadata = this.jsonUtils.Deserialize<QuestionnaireMetadata>(item.MetaInfo);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new ArgumentException("Failed to extract questionnaire version. Please upgrade supervisor to the latest version.", exception);
-        //    }
-            
-        //    try
-        //    {
-        //        this.commandService.Execute(new DisableQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
-
-        //        var questionnaireIdentity = new QuestionnaireIdentity(metadata.QuestionnaireId, metadata.Version);
-
-        //        this.questionnaireRepository.DeleteQuestionnaireDocument(metadata.QuestionnaireId, metadata.Version);
-        //        this.questionnareAssemblyFileAccessor.RemoveAssembly(metadata.QuestionnaireId, metadata.Version);
-        //        this.questionnaireModelRepository.Remove(questionnaireIdentity.ToString());
-
-        //        this.commandService.Execute(new DeleteQuestionnaire(metadata.QuestionnaireId, metadata.Version, null));
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        this.logger.Warn(
-        //            string.Format("Failed to execute questionnaire deletion command (id: {0}, version: {1}).", metadata.QuestionnaireId.FormatGuid(), metadata.Version),
-        //            exception);
-        //    }
-        //}        
     }
 }
