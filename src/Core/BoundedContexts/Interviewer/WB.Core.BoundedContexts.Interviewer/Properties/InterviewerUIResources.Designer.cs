@@ -713,6 +713,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For user &apos;{0}&apos; pasword have been changed. Please provide new pasword..
+        /// </summary>
+        public static string Synchronization_UserPassword_Update_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_UserPassword_Update_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login or password is incorrect.
         /// </summary>
         public static string Unauthorized {

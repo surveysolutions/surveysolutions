@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -21,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -42,6 +47,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IJsonUtils jsonUtils;
         private readonly IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IMvxMessenger messenger;
+
+        private readonly IPasswordHasher passwordHasher;
+
+        private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
         private CancellationTokenSource synchronizationCancellationTokenSource;
@@ -61,7 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<QuestionnireInfo> plainStorageQuestionnireInfo,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ILogger logger,
-            IPrincipal principal)
+            IPrincipal principal, IMvxMessenger messenger, IUserInteractionService userInteractionService, IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, IPasswordHasher passwordHasher)
         {
             this.synchronizationService = synchronizationService;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -78,6 +89,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.logger = logger;
             this.principal = principal;
+            this.messenger = messenger;
+            this.userInteractionService = userInteractionService;
+            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.passwordHasher = passwordHasher;
         }
 
         private CancellationToken Token { get { return this.synchronizationCancellationTokenSource.Token; } }
@@ -139,6 +154,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Status = SynchronizationStatus.Download;
             this.IsSynchronizationInfoShowed = true;
             this.IsSynchronizationInProgress = true;
+            var showChangePasswordDialog = false;
             try
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
@@ -152,11 +168,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     return;
                 }
 
-                var packagesByInterviews = await this.synchronizationService.GetInterviewPackagesAsync(this.syncPackageIdsStorage.GetLastStoredPackageId(), this.Token);
+                var packagesByInterviews =
+                    await
+                        this.synchronizationService.GetInterviewPackagesAsync(
+                            this.syncPackageIdsStorage.GetLastStoredPackageId(), this.Token);
                 var completedInterviews = this.capiDataSynchronizationService.GetItemsToPush();
 
-                this.statistics.TotalNewInterviewsCount = packagesByInterviews.Interviews.Count(interview => !interview.IsRejected);
-                this.statistics.TotalRejectedInterviewsCount = packagesByInterviews.Interviews.Count(interview => interview.IsRejected);
+                this.statistics.TotalNewInterviewsCount =
+                    packagesByInterviews.Interviews.Count(interview => !interview.IsRejected);
+                this.statistics.TotalRejectedInterviewsCount =
+                    packagesByInterviews.Interviews.Count(interview => interview.IsRejected);
                 this.statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
 
                 this.Status = SynchronizationStatus.Upload;
@@ -177,6 +198,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     case SynchronizationExceptionType.RequestCanceledByUser:
                         this.IsSynchronizationInfoShowed = false;
                         break;
+                    case SynchronizationExceptionType.Unauthorized:
+                        showChangePasswordDialog = true;
+                        break;
                 }
 
                 this.Status = SynchronizationStatus.Fail;
@@ -193,6 +217,54 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.Statistics = statistics;
                 this.IsSynchronizationInProgress = false;
+            }
+            if (showChangePasswordDialog)
+            {
+                var newPassword = await this.userInteractionService.ConfirmWithTextInputAsync(
+                    String.Format(InterviewerUIResources.Synchronization_UserPassword_Update_Format, principal.CurrentUserIdentity.Name),
+                    okButton: UIResources.LoginText,
+                    cancelButton: InterviewerUIResources.Synchronization_Cancel);
+
+                if (newPassword == null)
+                    return;
+
+                var restCredentials = new RestCredentials()
+                {
+                    Login = principal.CurrentUserIdentity.Name,
+                    Password = this.passwordHasher.Hash(newPassword)
+                };
+
+                try
+                {
+
+                    this.IsSynchronizationInProgress = true;
+                    var currentInterviewer = await
+                        this.synchronizationService.GetCurrentInterviewerAsync(restCredentials);
+
+                    principal.SignOut();
+                    var interviewerIdentity = new InterviewerIdentity
+                    {
+                        Id = currentInterviewer.Id.FormatGuid(),
+                        UserId = currentInterviewer.Id,
+                        SupervisorId = currentInterviewer.SupervisorId,
+                        Name = restCredentials.Login,
+                        Password = restCredentials.Password
+                    };
+                    await this.interviewersPlainStorage.RemoveAsync(interviewerIdentity.Id);
+                    await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
+
+                    principal.SignIn(restCredentials.Login, restCredentials.Password, true);
+
+                    await SynchronizeAsync();
+                }
+                catch (SynchronizationException ex)
+                {
+                    this.SetProgressOperation(InterviewerUIResources.Synchronization_Fail_Title, ex.Message);
+                }
+                finally
+                {
+                    this.IsSynchronizationInProgress = false;
+                }
             }
         }
 
