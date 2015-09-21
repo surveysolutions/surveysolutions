@@ -58,8 +58,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Validity.Init(interviewId, entityIdentity, navigationState);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
-        }       
-        
+            this.Enablement.QuestionEnabled += EnablementOnQuestionEnabled;
+        }
+
+        private void EnablementOnQuestionEnabled(object sender, EventArgs eventArgs)
+        {
+            this.UpdateFromModel();
+        }
+
         private bool isAnswered;
         public bool IsAnswered
         {
@@ -69,12 +75,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(TAnswerEvent @event)
         {
-            if (@event.QuestionId == this.questionIdentity.Id &&
-                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                var interview = this.interviewRepository.Get(this.interviewId);
-                this.IsAnswered = interview.WasAnswered(this.questionIdentity);
+                this.UpdateFromModel();
             }
+        }
+
+        private void UpdateFromModel()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId);
+            this.IsAnswered = interview.WasAnswered(this.questionIdentity);
         }
 
         private IMvxCommand showCommentEditorCommand;
@@ -94,6 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this, interviewId);
+            this.Enablement.QuestionEnabled -= this.EnablementOnQuestionEnabled;
             Header.Dispose();
             Validity.Dispose();
             Enablement.Dispose();

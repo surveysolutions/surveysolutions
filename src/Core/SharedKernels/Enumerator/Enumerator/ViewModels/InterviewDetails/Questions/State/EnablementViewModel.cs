@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
 
+        public event EventHandler QuestionEnabled;
+
         protected EnablementViewModel() { }
 
         public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
@@ -78,6 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
+                this.OnQuestionEnabled();
             }
         }
 
@@ -92,6 +95,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this, interviewId);
+        }
+
+        protected virtual void OnQuestionEnabled()
+        {
+            var handler = this.QuestionEnabled;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
     }
 }
