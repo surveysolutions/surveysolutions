@@ -8,7 +8,7 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme", NoHistory = true)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
 

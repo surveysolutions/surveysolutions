@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public override void NavigateToPreviousViewModel()
+        public void NavigateToPreviousViewModel()
         {
             this.ReturnBack();
         }

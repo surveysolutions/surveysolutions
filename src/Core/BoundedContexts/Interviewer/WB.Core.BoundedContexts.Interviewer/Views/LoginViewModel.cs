@@ -78,10 +78,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.IsUserValid)
                 this.viewModelNavigationService.NavigateToDashboard();
         }
-
-        public override void NavigateToPreviousViewModel()
-        {
-
-        }
     }
 }
