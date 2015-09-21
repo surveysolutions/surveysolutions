@@ -78,4 +78,10 @@
     <item name="android:color">@color/login_footer_color</item>
     <item name="android:textStyle">italic</item>
   </style>
+  
+  <style name="Login_OnlineSingin_Button" parent="Login_Button">
+    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
+    <item name="android:textColor">@color/errorTextColor</item>
+    <item name="android:background">@drawable/transparent_input_button</item>
+  </style>
 </resources>

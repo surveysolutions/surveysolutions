@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.IsSynchronizationInProgress = true;
                 currentInterviewer = await
-                    this.remoteAuthorizationService.GetInterviewerAsync(restCredentials);
+                    this.remoteAuthorizationService.GetInterviewerAsync(restCredentials, synchronizationCancellationTokenSource.Token);
             }
             catch (SynchronizationException ex)
             {

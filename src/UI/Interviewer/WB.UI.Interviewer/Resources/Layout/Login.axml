@@ -41,6 +41,19 @@
             android:layout_below="@+id/LoginPage_logo"
             android:layout_width="wrap_content"
             local:MvxBind="Text Localization('Login_WrondPassword'); Visible Not(IsUserValid)"/>
+       <TextView
+            style="@style/Login_ErrorMessage"
+            android:id="@+id/LoginPage_online_login_explanation_message"
+            android:layout_below="@+id/LoginPage_error_message"
+            android:layout_width="wrap_content"
+            local:MvxBind="Text Localization('Login_Online_Signin_Explanation_message'); Visible IsOnlineLoginButtonVisible;"/>
+        <TextView
+            style="@style/Login_ErrorMessage"
+            android:id="@+id/LoginPage_online_Error_message"
+            android:layout_below="@+id/LoginPage_online_login_explanation_message"
+            android:layout_width="wrap_content"
+            local:MvxBind="Text ErrorMessage; Visible IsStringNotEmpty(ErrorMessage)"/>
+        
         <RelativeLayout
             style="@style/Login_FormContainer"
             android:gravity="center"
@@ -68,12 +81,21 @@
               android:id="@+id/LoginPage_singin_button"
               android:layout_below="@+id/LoginPage_password"
               local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
+        
           <Button
+              style="@style/Login_OnlineSingin_Button"
+              android:id="@+id/LoginPage_Online_Login_button" 
+              android:layout_toRightOf="@+id/LoginPage_singin_button"               
+              android:layout_below="@+id/LoginPage_password"
+              local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;" />
+        
+        <Button
               style="@style/Login_Troubleshotting_Button"
               android:id="@+id/LoginPage_troubleshooting_button"
-              android:layout_toRightOf="@+id/LoginPage_singin_button"
+              android:layout_toRightOf="@+id/LoginPage_Online_Login_button"
               android:layout_below="@+id/LoginPage_password"
               local:MvxBind="Click NavigateToTroubleshootingPageCommand; Text Localization('Interviewer_Troubleshooting');" />
+   
         </RelativeLayout>
       </LinearLayout>
     </ScrollView>
