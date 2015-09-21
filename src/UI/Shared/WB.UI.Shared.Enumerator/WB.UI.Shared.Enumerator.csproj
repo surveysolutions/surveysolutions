@@ -953,7 +953,7 @@
     <AndroidResource Include="Resources\layout\interview_active_group.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\popup_edit_text.axml" />
+    <AndroidResource Include="Resources\layout\confirmation_edit_text.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
