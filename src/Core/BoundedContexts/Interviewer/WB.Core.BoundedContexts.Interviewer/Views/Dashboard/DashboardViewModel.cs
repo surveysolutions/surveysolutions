@@ -9,8 +9,6 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -252,11 +250,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.principal.SignOut();
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
-        }
-
-        public override void NavigateToPreviousViewModel()
-        {
-            
         }
 
         public void Dispose()

@@ -59,7 +59,7 @@ namespace WB.UI.Interviewer.ViewModel
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        public override void NavigateToPreviousViewModel()
+        public void NavigateToPreviousViewModel()
         {
             this.NavigateBack();
         }

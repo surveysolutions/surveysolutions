@@ -22,6 +22,19 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
+            
+        }
+
+        public override void OnBackPressed()
+        {
+            if (this.ViewModel.IsInProgress)
+            {
+                this.ViewModel.CancellInProgressTask();
+            }
+            else
+            {
+                base.OnBackPressed();
+            }
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

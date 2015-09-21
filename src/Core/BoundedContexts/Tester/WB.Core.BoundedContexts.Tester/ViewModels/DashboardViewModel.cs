@@ -6,8 +6,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-
 using Cirrious.MvvmCross.ViewModels;
 using Humanizer;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -18,11 +16,9 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -452,11 +448,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                        OwnerName = x.OwnerName,
                        Title = title
                    };
-        }
-
-        public override void NavigateToPreviousViewModel()
-        {
-            
         }
     }
 }
