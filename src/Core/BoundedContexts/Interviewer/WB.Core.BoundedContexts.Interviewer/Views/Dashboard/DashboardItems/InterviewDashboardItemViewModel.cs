@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Messenger;
+using Cirrious.MvvmCross.Plugins.Network.Droid;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -11,7 +12,9 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.ViewModel.Dashboard;
@@ -22,11 +25,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IChangeLogManipulator changeLogManipulator;
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IMvxMessenger messenger;
+        private readonly ISyncPackageRestoreService packageRestoreService;
 
         public string QuestionariName { get; private set; }
         public Guid InterviewId { get; private set; }
@@ -38,19 +43,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IUserInteractionService userInteractionService,
+            IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
             IPrincipal principal,
             IChangeLogManipulator changeLogManipulator,
             ICapiCleanUpService capiCleanUpService,
-            IMvxMessenger messenger)
+            IMvxMessenger messenger, 
+            ISyncPackageRestoreService packageRestoreService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
+            this.interviewRepository = interviewRepository;
             this.commandService = commandService;
             this.principal = principal;
             this.changeLogManipulator = changeLogManipulator;
             this.capiCleanUpService = capiCleanUpService;
             this.messenger = messenger;
+            this.packageRestoreService = packageRestoreService;
         }
 
         public void Init(DashboardQuestionnaireItem item)
@@ -154,7 +163,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             await Task.Run(() =>
             {
                 RaiseStartingLongOperation();
-                this.viewModelNavigationService.NavigateToInterview(this.InterviewId.FormatGuid());
+                this.packageRestoreService.CheckAndApplySyncPackage(this.InterviewId);
+
+                var interviewIdString = this.InterviewId.FormatGuid();
+                IStatefulInterview interview = interviewRepository.Get(interviewIdString);
+
+                if (interview.CreatedOnClient)
+                {
+                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
+                }
+                else
+                {
+                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
+                }
             });
         }
 
