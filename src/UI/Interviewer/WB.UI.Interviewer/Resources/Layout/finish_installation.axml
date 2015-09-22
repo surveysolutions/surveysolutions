@@ -54,7 +54,7 @@
               android:id="@+id/LoginPage_endpoint"
               android:layout_below="@+id/LoginPage_error_message"
               android:singleLine="true"
-              android:inputType="textVisiblePassword|textNoSuggestions"
+              android:inputType="textUri|textNoSuggestions"
               android:imeOptions="actionNext"
               local:MvxBind="Text Endpoint; Hint Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
           <EditText
