@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -21,7 +20,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
-
         private readonly IPasswordHasher passwordHasher;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationService synchronizationService;
@@ -133,7 +131,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.IsUserValid = true;
 
-            var restCredentials = new RestCredentials()
+            var restCredentials = new RestCredentials
             {
                 Login = this.UserName,
                 Password = this.passwordHasher.Hash(this.Password)
