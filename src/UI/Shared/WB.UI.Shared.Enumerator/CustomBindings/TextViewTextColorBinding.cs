@@ -1,10 +1,8 @@
 ﻿using Android.Graphics;
-using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
-using WB.UI.Shared.Enumerator.CustomBindings;
 
-namespace WB.UI.Interviewer.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewTextColorBinding : BaseBinding<TextView, int?>
     {
