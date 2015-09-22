@@ -117,9 +117,6 @@
     <Compile Include="Implementation\Services\DataExport\IMetaDescriptionFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\MetaDescriptionFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\ReadSideToTabularDataExportService.cs" />
-    <Compile Include="Implementation\Services\ServiceVariableType.cs" />
-    <Compile Include="Implementation\Services\ServiceColumns.cs" />
-    <Compile Include="Implementation\Services\ServiceVariable.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Services\Export\IMetadataExportService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />

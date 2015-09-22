@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
+﻿namespace WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables
 {
     public class ServiceVariable
     {

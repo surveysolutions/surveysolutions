@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {

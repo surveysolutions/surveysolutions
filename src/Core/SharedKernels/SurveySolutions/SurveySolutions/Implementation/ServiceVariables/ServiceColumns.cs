@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
+﻿namespace WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables
 {
     public static class ServiceColumns
     {
@@ -17,7 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         public static readonly ServiceVariable[] SystemVariables = new []
         {
-            new ServiceVariable(ServiceVariableType.InterviewRandom, "_IRnd") //random number generated for interview
+            new ServiceVariable(ServiceVariableType.InterviewRandom, "ssSys_IRnd") //random number generated for interview
         };
         
     }
