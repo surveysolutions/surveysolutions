@@ -185,7 +185,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 try
                 {
-                    var uri = new Uri(new Uri(this.interviewerSettings.GetSyncAddressPoint()), SyncGetlatestVersion);
+                    var uri = new Uri(new Uri(this.interviewerSettings.Endpoint), SyncGetlatestVersion);
                     updater.GetLatestVersion(uri, ApplicationFileName);
                     updater.StartUpdate(ApplicationFileName);
                 }

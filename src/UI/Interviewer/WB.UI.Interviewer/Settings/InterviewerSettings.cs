@@ -9,8 +9,9 @@ using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Settings
 {
-    internal class InterviewerSettings : IInterviewerSettings
+    internal class InterviewerSettings : EnumeratorSettings, IInterviewerSettings
     {
+
         public string GetDeviceId()
         {
             return Android.Provider.Settings.Secure.GetString(Application.Context.ContentResolver,
@@ -33,11 +34,6 @@ namespace WB.UI.Interviewer.Settings
             var sClientRegistrationId = GetSetting(SettingsNames.RegistrationKeyName);
 
             return string.IsNullOrEmpty(sClientRegistrationId) ? (Guid?) null : Guid.Parse(sClientRegistrationId);
-        }
-
-        public string GetSyncAddressPoint()
-        {
-            return GetSetting(SettingsNames.Endpoint);
         }
 
         public string GetApplicationVersionName()
