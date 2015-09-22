@@ -52,6 +52,10 @@ namespace WB.UI.Interviewer.ViewModel
         {
             get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(this.SignOut)); }
         }
+        public IMvxCommand NavigateToTroubleshootingPageCommand
+        {
+            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+        }
 
         void SignOut()
         {

@@ -37,6 +37,10 @@ namespace WB.UI.Interviewer.Activities
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
                     break;
+
+                case Resource.Id.menu_troubleshooting:
+                    this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
+                    break;
             }
             return base.OnOptionsItemSelected(item);
         }

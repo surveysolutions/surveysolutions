@@ -24,6 +24,9 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.interview_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
+                case Resource.Id.menu_troubleshooting:
+                    this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
+                    break;
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
