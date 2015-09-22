@@ -587,4 +587,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Try to sign in online</value>
   </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Google Play Services are not available</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>You cannot start MvxLocation service more than once</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Location Client not started</value>
+  </data>
 </root>

@@ -12,6 +12,7 @@ using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.CrossCore.Exceptions;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Plugins.Location;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
 {
@@ -50,7 +51,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
             get
             {
                 if (this.googleApiClient == null || this.locationRequest == null)
-                    throw new MvxException("Location Client not started");
+                    throw new MvxException(UIResources.PlayServicesLocationWatcher_Location_Client_not_started);
 
                 var androidLocation = LocationServices.FusedLocationApi.GetLastLocation(this.googleApiClient);
                 return androidLocation == null ? null : CreateLocation(androidLocation);
@@ -60,10 +61,10 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.Location
         protected override void PlatformSpecificStart(MvxLocationOptions options)
         {
             if (this.googleApiClient != null)
-                throw new MvxException("You cannot start MvxLocation service more than once");
+                throw new MvxException(UIResources.PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once);
 
             if (GooglePlayServicesUtil.IsGooglePlayServicesAvailable(this.Context) != ConnectionResult.Success)
-                throw new MvxException("Google Play Services are not available");
+                throw new MvxException(UIResources.PlayServicesLocationWatcher_Google_Play_Services_are_not_available);
 
             this.locationRequest = LocationRequest.Create();
             this.locationRequest.SetInterval((long)options.TimeBetweenUpdates.TotalMilliseconds);
