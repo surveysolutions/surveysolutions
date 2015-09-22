@@ -100,8 +100,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                                type: RestExceptionType.RequestCanceledByUser, innerException: ex);   
                     }
                 }
-
-                if (ex.Call.Response != null)
+                else if (ex.Call.Response != null)
                 {
                     throw new RestException(ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode,
                            innerException: ex);   
