@@ -4,6 +4,7 @@ using Android.Preferences;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -29,10 +30,10 @@ namespace WB.UI.Interviewer.Activities
             this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
             this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
 
-            this.SetPreferenceTitleAndSummary("Endpoint", InterviewerUIResources.Prefs_EndpointTitle, InterviewerUIResources.Prefs_EndpointSummary);
-            this.SetPreferenceTitleAndSummary("HttpResponseTimeout", InterviewerUIResources.Prefs_HttpResponseTimeoutTitle, InterviewerUIResources.Prefs_HttpResponseTimeoutSummary);
-            this.SetPreferenceTitleAndSummary("BufferSize", InterviewerUIResources.Prefs_BufferSizeTitle, InterviewerUIResources.Prefs_BufferSizeSummary);
-            this.SetPreferenceTitleAndSummary("GpsReceiveTimeoutSec", InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle, InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary);
+            this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle, InterviewerUIResources.Prefs_EndpointSummary);
+            this.SetPreferenceTitleAndSummary(SettingsNames.HttpResponseTimeout, InterviewerUIResources.Prefs_HttpResponseTimeoutTitle, InterviewerUIResources.Prefs_HttpResponseTimeoutSummary);
+            this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle, InterviewerUIResources.Prefs_BufferSizeSummary);
+            this.SetPreferenceTitleAndSummary(SettingsNames.GpsReceiveTimeoutSec, InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle, InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary);
             
         }
 
