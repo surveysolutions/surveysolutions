@@ -196,10 +196,10 @@ for further instructions</value>
     <value>Provided Synchronization endpoint is invalid. Check settings.</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>If you forget your password and headquarter has reset it you could try sign in online</value>
+    <value>If you forgot your password and headquarter has reset it you could try to sign in online</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Your login or password is incorrect on the remote server too. Please check your credentials with the supervisor</value>
+    <value>Your password is incorrect on the remote server too. Please check your credentials with the supervisor</value>
   </data>
   <data name="Login_WrondPassword" xml:space="preserve">
     <value>Wrong password</value>
