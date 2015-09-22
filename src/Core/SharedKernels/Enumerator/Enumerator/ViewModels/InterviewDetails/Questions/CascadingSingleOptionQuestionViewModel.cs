@@ -331,8 +331,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(SingleOptionQuestionAnswered @event)
         {
-            if (@event.QuestionId == this.parentQuestionIdentity.Id
-                && @event.RosterVector.SequenceEqual(this.parentQuestionIdentity.RosterVector))
+            if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
                 var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
                 var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
@@ -341,6 +340,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.answerOnParentQuestion = parentAnswerModel.Answer;
                     this.UpdateSuggestionsList(string.Empty);
                 }              
+            }
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                FilterText = SelectedObject.Text;
             }
         }
 
@@ -352,6 +355,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.ResetTextInEditor = null;
                     this.QuestionState.IsAnswered = false;
+                    this.FilterText = String.Empty;
+                }
+                if (this.parentQuestionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    RemoveAnswerOfParentQuestion();
                 }
             }
         }
@@ -368,7 +376,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.IsAnswered = false;
                 this.ResetTextInEditor = string.Empty;
+                this.FilterText = String.Empty;
             }
+            if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                RemoveAnswerOfParentQuestion();
+            }
+        }
+
+        private void RemoveAnswerOfParentQuestion()
+        {
+            this.answerOnParentQuestion = null;
+            this.QuestionState.IsAnswered = false;
+            this.ResetTextInEditor = string.Empty;
+            this.FilterText = String.Empty;
         }
     }
 }
