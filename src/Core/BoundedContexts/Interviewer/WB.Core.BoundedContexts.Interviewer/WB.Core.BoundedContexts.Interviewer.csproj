@@ -226,7 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ErrorReporting\Resources\TabletInformationSenderStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TabletInformationSenderStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
