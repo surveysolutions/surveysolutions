@@ -246,6 +246,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return new MvxCommand(this.SignOut); }
         }
 
+        public IMvxCommand NavigateToTroubleshootingPageCommand
+        {
+            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+        }
+
         void SignOut()
         {
             this.principal.SignOut();

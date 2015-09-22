@@ -1,4 +1,5 @@
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
@@ -25,6 +26,22 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(Resource.Menu.relink, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.menu_troubleshooting:
+                    this.ViewModel.NavigateToTroubleshootingCommand.Execute();
+                    break;
+            }
+            return base.OnOptionsItemSelected(item);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace WB.UI.Interviewer.Activities
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            this.MenuInflater.Inflate(Resource.Menu.login, menu);
+            this.MenuInflater.Inflate(Resource.Menu.finish, menu);
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -49,6 +49,10 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
+                    break;
+
+                case Resource.Id.menu_troubleshooting:
+                    this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
                     break;
             }
             return base.OnOptionsItemSelected(item);

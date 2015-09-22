@@ -54,6 +54,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(this.ReturnBack); }
         }
 
+        public IMvxCommand NavigateToTroubleshootingCommand
+        {
+            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+        }
+
         private IMvxCommand relinkCommand;
         public IMvxCommand RelinkCommand
         {
