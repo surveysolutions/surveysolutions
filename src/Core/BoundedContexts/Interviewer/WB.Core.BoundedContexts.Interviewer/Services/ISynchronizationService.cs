@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ISynchronizationService
     {
+        Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);
         Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);

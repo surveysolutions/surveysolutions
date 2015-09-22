@@ -1000,24 +1000,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you forget your password and headquarter has reset it you could try sign in online.
-        /// </summary>
-        public static string Login_Online_Signin_Explanation_message {
-            get {
-                return ResourceManager.GetString("Login_Online_Signin_Explanation_message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your login or password is incorrect on the remote server too. Please check your credentials with the supervisor.
-        /// </summary>
-        public static string Login_Online_SignIn_Failed {
-            get {
-                return ResourceManager.GetString("Login_Online_SignIn_Failed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Entered endpoint is unreachable. Check internet connection or enter correct url.
         /// </summary>
         public static string Login_Validation_EndpointIsUnreachable {

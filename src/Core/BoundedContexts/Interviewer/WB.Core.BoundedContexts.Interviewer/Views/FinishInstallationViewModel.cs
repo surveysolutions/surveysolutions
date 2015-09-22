@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ISynchronizationService synchronizationService;
-        private readonly IRemoteAuthorizationService remoteAuthorizationService;
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
 
@@ -34,8 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IInterviewerSettings interviewerSettings,
             ISynchronizationService synchronizationService,
-            ILogger logger, 
-            IRemoteAuthorizationService remoteAuthorizationService)
+            ILogger logger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
@@ -44,7 +42,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerSettings = interviewerSettings;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
-            this.remoteAuthorizationService = remoteAuthorizationService;
         }
 
         private string endpoint;
@@ -111,7 +108,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.IsUserValid = true;
             this.IsEndpointValid = true;
-            this.Endpoint = this.interviewerSettings.GetSyncAddressPoint();
+            this.Endpoint = this.interviewerSettings.Endpoint;
 
             this.UserName = userIdentity.Name;
         }
@@ -133,7 +130,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsInProgress = true;
             try
             {
-                var interviewer = await this.remoteAuthorizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token);
+                var interviewer = await this.synchronizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token);
                 var interviewerIdentity = new InterviewerIdentity
                 {
                     Id = interviewer.Id.FormatGuid(),
