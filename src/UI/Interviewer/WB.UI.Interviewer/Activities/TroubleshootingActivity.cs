@@ -340,15 +340,40 @@ namespace WB.UI.Interviewer.Activities
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            this.MenuInflater.Inflate(Resource.Menu.settings, menu);
+            this.MenuInflater.Inflate(Resource.Menu.troubleshooting, menu);
+
+            var loginItem = menu.FindItem(Resource.Id.menu_login);
+            var dashboardItem = menu.FindItem(Resource.Id.menu_dashboard);
+            var singoutItem = menu.FindItem(Resource.Id.menu_signout);
+
+            if (ViewModel.IsAuthenticated)
+            {
+                loginItem.SetVisible(false);
+            }
+            else
+            {
+                dashboardItem.SetVisible(false);
+                singoutItem.SetVisible(false);
+            }
+
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_dashboard:
+                case Resource.Id.menu_login:
+                    this.ViewModel.NavigateToLoginCommand.Execute();
+                    break;
+                case Resource.Id.interview_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
+                    break;
+                case Resource.Id.menu_settings:
+                    Intent intent = new Intent(this, typeof(PrefsActivity));
+                    this.StartActivity(intent);
+                    break;
+                case Resource.Id.interview_signout:
+                    this.ViewModel.SignOutCommand.Execute();
                     break;
             }
             return base.OnOptionsItemSelected(item);

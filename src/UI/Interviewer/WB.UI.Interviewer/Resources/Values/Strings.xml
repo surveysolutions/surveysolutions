@@ -41,7 +41,8 @@
   <string name="MenuItem_Title_Synchronization">Synchronization</string>
   <string name="MenuItem_Title_SignOut">Sign out</string>
   <string name="MenuItem_Title_Troubleshooting">Troubleshooting</string>
-
+  <string name="MenuItem_Title_Login">Login</string>
+  
   <string name="NoAssignments">You have no new assignments</string>
 
   <item  type="id"  name="QuestionnaireId" />

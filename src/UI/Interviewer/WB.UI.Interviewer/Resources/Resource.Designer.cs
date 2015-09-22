@@ -5253,6 +5253,9 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0c00a2
 			public const int menu_dashboard = 2131493026;
 			
+			// aapt resource value: 0x7f0c00a3
+			public const int menu_login = 2131493027;
+			
 			// aapt resource value: 0x7f0c009d
 			public const int menu_settings = 2131493021;
 			
@@ -5787,6 +5790,9 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f0e0005
 			public const int settings = 2131623941;
 			
+			// aapt resource value: 0x7f0e0006
+			public const int troubleshooting = 2131623942;
+			
 			static Menu()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -5870,6 +5876,9 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f07005a
 			public const int MenuItem_Title_Dashboard = 2131165274;
 			
+			// aapt resource value: 0x7f07005f
+			public const int MenuItem_Title_Login = 2131165279;
+			
 			// aapt resource value: 0x7f07005c
 			public const int MenuItem_Title_Settings = 2131165276;
 			
@@ -5882,29 +5891,29 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f07005e
 			public const int MenuItem_Title_Troubleshooting = 2131165278;
 			
-			// aapt resource value: 0x7f070062
-			public const int NetworkStatus = 2131165282;
+			// aapt resource value: 0x7f070063
+			public const int NetworkStatus = 2131165283;
 			
-			// aapt resource value: 0x7f070066
-			public const int NewHtmlLine = 2131165286;
+			// aapt resource value: 0x7f070067
+			public const int NewHtmlLine = 2131165287;
 			
 			// aapt resource value: 0x7f070049
 			public const int No = 2131165257;
 			
-			// aapt resource value: 0x7f07005f
-			public const int NoAssignments = 2131165279;
+			// aapt resource value: 0x7f070060
+			public const int NoAssignments = 2131165280;
 			
-			// aapt resource value: 0x7f070063
-			public const int NowYouareConnectedToMobileNetwork = 2131165283;
+			// aapt resource value: 0x7f070064
+			public const int NowYouareConnectedToMobileNetwork = 2131165284;
 			
-			// aapt resource value: 0x7f070065
-			public const int NowYouareConnectedToWifiNetwork = 2131165285;
+			// aapt resource value: 0x7f070066
+			public const int NowYouareConnectedToWifiNetwork = 2131165286;
 			
 			// aapt resource value: 0x7f07004f
 			public const int Oops = 2131165263;
 			
-			// aapt resource value: 0x7f070060
-			public const int PleaseCheckURLInSettingsFormat = 2131165280;
+			// aapt resource value: 0x7f070061
+			public const int PleaseCheckURLInSettingsFormat = 2131165281;
 			
 			// aapt resource value: 0x7f07004a
 			public const int Send = 2131165258;
@@ -5930,14 +5939,14 @@ namespace WB.UI.Interviewer
 			// aapt resource value: 0x7f07004c
 			public const int Warning = 2131165260;
 			
-			// aapt resource value: 0x7f070061
-			public const int WebErrorWithStatus = 2131165281;
+			// aapt resource value: 0x7f070062
+			public const int WebErrorWithStatus = 2131165282;
 			
 			// aapt resource value: 0x7f070048
 			public const int Yes = 2131165256;
 			
-			// aapt resource value: 0x7f070064
-			public const int YouAreNotConnectedToAnyNetwork = 2131165284;
+			// aapt resource value: 0x7f070065
+			public const int YouAreNotConnectedToAnyNetwork = 2131165285;
 			
 			// aapt resource value: 0x7f070006
 			public const int abc_action_bar_home_description = 2131165190;
