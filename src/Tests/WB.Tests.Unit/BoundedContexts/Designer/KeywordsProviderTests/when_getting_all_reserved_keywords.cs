@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
 {
@@ -17,6 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
                 .Union(SpssReservedKeywords)
                 .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
                 .Union(SurveySolutionsServiceVariablesKeywords)
+                .Union(ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName))
+                .Select(x => x.ToLower())
                 .ToArray();
 
         };
@@ -58,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
 
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
-            "rowcode", "rowname", "rowindex", "roster", "id", "self", "state", "quest"
+            "rowcode", "rowname", "rowindex", "roster", "id", "parentid1", "parentid2","parentid3", "parentid4", "self", "state", "quest"
         };
         private static string[] reservedKeywords;
 
