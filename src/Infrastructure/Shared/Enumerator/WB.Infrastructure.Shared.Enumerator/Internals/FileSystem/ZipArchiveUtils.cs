@@ -34,13 +34,13 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         {
             using (FileStream fsOut = File.Create(archiveFilePath))
             {
-                using (ZipOutputStream zipStream = new ZipOutputStream(fsOut)) 
+                using (ZipOutputStream zipStream = new ZipOutputStream(fsOut))
                 {
                     foreach (string filename in files)
                     {
                         FileInfo fileInfo = new FileInfo(filename);
 
-                        var entryName = ZipEntry.CleanName(filename); 
+                        var entryName = ZipEntry.CleanName(filename);
                         ZipEntry newEntry = new ZipEntry(entryName);
                         newEntry.DateTime = fileInfo.LastWriteTime;
                         newEntry.Size = fileInfo.Length;
@@ -61,11 +61,59 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             }
         }
 
+
         public void Unzip(string archivedFile, string extractToFolder)
         {
-            FastZip fastZip = new FastZip();
-            string targetDirectory = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
-            fastZip.ExtractZip(archivedFile, targetDirectory, string.Empty);
+            extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
+            if (!Directory.Exists(extractToFolder))
+            {
+                Directory.CreateDirectory(extractToFolder);
+            }
+
+            using (FileStream fr = File.OpenRead(archivedFile))
+            {
+                using (ZipInputStream ins = new ZipInputStream(fr))
+                {
+                    ZipEntry ze = ins.GetNextEntry();
+                    while (ze != null)
+                    {
+                        if (ze.IsDirectory)
+                        {
+                            Directory.CreateDirectory(Path.Combine(extractToFolder, ze.Name));
+                        }
+                        else if (ze.IsFile)
+                        {
+                            var targetDirectory = Path.Combine(extractToFolder,  Path.GetDirectoryName(ze.Name));
+                            if (!Directory.Exists(targetDirectory))
+                            {
+                                Directory.CreateDirectory(targetDirectory);
+                            }
+
+                            FileStream fs = File.Create(Path.Combine(extractToFolder, ze.Name));
+
+                            byte[] writeData = new byte[ze.Size];
+                            int iteration = 0;
+                            while (true)
+                            {
+                                int size = 2048;
+                                size = ins.Read(writeData, (int)Math.Min(ze.Size, (iteration * 2048)),
+                                    (int)Math.Min(ze.Size - (int)Math.Min(ze.Size, (iteration * 2048)), 2048));
+                                if (size > 0)
+                                {
+                                    fs.Write(writeData, (int)Math.Min(ze.Size, (iteration * 2048)), size);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                                iteration++;
+                            }
+                            fs.Close();
+                        }
+                        ze = ins.GetNextEntry();
+                    }
+                }
+            }
         }
 
         public bool IsZipFile(string filePath)
