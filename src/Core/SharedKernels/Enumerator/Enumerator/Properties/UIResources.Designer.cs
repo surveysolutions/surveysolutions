@@ -910,7 +910,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try sign in online.
+        ///   Looks up a localized string similar to Try to sign in online.
         /// </summary>
         public static string Interviewer_TryOnlineLogin {
             get {
