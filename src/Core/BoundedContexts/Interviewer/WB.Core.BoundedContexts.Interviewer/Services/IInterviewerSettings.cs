@@ -1,17 +1,16 @@
 using System;
+using WB.Core.SharedKernels.Enumerator;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
-    public interface IInterviewerSettings
+    public interface IInterviewerSettings : IEnumeratorSettings
     {
         string GetDeviceId();
 
         Guid GetInstallationId();
 
         Guid? GetClientRegistrationId();
-
-        string GetSyncAddressPoint();
-
+        
         string GetApplicationVersionName();
 
         int GetApplicationVersionCode();

@@ -2,18 +2,13 @@ using System;
 using Android.App;   
 using Android.Content;
 using Android.Preferences;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
+using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Settings
 {
-    public class EnumeratorSettings : IRestServiceSettings, IEnumeratorSettings
+    public class EnumeratorSettings : IEnumeratorSettings
     {
-        private const string EndpointParameterName = "Endpoint";
-        private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
-        private const string BufferSizeParameterName = "BufferSize";
-        private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
-
         private static ISharedPreferences SharedPreferences
         {
             get { return PreferenceManager.GetDefaultSharedPreferences(Application.Context); }
@@ -24,7 +19,7 @@ namespace WB.UI.Interviewer.Settings
             get
             {
                 var defaultValue = Application.Context.Resources.GetString(Resource.String.Endpoint);
-                var endpoint = SharedPreferences.GetString(EndpointParameterName, defaultValue);
+                var endpoint = SharedPreferences.GetString(SettingsNames.Endpoint, defaultValue);
                 return endpoint;
             }
         }
@@ -34,11 +29,9 @@ namespace WB.UI.Interviewer.Settings
             get
             {
                 var defValue = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout);
-                string httpResponseTimeoutSec = SharedPreferences.GetString(HttpResponseTimeoutParameterName,
-                    defValue.ToString());
+                string httpResponseTimeoutSec = SharedPreferences.GetString(SettingsNames.HttpResponseTimeout, defValue.ToString());
 
                 int result;
-
                 return int.TryParse(httpResponseTimeoutSec, out result)
                     ? new TimeSpan(0, 0, result)
                     : new TimeSpan(0, 0, defValue);
@@ -50,15 +43,10 @@ namespace WB.UI.Interviewer.Settings
             get
             {
                 var defValue = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize);
-                string bufferSize = SharedPreferences.GetString(BufferSizeParameterName,
-                    defValue.ToString());
-                int result;
-                if (int.TryParse(bufferSize, out result))
-                {
-                    return result;
-                }
+                string bufferSize = SharedPreferences.GetString(SettingsNames.BufferSize, defValue.ToString());
 
-                return defValue;
+                int result;
+                return int.TryParse(bufferSize, out result) ? result : defValue;
             }
         }
 
@@ -72,23 +60,10 @@ namespace WB.UI.Interviewer.Settings
             get
             {
                 var defValue = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec);
-                string gpsReceiveTimeoutSec = SharedPreferences.GetString(GpsReceiveTimeoutSecParameterName,
-                    defValue.ToString());
+                string gpsReceiveTimeoutSec = SharedPreferences.GetString(SettingsNames.GpsReceiveTimeoutSec, defValue.ToString());
+
                 int result;
-                if (int.TryParse(gpsReceiveTimeoutSec, out result))
-                {
-                    return result;
-                }
-
-                return defValue;
-            }
-        }
-
-        public string ApplicationVersion
-        {
-            get
-            {
-                return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
+                return int.TryParse(gpsReceiveTimeoutSec, out result) ? result : defValue;
             }
         }
     }

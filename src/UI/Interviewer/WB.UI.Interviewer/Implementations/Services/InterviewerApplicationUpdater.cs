@@ -32,7 +32,7 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void GetLatestVersion()
         {
-            var uri = new Uri(new Uri(this.interviewerSettings.GetSyncAddressPoint()), SyncGetlatestVersion);
+            var uri = new Uri(new Uri(this.interviewerSettings.Endpoint), SyncGetlatestVersion);
             this.GetLatestVersion(uri, SyncGetlatestVersion);
             this.StartUpdate(ApplicationFileName);
         }
