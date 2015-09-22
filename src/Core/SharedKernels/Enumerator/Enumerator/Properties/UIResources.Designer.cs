@@ -685,7 +685,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Complete Interview.
+        ///   Looks up a localized string similar to To complete screen.
         /// </summary>
         public static string Interview_NextCompleteInterview_ButtonText {
             get {

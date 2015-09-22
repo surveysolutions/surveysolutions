@@ -104,20 +104,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (navigationIdentity.ScreenType != ScreenType.Group)
             {
                 this.GroupState.Init(interviewId, null, navigationIdentity.ScreenType);
-                return;
+                groupWithAnswersToMonitor = this.navigationState.CurrentGroup;
             }
+            else
+            {
+                GroupModel groupModel;
+                if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(navigationIdentity.TargetGroup.Id, out groupModel))
+                    throw new InvalidOperationException("Group with identity {0} don't found".FormatString(navigationIdentity.TargetGroup));
 
-            GroupModel groupModel;
-            if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(navigationIdentity.TargetGroup.Id, out groupModel))
-                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(navigationIdentity.TargetGroup));
+                this.Enablement.Init(interviewId, navigationIdentity.TargetGroup, navigationState);
+                this.GroupState.Init(interviewId, navigationIdentity.TargetGroup);
 
-            this.Enablement.Init(interviewId, navigationIdentity.TargetGroup, navigationState);
-            this.GroupState.Init(interviewId, navigationIdentity.TargetGroup);
-
-            this.Title = groupModel.Title;
-            this.RosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
-            this.IsRoster = groupModel is RosterModel;
-
+                this.Title = groupModel.Title;
+                this.RosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
+                this.IsRoster = groupModel is RosterModel;
+            }
             if (groupWithAnswersToMonitor != null)
             {
                 IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
