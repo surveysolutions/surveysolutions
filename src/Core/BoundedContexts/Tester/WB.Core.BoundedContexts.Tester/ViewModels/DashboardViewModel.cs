@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var lastUpdate = this.dashboardLastUpdateStorage.Query(query => query.FirstOrDefault(x => x.Id == this.principal.CurrentUserIdentity.Name));
 
-            this.HumanizeLasUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
+            this.HumanizeAndSetLasUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
         }
        
         private void LoadFilteredListFromLocalStorage(string searchTerm)
@@ -391,8 +391,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 var lastUpdateDate = DateTime.Now;
 
-                HumanizeLasUpdateDate(lastUpdateDate);
+                HumanizeAndSetLasUpdateDate(lastUpdateDate);
 
+                await this.dashboardLastUpdateStorage.RemoveAsync(this.principal.CurrentUserIdentity.Name);
                 await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
                 {
                     Id = this.principal.CurrentUserIdentity.Name,
@@ -417,7 +418,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 await this.userInteractionService.AlertAsync(errorMessage);
         }
 
-        private void HumanizeLasUpdateDate(DateTime? lastUpdate)
+        private void HumanizeAndSetLasUpdateDate(DateTime? lastUpdate)
         {
             this.HumanizedLastUpdateDate = lastUpdate.HasValue 
                 ? string.Format(UIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate:false))
