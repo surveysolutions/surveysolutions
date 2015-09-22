@@ -317,7 +317,6 @@
     <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
-    <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="CustomControls\TabletInformationReportButton.cs" />
     <Compile Include="Implementations\DenormalizerStorage\SqliteDenormalizerStore.cs" />

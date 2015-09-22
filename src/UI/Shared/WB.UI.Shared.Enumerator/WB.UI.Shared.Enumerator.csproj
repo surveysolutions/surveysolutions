@@ -204,6 +204,7 @@
     <Compile Include="CustomBindings\TextViewHintBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
+    <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
     <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
