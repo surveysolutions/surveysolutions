@@ -32,9 +32,8 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
 
-            this.Bind<IEnumeratorSettings>().To<EnumeratorSettings>();
+            this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
             this.Bind<IPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
-            this.Bind<IRestServiceSettings>().To<EnumeratorSettings>();
 
             this.Bind<ICapiDataSynchronizationService>().To<CapiDataSynchronizationService>();
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
