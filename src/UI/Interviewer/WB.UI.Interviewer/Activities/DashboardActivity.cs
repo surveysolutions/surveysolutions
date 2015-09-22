@@ -38,6 +38,10 @@ namespace WB.UI.Interviewer.Activities
             recyclerView.Adapter = adapter;
         }
 
+        public override void OnBackPressed()
+        {
+        }
+
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);

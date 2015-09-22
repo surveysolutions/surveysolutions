@@ -24,6 +24,10 @@ namespace WB.UI.Interviewer.Activities
             this.SetSupportActionBar(toolbar);
         }
 
+        public override void OnBackPressed()
+        {
+        }
+
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.login, menu);

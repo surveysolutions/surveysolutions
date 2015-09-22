@@ -120,6 +120,11 @@ namespace WB.UI.Interviewer.Activities
             this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", this.interviewerSettings.GetApplicationVersionName());
         }
 
+        public override void OnBackPressed()
+        {
+            base.OnBackPressed();
+        }
+
         private async void btnVersion_Click(object sender, EventArgs evnt)
         {
             if (!this.networkService.IsNetworkEnabled())

@@ -33,6 +33,10 @@ namespace WB.UI.Tester.Activities
             recyclerView.SetLayoutManager(layoutManager);
         }
 
+        public override void OnBackPressed()
+        {
+        }
+
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);

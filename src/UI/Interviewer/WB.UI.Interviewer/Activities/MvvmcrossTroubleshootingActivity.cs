@@ -26,6 +26,10 @@ namespace WB.UI.Interviewer.Activities
             GC.Collect();
         }
 
+        public override void OnBackPressed()
+        {
+        }
+
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.settings, menu);
