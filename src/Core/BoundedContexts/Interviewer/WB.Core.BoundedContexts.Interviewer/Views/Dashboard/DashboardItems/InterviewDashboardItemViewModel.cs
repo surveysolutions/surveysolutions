@@ -138,10 +138,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxCommand LoadDashboardItemCommand
         {
-            get { return new MvxCommand(this.LoadInterview); }
+            get { return new MvxCommand(async () => await this.LoadInterview()); }
         }
 
-        private async void LoadInterview()
+        public async Task LoadInterview()
         {
             if (this.Status == DashboardInterviewStatus.Completed)
             {
