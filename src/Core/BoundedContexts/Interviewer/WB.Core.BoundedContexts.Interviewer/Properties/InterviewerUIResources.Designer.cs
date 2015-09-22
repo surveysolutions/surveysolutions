@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you forget your password and headquarter has reset it you could try sign in online.
+        ///   Looks up a localized string similar to If you forgot your password and headquarter has reset it you could try to sign in online.
         /// </summary>
         public static string Login_Online_Signin_Explanation_message {
             get {
@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your login or password is incorrect on the remote server too. Please check your credentials with the supervisor.
+        ///   Looks up a localized string similar to Your password is incorrect on the remote server too. Please check your credentials with the supervisor.
         /// </summary>
         public static string Login_Online_SignIn_Failed {
             get {

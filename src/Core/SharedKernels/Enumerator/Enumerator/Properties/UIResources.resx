@@ -585,6 +585,6 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Sending of information package is failed</value>
   </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
-    <value>Try sign in online</value>
+    <value>Try to sign in online</value>
   </data>
 </root>
