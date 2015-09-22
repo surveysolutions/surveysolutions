@@ -365,14 +365,14 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_login:
                     this.ViewModel.NavigateToLoginCommand.Execute();
                     break;
-                case Resource.Id.interview_dashboard:
+                case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
                     break;
-                case Resource.Id.interview_signout:
+                case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
             }
