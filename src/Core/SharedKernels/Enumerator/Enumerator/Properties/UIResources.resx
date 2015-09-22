@@ -587,10 +587,4 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Try sign in online</value>
   </data>
-  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>If you forget your password and headquarter has reset it you could try sign in online</value>
-  </data>
-  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Your login or password is incorrect on the remote server too. Please check your credentials with the supervisor</value>
-  </data>
 </root>

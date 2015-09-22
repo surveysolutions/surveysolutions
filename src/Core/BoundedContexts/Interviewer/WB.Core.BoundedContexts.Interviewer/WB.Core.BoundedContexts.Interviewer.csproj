@@ -128,8 +128,6 @@
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
-    <Compile Include="Implementation\Services\RemoteAuthorizationService.cs" />
-    <Compile Include="Implementation\Services\RestBaseService.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
@@ -151,7 +149,6 @@
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
-    <Compile Include="Services\IRemoteAuthorizationService.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISyncPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />

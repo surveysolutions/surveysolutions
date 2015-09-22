@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -20,25 +19,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class LoginViewModel : BaseViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IRemoteAuthorizationService remoteAuthorizationService;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
 
         private readonly IPasswordHasher passwordHasher;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly ISynchronizationService synchronizationService;
 
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
-            IRemoteAuthorizationService remoteAuthorizationService, ILogger logger)
+            ISynchronizationService synchronizationService,
+            ILogger logger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
-            this.remoteAuthorizationService = remoteAuthorizationService;
+            this.synchronizationService = synchronizationService;
             this.logger = logger;
         }
 
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand OnlineSignInCommand
         {
-            get { return new MvxCommand(this.OnlineSignIn); }
+            get { return new MvxCommand(async () => await this.RemoteSignInAsync()); }
         }
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
@@ -110,31 +110,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             this.IsUserValid = true;
             this.UserName = currentInterviewer.Name;
+            this.ErrorMessage = InterviewerUIResources.Login_WrondPassword;
         }
 
         private void SignIn()
         {
-            this.ErrorMessage = string.Empty;
             var userName = this.UserName;
             var hashedPassword = this.passwordHasher.Hash(this.Password);
 
             this.IsUserValid = this.principal.SignIn(userName, hashedPassword, true);
 
-            if (this.IsUserValid)
-            {
-                this.ResetCountOfFailedLoginAttempts();
-                this.viewModelNavigationService.NavigateToDashboard();
-            }
-            else
+            if (!this.IsUserValid)
             {
                 this.IncreaseCountOfFailedLoginAttempts();
+                return;
             }
+
+            this.viewModelNavigationService.NavigateToDashboard();
         }
 
-        private async void OnlineSignIn()
+        private async Task RemoteSignInAsync()
         {
             this.IsUserValid = true;
-            this.ErrorMessage = string.Empty;
 
             var restCredentials = new RestCredentials()
             {
@@ -142,68 +139,49 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 Password = this.passwordHasher.Hash(this.Password)
             };
 
-            InterviewerApiView currentInterviewer;
             this.IsInProgress = true;
             try
             {
-                currentInterviewer = await
-                    this.remoteAuthorizationService.GetInterviewerAsync(restCredentials);
+                await this.synchronizationService.GetInterviewerAsync(restCredentials);
+
+                var localInterviewer = this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
+                localInterviewer.Password = restCredentials.Password;
+
+                await this.interviewersPlainStorage.StoreAsync(localInterviewer);
+
+                this.SignIn();
             }
             catch (SynchronizationException ex)
             {
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.Unauthorized:
-                        this.ErrorMessage = UIResources.Login_Online_SignIn_Failed;
+                        this.ErrorMessage = InterviewerUIResources.Login_Online_SignIn_Failed;
                         break;
                     default:
                         this.ErrorMessage = ex.Message;
                         break;
                 }
-                return;
+                this.IsUserValid = false;
             }
             catch (Exception ex)
             {
                 this.ErrorMessage = InterviewerUIResources.UnexpectedException;
                 this.logger.Error("Login view model. Unexpected exception", ex);
-                return;
+                this.IsUserValid = false;
             }
             finally
             {
                 this.IsInProgress = false;
             }
-
-            var interviewerIdentity = new InterviewerIdentity
-            {
-                Id = currentInterviewer.Id.FormatGuid(),
-                UserId = currentInterviewer.Id,
-                SupervisorId = currentInterviewer.SupervisorId,
-                Name = restCredentials.Login,
-                Password = restCredentials.Password
-            };
-
-            await this.interviewersPlainStorage.RemoveAsync(interviewerIdentity.Id);
-            await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
-
-            this.IsUserValid = principal.SignIn(restCredentials.Login, restCredentials.Password, true);
-
-            if (this.IsUserValid)
-            {
-                this.ResetCountOfFailedLoginAttempts();
-                this.viewModelNavigationService.NavigateToDashboard();
-            }
-        }
-
-        private void ResetCountOfFailedLoginAttempts()
-        {
-            this.countOfFailedLoginAttempts = 0;
-            IsOnlineLoginButtonVisible=false;
         }
 
         private void IncreaseCountOfFailedLoginAttempts()
         {
             this.countOfFailedLoginAttempts++;
             IsOnlineLoginButtonVisible = countOfFailedLoginAttempts > 4;
+            if(this.IsOnlineLoginButtonVisible)
+                this.ErrorMessage = InterviewerUIResources.Login_Online_Signin_Explanation_message;
         }
     }
 }

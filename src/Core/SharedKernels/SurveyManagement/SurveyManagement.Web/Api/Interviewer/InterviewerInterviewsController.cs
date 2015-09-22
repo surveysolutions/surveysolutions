@@ -7,6 +7,7 @@ using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -73,8 +74,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 this.interviewerInterviewsFactory.GetInterviewsByIds(
                     interviewPackages.Where(package=>package.ItemType == SyncItemType.Interview).Select(package => package.InterviewId).Distinct().ToArray());
 
-            this.syncLogger.TraceHandshake(deviceId, userId, null);
             this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.Interview, interviewPackages.Select(x => x.Id).ToArray());
+
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.Questionnaire,
+                interviewsByPackages.Select(x => GetSyncLogQuestionnaireId(x.QuestionnaireIdentity.QuestionnaireId,
+                    x.QuestionnaireIdentity.Version, SyncItemType.Questionnaire)).ToArray());
+
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.QuestionnaireAssembly,
+                interviewsByPackages.Select(x => GetSyncLogQuestionnaireId(x.QuestionnaireIdentity.QuestionnaireId,
+                    x.QuestionnaireIdentity.Version, SyncItemType.QuestionnaireAssembly)).ToArray());
 
             return new InterviewPackagesApiView()
             {
@@ -119,13 +127,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [Route("package/{id}/logstate")]
         public void LogPackageAsSuccessfullyHandled(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-                this.syncManager.MarkPackageAsSuccessfullyHandled(id, this.GetInterviewerDeviceId(), this.globalInfoProvider.GetCurrentUser().Id);
+            this.syncManager.MarkPackageAsSuccessfullyHandled(id, this.GetInterviewerDeviceId(),
+                this.globalInfoProvider.GetCurrentUser().Id);
         }
 
         private Guid GetInterviewerDeviceId()
         {
             return this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId.ToGuid();
+        }
+
+        private static string GetSyncLogQuestionnaireId(Guid questionnaireId, long questionnaireVersion, string syncItemType)
+        {
+            return string.Concat(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(), "$", syncItemType);
         }
     }
 }
