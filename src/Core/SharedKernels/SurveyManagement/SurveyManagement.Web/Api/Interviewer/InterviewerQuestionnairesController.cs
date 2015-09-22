@@ -66,8 +66,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 PageSize = int.MaxValue
             };
 
-            return this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
+            var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
                 .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version)).ToList();
+
+            var deviceId = this.GetInterviewerDeviceId();
+            var userId = this.globalInfoProvider.GetCurrentUser().Id;
+
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.Questionnaire,
+                censusQuestionnaires.Select(x => GetSyncLogQuestionnaireId(x.QuestionnaireId, 
+                    x.Version, SyncItemType.Questionnaire)).ToArray());
+
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.QuestionnaireAssembly,
+                censusQuestionnaires.Select(x => GetSyncLogQuestionnaireId(x.QuestionnaireId,
+                    x.Version, SyncItemType.QuestionnaireAssembly)).ToArray());
+
+            return censusQuestionnaires;
         }
 
         [HttpGet]
@@ -80,7 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
-                this.globalInfoProvider.GetCurrentUser().Id, null, GetSyncLogQuestionnaireId(id, version, SyncItemType.Questionnaire));
+                this.globalInfoProvider.GetCurrentUser().Id, SyncItemType.Questionnaire, GetSyncLogQuestionnaireId(id, version, SyncItemType.Questionnaire));
 
             return new QuestionnaireApiView()
             {
@@ -96,15 +109,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             if (!this.questionnareAssemblyFileAccessor.IsQuestionnaireAssemblyExists(id, version))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
-                this.globalInfoProvider.GetCurrentUser().Id, null, GetSyncLogQuestionnaireId(id, version, SyncItemType.QuestionnaireAssembly));
-
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StreamContent(File.OpenRead(this.questionnareAssemblyFileAccessor.GetFullPathToAssembly(id, version)))
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+            
+            this.syncLogger.TrackPackageRequest(this.GetInterviewerDeviceId(),
+                this.globalInfoProvider.GetCurrentUser().Id, SyncItemType.QuestionnaireAssembly, GetSyncLogQuestionnaireId(id, version, SyncItemType.QuestionnaireAssembly));
 
             return response;
         }
