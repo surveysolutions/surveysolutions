@@ -281,7 +281,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Synchronization entpoint is invalid. Check settings..
+        ///   Looks up a localized string similar to Provided Synchronization endpoint is invalid. Check settings..
         /// </summary>
         public static string InvalidEndpoint {
             get {
@@ -551,7 +551,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization was interupted, please try again.
+        ///   Looks up a localized string similar to Synchronization was interrupted, please try again.
         /// </summary>
         public static string Synchronization_Fail_Title {
             get {

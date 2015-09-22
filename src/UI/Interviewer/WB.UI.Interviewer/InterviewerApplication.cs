@@ -112,14 +112,6 @@ namespace WB.UI.Interviewer
             bus.RegisterHandler(fileSorage, typeof (FileDeleted));
         }
 
-        private void InitUserStorage(InProcessEventBus bus)
-        {
-            var usereventHandler =
-                new UserDenormalizer(this.kernel.Get<IReadSideRepositoryWriter<LoginDTO>>());
-            bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
-            bus.RegisterHandler(usereventHandler, typeof(UserChanged));
-        }
-
         private void InitDashboard(InProcessEventBus bus)
         {
             var dashboardeventHandler = new DashboardDenormalizer(
@@ -237,14 +229,13 @@ namespace WB.UI.Interviewer
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
             this.kernel.Bind<IInterviewCompletionService>().To<InterviewerInterviewCompletionService>().InSingletonScope();
 
-            this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>().InSingletonScope();
-            this.kernel.Bind<ISynchronizationService>().To<SynchronizationService>().InSingletonScope();
-            this.kernel.Bind<IRemoteAuthorizationService>().To<RemoteAuthorizationService>().InSingletonScope();
+
+            this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>();
+            this.kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
 
             this.kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
             this.InitTemplateStorage(cqrsEventBus);
-            this.InitUserStorage(cqrsEventBus);
             this.InitFileStorage(cqrsEventBus);
             this.InitDashboard(cqrsEventBus);
 
