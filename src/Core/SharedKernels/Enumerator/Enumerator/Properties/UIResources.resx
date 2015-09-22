@@ -471,7 +471,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Troubleshooting</value>
   </data>
   <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
-    <value>Complete Interview</value>
+    <value>To complete screen</value>
   </data>
   <data name="Confirmation_Interviewer_ReassignUserToAnotherDevice" xml:space="preserve">
     <value>Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?</value>
