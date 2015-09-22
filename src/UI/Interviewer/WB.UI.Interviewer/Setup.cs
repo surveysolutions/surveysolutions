@@ -11,6 +11,7 @@ using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Droid.Target;
+using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -68,6 +69,7 @@ namespace WB.UI.Interviewer
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
+            registry.RegisterCustomBindingFactory<MvxListView>("FixHeight", (view) => new MvxListViewFixHeightBinding(view));
 
             base.FillTargetFactories(registry);
         }
