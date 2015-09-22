@@ -403,6 +403,9 @@
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingVerifierTests\UserPreloadingVerifierTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\InterviewDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\when_rejected_interview_is_created_on_client.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\LoginViewModelTestContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_initializing_login_view_model.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_user_exist_and_password_were_entered.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
