@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Location;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -79,24 +81,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly Guid userId;
         public event EventHandler AnswerRemoved;
+        private readonly ILogger logger;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IGpsLocationService locationService;
+        private readonly IUserInteractionService userInteractionService;
 
         private Identity questionIdentity;
         private Guid interviewId;
 
         public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-
         public GpsCoordinatesQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IEnumeratorSettings settings,
             IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, ILiteEventRegistry liteEventRegistry)
+            AnsweringViewModel answering, 
+            ILiteEventRegistry liteEventRegistry, 
+            IUserInteractionService userInteractionService, ILogger logger)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
@@ -106,6 +111,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
+            this.userInteractionService = userInteractionService;
+            this.logger = logger;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -140,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async Task SaveAnswerAsync()
         {
             this.IsInProgress = true;
-
+            string errorMessage = null;
             try
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -152,9 +159,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
             }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+                logger.Error(e.Message, e);
+            }
             finally
             {
                 this.IsInProgress = false;
+            }
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                await
+                    this.userInteractionService.AlertAsync((errorMessage));
             }
         }
 

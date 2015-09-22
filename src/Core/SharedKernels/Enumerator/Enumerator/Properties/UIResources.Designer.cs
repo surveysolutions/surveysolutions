@@ -1099,6 +1099,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google Play Services are not available.
+        /// </summary>
+        public static string PlayServicesLocationWatcher_Google_Play_Services_are_not_available {
+            get {
+                return ResourceManager.GetString("PlayServicesLocationWatcher_Google_Play_Services_are_not_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location Client not started.
+        /// </summary>
+        public static string PlayServicesLocationWatcher_Location_Client_not_started {
+            get {
+                return ResourceManager.GetString("PlayServicesLocationWatcher_Location_Client_not_started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot start MvxLocation service more than once.
+        /// </summary>
+        public static string PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once {
+            get {
+                return ResourceManager.GetString("PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to START.
         /// </summary>
         public static string PrefilledQuestions_StartInterview {
