@@ -375,7 +375,6 @@
     <Compile Include="Controls\DashboardAdapter.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
-    <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />

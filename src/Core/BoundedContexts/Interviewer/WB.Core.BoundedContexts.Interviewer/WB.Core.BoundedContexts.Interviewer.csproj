@@ -167,7 +167,6 @@
     <Compile Include="Services\IInterviewerApplicationUpdater.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
     <Compile Include="Views\MvvmcrossTroubleshootingViewModel.cs" />
-    <Compile Include="Views\QuestionnireInfo.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
     <Compile Include="Views\Dashboard\DashboardInterviewStatus.cs" />
