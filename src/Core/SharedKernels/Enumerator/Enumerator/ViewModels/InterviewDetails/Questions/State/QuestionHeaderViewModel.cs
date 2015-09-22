@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer, interview, questionnaire) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
-                    questionTitle, variable, answerString ?? this.substitutionService.DefaultSubstitutionText);
+                    questionTitle, variable, string.IsNullOrEmpty(answerString) ? this.substitutionService.DefaultSubstitutionText : answerString);
             }
 
             this.Title = questionTitle;

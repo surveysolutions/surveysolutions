@@ -1,6 +1,0 @@
-- Rebuild read side is requred
-- Release Designer is requried with rebuild read side on it
-- Don't forget to move SMTP settings from designer configuration folder to web.config
-- CAPI is *NOT* backward compatible
-- HQ is *NOT* backward compatible at all (assemblies are compiled using different profiles)
-- HQ,SV,IN major versions should be increased to 5
