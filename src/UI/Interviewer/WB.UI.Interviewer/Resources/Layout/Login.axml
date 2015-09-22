@@ -75,12 +75,6 @@
               android:layout_below="@+id/LoginPage_password"
               local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;" />
         
-        <Button
-              style="@style/Login_Troubleshotting_Button"
-              android:id="@+id/LoginPage_troubleshooting_button"
-              android:layout_toRightOf="@+id/LoginPage_Online_Login_button"
-              android:layout_below="@+id/LoginPage_password"
-              local:MvxBind="Click NavigateToTroubleshootingPageCommand; Text Localization('Interviewer_Troubleshooting');" />
    
         </RelativeLayout>
       </LinearLayout>
