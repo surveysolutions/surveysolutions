@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password is incorrect on the remote server too. Please check your credentials with the supervisor.
+        ///   Looks up a localized string similar to Authentication problem on the remote server too. Please contact your Supervisor or Headquarter.
         /// </summary>
         public static string Login_Online_SignIn_Failed {
             get {
@@ -758,7 +758,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For user &apos;{0}&apos; pasword have been changed. Please provide new pasword..
+        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your interviewer account (&apos;{0}&apos;). 
+        ///Your account may have one of the following problems: have a different password than you entered, be locked by Headquarter, or be deleted by Headquarter.
+        ///Please enter your updated password. If doing so does not resolve the problem, please contact your Supervisor or Headquarter..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {
             get {
