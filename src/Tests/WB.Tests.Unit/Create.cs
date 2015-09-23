@@ -513,9 +513,14 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Answer Answer(string answer, decimal value)
+        public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
         {
-            return new Answer() {AnswerText = answer, AnswerValue = value.ToString()};
+            return new Answer()
+            {
+                AnswerText = answer,
+                AnswerValue = value.ToString(),
+                ParentValue = parentValue.HasValue ? parentValue.ToString() : null
+            };
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
