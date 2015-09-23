@@ -54,39 +54,48 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 interview.AnswerSingleOptionQuestion(userId, childOfChildCascadingQuestionId, new decimal[0],
                  DateTime.Now, 211);
-                eventContext = new EventContext();
+                using (var eventContext = new EventContext())
+                {
 
-                interview.RemoveAnswer(parentCascadingQuestion, new decimal[0], userId, DateTime.Now);
-                return true;
+                    interview.RemoveAnswer(parentCascadingQuestion, new decimal[0], userId, DateTime.Now);
+                    return new InvokeResults()
+                    {
+                        WasAnswerOnParentQuestionRemoved = eventContext.AnyEvent<AnswerRemoved>(e=> e.QuestionId == parentCascadingQuestion && !e.RosterVector.Any()),
+                        WasAnswerOnChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
+                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) > 0)
+                    };
+                }
             });
 
         Cleanup stuff = () =>
         {
-            eventContext.Dispose();
-            eventContext = null;
             appDomainContext.Dispose();
             appDomainContext = null;
         };
 
         It should_raise_AnswerRemoved_event_for_parent_question = () =>
-            eventContext.ShouldContainEvent<AnswerRemoved>(@event
-                => @event.QuestionId == parentCascadingQuestion && !@event.RosterVector.Any());
+            result.WasAnswerOnParentQuestionRemoved.ShouldBeTrue();
 
         It should_raise_QuestionsDisabled_event_for_child_question = () =>
-            eventContext.ShouldContainEvent<QuestionsDisabled>(@event
-                => @event.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0);
+            result.WasAnswerOnChildCascadingQuestionDisabled.ShouldBeTrue();
 
         It should_raise_QuestionsDisabled_event_for_child_of_child_question = () =>
-           eventContext.ShouldContainEvent<QuestionsDisabled>(@event
-               => @event.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) > 0);
+           result.WasAnswerOnChildCascadingQuestionDisabled.ShouldBeTrue();
 
-        private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
         private static Guid parentCascadingQuestion;
         private static Guid childCascadingQuestionId;
         private static Guid childOfChildCascadingQuestionId;
         private static AppDomainContext appDomainContext;
-        private static bool result;
+        private static InvokeResults result;
+
+        [Serializable]
+        internal class InvokeResults
+        {
+            public bool WasAnswerOnParentQuestionRemoved { get; set; }
+            public bool WasAnswerOnChildCascadingQuestionDisabled { get; set; }
+            public bool WasAnswerOnChildOfChildCascadingQuestionDisabled { get; set; }
+        }
     }
 }
