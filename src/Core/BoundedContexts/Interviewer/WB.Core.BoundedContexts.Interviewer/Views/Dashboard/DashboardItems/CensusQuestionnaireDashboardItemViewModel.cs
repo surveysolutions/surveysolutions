@@ -4,6 +4,7 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -53,14 +54,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxCommand CreateNewInterviewCommand
         {
-            get { return new MvxCommand(this.CreateNewInterview); }
+            get { return new MvxCommand(async () => await this.CreateNewInterviewAsync()); }
         }
 
-        private async void CreateNewInterview()
+        private async Task CreateNewInterviewAsync()
         {
             RaiseStartingLongOperation();
             var interviewId = Guid.NewGuid();
-            var interviewerIdentity = (InterviewerIdentity) this.principal.CurrentUserIdentity;
+            var interviewerIdentity = (IInterviewerPrincipal)this.principal.CurrentUserIdentity;
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewerIdentity.UserId, this.questionnaireId, this.questionnaireVersion, DateTime.UtcNow,
