@@ -62,7 +62,9 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     {
                         WasAnswerOnParentQuestionRemoved = eventContext.AnyEvent<AnswerRemoved>(e=> e.QuestionId == parentCascadingQuestion && !e.RosterVector.Any()),
                         WasAnswerOnChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
-                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) > 0)
+                        WasAnswerOnChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
+                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) > 0),
+                        WasAnswerOnChildOfChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0)
                     };
                 }
             });
@@ -80,7 +82,13 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             result.WasAnswerOnChildCascadingQuestionDisabled.ShouldBeTrue();
 
         It should_raise_QuestionsDisabled_event_for_child_of_child_question = () =>
-           result.WasAnswerOnChildCascadingQuestionDisabled.ShouldBeTrue();
+           result.WasAnswerOnChildOfChildCascadingQuestionDisabled.ShouldBeTrue();
+
+        It should_raise_AnswerRemoved_event_for_child_question = () =>
+            result.WasAnswerOnChildCascadingQuestionRemoved.ShouldBeTrue();
+
+        It should_raise_AnswerRemoved_event_for_child_of_child_question = () =>
+            result.WasAnswerOnChildOfChildCascadingQuestionRemoved.ShouldBeTrue();
 
         private static Interview interview;
         private static Guid userId;
@@ -95,7 +103,9 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         {
             public bool WasAnswerOnParentQuestionRemoved { get; set; }
             public bool WasAnswerOnChildCascadingQuestionDisabled { get; set; }
+            public bool WasAnswerOnChildCascadingQuestionRemoved { get; set; }
             public bool WasAnswerOnChildOfChildCascadingQuestionDisabled { get; set; }
+            public bool WasAnswerOnChildOfChildCascadingQuestionRemoved { get; set; }
         }
     }
 }
