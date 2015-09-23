@@ -74,7 +74,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<bool>(url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId()),
+            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<bool>(
+                url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
@@ -200,13 +201,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         #endregion
 
         #region [Application Api]
-
-        public async Task CheckInterviewerCompatibilityWithServerAsync(CancellationToken token)
-        {
-            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
-                url: string.Concat(interviewerApiUrl, "/compatibility/", this.syncProtocolVersionProvider.GetProtocolVersion()),
-                credentials: this.restCredentials, token: token));
-        }
 
         public async Task<byte[]> GetApplicationAsync(CancellationToken token)
         {
@@ -339,22 +333,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             exceptionMessage = InterviewerUIResources.UpgradeRequired;
                             exceptionType = SynchronizationExceptionType.UpgradeRequired;
                             break;
-                        case HttpStatusCode.NotFound:
-                            this.logger.Warn("Server error", ex);
-
-                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
-                            exceptionType = SynchronizationExceptionType.InvalidUrl;
-                            break;
                         case HttpStatusCode.BadRequest:
                         case HttpStatusCode.Redirect:
                             exceptionMessage = InterviewerUIResources.InvalidEndpoint;
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
+                        case HttpStatusCode.NotFound:
                         case HttpStatusCode.InternalServerError:
                             this.logger.Warn("Server error", ex);
 
                             exceptionMessage = InterviewerUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
+                            break;
+                        case HttpStatusCode.NotAcceptable:
+                            exceptionMessage = InterviewerUIResources.ApplicationIncompatibleWithServer;
+                            exceptionType = SynchronizationExceptionType.ApplicationIncompatibleWithServer;
                             break;
                     }
                     break;

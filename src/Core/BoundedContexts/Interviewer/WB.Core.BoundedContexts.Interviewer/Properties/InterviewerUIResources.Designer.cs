@@ -89,6 +89,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your application is not compatible with server one. Update your Interviewer application.
+        /// </summary>
+        public static string ApplicationIncompatibleWithServer {
+            get {
+                return ResourceManager.GetString("ApplicationIncompatibleWithServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed {0}.
         /// </summary>
         public static string Dashboard_CompletedLinkText {
