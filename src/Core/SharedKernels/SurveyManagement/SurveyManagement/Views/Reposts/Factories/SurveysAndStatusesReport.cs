@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                      InterviewsCount = g.Count()
                                  }).ToList();
 
+
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
                 foreach (var questionnaire in interviews.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle}).Distinct())
                 {
@@ -44,7 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         QuestionnaireId =               questionnaire.QuestionnaireId,
                         QuestionnaireVersion =          questionnaire.QuestionnaireVersion,
                         QuestionnaireTitle =            questionnaire.QuestionnaireTitle,
-                        
+                        ResponsibleName = input.ResponsibleName,
+                        TeamLeadName = input.TeamLeadName,
                         SupervisorAssignedCount =       Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned).InterviewsCount),
                         CompletedCount =                Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.Completed).InterviewsCount),
@@ -76,13 +78,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    QuestionnaireId = doc.QuestionnaireId,
                                    QuestionnaireVersion = doc.QuestionnaireVersion,
                                    QuestionnaireTitle = doc.QuestionnaireTitle,
-
-                                   Responsible = !string.IsNullOrEmpty(input.TeamLeadName) ? input.TeamLeadName : input.ResponsibleName
+                                   
+                                   ResponsibleName = !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : doc.ResponsibleName
                            }).ToList();
+
+            var totalCount = this.interviewSummaryReader.Query(_ =>
+            {
+                var result = ApplyFilter(input, _)
+                    .Select(x => x)
+                    .GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
+                    .Distinct()
+                    .Count();
+
+                return result;
+            });
 
             return new SurveysAndStatusesReportView
                 {
-                    TotalCount = currentPage.Count(),
+                    TotalCount = totalCount,
                     Items = currentPage
                 };
         }
