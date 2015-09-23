@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
 
-        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private CancellationTokenSource tokenSource;
         private readonly IDesignerApiService designerApiService;
 
         private readonly IQuestionnaireImportService questionnaireImportService;
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
         {
             if (this.IsInProgress) return;
-
+            this.tokenSource = new CancellationTokenSource();
             this.IsInProgress = true;
 
             this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
@@ -341,6 +341,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
+                if (ex.Type == RestExceptionType.RequestCanceledByUser)
+                    return;
+
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
@@ -360,6 +363,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (string.IsNullOrEmpty(errorMessage))
                     throw;
             }
+            catch (Exception)
+            {
+                return;
+            }
             finally
             {
                 this.IsInProgress = false;   
@@ -372,6 +379,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
+            this.tokenSource = new CancellationTokenSource();
             string errorMessage = null;
             try
             {
@@ -381,8 +389,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 await this.questionnaireListStorage.RemoveAsync(this.publicQuestionnaires);
                 questionnaireListStorageCache.Clear();
 
-                var loadedMyQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
-                var loadedPublicQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
+                var loadedMyQuestionnaires =
+                    await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
+                var loadedPublicQuestionnaires =
+                    await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
 
                 questionnaireListStorageCache.AddRange(loadedMyQuestionnaires);
                 questionnaireListStorageCache.AddRange(loadedPublicQuestionnaires);
@@ -404,10 +414,17 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (RestException ex)
             {
+                if (ex.Type == RestExceptionType.RequestCanceledByUser)
+                    return;
+
                 errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
 
                 if (string.IsNullOrEmpty(errorMessage))
                     throw;
+            }
+            catch (Exception)
+            {
+                return;
             }
             finally
             {
@@ -451,6 +468,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                        OwnerName = x.OwnerName,
                        Title = title
                    };
+        }
+
+        public void CancelLoadServerQuestionnaires()
+        {
+            if (tokenSource != null && !tokenSource.IsCancellationRequested)
+                this.tokenSource.Cancel();
         }
     }
 }
