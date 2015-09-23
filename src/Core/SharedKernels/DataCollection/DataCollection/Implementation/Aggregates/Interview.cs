@@ -2710,8 +2710,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector,
                 rosterInstanceIds, null, questionnaire, (s, i) => null);
 
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
+
             //Update State
             RemoveAnswerFromExpressionProcessorState(expressionProcessorState, questionId, rosterVector);
+
+            this.DisableDependantCascadingQuestions(state, expressionProcessorState, questionnaire, questionId, rosterVector);
 
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
@@ -2726,8 +2730,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
-
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
@@ -2756,6 +2758,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 null,
                 substitutionChanges);
+        }
+
+        private void DisableDependantCascadingQuestions(InterviewStateDependentOnAnswers state,
+            IInterviewExpressionStateV2 expressionProcessorState, IQuestionnaire questionnaire, Guid questionId,
+            decimal[] rosterVector)
+        {
+            var cascadingQuestionsToDisable =
+                questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId).ToList();
+
+            var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                state,
+                cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
+
+            expressionProcessorState.DisableQuestions(cascadingQuestionsToDisableIdentities);
+            foreach (var cascadingQuestionsToDisableIdentity in cascadingQuestionsToDisableIdentities)
+            {
+                this.DisableDependantCascadingQuestions(state, expressionProcessorState, questionnaire,
+                    cascadingQuestionsToDisableIdentity.Id, cascadingQuestionsToDisableIdentity.RosterVector);
+            }
         }
 
         private IInterviewExpressionStateV2 PrepareExpressionProcessorStateForCalculations()
