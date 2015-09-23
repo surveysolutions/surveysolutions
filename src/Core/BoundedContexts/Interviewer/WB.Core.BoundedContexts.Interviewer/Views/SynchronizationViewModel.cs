@@ -128,6 +128,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.isSynchronizationInProgress = value; this.RaisePropertyChanged(); }
         }
 
+        private bool hasUserAnotherDevice;
+        public bool HasUserAnotherDevice
+        {
+            get { return this.hasUserAnotherDevice; }
+            set { this.hasUserAnotherDevice = value; this.RaisePropertyChanged(); }
+        }
+
         private string processOperation;
         public string ProcessOperation
         {
@@ -162,7 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Status = SynchronizationStatus.Download;
             this.IsSynchronizationInfoShowed = true;
             this.IsSynchronizationInProgress = true;
-            
+
             try
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
@@ -172,8 +179,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: this.Token, credentials: this.restCredentials))
                 {
-                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(this.principal.CurrentUserIdentity);
-                    return;
+                    throw new SynchronizationException(SynchronizationExceptionType.UserLinkedToAnotherDevice);
                 }
 
                 if (this.shouldUpdatePasswordOfInterviewer)
@@ -182,20 +188,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     await this.UpdatePasswordOfInterviewerAsync();   
                 }
 
-                var packagesByInterviews = await this.synchronizationService.GetInterviewPackagesAsync(
-                    this.syncPackageIdsStorage.GetLastStoredPackageId(), this.Token);
-                var completedInterviews = this.capiDataSynchronizationService.GetItemsToPush();
-
-                this.statistics.TotalNewInterviewsCount = packagesByInterviews.Interviews.Count(interview => !interview.IsRejected);
-                this.statistics.TotalRejectedInterviewsCount = packagesByInterviews.Interviews.Count(interview => interview.IsRejected);
-                this.statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
-
                 this.Status = SynchronizationStatus.Upload;
-                await this.UploadCompletedInterviewsAsync(completedInterviews);
+                await this.UploadCompletedInterviewsAsync();
 
                 this.Status = SynchronizationStatus.Download;
                 await this.DownloadCensusAsync();
-                await this.DownloadInterviewPackagesAsync(packagesByInterviews);
+                await this.DownloadInterviewPackagesAsync();
 
                 this.Status = SynchronizationStatus.Success;
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Success_Title,
@@ -203,6 +201,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (SynchronizationException ex)
             {
+                var errorTitle = InterviewerUIResources.Synchronization_Fail_Title;
+                var errorDescription = ex.Message;
+
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.RequestCanceledByUser:
@@ -211,10 +212,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     case SynchronizationExceptionType.Unauthorized:
                         this.shouldUpdatePasswordOfInterviewer = true;
                         break;
+                    case SynchronizationExceptionType.UserLinkedToAnotherDevice:
+                        this.HasUserAnotherDevice = true;
+                        errorTitle = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status;
+                        errorDescription = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title;
+                        break;
                 }
 
                 this.Status = SynchronizationStatus.Fail;
-                this.SetProgressOperation(InterviewerUIResources.Synchronization_Fail_Title, ex.Message);
+                this.SetProgressOperation(errorTitle, errorDescription);
             }
             catch (Exception ex)
             {
@@ -324,8 +330,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private async Task DownloadInterviewPackagesAsync(InterviewPackagesApiView interviewPackages)
+        private async Task DownloadInterviewPackagesAsync()
         {
+            var interviewPackages = await this.synchronizationService.GetInterviewPackagesAsync(
+                    this.syncPackageIdsStorage.GetLastStoredPackageId(), this.Token);
+
+            this.statistics.TotalNewInterviewsCount = interviewPackages.Interviews.Count(interview => !interview.IsRejected);
+            this.statistics.TotalRejectedInterviewsCount = interviewPackages.Interviews.Count(interview => interview.IsRejected);
+
             var listOfProcessedInterviews = new List<Guid>();
             foreach (var interviewPackage in interviewPackages.Packages)
             {
@@ -360,9 +372,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private async Task UploadCompletedInterviewsAsync(IList<ChangeLogRecordWithContent> dataByChuncks)
+        private async Task UploadCompletedInterviewsAsync()
         {
-            foreach (var chunckDescription in dataByChuncks)
+            var completedInterviews = this.capiDataSynchronizationService.GetItemsToPush();
+            this.statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
+
+            foreach (var completedInterview in completedInterviews)
             {
                 this.SetProgressOperation(
                     InterviewerUIResources.Synchronization_Upload_Title_Format.FormatString(InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
@@ -370,15 +385,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         this.Statistics.CompletedInterviewsCount, this.Statistics.TotalCompletedInterviewsCount,
                         InterviewerUIResources.Synchronization_Upload_Interviews_Text));
 
-                await this.UploadImagesByCompletedInterview(chunckDescription.EventSourceId);
+                await this.UploadImagesByCompletedInterview(completedInterview.EventSourceId);
 
                 await this.synchronizationService.UploadInterviewAsync(
-                    interviewId: chunckDescription.EventSourceId,
-                    content: chunckDescription.Content,
+                    interviewId: completedInterview.EventSourceId,
+                    content: completedInterview.Content,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 
-                await this.RemoveInterviewAsync(chunckDescription);
+                await this.RemoveInterviewAsync(completedInterview);
 
                 this.Statistics.CompletedInterviewsCount++;
             }

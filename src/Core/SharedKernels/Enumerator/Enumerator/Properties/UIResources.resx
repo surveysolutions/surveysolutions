@@ -489,7 +489,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Relink</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>If you relink to this device all data on the old one will be lost</value>
+    <value>If you relink to this device &lt;br/&gt; all data on the old one will be lost</value>
   </data>
   <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
     <value>have not been updated</value>
@@ -595,5 +595,8 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
     <value>Location Client not started</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>You do not have any assignments on this device. Send tablet information, clear application's data and login by another account</value>
   </data>
 </root>

@@ -740,6 +740,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User authentication error.
+        /// </summary>
+        public static string Synchronization_UserLinkedToAnotherDevice_Status {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You account was relinked to another tablet.
+        /// </summary>
+        public static string Synchronization_UserLinkedToAnotherDevice_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For user &apos;{0}&apos; pasword have been changed. Please provide new pasword..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {

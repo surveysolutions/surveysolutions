@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         public readonly SynchronizationExceptionType Type;
 
-        public SynchronizationException(SynchronizationExceptionType type, string message, Exception innerException)
+        public SynchronizationException(SynchronizationExceptionType type, string message = null, Exception innerException = null)
             : base(message, innerException)
         {
             this.Type = type;
