@@ -341,10 +341,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.UpdateSuggestionsList(string.Empty);
                 }              
             }
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                FilterText = SelectedObject.Text;
-            }
         }
 
         public void Handle(AnswersRemoved @event)
@@ -355,11 +351,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.ResetTextInEditor = null;
                     this.QuestionState.IsAnswered = false;
-                    this.FilterText = String.Empty;
-                }
-                if (this.parentQuestionIdentity.Equals(question.Id, question.RosterVector))
-                {
-                    RemoveAnswerOfParentQuestion();
                 }
             }
         }
@@ -376,20 +367,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.IsAnswered = false;
                 this.ResetTextInEditor = string.Empty;
-                this.FilterText = String.Empty;
             }
-            if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                RemoveAnswerOfParentQuestion();
-            }
-        }
-
-        private void RemoveAnswerOfParentQuestion()
-        {
-            this.answerOnParentQuestion = null;
-            this.QuestionState.IsAnswered = false;
-            this.ResetTextInEditor = string.Empty;
-            this.FilterText = String.Empty;
         }
     }
 }
