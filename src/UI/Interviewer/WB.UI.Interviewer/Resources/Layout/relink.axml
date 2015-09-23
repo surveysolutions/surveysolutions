@@ -11,71 +11,43 @@
       android:background="?attr/colorPrimary"
       local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    <TextView
-        style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
+    <TextView style="@style/ToolbarTitle"
+              local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-            local:MvxBind="ShowProgress IsInProgress" />
-  <RelativeLayout
-      android:layout_above="@+id/login_page_scroll_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-    <ScrollView
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/login_page_footer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbarStyle="outsideOverlay"
-        android:gravity="center"
-        android:fillViewport="true">
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-        <ImageView
-            style="@style/Login_Logo"
-            android:id="@+id/LoginPage_logo" />
-        <TextView
-            style="@style/Login_ErrorMessage"
-            android:id="@+id/LoginPage_error_message"
-            android:layout_below="@+id/LoginPage_logo"
-            android:layout_width="wrap_content"
-            local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
-        <RelativeLayout
-            style="@style/Login_FormContainer"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_above="@+id/login_page_screen_bottom">
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/LoginPage_login"
-              local:MvxBind="Text Localization('Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage')" />
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textColor="@color/group_with_invalid_answers"
-              android:id="@+id/LoginPage_password"
-              android:layout_below="@+id/LoginPage_login"
-              local:MvxBind="Text Localization('Interviewer_RelinkDevice_RelinkMessage')" />
-          <Button
-              style="@style/Login_Singin_Button"
-              android:background="@drawable/group_with_invalid_answers"
-              android:id="@+id/LoginPage_singin_button"
-              android:layout_below="@+id/LoginPage_password"
-              android:layout_centerHorizontal="true"
-              local:MvxBind="Click RelinkCommand; Text Localization('Interviewer_RelinkDevice_RelinkButtonText');" />
-          <Button
-              style="@style/Login_Troubleshotting_Button"
-              android:id="@+id/LoginPage_troubleshooting_button"
-              android:layout_toRightOf="@+id/LoginPage_singin_button"
-              android:layout_below="@+id/LoginPage_password"
-              local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
-        </RelativeLayout>
+               local:MvxBind="ShowProgress IsInProgress" />
+  <ScrollView android:layout_alignParentTop="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:scrollbarStyle="outsideOverlay"
+              android:gravity="center"
+              android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="center">
+      <ImageView style="@style/Relink_Logo" />
+      <RelativeLayout style="@style/Relink_FormContainer">
+        <TextView style="@style/Relink_RemoteErrorMessage"
+                  android:id="@+id/relinkPage_error_message"
+                  local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
+        <TextView style="@style/Relink_Warning"
+                  android:id="@+id/relinkPage_login"
+                  android:layout_below="@+id/relinkPage_error_message"
+                  local:MvxBind="Text Localization('Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage')" />
+        <TextView style="@style/Relink_ErrorMessage"
+                  android:id="@+id/relinkPage_password"
+                  android:layout_below="@+id/relinkPage_login"
+                  local:MvxBind="Html Localization('Interviewer_RelinkDevice_RelinkMessage')" />
+      </RelativeLayout>
+      <LinearLayout android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+        <Button style="@style/Relink_Button"
+                local:MvxBind="Click RelinkCommand; Text Localization('Interviewer_RelinkDevice_RelinkButtonText');" />
+        <Button style="@style/Relink_Cancel_Button"
+                local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
       </LinearLayout>
-    </ScrollView>
-  </RelativeLayout>
+    </LinearLayout>
+  </ScrollView>
 </LinearLayout>
