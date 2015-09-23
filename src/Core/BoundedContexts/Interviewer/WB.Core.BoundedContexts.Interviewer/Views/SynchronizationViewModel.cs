@@ -464,7 +464,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public void CancelSynchronizaion()
         {
-            this.synchronizationCancellationTokenSource.Cancel();
+            if (!this.synchronizationCancellationTokenSource.IsCancellationRequested)
+                this.synchronizationCancellationTokenSource.Cancel();
         }    
     }
 }
