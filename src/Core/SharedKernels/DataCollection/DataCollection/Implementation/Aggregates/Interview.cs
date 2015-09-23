@@ -2715,7 +2715,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //Update State
             RemoveAnswerFromExpressionProcessorState(expressionProcessorState, questionId, rosterVector);
 
-            this.DisableDependantCascadingQuestions(state, expressionProcessorState, questionnaire, questionId, rosterVector);
+            var answersToRemoveByCascading = this.DisableDependantCascadingQuestions(state, questionnaire, questionId, rosterVector);
+
+            expressionProcessorState.DisableQuestions(answersToRemoveByCascading);
 
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
                 d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
@@ -2750,7 +2752,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, getRosterInstanceIds));
 
-            return new InterviewChanges(interviewByAnswerChange,
+            var interviewChanges= new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
@@ -2758,12 +2760,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 null,
                 substitutionChanges);
+
+            interviewChanges.AnswersForLinkedQuestionsToRemove.AddRange(answersToRemoveByCascading);
+            
+            return interviewChanges;
         }
 
-        private void DisableDependantCascadingQuestions(InterviewStateDependentOnAnswers state,
-            IInterviewExpressionStateV2 expressionProcessorState, IQuestionnaire questionnaire, Guid questionId,
+        private List<Identity> DisableDependantCascadingQuestions(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire, Guid questionId,
             decimal[] rosterVector)
         {
+            var result =new List<Identity>();
             var cascadingQuestionsToDisable =
                 questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId).ToList();
 
@@ -2771,12 +2777,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 state,
                 cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
 
-            expressionProcessorState.DisableQuestions(cascadingQuestionsToDisableIdentities);
+            result.AddRange(cascadingQuestionsToDisableIdentities);
             foreach (var cascadingQuestionsToDisableIdentity in cascadingQuestionsToDisableIdentities)
             {
-                this.DisableDependantCascadingQuestions(state, expressionProcessorState, questionnaire,
-                    cascadingQuestionsToDisableIdentity.Id, cascadingQuestionsToDisableIdentity.RosterVector);
+                result.AddRange(this.DisableDependantCascadingQuestions(state, questionnaire,
+                    cascadingQuestionsToDisableIdentity.Id, cascadingQuestionsToDisableIdentity.RosterVector));
             }
+            return result;
         }
 
         private IInterviewExpressionStateV2 PrepareExpressionProcessorStateForCalculations()
