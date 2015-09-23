@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>, 
+        ILiteEventHandler<QuestionsDisabled>,
         IDisposable
     {
         private string name;
@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
-            IMvxMessenger messenger, 
+            IMvxMessenger messenger,
             IUserInterfaceStateService userInterfaceStateService)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
@@ -115,11 +115,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.Items = new ObservableRangeCollection<dynamic>();
 
-            var completeScreenItems = this.interviewViewModelFactory
-                .GetCompleteScreenEntities(this.navigationState.InterviewId);
+            var completeScreenItems = this.interviewViewModelFactory.GetCompleteScreenEntities(this.navigationState.InterviewId);
 
-            completeScreenItems.ForEach(x => this.Items.Add(x)); 
+            completeScreenItems.ForEach(x => this.Items.Add(x));
             this.Name = UIResources.Interview_Complete_Screen_Title;
+            this.eventRegistry.Unsubscribe(this, this.interviewId);
         }
 
 
@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
                     navigationState: this.navigationState);
-                
+
                 foreach (var x in interviewEntityViewModels)
                 {
                     this.Items.Add(x);
@@ -182,7 +182,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
                 this.Items.Add(previousGroupNavigationViewModel);
             }
-            finally 
+            finally
             {
                 userInterfaceStateService.NotifyRefreshFinished();
             }
@@ -195,7 +195,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
                     GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
-                    this.Name = this.substitutionService.GenerateRosterName(@group.Title, this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
+                    this.Name = this.substitutionService.GenerateRosterName(@group.Title,
+                        this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
                 }
             }
         }
@@ -212,13 +213,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var viewModelEntity = viewModelEntities.FirstOrDefault(x => x.Identity.Equals(addedRosterInstance.GetIdentity()));
 
                 if (viewModelEntity != null)
-                    this.Items.Insert(viewModelEntities.IndexOf(viewModelEntity), viewModelEntity);
+                {
+                    var itemIndex = viewModelEntities.IndexOf(viewModelEntity);
+                    this.Items.Insert(itemIndex, viewModelEntity);
+                }
             }
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            var itemsToRemove = this.Items.OfType<GroupViewModel>().Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+            var itemsToRemove = this.Items.OfType<GroupViewModel>()
+                                          .Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
             InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
         }
 
@@ -242,11 +247,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InvalidateViewModelsByConditions(@event.Groups);
         }
 
-        void InvalidateViewModelsByConditions(IEnumerable<Identity> viewModelIdentities)
+        private void InvalidateViewModelsByConditions(IEnumerable<Identity> viewModelIdentities)
         {
             foreach (var viewModelIdentity in viewModelIdentities)
             {
-                var interviewEntity = this.Items.OfType<IInterviewEntityViewModel>().FirstOrDefault(x => x.Identity.Equals(viewModelIdentity));
+                var interviewEntity =
+                    this.Items.OfType<IInterviewEntityViewModel>().FirstOrDefault(x => x.Identity.Equals(viewModelIdentity));
 
                 if (interviewEntity != null)
                     this.Items[this.Items.IndexOf(interviewEntity)] = interviewEntity;
