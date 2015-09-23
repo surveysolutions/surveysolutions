@@ -793,6 +793,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public int CountActiveInterviewerQuestionsInGroupOnly(Identity group)
         {
+            if (group == null) throw new ArgumentNullException("group");
             return this
                 .GetEnabledInterviewerChildQuestions(group)
                 .Count;

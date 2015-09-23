@@ -76,7 +76,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            this.UpdateInterviewStatus(this.navigationState.CurrentGroup);
+            if (this.navigationState.CurrentGroupType == ScreenType.Group)
+            {
+                this.UpdateInterviewStatus(this.navigationState.CurrentGroup);
+            }
         }
 
         private void NavigationStateOnOnGroupChanged(GroupChangedEventArgs newGroupIdentity)
@@ -87,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
             }
 
-            var interview = this.interviewRepository.Get(this.navigationState.InterviewId);
+            IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
             IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
 
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
