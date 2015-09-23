@@ -276,29 +276,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task DownloadCensusAsync()
         {
-            var downloadedCensusQuestionnaires = await this.synchronizationService.GetCensusQuestionnairesAsync(this.Token);
+            var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(this.Token);
 
-            var localCensusQuestionnaires = this.questionnaireInfoRepository.Filter(questionnaire => questionnaire.AllowCensusMode);
+            var localCensusQuestionnaireIdentities = this.questionnaireInfoRepository.Filter(questionnaire => questionnaire.AllowCensusMode)
+                .Select(questionnaire => new QuestionnaireIdentity(Guid.Parse(questionnaire.QuestionnaireId), questionnaire.QuestionnaireVersion)).ToList();
 
-            var downloadedCensusQuestionnaireIds = downloadedCensusQuestionnaires.Select(questionnaire => questionnaire.ToString());
-
-            var localCensusQuestionnairesToDelete = localCensusQuestionnaires.Where(
-                    questionnaire => !downloadedCensusQuestionnaireIds.Contains(questionnaire.Id)).ToList();
-
-            foreach (var questionnaireInfo in localCensusQuestionnairesToDelete)
+            var notExistingRemoteCensusQuestionnaireIdentities = localCensusQuestionnaireIdentities.Where(
+                    questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
+            foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
             {
-                await this.DeleteQuestionnaireAsync(new QuestionnaireIdentity(Guid.Parse(questionnaireInfo.QuestionnaireId), questionnaireInfo.QuestionnaireVersion));   
+                await this.DeleteQuestionnaireAsync(censusQuestionnaireIdentity);
             }
 
             var processedQuestionnaires = 0;
-            foreach (var censusQuestionnaire in downloadedCensusQuestionnaires)
+            var notExistingLocalCensusQuestionnaireIdentities = remoteCensusQuestionnaireIdentities.Except(localCensusQuestionnaireIdentities).ToList();
+            foreach (var censusQuestionnaireIdentity in notExistingLocalCensusQuestionnaireIdentities)
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
                             InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
-                                processedQuestionnaires, downloadedCensusQuestionnaires.Count,
+                                processedQuestionnaires, notExistingLocalCensusQuestionnaireIdentities.Count,
                                 InterviewerUIResources.Synchronization_Questionnaires));
 
-                await this.DownloadQuestionnaireAsync(censusQuestionnaire);
+                await this.DownloadQuestionnaireAsync(censusQuestionnaireIdentity);
 
                 processedQuestionnaires++;
             }
@@ -318,12 +317,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
 
-            if (this.questionnaireInfoRepository.GetById(questionnaireIdentity.ToString()) == null)
+            var formattedQuestionnaireId = questionnaireIdentity.QuestionnaireId.FormatGuid();
+            if (!this.questionnaireInfoRepository.Filter(questionnaire =>
+                        questionnaire.QuestionnaireId == formattedQuestionnaireId &&
+                        questionnaire.QuestionnaireVersion == questionnaireIdentity.Version).Any())
             {
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
-                   questionnaire: questionnaireIdentity,
-                   onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                   token: this.Token);
+                    questionnaire: questionnaireIdentity,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: this.Token);
 
                 await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
