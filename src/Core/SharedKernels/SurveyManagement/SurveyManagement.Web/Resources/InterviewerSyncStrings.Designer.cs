@@ -97,15 +97,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed.  Your application is not compatible with server one. Uninstall your application and download older version of Interviewer app from your Supervisor..
-        /// </summary>
-        internal static string InterviewerApplicationHasHigherVersionThanSupervisor {
-            get {
-                return ResourceManager.GetString("InterviewerApplicationHasHigherVersionThanSupervisor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Synchronization failed. Your application is not compatible with server one. Update your Interviewer app.
         /// </summary>
         internal static string InterviewerApplicationShouldBeUpdated {
@@ -120,15 +111,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         internal static string InterviewerIsNotCompatibleWithThisVersion {
             get {
                 return ResourceManager.GetString("InterviewerIsNotCompatibleWithThisVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Please uninstall Interviewer application and install it..
-        /// </summary>
-        internal static string InterviewerVersionLessThanServerOne {
-            get {
-                return ResourceManager.GetString("InterviewerVersionLessThanServerOne", resourceCulture);
             }
         }
         

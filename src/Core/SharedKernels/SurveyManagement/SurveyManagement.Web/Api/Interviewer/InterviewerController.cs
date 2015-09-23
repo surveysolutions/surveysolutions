@@ -5,9 +5,7 @@ using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
@@ -25,54 +23,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISupportedVersionProvider versionProvider;
         private readonly ITabletInformationService tabletInformationService;
-        private readonly ISyncProtocolVersionProvider syncVersionProvider;
 
         public InterviewerController(
             IFileSystemAccessor fileSystemAccessor,
             ISupportedVersionProvider versionProvider,
-            ITabletInformationService tabletInformationService,
-            ISyncProtocolVersionProvider syncVersionProvider)
+            ITabletInformationService tabletInformationService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.versionProvider = versionProvider;
             this.tabletInformationService = tabletInformationService;
-            this.syncVersionProvider = syncVersionProvider;
         }
-
-        [HttpGet]
-        [Route("compatibility/{version:int}")]
-        public HttpResponseMessage CheckInterviewerCompatibilityWithServer(int version)
-        {
-            int supervisorRevisionNumber = this.syncVersionProvider.GetProtocolVersion();
-            int supervisorShiftVersionNumber = this.syncVersionProvider.GetLastNonUpdatableVersion();
-
-            if (version > supervisorRevisionNumber)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationHasHigherVersionThanSupervisor
-                });
-            }
-
-            if (version < supervisorShiftVersionNumber)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.InterviewerVersionLessThanServerOne
-                });
-            }
-
-            if (version < supervisorRevisionNumber)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationShouldBeUpdated
-                });
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
+        
         [HttpGet] 
         [Route("")] 
         public HttpResponseMessage Get()

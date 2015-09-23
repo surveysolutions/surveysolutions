@@ -92,14 +92,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Logger.Info(string.Format("Version mismatch. Client from the future. Client has protocol version {0} but current app protocol is {1} ", request.Version, supervisorRevisionNumber));
 
-                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationHasHigherVersionThanSupervisor);
+                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationShouldBeUpdated);
             }
 
             if (request.Version < supervisorShiftVersionNumber)
             {
                 Logger.Info(string.Format(" Client has protocol version {0} but current app protocol is {1}. Major change.", request.Version, supervisorRevisionNumber));
 
-                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerVersionLessThanServerOne);
+                throw CreateRestException(HttpStatusCode.NotAcceptable, InterviewerSyncStrings.InterviewerApplicationShouldBeUpdated);
             }
 
             if (request.Version < supervisorRevisionNumber)
