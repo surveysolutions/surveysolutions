@@ -12,15 +12,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
     internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {
         private readonly IAggregateRootRepository aggregateRootRepository;
-        private readonly IEventStore eventStore;
 
-        public StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository,
-            IEventStore eventStore)
+        public StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository)
         {
             if (aggregateRootRepository == null) throw new ArgumentNullException("aggregateRootRepository");
 
             this.aggregateRootRepository = aggregateRootRepository;
-            this.eventStore = eventStore;
         }
 
         public IStatefulInterview Get(string interviewId)

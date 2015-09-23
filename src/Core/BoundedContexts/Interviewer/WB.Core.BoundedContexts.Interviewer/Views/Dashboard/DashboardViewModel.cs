@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async Task RefreshDashboardAsync()
         {
-            this.DashboardInformation = await this.dashboardFactory.GetDashboardItems(
+            this.DashboardInformation = await this.dashboardFactory.GetDashboardItemsAsync(
                 this.principal.CurrentUserIdentity.UserId);
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             switch (this.CurrentDashboardStatus)
             {
                  case DashboardInterviewStatus.New:
-                    this.DashboardItems = dashboardInformation.CensusQuestionniories.Union(dashboardInformation.NewInterviews);
+                    this.DashboardItems = dashboardInformation.CensusQuestionnaires.Union(dashboardInformation.NewInterviews);
                     break;
                  case DashboardInterviewStatus.InProgress:
                     this.DashboardItems = dashboardInformation.StartedInterviews;
@@ -193,13 +193,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public int NewInterviewsCount { get { return this.dashboardInformation.NewInterviews.Count; } }
-        public int StartedInterviewsCount { get { return this.dashboardInformation.StartedInterviews.Count; } }
-        public int CompletedInterviewsCount { get { return this.dashboardInformation.CompletedInterviews.Count; } }
-        public int RejectedInterviewsCount { get { return this.dashboardInformation.RejectedInterviews.Count; } }
+        public int NewInterviewsCount { get { return this.dashboardInformation.NewInterviews.Count(); } }
+        public int StartedInterviewsCount { get { return this.dashboardInformation.StartedInterviews.Count(); } }
+        public int CompletedInterviewsCount { get { return this.dashboardInformation.CompletedInterviews.Count(); } }
+        public int RejectedInterviewsCount { get { return this.dashboardInformation.RejectedInterviews.Count(); } }
 
-        public bool IsExistsAnyCensusQuestionniories { get { return this.dashboardInformation.CensusQuestionniories.Count > 0; } }
-        public bool IsExistsAnyNewInterview { get { return this.dashboardInformation.CensusQuestionniories.Count > 0 && this.NewInterviewsCount > 0; } }
+        public bool IsExistsAnyCensusQuestionniories { get { return this.dashboardInformation.CensusQuestionnaires.Any(); } }
+        public bool IsExistsAnyNewInterview { get { return this.dashboardInformation.CensusQuestionnaires.Any() && this.NewInterviewsCount > 0; } }
         public bool IsExistsAnyStartedInterview { get { return this.StartedInterviewsCount > 0; } }
         public bool IsExistsAnyCompletedInterview { get { return this.CompletedInterviewsCount > 0; } }
         public bool IsExistsAnyRejectedInterview { get { return this.RejectedInterviewsCount > 0; } }

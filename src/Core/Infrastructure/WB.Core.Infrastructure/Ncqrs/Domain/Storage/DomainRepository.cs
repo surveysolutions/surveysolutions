@@ -47,7 +47,7 @@ namespace Ncqrs.Domain.Storage
 
                 var mappedAggregateRoot = aggregateRoot as MappedAggregateRoot;
                 if (mappedAggregateRoot != null
-                    && !mappedAggregateRoot.CanApplyAllEvents(committedEventStream))
+                    && !mappedAggregateRoot.CanApplyHistory(committedEventStream))
                     return null;
                 
                 aggregateRoot.InitializeFromHistory(committedEventStream);

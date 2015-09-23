@@ -10,21 +10,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, int? colorId)
         {
-            this.SetBackgroundDrawable(control, colorId);
+            if (!colorId.HasValue)
+                return;
+
+            Color color = control.Resources.GetColor(colorId.Value);
+            control.SetTextColor(color);
         }
 
         public override MvxBindingMode DefaultMode
         {
             get { return MvxBindingMode.OneWay; }
-        }
-
-        private void SetBackgroundDrawable(TextView androidControl, int? colorId)
-        {
-            if (colorId.HasValue)
-            {
-                Color color = androidControl.Resources.GetColor(colorId.Value);
-                androidControl.SetTextColor(color); 
-            }
         }
     }
 }

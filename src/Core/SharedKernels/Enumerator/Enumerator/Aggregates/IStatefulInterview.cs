@@ -15,8 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         InterviewStatus Status { get; }
 
         Guid Id { get; }
-        long QuestionnaireVersion { get; }
-        string InterviewerCompliteComment { get; }
+        string InterviewerCompleteComment { get; }
         string SupervisorRejectComment { get; }
 
         IReadOnlyDictionary<string, BaseInterviewAnswer> Answers { get; }
