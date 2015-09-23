@@ -60,5 +60,11 @@ namespace WB.UI.Tester.Activities
             }
             return base.OnOptionsItemSelected(item);
         }
+
+        protected override void OnDestroy()
+        {
+            ViewModel.CancelLoadServerQuestionnaires();
+            base.OnDestroy();
+        }
     }
 }
