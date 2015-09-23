@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-
 using Cirrious.MvvmCross.Test.Core;
-
 using Moq;
-
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -23,29 +20,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         }
 
         protected static LoginViewModel CreateLoginViewModel(
+            IViewModelNavigationService viewModelNavigationService = null,
             IPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
-            InterviewerIdentity interviewer = null,
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             ISynchronizationService synchronizationService = null,
             ILogger logger = null)
         {
-            InterviewersPlainStorage
-               .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewerIdentity>, InterviewerIdentity>>()))
-               .Returns(interviewer);
-
             return new LoginViewModel(
-                ViewModelNavigationServiceMock.Object,
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                InterviewersPlainStorage.Object,
+                interviewersPlainStorage ?? Mock.Of<IAsyncPlainStorage<InterviewerIdentity>>(),
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 logger ?? Mock.Of<ILogger>());
         }
-
-        protected readonly static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-
-        protected static readonly Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
-
+        
         protected static InterviewerIdentity CreateInterviewerIdentity(string userName, string userPasswordHash = null)
         {
             return new InterviewerIdentity { Name = userName, Password = userPasswordHash };

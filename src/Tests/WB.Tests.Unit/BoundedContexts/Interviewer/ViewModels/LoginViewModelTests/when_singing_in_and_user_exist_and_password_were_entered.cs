@@ -1,8 +1,13 @@
-﻿using Machine.Specifications;
+﻿using System;
+using System.Linq;
+
+using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 using It = Machine.Specifications.It;
 
@@ -19,8 +24,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             var principal = new Mock<IPrincipal>();
             principal.Setup(x => x.SignIn(userName, userPasswordHash, true)).Returns(true);
 
+            InterviewersPlainStorage
+              .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewerIdentity>, InterviewerIdentity>>()))
+              .Returns(interviewer);
+
             viewModel = CreateLoginViewModel(
-                interviewer: interviewer,
+                viewModelNavigationService: ViewModelNavigationServiceMock.Object,
+                interviewersPlainStorage: InterviewersPlainStorage.Object,
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
@@ -37,5 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         private static readonly string userName = "Vasya";
         private static readonly string userPassword = "password";
         private static readonly string userPasswordHash = "passwordHash";
+        static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
+        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
     }
 }
