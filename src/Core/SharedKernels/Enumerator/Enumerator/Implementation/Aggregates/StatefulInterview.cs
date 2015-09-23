@@ -385,7 +385,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            this.InterviewerCompliteComment = @event.Comment;
+            this.InterviewerCompleteComment = @event.Comment;
             this.IsCompleted = true;
         }
 
@@ -427,8 +427,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public Guid InterviewerId { get { return this.interviewerId; } }
         public InterviewStatus Status { get { return status; } }
         public Guid Id { get; set; }
-        public long QuestionnaireVersion { get { return questionnaireVersion; } }
-        public string InterviewerCompliteComment { get; private set; }
+        public string InterviewerCompleteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }
 
         public IReadOnlyDictionary<string, BaseInterviewAnswer> Answers

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.CrossCore;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
@@ -18,15 +19,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private readonly IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage;
         private readonly IFilterableReadSideRepositoryReader<SurveyDto> surveyDtoDocumentStorage;
+        private readonly IServiceLocator serviceLocator;
 
         public InterviewerDashboardFactory(IFilterableReadSideRepositoryReader<QuestionnaireDTO> questionnaireDtoDocumentStorage,
-            IFilterableReadSideRepositoryReader<SurveyDto> surveyDtoDocumentStorage)
+            IFilterableReadSideRepositoryReader<SurveyDto> surveyDtoDocumentStorage,
+            IServiceLocator serviceLocator)
         {
             this.questionnaireDtoDocumentStorage = questionnaireDtoDocumentStorage;
             this.surveyDtoDocumentStorage = surveyDtoDocumentStorage;
+            this.serviceLocator = serviceLocator;
         }
 
-        public Task<DashboardInformation> GetDashboardItems(Guid interviewerId)
+        public Task<DashboardInformation> GetDashboardItemsAsync(Guid interviewerId)
         {
             return Task.Run(() => this.CollectDashboardInformation(interviewerId));
         }
@@ -40,37 +44,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var surveys = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
             List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
-            CollectCensusQuestionnaries(questionnaires, surveys, dashboardInformation);
-            this.CollectInterviews(questionnaires, surveys, dashboardInformation);
+            dashboardInformation.AddCensusQuestionnairesRange(CollectCensusQuestionnaries(questionnaires, surveys, dashboardInformation));
+            dashboardInformation.AddInterviewsRange(CollectInterviews(questionnaires, surveys, dashboardInformation));
 
             return dashboardInformation;
         }
 
-        private static void CollectCensusQuestionnaries(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
+        private IEnumerable<CensusQuestionnaireDashboardItemViewModel> CollectCensusQuestionnaries(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
         {
             var listCensusQuestionnires = surveys.Where(s => s.AllowCensusMode);
             // show census mode for new tab
             foreach (var censusQuestionnireInfo in listCensusQuestionnires)
             {
-                var countInterviewsFromCurrentQuestionnare = questionnaires.Count(questionnaire => IsQuestionnareRelatedToInterview(censusQuestionnireInfo, questionnaire));
+                var countInterviewsFromCurrentQuestionnare = questionnaires.Count(questionnaire => IsSurveyForQuestionnaire(censusQuestionnireInfo, questionnaire));
                 var censusQuestionnaireDashboardItem = Load<CensusQuestionnaireDashboardItemViewModel>();
                 censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo, countInterviewsFromCurrentQuestionnare);
-                dashboardInformation.CensusQuestionniories.Add(censusQuestionnaireDashboardItem);
+                yield return censusQuestionnaireDashboardItem;
             }
         }
 
-        private void CollectInterviews(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
+        private IEnumerable<InterviewDashboardItemViewModel> CollectInterviews(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
         {
-            List<DashboardQuestionnaireItem> dashboardQuestionnaireItems = new List<DashboardQuestionnaireItem>();
-
             foreach (var questionnaire in questionnaires)
             {
-                var survey = surveys.First(surveyDto => IsQuestionnareRelatedToInterview(surveyDto, questionnaire));
+                var survey = surveys.Single(surveyDto => IsSurveyForQuestionnaire(surveyDto, questionnaire));
 
                 var interviewCategory = this.GetDashboardCategoryForInterview((InterviewStatus)questionnaire.Status, questionnaire.StartedDateTime);
 
-                dashboardQuestionnaireItems.Add(
-                    new DashboardQuestionnaireItem(Guid.Parse(questionnaire.Id),
+                var dashboardQuestionnaireItem = new DashboardQuestionnaireItem(Guid.Parse(questionnaire.Id),
                         Guid.Parse(questionnaire.Survey),
                         interviewCategory,
                         questionnaire.GetProperties(),
@@ -81,19 +82,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         questionnaire.CompletedDateTime,
                         questionnaire.CreatedDateTime,
                         questionnaire.CreatedOnClient,
-                        questionnaire.JustInitilized.HasValue && questionnaire.JustInitilized.Value));
-            }
-
-
-            foreach (var dashboardQuestionnaireItem in dashboardQuestionnaireItems)
-            {
+                        questionnaire.JustInitilized.HasValue && questionnaire.JustInitilized.Value);
+ 
                 var interviewDashboardItem = Load<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(dashboardQuestionnaireItem);
-                this.AddDashboardItemToCategoryCollection(dashboardInformation, interviewDashboardItem);
+                yield return interviewDashboardItem;
             }
         }
 
-        private static bool IsQuestionnareRelatedToInterview(SurveyDto surveyDto, QuestionnaireDTO questionnaire)
+        private static bool IsSurveyForQuestionnaire(SurveyDto surveyDto, QuestionnaireDTO questionnaire)
         {
             if (string.IsNullOrEmpty(surveyDto.QuestionnaireId))
             {
@@ -117,41 +114,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
                 case InterviewStatus.InterviewerAssigned:
-                {
-                    if (startedDateTime.HasValue)
-                        return DashboardInterviewStatus.InProgress;
-                    else
-                        return DashboardInterviewStatus.New;
-                }
+                    return startedDateTime.HasValue 
+                        ? DashboardInterviewStatus.InProgress 
+                        : DashboardInterviewStatus.New;
 
                 default:
                     throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
             }
         }
 
-        private void AddDashboardItemToCategoryCollection(DashboardInformation dashboardInformation, 
-            InterviewDashboardItemViewModel interviewDashboardItem)
+        private T Load<T>() where T : class
         {
-            switch (interviewDashboardItem.Status)
-            {
-                case DashboardInterviewStatus.Rejected:
-                    dashboardInformation.RejectedInterviews.Add(interviewDashboardItem);
-                    break;
-                case DashboardInterviewStatus.Completed:
-                    dashboardInformation.CompletedInterviews.Add(interviewDashboardItem);
-                    break;
-                case DashboardInterviewStatus.New:
-                    dashboardInformation.NewInterviews.Add(interviewDashboardItem);
-                    break;
-                case DashboardInterviewStatus.InProgress:
-                    dashboardInformation.StartedInterviews.Add(interviewDashboardItem);
-                    break;
-            }
-        }
-
-        private static T Load<T>() where T : class
-        {
-            return Mvx.Resolve<T>();
+            return serviceLocator.GetInstance<T>();
         }
     }
 }
