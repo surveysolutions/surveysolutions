@@ -1,11 +1,13 @@
+using System;
+using System.Linq;
+
 using Machine.Specifications;
-
 using Moq;
-
 using NSubstitute;
-
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 using It = Machine.Specifications.It;
 
@@ -17,8 +19,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         {
             var interview = Substitute.For<IStatefulInterview>();
             interview.CreatedOnClient.Returns(true);
-
-            viewModel = CreateLoginViewModel(interviewer: null);
+         
+            viewModel = CreateLoginViewModel(
+                viewModelNavigationService: ViewModelNavigationServiceMock.Object,
+                interviewersPlainStorage: InterviewersPlainStorage.Object);
         };
 
         Because of = () => viewModel.Init();
@@ -27,5 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             ViewModelNavigationServiceMock.Verify(x => x.NavigateTo<FinishInstallationViewModel>(), Times.Once);
 
         static LoginViewModel viewModel;
+        static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
+        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
     }
 }

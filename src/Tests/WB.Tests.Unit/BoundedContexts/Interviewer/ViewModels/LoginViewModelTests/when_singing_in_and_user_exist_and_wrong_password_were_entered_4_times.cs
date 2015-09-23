@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+
 using Machine.Specifications;
 
 using Moq;
@@ -5,7 +8,9 @@ using Moq;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 using It = Machine.Specifications.It;
 
@@ -23,8 +28,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             principal.Setup(x => x.SignIn(userName, userPasswordHash, true)).Returns(true);
             principal.Setup(x => x.SignIn(userName, wrongPassword, true)).Returns(false);
 
+            InterviewersPlainStorage
+             .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewerIdentity>, InterviewerIdentity>>()))
+             .Returns(interviewer);
+
             viewModel = CreateLoginViewModel(
-                interviewer: interviewer,
+                viewModelNavigationService: ViewModelNavigationServiceMock.Object,
+                interviewersPlainStorage: InterviewersPlainStorage.Object,
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
@@ -54,5 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         private static readonly string userPasswordHash = "passwordHash";
 
         private static readonly string wrongPassword = "wrongPassword";
+        static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
+        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
     }
 }
