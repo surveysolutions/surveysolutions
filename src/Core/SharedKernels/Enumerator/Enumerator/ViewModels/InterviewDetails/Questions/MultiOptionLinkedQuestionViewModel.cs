@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
+        ILiteEventHandler<AnswerRemoved>,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
         IDisposable
     {
@@ -160,6 +161,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.InvokeOnMainThread(() => this.Options.Remove(shownAnswer));
                         this.RaisePropertyChanged(() => this.HasOptions);
                     }
+                }
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.linkedToQuestionId)
+            {
+                var shownAnswer = this.Options.SingleOrDefault(x => x.Value.SequenceEqual(@event.RosterVector));
+                if (shownAnswer != null)
+                {
+                    this.InvokeOnMainThread(() => this.Options.Remove(shownAnswer));
+                    this.RaisePropertyChanged(() => this.HasOptions);
                 }
             }
         }
