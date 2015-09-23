@@ -76,11 +76,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 var writer = datasetWriterFactory.CreateDatasetWriter(exportType);
                 foreach (var tabFile in dataFiles)
                 {
+                    currentDataInfo = string.Format("filename: {0}", tabFile);
                     string dataFile = fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
                     var meta = tabReader.GetMetaFromTabFile(tabFile);
-                    
                     UpdateMetaWithLabels(meta, varLabels, varValueLabels);
-                    currentDataInfo = string.Format("filename: {0}", tabFile);
                     var data = tabReader.GetDataFromTabFile(tabFile);
                     writer.WriteToFile(dataFile, meta, data);
                     result.Add(dataFile);
