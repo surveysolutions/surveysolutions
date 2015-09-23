@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Cirrious.MvvmCross.Test.Core;
@@ -24,26 +23,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         }
 
         protected static LoginViewModel CreateLoginViewModel(
-            IViewModelNavigationService viewModelNavigationService = null,
             IPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
             InterviewerIdentity interviewer = null,
             ISynchronizationService synchronizationService = null,
             ILogger logger = null)
         {
-            var interviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
-            interviewersPlainStorage
+            InterviewersPlainStorage
                .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewerIdentity>, InterviewerIdentity>>()))
                .Returns(interviewer);
 
             return new LoginViewModel(
-                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                ViewModelNavigationServiceMock.Object,
                 principal ?? Mock.Of<IPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                interviewersPlainStorage.Object,
+                InterviewersPlainStorage.Object,
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 logger ?? Mock.Of<ILogger>());
         }
+
+        protected readonly static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
+
+        protected static readonly Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
 
         protected static InterviewerIdentity CreateInterviewerIdentity(string userName, string userPasswordHash = null)
         {
