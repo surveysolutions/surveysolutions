@@ -1,4 +1,7 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -63,12 +66,12 @@ namespace WB.UI.Interviewer.ViewModel
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        public void NavigateToPreviousViewModel()
+        public async Task NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
         {
-            this.NavigateBack();
+            await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
         }
 
-        private void NavigateBack()
+        public void NavigateBack()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
             if (this.PrefilledQuestions != null && this.PrefilledQuestions.Any() && interview.CreatedOnClient)
