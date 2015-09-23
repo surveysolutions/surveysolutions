@@ -260,6 +260,7 @@
   </style>
 
   <style name="Dashboard_Synchronization_Statistics_Holder" parent="VerticalContentHeightWrappingLayout">
+    <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
     <item name="android:layout_alignParentBottom">true</item>
   </style>
 </resources>

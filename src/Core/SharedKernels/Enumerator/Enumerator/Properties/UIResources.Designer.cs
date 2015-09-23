@@ -892,7 +892,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you relink to this device all data on the old one will be lost.
+        ///   Looks up a localized string similar to If you relink to this device &lt;br/&gt; all data on the old one will be lost.
         /// </summary>
         public static string Interviewer_RelinkDevice_RelinkMessage {
             get {
@@ -1248,6 +1248,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have any assignments on this device. Send tablet information, clear application&apos;s data and login by another account.
+        /// </summary>
+        public static string Synchronization_UserLinkedToAnotherDevice_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Description", resourceCulture);
             }
         }
         

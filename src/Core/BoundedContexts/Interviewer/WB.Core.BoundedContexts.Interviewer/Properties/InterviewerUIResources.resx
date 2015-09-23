@@ -357,4 +357,10 @@ for further instructions</value>
   <data name="UpgradeRequired" xml:space="preserve">
     <value>New version of application was released. Please, update the application</value>
   </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>User authentication error</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>You account was relinked to another tablet</value>
+  </data>
 </root>

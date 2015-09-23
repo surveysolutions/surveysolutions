@@ -50,8 +50,8 @@
       </LinearLayout>
     </LinearLayout>
     <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress));
-                                 Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress);"
+                  local:MvxBind="Enabled Not(Or(Or(Synchronization.IsSynchronizationInProgress, IsInProgress), Synchronization.HasUserAnotherDevice));
+                                 Clickable Or(Or(Synchronization.IsSynchronizationInProgress, IsInProgress), Synchronization.HasUserAnotherDevice);"
                   android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>
@@ -84,8 +84,8 @@
                                Click SynchronizationCommand;" />
     </LinearLayout>    
     <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress));
-                                 Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress);"
+                  local:MvxBind="Enabled Not(Or(Or(Synchronization.IsSynchronizationInProgress, IsInProgress), Synchronization.HasUserAnotherDevice));
+                                 Clickable Or(Or(Synchronization.IsSynchronizationInProgress, IsInProgress), Synchronization.HasUserAnotherDevice);"
                   android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>

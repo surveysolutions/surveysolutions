@@ -315,8 +315,8 @@
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
     <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
-    <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\MvxListViewFixHeightBinding.cs" />
+    <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="CustomControls\TabletInformationReportButton.cs" />
@@ -640,15 +640,12 @@
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_layout_border.xml" />
     <AndroidResource Include="Resources\Values\troubleshooting.xml" />
-    <AndroidResource Include="Resources\menu\relink.xml">
+    <AndroidResource Include="Resources\Values\relink.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\menu\finish.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\troubleshooting.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\menu\troubleshooting.xml" />
+    <AndroidResource Include="Resources\menu\relink.xml" />
+    <AndroidResource Include="Resources\menu\finish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

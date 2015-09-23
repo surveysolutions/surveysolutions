@@ -30,5 +30,10 @@
   <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
 
   <dimen name="Dashboard_Synchronization_Statistics_Height">120dp</dimen>
-  <dimen name="Dashboard_Synchronization_Statistics_Width">250dp</dimen>
+  <dimen name="Dashboard_Synchronization_Statistics_Width">350dp</dimen>
+
+  <dimen name="Relink_Message_marginBottom">28dp</dimen>
+  <dimen name="Relink_FormContainer_marginTop">16dp</dimen>
+  <dimen name="Relink_FormContainer_marginBottom">42dp</dimen>
+  <dimen name="Relink_FormContainer_Width">400dp</dimen>
 </resources>
