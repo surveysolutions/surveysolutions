@@ -70,47 +70,34 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                 Directory.CreateDirectory(extractToFolder);
             }
 
-            using (FileStream fr = File.OpenRead(archivedFile))
+            using (ZipInputStream zipFileStream = new ZipInputStream(File.OpenRead(archivedFile)))
             {
-                using (ZipInputStream ins = new ZipInputStream(fr))
+                ZipEntry zipFileOrDirectory;
+                while ((zipFileOrDirectory = zipFileStream.GetNextEntry()) != null)
                 {
-                    ZipEntry ze = ins.GetNextEntry();
-                    while (ze != null)
+                    string directoryName = Path.GetDirectoryName(zipFileOrDirectory.Name);
+                    string fileName = Path.GetFileName(zipFileOrDirectory.Name);
+
+                    if (!string.IsNullOrEmpty(directoryName))
                     {
-                        if (ze.IsDirectory)
-                        {
-                            Directory.CreateDirectory(Path.Combine(extractToFolder, ze.Name));
-                        }
-                        else if (ze.IsFile)
-                        {
-                            var targetDirectory = Path.Combine(extractToFolder,  Path.GetDirectoryName(ze.Name));
-                            if (!Directory.Exists(targetDirectory))
-                            {
-                                Directory.CreateDirectory(targetDirectory);
-                            }
+                        Directory.CreateDirectory(directoryName);
+                    }
 
-                            FileStream fs = File.Create(Path.Combine(extractToFolder, ze.Name));
-
-                            byte[] writeData = new byte[ze.Size];
-                            int iteration = 0;
+                    if (!string.IsNullOrEmpty(fileName))
+                    {
+                        using (FileStream streamWriter = File.Create(zipFileOrDirectory.Name))
+                        {
+                            int size = 2048;
+                            byte[] data = new byte[size];
                             while (true)
                             {
-                                int size = 2048;
-                                size = ins.Read(writeData, (int)Math.Min(ze.Size, (iteration * 2048)),
-                                    (int)Math.Min(ze.Size - (int)Math.Min(ze.Size, (iteration * 2048)), 2048));
+                                size = zipFileStream.Read(data, 0, data.Length);
                                 if (size > 0)
-                                {
-                                    fs.Write(writeData, (int)Math.Min(ze.Size, (iteration * 2048)), size);
-                                }
+                                    streamWriter.Write(data, 0, size);
                                 else
-                                {
                                     break;
-                                }
-                                iteration++;
                             }
-                            fs.Close();
                         }
-                        ze = ins.GetNextEntry();
                     }
                 }
             }
