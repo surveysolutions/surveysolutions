@@ -163,6 +163,14 @@
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
   </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру.</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>Проблемы аутентификации. Мы не можем подтвердить ваш аккаунт интервьюера('{0}'). 
+У вашего акканта возможны следующие проблемы: пароль отличается от того что вы вводили, аккаунт заблокирован или удален Хедквотером.
+Пожалуйста введите ваш обновленный пароль. Если проблема не будет решена, пожалйста, обратитесь к Супервизору или Хедквотеру.</value>
+  </data>
   <data name="tion" xml:space="preserve">
     <value>Вы уверены что хотите удалить интервью "{0}" ?</value>
   </data>
