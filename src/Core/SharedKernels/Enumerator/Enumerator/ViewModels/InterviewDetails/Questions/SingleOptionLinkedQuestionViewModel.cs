@@ -226,6 +226,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.Selected = false;
                 }
             }
+            if (this.referencedQuestionId == @event.QuestionId)
+            {
+                var optionToRemove = this.Options.SingleOrDefault(option => option.RosterVector.SequenceEqual(@event.RosterVector));
+
+                if (optionToRemove != null)
+                {
+                    this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
+                    this.RaisePropertyChanged(() => this.HasOptions);
+                }
+            }
         }
 
         private void ReferencedQuestionAnswered(object sender, EventArgs e)
