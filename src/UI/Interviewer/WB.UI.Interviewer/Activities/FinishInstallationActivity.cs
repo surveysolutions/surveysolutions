@@ -31,10 +31,10 @@ namespace WB.UI.Interviewer.Activities
             {
                 this.ViewModel.CancellInProgressTask();
             }
-            else
-            {
-                base.OnBackPressed();
-            }
+            //else
+            //{
+            //    base.OnBackPressed();
+            //}
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
