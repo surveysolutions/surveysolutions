@@ -4,7 +4,6 @@ using Android.Content;
 using Android.Preferences;
 using Java.Util;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Settings
@@ -59,11 +58,6 @@ namespace WB.UI.Interviewer.Settings
 
         public void SetSyncAddressPoint(string syncAddressPoint)
         {
-            if (!syncAddressPoint.IsValidWebAddress())
-            {
-                throw new ArgumentException(Properties.Resources.InvalidSyncPointAddressUrl, "syncAddressPoint");
-            }
-
             SetSetting(SettingsNames.Endpoint, syncAddressPoint.Trim());
         }
 

@@ -118,15 +118,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsUserValid = true;
             this.IsEndpointValid = true;
 
-            try
-            {
-                this.interviewerSettings.SetSyncAddressPoint(this.Endpoint);
-            }
-            catch (ArgumentException)
-            {
-                this.IsEndpointValid = false;
-                return;
-            }
+            this.interviewerSettings.SetSyncAddressPoint(this.Endpoint);
 
             var restCredentials = new RestCredentials
             {
