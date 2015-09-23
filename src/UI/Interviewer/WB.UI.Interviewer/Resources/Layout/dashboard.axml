@@ -30,6 +30,7 @@
         <TextView style="@style/Dashboard_NewItemsLink"
                   local:MvxBind="Text If(IsExistsAnyNewInterview, Format(Localization('Dashboard_NewItemsLinkText'), NewInterviewsCount), Localization('Dashboard_NoNewItemsLinkText')); 
                                Click ShowNewItemsInterviewsCommand;
+                               Visible Or(IsExistsAnyNewInterview, IsExistsAnyStartedInterview, IsExistsAnyCompletedInterview, IsExistsAnyRejectedInterview);
                                IsCurrentDashboardTab IsNewInterviewsCategorySelected;" />
         <TextView style="@style/Dashboard_StartedLink"
                   local:MvxBind="Text Format(Localization('Dashboard_StartedLinkText'), StartedInterviewsCount); 
