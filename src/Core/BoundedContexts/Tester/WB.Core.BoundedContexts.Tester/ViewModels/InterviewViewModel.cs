@@ -1,4 +1,7 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -70,12 +73,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        public void NavigateToPreviousViewModel()
+        public async Task NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
         {
-            this.NavigateBack();
+            await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
         }
 
-        void NavigateBack()
+        public void NavigateBack()
         {
             if (this.PrefilledQuestions.Any())
             {

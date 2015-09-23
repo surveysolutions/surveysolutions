@@ -13,9 +13,13 @@ namespace WB.UI.Tester.Activities
     {
         protected override int MenuResourceId { get { return Resource.Menu.interview; } }
 
-        public override void OnBackPressed()
+        public override async void OnBackPressed()
         {
-            this.ViewModel.NavigateToPreviousViewModel();
+            await this.ViewModel.NavigateToPreviousViewModel(() =>
+            {
+                Application.SynchronizationContext.Post(_ => { this.ViewModel.NavigateBack(); }, null);
+                this.Finish();
+            });
         }
         protected override void OnMenuItemSelected(int resourceId)
         {
