@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                                                                          QuestionnaireId = doc.QuestionnaireId,
                                                                                          QuestionnaireVersion = doc.QuestionnaireVersion,
                                                                                          ResponsibleId = doc.ResponsibleId,
-                                                                                         Responsible = doc.ResponsibleName
+                                                                                         ResponsibleName = doc.ResponsibleName
                                                                                      }).ToList();
 
             return new TeamsAndStatusesReportView
