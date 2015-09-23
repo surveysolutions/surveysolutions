@@ -201,6 +201,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.SetSuggestionsEmpty();
                 }
+
+                this.RaisePropertyChanged();
             }
         }
 
@@ -283,6 +285,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
+                this.FilterText = answerViewModel.Text;
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
