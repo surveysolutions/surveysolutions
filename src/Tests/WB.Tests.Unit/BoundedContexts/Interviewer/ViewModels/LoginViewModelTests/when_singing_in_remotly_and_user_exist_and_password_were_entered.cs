@@ -51,6 +51,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         private static readonly string newUserPassword = "newPassword";
         private static readonly string userPasswordHash = "passwordHash";
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage;
+        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
     }
 }
