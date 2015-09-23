@@ -1,19 +1,18 @@
-﻿using Machine.Specifications;
+using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
-    public class when_user_exist_and_password_were_entered : LoginViewModelTestContext
+    public class when_singing_in_remotly_and_user_exist_and_new_password_were_entered : LoginViewModelTestContext
     {
         Establish context = () =>
         {
-            var passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(userPassword) == userPasswordHash);
+            var passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(newUserPassword) == userPasswordHash);
 
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
 
@@ -23,23 +22,23 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             viewModel = CreateLoginViewModel(
                 interviewer: interviewer,
                 passwordHasher: passwordHasher,
-                principal: principal.Object,
-                viewModelNavigationService: ViewModelNavigationService.Object);
+                principal: principal.Object);
 
             viewModel.Init();
-            viewModel.Password = userPassword;
+            viewModel.Password = newUserPassword;
         };
 
-        Because of = () => viewModel.SignInCommand.Execute();
+        Because of = () => viewModel.OnlineSignInCommand.Execute();
 
         It should_navigate_to_dashboard = () =>
-            ViewModelNavigationService.Verify(x => x.NavigateToDashboard(), Times.Once);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Once);
+
+        It should_store_entered_password = () =>
+           InterviewersPlainStorage.Verify(x => x.StoreAsync(Moq.It.Is<InterviewerIdentity>(i => i.Password == userPasswordHash)), Times.Once);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";
-        private static readonly string userPassword = "password";
+        private static readonly string newUserPassword = "newPassword";
         private static readonly string userPasswordHash = "passwordHash";
-
-        private static readonly Mock<IViewModelNavigationService> ViewModelNavigationService = new Mock<IViewModelNavigationService>();
     }
 }

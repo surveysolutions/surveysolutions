@@ -1,4 +1,5 @@
 using Machine.Specifications;
+
 using NSubstitute;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -7,7 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
-    public class when_initializing_login_view_model : LoginViewModelTestContext
+    public class when_initializing_and_user_activated_on_device : LoginViewModelTestContext
     {
         Establish context = () =>
         {
