@@ -199,7 +199,7 @@ for further instructions</value>
     <value>If you forgot your password and headquarter has reset it you could try to sign in online</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Your password is incorrect on the remote server too. Please check your credentials with the supervisor</value>
+    <value>Authentication problem on the remote server too. Please contact your Supervisor or Headquarter</value>
   </data>
   <data name="Login_WrondPassword" xml:space="preserve">
     <value>Wrong password</value>
@@ -346,7 +346,9 @@ for further instructions</value>
     <value>User authentication</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>For user '{0}' pasword have been changed. Please provide new pasword.</value>
+    <value>Authentication problem. We were unable to confirm your interviewer account ('{0}'). 
+Your account may have one of the following problems: have a different password than you entered, be locked by Headquarter, or be deleted by Headquarter.
+Please enter your updated password. If doing so does not resolve the problem, please contact your Supervisor or Headquarter.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
