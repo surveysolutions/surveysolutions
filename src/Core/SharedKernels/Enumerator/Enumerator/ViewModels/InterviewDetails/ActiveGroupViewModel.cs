@@ -109,6 +109,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
             await this.CreateRegularGroupScreen(navigationParams, @group);
+            if (!this.eventRegistry.IsSubscribed(this, interviewId))
+            {
+                this.eventRegistry.Subscribe(this, interviewId);
+            }
         }
 
         private void CreateCompleteScreen()

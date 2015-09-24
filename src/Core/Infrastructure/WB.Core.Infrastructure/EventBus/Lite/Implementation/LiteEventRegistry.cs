@@ -34,6 +34,17 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
+        public bool IsSubscribed(ILiteEventHandler handler, string eventSourceId)
+        {
+            if (handler == null) throw new ArgumentNullException("handler");
+            return handlers.Values.Any(x => x.Any(handlerRef =>
+            {
+                ILiteEventHandler subsribedHandler;
+                handlerRef.TryGetTarget(out subsribedHandler);
+                return ReferenceEquals(subsribedHandler, handler);
+            }));
+        }
+
         public IEnumerable<Action<object>> GetHandlers(UncommittedEvent @event)
         {
             Type eventType = @event.Payload.GetType();
