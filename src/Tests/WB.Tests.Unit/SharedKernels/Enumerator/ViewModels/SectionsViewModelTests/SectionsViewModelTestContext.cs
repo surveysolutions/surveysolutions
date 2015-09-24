@@ -59,6 +59,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             serviceLocatorMock.Setup(x => x.GetInstance<GroupStateViewModel>())
                 .Returns(Mock.Of<GroupStateViewModel>());
 
+            serviceLocatorMock.Setup(x => x.GetInstance<InterviewStateViewModel>())
+                .Returns(Mock.Of<InterviewStateViewModel>());
 
             var sideBarSectionViewModelsFactory =  new SideBarSectionViewModelFactory(serviceLocatorMock.Object);
            

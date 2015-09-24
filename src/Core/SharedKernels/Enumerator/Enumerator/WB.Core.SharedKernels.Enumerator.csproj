@@ -149,6 +149,7 @@
     <Compile Include="ViewModels\InterviewDetails\BeforeGroupChangedEventArgs.cs" />
     <Compile Include="ViewModels\InterviewDetails\BreadCrumbItemViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\BreadcrumbsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\InterviewStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupStatus.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupViewModel.cs" />

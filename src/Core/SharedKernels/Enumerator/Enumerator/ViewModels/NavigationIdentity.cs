@@ -6,7 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public enum ScreenType
     {
         Group = 0,
-        Cover = 1,
         Complete = 1
     }
 
