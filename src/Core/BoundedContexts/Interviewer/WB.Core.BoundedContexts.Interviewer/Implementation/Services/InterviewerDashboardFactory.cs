@@ -63,10 +63,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private IEnumerable<InterviewDashboardItemViewModel> CollectInterviews(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys)
         {
-            foreach (var questionnaire in questionnaires)
+            foreach (var survey in surveys)
             {
-                var survey = surveys.Single(surveyDto => IsSurveyForQuestionnaire(surveyDto, questionnaire));
-
+                var questionnaire = questionnaires.Single(q => IsSurveyForQuestionnaire(survey, q));
                 var interviewCategory = this.GetDashboardCategoryForInterview((InterviewStatus)questionnaire.Status, questionnaire.StartedDateTime);
 
                 var dashboardQuestionnaireItem = new DashboardQuestionnaireItem(Guid.Parse(questionnaire.Id),
