@@ -120,6 +120,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             else this.ShowPublicQuestionnaires();
         }
 
+        private bool loadServerQuestionnairesProcessIsCanceled=false;
         private string humanizedLastUpdateDate;
         public string HumanizedLastUpdateDate
         {
@@ -472,8 +473,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public void CancelLoadServerQuestionnaires()
         {
-            if (tokenSource != null && !tokenSource.IsCancellationRequested)
+            if (tokenSource != null && !tokenSource.IsCancellationRequested && IsInProgress)
+            {
                 this.tokenSource.Cancel();
+                this.loadServerQuestionnairesProcessIsCanceled = true;
+            }
+        }
+
+        public async void RestartLoadServerQuestionnairesIfNeeded()
+        {
+            if (loadServerQuestionnairesProcessIsCanceled)
+            {
+                await LoadServerQuestionnairesAsync();
+                loadServerQuestionnairesProcessIsCanceled = false;
+            }
         }
     }
 }
