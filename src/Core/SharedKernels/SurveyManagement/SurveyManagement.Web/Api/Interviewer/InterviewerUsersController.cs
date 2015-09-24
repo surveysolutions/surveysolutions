@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -27,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [WriteToSyncLog(SyncLogAction.TrackCurrentUserRequest, "User")]
+        [WriteToSyncLog(SyncLogAction.TrackCurrentUserRequest, SyncItemType.User)]
         public InterviewerApiView Current()
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(this.globalInfoProvider.GetCurrentUser().Id));

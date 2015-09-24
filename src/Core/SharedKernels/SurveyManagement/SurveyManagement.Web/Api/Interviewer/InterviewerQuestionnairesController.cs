@@ -46,8 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("census")]
-        [WriteToSyncLog(SyncLogAction.TrackAggregateRootIdsRequest, "Questionnaire")]
-        [WriteToSyncLog(SyncLogAction.TrackAggregateRootIdsRequest, "Assembly")]
+        [WriteToSyncLog(SyncLogAction.TrackAggregateRootIdsRequest, SyncItemType.Questionnaire)]
+        [WriteToSyncLog(SyncLogAction.TrackAggregateRootIdsRequest, SyncItemType.QuestionnaireAssembly)]
         public List<QuestionnaireIdentity> Census()
         {
             var query = new QuestionnaireBrowseInputModel()
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("{id:guid}/{version:int}")]
-        [WriteToSyncLog(SyncLogAction.TrackQuestionnaireRequest, "Questionnaire")]
+        [WriteToSyncLog(SyncLogAction.TrackQuestionnaireRequest, SyncItemType.Questionnaire)]
         public QuestionnaireApiView Get(Guid id, int version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("{id:guid}/{version:int}/assembly")]
-        [WriteToSyncLog(SyncLogAction.TrackQuestionnaireRequest, "Assembly")]
+        [WriteToSyncLog(SyncLogAction.TrackQuestionnaireRequest, SyncItemType.QuestionnaireAssembly)]
         public HttpResponseMessage GetAssembly(Guid id, int version)
         {
             if (!this.questionnareAssemblyFileAccessor.IsQuestionnaireAssemblyExists(id, version))
@@ -99,14 +99,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpPost]
         [Route("{id:guid}/{version:int}/logstate")]
-        [WriteToSyncLog(SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled, "Questionnaire")]
+        [WriteToSyncLog(SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled, SyncItemType.Questionnaire)]
         public void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
         {
         }
 
         [HttpPost]
         [Route("{id:guid}/{version:int}/assembly/logstate")]
-        [WriteToSyncLog(SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled, "Assembly")]
+        [WriteToSyncLog(SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled, SyncItemType.QuestionnaireAssembly)]
         public void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
         {
         }
