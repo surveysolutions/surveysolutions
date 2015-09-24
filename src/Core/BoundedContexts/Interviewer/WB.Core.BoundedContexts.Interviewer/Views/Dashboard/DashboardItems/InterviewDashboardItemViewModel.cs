@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.Status = item.Status;
             this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
             this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
-            this.Comment = this.GetInterviewCommentByStatus(item) ?? "-";
+            this.Comment = this.GetInterviewCommentByStatus(item);
             this.PrefilledQuestions = this.GetPrefilledQuestions(item.Properties, 3);
             this.IsSupportedRemove = item.CanBeDeleted;
         }
