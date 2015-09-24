@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Cheesebaron.MvxPlugins.Settings.Interfaces;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.UI.Interviewer.Infrastructure.Internals.Security
 {
-    public class InterviewerPrincipal : IPrincipal
+    public class InterviewerPrincipal : IInterviewerPrincipal
     {
         private const string UserNameParameterName = "authenticatedUser";
 
@@ -17,7 +18,8 @@ namespace WB.UI.Interviewer.Infrastructure.Internals.Security
         public bool IsAuthenticated { get { return this.currentUserIdentity != null; } }
 
         private InterviewerIdentity currentUserIdentity;
-        public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
+        public IInterviewerUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
+        IUserIdentity IPrincipal.CurrentUserIdentity { get { return this.currentUserIdentity; } }
 
         public InterviewerPrincipal(ISettings settingsService, IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
         {

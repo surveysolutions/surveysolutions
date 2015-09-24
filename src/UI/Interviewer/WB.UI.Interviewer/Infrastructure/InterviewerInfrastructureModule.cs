@@ -1,8 +1,12 @@
-﻿using Ninject.Modules;
+﻿using Cheesebaron.MvxPlugins.Settings.Interfaces;
+using Ninject;
+using Ninject.Modules;
 using PCLStorage;
 using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -33,7 +37,10 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
 
             this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
-            this.Bind<IPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
+
+            this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
+            this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
+            this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
 
             this.Bind<ICapiDataSynchronizationService>().To<CapiDataSynchronizationService>();
             this.Bind<IQuestionnaireAssemblyFileAccessor>()

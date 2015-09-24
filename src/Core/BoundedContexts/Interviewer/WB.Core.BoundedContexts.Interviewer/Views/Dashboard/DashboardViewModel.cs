@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private DashboardInformation dashboardInformation = new DashboardInformation();
+        private DashboardInformation dashboardInformation = new DashboardInformation(Enumerable.Empty<CensusQuestionnaireDashboardItemViewModel>(), Enumerable.Empty<InterviewDashboardItemViewModel>());
         private DashboardInterviewStatus currentDashboardStatus;
         public bool IsNewInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.New; } }
         public bool IsStartedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.InProgress; } }
