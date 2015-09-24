@@ -208,13 +208,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.filterText = value;
-
+                
                 this.UpdateSuggestionsList(this.filterText);
 
                 this.isInitialized = true;
 
-                this.RaisePropertyChanged(); 
+                this.RaisePropertyChanged();
+
+                this.CanRemoveAnswer = !string.IsNullOrEmpty(this.filterText);
             }
+        }
+
+        private bool canRemoveAnswer;
+
+        public bool CanRemoveAnswer
+        {
+            set
+            {
+                if (canRemoveAnswer != value)
+                {
+                    this.canRemoveAnswer = value;
+                    this.RaisePropertyChanged(); 
+                }
+            }
+            get { return canRemoveAnswer; }
         }
 
         private void UpdateSuggestionsList(string textHint)
@@ -341,6 +358,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.UpdateSuggestionsList(string.Empty);
                 }              
             }
+
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                CanRemoveAnswer = true;
+            }
         }
 
         public void Handle(AnswersRemoved @event)
@@ -351,6 +373,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.ResetTextInEditor = null;
                     this.QuestionState.IsAnswered = false;
+                    this.CanRemoveAnswer = false;
                 }
             }
         }
@@ -367,6 +390,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.IsAnswered = false;
                 this.ResetTextInEditor = string.Empty;
+                this.CanRemoveAnswer = false;
             }
         }
     }

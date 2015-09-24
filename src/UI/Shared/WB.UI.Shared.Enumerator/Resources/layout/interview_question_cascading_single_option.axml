@@ -29,7 +29,7 @@
                     android:layout_weight="0"
                     local:MvxBind="Click RemoveAnswerCommand; 
                                       HideKeyboardOnClick .; 
-                                      Visible IsStringNotEmpty(FilterText);" />
+                                      Visible CanRemoveAnswer;" />
         </LinearLayout>
 
       </LinearLayout>
