@@ -79,6 +79,10 @@ namespace WB.UI.Interviewer.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
+            DateTime? rejectedDateTime = evnt.Payload.Status == InterviewStatus.RejectedBySupervisor
+                ? evnt.EventTimeStamp
+                : (DateTime?)null;
+
             this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, 
                 evnt.Payload.QuestionnaireVersion, 
                 evnt.EventSourceId, 
@@ -89,7 +93,8 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.CreatedOnClient,
                 false,
                 evnt.EventTimeStamp,
-                null);
+                null,
+                rejectedDateTime);
         }
 
 
@@ -105,21 +110,12 @@ namespace WB.UI.Interviewer.EventHandlers
                 true, 
                 true,
                 evnt.EventTimeStamp,
-                evnt.EventTimeStamp);
+                evnt.EventTimeStamp,
+                null);
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, 
-            long questionnaireVersion, 
-            Guid interviewId, 
-            Guid responsibleId,
-            InterviewStatus status, 
-            string comments, 
-            IEnumerable<AnsweredQuestionSynchronizationDto>answeredQuestions,
-            bool createdOnClient, 
-            bool canBeDeleted,
-            DateTime createdDateTime,
-            DateTime? startedDateTime)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
         {
             var questionnaireTemplate = this.questionnaireStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
             if (questionnaireTemplate == null)
@@ -133,7 +129,8 @@ namespace WB.UI.Interviewer.EventHandlers
             }
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                items, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, createdOnClient, canBeDeleted);
+                items, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, rejectedDateTime,
+                createdOnClient, canBeDeleted);
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
         }
 
@@ -192,7 +189,8 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.InterviewData.CreatedOnClient,
                 canBeDeleted: false,
                 createdDateTime: evnt.EventTimeStamp,
-                startedDateTime: null);
+                startedDateTime: null,
+                rejectedDateTime: null);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
