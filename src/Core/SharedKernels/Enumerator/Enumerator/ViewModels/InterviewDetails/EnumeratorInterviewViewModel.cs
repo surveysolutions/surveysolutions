@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
+        private readonly InterviewStateViewModel interviewState;
         protected string interviewId;
 
         protected EnumeratorInterviewViewModel(
@@ -31,7 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ActiveGroupViewModel groupViewModel, 
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
-            GroupStateViewModel groupState)
+            GroupStateViewModel groupState, 
+            InterviewStateViewModel interviewState)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -39,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
             this.groupState = groupState;
+            this.interviewState = interviewState;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.CurrentGroup = groupViewModel;
@@ -78,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (this.navigationState.CurrentGroupType == ScreenType.Group)
             {
-                this.UpdateInterviewStatus(this.navigationState.CurrentGroup);
+                this.UpdateGroupStatus(this.navigationState.CurrentGroup);
             }
         }
 
@@ -86,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (newGroupIdentity.ScreenType != ScreenType.Group)
             {
-                UpdateInterviewStatus(null, ScreenType.Complete);
+                this.UpdateInterviewStatus(null, ScreenType.Complete);
                 return;
             }
 
@@ -95,14 +98,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
 
-            this.UpdateInterviewStatus(newGroupIdentity.TargetGroup);
+            this.UpdateGroupStatus(newGroupIdentity.TargetGroup);
+        }
+
+        private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
+        {
+            this.groupState.Init(this.navigationState.InterviewId, groupIdentity, type);
+            this.Status = this.groupState.Status;
         }
 
         private void UpdateInterviewStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
         {
-            this.groupState.Init(this.navigationState.InterviewId, groupIdentity, type);
-
-            this.Status = this.groupState.Status;
+            this.interviewState.Init(this.navigationState.InterviewId, groupIdentity, type);
+            this.Status = this.interviewState.Status;
         }
 
         private string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)

@@ -34,9 +34,10 @@ namespace WB.UI.Interviewer.ViewModel
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
-            GroupStateViewModel groupState)
+            GroupStateViewModel groupState,
+            InterviewStateViewModel interviewState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
+                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState, interviewState)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
