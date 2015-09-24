@@ -14,23 +14,23 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
         private static readonly object LockObject = new object();
 
-        public void Subscribe(ILiteEventHandler handler, string eventSourceId)
+        public void Subscribe(ILiteEventHandler handler, string aggregateRootId)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
             foreach (Type eventType in eventTypes)
             {
-                RegisterHandlerForEvent(handler, eventType, eventSourceId);
+                RegisterHandlerForEvent(handler, eventType, aggregateRootId);
             }
         }
 
-        public void Unsubscribe(ILiteEventHandler handler, string eventSourceId)
+        public void Unsubscribe(ILiteEventHandler handler, string aggregateRootId)
         {
             var eventTypes = GetHandledEventTypes(handler);
 
             foreach (Type eventType in eventTypes)
             {
-                UnregisterHandlerForEvent(eventType, handler, eventSourceId);
+                UnregisterHandlerForEvent(eventType, handler, aggregateRootId);
             }
         }
 
@@ -53,11 +53,11 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, string eventSourceId)
+        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, string aggregateRootId)
         {
             lock (LockObject)
             {
-                var handlerKey = GetEventKey(eventType, eventSourceId);
+                var handlerKey = GetEventKey(eventType, aggregateRootId);
                 List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(handlerKey, new List<WeakReference<ILiteEventHandler>>());
 
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
@@ -67,16 +67,16 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        static string GetEventKey(Type eventType, string eventSourceId)
+        static string GetEventKey(Type eventType, string aggregateRootId)
         {
-            return eventType.Name + "$" + eventSourceId;
+            return eventType.Name + "$" + aggregateRootId;
         }
 
-        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler, string eventSourceId)
+        private void UnregisterHandlerForEvent(Type eventType, ILiteEventHandler handler, string aggregateRootId)
         {
             lock (LockObject)
             {
-                var eventName = GetEventKey(eventType, eventSourceId);
+                var eventName = GetEventKey(eventType, aggregateRootId);
                 if (this.handlers.ContainsKey(eventName))
                 {
                     this.handlers[eventName].RemoveAll(registeredHandler => ShouldRemoveHandler(registeredHandler, handler));
