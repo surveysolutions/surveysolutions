@@ -254,6 +254,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejected on {0}.
+        /// </summary>
+        public static string DashboardItem_RejectedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_RejectedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Started on {0}.
         /// </summary>
         public static string DashboardItem_StartedOn {

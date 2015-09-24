@@ -132,6 +132,9 @@
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Не начатое</value>
   </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Отклонено {0}</value>
+  </data>
   <data name="DashboardItem_StartedOn" xml:space="preserve">
     <value>Начато {0}</value>
   </data>
