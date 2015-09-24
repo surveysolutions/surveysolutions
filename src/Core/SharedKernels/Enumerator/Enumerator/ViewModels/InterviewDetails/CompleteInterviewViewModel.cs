@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
@@ -29,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewCompletionService completionService, 
             IStatefulInterviewRepository interviewRepository, 
             IMvxMessenger messenger,
-            GroupStateViewModel interviewState)
+            InterviewStateViewModel interviewState)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
@@ -61,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public int ErrorsCount { get; set; }
 
 
-        public GroupStateViewModel InterviewState { get; set; }
+        public InterviewStateViewModel InterviewState { get; set; }
 
         private IMvxCommand completeInterviewCommand;
         public IMvxCommand CompleteInterviewCommand
