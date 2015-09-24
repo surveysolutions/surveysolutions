@@ -758,7 +758,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You account was relinked to another tablet.
+        ///   Looks up a localized string similar to Your account was relinked to another tablet.
         /// </summary>
         public static string Synchronization_UserLinkedToAnotherDevice_Title {
             get {
