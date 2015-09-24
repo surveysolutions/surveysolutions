@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
+        [WriteToSyncLog(SyncLogAction.TrackCurrentUserRequest, "User")]
         public InterviewerApiView Current()
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(this.globalInfoProvider.GetCurrentUser().Id));

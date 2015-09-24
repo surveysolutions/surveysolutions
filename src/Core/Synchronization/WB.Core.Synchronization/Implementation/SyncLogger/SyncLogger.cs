@@ -85,7 +85,7 @@ namespace WB.Core.Synchronization.Implementation.SyncLogger
             });
         }
 
-        public void TrackPackageRequest(Guid deviceId, Guid userId, string packageType, string packageId)
+        public void TrackPackageRequest(Guid deviceId, Guid userId, string packageId)
         {
             this.UpdateState(deviceId, currentState =>
             {
