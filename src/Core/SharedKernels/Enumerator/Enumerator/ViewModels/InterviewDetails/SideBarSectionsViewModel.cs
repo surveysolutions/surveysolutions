@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -272,7 +273,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel())));
+                return new MvxCommand(async () => await Task.Run(
+                    () =>
+                    {
+                        this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel());
+                    }));
             }
         }
 

@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             return SimpleGroupStatus.Completed;
         }
 
-        private GroupStatus CalculateDetailedStatus()
+        protected GroupStatus CalculateDetailedStatus()
         {
             switch (this.SimpleStatus)
             {

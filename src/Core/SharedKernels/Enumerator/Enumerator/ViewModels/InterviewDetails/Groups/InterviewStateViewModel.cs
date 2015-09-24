@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.UpdateFromGroupModel();
         }
 
-        public new void UpdateFromGroupModel()
+        public override void UpdateFromGroupModel()
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
 
@@ -34,11 +34,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.AnsweredQuestionsCount = interview.CountAnsweredQuestionsInInterview();
             this.InvalidAnswersCount = interview.CountInvalidQuestionsInInterview();
 
-            this.SimpleStatus = CalculateInterviewSimpleStatus(interview);
+            this.SimpleStatus = this.CalculateInterviewSimpleStatus();
             this.Status = this.CalculateDetailedStatus();
         }
 
-        private SimpleGroupStatus CalculateInterviewSimpleStatus(IStatefulInterview interview)
+        private SimpleGroupStatus CalculateInterviewSimpleStatus()
         {
             if (InvalidAnswersCount > 0)
                 return SimpleGroupStatus.Invalid;
@@ -47,29 +47,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 return SimpleGroupStatus.Completed;
 
             return SimpleGroupStatus.Other;
-        }
-
-        private GroupStatus CalculateDetailedStatus()
-        {
-            switch (this.SimpleStatus)
-            {
-                case SimpleGroupStatus.Completed:
-                    return GroupStatus.Completed;
-
-                case SimpleGroupStatus.Invalid:
-                    return this.AreAllQuestionsAnswered() ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
-
-                case SimpleGroupStatus.Other:
-                    return this.IsStarted() ? GroupStatus.Started : GroupStatus.NotStarted;
-
-                default:
-                    return GroupStatus.Started;
-            }
-        }
-
-        private bool IsStarted()
-        {
-            return this.AnsweredQuestionsCount > 0;
         }
 
         private bool AreAllQuestionsAnswered()

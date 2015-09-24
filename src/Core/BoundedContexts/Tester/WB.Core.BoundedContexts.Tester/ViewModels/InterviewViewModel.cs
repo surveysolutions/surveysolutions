@@ -29,9 +29,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
-            GroupStateViewModel groupState)
+            GroupStateViewModel groupState,
+            InterviewStateViewModel interviewState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
+                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState, interviewState)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
