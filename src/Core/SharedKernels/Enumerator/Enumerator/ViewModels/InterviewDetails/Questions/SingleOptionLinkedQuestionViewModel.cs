@@ -204,16 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var question in @event.Questions)
             {
-                if (question.Id == this.referencedQuestionId)
-                {
-                    var optionToRemove = this.Options.SingleOrDefault(option => option.RosterVector.SequenceEqual(question.RosterVector));
-
-                    if (optionToRemove != null)
-                    {
-                        this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
-                        this.RaisePropertyChanged(() => this.HasOptions);
-                    }
-                }
+                RemoveOptionIfQuestionIsSourceofTheLink(question.Id, question.RosterVector);
             }
         }
 
@@ -226,15 +217,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.Selected = false;
                 }
             }
-            if (this.referencedQuestionId == @event.QuestionId)
-            {
-                var optionToRemove = this.Options.SingleOrDefault(option => option.RosterVector.SequenceEqual(@event.RosterVector));
+            RemoveOptionIfQuestionIsSourceofTheLink(@event.QuestionId, @event.RosterVector);
+        }
 
-                if (optionToRemove != null)
-                {
-                    this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
-                    this.RaisePropertyChanged(() => this.HasOptions);
-                }
+        private void RemoveOptionIfQuestionIsSourceofTheLink(Guid removedQuestionId,
+            decimal[] removedQuestionRosterVector)
+        {
+            if (removedQuestionId != this.referencedQuestionId)
+                return;
+            var optionToRemove =
+                this.Options.SingleOrDefault(option => option.RosterVector.SequenceEqual(removedQuestionRosterVector));
+
+            if (optionToRemove != null)
+            {
+                this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
+                this.RaisePropertyChanged(() => this.HasOptions);
             }
         }
 
