@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
@@ -19,14 +18,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     {
         private readonly ICommandService commandService;
         private readonly IChangeLogManipulator changeLogManipulator;
-        private readonly IPrincipal principal;
+        private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
 
         public CensusQuestionnaireDashboardItemViewModel(
             ICommandService commandService,
             IChangeLogManipulator changeLogManipulator,
-            IPrincipal principal,
+            IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger)
         {
@@ -61,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             RaiseStartingLongOperation();
             var interviewId = Guid.NewGuid();
-            var interviewerIdentity = (IInterviewerPrincipal)this.principal.CurrentUserIdentity;
+            var interviewerIdentity = this.principal.CurrentUserIdentity;
 
             var createInterviewOnClientCommand = new CreateInterviewOnClientCommand(interviewId,
                 interviewerIdentity.UserId, this.questionnaireId, this.questionnaireVersion, DateTime.UtcNow,
