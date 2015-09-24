@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 this.GetInterviewerDeviceId(),
                 this.GlobalInfoProvider.GetCurrentUser().Id,
                 this.synchronizationItemType,
-                new string[]{});
+                new[] { "all" });
         }
 
         private void TrackQuestionnaireRequest(HttpActionExecutedContext context)
