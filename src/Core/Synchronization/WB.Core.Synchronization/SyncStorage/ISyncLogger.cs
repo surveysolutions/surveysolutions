@@ -12,7 +12,7 @@ namespace WB.Core.Synchronization.SyncStorage
 
         void UnlinkUserFromDevice(Guid oldDeviceId, Guid userId);
 
-        void TrackPackageRequest(Guid deviceId, Guid userId, string packageType, string packageId);
+        void TrackPackageRequest(Guid deviceId, Guid userId, string packageId);
 
         void TraceHandshake(Guid deviceId, Guid userId, string appVersion);
 

@@ -155,7 +155,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
 
-            this.TrackPackageRequest(deviceId, SyncItemType.User, packageId, userId);
+            this.TrackPackageRequest(deviceId, packageId, userId);
 
             return new UserSyncPackageDto
                    {
@@ -173,7 +173,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
 
-            this.TrackPackageRequest(deviceId, SyncItemType.Questionnaire, packageId, userId);
+            this.TrackPackageRequest(deviceId, packageId, userId);
 
             return new QuestionnaireSyncPackageDto
                    {
@@ -191,7 +191,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (packageMetaInformation == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
 
-            this.TrackPackageRequest(deviceId, SyncItemType.Interview, packageId, userId);
+            this.TrackPackageRequest(deviceId, packageId, userId);
 
             return new InterviewSyncPackageDto
                    {
@@ -345,9 +345,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             }
         }
 
-        private void TrackPackageRequest(Guid deviceId, string packageType, string packageId, Guid userId)
+        private void TrackPackageRequest(Guid deviceId, string packageId, Guid userId)
         {
-            this.syncLogger.TrackPackageRequest(deviceId, userId, packageType, packageId);
+            this.syncLogger.TrackPackageRequest(deviceId, userId, packageId);
         }
 
         private void TrackUserLinkingRequest(Guid deviceId, Guid userId, string oldAndroidId)
