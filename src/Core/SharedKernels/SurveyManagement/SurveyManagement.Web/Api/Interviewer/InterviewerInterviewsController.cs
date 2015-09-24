@@ -76,14 +76,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.Interview, interviewPackages.Select(x => x.Id).ToArray());
 
-            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.Questionnaire,
-                interviewsByPackages.Select(x => GetSyncLogQuestionnaireId(x.QuestionnaireIdentity.QuestionnaireId,
-                    x.QuestionnaireIdentity.Version, SyncItemType.Questionnaire)).ToArray());
-
-            this.syncLogger.TrackArIdsRequest(deviceId, userId, SyncItemType.QuestionnaireAssembly,
-                interviewsByPackages.Select(x => GetSyncLogQuestionnaireId(x.QuestionnaireIdentity.QuestionnaireId,
-                    x.QuestionnaireIdentity.Version, SyncItemType.QuestionnaireAssembly)).ToArray());
-
             return new InterviewPackagesApiView()
             {
                 Packages = interviewPackages,
@@ -134,11 +126,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private Guid GetInterviewerDeviceId()
         {
             return this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId.ToGuid();
-        }
-
-        private static string GetSyncLogQuestionnaireId(Guid questionnaireId, long questionnaireVersion, string syncItemType)
-        {
-            return string.Concat(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString(), "$", syncItemType);
         }
     }
 }
