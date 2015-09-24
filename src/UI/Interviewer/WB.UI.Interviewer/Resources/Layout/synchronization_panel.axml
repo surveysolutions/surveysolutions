@@ -32,6 +32,10 @@
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.NewInterviewsCount, Synchronization.Statistics.TotalNewInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_RejectedInterviews_Format'), Synchronization.Statistics.RejectedInterviewsCount, Synchronization.Statistics.TotalRejectedInterviewsCount)" />
+          
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                   local:MvxBind="Text Format(Localization('Synchronization_Fail_State_DeletedInterviews_Format'), Synchronization.Statistics.DeletedInterviewsCount, Synchronization.Statistics.TotalDeletedInterviewsCount)" />
+
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_UploadedInterviews_Format'), Synchronization.Statistics.CompletedInterviewsCount, Synchronization.Statistics.TotalCompletedInterviewsCount)" />
         </LinearLayout>
@@ -40,6 +44,10 @@
                       local:MvxBind="Visible And(Not(IsSynchronizationFail(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.TotalCompletedInterviewsCount)" />
+
+          <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
+                  local:MvxBind="Text Format(Localization('Synchronization_Success_State_DeletedInterviews_Format'), Synchronization.Statistics.TotalDeletedInterviewsCount)" />
+          
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_RejectedInterviews_Format'), Synchronization.Statistics.TotalRejectedInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"

@@ -337,6 +337,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             this.statistics.TotalNewInterviewsCount = interviewPackages.Interviews.Count(interview => !interview.IsRejected);
             this.statistics.TotalRejectedInterviewsCount = interviewPackages.Interviews.Count(interview => interview.IsRejected);
+            this.statistics.TotalDeletedInterviewsCount = interviewPackages.Packages.Count(interview => interview.ItemType == SyncItemType.DeleteInterview);
 
             var listOfProcessedInterviews = new List<Guid>();
             foreach (var interviewPackage in interviewPackages.Packages)
@@ -368,6 +369,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         this.Statistics.RejectedInterviewsCount++;
                     else
                         this.Statistics.NewInterviewsCount++;
+                }
+                else
+                {
+                    this.Statistics.DeletedInterviewsCount++;
                 }
             }
         }
