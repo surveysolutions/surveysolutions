@@ -20,6 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
 
         public Guid ResponsibleId { get; set; }
 
-        public string ResponsibleName { get; set; }
+        public string Responsible { get; set; }
     }
 }

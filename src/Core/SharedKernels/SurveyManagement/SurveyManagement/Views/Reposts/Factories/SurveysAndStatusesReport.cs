@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -79,16 +80,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    QuestionnaireVersion = doc.QuestionnaireVersion,
                                    QuestionnaireTitle = doc.QuestionnaireTitle,
                                    
-                                   ResponsibleName = !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : doc.ResponsibleName
+                                   Responsible = !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : doc.ResponsibleName
                            }).ToList();
 
             var totalCount = this.interviewSummaryReader.Query(_ =>
             {
-                var result = ApplyFilter(input, _)
-                    .Select(x => x)
-                    .GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
-                    .Distinct()
-                    .Count();
+                var result = ApplyFilter(input, _).GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion}).ToList().Distinct().Count();
 
                 return result;
             });
