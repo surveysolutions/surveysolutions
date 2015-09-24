@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class InterviewerIdentity : IInterviewerPrincipal, IPlainStorageEntity
+    public class InterviewerIdentity : IInterviewerUserIdentity, IPlainStorageEntity
     {
         public string Name { get;  set; }
         public string Password { get; set; }

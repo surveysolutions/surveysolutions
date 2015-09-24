@@ -37,20 +37,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private DashboardInformation CollectDashboardInformation(Guid interviewerId)
         {
-            var dashboardInformation = new DashboardInformation();
-
             var userId = interviewerId.FormatGuid();
 
             var surveys = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
             List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
-            dashboardInformation.AddCensusQuestionnairesRange(CollectCensusQuestionnaries(questionnaires, surveys, dashboardInformation));
-            dashboardInformation.AddInterviewsRange(CollectInterviews(questionnaires, surveys, dashboardInformation));
-
+            var censusQuestionnaireDashboardItemViewModels = this.CollectCensusQuestionnaries(questionnaires, surveys);
+            var interviewDashboardItemViewModels = this.CollectInterviews(questionnaires, surveys);
+            var dashboardInformation = new DashboardInformation(censusQuestionnaireDashboardItemViewModels, interviewDashboardItemViewModels);
             return dashboardInformation;
         }
 
-        private IEnumerable<CensusQuestionnaireDashboardItemViewModel> CollectCensusQuestionnaries(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
+        private IEnumerable<CensusQuestionnaireDashboardItemViewModel> CollectCensusQuestionnaries(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys)
         {
             var listCensusQuestionnires = surveys.Where(s => s.AllowCensusMode);
             // show census mode for new tab
@@ -63,7 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        private IEnumerable<InterviewDashboardItemViewModel> CollectInterviews(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys, DashboardInformation dashboardInformation)
+        private IEnumerable<InterviewDashboardItemViewModel> CollectInterviews(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys)
         {
             foreach (var questionnaire in questionnaires)
             {
