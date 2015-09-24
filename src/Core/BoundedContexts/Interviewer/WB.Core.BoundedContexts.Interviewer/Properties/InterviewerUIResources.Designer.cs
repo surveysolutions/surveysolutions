@@ -551,7 +551,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloading new assignments.
+        ///   Looks up a localized string similar to Updating assignments.
         /// </summary>
         public static string Synchronization_Download_Title {
             get {
@@ -565,6 +565,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Fail_Description {
             get {
                 return ResourceManager.GetString("Synchronization_Fail_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} interviews deleted.
+        /// </summary>
+        public static string Synchronization_Fail_State_DeletedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Fail_State_DeletedInterviews_Format", resourceCulture);
             }
         }
         
@@ -646,6 +655,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Success_Description {
             get {
                 return ResourceManager.GetString("Synchronization_Success_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews deleted.
+        /// </summary>
+        public static string Synchronization_Success_State_DeletedInterviews_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Success_State_DeletedInterviews_Format", resourceCulture);
             }
         }
         
