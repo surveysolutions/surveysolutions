@@ -148,6 +148,17 @@
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Новые {0}</value>
   </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>Синхронизировать</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Синхронизируйтись для получения новых заданий
+или свяжитесь с вашим супервайзером
+для дальнейших инструкций</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>У вас нету новых заданий</value>
+  </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
     <value>Нет новых</value>
   </data>

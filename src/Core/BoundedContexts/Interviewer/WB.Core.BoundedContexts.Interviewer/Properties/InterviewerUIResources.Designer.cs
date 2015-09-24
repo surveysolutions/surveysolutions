@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have no new assigments.
+        ///   Looks up a localized string similar to You have no new assignments.
         /// </summary>
         public static string Dashboard_NoInterviewsTitle {
             get {
