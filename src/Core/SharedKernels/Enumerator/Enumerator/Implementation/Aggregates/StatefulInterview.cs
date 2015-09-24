@@ -242,8 +242,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             @event.Questions.ForEach(x =>
-                this.Answers[ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)].RemoveAnswer()
-            );
+            {
+                var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
+                if (this.Answers.ContainsKey(questionId))
+                {
+                    this.Answers[questionId].RemoveAnswer();
+                }
+            });
         }
 
         internal new void Apply(AnswerRemoved @event)
