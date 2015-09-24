@@ -79,7 +79,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 return await restClient.SendAsync(method, this.CreateJsonContent(request),
                     linkedCancellationTokenSource.Token);
             }
-            catch (TaskCanceledException ex)
+            catch (OperationCanceledException ex)
             {
                 // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
                 throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex); 
