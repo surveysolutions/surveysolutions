@@ -135,9 +135,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             return string.Format("{0}${1}", this.synchronizationItemType, new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
-        private string GetSyncLogUserId(Guid questionnaireId)
+        private string GetSyncLogUserId(Guid userId)
         {
-            return string.Format("{0}${1}", this.synchronizationItemType, questionnaireId.FormatGuid());
+            return string.Format("{0}${1}", this.synchronizationItemType, userId.FormatGuid());
         }
     }
 }
