@@ -63,8 +63,8 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         WasAnswerOnParentQuestionRemoved = eventContext.AnyEvent<AnswerRemoved>(e=> e.QuestionId == parentCascadingQuestion && !e.RosterVector.Any()),
                         WasAnswerOnChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
                         WasAnswerOnChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0),
-                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) > 0),
-                        WasAnswerOnChildOfChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) > 0)
+                        WasAnswerOnChildOfChildCascadingQuestionDisabled = eventContext.AnyEvent<QuestionsDisabled>(e=>e.Questions.Count(q => q.Id == childOfChildCascadingQuestionId && !q.RosterVector.Any()) == 1),
+                        WasAnswerOnChildOfChildCascadingQuestionRemoved = eventContext.AnyEvent<AnswersRemoved>(e => e.Questions.Count(q => q.Id == childCascadingQuestionId && !q.RosterVector.Any()) == 1)
                     };
                 }
             });
