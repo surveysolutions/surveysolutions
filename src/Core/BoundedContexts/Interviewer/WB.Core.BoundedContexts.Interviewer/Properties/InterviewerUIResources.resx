@@ -280,7 +280,7 @@ for further instructions</value>
     <value>{0} of {1} {2} done</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
-    <value>Downloading new assignments</value>
+    <value>Updating assignments</value>
   </data>
   <data name="Synchronization_Fail_Description" xml:space="preserve">
     <value>Some assignments were updated</value>
@@ -370,5 +370,11 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="DashboardItem_RejectedOn" xml:space="preserve">
     <value>Rejected on {0}</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} of {1} interviews deleted</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} interviews deleted</value>
   </data>
 </root>
