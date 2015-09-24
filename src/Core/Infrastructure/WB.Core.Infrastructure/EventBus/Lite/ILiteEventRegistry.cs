@@ -11,6 +11,8 @@ namespace WB.Core.Infrastructure.EventBus.Lite
 
         void Unsubscribe(ILiteEventHandler handler, string aggregateRootId);
 
+        bool IsSubscribed(ILiteEventHandler handler, string eventSourceId);
+
         IEnumerable<Action<object>> GetHandlers(UncommittedEvent @event);
     }
 }
