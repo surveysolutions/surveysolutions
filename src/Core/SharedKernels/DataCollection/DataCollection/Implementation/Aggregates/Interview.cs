@@ -2715,7 +2715,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //Update State
             RemoveAnswerFromExpressionProcessorState(expressionProcessorState, questionId, rosterVector);
 
-            var answersToRemoveByCascading = this.DisableDependantCascadingQuestions(state, questionnaire, questionId, rosterVector);
+            var answersToRemoveByCascading = this.GetDisableDependantCascadingQuestions(state, questionnaire, questionId, rosterVector);
 
             expressionProcessorState.DisableQuestions(answersToRemoveByCascading);
 
@@ -2766,7 +2766,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return interviewChanges;
         }
 
-        private List<Identity> DisableDependantCascadingQuestions(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire, Guid questionId,
+        private List<Identity> GetDisableDependantCascadingQuestions(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire, Guid questionId,
             decimal[] rosterVector)
         {
             var result =new List<Identity>();
@@ -2780,7 +2780,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             result.AddRange(cascadingQuestionsToDisableIdentities);
             foreach (var cascadingQuestionsToDisableIdentity in cascadingQuestionsToDisableIdentities)
             {
-                result.AddRange(this.DisableDependantCascadingQuestions(state, questionnaire,
+                result.AddRange(this.GetDisableDependantCascadingQuestions(state, questionnaire,
                     cascadingQuestionsToDisableIdentity.Id, cascadingQuestionsToDisableIdentity.RosterVector));
             }
             return result;
