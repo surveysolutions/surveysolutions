@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             // show census mode for new tab
             foreach (var censusQuestionnireInfo in listCensusQuestionnires)
             {
-                var countInterviewsFromCurrentQuestionnare = interviews.Count(questionnaire => IsSurveyForQuestionnaire(censusQuestionnireInfo, questionnaire));
+                var countInterviewsFromCurrentQuestionnare = interviews.Count(questionnaire => IsInterviewForQuestionnaire(censusQuestionnireInfo, questionnaire));
                 var censusQuestionnaireDashboardItem = Load<CensusQuestionnaireDashboardItemViewModel>();
                 censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo, countInterviewsFromCurrentQuestionnare);
                 yield return censusQuestionnaireDashboardItem;
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             foreach (var interview in interviews)
             {
-                var questionnaire = questionnaires.Single(surveyDto => IsSurveyForQuestionnaire(surveyDto, interview));
+                var questionnaire = questionnaires.Single(interviewDto => IsInterviewForQuestionnaire(interviewDto, interview));
                 var interviewCategory = this.GetDashboardCategoryForInterview((InterviewStatus)interview.Status, interview.StartedDateTime);
 
                 var dashboardQuestionnaireItem = new DashboardQuestionnaireItem(Guid.Parse(interview.Id),
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        private static bool IsSurveyForQuestionnaire(SurveyDto questionnaire, QuestionnaireDTO interview)
+        private static bool IsInterviewForQuestionnaire(SurveyDto questionnaire, QuestionnaireDTO interview)
         {
             if (string.IsNullOrEmpty(questionnaire.QuestionnaireId))
             {
