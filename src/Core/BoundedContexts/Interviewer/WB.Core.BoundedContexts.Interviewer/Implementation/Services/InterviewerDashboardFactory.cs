@@ -39,47 +39,48 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var userId = interviewerId.FormatGuid();
 
-            var surveys = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
-            List<QuestionnaireDTO> questionnaires = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
+            var questionnaires = this.surveyDtoDocumentStorage.Filter(s => true).ToList();
+            List<QuestionnaireDTO> interviews = this.questionnaireDtoDocumentStorage.Filter(q => q.Responsible == userId).ToList();
 
-            var censusQuestionnaireDashboardItemViewModels = this.CollectCensusQuestionnaries(questionnaires, surveys);
-            var interviewDashboardItemViewModels = this.CollectInterviews(questionnaires, surveys);
+            var censusQuestionnaireDashboardItemViewModels = this.CollectCensusQuestionnaries(interviews, questionnaires);
+            var interviewDashboardItemViewModels = this.CollectInterviews(interviews, questionnaires);
             var dashboardInformation = new DashboardInformation(censusQuestionnaireDashboardItemViewModels, interviewDashboardItemViewModels);
             return dashboardInformation;
         }
 
-        private IEnumerable<CensusQuestionnaireDashboardItemViewModel> CollectCensusQuestionnaries(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys)
+        private IEnumerable<CensusQuestionnaireDashboardItemViewModel> CollectCensusQuestionnaries(List<QuestionnaireDTO> interviews, List<SurveyDto> questionnaires)
         {
-            var listCensusQuestionnires = surveys.Where(s => s.AllowCensusMode);
+            var listCensusQuestionnires = questionnaires.Where(s => s.AllowCensusMode);
             // show census mode for new tab
             foreach (var censusQuestionnireInfo in listCensusQuestionnires)
             {
-                var countInterviewsFromCurrentQuestionnare = questionnaires.Count(questionnaire => IsSurveyForQuestionnaire(censusQuestionnireInfo, questionnaire));
+                var countInterviewsFromCurrentQuestionnare = interviews.Count(questionnaire => IsSurveyForQuestionnaire(censusQuestionnireInfo, questionnaire));
                 var censusQuestionnaireDashboardItem = Load<CensusQuestionnaireDashboardItemViewModel>();
                 censusQuestionnaireDashboardItem.Init(censusQuestionnireInfo, countInterviewsFromCurrentQuestionnare);
                 yield return censusQuestionnaireDashboardItem;
             }
         }
 
-        private IEnumerable<InterviewDashboardItemViewModel> CollectInterviews(List<QuestionnaireDTO> questionnaires, List<SurveyDto> surveys)
+        private IEnumerable<InterviewDashboardItemViewModel> CollectInterviews(List<QuestionnaireDTO> interviews, List<SurveyDto> questionnaires)
         {
-            foreach (var survey in surveys)
+            foreach (var interview in interviews)
             {
-                var questionnaire = questionnaires.Single(q => IsSurveyForQuestionnaire(survey, q));
-                var interviewCategory = this.GetDashboardCategoryForInterview((InterviewStatus)questionnaire.Status, questionnaire.StartedDateTime);
+                var questionnaire = questionnaires.Single(surveyDto => IsSurveyForQuestionnaire(surveyDto, interview));
+                var interviewCategory = this.GetDashboardCategoryForInterview((InterviewStatus)interview.Status, interview.StartedDateTime);
 
-                var dashboardQuestionnaireItem = new DashboardQuestionnaireItem(Guid.Parse(questionnaire.Id),
-                        Guid.Parse(questionnaire.Survey),
+                var dashboardQuestionnaireItem = new DashboardQuestionnaireItem(Guid.Parse(interview.Id),
+                        Guid.Parse(interview.Survey),
                         interviewCategory,
-                        questionnaire.GetProperties(),
-                        survey.SurveyTitle,
-                        survey.QuestionnaireVersion,
-                        questionnaire.Comments,
-                        questionnaire.StartedDateTime,
-                        questionnaire.CompletedDateTime,
-                        questionnaire.CreatedDateTime,
-                        questionnaire.CreatedOnClient,
-                        questionnaire.JustInitilized.HasValue && questionnaire.JustInitilized.Value);
+                        interview.GetProperties(),
+                        questionnaire.SurveyTitle,
+                        questionnaire.QuestionnaireVersion,
+                        interview.Comments,
+                        interview.StartedDateTime,
+                        interview.CompletedDateTime,
+                        interview.CreatedDateTime,
+                        interview.RejectedDateTime,
+                        interview.CreatedOnClient,
+                        interview.JustInitilized.HasValue && interview.JustInitilized.Value);
  
                 var interviewDashboardItem = Load<InterviewDashboardItemViewModel>();
                 interviewDashboardItem.Init(dashboardQuestionnaireItem);
@@ -87,16 +88,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        private static bool IsSurveyForQuestionnaire(SurveyDto surveyDto, QuestionnaireDTO questionnaire)
+        private static bool IsSurveyForQuestionnaire(SurveyDto questionnaire, QuestionnaireDTO interview)
         {
-            if (string.IsNullOrEmpty(surveyDto.QuestionnaireId))
+            if (string.IsNullOrEmpty(questionnaire.QuestionnaireId))
             {
-                return questionnaire.Survey == surveyDto.Id;
+                return interview.Survey == questionnaire.Id;
             }
             else
             {
-                return questionnaire.Survey == surveyDto.QuestionnaireId
-                       && questionnaire.SurveyVersion == surveyDto.QuestionnaireVersion;
+                return interview.Survey == questionnaire.QuestionnaireId
+                       && interview.SurveyVersion == questionnaire.QuestionnaireVersion;
             }
         }
 
