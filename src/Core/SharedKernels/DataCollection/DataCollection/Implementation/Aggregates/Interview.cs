@@ -2715,8 +2715,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //Update State
             RemoveAnswerFromExpressionProcessorState(expressionProcessorState, questionId, rosterVector);
 
-            var answersToRemoveByCascading = this.GetDisableDependantCascadingQuestions(state, questionnaire, questionId, rosterVector);
-
+            var answersToRemoveByCascading = this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state).ToArray();
+            
             expressionProcessorState.DisableQuestions(answersToRemoveByCascading);
 
             var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
@@ -2764,26 +2764,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             interviewChanges.AnswersForLinkedQuestionsToRemove.AddRange(answersToRemoveByCascading);
             
             return interviewChanges;
-        }
-
-        private List<Identity> GetDisableDependantCascadingQuestions(InterviewStateDependentOnAnswers state, IQuestionnaire questionnaire, Guid questionId,
-            decimal[] rosterVector)
-        {
-            var result =new List<Identity>();
-            var cascadingQuestionsToDisable =
-                questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId).ToList();
-
-            var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                state,
-                cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
-
-            result.AddRange(cascadingQuestionsToDisableIdentities);
-            foreach (var cascadingQuestionsToDisableIdentity in cascadingQuestionsToDisableIdentities)
-            {
-                result.AddRange(this.GetDisableDependantCascadingQuestions(state, questionnaire,
-                    cascadingQuestionsToDisableIdentity.Id, cascadingQuestionsToDisableIdentity.RosterVector));
-            }
-            return result;
         }
 
         private IInterviewExpressionStateV2 PrepareExpressionProcessorStateForCalculations()
