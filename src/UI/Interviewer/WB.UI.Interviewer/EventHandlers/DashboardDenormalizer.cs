@@ -31,6 +31,7 @@ namespace WB.UI.Interviewer.EventHandlers
                                       IEventHandler<TemplateImported>,
                                       IEventHandler<QuestionnaireDeleted>,
                                       IEventHandler<InterviewDeleted>,
+                                      IEventHandler<InterviewHardDeleted>,
                                       IEventHandler<PlainQuestionnaireRegistered>,
 
                                       IEventHandler<TextQuestionAnswered>,
@@ -213,6 +214,12 @@ namespace WB.UI.Interviewer.EventHandlers
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            Guid interviewId = evnt.EventSourceId;
+            this.questionnaireDtoDocumentStorage.Remove(interviewId);
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
             Guid interviewId = evnt.EventSourceId;
             this.questionnaireDtoDocumentStorage.Remove(interviewId);
