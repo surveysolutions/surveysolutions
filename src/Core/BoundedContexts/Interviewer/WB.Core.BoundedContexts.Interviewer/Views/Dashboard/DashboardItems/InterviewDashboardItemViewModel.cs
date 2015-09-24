@@ -82,8 +82,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 case DashboardInterviewStatus.InProgress:
                     return item.StartedDateTime.HasValue ? InterviewerUIResources.DashboardItem_StartedOn.FormatString(item.StartedDateTime) : string.Empty;
                 case DashboardInterviewStatus.Completed:
-                case DashboardInterviewStatus.Rejected:
                     return item.CompletedDateTime.HasValue ? InterviewerUIResources.DashboardItem_CompletedOn.FormatString(item.CompletedDateTime) : string.Empty;
+                case DashboardInterviewStatus.Rejected:
+                    return item.RejectedDateTime.HasValue ? InterviewerUIResources.DashboardItem_RejectedOn.FormatString(item.RejectedDateTime) : string.Empty;
                 default:
                     return string.Empty;
             }

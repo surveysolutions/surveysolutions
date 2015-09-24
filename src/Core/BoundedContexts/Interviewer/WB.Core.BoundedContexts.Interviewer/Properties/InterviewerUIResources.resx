@@ -368,4 +368,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Your account was relinked to another tablet</value>
   </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Rejected on {0}</value>
+  </data>
 </root>
