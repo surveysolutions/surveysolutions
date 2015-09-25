@@ -103,13 +103,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
         {
-            this.groupState.Init(this.navigationState.InterviewId, groupIdentity, type);
+            this.groupState.Init(this.navigationState.InterviewId, groupIdentity);
             this.Status = this.groupState.Status;
         }
 
         private void UpdateInterviewStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
         {
-            this.interviewState.Init(this.navigationState.InterviewId, groupIdentity, type);
+            this.interviewState.Init(this.navigationState.InterviewId, groupIdentity);
             this.Status = this.interviewState.Status;
         }
 

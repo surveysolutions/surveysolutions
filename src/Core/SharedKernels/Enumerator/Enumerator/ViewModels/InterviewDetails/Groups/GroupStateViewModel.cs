@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private Identity group;
 
-        public virtual void Init(string interviewId, Identity groupIdentity, ScreenType screenType = ScreenType.Group)
+        public virtual void Init(string interviewId, Identity groupIdentity)
         {
             this.interviewId = interviewId;
             this.group = groupIdentity;
