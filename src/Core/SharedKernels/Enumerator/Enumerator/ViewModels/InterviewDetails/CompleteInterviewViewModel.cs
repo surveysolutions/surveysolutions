@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.interviewId = Guid.Parse(interviewId);
 
-            InterviewState.Init(interviewId, null, ScreenType.Complete);
+            InterviewState.Init(interviewId, null);
 
             var questionsCount = InterviewState.QuestionsCount;//  interview.CountActiveQuestionsInInterview();
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;// interview.CountAnsweredQuestionsInInterview();
