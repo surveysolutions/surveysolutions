@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
                     InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
-                        listOfProcessedInterviews.Count, interviewPackages.Interviews.Count,
+                        listOfProcessedInterviews.Count, interviewPackages.Packages.Count,
                         InterviewerUIResources.Synchronization_Interviews));
 
                 var interviewInfo = interviewPackages.Interviews.Find(interview => interview.Id == interviewPackage.InterviewId);
