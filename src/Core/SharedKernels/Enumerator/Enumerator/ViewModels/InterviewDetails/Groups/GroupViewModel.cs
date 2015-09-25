@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (navigationIdentity.ScreenType != ScreenType.Group)
             {
                 var interviewState = this.serviceLocator.GetInstance<InterviewStateViewModel>();
-                interviewState.Init(interviewId, null, navigationIdentity.ScreenType);
+                interviewState.Init(interviewId, null);
                 this.groupState = interviewState;
                 groupWithAnswersToMonitor = this.navigationState.CurrentGroup;
             }

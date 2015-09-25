@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private string interviewId;
 
-        public override void Init(string interviewId, Identity groupIdentity, ScreenType screenType = ScreenType.Group)
+        public override void Init(string interviewId, Identity groupIdentity)
         {
             this.interviewId = interviewId;
             this.UpdateFromGroupModel();
