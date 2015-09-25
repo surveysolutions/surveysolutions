@@ -23,6 +23,7 @@
       android:layout_height="match_parent">
     <ScrollView
         android:id="@+id/login_page_scroll"
+        android:layout_above="@+id/login_page_scroll"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -89,7 +90,6 @@
     <LinearLayout
         style="@style/Login_Footer"
         android:id="@+id/login_page_footer"
-        android:layout_alignEnd="@+id/login_page_scroll"
         android:layout_alignParentBottom="true">
       <TextView
          style="@style/Login_Footer_Message"
