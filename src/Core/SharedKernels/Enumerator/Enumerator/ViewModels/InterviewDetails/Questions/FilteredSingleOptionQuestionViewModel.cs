@@ -151,7 +151,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 InvokeOnMainThread(() =>
                 {
                     this.QuestionState.IsAnswered = false;
-                    this.DefaultText = string.Empty;
                     this.ResetTextInEditor = string.Empty;
                 });
             }
@@ -168,20 +167,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private string defaultText;
-
-        public string DefaultText
-        {
-            get
-            {
-                return defaultText;
-            }
-            set
-            {
-                this.defaultText = value;
-                this.RaisePropertyChanged();
-            }
-        }
+        public string DefaultText { get; set; }
 
         private string filterText;
         public string FilterText
@@ -222,19 +208,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string textHint)
+        private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
+            
+
             foreach (var model in this.Options)
             {
                 if (model.Text.IsNullOrEmpty())
                     continue;
 
-                var index = model.Text.IndexOf(textHint, StringComparison.CurrentCultureIgnoreCase);
-                if (index >= 0)
+                if (searchFor != null)
                 {
-                    yield return new FilteredComboboxItemViewModel()
+                    var startIndexOfSearchedText = model.Text.IndexOf(searchFor, StringComparison.CurrentCultureIgnoreCase);
+                    if (startIndexOfSearchedText >= 0)
                     {
-                        Text = model.Text.Insert(index + textHint.Length, "</b>").Insert(index, "<b>"),
+                        yield return new FilteredComboboxItemViewModel
+                        {
+                            Text = model.Text.Insert(startIndexOfSearchedText + searchFor.Length, "</b>")
+                                             .Insert(startIndexOfSearchedText, "<b>"),
+                            Value = model.Value
+                        };
+                    }
+                }
+                else
+                {
+                    yield return new FilteredComboboxItemViewModel
+                    {
+                        Text = model.Text,
                         Value = model.Value
                     };
                 }
