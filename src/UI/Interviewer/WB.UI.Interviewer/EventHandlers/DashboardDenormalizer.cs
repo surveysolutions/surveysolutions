@@ -298,7 +298,7 @@ namespace WB.UI.Interviewer.EventHandlers
 
             if (preFilledQuestion != null)
             {
-                preFilledQuestion.Value = this.getAnswer(preFilledQuestion, answer);
+                preFilledQuestion.Value = answer==null?string.Empty:this.getAnswer(preFilledQuestion, answer);
                 questionnaire.SetProperties(featuredItems);
             }
             else if (!questionnaire.StartedDateTime.HasValue)
@@ -379,13 +379,13 @@ namespace WB.UI.Interviewer.EventHandlers
         {
             foreach (var question in evnt.Payload.Questions)
             {
-                this.AnswerQuestion(evnt.EventSourceId, question.Id, string.Empty, evnt.EventTimeStamp);
+                this.AnswerQuestion(evnt.EventSourceId, question.Id, null, evnt.EventTimeStamp);
             }
         }
 
         public void Handle(IPublishedEvent<AnswerRemoved> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, string.Empty, evnt.EventTimeStamp);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, null, evnt.EventTimeStamp);
         }
 
         private void StoreSurveyDto(Guid id, QuestionnaireDocument questionnaireDocument, long version, bool allowCensusMode)
