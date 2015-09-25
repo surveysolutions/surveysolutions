@@ -377,4 +377,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} interviews deleted</value>
   </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed</value>
+  </data>
 </root>

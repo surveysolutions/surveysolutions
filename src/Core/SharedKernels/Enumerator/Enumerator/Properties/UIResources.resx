@@ -509,9 +509,6 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Login_App_NewVersionAvailable" xml:space="preserve">
     <value>new version available</value>
   </data>
-  <data name="Login_FinishInstallation_Message" xml:space="preserve">
-    <value>This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed</value>
-  </data>
   <data name="Login_EndpointWasNotReached" xml:space="preserve">
     <value>Endpoint was not reached</value>
   </data>
