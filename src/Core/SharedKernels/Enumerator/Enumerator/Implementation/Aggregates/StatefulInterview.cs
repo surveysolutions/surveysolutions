@@ -595,43 +595,47 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 case AnswerType.Integer:
                     this.GetOrCreateAnswer<IntegerNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToInt32(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (int?) Convert.ToInt32(answerDto.Answer));
                     break;
                 case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToDecimal(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (decimal?)Convert.ToDecimal(answerDto.Answer));
                     break;
                 case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToDateTime(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (DateTime?)Convert.ToDateTime(answerDto.Answer));
                     break;
                 case AnswerType.OptionCodeArray:
                     this.GetOrCreateAnswer<MultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((decimal[])answerDto.Answer);
+                        .SetAnswers(answerDto.Answer as decimal[]);
                     break;
                 case AnswerType.RosterVectorArray:
                     this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((decimal[][])answerDto.Answer);
+                        .SetAnswers(answerDto.Answer as decimal[][]);
                     break;
                 case AnswerType.OptionCode:
                     this.GetOrCreateAnswer<SingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToDecimal(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (decimal?)Convert.ToDecimal(answerDto.Answer));
                     break;
                 case AnswerType.RosterVector:
                     this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer((decimal[])answerDto.Answer);
+                        .SetAnswer(answerDto.Answer as decimal[]);
                     break;
                 case AnswerType.DecimalAndStringArray:
                     this.GetOrCreateAnswer<TextListAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((Tuple<decimal, string>[])answerDto.Answer);
+                        .SetAnswers(answerDto.Answer as Tuple<decimal, string>[]);
                     break;
                 case AnswerType.String:
                     this.GetOrCreateAnswer<TextAnswer>(answerDto.Id, answerDto.RosterVector).SetAnswer((string)answerDto.Answer);
                     break;
                 case AnswerType.GpsData:
                     var geoAnswer = answerDto.Answer as GeoPosition;
-                    this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector)
+                    var gpsQuestion = this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector);
+                    if (geoAnswer!=null)
+                        this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy, geoAnswer.Altitude);
+                    else
+                        gpsQuestion.RemoveAnswer();
                     break;
                 case AnswerType.FileName:
                     this.GetOrCreateAnswer<MultimediaAnswer>(answerDto.Id, answerDto.RosterVector)

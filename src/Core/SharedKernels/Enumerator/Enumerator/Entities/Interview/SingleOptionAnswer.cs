@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
         {
         }
 
-        public void SetAnswer(decimal answer)
+        public void SetAnswer(decimal? answer)
         {
             this.Answer = answer;
         }
