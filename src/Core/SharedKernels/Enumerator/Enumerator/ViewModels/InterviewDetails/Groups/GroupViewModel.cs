@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-
 using Microsoft.Practices.ServiceLocation;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -29,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private string interviewId;
 
         private NavigationState navigationState;
-        private NavigationIdentity groupIdentity;
+        private Identity groupIdentity;
 
         public EnablementViewModel Enablement { get; private set; }
         public string Title { get; private set; }
@@ -61,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public Identity Identity
         {
-            get{ return this.groupIdentity.TargetGroup; }
+            get{ return this.groupIdentity; }
         }
 
         private IMvxCommand navigateToGroupCommand;
@@ -94,40 +92,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             Identity groupWithAnswersToMonitor = interview.GetParentGroup(entityIdentity);
 
-            this.Init(interviewId, new NavigationIdentity(entityIdentity), groupWithAnswersToMonitor, navigationState);
+            this.Init(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
         }
 
-        public void Init(string interviewId, NavigationIdentity navigationIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
+        public void Init(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.navigationState = navigationState;
-            this.groupIdentity = navigationIdentity;
+            this.groupIdentity = groupIdentity;
 
             this.eventRegistry.Subscribe(this, interviewId);
+            
+            GroupModel groupModel;
+            if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(groupIdentity.Id, out groupModel))
+                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(groupIdentity));
 
-            if (navigationIdentity.ScreenType != ScreenType.Group)
-            {
-                var interviewState = this.serviceLocator.GetInstance<InterviewStateViewModel>();
-                interviewState.Init(interviewId, null);
-                this.groupState = interviewState;
-                groupWithAnswersToMonitor = this.navigationState.CurrentGroup;
-            }
-            else
-            {
-                GroupModel groupModel;
-                if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(navigationIdentity.TargetGroup.Id, out groupModel))
-                    throw new InvalidOperationException("Group with identity {0} don't found".FormatString(navigationIdentity.TargetGroup));
+            this.Enablement.Init(interviewId, groupIdentity, navigationState);
+            this.GroupState.Init(interviewId, groupIdentity);
 
-                this.Enablement.Init(interviewId, navigationIdentity.TargetGroup, navigationState);
-                this.GroupState.Init(interviewId, navigationIdentity.TargetGroup);
-
-                this.Title = groupModel.Title;
-                this.RosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
-                this.IsRoster = groupModel is RosterModel;
-            }
+            this.Title = groupModel.Title;
+            this.RosterTitle = interview.GetRosterTitle(groupIdentity);
+            this.IsRoster = groupModel is RosterModel;
+            
             if (groupWithAnswersToMonitor != null)
             {
                 IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
@@ -144,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private async Task NavigateToGroupAsync()
         {
-            await this.navigationState.NavigateToAsync(this.groupIdentity);
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.groupIdentity));
         }
 
         public void Handle(RosterInstancesTitleChanged @event)

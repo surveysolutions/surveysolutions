@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                return new MvxCommand(async () => await this.navigationState.NavigateToAsync(new NavigationIdentity(this.ItemId)));
+                return new MvxCommand(async () => await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.ItemId)));
             }
         }
     }

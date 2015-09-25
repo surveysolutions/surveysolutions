@@ -88,18 +88,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
-            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(new NavigationIdentity(null, ScreenType.Complete),  navigationState, interviewId));
+            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(NavigationIdentity.CreateForCompleteScreen(),  navigationState, interviewId));
 
             this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections);
             this.UpdateSideBarTree();
         }
 
-        private void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
+        private void NavigationStateGroupChanged(ScreenChangedEventArgs navigationParams)
         {
             this.HighlightCurrentSection(navigationParams);
         }
 
-        private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
+        private void HighlightCurrentSection(ScreenChangedEventArgs navigationParams)
         {
             var allTreeElements = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections)
                 .TreeToEnumerable(x => x.Children).ToList();
@@ -266,7 +266,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
         {
-            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, new NavigationIdentity(enabledSubgroupIdentity), this.navigationState, this.interviewId);
+            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, NavigationIdentity.CreateForGroup(enabledSubgroupIdentity), this.navigationState, this.interviewId);
         }
 
         public ICommand UpdateStatuses

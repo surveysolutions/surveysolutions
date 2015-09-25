@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Subscribe(this, interviewId);
 
 
-            if (navigationIdentity.ScreenType == ScreenType.Group)
+            if (navigationIdentity.TargetScreen == ScreenType.Group)
             {
                 var interview = this.statefulInterviewRepository.Get(this.interviewId);
                 this.questionnaireId = interview.QuestionnaireId;
@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.IsSelected = this.Parent.IsSelected;
                 }
             }
-            else if (navigationIdentity.ScreenType == ScreenType.Complete)
+            else if (navigationIdentity.TargetScreen == ScreenType.Complete)
             {
                 this.Parent = null;
                 this.HasChildren = false;
@@ -105,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
             }
             this.SideBarGroupState = groupStateViewModel;
-            this.ScreenType = navigationIdentity.ScreenType;
+            this.ScreenType = navigationIdentity.TargetScreen;
             this.NavigationState = navigationState;
             this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
             this.NavigationState.BeforeGroupChanged += this.NavigationState_OnBeforeGroupChanged;
@@ -116,12 +116,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.IsCurrent = false;
         }
 
-        void NavigationState_OnGroupChanged(GroupChangedEventArgs newNavigationIdentity)
+        void NavigationState_OnGroupChanged(ScreenChangedEventArgs newNavigationIdentity)
         {
-            if (this.ScreenType != newNavigationIdentity.ScreenType)
+            if (this.ScreenType != newNavigationIdentity.TargetScreen)
                 return;
 
-            if (newNavigationIdentity.ScreenType == ScreenType.Complete)
+            if (newNavigationIdentity.TargetScreen == ScreenType.Complete)
             {
                 this.IsCurrent = true;
             }
@@ -251,9 +251,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.messenger.Publish(new SectionChangeMessage(this));
 
-            await this.NavigationState.NavigateToAsync(new NavigationIdentity(
-                this.ScreenType == ScreenType.Complete ? null : this.SectionIdentity, 
-                this.ScreenType));
+            var navigationIdentity = this.ScreenType == ScreenType.Complete 
+                ? NavigationIdentity.CreateForCompleteScreen()
+                : NavigationIdentity.CreateForGroup(this.SectionIdentity);
+
+            await this.NavigationState.NavigateToAsync(navigationIdentity);
         }
 
         private List<SideBarSectionViewModel> GenerateChildNodes()
@@ -261,7 +263,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.NavigationState.InterviewId);
 
             var result = interview.GetEnabledSubgroups(this.SectionIdentity)
-                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, new NavigationIdentity(groupInstance), this.NavigationState, this.NavigationState.InterviewId));
+                                  .Select(groupInstance => this.modelsFactory.BuildSectionItem(this.root, this, NavigationIdentity.CreateForGroup(groupInstance), this.NavigationState, this.NavigationState.InterviewId));
 
             return new List<SideBarSectionViewModel>(result);
         }
