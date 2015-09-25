@@ -22,8 +22,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
     <ScrollView
+        android:id="@+id/login_page_scroll"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/login_page_footer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbarStyle="outsideOverlay"
@@ -89,10 +89,11 @@
     <LinearLayout
         style="@style/Login_Footer"
         android:id="@+id/login_page_footer"
+        android:layout_alignEnd="@+id/login_page_scroll"
         android:layout_alignParentBottom="true">
       <TextView
          style="@style/Login_Footer_Message"
-         local:MvxBind="Html Format(Localization('Login_FinishInstallation_Message'), Version)" />
+         local:MvxBind="Html Localization('Login_FinishInstallation_Message')" />
     </LinearLayout>
   </RelativeLayout>
 </LinearLayout>

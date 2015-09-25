@@ -991,15 +991,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed.
-        /// </summary>
-        public static string Login_FinishInstallation_Message {
-            get {
-                return ResourceManager.GetString("Login_FinishInstallation_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Entered endpoint is unreachable. Check internet connection or enter correct url.
         /// </summary>
         public static string Login_Validation_EndpointIsUnreachable {

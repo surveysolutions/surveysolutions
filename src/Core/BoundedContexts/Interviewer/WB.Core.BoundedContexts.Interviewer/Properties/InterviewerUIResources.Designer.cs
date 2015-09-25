@@ -308,6 +308,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed.
+        /// </summary>
+        public static string Login_FinishInstallation_Message {
+            get {
+                return ResourceManager.GetString("Login_FinishInstallation_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you forgot your password and headquarter has reset it you could try to sign in online.
         /// </summary>
         public static string Login_Online_Signin_Explanation_message {
