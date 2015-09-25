@@ -339,6 +339,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
                         case HttpStatusCode.NotFound:
+                            this.logger.Warn("Server error", ex);
+                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
+                            exceptionType = SynchronizationExceptionType.InvalidUrl;
+                            break;
                         case HttpStatusCode.InternalServerError:
                             this.logger.Warn("Server error", ex);
 
