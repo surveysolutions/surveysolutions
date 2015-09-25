@@ -412,6 +412,8 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_singing_in_remotly_and_user_exist_and_password_were_entered.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_link_source_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_link_source_question_of_multi_option_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
