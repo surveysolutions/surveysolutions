@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.statistics.TotalDeletedInterviewsCount = interviewPackages.Packages.Count(interview => interview.ItemType == SyncItemType.DeleteInterview);
 
             var listOfProcessedInterviews = new List<Guid>();
-            foreach (var interviewPackage in interviewPackages.Packages)
+            foreach (var interviewPackage in interviewPackages.Packages.OrderBy(package => package.SortIndex))
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
                     InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
