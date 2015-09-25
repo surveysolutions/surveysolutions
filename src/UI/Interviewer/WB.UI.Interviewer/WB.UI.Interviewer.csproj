@@ -448,7 +448,9 @@
     <AndroidResource Include="Resources\Values\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_interview_item.axml" />
+    <AndroidResource Include="Resources\Layout\dashboard_interview_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -645,6 +647,8 @@
     <AndroidResource Include="Resources\menu\troubleshooting.xml" />
     <AndroidResource Include="Resources\menu\relink.xml" />
     <AndroidResource Include="Resources\menu\finish.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -693,6 +697,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\drawable-v21\" />
     <Folder Include="Services\" />
     <Folder Include="Syncronization\Update\" />
     <Folder Include="ViewModel\Dashboard\" />
