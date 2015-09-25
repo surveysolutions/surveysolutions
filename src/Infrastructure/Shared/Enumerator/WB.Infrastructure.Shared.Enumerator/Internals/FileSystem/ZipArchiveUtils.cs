@@ -75,17 +75,19 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                 ZipEntry zipFileOrDirectory;
                 while ((zipFileOrDirectory = zipFileStream.GetNextEntry()) != null)
                 {
-                    string directoryName = Path.GetDirectoryName(zipFileOrDirectory.Name);
-                    string fileName = Path.GetFileName(zipFileOrDirectory.Name);
-
-                    if (!string.IsNullOrEmpty(directoryName))
+                    if (zipFileOrDirectory.IsDirectory)
                     {
-                        Directory.CreateDirectory(directoryName);
+                        Directory.CreateDirectory(Path.Combine(extractToFolder, zipFileOrDirectory.Name));
                     }
-
-                    if (!string.IsNullOrEmpty(fileName))
+                    else 
                     {
-                        using (FileStream streamWriter = File.Create(zipFileOrDirectory.Name))
+                        var targetDirectory = Path.Combine(extractToFolder, Path.GetDirectoryName(zipFileOrDirectory.Name));
+                        if (!Directory.Exists(targetDirectory))
+                        {
+                            Directory.CreateDirectory(targetDirectory);
+                        }
+
+                        using (FileStream streamWriter = File.Create(Path.Combine(extractToFolder, zipFileOrDirectory.Name)))
                         {
                             int size = 2048;
                             byte[] data = new byte[size];
