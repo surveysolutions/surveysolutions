@@ -13,23 +13,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         public Identity TargetGroup { get; set; }
 
-        public ScreenType ScreenType { get; set; }
+        public ScreenType TargetScreen { get; set; }
 
         public Identity AnchoredElementIdentity { get; set; }
 
         public NavigationIdentity() { }
 
-        public NavigationIdentity(Identity targetGroup, ScreenType screenType = ScreenType.Group, Identity anchoredElementIdentity = null)
+        public static NavigationIdentity CreateForCompleteScreen()
+        {
+            return new NavigationIdentity(ScreenType.Complete, targetGroup: null);
+        }
+
+        public static NavigationIdentity CreateForGroup(Identity groupIdentity, Identity anchoredElementIdentity = null)
+        {
+            return new NavigationIdentity(ScreenType.Group, targetGroup: groupIdentity, anchoredElementIdentity: anchoredElementIdentity);
+        }
+
+        private NavigationIdentity(ScreenType targetScreen, Identity targetGroup, Identity anchoredElementIdentity = null)
             : this()
         {
             this.TargetGroup = targetGroup;
-            this.ScreenType = screenType;
+            this.TargetScreen = targetScreen;
             this.AnchoredElementIdentity = anchoredElementIdentity;
         }
 
         protected bool Equals(NavigationIdentity other)
         {
-            return Equals(this.TargetGroup, other.TargetGroup) && Equals(this.AnchoredElementIdentity, other.AnchoredElementIdentity);
+            return Equals(this.TargetGroup, other.TargetGroup) 
+                && Equals(this.AnchoredElementIdentity, other.AnchoredElementIdentity)
+                && Equals(this.TargetScreen, other.TargetScreen);
         }
 
         public override int GetHashCode()

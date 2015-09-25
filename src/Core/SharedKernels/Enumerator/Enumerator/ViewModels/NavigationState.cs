@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void NavigateTo(NavigationIdentity navigationItem)
         {
-            if (navigationItem.ScreenType == ScreenType.Group)
+            if (navigationItem.TargetScreen == ScreenType.Group)
             {
                 if (!this.CanNavigateTo(navigationItem.TargetGroup)) return;
 
@@ -155,16 +155,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
             this.CurrentGroup = navigationIdentity.TargetGroup;
-            this.CurrentGroupType = navigationIdentity.ScreenType;
+            this.CurrentGroupType = navigationIdentity.TargetScreen;
 
             if (this.GroupChanged != null)
             {
-                var groupChangedEventArgs = new GroupChangedEventArgs
+                var groupChangedEventArgs = new ScreenChangedEventArgs
                 {
                     TargetGroup = navigationIdentity.TargetGroup,
                     AnchoredElementIdentity =
                         navigationIdentity.AnchoredElementIdentity,
-                    ScreenType = navigationIdentity.ScreenType
+                    TargetScreen = navigationIdentity.TargetScreen
                 };
 
                 this.GroupChanged(groupChangedEventArgs);
@@ -174,5 +174,5 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
     public delegate void BeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs);
 
-    public delegate void GroupChanged(GroupChangedEventArgs newGroupIdentity);
+    public delegate void GroupChanged(ScreenChangedEventArgs newGroupIdentity);
 }

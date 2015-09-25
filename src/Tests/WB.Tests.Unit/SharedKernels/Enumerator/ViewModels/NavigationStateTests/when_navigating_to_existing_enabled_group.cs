@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
         };
 
         Because of = () =>
-            navigationState.NavigateToAsync(new NavigationIdentity(existingEnabledGroup)).WaitAndUnwrapException();
+            navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(existingEnabledGroup)).WaitAndUnwrapException();
 
         It should_navigate_to_that_group = () =>
             navigatedTo.ShouldEqual(existingEnabledGroup);
