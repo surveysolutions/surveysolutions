@@ -2745,6 +2745,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     enablementChanges.QuestionsToBeDisabled,
                     questionnaire, getRosterInstanceIds);
 
+            IEnumerable<Identity> answersForLinkedQuestionsToRemoveByEmptyAnswer = this
+                .GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
+                    state,
+                    new Identity(questionId, rosterVector).ToEnumerable(),
+                    questionnaire,
+                    GetRosterInstanceIds);
+
+
+            List<Identity> answersForLinkedQuestionsToRemove = Enumerable
+                .Union(answersForLinkedQuestionsToRemoveByEmptyAnswer, answersForLinkedQuestionsToRemoveByDisabling)
+                .ToList();
+
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(AnswerChangeType.RemoveAnswer, userId, questionId, rosterVector, removeTime, null)
@@ -2756,7 +2768,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemoveByDisabling,
+                answersForLinkedQuestionsToRemove,
                 rosterInstancesWithAffectedTitles,
                 null,
                 substitutionChanges);
