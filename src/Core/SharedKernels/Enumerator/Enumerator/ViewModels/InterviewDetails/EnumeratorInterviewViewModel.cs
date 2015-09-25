@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.GroupChanged += this.NavigationStateOnOnGroupChanged;
-            await this.navigationState.NavigateToAsync(new NavigationIdentity(targetGroup: new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }
@@ -85,9 +85,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void NavigationStateOnOnGroupChanged(GroupChangedEventArgs newGroupIdentity)
+        private void NavigationStateOnOnGroupChanged(ScreenChangedEventArgs newGroupIdentity)
         {
-            if (newGroupIdentity.ScreenType != ScreenType.Group)
+            if (newGroupIdentity.TargetScreen != ScreenType.Group)
             {
                 this.UpdateInterviewStatus(null, ScreenType.Complete);
                 return;

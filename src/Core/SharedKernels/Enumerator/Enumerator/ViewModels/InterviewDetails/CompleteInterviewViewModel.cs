@@ -72,12 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private string completeComment;
-        public string CompleteComment
-        {
-            get { return this.completeComment; }
-            set { this.completeComment = value; this.RaisePropertyChanged(); }
-        }
+        public string CompleteComment { get; set; }
 
         private bool wasThisInterviewCompleted = false;
 

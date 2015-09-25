@@ -57,20 +57,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, groupIdentity, this.navigationState);
             }
-
-            if (NavigateToIdentity.ScreenType == ScreenType.Group)
-            {
-                NavigationItemTitle = IsInSection
-                    ? UIResources.Interview_NextSection_ButtonText
-                    : UIResources.Interview_PreviousGroupNavigation_ButtonText;
-            }
-            else
-            {
-                NavigationItemTitle = UIResources.Interview_NextCompleteInterview_ButtonText;
-            }
+            
+            NavigationItemTitle = IsInSection
+                ? UIResources.Interview_NextSection_ButtonText
+                : UIResources.Interview_PreviousGroupNavigation_ButtonText;
         }
 
-        private NavigationIdentity NavigateToIdentity { get; set; }
+        private Identity NavigateToIdentity { get; set; }
 
         public string NavigationItemTitle { get; set; }
 
@@ -90,15 +83,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (this.IsInSection)
             {
-                await this.navigationState.NavigateToAsync(this.NavigateToIdentity);
+                await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.NavigateToIdentity));
             }
             else
             {
-                await this.navigationState.NavigateToAsync(new NavigationIdentity(this.NavigateToIdentity.TargetGroup, anchoredElementIdentity: this.groupIdentity));
+                await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.NavigateToIdentity, anchoredElementIdentity: this.groupIdentity));
             }
         }
 
-        private NavigationIdentity GetNavigateToIdentity(QuestionnaireModel questionnaire)
+        private Identity GetNavigateToIdentity(QuestionnaireModel questionnaire)
         {
             if (this.IsInSection)
             {
@@ -110,25 +103,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private NavigationIdentity GetParentIdentity(QuestionnaireModel questionnaire)
+        private Identity GetParentIdentity(QuestionnaireModel questionnaire)
         {
             var parentId = questionnaire.GroupsParentIdMap[this.groupIdentity.Id].Value;
             int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[this.groupIdentity.Id];
             decimal[] parentRosterVector = this.groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
-            return new NavigationIdentity(new Identity(parentId, parentRosterVector));
+            return new Identity(parentId, parentRosterVector);
         }
 
-        private NavigationIdentity GetNextSectionIdentity(QuestionnaireModel questionnaire)
+        private Identity GetNextSectionIdentity(QuestionnaireModel questionnaire)
         {
             int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.groupIdentity.Id);
 
             if (currentSectionIndex >= questionnaire.GroupsHierarchy.Count - 1)
             {
-                return new NavigationIdentity(null, ScreenType.Complete);
+                return null;
             }
             else
             {
-                return new NavigationIdentity(new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]));
+                return new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]);
             }
         }
     }

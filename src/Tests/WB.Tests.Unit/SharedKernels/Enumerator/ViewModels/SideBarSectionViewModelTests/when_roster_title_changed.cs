@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
             viewModel = CreateViewModel(questionnaire: questionnaire, interview: interview);
 
             sectionIdentity = new Identity(rosterGroupId, new[]{0m});
-            viewModel.Init("", new NavigationIdentity(sectionIdentity), Substitute.For<SideBarSectionsViewModel>(), null, Substitute.For<GroupStateViewModel>(), Create.NavigationState());
+            viewModel.Init("", NavigationIdentity.CreateForGroup(sectionIdentity), Substitute.For<SideBarSectionsViewModel>(), null, Substitute.For<GroupStateViewModel>(), Create.NavigationState());
 
             viewModel.SectionIdentity = sectionIdentity;
         };

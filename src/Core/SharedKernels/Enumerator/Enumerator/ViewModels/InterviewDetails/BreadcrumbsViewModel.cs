@@ -73,9 +73,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return changedRosterInstanceIdentity;
         }
 
-        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
         {
-            if (navigationParams.ScreenType != ScreenType.Group)
+            if (navigationParams.TargetScreen != ScreenType.Group)
             {
                 this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
             }

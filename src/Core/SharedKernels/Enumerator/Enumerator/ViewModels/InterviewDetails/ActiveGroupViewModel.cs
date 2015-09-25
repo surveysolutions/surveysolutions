@@ -99,16 +99,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
         }
 
-        private async void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        private async void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
         {
-            if (navigationParams.ScreenType != ScreenType.Group)
+            if (navigationParams.TargetScreen == ScreenType.Complete)
             {
                 CreateCompleteScreen();
                 return;
             }
 
             GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
-            await this.CreateRegularGroupScreen(navigationParams, @group);
+
+            bool isThisIsLastInterviewSection = this.questionnaire.GroupsHierarchy.Last().Id
+                                                == navigationParams.TargetGroup.Id;
+
+            await this.CreateRegularGroupScreen(navigationParams, @group, isThisIsLastInterviewSection);
             if (!this.eventRegistry.IsSubscribed(this, interviewId))
             {
                 this.eventRegistry.Subscribe(this, interviewId);
@@ -127,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
 
-        private async Task CreateRegularGroupScreen(GroupChangedEventArgs navigationParams, GroupModel @group)
+        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs navigationParams, GroupModel @group, bool isThisIsLastInterviewSection)
         {
             if (@group is RosterModel)
             {
@@ -144,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await Task.Run(
                 () =>
                 {
-                    this.LoadFromModel(navigationParams.TargetGroup);
+                    this.LoadFromModel(navigationParams.TargetGroup, isThisIsLastInterviewSection);
                     this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
                 });
         }
@@ -164,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.messenger.Publish(new ScrollToAnchorMessage(this, anchorElementIndex));
         }
 
-        private void LoadFromModel(Identity groupIdentity)
+        private void LoadFromModel(Identity groupIdentity, bool isThisIsLastInterviewSection)
         {
             this.Items = new ObservableRangeCollection<dynamic>();
 
@@ -182,9 +186,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Items.Add(x);
                 }
 
-                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
-                this.Items.Add(previousGroupNavigationViewModel);
+                if (isThisIsLastInterviewSection)
+                {
+                    var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<InterviewSummaryNavigationViewModel>();
+                    previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+                    this.Items.Add(previousGroupNavigationViewModel);
+                }
+                else
+                {
+                    var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                    previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+                    this.Items.Add(previousGroupNavigationViewModel);
+                }
             }
             finally
             {
