@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Runtime;
@@ -40,7 +41,13 @@ namespace WB.UI.Interviewer.Infrastructure.Internals.Crasher
 
         private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
-            this.ProcessException(Throwable.FromException(e.Exception));
+            var exception = e.Exception;
+            
+#warning this is super dirty hack in order to get exception's stack trace which happend inside async method
+            FieldInfo stackTrace = typeof(Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
+            if(stackTrace!=null)
+                stackTrace.SetValue(exception, null);
+            this.ProcessException(Throwable.FromException(exception));
         }
 
         private static readonly object _customReportDataProvidersLocker = new object();
