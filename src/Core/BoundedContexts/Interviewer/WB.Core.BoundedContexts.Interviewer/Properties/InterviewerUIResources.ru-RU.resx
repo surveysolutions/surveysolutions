@@ -177,6 +177,9 @@
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} интервью для {1}</value>
   </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
+  </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру.</value>
   </data>

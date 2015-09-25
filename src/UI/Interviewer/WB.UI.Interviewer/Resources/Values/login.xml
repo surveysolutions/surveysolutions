@@ -57,6 +57,7 @@
   </style>
   
   <style name="Login_Singin_Button" parent="Login_Button">
+    <item name="android:layout_marginBottom">@dimen/Login_Footer_paddingBottom</item>
   </style>
 
   <style name="Login_Troubleshotting_Button" parent="Login_Button">
