@@ -53,6 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ILogger logger;
         private readonly IPrincipal principal;
         private readonly IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository;
+        private readonly IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository;
         private CancellationTokenSource synchronizationCancellationTokenSource;
 
         public SynchronizationViewModel(
@@ -73,7 +74,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             IPasswordHasher passwordHasher,
             IPrincipal principal,
-            IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository)
+            IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository,
+            IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository)
         {
             this.synchronizationService = synchronizationService;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -93,6 +95,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;
             this.questionnaireInfoRepository = questionnaireInfoRepository;
+            this.interviewInfoRepository = interviewInfoRepository;
 
             this.restCredentials = new RestCredentials()
             {
@@ -283,6 +286,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
             foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
             {
+                await this.DeleteInterviewsByQuestionnaireAsync(censusQuestionnaireIdentity);
                 await this.DeleteQuestionnaireAsync(censusQuestionnaireIdentity);
             }
 
@@ -299,6 +303,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 processedQuestionnaires++;
             }
+        }
+
+        private async Task DeleteInterviewsByQuestionnaireAsync(QuestionnaireIdentity censusQuestionnaireIdentity)
+        {
+            await Task.Run(() =>
+            {
+                var formattedQuestionnaireId = censusQuestionnaireIdentity.QuestionnaireId.FormatGuid();
+                var interviewIdsByQuestionnaire = this.interviewInfoRepository
+                    .Filter(interview => interview.Survey == formattedQuestionnaireId &&
+                                         interview.SurveyVersion == censusQuestionnaireIdentity.Version)
+                    .Select(interview => Guid.Parse(interview.Id))
+                    .ToList();
+
+                for (int indexOfInterviewToRemove = interviewIdsByQuestionnaire.Count - 1; indexOfInterviewToRemove >= 0; indexOfInterviewToRemove--)
+                {
+                    this.capiCleanUpService.DeleteInterview(interviewIdsByQuestionnaire[indexOfInterviewToRemove]);
+                }
+            });
         }
 
         private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
