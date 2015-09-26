@@ -40,6 +40,15 @@ namespace WB.UI.Interviewer.Activities
 
         public override void OnBackPressed()
         {
+            
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+
+            if (this.ViewModel != null)
+                this.ViewModel.Synchronization.CancelSynchronizationCommand.Execute();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
