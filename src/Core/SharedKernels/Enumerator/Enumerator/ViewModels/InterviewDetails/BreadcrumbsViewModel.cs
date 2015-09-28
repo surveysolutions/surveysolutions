@@ -16,7 +16,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class BreadCrumbsViewModel : MvxNotifyPropertyChanged, 
-        ILiteEventHandler<RosterInstancesTitleChanged>
+        ILiteEventHandler<RosterInstancesTitleChanged>,IDisposable
     {
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -73,9 +73,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return changedRosterInstanceIdentity;
         }
 
-        void navigationState_OnGroupChanged(GroupChangedEventArgs navigationParams)
+        void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
         {
-            this.BuildBreadCrumbs(navigationParams.TargetGroup);
+            if (navigationParams.TargetScreen != ScreenType.Group)
+            {
+                this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
+            }
+            else
+            {
+                this.BuildBreadCrumbs(navigationParams.TargetGroup);
+            }
         }
 
         private void BuildBreadCrumbs(Identity newGroupIdentity)
@@ -131,6 +138,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get { return this.items; }
             set { this.items = value; this.RaisePropertyChanged(); }
+        }
+
+        public void Dispose()
+        {
+            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
+            this.eventRegistry.Unsubscribe(this, interviewId);
         }
     }
 }

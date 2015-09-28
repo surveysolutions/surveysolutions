@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFeedReaderTests
 {
     [Subject(typeof(UserChangedFeedReader))]
-    public class when_recent_feed_contains_one_new_event
+    internal class when_recent_feed_contains_one_new_event
     {
         private Establish context = () =>
         {

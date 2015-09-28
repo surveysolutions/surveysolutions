@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -24,11 +25,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 {
     class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
-        const string CountProjectionName = "AllEventsCount";
+        const string CountProjectionName = "AllEventsCountV1";
         const string EventsPrefix = EventsCategory + "-";
+        private const int maxAllowedBatchSize = 4096;
+        private readonly IEventTypeResolver eventTypeResolver;
         const string EventsCategory = "WB";
         static readonly Encoding Encoding = Encoding.UTF8;
         static long lastUsedGlobalSequence = -1;
+        
 
         static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -49,10 +53,11 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider,
             ILogger logger,
-            EventStoreSettings settings)
+            EventStoreSettings settings, IEventTypeResolver eventTypeResolver)
         {
             this.logger = logger;
             this.settings = settings;
+            this.eventTypeResolver = eventTypeResolver;
             ConfigureEventStore();
             this.connection = connectionProvider.Open();
 
@@ -80,7 +85,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
 
             var streamEvents = new List<ResolvedEvent>();
-            var batchSize = normalMax - normalMin;
+            var batchSize = Math.Min(maxAllowedBatchSize, normalMax - normalMin);
 
             StreamEventsSlice currentSlice;
             var nextSliceStart = StreamPosition.Start + normalMin;
@@ -94,7 +99,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 nextSliceStart = currentSlice.NextEventNumber;
 
                 streamEvents.AddRange(currentSlice.Events);
-            } while (!currentSlice.IsEndOfStream && streamEvents.Count < batchSize);
+            } while (!currentSlice.IsEndOfStream);
 
             var storedEvents = streamEvents.Select(this.ToCommittedEvent).ToList();
 
@@ -178,7 +183,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
                 var eventData = JsonConvert.DeserializeObject(value,
-                    NcqrsEnvironment.GetEventDataTypeByName(resolvedEvent.Event.EventType.ToPascalCase()),
+                    eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase()),
                     JsonSerializerSettings);
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
@@ -318,7 +323,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return { count: 0 }; // initial state
         },
         $any: function (state, event) {
-            if (event.metadata.EventSourceId.indexOf(""$"") !== 0) {
+            if (event.metadata && event.metadata.EventSourceId && event.metadata.EventSourceId.indexOf(""$"") !== 0) {
                 state.count += 1;
             }
             return state;

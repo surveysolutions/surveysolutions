@@ -4,7 +4,6 @@ using Ncqrs.Eventing.Storage;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.File
 {
-    [EventName("RavenQuestionnaire.Core:Events:FileUploaded")]
     public class FileUploaded
     {
         public string Description { get; set; }

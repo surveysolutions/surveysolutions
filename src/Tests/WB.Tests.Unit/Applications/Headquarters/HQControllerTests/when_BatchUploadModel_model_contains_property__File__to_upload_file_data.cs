@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
 namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
 {
-    public class when_BatchUploadModel_model_contains_property__File__to_upload_file_data
+    internal class when_BatchUploadModel_model_contains_property__File__to_upload_file_data
     {
         Establish context = () => 
             propertyInfo = typeof(BatchUploadModel).GetProperty("File");

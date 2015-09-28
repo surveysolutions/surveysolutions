@@ -44,6 +44,7 @@
     <Compile Include="Aggregates\IAggregateRootRepository.cs" />
     <Compile Include="CommandBus\CommandHandlerConfiguration.cs" />
     <Compile Include="CommandBus\CommandRegistry.cs" />
+    <Compile Include="CommandBus\CommandRegistryException.cs" />
     <Compile Include="CommandBus\CommandServiceException.cs" />
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
@@ -55,8 +56,8 @@
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepositoryWithCache.cs" />
-    <Compile Include="Implementation\CommandBus\CommandService.cs" />
-    <Compile Include="Implementation\CommandBus\SequentialCommandService.cs" />
+    <Compile Include="CommandBus\Implementation\CommandService.cs" />
+    <Compile Include="CommandBus\Implementation\SequentialCommandService.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
@@ -87,23 +88,17 @@
     <Compile Include="Modularity\IIocRegistry.cs" />
     <Compile Include="Modularity\Module.cs" />
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
-    <Compile Include="Ncqrs\Config\IEnvironmentConfiguration.cs" />
-    <Compile Include="Ncqrs\Config\InstanceNotFoundInEnvironment.cs" />
     <Compile Include="Ncqrs\DateTimeBasedClock.cs" />
     <Compile Include="Ncqrs\Domain\AggregateExtensions.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRoot.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRootMappedByConvention.cs" />
-    <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationException.cs" />
-    <Compile Include="Ncqrs\Domain\Storage\AggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootNotFoundException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateSupportsSnapshotValidator.cs" />
     <Compile Include="Ncqrs\Domain\Storage\DefaultAggregateSnapshotter.cs" />
     <Compile Include="Ncqrs\Domain\Storage\DomainRepository.cs" />
-    <Compile Include="Ncqrs\Domain\Storage\IAggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Domain\Storage\IAggregateSnapshotter.cs" />
     <Compile Include="Ncqrs\Domain\Storage\IAggregateSupportsSnapshotValidator.cs" />
     <Compile Include="Ncqrs\Domain\Storage\IDomainRepository.cs" />
-    <Compile Include="Ncqrs\Domain\Storage\SimpleAggregateRootCreationStrategy.cs" />
     <Compile Include="Ncqrs\Eventing\AggregateRootEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEventStream.cs" />
@@ -136,7 +131,7 @@
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\Snapshot.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\UndefinedValues.cs" />
-    <Compile Include="Ncqrs\Eventing\Storage\AttributeEventTypeResolver.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\EventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\InMemoryEventStore.cs" />
@@ -150,10 +145,6 @@
     <Compile Include="Ncqrs\Eventing\UncommittedEventStream.cs" />
     <Compile Include="Ncqrs\IClock.cs" />
     <Compile Include="Ncqrs\InternalExtensions.cs" />
-    <Compile Include="Ncqrs\LoggerExtensions.cs" />
-    <Compile Include="Ncqrs\LogManager.cs" />
-    <Compile Include="Ncqrs\NcqrsEnvironment.cs" />
-    <Compile Include="Ncqrs\NcqrsEnvironmentException.cs" />
     <Compile Include="Ncqrs\NcqrsModule.cs" />
     <Compile Include="Ncqrs\Utils.cs" />
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
@@ -211,9 +202,6 @@
       <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
       <Private>True</Private>
@@ -224,6 +212,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

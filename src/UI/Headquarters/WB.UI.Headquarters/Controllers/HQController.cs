@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -34,24 +33,22 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
         private readonly Func<ISampleImportService> sampleImportServiceFactory;
-        private readonly IUserListViewFactory supervisorsFactory;
         private readonly IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory;
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
-        private readonly InterviewHistorySettings interviewHistorySettings;
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
-            IUserListViewFactory supervisorsFactory,
             Func<ISampleImportService> sampleImportServiceFactory,
             IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory,
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
-            InterviewHistorySettings interviewHistorySettings)
+            InterviewDataExportSettings interviewDataExportSettings)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -60,15 +57,14 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
-            this.interviewHistorySettings = interviewHistorySettings;
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
-            this.supervisorsFactory = supervisorsFactory;
         }
 
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
             return this.View();
         }
 
@@ -82,8 +78,6 @@ namespace WB.UI.Headquarters.Controllers
                         this.Url.Action("TakeNew", "HQ", new { id = questionnaireId.Value })));
             }
             this.ViewBag.ActivePage = MenuItem.Docs;
-            UserLight currentUser = this.GlobalInfo.GetCurrentUser();
-            this.ViewBag.CurrentUser = new UsersViewItem { UserId = currentUser.Id, UserName = currentUser.Name };
             return this.View(this.Filters());
         }
 
@@ -174,14 +168,6 @@ namespace WB.UI.Headquarters.Controllers
             //null is handled inside 
             var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
 
-            this.ViewBag.SupervisorList =
-                this.supervisorsFactory.Load(new UserListViewInputModel
-                {
-                    Role = UserRoles.Supervisor,
-                    PageSize = int.MaxValue,
-                    Order = "UserName"
-                }).Items.Select(x => new UsersViewItem() {UserId = x.UserId, UserName = x.UserName});
-
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
             {
@@ -197,15 +183,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(id);
             var verificationStatus = this.preloadedDataVerifier.VerifyPanel(questionnaireId, version, preloadedPanelData);
-
-            this.ViewBag.SupervisorList =
-                this.supervisorsFactory.Load(new UserListViewInputModel
-                {
-                    Role = UserRoles.Supervisor,
-                    PageSize = int.MaxValue,
-                    Order = "UserName"
-                }).Items.Select(x => new UsersViewItem() { UserId = x.UserId, UserName = x.UserName });
-
+            
             //clean up for security reasons
             if (verificationStatus.Errors.Any())
             {
@@ -246,10 +224,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Surveys;
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            return this.View(usersAndQuestionnaires.Users);
+            return this.View();
         }
 
         public ActionResult SupervisorsAndStatuses()
@@ -291,7 +266,6 @@ namespace WB.UI.Headquarters.Controllers
 
             return new DocumentFilter
             {
-                Responsibles = usersAndQuestionnaires.Users,
                 Templates = usersAndQuestionnaires.Questionnaires,
                 Statuses = statuses
             };
@@ -300,7 +274,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult DataExport()
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;
-            this.ViewBag.EnableInterviewHistory = interviewHistorySettings.EnableInterviewHistory;
+            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
 
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());

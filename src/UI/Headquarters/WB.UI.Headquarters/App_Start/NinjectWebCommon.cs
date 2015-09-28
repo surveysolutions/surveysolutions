@@ -50,6 +50,7 @@ using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
@@ -126,8 +127,6 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
-
             var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly};
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
@@ -135,12 +134,7 @@ namespace WB.UI.Headquarters
                 MappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
             };
 
-            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
-
-            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-
-          
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -159,10 +153,6 @@ namespace WB.UI.Headquarters
 
                 new PostresKeyValueModule(postgresCacheSize),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies));
-
-            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
-            NcqrsEnvironment.InitDefaults();
-
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
@@ -190,8 +180,9 @@ namespace WB.UI.Headquarters
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath,
-                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"])),
+                    new InterviewDataExportSettings(basePath,
+                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
+                        WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000)),
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
@@ -204,8 +195,8 @@ namespace WB.UI.Headquarters
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
-            PrepareNcqrsInfrastucture(kernel);
+
+            CreateAndRegisterEventBus(kernel);
 
             kernel.Bind<ITokenVerifier>().ToConstant(new SimpleTokenVerifier(WebConfigurationManager.AppSettings["Synchronization.Key"]));
 
@@ -233,21 +224,6 @@ namespace WB.UI.Headquarters
             return kernel;
         }
 
-       
-        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
-        {
-            var snapshottingPolicy = new SimpleSnapshottingPolicy(1);
-            kernel.Bind<ISnapshottingPolicy>().ToConstant(snapshottingPolicy);
-            kernel.Bind<ISnapshotStore>().To<InMemoryCachedSnapshotStore>().InSingletonScope();
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(snapshottingPolicy);
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(kernel.Get<ISnapshotStore>());
-
-            CreateAndRegisterEventBus(kernel);
-        }
-
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             var ignoredDenormalizersConfigSection =
@@ -255,8 +231,6 @@ namespace WB.UI.Headquarters
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
-            NcqrsEnvironment.SetDefault<ILiteEventBus>(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);

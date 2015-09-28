@@ -7,7 +7,7 @@ using Moq.Protected;
 
 namespace WB.Tests.Unit
 {
-    public static class MockExtensions
+    internal static class MockExtensions
     {
         public static void SetupResponseFromResource(this Mock<HttpMessageHandler> handlerMock, string requestUrl, string resourceName)
         {

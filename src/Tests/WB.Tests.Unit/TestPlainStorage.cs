@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit
 {
-    public class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
+    internal class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
     {
         private readonly Dictionary<object, T> entites;
 

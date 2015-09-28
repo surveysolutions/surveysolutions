@@ -22,7 +22,7 @@ using it = Moq.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Pull
 {
     [Subject(typeof (InterviewsSynchronizer))]
-    public class when_interview_is_unassigned_after_assignment
+    internal class when_interview_is_unassigned_after_assignment
     {
         Establish context = () =>
         {
@@ -33,10 +33,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryStorage =
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(it.IsAny<string>()) == new InterviewSummary());
 
-            var interviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "",
+            var interviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "", null,
                      userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                      new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                     new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
+                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
 
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
                 .Returns(

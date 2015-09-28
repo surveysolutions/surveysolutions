@@ -26,14 +26,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaire = Mock.Of<IQuestionnaire>();
 
-            var questionnaireRepository = 
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
             interview.Complete(userId, string.Empty, DateTime.Now);

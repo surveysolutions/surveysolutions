@@ -8,12 +8,14 @@ namespace WB.Core.Synchronization.SyncStorage
 
         void TrackUserLinkingRequest(Guid deviceId, Guid userId);
 
-        void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string lastSyncedPackageId, string[] packagesToDownload);
+        void TrackArIdsRequest(Guid deviceId, Guid userId, string packageType, string[] packagesToDownload);
 
         void UnlinkUserFromDevice(Guid oldDeviceId, Guid userId);
 
-        void TrackPackageRequest(Guid deviceId, Guid userId, string packageType, string packageId);
+        void TrackPackageRequest(Guid deviceId, Guid userId, string packageId);
 
         void TraceHandshake(Guid deviceId, Guid userId, string appVersion);
+
+        void MarkPackageAsSuccessfullyHandled(Guid deviceId, Guid userId, string successfullyHandledPackageId);
     }
 }

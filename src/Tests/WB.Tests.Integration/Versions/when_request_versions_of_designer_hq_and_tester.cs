@@ -1,6 +1,5 @@
 ﻿using System;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Capi.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -16,7 +15,7 @@ namespace WB.Tests.Integration.Versions
     {
         Establish context = () =>
         {
-            designerExpressionsEngineVersionService = new DesignerExpressionsEngineVersionService();
+            designerEngineVersionService = new DesignerEngineVersionService();
             testerExpressionsEngineVersionService = new TesterExpressionsEngineVersionService();
             hqSupportedVersionProvider = new SupportedVersionProvider(() => false, new Version());
         };
@@ -24,7 +23,7 @@ namespace WB.Tests.Integration.Versions
         Because of = () =>
         {
             testerVersion = testerExpressionsEngineVersionService.GetExpressionsEngineSupportedVersion();
-            designerLatestSupportedVersion = designerExpressionsEngineVersionService.GetLatestSupportedVersion();
+            designerLatestSupportedVersion = designerEngineVersionService.GetLatestSupportedVersion();
             designerApiVersion = QuestionnairesController.ApiVersion;
             hqVersion = hqSupportedVersionProvider.GetSupportedQuestionnaireVersion();
         };
@@ -44,7 +43,7 @@ namespace WB.Tests.Integration.Versions
         private static Version hqVersion;
 
         private static TesterExpressionsEngineVersionService testerExpressionsEngineVersionService;
-        private static DesignerExpressionsEngineVersionService designerExpressionsEngineVersionService;
+        private static DesignerEngineVersionService designerEngineVersionService;
         private static SupportedVersionProvider hqSupportedVersionProvider;
     }
 }

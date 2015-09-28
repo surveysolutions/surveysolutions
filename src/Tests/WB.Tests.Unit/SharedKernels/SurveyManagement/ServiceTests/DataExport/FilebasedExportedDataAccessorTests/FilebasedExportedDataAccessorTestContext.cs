@@ -22,27 +22,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         protected static FilebasedExportedDataAccessor CreateFilebasedExportedDataAccessor(
             string[] dataFiles=null, 
             string[] environmentFiles=null, 
-            Action<IEnumerable<string>,IEnumerable<string>> zipCallback=null,
+            Action<IEnumerable<string>> zipCallback=null,
             IFileSystemAccessor fileSystemAccessor=null)
         {
             if (fileSystemAccessor == null)
             {
                 var fileSystemAccessorMock = CreateFileSystemAccessorMock();
+                fileSystemAccessorMock.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>()))
+                    .Returns<string, string>(Path.Combine);
                 fileSystemAccessor = fileSystemAccessorMock.Object;
             }
             var archiveUtilsMock = new Mock<IArchiveUtils>();
             if (zipCallback != null)
-                archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
-                    .Callback<IEnumerable<string>, IEnumerable<string>, string>((f, d, n) => zipCallback(f, d));
+                archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
+                    .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
-            return new FilebasedExportedDataAccessor(fileSystemAccessor, "",
-                Mock.Of<IDataExportService>(_ => _.GetDataFilesForQuestionnaire(
-                    It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles &&
-                    _.GetDataFilesForQuestionnaireByInterviewsInApprovedState(
-                        It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == dataFiles),
+            return new FilebasedExportedDataAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
+                Mock.Of<ITabularDataToExternalStatPackageExportService>(),
+                Mock.Of<IMetadataExportService>(),
                 Mock.Of<IEnvironmentContentService>(
-                    _ => _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) == environmentFiles),
-                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewHistorySettings(string.Empty,false));
+                    _ =>
+                        _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) ==
+                        environmentFiles),
+                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewDataExportSettings(string.Empty, false,10000),
+                Mock.Of<ITabularFormatExportService>(_ => _.GetTabularDataFilesFromFolder(Moq.It.IsAny<string>()) == (dataFiles?? new string[0])));
         }
 
         protected static Mock<IFileSystemAccessor> CreateFileSystemAccessorMock()

@@ -8,19 +8,29 @@
       <include layout="@layout/interview_question__instructions" />
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-
-        <MvxAutoCompleteTextView
-          style="@style/Interview_Question_Answer_FilteredComboBox"
-          android:completionThreshold="1"
-          android:inputType="textVisiblePassword"
-          local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-          local:MvxBind="FocusValueChanged ValueChangeCommand; 
+        <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+          <MvxAutoCompleteTextView
+            style="@style/Interview_Question_Answer_FilteredComboBox"
+            android:completionThreshold="1"
+            android:layout_weight="1"
+            android:inputType="textVisiblePassword"
+            local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
+            local:MvxBind="FocusValueChanged ValueChangeCommand; 
                          ItemsSource AutoCompleteSuggestions; 
                          PartialText FilterText; 
                          SelectedObject SelectedObject; 
                          ResetText ResetTextInEditor;
-                         Hint Localization('FilteredComboboxQuestion_Hint');
-                         BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));" />
+                         Hint Localization('FilteredComboboxQuestion_Hint');" />
+          <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_weight="0"
+                    local:MvxBind="Click RemoveAnswerCommand; 
+                                      HideKeyboardOnClick .; 
+                                      Visible CanRemoveAnswer;" />
+        </LinearLayout>
 
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />

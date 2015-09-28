@@ -99,7 +99,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             var updateFromLastPackageByQuestionnaire = FilterDeletedQuestionnaires(allFromLastPackageByQuestionnaire, lastSyncedPackageId);
 
-            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Questionnaire, lastSyncedPackageId, updateFromLastPackageByQuestionnaire);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Questionnaire, updateFromLastPackageByQuestionnaire);
 
             return new SyncItemsMetaContainer
             {
@@ -118,7 +118,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             updateFromLastPackageByUser = updateFromLastPackageByUser.Skip(Math.Max(0, updateFromLastPackageByUser.Count() - 1)).Take(1).ToList();
 
-            this.TrackArIdsRequest(userId, deviceId, SyncItemType.User, lastSyncedPackageId, updateFromLastPackageByUser);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.User, updateFromLastPackageByUser);
 
             return new SyncItemsMetaContainer
             {
@@ -135,10 +135,10 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
 
             List<SynchronizationChunkMeta> updateFromLastPackageByInterview =
                 allUpdatesFromLastPackage.Select(
-                    x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType))
+                    x => new SynchronizationChunkMeta(x.PackageId, x.SortIndex, x.UserId, x.ItemType) { InterviewId = x.InterviewId })
                     .ToList();
 
-            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Interview, lastSyncedPackageId, updateFromLastPackageByInterview);
+            this.TrackArIdsRequest(userId, deviceId, SyncItemType.Interview, updateFromLastPackageByInterview);
 
             return new SyncItemsMetaContainer
             {
@@ -155,7 +155,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with user is absent", packageId));
 
-            this.TrackPackageRequest(deviceId, SyncItemType.User, packageId, userId);
+            this.TrackPackageRequest(deviceId, packageId, userId);
 
             return new UserSyncPackageDto
                    {
@@ -173,7 +173,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (package == null)
                 throw new ArgumentException(string.Format("Package {0} with questionnaire is absent", packageId));
 
-            this.TrackPackageRequest(deviceId, SyncItemType.Questionnaire, packageId, userId);
+            this.TrackPackageRequest(deviceId, packageId, userId);
 
             return new QuestionnaireSyncPackageDto
                    {
@@ -191,7 +191,7 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             if (packageMetaInformation == null)
                 throw new ArgumentException(string.Format("Package {0} with interview is absent", packageId));
 
-            this.TrackPackageRequest(deviceId, SyncItemType.Interview, packageId, userId);
+            this.TrackPackageRequest(deviceId, packageId, userId);
 
             return new InterviewSyncPackageDto
                    {
@@ -199,6 +199,12 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
                        Content = packageMetaInformation.Content,
                        MetaInfo = packageMetaInformation.Meta
                    };
+        }
+
+
+        public void MarkPackageAsSuccessfullyHandled(string successfullyHandledPackageId, Guid deviceId, Guid userId)
+        {
+            this.syncLogger.MarkPackageAsSuccessfullyHandled(deviceId, userId, successfullyHandledPackageId);
         }
 
         private List<SynchronizationChunkMeta> FilterDeletedQuestionnaires(IList<QuestionnaireSyncPackageMeta> packages, string lastSyncedPackageId)
@@ -339,9 +345,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             }
         }
 
-        private void TrackPackageRequest(Guid deviceId, string packageType, string packageId, Guid userId)
+        private void TrackPackageRequest(Guid deviceId, string packageId, Guid userId)
         {
-            this.syncLogger.TrackPackageRequest(deviceId, userId, packageType, packageId);
+            this.syncLogger.TrackPackageRequest(deviceId, userId, packageId);
         }
 
         private void TrackUserLinkingRequest(Guid deviceId, Guid userId, string oldAndroidId)
@@ -359,9 +365,9 @@ namespace WB.Core.Synchronization.Implementation.SyncManager
             this.syncLogger.TraceHandshake(deviceId, userId, appVersion);
         }
 
-        private void TrackArIdsRequest(Guid userId, Guid deviceId, string packageType, string lastSyncedPackageId, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
+        private void TrackArIdsRequest(Guid userId, Guid deviceId, string packageType, IEnumerable<SynchronizationChunkMeta> updateFromLastPakage)
         {
-            this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType, lastSyncedPackageId, updateFromLastPakage.Select(x => x.Id).ToArray());
+            this.syncLogger.TrackArIdsRequest(deviceId, userId, packageType,updateFromLastPakage.Select(x => x.Id).ToArray());
         }
 
         private void TrackDeviceRegistration(Guid deviceId, Guid userId, string appVersion, string androidId)

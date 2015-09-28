@@ -46,10 +46,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                                                                                                 questionaire);
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(questionnaireRepository);
-            //SetupInstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
+            //Setup.InstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new TextQuestionAnswered(userId, conditionallyInvalidQuestionId, new decimal[0], DateTime.Now, "answer"));
             interview.Apply(new QuestionsDisabled(new[] { new Identity(conditionallyInvalidQuestionId, new decimal[0]) }));
             interview.Apply(new AnswersDeclaredInvalid(new[] { new Identity(conditionallyInvalidQuestionId, new decimal[0]) }));

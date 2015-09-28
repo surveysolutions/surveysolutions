@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
-        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IJsonUtils jsonUtils;
         public ImportController(
             IStringCompressor zipUtils,
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper, 
-            IDesignerExpressionsEngineVersionService expressionsEngineVersionService, 
+            IDesignerEngineVersionService engineVersionService, 
             IJsonUtils jsonUtils)
         {
             this.zipUtils = zipUtils;
@@ -56,7 +56,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.engineVersionService = engineVersionService;
             this.jsonUtils = jsonUtils;
         }
 
@@ -90,12 +90,20 @@ namespace WB.UI.Designer.Api
                 request.SupportedVersion.Minor,
                 request.SupportedVersion.Patch);
 
-            if (!expressionsEngineVersionService.IsClientVersionSupported(supportedClientVersion))
+            if (!this.engineVersionService.IsClientVersionSupported(supportedClientVersion))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
                     ReasonPhrase =
                         string.Format(ErrorMessages.ClientVersionIsNotSupported, supportedClientVersion)
+                });
+            }
+
+            if (!this.engineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(questionnaireView.Source, supportedClientVersion))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
 
@@ -140,32 +148,14 @@ namespace WB.UI.Designer.Api
                     ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
-
-            UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(
-                questionnaireView.Source);
+            
             return new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(jsonUtils.Serialize(questionnaireView.Source)),
                 QuestionnaireAssembly = resultAssembly
             };
         }
-
-
-
-        private void UpdateNumericQuestionInOrderToPreserveBackwardCompatibilityWithRosterUpperBoundSetting(QuestionnaireDocument questionnaire)
-        {
-            var numericQuestions = questionnaire.Find<NumericQuestion>(q => true).ToArray();
-            foreach (var numericQuestion in numericQuestions)
-            {
-                var rostersTriggeredByTheQuestion =
-                    questionnaire.Find<IGroup>(g => g.RosterSizeQuestionId == numericQuestion.PublicKey);
-                if (rostersTriggeredByTheQuestion.Any())
-                    numericQuestion.MaxValue = Constants.MaxRosterRowCount;
-                else
-                    numericQuestion.MaxValue = null;
-            }
-        }
-
+        
         [HttpPost]
         public PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
         {

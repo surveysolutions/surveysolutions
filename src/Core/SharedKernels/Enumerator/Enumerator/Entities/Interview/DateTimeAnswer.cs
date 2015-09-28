@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
         {
         }
 
-        public void SetAnswer(DateTime answer)
+        public void SetAnswer(DateTime? answer)
         {
             this.Answer = answer;
         }

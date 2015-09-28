@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CloneStaticTextTests
 {
-    public class when_cloning_StaticText_and_source_not_present : QuestionnaireTestsContext
+    internal class when_cloning_StaticText_and_source_not_present : QuestionnaireTestsContext
     {
         Establish context = () =>
         {

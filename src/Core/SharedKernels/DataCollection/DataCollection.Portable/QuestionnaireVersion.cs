@@ -5,6 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     [DataContract]
     [Obsolete("Don't use this class! Don't move it. It is here only for backward compatibility with versions lower then 4.")]
+    //survived during clean up. should be removed when all clients have version higher 4.0
     public sealed class QuestionnaireVersion
     {
         [DataMember]

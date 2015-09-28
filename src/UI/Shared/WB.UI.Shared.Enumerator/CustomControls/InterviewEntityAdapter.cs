@@ -40,8 +40,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
+            {typeof (InterviewSummaryNavigationViewModel), Resource.Layout.interview_summary_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
-            {typeof (InterviewCompletionStatisticsViewModel), Resource.Layout.interview_complete_statistics},
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
         };
 

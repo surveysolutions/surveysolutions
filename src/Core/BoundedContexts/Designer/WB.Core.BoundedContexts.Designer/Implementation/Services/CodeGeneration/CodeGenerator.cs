@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -30,28 +31,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
                 CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, true);
 
-            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
+            return GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
+        }
 
-            return template.TransformText();
+        private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
+        {
+            return targetVersion.Major < 11 ? 
+                new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText() : 
+                new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
         }
 
         public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            var generatedClasses = new Dictionary<string, string>();
-
             CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
             QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
                 CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, false);
 
-            var template = new InterviewExpressionStateTemplate(questionnaireTemplateStructure);
+            var transformText = GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
 
+            var generatedClasses = new Dictionary<string, string>();
             generatedClasses.Add(new ExpressionLocation
             {
                 ItemType = ExpressionLocationItemType.Questionnaire,
                 ExpressionType = ExpressionLocationType.General,
                 Id = questionnaire.PublicKey
-            }.ToString(), template.TransformText());
+            }.ToString(), transformText);
 
             //generating partial classes
             GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
@@ -85,7 +90,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
 
-            return new CodeGenerationSettings(
+            if (version.Major < 11)
+                return new CodeGenerationSettings(
                     abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2" },
                     namespaces: new[]
@@ -93,6 +99,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V2",
                         "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
                         "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
+                    },
+                    areRosterServiceVariablesPresent: true,
+                    rosterType: "RosterRowList");
+
+            return new CodeGenerationSettings(
+                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV4",
+                    additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
+                    namespaces: new[]
+                    {
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V4",
+                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
                     },
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 
 namespace WB.Core.SharedKernels.Enumerator.Repositories

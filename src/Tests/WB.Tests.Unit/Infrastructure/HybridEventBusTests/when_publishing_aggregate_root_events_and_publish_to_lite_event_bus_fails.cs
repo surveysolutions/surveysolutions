@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
 {
-    public class when_publishing_aggregate_root_events_and_publish_to_lite_event_bus_fails
+    internal class when_publishing_aggregate_root_events_and_publish_to_lite_event_bus_fails
     {
         Establish context = () =>
         {

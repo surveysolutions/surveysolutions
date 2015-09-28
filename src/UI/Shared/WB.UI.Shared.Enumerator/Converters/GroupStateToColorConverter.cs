@@ -8,9 +8,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
-    public class GroupStateToColorConverter : MvxValueConverter<SimpleGroupStatus, Color>
+    public class GroupStateToColorConverter : MvxValueConverter<SimpleGroupStatus, int>
     {
-        protected override Color Convert(SimpleGroupStatus value, Type targetType, object parameter, CultureInfo culture)
+        protected override int Convert(SimpleGroupStatus value, Type targetType, object parameter, CultureInfo culture)
         {
             var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
             var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
@@ -18,11 +18,11 @@ namespace WB.UI.Shared.Enumerator.Converters
             switch (value)
             {
                 case SimpleGroupStatus.Completed:
-                    return resources.GetColor(Resource.Color.group_completed);
+                    return Resource.Color.group_completed;
                 case SimpleGroupStatus.Invalid:
-                    return resources.GetColor(Resource.Color.group_with_invalid_answers);
+                    return Resource.Color.group_with_invalid_answers;
                 default:
-                    return resources.GetColor(Resource.Color.group_started);
+                    return Resource.Color.group_started;
             }
         }
     }

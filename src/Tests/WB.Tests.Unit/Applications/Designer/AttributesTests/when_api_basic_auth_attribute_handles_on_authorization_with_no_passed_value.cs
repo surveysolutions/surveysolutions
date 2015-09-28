@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.AttributesTests
 {
-    public class when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value : AttributesTestContext
+    internal class when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value : AttributesTestContext
     {
         Establish context = () =>
         {

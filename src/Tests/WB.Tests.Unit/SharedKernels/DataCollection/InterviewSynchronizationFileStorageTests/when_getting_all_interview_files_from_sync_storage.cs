@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
             interviewSynchronizationFileStorage = CreateFileSyncRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
-        Because of = () => result = interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
+        Because of = () => result = interviewSynchronizationFileStorage.GetImagesByInterviews();
 
         It should_return_2_files = () =>
             result.Count.ShouldEqual(2);

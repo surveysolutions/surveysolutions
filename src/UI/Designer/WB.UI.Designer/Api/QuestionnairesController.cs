@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Api
     [RoutePrefix("api/v9/questionnaires")]
     public class QuestionnairesController : ApiController
     {
-        internal static readonly Version ApiVersion = new Version(9, 0, 0);
+        internal static readonly Version ApiVersion = new Version(11, 0, 0);
 
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -29,14 +29,14 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory, IDesignerExpressionsEngineVersionService expressionsEngineVersionService)
+            IQuestionnaireListViewFactory viewFactory, IDesignerEngineVersionService engineVersionService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.engineVersionService = engineVersionService;
         }
 
         [Route("~/api/v9/login")]

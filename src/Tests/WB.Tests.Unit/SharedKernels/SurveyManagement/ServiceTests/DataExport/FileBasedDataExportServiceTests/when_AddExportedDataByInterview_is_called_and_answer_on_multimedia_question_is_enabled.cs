@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 new[]
                 {
                     new InterviewDataExportRecord(interviewId, "name.tex", new string[0], new string[0],
-                        new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { fileName }), })
+                        new[] { new ExportedQuestion(Guid.NewGuid(), QuestionType.Multimedia, new[] { fileName }), }, new string[0])
                 }, Guid.NewGuid().FormatGuid());
 
             interviewToExport = new InterviewDataExportView(interviewId, Guid.NewGuid(), 1,
-                new[] { interviewLevelToExport });
+                new[] { interviewLevelToExport }, InterviewExportedAction.Completed);
 
             plainFileRepositoryMock = new Mock<IPlainInterviewFileStorage>();
             plainFileRepositoryMock.Setup(x => x.GetInterviewBinaryData(interviewId, Moq.It.IsAny<string>()))
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            fileBasedDataExportRepositoryWriter.AddExportedDataByInterview(interviewId);
+            fileBasedDataExportRepositoryWriter.AddExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.Completed);
 
         It should_store_once_data_by_level = () =>
             interviewExportServiceMock.Verify(x => x.AddOrUpdateInterviewRecords(interviewToExport, Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Once());
