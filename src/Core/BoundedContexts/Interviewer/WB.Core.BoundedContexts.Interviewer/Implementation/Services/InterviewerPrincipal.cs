@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Cheesebaron.MvxPlugins.Settings.Interfaces;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.UI.Interviewer.Infrastructure.Internals.Security
+namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerPrincipal : IInterviewerPrincipal
     {

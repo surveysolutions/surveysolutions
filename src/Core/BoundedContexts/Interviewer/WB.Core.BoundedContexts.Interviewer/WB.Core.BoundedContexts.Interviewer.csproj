@@ -40,6 +40,10 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.1\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid10+Xamarin.iOS10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Cirrious.CrossCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e16445fd9b451819, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.CrossCore.dll</HintPath>
       <Private>True</Private>
@@ -128,6 +132,7 @@
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
+    <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
@@ -152,7 +157,7 @@
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
-    <Compile Include="Services\ISyncPackageIdsStorage.cs" />
+    <Compile Include="Services\IInterviewPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />

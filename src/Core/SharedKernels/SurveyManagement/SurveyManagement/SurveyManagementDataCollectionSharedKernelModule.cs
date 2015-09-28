@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
-            this.Bind<IInterviewerInterviewsFactory>().To<InterviewerInterviewsFactory>();
+            this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>().InSingletonScope()
               .WithConstructorArgument("rootDirectoryPath", this.basePath);
