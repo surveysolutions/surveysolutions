@@ -34,14 +34,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly ICommandService commandService;
         private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
-        private readonly ISyncPackageIdsStorage syncPackageIdsStorage;
+        private readonly IInterviewPackageIdsStorage interviewPackageIdsStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IJsonUtils jsonUtils;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
@@ -58,14 +57,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public SynchronizationViewModel(
             ISynchronizationService synchronizationService,
-            IViewModelNavigationService viewModelNavigationService,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IQuestionnaireModelBuilder questionnaireModelBuilder,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IPlainQuestionnaireRepository questionnaireRepository,
             ICommandService commandService,
             ICapiDataSynchronizationService capiDataSynchronizationService,
-            ISyncPackageIdsStorage syncPackageIdsStorage,
+            IInterviewPackageIdsStorage interviewPackageIdsStorage,
             ICapiCleanUpService capiCleanUpService,
             IJsonUtils jsonUtils,
             IPlainInterviewFileStorage plainInterviewFileStorage,
@@ -78,14 +76,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository)
         {
             this.synchronizationService = synchronizationService;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.questionnaireModelBuilder = questionnaireModelBuilder;
             this.questionnaireModelRepository = questionnaireModelRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.commandService = commandService;
             this.capiDataSynchronizationService = capiDataSynchronizationService;
-            this.syncPackageIdsStorage = syncPackageIdsStorage;
+            this.interviewPackageIdsStorage = interviewPackageIdsStorage;
             this.capiCleanUpService = capiCleanUpService;
             this.jsonUtils = jsonUtils;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
@@ -355,7 +352,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private async Task DownloadInterviewPackagesAsync()
         {
             var interviewPackages = await this.synchronizationService.GetInterviewPackagesAsync(
-                    this.syncPackageIdsStorage.GetLastStoredPackageId(), this.Token);
+                    this.interviewPackageIdsStorage.GetLastStoredPackageId(), this.Token);
 
             this.statistics.TotalNewInterviewsCount = interviewPackages.Interviews.Count(interview => !interview.IsRejected);
             this.statistics.TotalRejectedInterviewsCount = interviewPackages.Interviews.Count(interview => interview.IsRejected);
@@ -463,7 +460,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             await Task.Run(() =>
             {
                 this.capiDataSynchronizationService.ProcessDownloadedInterviewPackages(package, synchronizationChunkMeta.ItemType);
-                this.syncPackageIdsStorage.Append(package.PackageId, synchronizationChunkMeta.SortIndex);
+                this.interviewPackageIdsStorage.Store(package.PackageId, synchronizationChunkMeta.SortIndex);
             });
         }
 

@@ -356,7 +356,6 @@
     <Compile Include="Infrastructure\Internals\Crasher\Utils\Installation.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Utils\PackageManagerWrapper.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Utils\ReportUtils.cs" />
-    <Compile Include="Infrastructure\Internals\Security\InterviewerPrincipal.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Backup\BackupableInMemoryReadSideRepositoryAccessor.cs" />
@@ -405,9 +404,9 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Syncronization\ChangeLogManipulator.cs" />
-    <Compile Include="Syncronization\Implementation\SyncPackageIdsStorage.cs" />
-    <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Implementations\Services\InterviewerApplicationUpdater.cs" />
+    <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorage.cs" />
+    <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
@@ -697,6 +696,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Infrastructure\Internals\Security\" />
     <Folder Include="Resources\drawable-v21\" />
     <Folder Include="Services\" />
     <Folder Include="Syncronization\Update\" />
