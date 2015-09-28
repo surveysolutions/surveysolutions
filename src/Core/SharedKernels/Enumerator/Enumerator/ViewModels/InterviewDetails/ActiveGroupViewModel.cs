@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
@@ -103,23 +102,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (navigationParams.TargetScreen == ScreenType.Complete)
             {
-                CreateCompleteScreen();
-                return;
+                this.ShowCompleteScreen();
             }
-
-            GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
-
-            bool isThisIsLastInterviewSection = this.questionnaire.GroupsHierarchy.Last().Id
-                                                == navigationParams.TargetGroup.Id;
-
-            await this.CreateRegularGroupScreen(navigationParams, @group, isThisIsLastInterviewSection);
-            if (!this.eventRegistry.IsSubscribed(this, interviewId))
+            else
             {
-                this.eventRegistry.Subscribe(this, interviewId);
+                await this.ShowGroupMembers(navigationParams);
             }
         }
 
-        private void CreateCompleteScreen()
+        private async Task ShowGroupMembers(ScreenChangedEventArgs navigationParams)
+        {
+            GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+
+            bool isThisIsLastInterviewSection = this.questionnaire.GroupsHierarchy.Last().Id == navigationParams.TargetGroup.Id;
+
+            await this.CreateRegularGroupScreen(navigationParams, @group, isThisIsLastInterviewSection);
+            if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+            {
+                this.eventRegistry.Subscribe(this, this.interviewId);
+            }
+        }
+
+        private void ShowCompleteScreen()
         {
             this.Items = new ObservableRangeCollection<dynamic>();
 
@@ -145,12 +149,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = @group.Title;
             }
 
-            await Task.Run(
-                () =>
-                {
-                    this.LoadFromModel(navigationParams.TargetGroup, isThisIsLastInterviewSection);
-                    this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
-                });
+            await Task.Run(() => {
+                this.LoadFromModel(navigationParams.TargetGroup, isThisIsLastInterviewSection);
+                this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
+            });
         }
 
         private void SendScrollToMessage(Identity scrollTo)
