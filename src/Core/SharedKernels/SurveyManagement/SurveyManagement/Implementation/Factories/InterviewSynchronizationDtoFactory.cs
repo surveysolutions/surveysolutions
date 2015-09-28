@@ -20,9 +20,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             this.questionnriePropagationStructures = questionnriePropagationStructures;
         }
 
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime)
         {
-            var result = BuildFrom(interview, interview.ResponsibleId, interview.Status, comments);
+            var result = BuildFrom(interview, interview.ResponsibleId, interview.Status, comments, rejectedDateTime);
             return result;
         }
 
@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 return null;
             return question.Comments.Last().Text;
         }
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview, Guid userId, InterviewStatus status, string comments)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview, 
+            Guid userId, InterviewStatus status, string comments, DateTime? rejectedDateTime)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
@@ -81,7 +82,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     propagatedGroupInstanceCounts);
             }
             return new InterviewSynchronizationDto(interview.InterviewId,
-                status, comments,
+                status, 
+                comments,
+                rejectedDateTime,
                 userId,
                 interview.QuestionnaireId,
                 interview.QuestionnaireVersion,

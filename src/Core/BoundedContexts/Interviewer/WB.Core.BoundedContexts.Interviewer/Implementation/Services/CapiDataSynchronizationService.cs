@@ -104,7 +104,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     metaInfo.TemplateVersion,
                     (InterviewStatus)metaInfo.Status,
                     featuredQuestionsMeta, 
-                    metaInfo.Comments, 
+                    metaInfo.Comments,
+                    metaInfo.RejectDateTime,
                     true, 
                     createdOnClient);
 
