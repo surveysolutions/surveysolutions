@@ -3,7 +3,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.MonadsTests
 {
-    public class MonadsTests
+    internal class MonadsTests
     {
         Establish context = () => {};
 

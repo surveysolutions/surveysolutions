@@ -3,6 +3,8 @@ using System.IO;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.PictureChooser;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -18,12 +20,16 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class MultimedaQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel,
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
+        private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
         private Identity questionIdentity;
         private string variableName;
@@ -33,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IPlainInterviewFileStorage plainInterviewFileStorage,
+            ILiteEventRegistry eventRegistry,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
@@ -40,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
+            this.eventRegistry = eventRegistry;
             this.questionnaireStorage = questionnaireStorage;
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -52,7 +60,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public byte[] Answer
         {
             get { return this.answer; }
-            set { this.answer = value; this.RaisePropertyChanged(); }
+            set
+            {
+                this.answer = value;
+                this.RaisePropertyChanged();
+            }
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -72,6 +84,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.PictureFileName);
             }
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         public IMvxCommand RequestAnswerCommand
@@ -80,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(async () =>
                 {
-                    var pictureFileName = String.Format("{0}{1}.jpg", this.variableName, string.Join("-", this.questionIdentity.RosterVector));
+                    var pictureFileName = this.GetPictureFileName();
 
                     var pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
                     Stream pictureStream = await pictureChooserTask.TakePictureAsync(400, 95);
@@ -112,6 +126,41 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return new MvxCommand(async () =>
+                {
+                    try
+                    {
+                        await this.Answering.SendRemoveAnswerCommandAsync(
+                            new RemoveAnswerCommand(this.interviewId,
+                                this.userId, 
+                                this.questionIdentity,
+                                DateTime.UtcNow));
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    }
+                    catch (InterviewException exception)
+                    {
+                        this.QuestionState.Validity.ProcessException(exception);
+                    }
+                });
+            }
+        }
+
+        public void Handle(AnswerRemoved answerRemoved)
+        {
+            var myAnswerRemoved = this.questionIdentity.Id == answerRemoved.QuestionId && 
+                                  this.questionIdentity.RosterVector.Identical(answerRemoved.RosterVector);
+            if (myAnswerRemoved)
+            {
+                this.Answer = null;
+                this.QuestionState.IsAnswered = false;
+                this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
+            }
+        }
+
         private void StorePictureFile(Stream pictureStream, string pictureFileName)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -120,6 +169,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 byte[] pictureBytes = ms.ToArray();
                 this.plainInterviewFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
             }
+        }
+
+        private string GetPictureFileName()
+        {
+            return String.Format("{0}{1}.jpg", this.variableName, string.Join("-", this.questionIdentity.RosterVector));
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
         }
     }
 }

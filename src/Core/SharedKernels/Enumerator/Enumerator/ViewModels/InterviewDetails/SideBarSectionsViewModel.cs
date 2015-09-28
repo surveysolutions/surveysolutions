@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -22,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<GroupsEnabled>,
-        ILiteEventHandler<GroupsDisabled>
+        ILiteEventHandler<GroupsDisabled>, IDisposable
     {
         private NavigationState navigationState;
 
@@ -87,21 +88,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
+            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(NavigationIdentity.CreateForCompleteScreen(),  navigationState, interviewId));
+
             this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections);
             this.UpdateSideBarTree();
         }
 
-        void NavigationStateGroupChanged(GroupChangedEventArgs navigationParams)
+        private void NavigationStateGroupChanged(ScreenChangedEventArgs navigationParams)
         {
             this.HighlightCurrentSection(navigationParams);
         }
 
-        private void HighlightCurrentSection(GroupChangedEventArgs navigationParams)
+        private void HighlightCurrentSection(ScreenChangedEventArgs navigationParams)
         {
             var allTreeElements = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections)
                 .TreeToEnumerable(x => x.Children).ToList();
             SideBarSectionViewModel selectedGroup = allTreeElements
-                .FirstOrDefault(x => x.SectionIdentity.Equals(navigationParams.TargetGroup));
+                .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(navigationParams.TargetGroup));
 
             var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
@@ -161,12 +164,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateSideBarTree();
         }
 
-        void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
+        private void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
         {
             var sectionIdentity = new Identity(section.Id, new decimal[0]);
             var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
             var index = questionnaire.GroupsHierarchy
-                .Where(s => interview.IsEnabled(sectionIdentity))
+                .Where(s => interview.IsEnabled(new Identity(s.Id, new decimal[0])))
                 .ToList()
                 .IndexOf(section);
             this.Sections.Insert(index, sectionViewModel);
@@ -175,7 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
@@ -220,7 +223,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             foreach (var groupIdentity in identities)
             {
-                var section = this.AllVisibleSections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                var section = this.AllVisibleSections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
                 if (section != null)
                 {
                     if (section.Parent != null)
@@ -235,7 +238,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             foreach (var groupIdentity in identities)
             {
-                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.SectionIdentity.Equals(groupIdentity));
+                var topLevelSectionToRemove = this.Sections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
                 if (topLevelSectionToRemove != null)
                 {
                     this.Sections.Remove(topLevelSectionToRemove);
@@ -263,15 +266,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private SideBarSectionViewModel BuildSectionItem(SideBarSectionViewModel sectionToAddTo, Identity enabledSubgroupIdentity)
         {
-            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, enabledSubgroupIdentity, this.navigationState, this.interviewId);
+            return this.modelsFactory.BuildSectionItem(this, sectionToAddTo, NavigationIdentity.CreateForGroup(enabledSubgroupIdentity), this.navigationState, this.interviewId);
         }
 
         public ICommand UpdateStatuses
         {
             get
             {
-                return new MvxCommand(async () => await Task.Run(()=> this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromModel())));
+                return new MvxCommand(async () => await Task.Run(
+                    () =>
+                    {
+                        this.AllVisibleSections.ForEach(x => x.SideBarGroupState.UpdateFromGroupModel());
+                    }));
             }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId);
+            this.navigationState.GroupChanged -= this.NavigationStateGroupChanged;
         }
     }
 }

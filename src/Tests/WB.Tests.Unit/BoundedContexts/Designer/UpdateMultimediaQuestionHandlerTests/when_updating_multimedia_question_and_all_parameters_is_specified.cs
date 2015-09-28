@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
                 questionnaire.UpdateMultimediaQuestion(questionId: questionId, title: "title",
                     variableName: "multimedia_question",
                     variableLabel: variableName, enablementCondition: condition, instructions: instructions,
-                    responsibleId: responsibleId);
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer);
 
         Cleanup stuff = () =>
         {

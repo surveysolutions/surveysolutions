@@ -5,6 +5,7 @@ using datacollection::Main.Core.Events.Questionnaire;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
@@ -16,6 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         {
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
             eventContext = new EventContext();
+            questionnaire = CreateQuestionnaire();
         };
 
         Cleanup stuff = () =>
@@ -25,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire = new Questionnaire(Guid.NewGuid(), questionnaireDocument, true, "assembly body");
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, true, "assembly body"));
 
         It should_raise_1_TemplateImported_event = () =>
           eventContext.GetEvents<TemplateImported>().Count(@event => @event.Source == questionnaireDocument && @event.AllowCensusMode && @event.Version == 1).ShouldEqual(1);

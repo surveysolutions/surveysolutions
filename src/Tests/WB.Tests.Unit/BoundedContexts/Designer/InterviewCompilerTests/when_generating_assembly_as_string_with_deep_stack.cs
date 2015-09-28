@@ -58,7 +58,7 @@ using WB.Core.SharedKernels.DataCollection.V2;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
+    internal class InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17 : AbstractInterviewExpressionState, IInterviewExpressionStateV2 
     {
         public InterviewExpressionState_9a3ff0299518414ba8cfb720bfe1ff17() 
         {
@@ -355,7 +355,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         //generating rosters
         
-        public static class IdOf
+        internal static class IdOf
         {
             public static readonly Guid @__questionnaire = Guid.Parse(""4f66d228-f2f5-4e32-98f4-2de7079fea6b""); 
             //questions

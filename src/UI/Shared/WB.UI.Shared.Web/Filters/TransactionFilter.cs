@@ -5,21 +5,23 @@ namespace WB.UI.Shared.Web.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
     {
-        private readonly ITransactionManagerProvider transactionManager;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
-        public TransactionFilter(ITransactionManagerProvider transactionManager)
+        public TransactionFilter(ITransactionManagerProvider transactionManagerProvider)
         {
-            this.transactionManager = transactionManager;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            transactionManager.GetTransactionManager().BeginQueryTransaction();
+            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
         }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            transactionManager.GetTransactionManager().RollbackQueryTransaction();
+            var transactionManager = this.transactionManagerProvider.GetTransactionManager();
+            if (transactionManager.IsQueryTransactionStarted)
+                transactionManager.RollbackQueryTransaction();
         }
     }
 }

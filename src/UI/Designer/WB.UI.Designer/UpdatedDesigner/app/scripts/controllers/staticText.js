@@ -5,7 +5,7 @@
 
             var saveStaticText = 'ctrl+s';
 
-            if (hotkeys.get(saveStaticText) === false) {
+            if (hotkeys.get(saveStaticText) !== false) {
                 hotkeys.del(saveStaticText);
             }
             if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)

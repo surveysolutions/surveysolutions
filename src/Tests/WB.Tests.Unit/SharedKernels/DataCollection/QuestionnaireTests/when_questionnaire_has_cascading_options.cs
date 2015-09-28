@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             parentSingleOptionQuestionId = Guid.Parse("9E96D4AB-DF91-4FC9-9585-23FA270B25D7");
             childCascadedComboboxId = Guid.Parse("C6CC807A-3E81-406C-A110-1044AE3FD89B");
             grandChildCascadedComboboxId = Guid.Parse("4C603B8A-3237-4915-96FA-8D1568C679E2");
-            questionnaire = CreateQuestionnaire(Guid.NewGuid(), CreateQuestionnaireDocumentWithOneChapter(new MultyOptionsQuestion
+            questionnaire = CreateImportedQuestionnaire(Guid.NewGuid(), CreateQuestionnaireDocumentWithOneChapter(new MultyOptionsQuestion
             {
                 PublicKey = parentSingleOptionQuestionId,
                 QuestionType = QuestionType.SingleOption

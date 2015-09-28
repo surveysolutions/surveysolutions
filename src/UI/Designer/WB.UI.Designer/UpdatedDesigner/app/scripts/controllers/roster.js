@@ -12,12 +12,18 @@
 
                 var saveRoster = 'ctrl+s';
 
-                if (hotkeys.get(saveRoster) === false) {
+                var addRosterTitle = 'enter';
+
+                if (hotkeys.get(saveRoster) !== false) {
                     hotkeys.del(saveRoster);
                 }
-                if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)
-                {
-                    
+
+                if (hotkeys.get(addRosterTitle) !== false) {
+                    hotkeys.del(addRosterTitle);
+                }
+
+                if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
+
                     hotkeys.bindTo($scope)
                         .add({
                             combo: saveRoster,
@@ -30,6 +36,22 @@
                             }
                         });
                 }
+                hotkeys.add({
+                        combo: addRosterTitle,
+                        description: 'Add roster title',
+                        allowIn: ["INPUT"],
+                        callback: function (event) {
+                            event.preventDefault();
+                            utilityService.moveFocusAndAddOptionIfNeeded(
+                                event.target,
+                                ".fixed-roster-titles-editor",
+                                ".fixed-roster-titles-editor input.fixed-roster-value-editor",
+                                $scope.activeRoster.fixedRosterTitles,
+                                function() { return $scope.addFixedTitle(); },
+                                "title");
+                        }
+                    });
+                
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
                     $scope.activeRoster.variable = result.variableName;
@@ -121,7 +143,8 @@
                             $rootScope.$emit('rosterUpdated', {
                                 itemId: $scope.activeRoster.itemId,
                                 variable: $scope.activeRoster.variableName,
-                                title: $scope.activeRoster.title
+                                title: $scope.activeRoster.title,
+                                hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition))
                             });
                         });
                     }

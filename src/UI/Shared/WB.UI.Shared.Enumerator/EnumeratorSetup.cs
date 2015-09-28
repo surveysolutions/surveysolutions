@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
@@ -29,11 +30,19 @@ namespace WB.UI.Shared.Enumerator
         protected EnumeratorSetup(Context applicationContext) : base(applicationContext)
         {
             //killing app to avoid incorrect state
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => 
-                UncaughtExceptionHandler();
+            AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainOnUnhandledException;
             
-            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, args) =>
-                UncaughtExceptionHandler();
+            TaskScheduler.UnobservedTaskException += OnTaskSchedulerOnUnobservedTaskException;
+        }
+
+        private void OnTaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs args)
+        {
+            UncaughtExceptionHandler();
+        }
+
+        private void OnCurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            UncaughtExceptionHandler();
         }
 
         static void UncaughtExceptionHandler()
@@ -61,10 +70,11 @@ namespace WB.UI.Shared.Enumerator
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
-            registry.AddOrOverwrite("ByteArrayToImage", new ByteArrayToImageConverter());
+            registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
+            registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
             registry.AddOrOverwrite("MediaButtonStyleBackground", new MediaQuestionButtonBackgroundConverter());
             registry.AddOrOverwrite("ViewOptionStyleBackground", new ViewOptionStyleBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
@@ -97,6 +107,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("Transparent", view => new ViewTransparentBinding(view));
             registry.RegisterCustomBindingFactory<View>("PaddingLeft", view => new ViewPaddingLeftBinding(view));
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
 
             base.FillTargetFactories(registry);
         }

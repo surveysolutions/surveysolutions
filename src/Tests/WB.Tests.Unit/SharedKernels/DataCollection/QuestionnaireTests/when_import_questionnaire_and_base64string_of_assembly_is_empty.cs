@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaire(creatorId: responsibleId);
+            questionnaire = CreateImportedQuestionnaire(creatorId: responsibleId);
         };
 
         Because of = () =>

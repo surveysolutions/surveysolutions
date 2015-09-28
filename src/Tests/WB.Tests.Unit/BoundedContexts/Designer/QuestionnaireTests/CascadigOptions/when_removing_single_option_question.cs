@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOptions
 {
-    public class when_removing_single_option_question_used_as_cascading_parent : QuestionnaireTestsContext
+    internal class when_removing_single_option_question_used_as_cascading_parent : QuestionnaireTestsContext
     {
         Establish context = () =>
         {

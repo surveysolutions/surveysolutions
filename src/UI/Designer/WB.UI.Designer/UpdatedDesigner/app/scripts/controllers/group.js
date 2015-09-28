@@ -55,7 +55,8 @@
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
                             itemId: $scope.activeGroup.itemId,
-                            title: $scope.activeGroup.title
+                            title: $scope.activeGroup.title,
+                            hasCondition: ($scope.activeGroup.enablementCondition !== null && /\S/.test($scope.activeGroup.enablementCondition))
                         });
                     });
                 }

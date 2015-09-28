@@ -22,7 +22,7 @@ using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImport
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormalizerTests
 {
     [TestFixture]
-    public class QuestionnaireListViewDenormalizerOldTests
+    internal class QuestionnaireListViewDenormalizerOldTests
     {
         [Test]
         public void Handle_When_QuestionnaireCloned_event_received()

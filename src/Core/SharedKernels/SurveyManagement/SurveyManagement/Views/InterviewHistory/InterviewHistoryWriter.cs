@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly Dictionary<string, InterviewHistoryView> cache = new Dictionary<string, InterviewHistoryView>();
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        private readonly int maxCountOfCachedEntities = 1024;
         private bool cacheEnabled = false;
 
         public InterviewHistoryWriter(ICsvWriterFactory csvWriterFactory, IFileSystemAccessor fileSystemAccessor,
@@ -37,13 +38,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             filebasedExportedDataAccessor.CleanExportHistoryFolder();
         }
 
+        public void Store(InterviewHistoryView view, string id)
+        {
+            if (this.cacheEnabled)
+            {
+                this.StoreUsingCache(view, id);
+            }
+            else
+            {
+                this.StoreAvoidingCache(view, id);
+            }
+        }
+
+
         public InterviewHistoryView GetById(string id)
         {
             if (cacheEnabled)
             {
-                if (cache.ContainsKey(id))
-                    return cache[id];
-                return null;
+                return this.GetByIdUsingCache(id);
             }
 
             var interviewSummary = this.interviewSummaryReader.GetById(id);
@@ -56,32 +68,134 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 
         public void Remove(string id)
         {
-            if (cacheEnabled)
+            if (this.cacheEnabled)
             {
-                cache.Remove(id);
+                this.RemoveUsingCache(id);
+            }
+            else
+            {
+                RemoveAvoidingCache(id);
+            }
+        }
+
+        public void EnableCache()
+        {
+            cacheEnabled = true;
+        }
+
+        public void DisableCache()
+        {
+            foreach (var viewId in cache.Keys.ToList())
+            {
+                var interviewHistoryView = cache[viewId];
+                this.StoreAvoidingCache(interviewHistoryView, viewId);
+                cache.Remove(viewId);
             }
 
+            cacheEnabled = false;
+        }
+
+        public string GetReadableStatus()
+        {
+            return string.Format("Interview history -_- | cache {0} | items: {1}",
+              this.cacheEnabled ? "enabled" : "disabled",
+              cache.Count);
+        }
+
+        public Type ViewType { get { return typeof(InterviewHistoryView); } }
+
+        public bool IsCacheEnabled { get { return this.cacheEnabled; } }
+
+        public void BulkStore(List<Tuple<InterviewHistoryView, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
+            }
+        }
+
+        private InterviewHistoryView GetByIdUsingCache(string id)
+        {
+            if (cache.ContainsKey(id))
+                return cache[id];
+
+            var interviewSummary = this.interviewSummaryReader.GetById(id);
+            if (interviewSummary == null)
+                return null;
+
+            var entity= new InterviewHistoryView(interviewSummary.InterviewId, new List<InterviewHistoricalRecordView>(),
+                interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+
+            cache[id] = entity;
+
+            this.ReduceCacheIfNeeded();
+
+            return entity;
+        }
+
+        private void StoreUsingCache(InterviewHistoryView entity, string id)
+        {
+            this.cache[id] = entity;
+
+            this.ReduceCacheIfNeeded();
+        }
+
+        private void RemoveUsingCache(string id)
+        {
+            this.cache.Remove(id);
+            RemoveAvoidingCache(id);
+        }
+
+        private void ReduceCacheIfNeeded()
+        {
+            if (this.IsCacheLimitReached())
+            {
+                this.ReduceCache();
+            }
+        }
+
+        private bool IsCacheLimitReached()
+        {
+            return this.cache.Count >= maxCountOfCachedEntities;
+        }
+
+        private void ReduceCache()
+        {
+            var bulk = this.cache.Keys.Take(maxCountOfCachedEntities/2).ToList();
+            this.StoreBulkEntitiesToRepository(bulk);
+        }
+
+        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
+        {
+            foreach (var entityId in bulk)
+            {
+                var entity = cache[entityId];
+                if (entity == null)
+                {
+                    RemoveAvoidingCache(entityId);
+                }
+                else
+                {
+                    this.StoreAvoidingCache(entity, entityId);
+                }
+
+                cache.Remove(entityId);
+            }
+        }
+
+        private void RemoveAvoidingCache(string id)
+        {
             var interviewSummary = this.interviewSummaryReader.GetById(id);
             if (interviewSummary == null)
                 return;
 
             var pathToInterviewHistory = GetPathToInterviewHistoryFile(id, interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
-            if(fileSystemAccessor.IsFileExists(pathToInterviewHistory))
+            if (fileSystemAccessor.IsFileExists(pathToInterviewHistory))
                 fileSystemAccessor.DeleteFile(pathToInterviewHistory);
         }
 
-        public void Store(InterviewHistoryView view, string id)
-        {
-            if (cacheEnabled)
-            {
-                cache[id] = view;
-                return;
-            }
-            this.StoreImpl(view,id);
-        }
-
-        private void StoreImpl(InterviewHistoryView view, string id)
+        private void StoreAvoidingCache(InterviewHistoryView view, string id)
         {
             var questionnariePath = GetPathToQuestionnaireFolder(view.QuestionnaireId, view.QuestionnaireVersion);
 
@@ -129,42 +243,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         {
             return fileSystemAccessor.CombinePath(GetPathToQuestionnaireFolder(questionnaireId, version),
                 string.Format("{0}.tab", interviewId));
-        }
-
-        public void EnableCache()
-        {
-            cacheEnabled = true;
-        }
-
-        public void DisableCache()
-        {
-            foreach (var viewId in cache.Keys.ToList())
-            {
-                var interviewHistoryView = cache[viewId];
-                this.StoreImpl(interviewHistoryView, viewId);
-                cache.Remove(viewId);
-            }
-
-            cacheEnabled = false;
-        }
-
-        public string GetReadableStatus()
-        {
-            return string.Format("Interview history -_- | cache {0} | items: {1}",
-              this.cacheEnabled ? "enabled" : "disabled",
-              cache.Count);
-        }
-
-        public Type ViewType { get { return typeof (InterviewHistoryView); } }
-
-        public bool IsCacheEnabled { get { return this.cacheEnabled; } }
-        
-        public void BulkStore(List<Tuple<InterviewHistoryView, string>> bulk)
-        {
-            foreach (var tuple in bulk)
-            {
-                Store(tuple.Item1, tuple.Item2);
-            }
         }
     }
 }

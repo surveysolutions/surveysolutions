@@ -16,3 +16,11 @@ node_modules
 # IDE files #
 .idea
 *.iml
+
+examples/bower_components
+examples/source
+
+# Other #
+#########
+.tmp
+.publish

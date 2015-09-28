@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
         {
             string positiveResponse = ":)";
 
-            fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder())
+            fileSyncRepository.Setup(x => x.GetImagesByInterviews())
                 .Returns(new List<InterviewBinaryDataDescriptor>() { new InterviewBinaryDataDescriptor(interviewId, fileName, () => new byte[] { 1 }) });
 
             var httpMessageHandler = Mock.Of<HttpMessageHandler>();
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             interviewsSynchronizer.Push(userId);
 
         It should_sent_file_be_not_removed_from_sync_storage = () =>
-          fileSyncRepository.Verify(x => x.RemoveBinaryDataFromSyncFolder(interviewId, fileName), Times.Never);
+          fileSyncRepository.Verify(x => x.RemoveInterviewImage(interviewId, fileName), Times.Never);
 
         private static Mock<IInterviewSynchronizationFileStorage> fileSyncRepository = new Mock<IInterviewSynchronizationFileStorage>();
         private static InterviewsSynchronizer interviewsSynchronizer;

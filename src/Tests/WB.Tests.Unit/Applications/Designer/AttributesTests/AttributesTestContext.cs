@@ -4,7 +4,7 @@ using WB.UI.Designer.Api.Attributes;
 
 namespace WB.Tests.Unit.Applications.Designer.AttributesTests
 {
-    public class AttributesTestContext
+    internal class AttributesTestContext
     {
         public static ApiBasicAuthAttribute CreateApiBasicAuthAttribute(Func<string, string, bool> validateUserCredentials = null)
         {

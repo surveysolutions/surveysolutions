@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Ncqrs.Domain;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
@@ -24,6 +25,11 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         {
             foreach (var handler in _mappingStrategy.GetEventHandlers(this))
                 RegisterHandler(handler);
+        }
+
+        public bool CanApplyHistory(CommittedEventStream history)
+        {
+            return history.All(committedEvent => _mappingStrategy.CanHandleEvent(this, committedEvent.Payload.GetType()));
         }
     }
 }

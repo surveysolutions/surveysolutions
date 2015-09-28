@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 {
-    public class CodeGenerationTestsContext
+    internal class CodeGenerationTestsContext
     {
         public static QuestionnaireDocument CreateQuestionnaireForGeneration(Guid? questionnaireId = null)
         {
@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
         public static Version CreateQuestionnaireVersion()
         {
-            return new DesignerExpressionsEngineVersionService().GetLatestSupportedVersion();
+            return new DesignerEngineVersionService().GetLatestSupportedVersion();
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)

@@ -1,6 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
-@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.UsersViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
@@ -11,13 +9,13 @@
     @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/viewmodels/pages/surveysandstatuses.js")
     <script type="text/javascript">
     var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
-        $(function () {
-            var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
-            var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model));
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsibles);
-            ko.applyBindings(model);
-            model.load();
-        });
+    $(function() {
+        var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
+        var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -33,7 +31,8 @@
             <h4 class="list-group-item-heading">Team members</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>

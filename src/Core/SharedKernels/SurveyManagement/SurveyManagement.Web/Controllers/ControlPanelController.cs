@@ -5,11 +5,11 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
@@ -22,18 +22,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ISettingsProvider settingsProvider;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
         public ControlPanelController(IServiceLocator serviceLocator,
             IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
-            ISettingsProvider settingsProvider)
+            ISettingsProvider settingsProvider, 
+            ITransactionManagerProvider transactionManagerProvider)
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.settingsProvider = settingsProvider;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
@@ -81,7 +84,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             else
             {
-                this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                try
+                {
+                    this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error(string.Format("Exception while repating last interview status: {0}", interviewId), exception);
+                }
+
                 return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));
             }
         }

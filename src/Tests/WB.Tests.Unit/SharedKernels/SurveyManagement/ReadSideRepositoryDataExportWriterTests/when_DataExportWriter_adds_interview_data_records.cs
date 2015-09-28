@@ -16,11 +16,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExp
         {
             interviewExportedDataStorage = new TestInMemoryWriter<InterviewExportedDataRecord>();
 
-            interviewHistoryStorage = new TestInMemoryWriter<InterviewHistory>();
             readSideRepositoryDataExportWriter =
                 CreateReadSideRepositoryDataExportWriter(
-                    interviewExportedDataStorage: interviewExportedDataStorage,
-                    interviewActionsDataStorage: interviewHistoryStorage);
+                    interviewExportedDataStorage: interviewExportedDataStorage);
 
             interviewDataExportView = Create.InterviewDataExportView(
                 interviewId: interviewId,
@@ -41,7 +39,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExp
         private static ReadSideRepositoryDataExportWriter readSideRepositoryDataExportWriter;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static TestInMemoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage;
-        private static TestInMemoryWriter<InterviewHistory> interviewHistoryStorage;
         private static InterviewDataExportView interviewDataExportView;
     }
 }

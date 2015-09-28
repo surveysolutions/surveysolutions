@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content.Res;
+using Android.Text;
+using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
 {
@@ -30,6 +34,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
         {
             var tcs = new TaskCompletionSource<bool>();
             this.Confirm(message, k => tcs.TrySetResult(k), title, okButton, cancelButton);
+            return tcs.Task;
+        }
+
+        public Task<string> ConfirmWithTextInputAsync(
+           string message,
+           string title = "",
+           string okButton = "OK",
+           string cancelButton = "Cancel",
+           bool isTextInputPassword=false)
+        {
+            var tcs = new TaskCompletionSource<string>();
+            this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? String.Empty),
+                () => tcs.TrySetResult(null), title,
+                okButton, cancelButton, isTextInputPassword);
             return tcs.Task;
         }
 
@@ -89,10 +107,62 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(message)
-                            .SetTitle(title)
+                            .SetMessage(Html.FromHtml(message))
+                            .SetTitle(Html.FromHtml(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(true); }); })
                             .SetNegativeButton(cancelButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(false); }); })
+                            .SetCancelable(false)
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }
+
+        private void ConfirmWithTextInputImpl(string message, Action<string> okCallback, Action cancelCallBack, string title, string okButton, string cancelButton, bool isTextInputPassword)
+        {
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        var inflatedView = (LinearLayout)this.CurrentActivity.LayoutInflater.Inflate(Resource.Layout.confirmation_edit_text, null);
+                        EditText editText = inflatedView.FindViewById<EditText>(Resource.Id.confirmationEditText);
+                        if (isTextInputPassword)
+                        {
+                            editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
+                        }
+                        new AlertDialog.Builder(this.CurrentActivity)
+                            .SetMessage(Html.FromHtml(message))
+                            .SetTitle(Html.FromHtml(title)).SetView(inflatedView)
+                            .SetPositiveButton(okButton,
+                                delegate
+                                {
+                                    HandleDialogClose(userInteractionId, () => { if (okCallback != null) okCallback(editText.Text); });
+
+                                    this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
+                                })
+                            .SetNegativeButton(cancelButton,
+                                delegate
+                                {
+                                    HandleDialogClose(userInteractionId,
+                                        () => { if (cancelCallBack != null) cancelCallBack(); });
+                                    this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
+                                })
                             .SetCancelable(false)
                             .Show();
                     },
@@ -123,8 +193,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
                         }
 
                         new AlertDialog.Builder(this.CurrentActivity)
-                            .SetMessage(message)
-                            .SetTitle(title)
+                            .SetMessage(Html.FromHtml(message))
+                            .SetTitle(Html.FromHtml(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => { if (callback != null) callback(); }); })
                             .SetCancelable(false)
                             .Show();

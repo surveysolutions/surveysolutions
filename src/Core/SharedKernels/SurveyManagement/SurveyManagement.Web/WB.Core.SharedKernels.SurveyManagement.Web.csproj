@@ -99,6 +99,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StatData">
       <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
@@ -181,21 +185,33 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerDevicesController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerInterviewsController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Api\Interviewer\InterviewerQuestionnairesController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerUsersController.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Code\ProtobufJsonFormatter.cs" />
     <Compile Include="Code\PlainApiTransactionFilter.cs" />
+    <Compile Include="Code\ProtobufSerializer.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
     <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Security\IdentityExtentions.cs" />
     <Compile Include="Code\Security\PrincipalReplacer.cs" />
+    <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />
+    <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Filters\LimitsFilterAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
@@ -204,7 +220,6 @@
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
-    <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
@@ -289,15 +304,11 @@
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
-    <Compile Include="Models\DocumentRequestModel.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
-    <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
-    <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
@@ -313,19 +324,15 @@
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
-    <Compile Include="Models\RevalidateModel.cs" />
+    <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
-    <Compile Include="Models\SummaryRequestModel.cs" />
-    <Compile Include="Models\SurveyListViewModel.cs" />
-    <Compile Include="Models\SurveyRequestModel.cs" />
+    <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
-    <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\FieldsAndValidations.Designer.cs">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
@@ -341,6 +348,7 @@
     <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
+    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
     <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
@@ -455,8 +463,8 @@
     <None Include="fonts\glyphicons-halflings-regular.ttf" />
     <None Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Troubleshooting.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Troubleshoot.cshtml" />
     <EmbeddedResource Include="fonts\fontawesome-webfont.svg" />
     <EmbeddedResource Include="Scripts\supervisor.framework.js" />
     <EmbeddedResource Include="Scripts\viewmodels\listview.js" />
@@ -536,6 +544,9 @@
     <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Archived.cshtml" />
     <EmbeddedResource Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
+    <None Include="Scripts\spin.min.js.map">
+      <DependentUpon>spin.min.js</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
@@ -643,6 +654,9 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
+    <EmbeddedResource Include="Scripts\spin.js" />
+    <Content Include="Scripts\spin.min.js" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.css" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.min.css" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.standalone.css" />

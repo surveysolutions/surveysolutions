@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -270,7 +271,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.headquartersPushContext.PushMessage(string.Format("Pushing interview {0} ({1} out of {2}).", interviewId.FormatGuid(),
                         interviewIndex + 1, interviewsToPush.Count));
                     this.PushInterview(interviewId, userId);
-                    this.interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
+                    this.interviewSynchronizationFileStorage.MoveInterviewImagesToSyncFolder(interviewId);
                     this.headquartersPushContext.PushMessage(string.Format("Interview {0} successfully pushed.", interviewId.FormatGuid()));
                 }
                 catch (Exception exception)
@@ -287,7 +288,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private void PushInterviewFile()
         {
             this.headquartersPushContext.PushMessage("Getting interviews files to be pushed.");
-            var files = this.interviewSynchronizationFileStorage.GetBinaryFilesFromSyncFolder();
+            var files = this.interviewSynchronizationFileStorage.GetImagesByInterviews();
             this.headquartersPushContext.PushMessage(string.Format("Found {0} files to push.", files.Count));
 
             for (int interviewIndex = 0; interviewIndex < files.Count; interviewIndex++)
@@ -299,7 +300,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                     this.headquartersPushContext.PushMessage(string.Format("Pushing file {0} for interview {1} ({2} out of {3}).", interviewFile.FileName, interviewFile.InterviewId.FormatGuid(),
                         interviewIndex + 1, files.Count));
                     this.PushFile(interviewFile);
-                    this.interviewSynchronizationFileStorage.RemoveBinaryDataFromSyncFolder(interviewFile.InterviewId, interviewFile.FileName);
+                    this.interviewSynchronizationFileStorage.RemoveInterviewImage(interviewFile.InterviewId, interviewFile.FileName);
                     this.headquartersPushContext.PushMessage(string.Format("File {0} for interview {1} successfully pushed.", interviewFile.FileName, interviewFile.InterviewId.FormatGuid()));
                 }
                 catch (Exception exception)
@@ -433,6 +434,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             InterviewSummary interviewSummary = this.GetInterviewSummary(interviewId);
 
             string lastComment = interviewSummary.LastStatusChangeComment ?? string.Empty;
+            DateTime? rejectedDateTime = interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                ? interviewSummary.UpdateDate
+                : (DateTime?) null;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions
@@ -446,6 +450,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 PublicKey = interviewId,
                 ResponsibleId = interviewSummary.ResponsibleId,
                 Status = (int)interviewSummary.Status,
+                RejectDateTime = rejectedDateTime,
                 TemplateId = interviewSummary.QuestionnaireId,
                 Comments = lastComment,
                 Valid = !interviewSummary.HasErrors,

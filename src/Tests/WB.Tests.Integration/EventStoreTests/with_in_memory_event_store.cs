@@ -19,8 +19,6 @@ namespace WB.Tests.Integration.EventStoreTests
 
         Establish context = () =>
         {
-            NcqrsEnvironment.InitDefaults();
-
             var emptyEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             try
             {

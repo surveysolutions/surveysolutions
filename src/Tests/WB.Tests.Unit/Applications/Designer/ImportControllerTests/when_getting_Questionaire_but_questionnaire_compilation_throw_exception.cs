@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
-            var expressionsEngineVersionService = Mock.Of<IDesignerExpressionsEngineVersionService>(
+            var expressionsEngineVersionService = Mock.Of<IDesignerEngineVersionService>(
                 _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
 
             string generatedAssembly;
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
-                expressionsEngineVersionService: expressionsEngineVersionService,
+                engineVersionService: expressionsEngineVersionService,
                 expressionProcessorGenerator: expressionProcessorGenerator.Object,
                 questionnaireVerifier: questionnaireVerifier);
         };

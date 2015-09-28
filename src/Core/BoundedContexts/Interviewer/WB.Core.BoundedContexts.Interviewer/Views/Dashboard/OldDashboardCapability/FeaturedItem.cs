@@ -1,0 +1,19 @@
+using System;
+
+namespace WB.UI.Interviewer.ViewModel.Dashboard
+{
+    public class FeaturedItem
+    {
+        public FeaturedItem(Guid publicKey, string title, string value)
+        {
+            this.PublicKey = publicKey;
+            this.Title = title;
+            this.Value = value;
+        }
+
+        public Guid PublicKey { get; private set; }
+        public string Title { get; private set; }
+
+        public string Value { get; set; }
+    }
+}

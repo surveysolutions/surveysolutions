@@ -1,5 +1,4 @@
 using System;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels

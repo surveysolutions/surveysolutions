@@ -24,10 +24,8 @@ namespace Ncqrs.Eventing
         /// </summary>
         public Event()
         {
-            var clock = NcqrsEnvironment.Get<IClock>();
-
             EventIdentifier = Guid.NewGuid();
-            EventTimeStamp = clock.UtcNow();
+            EventTimeStamp = DateTime.UtcNow;
         }
 
         public Event(Guid eventIdentifier, DateTime eventTimeStamp)

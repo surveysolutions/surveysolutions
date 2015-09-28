@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
                 new ReadSideStoreMemoryCacheSettings(256, 128));
         }
     }
-    public class ReadSideRepositoryEntity : IReadSideRepositoryEntity
+    internal class ReadSideRepositoryEntity : IReadSideRepositoryEntity
     {
 
     }

@@ -37,16 +37,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         && _.GetQuestionType(realQuestionId) == QuestionType.Numeric
                                                         );
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
-
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Cleanup stuff = () =>
@@ -57,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerNumericRealQuestion(userId, realQuestionId, new decimal[] { }, DateTime.Now, (decimal)0.1234));
 
         It should_throw_InterviewException = () =>
-            expectedException.ShouldBeOfType(typeof (InterviewException));
+            expectedException.ShouldBeOfExactType(typeof (InterviewException));
 
         private static Exception expectedException;
         private static Guid realQuestionId;

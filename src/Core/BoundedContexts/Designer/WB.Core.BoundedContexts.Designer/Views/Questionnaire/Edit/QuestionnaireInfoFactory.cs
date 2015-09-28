@@ -23,21 +23,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private readonly IExpressionProcessor expressionProcessor;
 
-        private static readonly SelectOption InterviewerQuestionScope = new SelectOption { Value = "Interviewer", Text = "Interviewer" };
-        private static readonly SelectOption SupervisorQuestionScope = new SelectOption { Value = "Supervisor", Text = "Supervisor" };
-        private static readonly SelectOption PrefilledQuestionScope = new SelectOption { Value = "Prefilled", Text = "Prefilled" };
-
         private static readonly SelectOption[] AllQuestionScopeOptions =
         {
-            InterviewerQuestionScope,
-            SupervisorQuestionScope,
-            PrefilledQuestionScope,
-        };
-
-        private static readonly SelectOption[] NotPrefilledQuestionScopeOptions =
-        {
-            InterviewerQuestionScope,
-            SupervisorQuestionScope,
+            new SelectOption { Value = "Interviewer", Text = "Interviewer" },
+            new SelectOption { Value = "Supervisor", Text = "Supervisor" },
+            new SelectOption { Value = "Hidden", Text = "Hidden" },
+            new SelectOption { Value = "Prefilled", Text = "Prefilled" }
         };
 
         private static readonly SelectOption[] QuestionTypeOptions =
@@ -217,8 +208,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
+
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-            result.NotPrefilledQuestionScopeOptions = NotPrefilledQuestionScopeOptions;
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 

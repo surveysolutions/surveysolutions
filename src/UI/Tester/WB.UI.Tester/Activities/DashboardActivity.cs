@@ -1,16 +1,20 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
-using Cirrious.MvvmCross.Binding.Droid.Views;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomControls;
+
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Tester.Activities
 {
-    [Activity(Label = "", Theme = "@style/GrayAppTheme", WindowSoftInputMode = SoftInput.StateHidden, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+    [Activity(Label = "",
+        Theme = "@style/GrayAppTheme", 
+        WindowSoftInputMode = SoftInput.StateHidden, 
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
         protected override int ViewResourceId
@@ -18,15 +22,25 @@ namespace WB.UI.Tester.Activities
             get { return Resource.Layout.dashboard; }
         }
 
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
-            var questionnairesList = this.FindViewById<MvxListView>(Resource.Id.questionnairesList);
-            questionnairesList.EmptyView = this.FindViewById<LinearLayout>(Resource.Id.emptyView);
+            var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.questionnairesList);
+            var layoutManager = new LinearLayoutManager(this);
+            recyclerView.SetLayoutManager(layoutManager);
+        }
+
+        protected override void OnRestoreInstanceState(Bundle savedInstanceState)
+        {
+            base.OnRestoreInstanceState(savedInstanceState);
+            ViewModel.RestartLoadServerQuestionnairesIfNeeded();
+        }
+
+        public override void OnBackPressed()
+        {
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -34,6 +48,7 @@ namespace WB.UI.Tester.Activities
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
             return base.OnCreateOptionsMenu(menu);
         }
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
@@ -48,9 +63,14 @@ namespace WB.UI.Tester.Activities
                 case Resource.Id.dashboard_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
-
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        protected override void OnDestroy()
+        {
+            ViewModel.CancelLoadServerQuestionnaires();
+            base.OnDestroy();
         }
     }
 }

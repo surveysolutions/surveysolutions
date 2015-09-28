@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -28,9 +29,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
-            GroupStateViewModel groupState)
+            GroupStateViewModel groupState,
+            InterviewStateViewModel interviewState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState)
+                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState, interviewState)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -72,12 +74,12 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        public override void NavigateToPreviousViewModel()
+        public async Task NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
         {
-            this.navigationState.NavigateBackAsync(this.NavigateBack).WaitAndUnwrapException();
+            await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
         }
 
-        void NavigateBack()
+        public void NavigateBack()
         {
             if (this.PrefilledQuestions.Any())
             {

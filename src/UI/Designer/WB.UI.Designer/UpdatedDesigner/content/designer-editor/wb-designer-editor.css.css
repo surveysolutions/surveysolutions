@@ -543,6 +543,15 @@
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
 }
+.highlighted-add .item .item-body .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
+}
+.highlighted-add .item .item-body .qname-block .condition-item {
+  height: 12px;
+  line-height: 17px;
+  font-size: 10px;
+}
 .highlighted-add .item.selected .qname-block {
   background-color: #ffffff;
 }
@@ -552,6 +561,15 @@
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
+}
+.highlighted-add .item.selected .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
+}
+.highlighted-add .item.selected .qname-block .condition-item {
+  height: 12px;
+  line-height: 17px;
+  font-size: 10px;
 }
 li.chapter-panel-item {
   position: relative;
@@ -601,6 +619,7 @@ li.chapter-panel-item.current {
 li.chapter-panel-item.current .holder .inner a.chapter-panel-item-body {
   border-bottom: none;
   padding-top: 16px;
+  outline: none;
 }
 li.chapter-panel-item.current > .holder > .inner {
   background-color: #ffffff;
@@ -623,6 +642,7 @@ li.chapter-panel-item:hover {
 li.chapter-panel-item:hover .holder .inner a.chapter-panel-item-body {
   border-bottom: none;
   padding-top: 16px;
+  outline: none;
 }
 li.chapter-panel-item:hover > .holder > .inner {
   background-color: #dbdfe2;
@@ -828,6 +848,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   border-bottom: 2px solid #edeff1;
   position: relative;
   padding-left: 29px;
+  outline: none;
 }
 .item .item-body .icon {
   position: absolute;
@@ -891,9 +912,19 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00dbdfe2', endColorstr='#ffdbdfe2', GradientType=1);
 }
+.item .item-body .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
+}
+.item .item-body .qname-block .condition-item {
+  height: 12px;
+  line-height: 17px;
+  font-size: 10px;
+}
 .item.group > .item-body {
   text-transform: uppercase;
   font-weight: bold;
+  outline: none;
 }
 .item.roster .item-text {
   color: #2075bf;
@@ -941,11 +972,21 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
 }
+.item.selected:hover .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
+}
+.item.selected:hover .qname-block .condition-item {
+  height: 12px;
+  line-height: 17px;
+  font-size: 10px;
+}
 .item.selected .dropdown {
   z-index: 501;
 }
 .item.selected .item-body {
   border-bottom: none;
+  outline: none;
 }
 .item.selected .qname-block {
   background-color: #ffffff;
@@ -956,6 +997,15 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=1);
+}
+.item.selected .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
+}
+.item.selected .qname-block .condition-item {
+  height: 12px;
+  line-height: 17px;
+  font-size: 10px;
 }
 .item:hover {
   position: relative;
@@ -973,6 +1023,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 }
 .item:hover .item-body {
   border-bottom: none;
+  outline: none;
 }
 .item:hover .dropdown {
   z-index: 500;
@@ -986,6 +1037,15 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   background-image: linear-gradient(to right, rgba(237, 239, 241, 0) 0%, #edeff1 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00edeff1', endColorstr='#ffedeff1', GradientType=1);
+}
+.item:hover .qname-block .conditions-block {
+  vertical-align: middle;
+  display: inline-block;
+}
+.item:hover .qname-block .condition-item {
+  height: 12px;
+  line-height: 17px;
+  font-size: 10px;
 }
 .item:hover.highlight .cursor {
   top: 0;
@@ -1024,19 +1084,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
 .position-fixed {
   position: fixed;
   z-index: 500;
-}
-.dropdown ul.dropdown-menu > li > a {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 30px;
-  color: #2a81cb;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-}
-.dropdown ul.dropdown-menu > li > a:hover {
-  background: #edeff1;
 }
 #show-reload-details-promt {
   position: absolute;

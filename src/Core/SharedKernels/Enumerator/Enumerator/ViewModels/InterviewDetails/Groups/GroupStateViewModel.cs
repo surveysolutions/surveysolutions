@@ -27,33 +27,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             this.interviewId = interviewId;
             this.group = groupIdentity;
-
-            this.UpdateFromModel();
+            this.UpdateFromGroupModel();
         }
 
-        public int AnsweredQuestionsCount { get; private set; }
-        public int SubgroupsCount { get; private set; }
-        public int QuestionsCount { get; private set; }
-        public int InvalidAnswersCount { get; private set; }
+        public int AnsweredQuestionsCount { get; protected set; }
+        public int SubgroupsCount { get; protected set; }
+        public int QuestionsCount { get; protected set; }
+        public int InvalidAnswersCount { get; protected set; }
 
         private GroupStatus status;
         public GroupStatus Status
         {
             get { return this.status; }
-            private set { this.RaiseAndSetIfChanged(ref this.status, value); }
+            protected set { this.RaiseAndSetIfChanged(ref this.status, value); }
         }
 
         private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
             get { return this.simpleStatus; }
-            private set { this.RaiseAndSetIfChanged(ref this.simpleStatus, value); }
+            protected set { this.RaiseAndSetIfChanged(ref this.simpleStatus, value); }
         }
 
-        public void UpdateFromModel()
+        public virtual void UpdateFromGroupModel()
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
-
+         
             this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
             this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
             this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
@@ -83,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             return SimpleGroupStatus.Completed;
         }
 
-        private GroupStatus CalculateDetailedStatus()
+        protected GroupStatus CalculateDetailedStatus()
         {
             switch (this.SimpleStatus)
             {

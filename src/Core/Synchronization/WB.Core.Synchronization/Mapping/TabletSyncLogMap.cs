@@ -69,6 +69,7 @@ namespace WB.Core.Synchronization.Mapping
             Property(x => x.PackageId);
             Property(x => x.PackageSyncTime);
             Property(x => x.PackageType);
+            Property(x => x.ReceivedByClient);
             ManyToOne(x => x.TabletSyncLogByUser, mto =>
             {
                 mto.Index("TabletSyncLogByUsers_SyncPackageTrackingInfos");

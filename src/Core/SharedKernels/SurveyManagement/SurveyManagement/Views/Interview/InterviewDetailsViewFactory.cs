@@ -74,7 +74,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 EnabledCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Enabled, question)),
                 FlaggedCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Flagged, question)),
                 InvalidCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Invalid, question)),
-                SupervisorsCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Supervisors, question))
+                SupervisorsCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Supervisors, question)),
+                HiddenCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Hidden, question)),
             };
 
             var selectedGroups = new List<InterviewGroupView>();
@@ -150,6 +151,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     return !question.IsValid;
                 case InterviewDetailsFilter.Supervisors:
                     return question.Scope == QuestionScope.Supervisor;
+                case InterviewDetailsFilter.Hidden:
+                    return question.Scope == QuestionScope.Hidden;
             }
             return true;
         }

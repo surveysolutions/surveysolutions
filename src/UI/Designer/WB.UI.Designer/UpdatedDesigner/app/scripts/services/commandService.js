@@ -56,7 +56,7 @@
                     });
                 };
 
-                commandService.sendUpdateQuestionCommand = function (questionnaireId, question, shouldGetOptionsOnServer) {
+                commandService.sendUpdateQuestionCommand = function(questionnaireId, question, shouldGetOptionsOnServer) {
 
                     var command = {
                         questionnaireId: questionnaireId,
@@ -72,13 +72,9 @@
                         instructions: question.instructions
                     };
 
-                    var doesQuestionSupportScopes = question.type != 'TextList' && question.type != 'QRBarcode' && !question.isLinked;
-
-                    if (doesQuestionSupportScopes) {
-                        var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
-                        command.isPreFilled = isPrefilledScopeSelected;
-                        command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
-                    }
+                    var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
+                    command.isPreFilled = isPrefilledScopeSelected;
+                    command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
 
                     switch (question.type) {
                     case "SingleOption":
@@ -100,7 +96,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToQuestionId = question.linkedToQuestionId;
-                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null ;
+                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;

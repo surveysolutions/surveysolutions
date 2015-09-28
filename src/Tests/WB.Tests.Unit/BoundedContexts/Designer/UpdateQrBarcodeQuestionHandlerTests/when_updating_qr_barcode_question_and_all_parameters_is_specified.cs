@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
                 variableLabel: null, enablementCondition: condition, instructions: instructions,
-                    responsibleId: responsibleId, validationExpression:validation, validationMessage:validationMessage);
+                    responsibleId: responsibleId, validationExpression: validation, validationMessage: validationMessage, scope: QuestionScope.Interviewer);
 
         Cleanup stuff = () =>
         {

@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private ICqrsPostgresTransactionManager GetPostgresTransactionManager()
         {
             return this.pinnedTransactionManager ?? 
-                (NoTransactionalThreadMarkerManager.IsMarkedAsNoTransaction() ? 
+                (ThreadMarkerManager.IsCurrentThreadNoTransactional() ? 
                     this.noTransactionTransactionManagerFactory.Invoke() : 
                     this.transactionManagerFactory.Invoke());
         }

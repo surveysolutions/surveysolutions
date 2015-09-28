@@ -31,7 +31,6 @@
         };
     },
         questions = new EntitySet(mapper.question),
-        supervisors = new EntitySet(mapper.user),
         status = {},
         responsible = {},
         questionnaire = {};
@@ -89,14 +88,12 @@
 
         responsible = q.Responsible;
         questions.getData(q.FeaturedQuestions);
-        supervisors.getData(q.Supervisors);
     };
 
     return {
         questions: questions,
         questionnaire: questionnaire,
         status: status,
-        supervisors: supervisors,
         parseData: parseData,
         prepareQuestion: prepareQuestion
     };

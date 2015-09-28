@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             var newSiblingRosters = siblingRosters
                 .ToDictionary(
                     interviewScope => interviewScope.Key,
-                    interviewScope => new List<string>(interviewScope.Value));
+                    interviewScope => new List<string>(interviewScope.Value)); 
 
             //set parents
             foreach (var interviewScope in interviewScopes)

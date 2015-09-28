@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var synchronizationDto = CreateSynchronizationDto(interviewId);
 
             var synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
-                    x => x.BuildFrom(data, Moq.It.IsAny<Guid>(), InterviewStatus.InterviewerAssigned, Moq.It.IsAny<string>()) == synchronizationDto);
+                    x => x.BuildFrom(data, Moq.It.IsAny<Guid>(), InterviewStatus.InterviewerAssigned, Moq.It.IsAny<string>(), Moq.It.IsAny<DateTime?>()) == synchronizationDto);
             
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             var interviewSummary = new InterviewSummary
