@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (answerModel.IsAnswered)
             {
                 var selectedValue = answerModel.Answer;
-                var answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
+                FilteredComboboxItemViewModel answerOption = this.Options.SingleOrDefault(i => i.Value == selectedValue);
                 this.SelectedObject = answerOption;
                 this.DefaultText = answerOption == null ? String.Empty : answerOption.Text;
                 this.ResetTextInEditor = this.DefaultText;
@@ -152,6 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.QuestionState.IsAnswered = false;
                     this.ResetTextInEditor = string.Empty;
+                    this.DefaultText = null;
                 });
             }
         }
@@ -262,7 +263,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void SendAnswerFilteredComboboxQuestionCommand(string text)
         {
-            var answerViewModel = this.Options.SingleOrDefault(i => i.Text == text);
+            FilteredComboboxItemViewModel answerViewModel = this.Options.SingleOrDefault(i => i.Text == text);
 
             if (answerViewModel == null)
             {
@@ -286,6 +287,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
                 this.FilterText = answerViewModel.Text;
+                this.DefaultText = answerViewModel.Text;
+                this.resetTextInEditor = answerViewModel.Text;
+                this.selectedObject = answerViewModel;
+
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
