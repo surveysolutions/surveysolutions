@@ -313,9 +313,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     .Select(interview => Guid.Parse(interview.Id))
                     .ToList();
 
-                for (int indexOfInterviewToRemove = interviewIdsByQuestionnaire.Count - 1; indexOfInterviewToRemove >= 0; indexOfInterviewToRemove--)
+                foreach (var interviewId in interviewIdsByQuestionnaire)
                 {
-                    this.capiCleanUpService.DeleteInterview(interviewIdsByQuestionnaire[indexOfInterviewToRemove]);
+                    this.capiCleanUpService.DeleteInterview(interviewId);
                 }
             });
         }
