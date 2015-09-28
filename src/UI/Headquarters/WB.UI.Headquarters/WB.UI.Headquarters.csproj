@@ -254,6 +254,7 @@
     <Content Include="Content\datepicker3.css" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\icons\binary.png" />
+    <Content Include="Content\icons\ddi.ico" />
     <Content Include="Content\icons\spss.png" />
     <Content Include="Content\icons\stata.gif" />
     <Content Include="Content\icons\tabs.png" />
@@ -287,6 +288,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
+    <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -498,7 +500,7 @@
     <Compile Include="API\Attributes\HeadquarterFeatureOnlyAttribute.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
-    <Compile Include="API\PreloadingApiController.cs" />
+    <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\Resources\AssembliesResourceController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -561,6 +563,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Injections\HeadquartersRegistry.cs" />
+    <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
+    <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
+    <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />
+    <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
@@ -590,7 +596,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">

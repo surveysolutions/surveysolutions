@@ -58,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
+            if (groupIdentity == null) throw new ArgumentNullException("groupIdentity");
             return this.GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
 
@@ -70,11 +71,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
-
-            if (groupIdentity == null || groupIdentity.Id == Guid.Empty)
-            {
-                groupIdentity = new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0]);
-            }
 
             if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.ContainsKey(groupIdentity.Id))
                 throw new KeyNotFoundException(string.Format("Group with id : {0} don't found", groupIdentity));
@@ -131,21 +127,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IEnumerable<dynamic> GetCompleteScreenEntities(string interviewId)
         {
-            var result = new List<IInterviewEntityViewModel>();
-
-            var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[typeof(StaticTextModel)].Invoke();
-            text.StaticText = UIResources.Interview_Complete_Screen_Description;
-            result.Add(text);
-
-            var statistics = Load<InterviewCompletionStatisticsViewModel>();
-            statistics.Init(interviewId, null, null);
-            result.Add(statistics);
-
             var completionInterview = Load<CompleteInterviewViewModel>();
-            completionInterview.Init(interviewId, null, null);
-            result.Add(completionInterview);
+            completionInterview.Init(interviewId);
 
-            return result;
+            return new List<dynamic> { completionInterview };
         }
 
         public T GetNew<T>() where T : class

@@ -50,11 +50,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
     {
         public PackagesTrackingInfo()
         {
-            PackagesRequestInfo = new Dictionary<string, DateTime?>();
+            PackagesRequestInfo = new List<SyncPackagesTrackingInfo>();
         }
 
         public string LastPackageId { get; set; }
 
-        public Dictionary<string, DateTime?> PackagesRequestInfo { get; set; }
+        public List<SyncPackagesTrackingInfo> PackagesRequestInfo { get; set; }
+    }
+
+    public class SyncPackagesTrackingInfo
+    {
+        public string PackageId { get; set; }
+        public DateTime? PackageRequestTime { get; set; }
+        public string PackageType { get; set; }
+        public bool IsPackageHandledByTheClient { get; set; }
     }
 }

@@ -32,8 +32,8 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
 
-            var expressionsEngineVersionService = Mock.Of<IDesignerExpressionsEngineVersionService>(
-                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true);
+            var expressionsEngineVersionService = Mock.Of<IDesignerEngineVersionService>(
+                _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == true);
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
-                expressionsEngineVersionService: expressionsEngineVersionService,
+                engineVersionService: expressionsEngineVersionService,
                 questionnaireVerifier: questionnaireVerifier);
         };
 

@@ -1,21 +1,22 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
-using Ninject;
 using Ninject.Modules;
 using Sqo;
-using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.Services.Infrastructure;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
-using WB.UI.Tester.Infrastructure.Internals.Json;
 using WB.UI.Tester.Infrastructure.Internals.Log;
 using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
@@ -27,6 +28,13 @@ namespace WB.UI.Tester.Infrastructure
 {
     public class TesterInfrastructureModule : NinjectModule
     {
+        private readonly string questionnaireAssembliesFolder;
+
+        public TesterInfrastructureModule(string questionnaireAssembliesFolder = "assemblies")
+        {
+            this.questionnaireAssembliesFolder = questionnaireAssembliesFolder;
+        }
+
         public override void Load()
         {
             this.Bind<IEventStore>().To<InMemoryEventStore>().InSingletonScope();
@@ -42,18 +50,22 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
-            this.Bind<ITesterNetworkService>().To<TesterNetworkService>().InSingletonScope();
-            this.Bind<IRestService>().To<RestService>().InSingletonScope();
+            this.Bind<IRestServiceSettings>().To<TesterSettings>();
+            this.Bind<INetworkService>().To<AndroidNetworkService>();
+            this.Bind<IEnumeratorSettings>().To<TesterSettings>();
+            this.Bind<IRestServicePointManager>().To<RestServicePointManager>();
+            this.Bind<IRestService>().To<RestService>();
 
-            this.Bind<NewtonJsonSerializer>().ToSelf().InSingletonScope();
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
+            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
 
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
-            this.Bind<IFriendlyErrorMessageService>().To<FriendlyErrorMessageService>().InSingletonScope();
-
-            this.Bind<ITesterSettings>().To<TesterSettings>();
-            this.Bind<IEnumeratorSettings>().To<TesterSettings>();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
+
+            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<QuestionnaireAssemblyFileAccessor>().InSingletonScope()
+                .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
         }
     }
 }

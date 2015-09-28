@@ -89,7 +89,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/viewmodels/listview.js",
                     "~/Scripts/components/bindings.js",
-                    "~/Scripts/bootbox.min.js"
+                    "~/Scripts/bootbox.min.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
                 }
             },
             {
@@ -112,7 +114,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/new/mapper.js",
                     "~/Scripts/viewmodels/pages/interview/new/model.js",
-                    "~/Scripts/viewmodels/pages/interview/new/newinterview.js"
+                    "~/Scripts/viewmodels/pages/interview/new/newinterview.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
                 }
             },
             {
@@ -144,6 +148,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/ko.datepicker.js",
                     "~/Scripts/viewmodels/pages/periodicstatusreport.js"
+                }
+            },
+            {
+                "~/js/batch-upload", new[]
+                {
+                   "~/Scripts/bootstrap3-typeahead.js", 
+                   "~/Scripts/knockout/ko.typeahead.js", 
+                   "~/Scripts/components/typeahead-extended.js", 
+                   "~/Scripts/pages/batchupload.js",
+                   "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
                 }
             },
         };

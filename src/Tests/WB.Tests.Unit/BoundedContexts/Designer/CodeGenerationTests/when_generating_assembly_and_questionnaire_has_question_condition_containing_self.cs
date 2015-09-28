@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         private static Guid questionId = Guid.Parse(questionStringId);
 
         [Serializable]
-        internal class InvokeResults
+        public class InvokeResults
         {
             public bool Success { get; set; }
             public ExpressionLocation[] ErrorLocations { get; set; }

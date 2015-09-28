@@ -9,6 +9,7 @@ using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -20,11 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
     [Subject(typeof(PreloadingTemplateService))]
     internal class PreloadingTemplateServiceTestContext
     {
-        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, IDataExportService dataExportService=null)
+        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, ITabularFormatExportService tabularFormatExportService = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
             return new PreloadingTemplateService(currentFileSystemAccessor, "",
-                dataExportService?? Mock.Of<IDataExportService>(),
+                tabularFormatExportService ?? Mock.Of<ITabularFormatExportService>(),
                 Mock.Of<IArchiveUtils>());
         }
 

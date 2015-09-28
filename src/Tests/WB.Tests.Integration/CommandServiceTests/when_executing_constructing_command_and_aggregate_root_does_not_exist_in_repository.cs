@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Machine.Specifications;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -10,7 +11,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
@@ -50,7 +51,10 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
-            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
+            IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
+                => _.GetInstance(typeof(Aggregate)) == new Aggregate());
+
+            commandService = Create.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
         };
 
         Because of = () =>

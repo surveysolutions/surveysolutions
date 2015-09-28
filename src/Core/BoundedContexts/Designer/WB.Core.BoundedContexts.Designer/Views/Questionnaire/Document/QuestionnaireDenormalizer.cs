@@ -155,14 +155,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument questionnaire = this.documentStorage.GetById(evnt.EventSourceId);
 
-            bool isLegacyEvent = evnt.Payload.AfterItemKey != null;
-
-            if (isLegacyEvent)
-            {
-                logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
-                return;
-            }
-
             questionnaire.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.TargetIndex);
 
             this.UpdateQuestionnaire(evnt, questionnaire);

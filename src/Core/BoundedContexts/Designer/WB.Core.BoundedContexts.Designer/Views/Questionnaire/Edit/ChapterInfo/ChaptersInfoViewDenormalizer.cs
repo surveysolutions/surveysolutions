@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -82,8 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.AddGroup(questionnaire: currentState,
                 parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
                 groupId: evnt.Payload.PublicKey.FormatGuid(),
-                groupTitle: evnt.Payload.GroupText, variableName:evnt.Payload.VariableName);
-
+                groupTitle: evnt.Payload.GroupText, variableName:evnt.Payload.VariableName, 
+                groupConditionExpression: evnt.Payload.ConditionExpression);
 
             return currentState;
         }
@@ -94,6 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 parentGroupId: GetNullAsParentForChapterOrParentGroupIdForGroup(evnt.Payload.ParentGroupPublicKey, currentState.ItemId),
                 groupId: evnt.Payload.PublicKey.FormatGuid(),
                 groupTitle: evnt.Payload.GroupText, variableName: evnt.Payload.VariableName, 
+                groupConditionExpression: evnt.Payload.ConditionExpression, 
                 orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
@@ -106,6 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             groupView.Title = evnt.Payload.GroupText;
             groupView.Variable = evnt.Payload.VariableName;
+            groupView.HasCondition = !string.IsNullOrWhiteSpace(evnt.Payload.ConditionExpression);
             return currentState;
         }
 
@@ -129,6 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: evnt.Payload.QuestionType,
                 questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: Monads.Maybe(() => evnt.Payload.LinkedToQuestionId.FormatGuid()));
 
             return currentState;
@@ -143,6 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: evnt.Payload.QuestionType,
                 questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: Monads.Maybe(() => evnt.Payload.LinkedToQuestionId.FormatGuid()),
                 orderIndex: evnt.Payload.TargetIndex);
 
@@ -157,7 +160,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionTitle: evnt.Payload.QuestionText,
                 questionType: QuestionType.Numeric,
                 questionVariable: evnt.Payload.StataExportCaption,
-                questionConditionExpression: evnt.Payload.ConditionExpression);
+                questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression);
 
             return currentState;
         }
@@ -171,6 +175,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.Numeric,
                 questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
@@ -184,27 +189,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionTitle: evnt.Payload.QuestionText,
                  questionType: QuestionType.TextList,
                  questionVariable: evnt.Payload.StataExportCaption,
-                 questionConditionExpression: evnt.Payload.ConditionExpression);
+                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                 questionValidationExpression: evnt.Payload.ValidationExpression);
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<TextListQuestionCloned> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.GroupId.FormatGuid(),
-                 questionId: evnt.Payload.PublicKey.FormatGuid(), questionTitle: evnt.Payload.QuestionText,
-                 questionType: QuestionType.TextList, questionVariable: evnt.Payload.StataExportCaption,
-                 questionConditionExpression: evnt.Payload.ConditionExpression, orderIndex: evnt.Payload.TargetIndex);
+            this.AddQuestion(questionnaire: currentState, 
+                groupId: evnt.Payload.GroupId.FormatGuid(),
+                 questionId: evnt.Payload.PublicKey.FormatGuid(), 
+                 questionTitle: evnt.Payload.QuestionText,
+                 questionType: QuestionType.TextList, 
+                 questionVariable: evnt.Payload.StataExportCaption,
+                 questionConditionExpression: evnt.Payload.ConditionExpression, 
+                 questionValidationExpression: evnt.Payload.ValidationExpression, 
+                 orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
         }
 
         public GroupInfoView Update(GroupInfoView currentState, IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
-            this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.ParentGroupId.FormatGuid(),
-                 questionId: evnt.Payload.QuestionId.FormatGuid(), questionTitle: evnt.Payload.Title,
-                 questionType: QuestionType.QRBarcode, questionVariable: evnt.Payload.VariableName,
-                 questionConditionExpression: evnt.Payload.EnablementCondition);
+            this.AddQuestion(questionnaire: currentState, 
+                groupId: evnt.Payload.ParentGroupId.FormatGuid(),
+                 questionId: evnt.Payload.QuestionId.FormatGuid(), 
+                 questionTitle: evnt.Payload.Title,
+                 questionType: QuestionType.QRBarcode, 
+                 questionVariable: evnt.Payload.VariableName,
+                 questionConditionExpression: evnt.Payload.EnablementCondition,
+                 questionValidationExpression: evnt.Payload.ValidationExpression);
 
             return currentState;
         }
@@ -214,7 +229,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.AddQuestion(questionnaire: currentState, groupId: evnt.Payload.ParentGroupId.FormatGuid(),
                  questionId: evnt.Payload.QuestionId.FormatGuid(), questionTitle: evnt.Payload.Title,
                  questionType: QuestionType.QRBarcode, questionVariable: evnt.Payload.VariableName,
-                 questionConditionExpression: evnt.Payload.EnablementCondition, orderIndex: evnt.Payload.TargetIndex);
+                 questionConditionExpression: evnt.Payload.EnablementCondition,
+                 questionValidationExpression: evnt.Payload.ValidationExpression,
+                 orderIndex: evnt.Payload.TargetIndex);
 
             return currentState;
         }
@@ -238,6 +255,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: evnt.Payload.QuestionType,
                 questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: Monads.Maybe(() => evnt.Payload.LinkedToQuestionId.FormatGuid()));
 
             return currentState;
@@ -251,6 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.Numeric,
                 questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: null);
 
             return currentState;
@@ -264,6 +283,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.TextList,
                 questionVariable: evnt.Payload.StataExportCaption,
                 questionConditionExpression: evnt.Payload.ConditionExpression,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: null);
 
             return currentState;
@@ -277,6 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.QRBarcode,
                 questionVariable: evnt.Payload.VariableName,
                 questionConditionExpression: evnt.Payload.EnablementCondition,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: null);
 
             return currentState;
@@ -290,6 +311,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.Multimedia,
                 questionVariable: evnt.Payload.VariableName,
                 questionConditionExpression: evnt.Payload.EnablementCondition,
+                questionValidationExpression: evnt.Payload.ValidationExpression,
                 linkedToQuestionId: null);
 
             return currentState;
@@ -416,7 +438,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                         if (retVal != null) break;
                     }
                 }
-
             }
 
             return (T)retVal;
@@ -447,6 +468,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType,
             string questionVariable,
             string questionConditionExpression,
+            string questionValidationExpression,
             string linkedToQuestionId = null,
             int? orderIndex = null)
         {
@@ -463,8 +485,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = questionTitle,
                 Type = questionType,
                 Variable = questionVariable,
-                LinkedToQuestionId = linkedToQuestionId
-            };
+                LinkedToQuestionId = linkedToQuestionId,
+                HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression),
+                HasValidation = !string.IsNullOrWhiteSpace(questionValidationExpression)    
+        };
 
             if (orderIndex.HasValue)
             {
@@ -483,6 +507,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType,
             string questionVariable,
             string questionConditionExpression,
+            string questionValidationExpression,
             string linkedToQuestionId)
         {
             var questionView = this.FindQuestion(questionnaireOrGroup: questionnaire, questionId: questionId);
@@ -494,6 +519,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.Type = questionType;
             questionView.Variable = questionVariable;
             questionView.LinkedToQuestionId = linkedToQuestionId;
+            questionView.HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression);
+            questionView.HasValidation = !string.IsNullOrWhiteSpace(questionValidationExpression);
         }
 
         private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text,
@@ -531,7 +558,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             staticTextInfoView.Text = text;
         }
 
-        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle,string variableName, bool isRoster = false, int? orderIndex = null)
+        private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, string variableName,
+            string groupConditionExpression,
+            bool isRoster = false, int? orderIndex = null)
         {
             var parentGroup = string.IsNullOrEmpty(parentGroupId)
                 ? questionnaire
@@ -546,6 +575,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Title = groupTitle,
                 Variable = variableName,
                 IsRoster = isRoster,
+                HasCondition = !string.IsNullOrWhiteSpace(groupConditionExpression),
                 Items = new List<IQuestionnaireItem>(),
                 GroupsCount = 0,
                 RostersCount = 0,
@@ -566,41 +596,49 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             foreach (var child in sourceQuestionnaireOrGroup.Children)
             {
-                if (child is IGroup)
+                var questionChild = child as IQuestion;
+                if (questionChild != null)
                 {
-                    IGroup group = child as IGroup;
-                    this.AddGroup(questionnaire: currentState,
-                                  groupId: group.PublicKey.FormatGuid(),
-                                  parentGroupId: group.GetParent().PublicKey.FormatGuid(),
-                                  groupTitle: group.Title,
-                    variableName:group.VariableName,
-                                  isRoster: group.IsRoster);
-                    this.AddQuestionnaireItem(currentState: currentState, sourceQuestionnaireOrGroup: @group);
-                }
-                else if (child is IQuestion)
-                {
-                    var question = child as IQuestion;
                     this.AddQuestion(questionnaire: currentState,
-                                     groupId: question.GetParent().PublicKey.FormatGuid(),
-                                     questionId: question.PublicKey.FormatGuid(),
-                                     questionTitle: question.QuestionText,
-                                     questionType: question.QuestionType,
-                                     questionVariable: question.StataExportCaption,
-                                     questionConditionExpression: question.ConditionExpression,
-                                     linkedToQuestionId: Monads.Maybe(() => question.LinkedToQuestionId.FormatGuid()));
+                                     groupId: questionChild.GetParent().PublicKey.FormatGuid(),
+                                     questionId: questionChild.PublicKey.FormatGuid(),
+                                     questionTitle: questionChild.QuestionText,
+                                     questionType: questionChild.QuestionType,
+                                     questionVariable: questionChild.StataExportCaption,
+                                     questionConditionExpression: questionChild.ConditionExpression,
+                                     questionValidationExpression: questionChild.ValidationExpression,
+                                     linkedToQuestionId: Monads.Maybe(() => questionChild.LinkedToQuestionId.FormatGuid()));
+
+                    continue;
                 }
-                else if (child is IStaticText)
+
+                IGroup groupChild = child as IGroup;
+                if (groupChild != null)
                 {
-                    var staticText = child as IStaticText;
+                    this.AddGroup(questionnaire: currentState,
+                                  groupId: groupChild.PublicKey.FormatGuid(),
+                                  parentGroupId: groupChild.GetParent().PublicKey.FormatGuid(),
+                                  groupTitle: groupChild.Title,
+                                  variableName: groupChild.VariableName,
+                                  groupConditionExpression: groupChild.ConditionExpression,
+                                  isRoster: groupChild.IsRoster);
+                    this.AddQuestionnaireItem(currentState: currentState, sourceQuestionnaireOrGroup: groupChild);
+
+                    continue;
+                }
+
+                var staticTextChild = child as IStaticText;
+                if (staticTextChild != null)
+                {
                     this.AddStaticText(questionnaire: currentState,
-                        parentId: staticText.GetParent().PublicKey.FormatGuid(),
-                        entityId: staticText.PublicKey.FormatGuid(),
-                        text: staticText.Text);
+                        parentId: staticTextChild.GetParent().PublicKey.FormatGuid(),
+                        entityId: staticTextChild.PublicKey.FormatGuid(),
+                        text: staticTextChild.Text);
+
+                    continue;
                 }
-                else
-                {
-                    throw new ArgumentException(string.Format("Unknown qustionnaire item type in item with id {0}, received type is: {1}", child.PublicKey, child.GetType()));
-                }
+
+                throw new ArgumentException(string.Format("Unknown questionnaire item type in item with id {0}, received type is: {1}", child.PublicKey, child.GetType()));
             }
         }
 

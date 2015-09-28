@@ -1,6 +1,4 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
-@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.UsersViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
@@ -10,14 +8,14 @@
     @Html.Partial("_ListViewStatusesScript")
     @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/surveysandstatuses.js")
     <script type="text/javascript">
-        var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
-        $(function () {
-            var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })';
-            var responsibles = @Html.Raw(JsonConvert.SerializeObject(Model));
-            var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsibles);
-            ko.applyBindings(model);
-            model.load();
-        });
+    var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
+    $(function() {
+        var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
+        var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -33,7 +31,8 @@
             <h4 class="list-group-item-heading">Supervisors</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
@@ -76,7 +75,7 @@
                 <td data-bind="template: { name: 'RejectedByHeadquartersCountTemplate' }"></td>
                 <td data-bind="template: { name: 'ApprovedByHeadquartersCountTemplate' }"></td>
                 <td>
-                    <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() + '&interviewerId=' + ResponsibleId() }, text: TotalCount"></a>
+                    <a data-bind="attr: { href: $interviewsUrl + '?templateId=' + QuestionnaireId() + '&templateVersion=' + QuestionnaireVersion() + '&responsible=' + Responsible() }, text: TotalCount"></a>
                 </td>
             </tr>
             <!-- /ko -->

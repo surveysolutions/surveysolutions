@@ -4,10 +4,12 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Moq;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Tests.Unit.SharedKernels.DataCollection;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit
@@ -51,6 +53,14 @@ namespace WB.Tests.Unit
             sideBarSectionViewModel.NavigationState = Create.NavigationState();
             sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
             return sideBarSectionViewModelsFactory.Object;
+        }
+
+        public static IInterviewExpressionStatePrototypeProvider InterviewExpressionStateProvider()
+        {
+            var expressionState = new StronglyTypedInterviewEvaluator();
+
+            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
         }
     }
 }

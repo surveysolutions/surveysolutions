@@ -44,19 +44,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
+                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, userId, questionnaireId,
                     questionnaire.Version,
                     new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] {}, new decimal[] { 1 }, string.Empty) },
                     new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
+                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {

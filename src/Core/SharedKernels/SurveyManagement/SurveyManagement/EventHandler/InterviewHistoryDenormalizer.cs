@@ -54,7 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, QuestionsDisabled>,
         IUpdateHandler<InterviewHistoryView, QuestionsEnabled>,
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
-        IUpdateHandler<InterviewHistoryView, GroupsEnabled>
+        IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
+        IUpdateHandler<InterviewHistoryView, AnswerRemoved>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
@@ -216,6 +217,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
           CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude,
                         evnt.Payload.Timestamp)),
               evnt.Payload.RosterVector));
+
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerRemoved> evnt)
+        {
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, evnt.Payload.UserId,
+                evnt.Payload.RemoveTimeUtc, CreateQuestionParameters(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
 
             return view;
         }

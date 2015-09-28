@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,11 +16,14 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
-    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel
+    public class GroupViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<RosterInstancesTitleChanged>, IInterviewEntityViewModel,
+        IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly AnswerNotifier answerNotifier;
+        readonly IServiceLocator serviceLocator;
+
         private string interviewId;
 
         private NavigationState navigationState;
@@ -39,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private readonly GroupStateViewModel groupState;
+        private GroupStateViewModel groupState;
         readonly ILiteEventRegistry eventRegistry;
 
         public GroupStateViewModel GroupState
@@ -69,7 +74,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry, 
+            IServiceLocator serviceLocator)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;
@@ -77,6 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
             this.eventRegistry = eventRegistry;
+            this.serviceLocator = serviceLocator;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -88,25 +95,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.Init(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
         }
 
-        public void Init(string interviewId, Identity entityIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
+        public void Init(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
             this.navigationState = navigationState;
-            this.groupIdentity = entityIdentity;
+            this.groupIdentity = groupIdentity;
 
             this.eventRegistry.Subscribe(this, interviewId);
+            
+            GroupModel groupModel;
+            if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(groupIdentity.Id, out groupModel))
+                throw new InvalidOperationException("Group with identity {0} don't found".FormatString(groupIdentity));
 
-            this.Enablement.Init(interviewId, entityIdentity, navigationState);
-            this.GroupState.Init(interviewId, entityIdentity);
+            this.Enablement.Init(interviewId, groupIdentity, navigationState);
+            this.GroupState.Init(interviewId, groupIdentity);
 
-            var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[entityIdentity.Id];
             this.Title = groupModel.Title;
-            this.RosterTitle = interview.GetRosterTitle(entityIdentity);
+            this.RosterTitle = interview.GetRosterTitle(groupIdentity);
             this.IsRoster = groupModel is RosterModel;
-
+            
             if (groupWithAnswersToMonitor != null)
             {
                 IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(groupWithAnswersToMonitor);
@@ -117,13 +127,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void QuestionAnswered(object sender, EventArgs e)
         {
-            this.GroupState.UpdateFromModel();
+            this.GroupState.UpdateFromGroupModel();
             this.RaisePropertyChanged(() => this.GroupState);
         }
 
         private async Task NavigateToGroupAsync()
         {
-            await this.navigationState.NavigateToAsync(this.groupIdentity);
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.groupIdentity));
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
@@ -134,6 +144,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             {
                 this.RosterTitle = changedInstance.Title;
             }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId);
+
+            this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
         }
     }
 }

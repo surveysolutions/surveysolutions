@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
     {
         public class DummyEvent  { }
 
-        public class DifferentDummyEvent  { }
+        public class DifferentDummyEvent { }
 
         public static IAggregateRoot CreateDummyAggregateRoot(Guid eventSourceId, params object[] events)
         {

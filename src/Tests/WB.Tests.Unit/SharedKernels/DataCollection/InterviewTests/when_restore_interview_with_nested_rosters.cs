@@ -16,7 +16,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -34,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             nestedRosterGroupId = Guid.Parse("22222222222222222222222222222222");
 
             int callOrder = 0;
-            interviewExpressionStateMock = new Mock<IInterviewExpressionStateV2>();
+            interviewExpressionStateMock = new Mock<IInterviewExpressionStateV4>();
             interviewExpressionStateMock.Setup(
                 x => x.AddRoster(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<decimal>(), Moq.It.IsAny<int?>()))
                 .Callback<Guid, decimal[], decimal, int?>(
@@ -43,6 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         rosterAddIndex[id] = callOrder;
                         callOrder++;
                     });
+            interviewExpressionStateMock.Setup(x => x.Clone()).Returns(interviewExpressionStateMock.Object);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => 
@@ -57,19 +60,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
-            SetupInstanceToMockedServiceLocator(Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => _.GetExpressionState(questionnaireId, Moq.It.IsAny<long>()) == interviewExpressionStateMock.Object));
-
-            interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, userId, questionnaireId,
+            interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, userId, questionnaireId,
                     questionnaire.Version,
                     new AnsweredQuestionSynchronizationDto[0],
                     new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
+                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
@@ -96,8 +97,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext.Dispose();
             eventContext = null;
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-               CreateInterviewExpressionStateProviderStub());
         };
 
         Because of = () => interview.SynchronizeInterview(userId, interviewSynchronizationDto);
@@ -125,6 +124,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid nestedRosterGroupId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Dictionary<Guid, int> rosterAddIndex = new Dictionary<Guid, int>(); 
-        private static Mock<IInterviewExpressionStateV2> interviewExpressionStateMock;
+        private static Mock<IInterviewExpressionStateV4> interviewExpressionStateMock;
     }
 }

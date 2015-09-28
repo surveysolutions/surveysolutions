@@ -8,7 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     public class CreateInterviewFromSynchronizationMetadata : InterviewCommand
     {
         public CreateInterviewFromSynchronizationMetadata(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient = false)
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, DateTime? rejectedDateTime,
+            bool valid, bool createdOnClient = false)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -17,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.InterviewStatus = status;
             this.FeaturedQuestionsMeta = featuredQuestionsMeta;
             this.Comments = comments;
+            this.RejectedDateTime = rejectedDateTime;
             this.Valid = valid;
             this.CreatedOnClient = createdOnClient;
         }
@@ -36,5 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public bool Valid { get; set; }
 
         public bool CreatedOnClient { get; set; }
+
+        public DateTime? RejectedDateTime { get; set; }
     }
 }

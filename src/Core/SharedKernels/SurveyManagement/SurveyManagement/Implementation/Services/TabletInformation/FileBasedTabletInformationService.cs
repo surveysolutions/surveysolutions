@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
 
             tabletLogView.Users =
                 tabletLog.RegisteredUsersOnDevice.Select(
-                    x => new UserLight(x, usersStorageReader.GetById(x).UserName)).ToList();
+                    x => new UserLight(x, this.GetByUserNameGetById(x))).ToList();
 
             foreach (var userSyncLog in tabletLog.UserSyncLog.OrderByDescending(x => x.HandshakeTime))
             {
@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
                                             x.ToDictionary(y => y.PackageId, y => y.PackageSyncTime)
                                     })*/
                     PackagesTrackingInfo =
-                        new[] {SyncItemType.User, SyncItemType.Interview, SyncItemType.Questionnaire}.ToDictionary(
+                        new[] {SyncItemType.User, SyncItemType.Interview, SyncItemType.Questionnaire, SyncItemType.QuestionnaireAssembly}.ToDictionary(
                             x => x, x => CreatePackagesTrackingInfoForPackageType(x, userSyncLog.PackagesTrackingInfo))
                 };
 
@@ -139,18 +139,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
             return tabletLogView;
         }
 
+        private string GetByUserNameGetById(Guid x)
+        {
+            var user = this.usersStorageReader.GetById(x);
+
+            return user == null ? "UNKNOWN" : user.UserName;
+        }
+
         private PackagesTrackingInfo CreatePackagesTrackingInfoForPackageType(string packageType,
             IList<SyncPackageTrackingInfo> packages)
         {
             var packagesFilteredByType = packages.Where(p => p.PackageType == packageType).ToArray();
 
             if (!packagesFilteredByType.Any())
-                return new PackagesTrackingInfo() {PackagesRequestInfo = new Dictionary<string, DateTime?>()};
-            
+                return new PackagesTrackingInfo() { PackagesRequestInfo = new List<SyncPackagesTrackingInfo>() };
+
             return new PackagesTrackingInfo()
             {
                 LastPackageId = packagesFilteredByType.Last().PackageId,
-                PackagesRequestInfo = packagesFilteredByType.ToDictionary(x => x.PackageId, x => x.PackageSyncTime)
+                PackagesRequestInfo =
+                    packagesFilteredByType.Select(x =>
+                            new SyncPackagesTrackingInfo()
+                            {
+                                IsPackageHandledByTheClient = x.ReceivedByClient,
+                                PackageId = x.PackageId,
+                                PackageRequestTime = x.PackageSyncTime,
+                                PackageType = x.PackageType
+                            }).ToList()
             };
         }
     }

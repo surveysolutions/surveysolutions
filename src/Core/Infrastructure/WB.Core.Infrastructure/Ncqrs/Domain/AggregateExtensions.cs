@@ -9,8 +9,6 @@ namespace Ncqrs.Domain
 {
     internal static class AggregateRootExtensions
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(AggregateRootExtensions));
-
         public static Type GetSnapshotInterfaceType(this Type aggregateType)
         {
             // Query all ISnapshotable interfaces. We only allow only
@@ -22,18 +20,15 @@ namespace Ncqrs.Domain
             // Aggregate does not implement any ISnapshotable interface.
             if (snapshotables.Count() == 0)
             {
-                Log.DebugFormat("No snapshot interface found on aggregate root {0}.", aggregateType.FullName);
                 return null;
             }
             // Aggregate does implement multiple ISnapshotable interfaces.
             if (snapshotables.Count() > 1)
             {
-                Log.WarnFormat("Aggregate root {0} contains multiple snapshot interfaces while only one is allowed.", aggregateType.FullName);
                 return null;
             }
 
             var snapshotableInterfaceType = snapshotables.Single();
-            Log.DebugFormat("Found snapshot interface {0} on aggregate root {1}.", snapshotableInterfaceType.FullName, aggregateType.FullName);
 
             return snapshotableInterfaceType;
         }

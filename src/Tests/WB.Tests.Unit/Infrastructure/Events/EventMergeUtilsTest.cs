@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace WB.Tests.Unit.Infrastructure.Events
 {
     [TestFixture]
-    public class EventMergeUtilsTest
+    internal class EventMergeUtilsTest
     {
         [SetUp]
         public void SetUp()

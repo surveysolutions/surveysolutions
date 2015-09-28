@@ -1,8 +1,5 @@
 ﻿@using System.Web.Optimization
-@using Newtonsoft.Json
 @using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
-@using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport
-@using WB.Core.SharedKernels.SurveyManagement.Views.User
 @model WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData.PreloadedDataVerificationErrorsView
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
@@ -11,16 +8,16 @@
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/pages/batchupload.js")
+    @Scripts.Render("~/js/batch-upload")
     <script type="text/javascript">
-        $(function () {
-            var $importDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewsApi", action = Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData" })';
-            var $successUploadUrl = "@Url.Action("SampleCreationResult", "HQ", new { id = Model.Id })";
-            var responsibles = @Html.Raw(JsonConvert.SerializeObject(ViewBag.SupervisorList));
-            var model = new Supervisor.VM.BatchUpload('@Model.Id', '@Model.QuestionnaireId', '@Model.Version',  responsibles, $importDataUrl, $successUploadUrl);
-            ko.applyBindings(model);
-            model.load();
-        });
+    $(function () {
+        var $importDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewsApi", action = Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData" })';
+        var $successUploadUrl = "@Url.Action("SampleCreationResult", "HQ", new { id = Model.Id })";
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Supervisors" })';
+        var model = new Supervisor.VM.BatchUpload('@Model.Id', '@Model.QuestionnaireId', '@Model.Version', responsiblesUrl, $importDataUrl, $successUploadUrl);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -88,7 +85,8 @@
                             @if (!Model.WasSupervsorProvided)
                             {
                                 <div class="input-group">
-                                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                                     <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
                                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                                     </div>

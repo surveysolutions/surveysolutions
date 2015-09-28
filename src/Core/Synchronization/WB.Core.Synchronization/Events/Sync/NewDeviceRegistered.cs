@@ -8,7 +8,6 @@ namespace Main.Core.Events.Synchronization
     /// The new device registered
     /// </summary>
     [Serializable]
-    [EventName("RavenQuestionnaire.Core:Events:NewDeviceRegistered")]
     public class NewDeviceRegistered
     {
         #region PublicProperties

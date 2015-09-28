@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Tests.Unit
 {
-    public static class QuestionnaireDocumentExtensions
+    internal static class QuestionnaireDocumentExtensions
     {
         public static IGroup GetGroup(this QuestionnaireDocument questionnaireDocument, Guid groupId)
         {

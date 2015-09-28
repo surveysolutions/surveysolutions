@@ -28,24 +28,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
           IDataExportRepositoryWriter dataExportRepositoryWriter = null,UserDocument user = null, InterviewSummary interviewSummary = null)
         {
             return new InterviewExportedDataDenormalizer(dataExportRepositoryWriter ?? Mock.Of<IDataExportRepositoryWriter>(),
-                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),
-                Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(It.IsAny<string>()) == interviewSummary),null);
+                Mock.Of<IReadSideRepositoryWriter<UserDocument>>(_ => _.GetById(It.IsAny<string>()) == user),null);
         }
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter = null,
             IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage = null, IReadSideRepositoryWriter<InterviewStatuses> statuses = null)
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage = null)
         {
-            return new InterviewExportedDataDenormalizer(dataExportWriter, userDocumentWriter,interviewSummaryStorage,statuses);
+            return new InterviewExportedDataDenormalizer(dataExportWriter, userDocumentWriter,interviewSummaryStorage);
         }
         protected static InterviewCommentedStatus CreateInterviewCommentedStatus(InterviewExportedAction status)
         {
             return new InterviewCommentedStatus() { Status = status, InterviewerId = Guid.NewGuid() };
-        }
-
-        protected static InterviewActionExportView CreateInterviewActionExportView(Guid interviewId, InterviewExportedAction action,string userName="test", string role="headquarter")
-        {
-            return new InterviewActionExportView(interviewId.FormatGuid(), action, userName, DateTime.Now, role);
         }
 
         protected static IPublishedEvent<InterviewApprovedByHQ> CreateInterviewApprovedByHQPublishableEvent(Guid? interviewId=null)
@@ -117,7 +111,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
     }
 
-    public static class ShouldExtensions
+    internal static class ShouldExtensions
     {
         public static void ShouldQuestionHasOneNotEmptyAnswer(this ExportedQuestion[] questions, Guid questionId)
         {

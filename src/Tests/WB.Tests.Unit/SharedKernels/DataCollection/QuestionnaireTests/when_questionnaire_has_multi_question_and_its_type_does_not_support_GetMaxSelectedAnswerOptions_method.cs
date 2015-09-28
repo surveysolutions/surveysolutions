@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 }
             });
 
-            questionnaire = CreateQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+            questionnaire = CreateImportedQuestionnaire(Guid.NewGuid(), questionnaireDocument);
         };
 
         Because of = () =>
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 questionnaire.GetQuestionnaire().GetMaxSelectedAnswerOptions(validatedQuestionId));
 
         It should_throw_questionnaire_exception = () =>
-            exception.ShouldBeOfType<QuestionnaireException>();
+            exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containing__custom_validation__ = () =>
             exception.Message.ShouldContain("Cannot return maximum for selected answers");

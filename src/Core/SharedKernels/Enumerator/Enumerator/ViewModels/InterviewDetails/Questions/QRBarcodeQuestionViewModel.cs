@@ -1,22 +1,26 @@
 ﻿using System;
+using System.Windows.Input;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class QRBarcodeQuestionViewModel : MvxNotifyPropertyChanged, 
+        IInterviewEntityViewModel, 
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         public QuestionStateViewModel<QRBarcodeQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
         
-
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -31,8 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
-        private IMvxCommand saveAnswerCommand;
-        public IMvxCommand SaveAnswerCommand
+        private ICommand saveAnswerCommand;
+        public ICommand SaveAnswerCommand
         {
             get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxCommand(this.SaveAnswer, () => !this.IsInProgress)); }
         }
@@ -40,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQRBarcodeScanService qrBarcodeScanService;
-        private readonly IUserInteractionService userInteractionService;
+        private readonly ILiteEventRegistry eventRegistry;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -49,14 +53,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IQRBarcodeScanService qrBarcodeScanService,
-            IUserInteractionService userInteractionService,
+            ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<QRBarcodeQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
             this.interviewRepository = interviewRepository;
             this.qrBarcodeScanService = qrBarcodeScanService;
-            this.userInteractionService = userInteractionService;
+            this.eventRegistry = eventRegistry;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
@@ -81,6 +85,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.Answer = answerModel.Answer;
             }
+
+            this.eventRegistry.Subscribe(this, interviewId);
         }
 
         private async void SaveAnswer()
@@ -113,6 +119,45 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             finally
             {
                 this.IsInProgress = false;
+            }
+        }
+
+        public ICommand RemoveAnswerCommand
+        {
+            get
+            {
+                return new MvxCommand(async () =>
+                {
+                    try
+                    {
+                        await this.Answering.SendRemoveAnswerCommandAsync(
+                            new RemoveAnswerCommand(this.interviewId,
+                                this.userId, 
+                                this.questionIdentity,
+                                DateTime.UtcNow));
+
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    }
+                    catch (InterviewException exception)
+                    {
+                        this.QuestionState.Validity.ProcessException(exception);
+                    }
+                });
+            }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                this.QuestionState.IsAnswered = false;
+                this.Answer = null;
             }
         }
     }

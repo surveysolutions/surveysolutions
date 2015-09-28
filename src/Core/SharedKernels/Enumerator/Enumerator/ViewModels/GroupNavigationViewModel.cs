@@ -4,6 +4,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -56,9 +57,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, groupIdentity, this.navigationState);
             }
+            
+            NavigationItemTitle = IsInSection
+                ? UIResources.Interview_NextSection_ButtonText
+                : UIResources.Interview_PreviousGroupNavigation_ButtonText;
         }
 
         private Identity NavigateToIdentity { get; set; }
+
+        public string NavigationItemTitle { get; set; }
 
         private bool isInSection;
         public bool IsInSection
@@ -76,11 +83,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (this.IsInSection)
             {
-                await this.navigationState.NavigateToAsync(this.NavigateToIdentity);
+                await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.NavigateToIdentity));
             }
             else
             {
-                await this.navigationState.NavigateToAsync(this.NavigateToIdentity, this.groupIdentity);
+                await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.NavigateToIdentity, anchoredElementIdentity: this.groupIdentity));
             }
         }
 

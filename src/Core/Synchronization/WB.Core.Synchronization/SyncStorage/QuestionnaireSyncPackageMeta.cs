@@ -3,7 +3,7 @@ namespace WB.Core.Synchronization.SyncStorage
 {
     public class QuestionnaireSyncPackageMeta : IOrderableSyncPackage
     {
-        [Obsolete("Probably used for deserialization")]
+        //DO not delete - is used for deserialization
         public QuestionnaireSyncPackageMeta()
         {
         }

@@ -23,7 +23,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CascadingSingleOptionQuestionViewModel : MvxNotifyPropertyChanged, 
          IInterviewEntityViewModel,
          ILiteEventHandler<SingleOptionQuestionAnswered>,
-         ILiteEventHandler<AnswersRemoved>
+         ILiteEventHandler<AnswersRemoved>,
+         ILiteEventHandler<AnswerRemoved>,
+         IDisposable
     {
         public class CascadingComboboxItemViewModel 
         {
@@ -144,6 +146,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return new MvxCommand(async () =>
+                {
+                    if (!QuestionState.IsAnswered)
+                    {
+                        ResetTextInEditor = "";
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                        return;
+                    }
+                    try
+                    {
+                        await this.Answering.SendRemoveAnswerCommandAsync(
+                            new RemoveAnswerCommand(this.interviewId,
+                                this.principal.CurrentUserIdentity.UserId,
+                                this.questionIdentity,
+                                DateTime.UtcNow));
+
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    }
+                    catch (InterviewException exception)
+                    {
+                        this.QuestionState.Validity.ProcessException(exception);
+                    }
+                });
+            }
+        }
+
         private CascadingComboboxItemViewModel selectedObject;
         public CascadingComboboxItemViewModel SelectedObject
         {
@@ -176,11 +208,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.filterText = value;
-
+                
                 this.UpdateSuggestionsList(this.filterText);
 
                 this.isInitialized = true;
+
+                this.RaisePropertyChanged();
+
+                this.CanRemoveAnswer = !string.IsNullOrEmpty(this.filterText);
             }
+        }
+
+        private bool canRemoveAnswer;
+
+        public bool CanRemoveAnswer
+        {
+            set
+            {
+                if (canRemoveAnswer != value)
+                {
+                    this.canRemoveAnswer = value;
+                    this.RaisePropertyChanged(); 
+                }
+            }
+            get { return canRemoveAnswer; }
         }
 
         private void UpdateSuggestionsList(string textHint)
@@ -287,6 +338,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
+                this.resetTextInEditor = this.selectedObject.OriginalText;
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
@@ -297,8 +349,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(SingleOptionQuestionAnswered @event)
         {
-            if (@event.QuestionId == this.parentQuestionIdentity.Id
-                && @event.RosterVector.SequenceEqual(this.parentQuestionIdentity.RosterVector))
+            if (this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
                 var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
                 var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
@@ -308,18 +359,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.UpdateSuggestionsList(string.Empty);
                 }              
             }
+
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                CanRemoveAnswer = true;
+            }
         }
 
         public void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
             {
-                if (question.Id == this.questionIdentity.Id && question.RosterVector.Identical(this.questionIdentity.RosterVector))
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.ResetTextInEditor = null;
                     this.QuestionState.IsAnswered = false;
-                    this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    this.CanRemoveAnswer = false;
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.QuestionState.Dispose();
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                this.QuestionState.IsAnswered = false;
+                this.ResetTextInEditor = string.Empty;
+                this.CanRemoveAnswer = false;
             }
         }
     }

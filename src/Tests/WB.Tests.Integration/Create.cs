@@ -9,18 +9,21 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Sql;
-using WB.Core.SharedKernels.SurveyManagement.Services.Sql;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Integration
@@ -320,19 +323,32 @@ namespace WB.Tests.Integration
 
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {
-            return new Questionnaire(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly");
+            var questionnaire = new Questionnaire(
+                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly"));
+
+            return questionnaire;
         }
 
-        public static Interview Interview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null)
+        public static Interview Interview(Guid? questionnaireId = null,
+            IQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            return new Interview(
-                interviewId ?? new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
-                userId ?? new Guid("F111F111F111F111F111F111F111F111"),
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 1,
-                answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
-                answersTime ?? new DateTime(2012, 12, 20),
-                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
+            var interview = new Interview(
+                Mock.Of<ILogger>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+
+            interview.CreateInterview(
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                1,
+                new Guid("D222D222D222D222D222D222D222D222"),
+                new Dictionary<Guid, object>(),
+                new DateTime(2012, 12, 20),
+                new Guid("F111F111F111F111F111F111F111F111"));
+
+            return interview;
         }
 
         public static Identity Identity(Guid id, decimal[] rosterVector = null)
@@ -407,6 +423,16 @@ namespace WB.Tests.Integration
                 repository ?? Mock.Of<IAggregateRootRepository>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>());
+        }
+
+        public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
+        {
+            return new Answer()
+            {
+                AnswerText = answer,
+                AnswerValue = value.ToString(),
+                ParentValue = parentValue.HasValue ? parentValue.ToString() : null
+            };
         }
     }
 }

@@ -45,14 +45,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () => 
-            exception = Catch.Exception(() => new Interview(new Guid(), new Guid(), questionnaireId, new Dictionary<Guid, object>(),
-                DateTime.Now));
+            exception = Catch.Exception(() => interview.CreateInterviewForTesting(questionnaireId, new Dictionary<Guid, object>(), DateTime.Now, Guid.NewGuid()));
 
         It should_exception_be_null = () =>
             exception.ShouldBeNull();
@@ -62,5 +59,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
         private static Guid questionnaireId = Guid.Parse("44444444444444444444444444444444");
         private static Exception exception;
+        private static Interview interview;
     }
 }

@@ -7,7 +7,6 @@
     /// <summary>
     /// The image updated.
     /// </summary>
-    [EventName("RavenQuestionnaire.Core:Events:ImageUploaded")]
     public class ImageUpdated
     {
         #region Public Properties

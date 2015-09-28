@@ -76,7 +76,7 @@ namespace WB.Tests.Integration.InterviewTests
                 }
             };
 
-            interview = CreateInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(questionnaireDocument);
+            interview = SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 3);
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 0 }, answerTime, "A");
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 2 }, answerTime, "C");

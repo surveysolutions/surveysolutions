@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
 {
     [TestFixture]
-    public class UserPreloadingServiceTests
+    internal class UserPreloadingServiceTests
     {
         [Test]
         public void

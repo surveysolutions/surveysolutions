@@ -41,25 +41,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
             Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                                 ? data.Request.SupervisorId
+                                 ? data.SupervisorId
                                  : this.GlobalInfo.GetCurrentUser().Id;
-            if (viewerId != null)
+
+            if (viewerId == null) return null;
+
+            var input = new InterviewersInputModel
             {
-                var input = new InterviewersInputModel(viewerId.Value)
-                    {
-                        Orders = data.SortOrder,
-                        SearchBy = data.SearchBy
-                    };
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy,
+                ViewerId = viewerId.Value
+            };
 
-                return this.interviewersFactory.Load(input);
-            }
-
-            return null;
+            return this.interviewersFactory.Load(input);
         }
 
         [HttpPost]
@@ -69,26 +65,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
             Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                                 ? data.Request.SupervisorId
+                                 ? data.SupervisorId
                                  : this.GlobalInfo.GetCurrentUser().Id;
-            if (viewerId != null)
+
+            if (viewerId == null) return null;
+
+            var input = new InterviewersInputModel
             {
-                var input = new InterviewersInputModel(viewerId.Value)
-                {
-                    Orders = data.SortOrder,
-                    SearchBy = data.SearchBy,
-                    Archived = true
-                };
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                ViewerId = viewerId.Value,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy,
+                Archived = true
+            };
 
-                return this.interviewersFactory.Load(input);
-            }
-
-            return null;
+            return this.interviewersFactory.Load(input);
         }
 
         [HttpPost]
@@ -123,17 +115,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             var input = new UserListViewInputModel
             {
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
                 Role = role,
                 Orders = data.SortOrder,
                 SearchBy = data.SearchBy,
                 Archived = archived
             };
-
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
 
             return this.supervisorsFactory.Load(input);
         }

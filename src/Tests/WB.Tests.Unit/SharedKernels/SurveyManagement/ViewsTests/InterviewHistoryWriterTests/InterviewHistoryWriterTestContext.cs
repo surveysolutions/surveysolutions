@@ -18,7 +18,7 @@ using It = Moq.It;
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHistoryWriterTests
 {
     [Subject(typeof(InterviewHistoryWriter))]
-    public class InterviewHistoryWriterTestContext
+    internal class InterviewHistoryWriterTestContext
     {
         protected static InterviewHistoryWriter CreateInterviewHistoryWriter(ICsvWriterService csvWriterService = null,
             IFileSystemAccessor fileSystemAccessor = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor=null)
