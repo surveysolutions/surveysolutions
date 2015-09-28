@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_restoring_interview_state_from_sync_package : StatefulInterviewTestsContext
+    internal class when_restoring_interview_state_from_sync_package_and_all_answers_are_null : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
@@ -36,17 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var answersDtos = new[]
             {
-                CreateAnsweredQuestionSynchronizationDto(integerQuestionId, rosterVector, integerAnswer),
-                CreateAnsweredQuestionSynchronizationDto(decimalQuestionId, rosterVector, decimalAnswer),
-                CreateAnsweredQuestionSynchronizationDto(dateTimeQuestionId, rosterVector, dateTimeAnswer),
-                CreateAnsweredQuestionSynchronizationDto(multiOptionQuestionId, rosterVector, multiOptionAnswer),
-                CreateAnsweredQuestionSynchronizationDto(linkedMultiOptionQuestionId , rosterVector, linkedMultiAnswer),
-                CreateAnsweredQuestionSynchronizationDto(singleOptionQuestionId, rosterVector, singleOptionAnswer),
-                CreateAnsweredQuestionSynchronizationDto(linkedSingleOptionQuestionId, rosterVector, linkedSingleAnswer),
-                CreateAnsweredQuestionSynchronizationDto(listQuestionId, rosterVector, listAnswer),
-                CreateAnsweredQuestionSynchronizationDto(textQuestionId, rosterVector, textAnswer),
-                CreateAnsweredQuestionSynchronizationDto(gpsQestionId, rosterVector, gpsAnswer),
-                CreateAnsweredQuestionSynchronizationDto(multimediaQuestionId, rosterVector, multimediaAnswer),
+                CreateAnsweredQuestionSynchronizationDto(integerQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(decimalQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(dateTimeQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(multiOptionQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(linkedMultiOptionQuestionId , rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(singleOptionQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(linkedSingleOptionQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(listQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(textQuestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(gpsQestionId, rosterVector, null),
+                CreateAnsweredQuestionSynchronizationDto(multimediaQuestionId, rosterVector, null),
             };
 
             synchronizationDto = Create.InterviewSynchronizationDto(questionnaireId, userId, answersDtos);
@@ -74,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(integerQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.Integer);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(integerAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_decimalQuestion = () =>
@@ -82,7 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(decimalQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.Decimal);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(decimalAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_dateTimeQuestion = () =>
@@ -90,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(dateTimeQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.DateTime);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(dateTimeAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_singleOptionQuestion = () =>
@@ -98,7 +96,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(singleOptionQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.OptionCode);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(singleOptionAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedSingleOptionQuestion = () =>
@@ -106,7 +104,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(linkedSingleOptionQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.RosterVector);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(linkedSingleAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multiOptionQuestion = () =>
@@ -114,7 +112,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(multiOptionQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.OptionCodeArray);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(multiOptionAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedMultiOptionQuestion = () =>
@@ -122,7 +120,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(linkedMultiOptionQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.RosterVectorArray);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(linkedMultiAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_listQuestion = () =>
@@ -130,7 +128,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(listQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.DecimalAndStringArray);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(listAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_textQuestion = () =>
@@ -138,7 +136,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(textQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.String);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(textAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_gpsQestionId = () =>
@@ -146,7 +144,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(gpsQestionId);
             answerDto.Type.ShouldEqual(AnswerType.GpsData);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(gpsAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multimediaQuestionId = () =>
@@ -154,25 +152,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var answerDto = GetAnswerDtoFromEvent(multimediaQuestionId);
             answerDto.Type.ShouldEqual(AnswerType.FileName);
             answerDto.RosterVector.ShouldEqual(rosterVector);
-            answerDto.Answer.ShouldEqual(multimediaAnswer);
+            answerDto.Answer.ShouldEqual(null);
         };
 
         static InterviewAnswerDto GetAnswerDtoFromEvent(Guid questionId)
         {
             return eventContext.GetSingleEvent<InterviewAnswersFromSyncPackageRestored>().Answers.Single(x => x.Id == questionId);
         }
-
-        static readonly object integerAnswer = 1;
-        static readonly object decimalAnswer = 6.44455m;
-        static readonly object dateTimeAnswer = DateTime.Now;
-        static readonly object singleOptionAnswer = 2m;
-        static readonly object linkedSingleAnswer = new []{ 0m, 2m};
-        static readonly object multiOptionAnswer = new[] { 1m };
-        static readonly object linkedMultiAnswer = new[] { new[] { 1m }, new[] { 2m } };
-        static readonly object listAnswer = new []{ new Tuple<decimal, string>(2,"Hello") };
-        static readonly object textAnswer = "hello";
-        static readonly object gpsAnswer = new GeoPosition(1, 2, 3, 4, DateTime.Now);
-        static readonly object multimediaAnswer = "hello.jpeg";
         private static EventContext eventContext;
         private static InterviewSynchronizationDto synchronizationDto;
         private static StatefulInterview interview;
