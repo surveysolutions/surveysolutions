@@ -79,10 +79,6 @@ namespace WB.UI.Interviewer.EventHandlers
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            DateTime? rejectedDateTime = evnt.Payload.Status == InterviewStatus.RejectedBySupervisor
-                ? evnt.EventTimeStamp
-                : (DateTime?)null;
-
             this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId, 
                 evnt.Payload.QuestionnaireVersion, 
                 evnt.EventSourceId, 
@@ -94,7 +90,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 false,
                 evnt.EventTimeStamp,
                 null,
-                rejectedDateTime);
+                evnt.Payload.RejectedDateTime);
         }
 
 

@@ -724,7 +724,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion,
-                interviewStatus, featuredQuestionsMeta, true, null));
+                interviewStatus, featuredQuestionsMeta, true, null, null));
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, string.Empty));
             this.ApplyValidationEvent(isValid);
         }
@@ -1808,7 +1808,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewFromSynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid,
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, 
+            string comments, 
+            DateTime? rejectedDateTime, 
+            bool valid,
             bool createdOnClient)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
@@ -1823,7 +1826,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaireVersion,
                 interviewStatus,
                 featuredQuestionsMeta,
-                createdOnClient, comments));
+                createdOnClient, 
+                comments,
+                rejectedDateTime));
 
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 

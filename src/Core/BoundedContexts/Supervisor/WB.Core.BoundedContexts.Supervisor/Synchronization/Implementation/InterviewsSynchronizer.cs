@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -433,6 +434,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             InterviewSummary interviewSummary = this.GetInterviewSummary(interviewId);
 
             string lastComment = interviewSummary.LastStatusChangeComment ?? string.Empty;
+            DateTime? rejectedDateTime = interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                ? interviewSummary.UpdateDate
+                : (DateTime?) null;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions
@@ -446,6 +450,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 PublicKey = interviewId,
                 ResponsibleId = interviewSummary.ResponsibleId,
                 Status = (int)interviewSummary.Status,
+                RejectDateTime = rejectedDateTime,
                 TemplateId = interviewSummary.QuestionnaireId,
                 Comments = lastComment,
                 Valid = !interviewSummary.HasErrors,
