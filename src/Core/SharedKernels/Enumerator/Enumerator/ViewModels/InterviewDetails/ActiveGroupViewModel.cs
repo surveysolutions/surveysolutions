@@ -222,28 +222,47 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesAdded @event)
         {
-            var viewModelEntities = this.interviewViewModelFactory.GetEntities(
-                interviewId: this.navigationState.InterviewId,
-                groupIdentity: this.navigationState.CurrentGroup,
-                navigationState: this.navigationState).ToList();
-
-            foreach (var addedRosterInstance in @event.Instances)
+            try
             {
-                var viewModelEntity = viewModelEntities.FirstOrDefault(x => x.Identity.Equals(addedRosterInstance.GetIdentity()));
+                userInterfaceStateService.NotifyRefreshStarted();
 
-                if (viewModelEntity != null)
+                var viewModelEntities = this.interviewViewModelFactory.GetEntities(
+                    interviewId: this.navigationState.InterviewId,
+                    groupIdentity: this.navigationState.CurrentGroup,
+                    navigationState: this.navigationState).ToList();
+
+                foreach (var addedRosterInstance in @event.Instances)
                 {
-                    var itemIndex = viewModelEntities.IndexOf(viewModelEntity);
-                    this.Items.Insert(itemIndex, viewModelEntity);
+                    var viewModelEntity = viewModelEntities.FirstOrDefault(x => x.Identity.Equals(addedRosterInstance.GetIdentity()));
+
+                    if (viewModelEntity != null)
+                    {
+                        var itemIndex = viewModelEntities.IndexOf(viewModelEntity);
+                        this.Items.Insert(itemIndex, viewModelEntity);
+                    }
                 }
             }
+            finally
+            {
+                userInterfaceStateService.NotifyRefreshFinished();
+            }
+
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            var itemsToRemove = this.Items.OfType<GroupViewModel>()
-                                          .Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
-            InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
+            try
+            {
+                userInterfaceStateService.NotifyRefreshStarted();
+
+                var itemsToRemove = this.Items.OfType<GroupViewModel>()
+                              .Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+                InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
+            }
+            finally
+            {
+                userInterfaceStateService.NotifyRefreshFinished();
+            }
         }
 
         public void Handle(QuestionsEnabled @event)

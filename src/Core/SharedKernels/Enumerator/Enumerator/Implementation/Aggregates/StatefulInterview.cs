@@ -869,7 +869,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString).ToList();
+                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
 
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(
                 x => x.Value != null 
@@ -920,7 +920,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds).ToList();
+                GetRosterInstanceIds);
             return questionInstances;
         }
 
@@ -1080,7 +1080,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Guid> questionIds = questionnaire.GetChildInterviewerQuestions(group.Id);
 
             IEnumerable<Identity> questions = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-                this.interviewState, questionIds, group.RosterVector, questionnaire, GetRosterInstanceIds).ToList();
+                this.interviewState, questionIds, group.RosterVector, questionnaire, GetRosterInstanceIds);
 
             return questions.Where(this.IsEnabled).ToReadOnlyCollection();
         }
