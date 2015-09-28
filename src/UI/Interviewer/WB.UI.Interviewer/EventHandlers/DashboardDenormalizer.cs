@@ -298,7 +298,7 @@ namespace WB.UI.Interviewer.EventHandlers
 
             if (preFilledQuestion != null)
             {
-                preFilledQuestion.Value = answer==null?string.Empty:this.getAnswer(preFilledQuestion, answer);
+                preFilledQuestion.Value = this.getAnswer(preFilledQuestion, answer);
                 questionnaire.SetProperties(featuredItems);
             }
             else if (!questionnaire.StartedDateTime.HasValue)
@@ -315,6 +315,9 @@ namespace WB.UI.Interviewer.EventHandlers
 
         private string getAnswer(FeaturedItem featuredQuestion, object answer)
         {
+            if (answer == null)
+                return string.Empty;
+
             var featuredCategoricalQuestion = featuredQuestion as FeaturedCategoricalItem;
             if (featuredCategoricalQuestion != null)
                 return AnswerUtils.AnswerToString(Convert.ToDecimal(answer, CultureInfo.InvariantCulture),
