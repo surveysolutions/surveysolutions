@@ -599,11 +599,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     break;
                 case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer == null ? null : (decimal?)Convert.ToDecimal(answerDto.Answer));
+                        .SetAnswer((decimal?) answerDto.Answer);
                     break;
                 case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(answerDto.Answer == null ? null : (DateTime?)Convert.ToDateTime(answerDto.Answer));
+                        .SetAnswer((DateTime?)answerDto.Answer);
                     break;
                 case AnswerType.OptionCodeArray:
                     this.GetOrCreateAnswer<MultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
