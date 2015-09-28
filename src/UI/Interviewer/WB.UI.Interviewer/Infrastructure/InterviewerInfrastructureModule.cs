@@ -1,13 +1,10 @@
-﻿using Cheesebaron.MvxPlugins.Settings.Interfaces;
-using Ninject;
+﻿using Ninject;
 using Ninject.Modules;
 using PCLStorage;
 using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator;
@@ -15,7 +12,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
-using WB.UI.Interviewer.Infrastructure.Internals.Security;
 using WB.UI.Interviewer.Settings;
 
 namespace WB.UI.Interviewer.Infrastructure
