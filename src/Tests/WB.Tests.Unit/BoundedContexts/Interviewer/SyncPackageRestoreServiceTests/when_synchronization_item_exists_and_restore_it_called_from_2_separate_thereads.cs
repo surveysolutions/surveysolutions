@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SyncPackageRestoreServiceTes
     {
         Establish context = () =>
         {
-            interviewSynchronizationDto = new InterviewSynchronizationDto(Guid.NewGuid(), InterviewStatus.InterviewerAssigned, null,
+            interviewSynchronizationDto = new InterviewSynchronizationDto(Guid.NewGuid(), InterviewStatus.InterviewerAssigned, null, null,
                 Guid.NewGuid(), Guid.NewGuid(), 1, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                 new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                 new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), false, false);

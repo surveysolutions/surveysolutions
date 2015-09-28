@@ -42,7 +42,8 @@ namespace WB.UI.Interviewer.ViewModel.InterviewMetaInfo
                 Valid = interview.Valid,
                 FeaturedQuestionsMeta = featuredQuestionList,
                 CreatedOnClient = interview.JustInitilized,
-                TemplateVersion = interview.SurveyVersion
+                TemplateVersion = interview.SurveyVersion,
+                RejectDateTime = interview.RejectedDateTime
             };
         }
     }
