@@ -15,20 +15,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class RelinkDeviceViewModel : BaseViewModel
     {
-        private readonly ICapiCleanUpService cleanUpExecutor;
         private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
         public RelinkDeviceViewModel(
-            ICapiCleanUpService cleanUpExecutor, 
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
         {
-            this.cleanUpExecutor = cleanUpExecutor;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.synchronizationService = synchronizationService;
@@ -51,12 +48,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand CancelCommand
         {
-            get { return new MvxCommand(this.ReturnBack); }
+            get { return new MvxCommand(this.ReturnBack, () => !this.IsInProgress); }
         }
 
         public IMvxCommand NavigateToTroubleshootingCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>(), () => !this.IsInProgress); }
         }
 
         private IMvxCommand relinkCommand;
@@ -81,14 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void ReturnBack()
         {
             this.cancellationTokenSource.Cancel();
-            if (this.principal.IsAuthenticated)
-            {
-                this.viewModelNavigationService.NavigateToDashboard();
-            }
-            else
-            {
-                this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
-            }
+            this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
         }
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
@@ -105,8 +95,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     },
                     token: this.cancellationTokenSource.Token);
 
-                this.cleanUpExecutor.DeleteAllInterviewsForUser(this.userIdentityToRelink.UserId);
-
                 await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
                 this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
                 this.viewModelNavigationService.NavigateToDashboard();
@@ -115,9 +103,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.ErrorMessage = ex.Message;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var a = ex;
                 this.ErrorMessage = InterviewerUIResources.UnexpectedException;   
             }
             finally

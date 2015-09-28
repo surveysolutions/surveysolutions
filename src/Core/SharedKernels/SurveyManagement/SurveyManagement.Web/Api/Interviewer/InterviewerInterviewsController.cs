@@ -29,14 +29,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private readonly ISyncLogger syncLogger;
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IUserWebViewFactory userInfoViewFactory;
-        private readonly IInterviewerInterviewsFactory interviewerInterviewsFactory;
+        private readonly IInterviewInformationFactory interviewerInterviewsFactory;
 
         public InterviewerInterviewsController(
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ISyncManager syncManager,
             IGlobalInfoProvider globalInfoProvider,
             IUserWebViewFactory userInfoViewFactory,
-            IInterviewerInterviewsFactory interviewerInterviewsFactory, 
+            IInterviewInformationFactory interviewerInterviewsFactory, 
             ISyncLogger syncLogger)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;

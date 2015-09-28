@@ -177,6 +177,7 @@ namespace WB.UI.Interviewer
             const string SynchronizationFolder = "SYNC";
             const string InterviewFilesFolder = "InterviewData";
             const string QuestionnaireAssembliesFolder = "assemblies";
+            const string SynchronizationPackagesFileName = "synchronizationPackages";
 
             this.kernel = new StandardKernel(
 
@@ -201,11 +202,14 @@ namespace WB.UI.Interviewer
             this.kernel.Bind<IUserInteractionService>().To<UserInteractionService>();
             this.kernel.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
-            this.kernel.Bind<SyncPackageIdsStorage>().ToSelf().InSingletonScope();
-            this.kernel.Bind<ISyncPackageIdsStorage>().To<SyncPackageIdsStorage>();
+            this.kernel.Bind<InterviewPackageIdsStorageSettings>()
+                .ToConstant(new InterviewPackageIdsStorageSettings(basePath, SynchronizationPackagesFileName));
+
+            this.kernel.Bind<InterviewPackageIdsStorage>().ToSelf().InSingletonScope();
+            this.kernel.Bind<IInterviewPackageIdsStorage>().To<InterviewPackageIdsStorage>();
 
             this.kernel.Load(new AndroidModelModule(basePath,
-                    new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }, this.kernel.Get<IWriteSideCleanerRegistry>(), this.kernel.Get<SyncPackageIdsStorage>()),
+                    new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }, this.kernel.Get<IWriteSideCleanerRegistry>(), this.kernel.Get<InterviewPackageIdsStorage>()),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
                 new AndroidDataCollectionSharedKernelModule(basePath: basePath,
                     syncDirectoryName: SynchronizationFolder));
