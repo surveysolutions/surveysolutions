@@ -32,6 +32,7 @@
   <dimen name="Dashboard_InterviewItem_StatusPanel_width">14dp</dimen>
   <dimen name="Dashboard_InterviewItem_StatusPanel_margin">1dp</dimen>
   <dimen name="Dashboard_InterviewItem_InformationBlock_margin">14dp</dimen>
+  <dimen name="Dashboard_InterviewItem_Title_marginRight">40dp</dimen>
   <dimen name="Dashboard_InterviewItem_Comment_lines_margin">8dp</dimen>
   <dimen name="Dashboard_InterviewItem_CreateButton_marginTop">26dp</dimen>
   <dimen name="Dashboard_InterviewItem_CreateButton_marginBottom">20dp</dimen>
