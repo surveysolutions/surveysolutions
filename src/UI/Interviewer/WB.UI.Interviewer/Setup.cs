@@ -88,7 +88,6 @@ namespace WB.UI.Interviewer
                 // Add assemblies with other views we use.  When the XML is inflated
                 // MvvmCross knows about the types and won't complain about them.  This
                 // speeds up inflation noticeably.
-                toReturn.Add(typeof(CardView).Assembly);
                 return toReturn;
             }
         }
