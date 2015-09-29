@@ -22,10 +22,9 @@
           local:MvxBind="Text QuestionariName;" />
       </RelativeLayout>
       
-      <MvxListView style="@style/Dashboard_InterviewItem_PrefilledQuestions"
-          local:MvxBind="ItemsSource PrefilledQuestions;
-                         ItemClick LoadDashboardItemCommand;
-                         FixHeight .;"
+      <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+          android:orientation="vertical"
+          local:MvxBind="ItemsSource PrefilledQuestions;"
           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
 
       <TextView style="@style/Dashboard_InterviewItem_Comment"

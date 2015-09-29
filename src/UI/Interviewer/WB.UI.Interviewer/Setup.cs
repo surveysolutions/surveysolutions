@@ -69,7 +69,6 @@ namespace WB.UI.Interviewer
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
-            registry.RegisterCustomBindingFactory<MvxListView>("FixHeight", (view) => new MvxListViewFixHeightBinding(view));
 
             base.FillTargetFactories(registry);
         }
