@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    card_view:cardBackgroundColor="@color/dashboard_new_interview_status"
-    card_view:cardCornerRadius="3dp"
-    card_view:cardElevation="0dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="horizontal"
     style="@style/Dashboard_InterviewListItem">
+
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout"
     local:MvxBind="Click LoadDashboardItemCommand;">
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
                   local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
-      <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:orientation="horizontal">
-        <Button style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
-          android:text="\u2573"
-          local:MvxBind="Click RemoveInterviewCommand;
-                         Visible IsSupportedRemove;" />
-        <TextView style="@style/Dashboard_InterviewItem_Title"
-          local:MvxBind="Text QuestionariName;" />
-      </RelativeLayout>
+      <TextView style="@style/Dashboard_InterviewItem_Title"
+        local:MvxBind="Text QuestionariName;" />
       
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           android:orientation="vertical"
@@ -37,6 +29,9 @@
       
     </LinearLayout>
   </LinearLayout>
-
-</android.support.v7.widget.CardView>
+  <Button style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
+    android:text="\u2573"
+    local:MvxBind="Click RemoveInterviewCommand;
+                         Visible IsSupportedRemove;" />
+</RelativeLayout>
 

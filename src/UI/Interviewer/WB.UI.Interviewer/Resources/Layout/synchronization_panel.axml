@@ -4,8 +4,6 @@
               android:id="@+id/synchronization_panel"
               style="@style/VerticalContentHeightWrappingLayout"
               local:MvxBind="Visible Synchronization.IsSynchronizationInfoShowed;">
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress Synchronization.IsSynchronizationInProgress" />
 
   <LinearLayout style="@style/Dashboard_Synchronization_Holder">
     <ImageView style="@style/Dashboard_Synchronization_Image"
