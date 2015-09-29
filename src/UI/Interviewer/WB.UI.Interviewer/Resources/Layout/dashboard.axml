@@ -19,7 +19,7 @@
   </android.support.v7.widget.Toolbar>
   
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-               local:MvxBind="ShowProgress IsInProgress" />
+               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress)" />
   
   <include layout="@layout/synchronization_panel" />
 
