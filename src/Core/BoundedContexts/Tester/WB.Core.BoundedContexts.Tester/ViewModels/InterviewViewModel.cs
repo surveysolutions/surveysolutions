@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
 
-        public async Task NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
+        public async Task NavigateToPreviousViewModelAsync(Action navigateToIfHistoryIsEmpty)
         {
             await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
         }
