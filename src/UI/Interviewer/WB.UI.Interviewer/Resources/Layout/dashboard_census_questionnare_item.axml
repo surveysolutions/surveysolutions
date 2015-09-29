@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    card_view:cardBackgroundColor="@android:color/white"
-    card_view:cardCornerRadius="3dp"
     style="@style/Dashboard_InterviewListItem">
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout" >
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel" />
@@ -21,5 +18,4 @@
 
     </LinearLayout>
   </LinearLayout>
-
-</android.support.v7.widget.CardView>
+</LinearLayout>
