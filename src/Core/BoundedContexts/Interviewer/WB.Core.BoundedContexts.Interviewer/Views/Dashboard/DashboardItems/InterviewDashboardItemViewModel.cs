@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Messenger;
@@ -78,16 +79,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             switch (status)
             {
                 case DashboardInterviewStatus.New:
-                    return item.CreatedDateTime.HasValue ? InterviewerUIResources.DashboardItem_CreatedOn.FormatString(item.CreatedDateTime) : string.Empty;
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_CreatedOn, item.CreatedDateTime);
                 case DashboardInterviewStatus.InProgress:
-                    return item.StartedDateTime.HasValue ? InterviewerUIResources.DashboardItem_StartedOn.FormatString(item.StartedDateTime) : string.Empty;
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_StartedOn, item.StartedDateTime);
                 case DashboardInterviewStatus.Completed:
-                    return item.CompletedDateTime.HasValue ? InterviewerUIResources.DashboardItem_CompletedOn.FormatString(item.CompletedDateTime) : string.Empty;
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_CompletedOn, item.CompletedDateTime);
                 case DashboardInterviewStatus.Rejected:
-                    return item.RejectedDateTime.HasValue ? InterviewerUIResources.DashboardItem_RejectedOn.FormatString(item.RejectedDateTime) : string.Empty;
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedOn, item.RejectedDateTime);
                 default:
                     return string.Empty;
             }
+        }
+
+        private string FormatDateTimeString(string formatString, DateTime? utcDateTimeWithOutKind)
+        {
+            if (!utcDateTimeWithOutKind.HasValue)
+                return string.Empty;
+
+            var utcDateTime = DateTime.SpecifyKind(utcDateTimeWithOutKind.Value, DateTimeKind.Utc);
+            return string.Format(formatString, utcDateTime.ToLocalTime().ToString(CultureInfo.CurrentUICulture));
         }
 
         private string GetInterviewCommentByStatus(DashboardQuestionnaireItem item)
