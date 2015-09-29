@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Capi.ViewModel.Dashboard;
 
 namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
