@@ -21,6 +21,9 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:paddingRight">@dimen/Dashboard_TabMenu_tab_padding</item>
+    <item name="android:paddingTop">@dimen/Dashboard_TabMenu_tab_padding</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_TabMenu_tab_padding</item>
   </style>
 
   <style name="Dashboard_NewItemsLink" parent="Dashboard_TabLink">
@@ -109,11 +112,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:focusable">false</item>
     <item name="android:focusableInTouchMode">false</item>
-    <item name="android:listSelector">@android:color/transparent</item>
-    <item name="android:cacheColorHint">@android:color/transparent</item>
-    <item name="android:divider">@android:color/transparent</item>
-    <item name="android:dividerHeight">0dp</item>
-    <item name="android:layout_marginTop">18dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestion" parent="AppTheme">
