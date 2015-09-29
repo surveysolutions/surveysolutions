@@ -51,5 +51,10 @@ namespace WB.UI.Interviewer
         {
             row.Visibility = ViewStates.Gone;
         }
+
+        public void Include(LinearLayout linearLayout)
+        {
+            linearLayout.Clickable = !linearLayout.Clickable;
+        }
     }
 }
