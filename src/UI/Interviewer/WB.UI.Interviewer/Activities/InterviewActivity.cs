@@ -14,7 +14,7 @@ namespace WB.UI.Interviewer.Activities
 
         public override async void OnBackPressed()
         {
-            await this.ViewModel.NavigateToPreviousViewModel(() =>
+            await this.ViewModel.NavigateToPreviousViewModelAsync(() =>
                 {
                     Application.SynchronizationContext.Post(_ => { this.ViewModel.NavigateBack(); }, null);
                     this.Finish();
