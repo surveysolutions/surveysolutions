@@ -124,7 +124,13 @@ namespace WB.UI.Interviewer.Ninject
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IProtobufJsonUtils>().To<ProtobufSerializer>();
-            this.Bind<IJsonUtils>().To<NewtonJsonUtils>();
+            this.Bind<IJsonUtils>().ToMethod((ctx) => new NewtonJsonUtils(new Dictionary<string, string>()
+            {
+                {
+                    "WB.UI.Capi",
+                    "WB.Core.BoundedContexts.Interviewer"
+                }
+            }));
             this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
     }
