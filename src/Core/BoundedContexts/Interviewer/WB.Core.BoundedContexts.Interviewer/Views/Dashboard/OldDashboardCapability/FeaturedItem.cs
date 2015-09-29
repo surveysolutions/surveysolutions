@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.UI.Interviewer.ViewModel.Dashboard
+namespace WB.UI.Capi.ViewModel.Dashboard
 {
     public class FeaturedItem
     {
