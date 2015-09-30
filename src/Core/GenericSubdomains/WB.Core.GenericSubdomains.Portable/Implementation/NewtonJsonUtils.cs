@@ -18,10 +18,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings>
             jsonSerializerSettingsByTypeNameHandling;
 
+        private Dictionary<string, string> assemblyReplacementMapping = new Dictionary<string, string>();
+
         public NewtonJsonUtils() : this(new Dictionary<string, string>()) { }
 
         public NewtonJsonUtils(Dictionary<string, string> assemblyReplacementMapping)
-            : this(new JsonUtilsSettings { TypeNameHandling = TypeSerializationSettings.ObjectsOnly }, assemblyReplacementMapping)
+            : this(new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.ObjectsOnly }, assemblyReplacementMapping)
         {
         }
 
@@ -30,7 +32,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         public NewtonJsonUtils(JsonUtilsSettings jsonUtilsSettings,
             Dictionary<string, string> assemblyReplacementMapping)
         {
-            var assemblyNameReplacerSerializationBinder = new AssemblyNameReplacerSerializationBinder(assemblyReplacementMapping);
+            this.assemblyReplacementMapping = assemblyReplacementMapping;
 
             this.jsonUtilsSettings = jsonUtilsSettings;
 
@@ -42,8 +44,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                         {
                             TypeNameHandling = TypeNameHandling.All,
                             NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal,
-                            Binder = assemblyNameReplacerSerializationBinder
+                            FloatParseHandling = FloatParseHandling.Decimal
                         }
                     },
                     {
@@ -52,8 +53,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                             TypeNameHandling = TypeNameHandling.Objects,
                             NullValueHandling = NullValueHandling.Ignore,
                             FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None,
-                            Binder = assemblyNameReplacerSerializationBinder
+                            Formatting = Formatting.None
                         }
                     },
                     {
@@ -62,9 +62,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                             TypeNameHandling = TypeNameHandling.None,
                             NullValueHandling = NullValueHandling.Ignore,
                             FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None,
-                            Binder = assemblyNameReplacerSerializationBinder
-                        }
+                            Formatting = Formatting.None                        }
                     }
                 };
 
@@ -94,7 +92,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload,
+            var appliedReplaysementPayload = ApplyAssemblyReplacementMapping(payload);
+            return JsonConvert.DeserializeObject<T>(appliedReplaysementPayload,
                 this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
         }
 
@@ -132,21 +131,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
         }
 
-        internal class AssemblyNameReplacerSerializationBinder : DefaultSerializationBinder
+        private string ApplyAssemblyReplacementMapping(string payload)
         {
-            private readonly Dictionary<string, string> assemblyReplacementMapping;
-
-            public AssemblyNameReplacerSerializationBinder(Dictionary<string, string> assemblyReplacementMapping)
+            var replaceOldAssemblyNames = payload;
+            foreach (var item in assemblyReplacementMapping)
             {
-                this.assemblyReplacementMapping = assemblyReplacementMapping;
+                replaceOldAssemblyNames.Replace(item.Key, item.Value);
             }
+            return replaceOldAssemblyNames;
 
-            public override Type BindToType(string assemblyName, string typeName)
-            {
-                if (!assemblyReplacementMapping.ContainsKey(assemblyName))
-                    return base.BindToType(assemblyName, typeName);
-                return base.BindToType(assemblyReplacementMapping[assemblyName], typeName);
-            }
         }
+        
     }
 }
