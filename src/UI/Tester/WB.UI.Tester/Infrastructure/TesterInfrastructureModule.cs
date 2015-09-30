@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -20,12 +21,20 @@ using WB.UI.Tester.Infrastructure.Internals.Log;
 using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
+using WB.UI.Tester.Infrastructure.Internals.Storage;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Tester.Infrastructure
 {
     public class TesterInfrastructureModule : NinjectModule
     {
+        private readonly string questionnaireAssembliesFolder;
+
+        public TesterInfrastructureModule(string questionnaireAssembliesFolder = "assemblies")
+        {
+            this.questionnaireAssembliesFolder = questionnaireAssembliesFolder;
+        }
+
         public override void Load()
         {
             this.Bind<IEventStore>().To<InMemoryEventStore>().InSingletonScope();
@@ -54,6 +63,9 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();
+
+            this.Bind<IQuestionnaireAssemblyFileAccessor>().To<TesterQuestionnaireAssemblyFileAccessor>().InSingletonScope()
+                .WithConstructorArgument("assemblyStorageDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory(this.questionnaireAssembliesFolder));
         }
     }
 }
