@@ -281,7 +281,7 @@
     <Compile Include="Infrastructure\Internals\Compression\Compressor.cs" />
     <Compile Include="Infrastructure\Internals\DesignerApiService.cs" />
     <Compile Include="Infrastructure\Internals\Log\XamarinInsightsLogger.cs" />
-    <Compile Include="Infrastructure\Internals\Storage\QuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Infrastructure\Internals\Storage\TesterQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Infrastructure\TesterInfrastructureModule.cs" />
     <Compile Include="Ninject\TesterUIModule.cs" />
