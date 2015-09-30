@@ -231,7 +231,6 @@ namespace WB.UI.Interviewer
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
-            this.kernel.Bind<IInterviewCompletionService>().To<InterviewerInterviewCompletionService>().InSingletonScope();
 
 
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>();

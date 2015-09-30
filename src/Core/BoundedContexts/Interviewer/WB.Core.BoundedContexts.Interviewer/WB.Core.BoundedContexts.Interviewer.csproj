@@ -131,7 +131,6 @@
     <Compile Include="Implementation\DenormalizerStorage\DenormalizerRow.cs" />
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
-    <Compile Include="Implementation\Services\InterviewerInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
@@ -170,6 +169,8 @@
     <Compile Include="Views\Dashboard\OldDashboardCapability\SurveyDTO.cs" />
     <Compile Include="Services\IInterviewerApplicationUpdater.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
+    <Compile Include="Views\InterviewerActiveStageViewModel.cs" />
+    <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
     <Compile Include="Views\MvvmcrossTroubleshootingViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />

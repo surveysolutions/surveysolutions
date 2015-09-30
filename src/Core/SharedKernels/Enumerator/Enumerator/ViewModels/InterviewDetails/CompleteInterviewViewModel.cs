@@ -4,7 +4,6 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -16,30 +15,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
-        private readonly IPrincipal principal;
-        private readonly IInterviewCompletionService completionService;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IPrincipal principal;
 
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
             IPrincipal principal, 
-            IInterviewCompletionService completionService, 
-            IStatefulInterviewRepository interviewRepository, 
             IMvxMessenger messenger,
             InterviewStateViewModel interviewState)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
-            this.completionService = completionService;
-            this.interviewRepository = interviewRepository;
             this.messenger = messenger;
             this.InterviewState = interviewState;
         }
 
-        Guid interviewId;
+        protected Guid interviewId;
 
         public void Init(string interviewId)
         {
@@ -47,9 +40,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             InterviewState.Init(interviewId, null);
 
-            var questionsCount = InterviewState.QuestionsCount;//  interview.CountActiveQuestionsInInterview();
-            this.AnsweredCount = InterviewState.AnsweredQuestionsCount;// interview.CountAnsweredQuestionsInInterview();
-            this.ErrorsCount = InterviewState.InvalidAnswersCount;// interview.CountInvalidQuestionsInInterview();
+            var questionsCount = InterviewState.QuestionsCount;
+            this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
+            this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.UnansweredCount = questionsCount - this.AnsweredCount;
         }
 
@@ -89,12 +82,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             await this.commandService.ExecuteAsync(completeInterviewCommand);
 
-            this.completionService.CompleteInterview(this.interviewId, this.principal.CurrentUserIdentity.UserId);
-
-            this.viewModelNavigationService.NavigateToDashboard();
-
-            messenger.Publish(new InterviewCompleteMessage(this));
+            this.CloseInterview();
         }
 
+        protected virtual void CloseInterview()
+        {
+            this.viewModelNavigationService.NavigateToDashboard();
+
+            this.messenger.Publish(new InterviewCompleteMessage(this));
+        }
     }
 }
