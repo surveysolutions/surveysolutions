@@ -147,6 +147,7 @@
     <Compile Include="Internals\FileSystem\AndroidFileSystemEntryInfo.cs" />
     <Compile Include="Internals\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Internals\FileSystem\FileSystemService.cs" />
+    <Compile Include="Internals\FileSystem\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Internals\GpsLocationService.cs" />
     <Compile Include="Internals\Location\IMvxLocationReceiver.cs" />
     <Compile Include="Internals\Location\IPlayConnectionCallbacksReceiver.cs" />
