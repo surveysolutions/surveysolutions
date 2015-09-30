@@ -62,10 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             return fileSystemAccessorMock;
         }
 
-        protected static IJsonUtils CreateJsonUtils(SyncItem syncItem = null, InterviewMetaInfo interviewMetaInfo = null)
+        protected static ISerializer CreateJsonUtils(SyncItem syncItem = null, InterviewMetaInfo interviewMetaInfo = null)
         {
             return
-                Mock.Of<IJsonUtils>(
+                Mock.Of<ISerializer>(
                     _ =>
                         _.Deserialize<SyncItem>(It.IsAny<string>()) == syncItem &&
                         _.Deserialize<InterviewMetaInfo>(It.IsAny<string>()) == interviewMetaInfo);

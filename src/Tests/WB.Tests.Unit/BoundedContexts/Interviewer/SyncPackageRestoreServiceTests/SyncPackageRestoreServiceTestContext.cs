@@ -10,13 +10,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SyncPackageRestoreServiceTes
     {
         protected static SyncPackageRestoreService CreateSyncPackageRestoreService(
             ICapiSynchronizationCacheService capiSynchronizationCacheService = null,
-            IJsonUtils jsonUtils = null, ICommandService commandService = null)
+            ISerializer serializer = null, ICommandService commandService = null)
         {
             var stringCompressorMock = new Mock<IStringCompressor>();
             stringCompressorMock.Setup(x => x.DecompressString(Moq.It.IsAny<string>())).Returns<string>(s => s);
             return new SyncPackageRestoreService(Mock.Of<ILogger>(),
                 capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(), commandService ?? Mock.Of<ICommandService>());
+                serializer ?? Mock.Of<ISerializer>(), commandService ?? Mock.Of<ICommandService>());
         }
     }
 }

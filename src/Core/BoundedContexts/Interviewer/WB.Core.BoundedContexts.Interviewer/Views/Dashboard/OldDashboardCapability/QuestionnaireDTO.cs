@@ -11,9 +11,9 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {
-        private IJsonUtils jsonUtils
+        private ISerializer serializer
         {
-            get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
+            get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
         }
 
         public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, bool? createdOnClient = false, bool justInitilized = false)
@@ -57,12 +57,12 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         {
             return string.IsNullOrEmpty(this.Properties)
                 ? new FeaturedItem[0]
-                : this.jsonUtils.Deserialize<IEnumerable<FeaturedItem>>(this.Properties);
+                : this.serializer.Deserialize<IEnumerable<FeaturedItem>>(this.Properties);
         }
 
         public void SetProperties(IEnumerable<FeaturedItem> properties)
         {
-            this.Properties = this.jsonUtils.Serialize(properties);
+            this.Properties = this.serializer.Serialize(properties);
         }
     }
 }

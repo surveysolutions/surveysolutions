@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator=null,
-            IJsonUtils jsonUtils=null)
+            ISerializer serializer=null)
         {
             return new ImportController(Mock.Of<IStringCompressor>(),
                 membershipUserService ?? Mock.Of<IMembershipUserService>(),
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
                 Mock.Of<IQuestionnaireHelper>(),
                 engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
-                jsonUtils??Mock.Of<IJsonUtils>());
+                serializer??Mock.Of<ISerializer>());
         }
     }
 }

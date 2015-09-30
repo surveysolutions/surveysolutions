@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaries;
 
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
 
         private readonly IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter;
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviews,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaries,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IMetaInfoBuilder metaBuilder,
             IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter,
             IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviews = interviews;
             this.interviewSummaries = interviewSummaries;
             this.metaBuilder = metaBuilder;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.syncPackageWriter = syncPackageWriter;
             this.interviewResponsibleStorageWriter = interviewResponsibleStorageWriter;
             this.synchronizationDtoFactory = synchronizationDtoFactory;
@@ -196,8 +196,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 questionnaireVersion,
                 responsibleId,
                 SyncItemType.Interview,
-                this.jsonUtils.Serialize(doc, TypeSerializationSettings.AllTypes),
-                this.jsonUtils.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes),
+                this.serializer.Serialize(doc, TypeSerializationSettings.AllTypes),
+                this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes),
                 timestamp,
                 packageId,
                 globalSequence);
