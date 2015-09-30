@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.UI.Capi.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {

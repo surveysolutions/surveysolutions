@@ -1,4 +1,4 @@
-namespace WB.UI.Capi.ViewModel.Dashboard
+namespace WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard
 {
     public class FeaturedCategoricalOption
     {
