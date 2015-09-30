@@ -92,8 +92,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public T Deserialize<T>(string payload)
         {
-            var appliedReplaysementPayload = ApplyAssemblyReplacementMapping(payload);
-            return JsonConvert.DeserializeObject<T>(appliedReplaysementPayload,
+            var appliedReplacementPayload = ApplyAssemblyReplacementMapping(payload);
+            return JsonConvert.DeserializeObject<T>(appliedReplacementPayload,
                 this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
         }
 
