@@ -174,11 +174,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
                     InterviewerUIResources.Synchronization_UserAuthentication_Description);
-                
-                if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(token: this.Token, credentials: this.restCredentials))
-                {
-                    throw new SynchronizationException(SynchronizationExceptionType.UserLinkedToAnotherDevice);
-                }
+
+                await this.synchronizationService.CanSynchronizeAsync(token: this.Token, credentials: this.restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
