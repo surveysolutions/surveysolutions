@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.UI.Capi.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 
 namespace WB.UI.Interviewer.EventHandlers
