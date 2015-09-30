@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual event GroupChanged GroupChanged;
         public virtual event BeforeGroupChanged BeforeGroupChanged;
 
-        private bool isUserInterfaceRefreshing = false;
+        private bool isNavigationStarted = false;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
@@ -60,28 +60,47 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public async Task NavigateToAsync(NavigationIdentity navigationItem)
         {
-            await this.NavigateIfUserInterfaceIsNotRefreshing((() => this.NavigateTo(navigationItem)));
-        }       
-        
-        private async Task NavigateIfUserInterfaceIsNotRefreshing(Action action)
-        {
-            if (this.isUserInterfaceRefreshing)
+            if (this.isNavigationStarted)
                 return;
 
             try
             {
-                this.isUserInterfaceRefreshing = true;
+                this.isNavigationStarted = true;
 
-                await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
-                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
-                await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+                await this.WaitPendingOperationsCompletion();
 
-                action.Invoke();
+                this.NavigateTo(navigationItem);
             }
-            finally 
+            finally
             {
-                this.isUserInterfaceRefreshing = false;
+                this.isNavigationStarted = false;
             }
+        }
+
+        public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
+        {
+            if (this.isNavigationStarted)
+                return;
+
+            try
+            {
+                this.isNavigationStarted = true;
+
+                await this.WaitPendingOperationsCompletion();
+
+                this.NavigateBack(navigateToIfHistoryIsEmpty);
+            }
+            finally
+            {
+                this.isNavigationStarted = false;
+            }
+        }
+
+        private async Task WaitPendingOperationsCompletion()
+        {
+            await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+            await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
+            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
         }
 
         private void NavigateTo(NavigationIdentity navigationItem)
@@ -106,11 +125,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var interview = this.interviewRepository.Get(this.InterviewId);
 
             return interview.HasGroup(group) && interview.IsEnabled(group);
-        }
-
-        public async Task NavigateBackAsync(Action navigateToIfHistoryIsEmpty)
-        {
-            await this.NavigateIfUserInterfaceIsNotRefreshing((() => this.NavigateBack(navigateToIfHistoryIsEmpty)));
         }
 
         private void NavigateBack(Action navigateToIfHistoryIsEmpty)
