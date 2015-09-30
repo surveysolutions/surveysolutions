@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         {
             var inteviewsGroupByTemplateAndStatus = this.interviewSummaryReader.Query(_ =>
             {
-                var filetredInterviews = ApplyFilter(input, _);
+                IQueryable<InterviewSummary> filetredInterviews = ApplyFilter(input, _);
 
                 var interviews = (from f in filetredInterviews
                                  group f by new {f.QuestionnaireId, f.QuestionnaireVersion, f.QuestionnaireTitle, f.Status} into g
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 return statistics;
             });
 
-            var currentPage = inteviewsGroupByTemplateAndStatus
+            List<HeadquarterSurveysAndStatusesReportLine> currentPage = inteviewsGroupByTemplateAndStatus
                            .Select(doc => new HeadquarterSurveysAndStatusesReportLine
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
@@ -83,9 +83,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    Responsible = !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : doc.ResponsibleName
                            }).ToList();
 
-            var totalCount = this.interviewSummaryReader.Query(_ =>
+            int totalCount = this.interviewSummaryReader.Query(_ =>
             {
-                var result = ApplyFilter(input, _).GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion}).ToList().Distinct().Count();
+                int result = ApplyFilter(input, _)
+                            .GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
+                            .ToList()
+                            .Distinct()
+                            .Count();
 
                 return result;
             });
