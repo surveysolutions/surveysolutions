@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         MvxNotifyPropertyChanged,
         IDisposable
     {
-        private readonly IInterviewViewModelFactory interviewViewModelFactory;
+        protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private NavigationState navigationState;
         string interviewId;
         public ActiveStageViewModel(
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 if (this.navigationState.CurrentGroupType == ScreenType.Complete)
                 {
-                    var completionInterview = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
+                    var completionInterview = this.CompletionInterviewViewModel();
                     completionInterview.Init(this.interviewId);
                     return new ObservableRangeCollection<dynamic>(completionInterview.ToEnumerable());
                 }
@@ -56,6 +56,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     return this.EnumerationStage.Items;
                 }
             }
+        }
+
+        protected virtual CompleteInterviewViewModel CompletionInterviewViewModel()
+        {
+            return this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
         }
 
         public string Name
