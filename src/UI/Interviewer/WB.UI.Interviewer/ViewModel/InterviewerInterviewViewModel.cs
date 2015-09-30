@@ -26,7 +26,7 @@ namespace WB.UI.Interviewer.ViewModel
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
-            ActiveStageViewModel stageViewModel,
+            InterviewerActiveStageViewModel stageViewModel,
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
@@ -53,6 +53,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(this.SignOut)); }
         }
+
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
             get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
