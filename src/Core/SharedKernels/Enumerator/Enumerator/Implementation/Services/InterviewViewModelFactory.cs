@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -123,14 +122,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;
-        }
-
-        public IEnumerable<dynamic> GetCompleteScreenEntities(string interviewId)
-        {
-            var completionInterview = Load<CompleteInterviewViewModel>();
-            completionInterview.Init(interviewId);
-
-            return new List<dynamic> { completionInterview };
         }
 
         public T GetNew<T>() where T : class
