@@ -20,12 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
         protected static UserSynchronizationDenormalizer CreateDenormalizer(
              IReadSideRepositoryWriter<UserDocument> users = null,
-            IJsonUtils jsonUtils = null,
+            ISerializer serializer = null,
             IReadSideRepositoryWriter<UserSyncPackageMeta> userPackageStorageWriter = null)
         {
             var result = new UserSynchronizationDenormalizer(
                 users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(),
+                serializer ?? Mock.Of<ISerializer>(),
                 userPackageStorageWriter ?? Mock.Of<IReadSideRepositoryWriter<UserSyncPackageMeta>>());
 
             return result;

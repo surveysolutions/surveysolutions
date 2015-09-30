@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly ILogger logger;
         private readonly IStringCompressor zipUtils;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Controllers
             IStringCompressor zipUtils,
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IJsonUtils jsonUtils, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory)
+            ISerializer serializer, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -53,7 +53,7 @@ namespace WB.UI.Designer.Controllers
             this.zipUtils = zipUtils;
             this.commandService = commandService;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.accountListViewFactory = accountListViewFactory;
         }
 
@@ -93,7 +93,7 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireView == null)
                 return null;
 
-            return new FileStreamResult(this.zipUtils.Compress(jsonUtils.Serialize(questionnaireView.Source)), "application/octet-stream")
+            return new FileStreamResult(this.zipUtils.Compress(this.serializer.Serialize(questionnaireView.Source)), "application/octet-stream")
             {
                 FileDownloadName = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName())
             };

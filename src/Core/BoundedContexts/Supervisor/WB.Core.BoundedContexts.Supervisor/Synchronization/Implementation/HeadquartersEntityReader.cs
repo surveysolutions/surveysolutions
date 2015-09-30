@@ -11,15 +11,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
     internal class HeadquartersEntityReader
     {
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         protected readonly IHeadquartersSettings headquartersSettings;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
 
-        public HeadquartersEntityReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
+        public HeadquartersEntityReader(ISerializer serializer, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
         {
             if (messageHandler == null) throw new ArgumentNullException("messageHandler");
 
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.headquartersSettings = headquartersSettings;
             this.httpMessageHandler = messageHandler;
         }
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
                 string resultString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                var deserializedEntity = this.jsonUtils.Deserialize<TEntity>(resultString);
+                var deserializedEntity = this.serializer.Deserialize<TEntity>(resultString);
 
                 return deserializedEntity;
             }

@@ -23,16 +23,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<UserUnlockedBySupervisor>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IReadSideRepositoryWriter<UserSyncPackageMeta> syncPackageWriter;
 
         public UserSynchronizationDenormalizer(
             IReadSideRepositoryWriter<UserDocument> users, 
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IReadSideRepositoryWriter<UserSyncPackageMeta> syncPackageWriter)
         {
             this.users = users;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.syncPackageWriter = syncPackageWriter;
         }
 
@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
             }
 
-            string content = this.jsonUtils.Serialize(user, TypeSerializationSettings.ObjectsOnly);
+            string content = this.serializer.Serialize(user, TypeSerializationSettings.ObjectsOnly);
 
             var syncPackageMeta = new UserSyncPackageMeta(user.PublicKey, timestamp)
             {

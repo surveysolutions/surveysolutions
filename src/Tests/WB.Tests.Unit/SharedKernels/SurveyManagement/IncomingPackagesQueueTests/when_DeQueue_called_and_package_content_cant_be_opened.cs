@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     {
         Establish context = () =>
         {
-            var jsonUtilsMock = new Mock<IJsonUtils>();
+            var jsonUtilsMock = new Mock<ISerializer>();
             jsonUtilsMock.Setup(x => x.Deserialize<SyncItem>(Moq.It.IsAny<string>())).Returns(new SyncItem(){RootId = interviewId});
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>())).Throws<NullReferenceException>();
 
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             fileSystemAccessorMock.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
 
-            incomingSyncPackages = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object, jsonUtils: jsonUtilsMock.Object);
+            incomingSyncPackages = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object, serializer: jsonUtilsMock.Object);
         };
 
         Because of = () =>

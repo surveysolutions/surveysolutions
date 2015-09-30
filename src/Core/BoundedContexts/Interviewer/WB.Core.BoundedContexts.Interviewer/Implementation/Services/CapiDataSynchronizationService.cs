@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IChangeLogManipulator changelog;
         private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
         private readonly ICommandService commandService;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory;
         private readonly IPrincipal principal;
 
@@ -33,13 +33,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ICapiCleanUpService capiCleanUpService,
             ILogger logger,
             ICapiSynchronizationCacheService capiSynchronizationCacheService,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
             IPrincipal principal)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.interviewIntoFactory = interviewIntoFactory;
             this.principal = principal;
             this.changelog = changelog;
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private void UpdateInterview(InterviewSyncPackageDto item)
         {
-            var metaInfo = this.jsonUtils.Deserialize<InterviewMetaInfo>(item.MetaInfo);
+            var metaInfo = this.serializer.Deserialize<InterviewMetaInfo>(item.MetaInfo);
             try
             {
                 bool createdOnClient = metaInfo.CreatedOnClient.GetValueOrDefault();

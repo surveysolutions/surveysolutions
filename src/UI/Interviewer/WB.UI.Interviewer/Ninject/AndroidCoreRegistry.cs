@@ -123,8 +123,8 @@ namespace WB.UI.Interviewer.Ninject
             base.Load();
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<IProtobufJsonUtils>().To<ProtobufSerializer>();
-            this.Bind<IJsonUtils>().ToMethod((ctx) => new NewtonJsonUtils(new Dictionary<string, string>()
+            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new Dictionary<string, string>()
             {
                 {
                     "WB.UI.Capi",

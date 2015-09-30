@@ -5,11 +5,11 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
     internal class NewtonJsonUtilsTestContext
     {
-        public static NewtonJsonUtils CreateNewtonJsonUtils(Dictionary<string, string> assemblyReplacementMapping=null)
+        public static NewtonJsonSerializer CreateNewtonJsonUtils(Dictionary<string, string> assemblyReplacementMapping=null)
         {
             return assemblyReplacementMapping == null
-                ? new NewtonJsonUtils()
-                : new NewtonJsonUtils(assemblyReplacementMapping);
+                ? new NewtonJsonSerializer()
+                : new NewtonJsonSerializer(assemblyReplacementMapping);
         }
     }
 }

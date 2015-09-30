@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
                 questionnaireVerifier ?? Mock.Of<IQuestionnaireVerifier>(),
                 expressionProcessorGenerator ?? Mock.Of<IExpressionProcessorGenerator>(),
                 Mock.Of<IDesignerEngineVersionService>(_ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == (isClientVersionSupported??false)),
-                Mock.Of<IJsonUtils>());
+                Mock.Of<ISerializer>());
         }
 
         protected static DownloadQuestionnaireRequest CreateDownloadQuestionnaireRequest(Guid questionnaireId,

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             usersRepository = Mock.Of<IReadSideRepositoryWriter<UserDocument>>(x => x.GetById(userId.FormatGuid()) == storedUser);
 
-            jsonUtilsMock = new Mock<IJsonUtils>();
+            jsonUtilsMock = new Mock<ISerializer>();
 
             jsonUtilsMock.Setup(x => x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()))
                 .Callback((object u, TypeSerializationSettings serializationSettings) => user = u as UserDocument);
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             denormalizer = CreateDenormalizer(
                 userPackageStorageWriter: userSyncPackageWriter.Object,
                 users: usersRepository,
-                jsonUtils: jsonUtilsMock.Object);
+                serializer: jsonUtilsMock.Object);
         };
 
         Because of = () =>
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         private static Mock<IReadSideRepositoryWriter<UserSyncPackageMeta>> userSyncPackageWriter = new Mock<IReadSideRepositoryWriter<UserSyncPackageMeta>>();
         private static Guid userId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        private static Mock<IJsonUtils> jsonUtilsMock;
+        private static Mock<ISerializer> jsonUtilsMock;
         private static UserDocument user;
         private static IReadSideRepositoryWriter<UserDocument> usersRepository;
     }

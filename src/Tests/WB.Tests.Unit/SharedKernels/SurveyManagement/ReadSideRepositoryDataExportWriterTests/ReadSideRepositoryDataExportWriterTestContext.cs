@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExp
             return
                 new ReadSideRepositoryDataExportWriter(
                     interviewExportedDataStorage ?? new TestInMemoryWriter<InterviewExportedDataRecord>(),
-                    new NewtonJsonUtils());
+                    new NewtonJsonSerializer());
         }
     }
 }

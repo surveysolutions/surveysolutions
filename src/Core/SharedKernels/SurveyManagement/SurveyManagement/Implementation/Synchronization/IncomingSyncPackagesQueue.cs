@@ -20,19 +20,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly string incomingUnprocessedPackagesDirectory;
         private readonly SyncSettings syncSettings;
         private readonly ILogger logger;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IArchiveUtils archiver;
 
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
             SyncSettings syncSettings, 
             ILogger logger, 
-            IJsonUtils jsonUtils, 
+            ISerializer serializer, 
             IArchiveUtils archiver)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
             this.logger = logger;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.archiver = archiver;
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
@@ -76,15 +76,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         
                 var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
 
-                var syncItem = jsonUtils.Deserialize<SyncItem>(fileContent);
+                var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
 
                 interviewId = syncItem.RootId;
 
                 var meta =
-                    jsonUtils.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
+                    this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
 
                 var eventsToSync =
-                    jsonUtils.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
+                    this.serializer.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
                         .Select(e => e.Payload)
                         .ToArray();
 

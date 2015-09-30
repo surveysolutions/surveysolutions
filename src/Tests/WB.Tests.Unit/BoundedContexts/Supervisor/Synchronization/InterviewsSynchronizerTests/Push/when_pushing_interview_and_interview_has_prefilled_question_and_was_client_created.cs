@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == interviewSummary);
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
-                jsonUtils: jsonUtils,
+                serializer: jsonUtils,
                 httpMessageHandler: () => httpMessageHandler,
                 commandService: commandServiceMock.Object);
         };

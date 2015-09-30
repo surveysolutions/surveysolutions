@@ -12,9 +12,9 @@ namespace WB.UI.Designer.Code
 {
     public class JsonFormatter : MediaTypeFormatter
     {
-        private IJsonUtils jsonUtils
+        private ISerializer serializer
         {
-            get { return ServiceLocator.Current.GetInstance<IJsonUtils>(); }
+            get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
         }
 
         public JsonFormatter()
@@ -44,12 +44,12 @@ namespace WB.UI.Designer.Code
 
         public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
         {
-            return Task.FromResult(this.jsonUtils.DeserializeFromStream(stream: readStream, type: type));
+            return Task.FromResult(this.serializer.DeserializeFromStream(stream: readStream, type: type));
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
         {
-            return Task.Run(() => this.jsonUtils.SerializeToStream(value: value, type: type, stream: writeStream));
+            return Task.Run(() => this.serializer.SerializeToStream(value: value, type: type, stream: writeStream));
         }
     }
 }
