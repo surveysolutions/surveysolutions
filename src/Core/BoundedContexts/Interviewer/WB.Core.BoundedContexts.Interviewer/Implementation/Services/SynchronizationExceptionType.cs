@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         UpgradeRequired,
         ServiceUnavailable,
         InternalServerError,
-        UserLinkedToAnotherDevice,
-        ApplicationIncompatibleWithServer
+        UserLinkedToAnotherDevice
     }
 }
