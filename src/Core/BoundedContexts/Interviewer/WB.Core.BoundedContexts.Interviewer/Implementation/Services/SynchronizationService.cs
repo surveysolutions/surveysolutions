@@ -349,10 +349,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             exceptionMessage = InterviewerUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
-                        case HttpStatusCode.NotAcceptable:
-                            exceptionMessage = InterviewerUIResources.ApplicationIncompatibleWithServer;
-                            exceptionType = SynchronizationExceptionType.ApplicationIncompatibleWithServer;
-                            break;
                     }
                     break;
             }

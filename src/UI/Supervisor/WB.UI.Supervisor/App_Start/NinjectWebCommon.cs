@@ -114,7 +114,7 @@ namespace WB.UI.Supervisor.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof(SupervisorBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
+                MappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
             };
 
             var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly }; 
