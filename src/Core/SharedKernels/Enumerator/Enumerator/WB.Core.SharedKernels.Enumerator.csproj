@@ -141,10 +141,11 @@
     <Compile Include="Services\MaskText\Range.cs" />
     <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\ActiveStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewSummaryNavigationViewModel.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\ActiveGroupViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnsweringViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnswerNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\BeforeGroupChangedEventArgs.cs" />
