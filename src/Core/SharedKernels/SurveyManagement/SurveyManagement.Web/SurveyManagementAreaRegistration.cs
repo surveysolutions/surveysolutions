@@ -161,6 +161,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/knockout/ko.spin.js",
                 }
             },
+            {
+                "~/js/synclog", new[]
+                {
+                   "~/Scripts/bootstrap-datepicker.js",
+                    "~/Scripts/ko.datepicker.js", 
+                    "~/Scripts/bootstrap3-typeahead.js", 
+                    "~/Scripts/components/typeahead-extended.js", 
+                    "~/Scripts/knockout/ko.typeahead.js", 
+                    "~/Scripts/viewmodels/pages/controlpanel/synchronizationlog.js"
+                }
+            },
         };
 
         public override string AreaName

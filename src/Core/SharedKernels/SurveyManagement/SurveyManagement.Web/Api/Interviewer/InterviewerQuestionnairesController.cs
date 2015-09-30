@@ -10,11 +10,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
@@ -46,8 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("census")]
-        [WriteToSyncLog(SyncLogAction.TrackAggregateRootIdsRequest, SyncItemType.Questionnaire)]
-        [WriteToSyncLog(SyncLogAction.TrackAggregateRootIdsRequest, SyncItemType.QuestionnaireAssembly)]
+        [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
         public List<QuestionnaireIdentity> Census()
         {
             var query = new QuestionnaireBrowseInputModel()
@@ -64,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("{id:guid}/{version:int}")]
-        [WriteToSyncLog(SyncLogAction.TrackQuestionnaireRequest, SyncItemType.Questionnaire)]
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
         public QuestionnaireApiView Get(Guid id, int version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
@@ -81,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpGet]
         [Route("{id:guid}/{version:int}/assembly")]
-        [WriteToSyncLog(SyncLogAction.TrackQuestionnaireRequest, SyncItemType.QuestionnaireAssembly)]
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAssembly)]
         public HttpResponseMessage GetAssembly(Guid id, int version)
         {
             if (!this.questionnareAssemblyFileAccessor.IsQuestionnaireAssemblyExists(id, version))
@@ -99,14 +98,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpPost]
         [Route("{id:guid}/{version:int}/logstate")]
-        [WriteToSyncLog(SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled, SyncItemType.Questionnaire)]
+        [WriteToSyncLog(SynchronizationLogType.QuestionnaireProcessed)]
         public void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
         {
         }
 
         [HttpPost]
         [Route("{id:guid}/{version:int}/assembly/logstate")]
-        [WriteToSyncLog(SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled, SyncItemType.QuestionnaireAssembly)]
+        [WriteToSyncLog(SynchronizationLogType.QuestionnaireAssemblyProcessed)]
         public void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
         {
         }

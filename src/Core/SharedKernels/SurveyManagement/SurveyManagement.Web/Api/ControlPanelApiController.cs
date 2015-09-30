@@ -6,6 +6,9 @@ using System.Web.Http;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.Synchronization;
@@ -20,16 +23,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
+        private const string DEFAULTEMPTYQUERY = "";
+        private const int DEFAULTPAGESIZE = 12;
+
         private readonly IReadSideAdministrationService readSideAdministrationService;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
+        private readonly ITeamViewFactory teamViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
 
 
-        public ControlPanelApiController(IReadSideAdministrationService readSideAdministrationService,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
+        public ControlPanelApiController(
+            IReadSideAdministrationService readSideAdministrationService,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            ISynchronizationLogViewFactory synchronizationLogViewFactory,
+            ITeamViewFactory teamViewFactory)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.synchronizationLogViewFactory = synchronizationLogViewFactory;
+            this.teamViewFactory = teamViewFactory;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
@@ -88,6 +101,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public void StopReadSideRebuilding()
         {
             this.readSideAdministrationService.StopAllViewsRebuilding();
+        }
+
+        [HttpPost]
+        public SynchronizationLog GetSynchronizationLog(SynchronizationLogFilter filter)
+        {
+            return this.synchronizationLogViewFactory.GetLog(filter);
+        }
+
+        [HttpGet]
+        public UsersView SyncLogInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        {
+            return this.synchronizationLogViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query);
+        }
+
+        [HttpGet]
+        public SynchronizationLogDevicesView SyncLogDevices(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        {
+            return this.synchronizationLogViewFactory.GetDevices(pageSize: pageSize, searchBy: query);
         }
     }
 }
