@@ -11,12 +11,12 @@ namespace WB.UI.Interviewer.ReadSideStore
     public class FileReadSideRepositoryWriter<TEntity> : IReadSideKeyValueStorage<TEntity>, IBackupable
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private Dictionary<string, TEntity> memcache = new Dictionary<string, TEntity>();
 
-        public FileReadSideRepositoryWriter(IJsonUtils jsonUtils)
+        public FileReadSideRepositoryWriter(ISerializer serializer)
         {
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             if (!Directory.Exists(this.StoreDirPath))
                 Directory.CreateDirectory(this.StoreDirPath);
         }
@@ -51,7 +51,7 @@ namespace WB.UI.Interviewer.ReadSideStore
                 var filePath = this.GetFileName(id);
                 if (!File.Exists(filePath))
                     return null;
-                this.memcache[id] = this.jsonUtils.Deserialize<TEntity>(File.ReadAllText(filePath));
+                this.memcache[id] = this.serializer.Deserialize<TEntity>(File.ReadAllText(filePath));
             }
             return this.memcache[id];
         }
@@ -66,7 +66,7 @@ namespace WB.UI.Interviewer.ReadSideStore
         public void Store(TEntity view, string id)
         {
             var path = this.GetFileName(id);
-            File.WriteAllText(path, this.jsonUtils.Serialize(view));
+            File.WriteAllText(path, this.serializer.Serialize(view));
 
             this.memcache[id] = view;
         }

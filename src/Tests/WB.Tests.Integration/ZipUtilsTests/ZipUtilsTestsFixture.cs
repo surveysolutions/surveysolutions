@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.ZipUtilsTests
 
         private JsonCompressor CreateZipUtils()
         {
-            return new JsonCompressor(new NewtonJsonUtils());
+            return new JsonCompressor(new NewtonJsonSerializer());
         }
     }
 }

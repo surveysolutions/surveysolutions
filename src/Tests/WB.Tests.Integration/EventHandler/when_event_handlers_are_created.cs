@@ -88,7 +88,7 @@ namespace WB.Tests.Integration.EventHandler
             typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof (IQuestionnaireCacheInitializer),
             typeof (IPlainQuestionnaireRepository), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
-            typeof (IQuestionDetailsViewMapper), typeof(IJsonUtils), typeof(IMetaInfoBuilder),
+            typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory)
         };
       

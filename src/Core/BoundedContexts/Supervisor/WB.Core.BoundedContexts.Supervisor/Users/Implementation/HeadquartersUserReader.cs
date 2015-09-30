@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 {
     internal class HeadquartersUserReader : HeadquartersEntityReader, IHeadquartersUserReader
     {
-        public HeadquartersUserReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
-            : base(jsonUtils, headquartersSettings, messageHandler) {}
+        public HeadquartersUserReader(ISerializer serializer, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
+            : base(serializer, headquartersSettings, messageHandler) {}
 
         public async Task<UserView> GetUserByUri(Uri headquartersUserUri)
         {

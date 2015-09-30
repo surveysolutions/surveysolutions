@@ -14,17 +14,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
 
         private static readonly NamedLocker Namedlocker = new NamedLocker();
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly ICommandService commandService;
 
         public SyncPackageRestoreService(ILogger logger,
             ICapiSynchronizationCacheService capiSynchronizationCacheService,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             ICommandService commandService)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.commandService = commandService;
         }
 
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                         if (!string.IsNullOrWhiteSpace(item))
                         {
-                            var interview = this.jsonUtils.Deserialize<InterviewSynchronizationDto>(item);
+                            var interview = this.serializer.Deserialize<InterviewSynchronizationDto>(item);
 
                             this.commandService.Execute(new SynchronizeInterviewCommand(interview.Id, interview.UserId, interview));
 

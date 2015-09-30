@@ -13,7 +13,7 @@ namespace WB.UI.Interviewer
         {
             this.Bind<INetworkService>().To<AndroidNetworkService>();
             this.Bind<IRestServiceSettings>().To<InterviewerSettings>();
-            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("restServicePointManager", _ => null).WithConstructorArgument("jsonUtils", _=>_.Kernel.Get<IProtobufJsonUtils>());
+            this.Bind<IRestService>().To<RestService>().WithConstructorArgument("restServicePointManager", _ => null).WithConstructorArgument("jsonUtils", _=>_.Kernel.Get<IProtobufSerializer>());
         }
     }
 }

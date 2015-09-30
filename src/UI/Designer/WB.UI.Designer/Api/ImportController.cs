@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Api
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IDesignerEngineVersionService engineVersionService;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         public ImportController(
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
@@ -46,7 +46,7 @@ namespace WB.UI.Designer.Api
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper, 
             IDesignerEngineVersionService engineVersionService, 
-            IJsonUtils jsonUtils)
+            ISerializer serializer)
         {
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Api
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
             this.engineVersionService = engineVersionService;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
         }
 
         [HttpGet]
@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Api
             
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(jsonUtils.Serialize(questionnaireView.Source)),
+                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaireView.Source)),
                 QuestionnaireAssembly = resultAssembly
             };
         }

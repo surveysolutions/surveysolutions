@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
-    public class NewtonJsonUtils : IJsonUtils
+    public class NewtonJsonSerializer : ISerializer
     {
         private readonly JsonUtilsSettings jsonUtilsSettings;
         private readonly JsonSerializer jsonSerializer;
@@ -20,16 +20,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         private Dictionary<string, string> assemblyReplacementMapping = new Dictionary<string, string>();
 
-        public NewtonJsonUtils() : this(new Dictionary<string, string>()) { }
+        public NewtonJsonSerializer() : this(new Dictionary<string, string>()) { }
 
-        public NewtonJsonUtils(Dictionary<string, string> assemblyReplacementMapping)
+        public NewtonJsonSerializer(Dictionary<string, string> assemblyReplacementMapping)
             : this(new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.ObjectsOnly }, assemblyReplacementMapping)
         {
         }
 
-        public NewtonJsonUtils(JsonUtilsSettings jsonUtilsSettings) : this(jsonUtilsSettings, new Dictionary<string, string>()) { }
+        public NewtonJsonSerializer(JsonUtilsSettings jsonUtilsSettings) : this(jsonUtilsSettings, new Dictionary<string, string>()) { }
 
-        public NewtonJsonUtils(JsonUtilsSettings jsonUtilsSettings,
+        public NewtonJsonSerializer(JsonUtilsSettings jsonUtilsSettings,
             Dictionary<string, string> assemblyReplacementMapping)
         {
             this.assemblyReplacementMapping = assemblyReplacementMapping;

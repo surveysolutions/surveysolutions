@@ -3,7 +3,7 @@ using System.IO;
 
 namespace WB.Core.GenericSubdomains.Portable.Services
 {
-    public interface IJsonUtils
+    public interface ISerializer
     {
         string Serialize(object item);
         string Serialize(object item, TypeSerializationSettings typeSerializationSettings);

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SyncPackageRestoreServiceTes
             capiSynchronizationCacheServiceMock.Setup(x => x.DoesCachedItemExist(Moq.It.IsAny<Guid>())).Returns(true);
             capiSynchronizationCacheServiceMock.Setup(x => x.LoadItem(Moq.It.IsAny<Guid>())).Returns("some string");
 
-            jsonUtilsMock=new Mock<IJsonUtils>();
+            jsonUtilsMock=new Mock<ISerializer>();
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewSynchronizationDto>("some string")).Returns(interviewSynchronizationDto);
 
             commandServiceMock=new Mock<ICommandService>();
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SyncPackageRestoreServiceTes
         private static SyncPackageRestoreService syncPackageRestoreService;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Mock<ICapiSynchronizationCacheService> capiSynchronizationCacheServiceMock;
-        private static Mock<IJsonUtils> jsonUtilsMock;
+        private static Mock<ISerializer> jsonUtilsMock;
         private static Mock<ICommandService> commandServiceMock;
     }
 }

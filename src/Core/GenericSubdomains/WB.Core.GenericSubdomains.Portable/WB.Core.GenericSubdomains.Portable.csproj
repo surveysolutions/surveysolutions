@@ -62,7 +62,7 @@
     <Compile Include="Implementation\Crypto\SHA1.cs" />
     <Compile Include="Implementation\DownloadProgressChangedEventArgs.cs" />
     <Compile Include="Implementation\JsonCompressor.cs" />
-    <Compile Include="Implementation\NewtonJsonUtils.cs" />
+    <Compile Include="Implementation\NewtonJsonSerializer.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="Implementation\RestException.cs" />
@@ -89,7 +89,7 @@
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\IInfoFileSupplierRegistry.cs" />
-    <Compile Include="Services\IJsonUtils.cs" />
+    <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
     <Compile Include="Services\IProtobufJsonUtils.cs" />

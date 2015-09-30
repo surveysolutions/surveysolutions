@@ -20,13 +20,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         protected static QuestionnaireSynchronizationDenormalizer CreateDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
-            IJsonUtils jsonUtils = null,
+            ISerializer serializer = null,
             IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta> questionnairePackageStorageWriter = null)
         {
             var result = new QuestionnaireSynchronizationDenormalizer(
                 questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(),
+                serializer ?? Mock.Of<ISerializer>(),
                 questionnairePackageStorageWriter ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta>>());
 
             return result;
