@@ -45,12 +45,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [HttpGet]
         [Route("current/{id}/{version}")]
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
-        public bool IsDeviceLinkedToCurrentInterviewer(string id, int version)
+        public HttpResponseMessage CanSynchronize(string id, int version)
         {
-            this.ThrowIfInterviewerIncompatibleWithServer(version);
+            int supervisorRevisionNumber = this.syncVersionProvider.GetProtocolVersion();
+            int supervisorShiftVersionNumber = this.syncVersionProvider.GetLastNonUpdatableVersion();
+
+            if (version != supervisorRevisionNumber || version < supervisorShiftVersionNumber)
+            {
+                return Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+            }
 
             var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null));
-            return interviewerInfo.DeviceId == id;
+            return interviewerInfo.DeviceId != id
+                ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
+                : this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         [HttpPost]
@@ -69,20 +77,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.commandService.Execute(new LinkUserToDevice(interviewerId, id));
 
             return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
-        public void ThrowIfInterviewerIncompatibleWithServer(int version)
-        {
-            int supervisorRevisionNumber = this.syncVersionProvider.GetProtocolVersion();
-            int supervisorShiftVersionNumber = this.syncVersionProvider.GetLastNonUpdatableVersion();
-
-            if (version != supervisorRevisionNumber || version < supervisorShiftVersionNumber)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
-                {
-                    ReasonPhrase = InterviewerSyncStrings.InterviewerApplicationShouldBeUpdated
-                });
-            }
         }
     }
 }
