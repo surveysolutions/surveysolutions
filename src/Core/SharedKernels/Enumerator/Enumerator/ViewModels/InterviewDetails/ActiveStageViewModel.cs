@@ -80,6 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
+            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
             this.EnumerationStage.Dispose();
         }
     }

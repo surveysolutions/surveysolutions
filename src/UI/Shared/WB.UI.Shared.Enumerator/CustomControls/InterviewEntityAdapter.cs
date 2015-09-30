@@ -68,8 +68,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return Resource.Layout.interview_disabled_group;
                 }
             }
-
-            return EntityTemplates.ContainsKey(typeOfViewModel) ?  EntityTemplates[typeOfViewModel] : UnknownViewType;
+            
+            return EntityTemplates.ContainsKey(typeOfViewModel) 
+                ? EntityTemplates[typeOfViewModel]
+                : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;
         }
 
         private EnablementViewModel GetEnablementViewModel(dynamic item)
