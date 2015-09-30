@@ -128,10 +128,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             cancellationTokenSource = new CancellationTokenSource();
             this.IsInProgress = true;
+            InterviewerIdentity interviewerIdentity = null;
             try
             {
                 var interviewer = await this.synchronizationService.GetInterviewerAsync(restCredentials, token: cancellationTokenSource.Token);
-                var interviewerIdentity = new InterviewerIdentity
+                interviewerIdentity = new InterviewerIdentity
                 {
                     Id = interviewer.Id.FormatGuid(),
                     UserId = interviewer.Id,
@@ -143,11 +144,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token);
                 }
-                else if (!await this.synchronizationService.IsDeviceLinkedToCurrentInterviewerAsync(credentials: restCredentials, token: cancellationTokenSource.Token))
-                {
-                    this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
-                    return;
-                }
+
+                await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token);
+                
                 await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
 
                 this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
@@ -155,7 +154,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (SynchronizationException ex)
             {
-                this.ErrorMessage = ex.Message;
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.HostUnreachable:
@@ -169,7 +167,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     case SynchronizationExceptionType.Unauthorized:
                         this.IsUserValid = false;
                         break;
+                    case SynchronizationExceptionType.UserLinkedToAnotherDevice:
+                        this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
+                        return;
                 }
+                this.ErrorMessage = ex.Message;
             }
             catch (Exception ex)
             {
