@@ -132,6 +132,7 @@
     <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
+    <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
