@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WB.UI.Capi.ViewModel.Dashboard
+namespace WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard
 {
     public class FeaturedCategoricalItem : FeaturedItem
     {

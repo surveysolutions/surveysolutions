@@ -136,7 +136,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             var replaceOldAssemblyNames = payload;
             foreach (var item in assemblyReplacementMapping)
             {
-                replaceOldAssemblyNames.Replace(item.Key, item.Value);
+                replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(item.Key, item.Value);
             }
             return replaceOldAssemblyNames;
 

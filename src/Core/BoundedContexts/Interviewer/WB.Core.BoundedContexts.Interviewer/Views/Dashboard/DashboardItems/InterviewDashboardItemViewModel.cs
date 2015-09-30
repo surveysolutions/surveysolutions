@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.UI.Capi.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
