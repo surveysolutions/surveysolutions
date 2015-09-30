@@ -185,11 +185,11 @@ namespace WB.UI.Interviewer
                 new InfrastructureModuleMobile().AsNinject(),
                 new DataCollectionInfrastructureModule(basePath).AsNinject(),
 
-                new InterviewerInfrastructureModule(QuestionnaireAssembliesFolder),
-
                 new EnumeratorSharedKernelModule(),
-                new EnumeratorInfrastructureModule(),
+                new EnumeratorInfrastructureModule(QuestionnaireAssembliesFolder),
                 new InterviewerUIModule(),
+
+                new InterviewerInfrastructureModule(),
 
                 new InterviewerBoundedContextModule(),
                 new AndroidCoreRegistry(),
