@@ -4,7 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Capi.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.Implementations.DenormalizerStorage;
 
 namespace WB.UI.Interviewer.ViewModel.Dashboard
