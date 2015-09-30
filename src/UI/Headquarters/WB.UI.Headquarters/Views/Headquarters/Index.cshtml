@@ -68,7 +68,9 @@
             <tr>
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
-                <td data-bind="text: Email"></td>
+                <td>
+                    <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
+                </td>
 
                 <td>
                     @if (User.IsInRole(UserRoles.Administrator.ToString()))
