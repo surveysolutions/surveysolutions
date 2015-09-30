@@ -1,12 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -29,7 +26,7 @@ namespace WB.UI.Interviewer.ViewModel
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
-            ActiveGroupViewModel groupViewModel,
+            ActiveStageViewModel stageViewModel,
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
@@ -37,7 +34,7 @@ namespace WB.UI.Interviewer.ViewModel
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, groupViewModel, navigationState, answerNotifier, groupState, interviewState)
+                breadCrumbsViewModel, stageViewModel, navigationState, answerNotifier, groupState, interviewState)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;

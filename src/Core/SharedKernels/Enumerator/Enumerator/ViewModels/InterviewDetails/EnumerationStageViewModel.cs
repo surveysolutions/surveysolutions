@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -21,7 +20,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class ActiveGroupViewModel : MvxNotifyPropertyChanged,
+    public class EnumerationStageViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
@@ -66,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         string interviewId;
 
 
-        public ActiveGroupViewModel(
+        public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -95,24 +94,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
+            this.Items = new ObservableRangeCollection<dynamic>();
             this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
         }
 
         private async void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
         {
-            if (navigationParams.TargetScreen == ScreenType.Complete)
-            {
-                this.ShowCompleteScreen();
-            }
-            else
-            {
-                await this.ShowGroupMembers(navigationParams);
-            }
-        }
-
-        private async Task ShowGroupMembers(ScreenChangedEventArgs navigationParams)
-        {
-            GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+            if (navigationParams.TargetScreen == ScreenType.Complete) { return; }
+            
+            GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
             bool isThisIsLastInterviewSection = this.questionnaire.GroupsHierarchy.Last().Id == navigationParams.TargetGroup.Id;
 
@@ -122,18 +112,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.eventRegistry.Subscribe(this, this.interviewId);
             }
         }
-
-        private void ShowCompleteScreen()
-        {
-            this.Items = new ObservableRangeCollection<dynamic>();
-
-            var completeScreenItems = this.interviewViewModelFactory.GetCompleteScreenEntities(this.navigationState.InterviewId);
-
-            completeScreenItems.ForEach(x => this.Items.Add(x));
-            this.Name = UIResources.Interview_Complete_Screen_Title;
-            this.eventRegistry.Unsubscribe(this, this.interviewId);
-        }
-
 
         private async Task CreateRegularGroupScreen(ScreenChangedEventArgs navigationParams, GroupModel @group, bool isThisIsLastInterviewSection)
         {
@@ -149,7 +127,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = @group.Title;
             }
 
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 this.LoadFromModel(navigationParams.TargetGroup, isThisIsLastInterviewSection);
                 this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
             });
@@ -172,7 +151,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void LoadFromModel(Identity groupIdentity, bool isThisIsLastInterviewSection)
         {
-            this.Items = new ObservableRangeCollection<dynamic>();
+            this.Items.Clear();
 
             try
             {

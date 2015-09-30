@@ -15,15 +15,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
         Establish context = () =>
         {
             interviewRepositoryMock.Setup(x => x.Get(Moq.It.IsAny<string>())).Returns(Mock.Of<IStatefulInterview>());
-            activeGroup = CreateActiveGroupViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
+            enumerationStage = CreateActiveGroupViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
         };
 
-        Because of = () => activeGroup.Init(interviewId, navigationState.Object);
+        Because of = () => enumerationStage.Init(interviewId, navigationState.Object);
 
         It should_subscribe_view_model_for_events =
-            () => eventRegistry.Verify(x => x.Subscribe(activeGroup, interviewId), Times.Once);
+            () => eventRegistry.Verify(x => x.Subscribe(enumerationStage, interviewId), Times.Once);
 
-        static ActiveGroupViewModel activeGroup;
+        static EnumerationStageViewModel enumerationStage;
 
         static readonly string interviewId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
