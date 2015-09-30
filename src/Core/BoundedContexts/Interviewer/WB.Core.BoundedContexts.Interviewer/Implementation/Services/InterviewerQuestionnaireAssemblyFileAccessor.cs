@@ -54,6 +54,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 var folderName = this.GetFolderNameForTemplate(questionnaireId);
                 var assemblySearchPath = this.fileSystemAccessor.CombinePath(this.assemblyStorageDirectory, folderName);
+
+                if (!this.fileSystemAccessor.IsDirectoryExists(assemblySearchPath))
+                    return null;
+
                 var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(assemblySearchPath);
 
                 return filesInDirectory.OrderByDescending(this.fileSystemAccessor.GetCreationTime).FirstOrDefault();
