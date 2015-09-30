@@ -229,6 +229,11 @@
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
+    <Compile Include="Properties\SyncLogMessages.Designer.cs">
+      <DependentUpon>SyncLogMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Archived.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -372,6 +377,11 @@
     <EmbeddedResource Include="Properties\FieldsAndValidations.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\SyncLogMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SyncLogMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
@@ -547,6 +557,8 @@
     <None Include="Scripts\spin.min.js.map">
       <DependentUpon>spin.min.js</DependentUpon>
     </None>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
+    <EmbeddedResource Include="Views\ControlPanel\SynchronizationLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

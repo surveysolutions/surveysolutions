@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [WriteToSyncLog(SyncLogAction.TrackCurrentUserRequest, SyncItemType.User)]
+        [WriteToSyncLog(SynchronizationLogType.GetInterviewer)]
         public InterviewerApiView Current()
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(this.globalInfoProvider.GetCurrentUser().Id));
@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.HasInterviewerDevice)]
         public bool HasDevice()
         {
             var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null));
