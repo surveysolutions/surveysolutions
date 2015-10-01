@@ -14,6 +14,7 @@ ko.bindingHandlers.typeahead = {
             delete options.displayText;
         }
 
+        $(element).prop('maxLength', 256);
         $(element).typeahead(options);
         $(element).change(function () {
             var selectedItem = $(element).typeahead("getActive");
@@ -22,6 +23,7 @@ ko.bindingHandlers.typeahead = {
                 observable(selectedItem);
             }
         });
+        valueAccessor().extend({ notify: 'always' });
     },
     update: function (element, valueAccessor, allBindingsAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
