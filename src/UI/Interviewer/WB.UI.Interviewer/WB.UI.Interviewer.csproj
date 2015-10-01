@@ -401,6 +401,7 @@
     <Compile Include="Syncronization\ChangeLogManipulator.cs" />
     <Compile Include="Implementations\Services\InterviewerApplicationUpdater.cs" />
     <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorage.cs" />
+    <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorageSettings.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
