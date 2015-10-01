@@ -49,6 +49,7 @@
             </div>
         </div>
     </div>
+    <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
 }
 
 @section grid
@@ -142,7 +143,7 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Template</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedTemplate" class="form-control">
+                <select id="templateSelector" data-bind="value: SelectedTemplate" class="form-control">
                     @if (Model.Templates.Count() > 1)
                     {
                         <option value="">Any</option>
