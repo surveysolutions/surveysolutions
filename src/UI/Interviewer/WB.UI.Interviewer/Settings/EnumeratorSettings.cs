@@ -9,7 +9,7 @@ namespace WB.UI.Interviewer.Settings
 {
     public class EnumeratorSettings : IEnumeratorSettings
     {
-        private static ISharedPreferences SharedPreferences
+        protected static ISharedPreferences SharedPreferences
         {
             get { return Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private); }
         }
