@@ -32,7 +32,8 @@
     <h3 class="sinle-line-header">Interviews</h3>
 }
 
-@section  actionbar{
+@section actionbar{
+    <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
     <div class="btn-group">
         <div class="form-inline">
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve</button>
@@ -49,7 +50,6 @@
             </div>
         </div>
     </div>
-    <h4 class="sinle-line-header text-italic" data-bind="text: TemplateName"></h4>
 }
 
 @section grid
