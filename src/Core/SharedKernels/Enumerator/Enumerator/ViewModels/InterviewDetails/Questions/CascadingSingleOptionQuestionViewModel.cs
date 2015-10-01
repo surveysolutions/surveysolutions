@@ -338,7 +338,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
-                this.resetTextInEditor = this.selectedObject.OriginalText;
+                if (this.selectedObject != null)
+                    this.resetTextInEditor = this.selectedObject.OriginalText;
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
