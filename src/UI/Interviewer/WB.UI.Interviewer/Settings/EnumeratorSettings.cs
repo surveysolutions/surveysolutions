@@ -9,17 +9,16 @@ namespace WB.UI.Interviewer.Settings
 {
     public class EnumeratorSettings : IEnumeratorSettings
     {
-        private static ISharedPreferences SharedPreferences
+        protected static ISharedPreferences SharedPreferences
         {
-            get { return PreferenceManager.GetDefaultSharedPreferences(Application.Context); }
+            get { return Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private); }
         }
 
         public string Endpoint
         {
             get
             {
-                var defaultValue = Application.Context.Resources.GetString(Resource.String.Endpoint);
-                var endpoint = SharedPreferences.GetString(SettingsNames.Endpoint, defaultValue);
+                var endpoint = SharedPreferences.GetString(SettingsNames.Endpoint, string.Empty);
                 return endpoint;
             }
         }
