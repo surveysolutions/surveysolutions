@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
             if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
-                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName == input.TeamLeadName);
+                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
             }
 
             return filteredInterviews;
