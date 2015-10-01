@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeHistoryStorage.Query(
                     _ =>
                         _.Where(h => h.QuestionnaireId == questionnaireId)
-                            .OrderBy(h => h.Sequence)
+                            .OrderByDescending(h => h.Sequence)
                             .Skip((page - 1)*pageSize)
                             .Take(pageSize).ToArray());
 
