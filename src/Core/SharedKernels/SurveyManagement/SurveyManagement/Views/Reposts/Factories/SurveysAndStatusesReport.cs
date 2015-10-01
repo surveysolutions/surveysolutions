@@ -86,7 +86,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             {
                 int result = ApplyFilter(input, _)
                             .GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
-                            .ToList()
                             .Distinct()
                             .Count();
 
