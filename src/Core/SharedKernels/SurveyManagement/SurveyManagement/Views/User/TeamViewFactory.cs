@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
-                interviews = interviews.Where(x => x.TeamLeadName.ToLower().Contains(searchBy.ToLower()));
+                interviews = interviews.Where(x => x.ResponsibleName.ToLower().Contains(searchBy.ToLower()));
             }
 
             var responsiblesFromInterviews = interviews.GroupBy(x => new { x.ResponsibleId, x.ResponsibleName })
