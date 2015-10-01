@@ -173,10 +173,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
 
-            fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+            var questionsWithAnswersOnMultimediaQuestions = this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
 
-            var questionsWithAnswersOnMultimediaQuestions =
-                this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
+            if (questionsWithAnswersOnMultimediaQuestions.Any())
+            {
+                if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
+                    fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+            }
 
             foreach (var questionWithAnswersOnMultimediaQuestions in questionsWithAnswersOnMultimediaQuestions)
             {
@@ -192,7 +195,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                             questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
                     continue;
                 }
-
+                
                 this.fileSystemAccessor.WriteAllBytes(
                     this.fileSystemAccessor.CombinePath(filesFolderForInterview,
                         questionWithAnswersOnMultimediaQuestions), fileContent);
