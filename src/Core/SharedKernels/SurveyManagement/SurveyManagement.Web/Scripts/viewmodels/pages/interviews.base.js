@@ -23,6 +23,8 @@
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
 
+    self.TemplateName = ko.observable();
+
     self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
         prefilledQuestions.forEach(function(prefilledQuestion) {
             if (prefilledQuestion.Type() == /*DateTime*/5) {
@@ -69,13 +71,20 @@
 
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
+        updateTemplateName(self.SelectedTemplate());
+
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
         self.Url.query['status'] = self.QueryString['status'] || "";
         self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
 
-        self.SelectedTemplate.subscribe(self.filter);
+        self.SelectedTemplate.subscribe(
+            function (value) {
+                updateTemplateName(value);
+                self.filter();
+            });
+
         self.SelectedResponsible.subscribe(self.filter);
         self.SelectedStatus.subscribe(self.filter);
 
@@ -121,5 +130,9 @@
             self.search();
         }, true);
     };
+
+    var updateTemplateName = function (value) {
+        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);
