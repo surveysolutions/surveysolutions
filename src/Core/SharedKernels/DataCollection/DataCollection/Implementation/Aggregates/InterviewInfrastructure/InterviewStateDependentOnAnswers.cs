@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -11,28 +12,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     {
         public InterviewStateDependentOnAnswers()
         {
-            this.AnswersSupportedInExpressions = new Dictionary<string, object>();
-            this.LinkedSingleOptionAnswersBuggy = new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>();
-            this.LinkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
-            this.TextListAnswers = new Dictionary<string, Tuple<decimal, string>[]>();
+            this.AnswersSupportedInExpressions = new ConcurrentDictionary<string, object>();
+            this.LinkedSingleOptionAnswersBuggy = new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>>();
+            this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
+            this.TextListAnswers = new ConcurrentDictionary<string, Tuple<decimal, string>[]>();
 
             this.AnsweredQuestions = new HashSet<string>();
             this.DisabledGroups = new HashSet<string>();
             this.DisabledQuestions = new HashSet<string>();
-            this.RosterGroupInstanceIds = new Dictionary<string, DistinctDecimalList>();
+            this.RosterGroupInstanceIds = new ConcurrentDictionary<string, DistinctDecimalList>();
             this.ValidAnsweredQuestions = new HashSet<string>();
             this.InvalidAnsweredQuestions = new HashSet<string>();
             this.AnswerComments = new List<AnswerComment>();
         }
 
-        public Dictionary<string, object> AnswersSupportedInExpressions { set; get; }
-        public Dictionary<string, Tuple<Guid, decimal[], decimal[]>> LinkedSingleOptionAnswersBuggy { set; get; }
-        public Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> LinkedMultipleOptionsAnswers { set; get; }
-        public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
+        public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
+        public ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>> LinkedSingleOptionAnswersBuggy { set; get; }
+        public ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>> LinkedMultipleOptionsAnswers { set; get; }
+        public ConcurrentDictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
         public HashSet<string> AnsweredQuestions { set; get; }
         public HashSet<string> DisabledGroups { set; get; }
         public HashSet<string> DisabledQuestions { set; get; }
-        public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
+        public ConcurrentDictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
         public HashSet<string> ValidAnsweredQuestions { set; get; }
         public HashSet<string> InvalidAnsweredQuestions { set; get; }
         public List<AnswerComment> AnswerComments { get; set; }

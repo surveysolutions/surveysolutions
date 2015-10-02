@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -13,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -95,37 +95,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
 
             this.interviewState.AnswersSupportedInExpressions = @event.InterviewData.Answers == null
-                ? new Dictionary<string, object>()
+                ? new ConcurrentDictionary<string, object>()
                 : @event.InterviewData.Answers
                     .Where(
                         question =>
                             !(question.Answer is GeoPosition || question.Answer is decimal[] || question.Answer is decimal[][] ||
                                 question.Answer is Tuple<decimal, string>[]))
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => question.Answer);
 
             this.interviewState.LinkedSingleOptionAnswersBuggy = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>()
+                ? new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[]) // bug: here we get multioption questions as well
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => Tuple.Create(question.Id, question.QuestionRosterVector, (decimal[])question.Answer));
 
             this.interviewState.LinkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>()
+                ? new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[][])
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => Tuple.Create(question.Id, question.QuestionRosterVector, (decimal[][])question.Answer));
 
             this.interviewState.TextListAnswers = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<decimal, string>[]>()
+                ? new ConcurrentDictionary<string, Tuple<decimal, string>[]>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is Tuple<decimal, string>[])
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => (Tuple<decimal, string>[])question.Answer
                     );
@@ -729,9 +729,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region StaticMethods
 
-        private static Dictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
+        private static ConcurrentDictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
         {
-            return synchronizationDto.RosterGroupInstances.ToDictionary(
+            return synchronizationDto.RosterGroupInstances.ToConcurrentDictionary(
                 pair => ConversionHelper.ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemRosterVector),
                 pair => new DistinctDecimalList(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
         }

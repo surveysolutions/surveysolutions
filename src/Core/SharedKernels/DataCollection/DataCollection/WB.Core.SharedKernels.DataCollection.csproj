@@ -274,6 +274,7 @@
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
     <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
+    <Compile Include="Utils\CuncurrentDictionaryExtensions.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
