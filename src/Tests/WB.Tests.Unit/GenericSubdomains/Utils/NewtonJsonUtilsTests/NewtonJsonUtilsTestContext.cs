@@ -1,12 +1,15 @@
-﻿using WB.Core.GenericSubdomains.Portable.Implementation;
+﻿using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
     internal class NewtonJsonUtilsTestContext
     {
-        public static NewtonJsonUtils CreateNewtonJsonUtils()
+        public static NewtonJsonUtils CreateNewtonJsonUtils(Dictionary<string, string> assemblyReplacementMapping=null)
         {
-            return new NewtonJsonUtils();
+            return assemblyReplacementMapping == null
+                ? new NewtonJsonUtils()
+                : new NewtonJsonUtils(assemblyReplacementMapping);
         }
     }
 }

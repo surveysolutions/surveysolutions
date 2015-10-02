@@ -4,30 +4,17 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Interviewer.Syncronization.Implementation
 {
-    public class InterviewPackageIdsStorageSettings
-    {
-        public InterviewPackageIdsStorageSettings(string pathToDatabase, string databaseName)
-        {
-            this.PathToDatabase = pathToDatabase;
-            this.DatabaseName = databaseName;
-        }
-
-        public string PathToDatabase { get; private set; }
-        public string DatabaseName { get; private set; }
-    }
-
     public class InterviewPackageIdsStorage : IInterviewPackageIdsStorage, IBackupable
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPrincipal principal;
         private readonly ISQLiteConnectionFactory connectionFactory;
         private readonly InterviewPackageIdsStorageSettings settings;
-#warning should be deleted later. Potatoid version supporting
-        private string interviewPackageType = "Interview";
 
         private string fullPathToDataBase
         {
@@ -57,7 +44,7 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
                     PackageId = packageId,
                     SortIndex = sortIndex,
                     UserId = userIdAsString,
-                    Type = this.interviewPackageType
+                    Type = SyncItemType.Interview
                 };
 
                 connection.Insert(newId);
@@ -70,16 +57,11 @@ namespace WB.UI.Interviewer.Syncronization.Implementation
             using (var connection = this.connectionFactory.Create(this.fullPathToDataBase))
             {
                 var lastStoredChunkId = connection.Table<SyncPackageId>()
-                    .Where(x => x.Type == this.interviewPackageType && x.UserId == userIdAsString)
+                    .Where(x => x.Type == SyncItemType.Interview && x.UserId == userIdAsString)
                     .OrderBy(x => x.SortIndex)
                     .LastOrDefault();
 
-                if (lastStoredChunkId == null)
-                {
-                    return null;
-                }
-
-                return lastStoredChunkId.PackageId;
+                return lastStoredChunkId == null ? null : lastStoredChunkId.PackageId;
             }
         }
 

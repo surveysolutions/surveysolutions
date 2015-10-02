@@ -21,6 +21,9 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:paddingRight">@dimen/Dashboard_TabMenu_tab_padding</item>
+    <item name="android:paddingTop">@dimen/Dashboard_TabMenu_tab_padding</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_TabMenu_tab_padding</item>
   </style>
 
   <style name="Dashboard_NewItemsLink" parent="Dashboard_TabLink">
@@ -66,20 +69,20 @@
   </style>
 
   <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
-    <item name="android:layout_width">14dp</item>
+    <item name="android:layout_width">@dimen/Dashboard_InterviewItem_StatusPanel_width</item>
     <item name="android:layout_height">fill_parent</item>
-    <item name="android:layout_marginTop">1dp</item>
-    <item name="android:layout_marginBottom">1dp</item>
-    <item name="android:layout_marginLeft">1dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
   </style>
 
   <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">fill_parent</item>
-    <item name="android:layout_marginTop">14dp</item>
-    <item name="android:layout_marginBottom">14dp</item>
-    <item name="android:layout_marginLeft">14dp</item>
-    <item name="android:layout_marginRight">1dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:orientation">vertical</item>
   </style>
 
@@ -89,18 +92,16 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:layout_alignParentLeft">true</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_InterviewItem_Title_marginRight</item>
   </style>
 
   <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
-    <item name="android:background">@color/dashboard_interview_background</item>
+    <item name="android:background">@android:color/transparent</item>
     <item name="android:layout_alignParentRight">true</item>
     <item name="android:textSize">@dimen/textsize_20</item>
-    <item name="android:layout_marginTop">-20dp</item>
-    <item name="android:layout_marginRight">-15dp</item>
-    <item name="android:padding">20dp</item>
     <item name="android:layout_gravity">top|right</item>
   </style>
 
@@ -109,11 +110,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:focusable">false</item>
     <item name="android:focusableInTouchMode">false</item>
-    <item name="android:listSelector">@android:color/transparent</item>
-    <item name="android:cacheColorHint">@android:color/transparent</item>
-    <item name="android:divider">@android:color/transparent</item>
-    <item name="android:dividerHeight">0dp</item>
-    <item name="android:layout_marginTop">18dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestion" parent="AppTheme">
@@ -130,7 +127,7 @@
     <item name="android:fontFamily">Trebuchet</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_prefilled_question</item>
-    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:singleLine">true</item>
   </style>
@@ -155,7 +152,7 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_new_interview_status</item>
     <item name="android:textStyle">bold</item>
-    <item name="android:layout_marginTop">8dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
     <item name="android:singleLine">true</item>
   </style>
 
@@ -163,12 +160,12 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@drawable/default_input_button</item>
-    <item name="android:paddingLeft">14dp</item>
-    <item name="android:paddingRight">14dp</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginTop">26dp</item>
-    <item name="android:layout_marginBottom">20dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_CreateButton_marginTop</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_CreateButton_marginBottom</item>
   </style>
 
   <style name="Dashboard_NoInterviewsPanel" parent="AppTheme">
@@ -186,7 +183,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
-    <item name="android:layout_marginTop">40dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsTitle_marginTop</item>
   </style>
 
   <style name="Dashboard_NoInterviewsText" parent="AppTheme">
@@ -195,18 +192,18 @@
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textColor">@color/dashboard_no_interviews_text</item>
-    <item name="android:layout_marginTop">20dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
   </style>
 
   <style name="Dashboard_NoInterviewsSyncButton" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@drawable/default_input_button</item>
-    <item name="android:paddingLeft">14dp</item>
-    <item name="android:paddingRight">14dp</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginTop">20dp</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
     <item name="android:drawableLeft">@drawable/dashboard_sync_icon_small</item>
   </style>
 

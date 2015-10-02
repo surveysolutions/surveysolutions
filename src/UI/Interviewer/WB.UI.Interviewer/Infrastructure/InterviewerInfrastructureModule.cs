@@ -40,7 +40,7 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind<ICapiDataSynchronizationService>().To<CapiDataSynchronizationService>();
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<QuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", FileSystem.Current.LocalStorage.Path).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesFolder);
+                .To<InterviewerQuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", FileSystem.Current.LocalStorage.Path).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesFolder);
         }
     }
 }
