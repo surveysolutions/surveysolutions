@@ -85,9 +85,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             int totalCount = this.interviewSummaryReader.Query(_ =>
             {
                 int result = ApplyFilter(input, _)
-                            .GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
+                            .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion })
                             .Distinct()
-                            .Count();
+                            .ToList()
+                            .Count;
 
                 return result;
             });
