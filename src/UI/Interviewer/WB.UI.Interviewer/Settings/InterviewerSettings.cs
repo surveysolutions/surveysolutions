@@ -77,12 +77,6 @@ namespace WB.UI.Interviewer.Settings
             ISharedPreferencesEditor prefEditor = SharedPreferences.Edit();
             prefEditor.PutString(settingName, settingValue);
             prefEditor.Commit();
-
-        }
-
-        private static ISharedPreferences SharedPreferences
-        {
-            get { return PreferenceManager.GetDefaultSharedPreferences(Application.Context); }
         }
     }
 }

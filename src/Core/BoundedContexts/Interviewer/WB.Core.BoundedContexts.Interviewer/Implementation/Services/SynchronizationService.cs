@@ -72,9 +72,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        public async Task<bool> IsDeviceLinkedToCurrentInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<bool>(
+            await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync(
                 url: string.Concat(this.devicesController, "/current/" + this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
@@ -349,9 +349,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             exceptionMessage = InterviewerUIResources.InternalServerError;
                             exceptionType = SynchronizationExceptionType.InternalServerError;
                             break;
-                        case HttpStatusCode.NotAcceptable:
-                            exceptionMessage = InterviewerUIResources.ApplicationIncompatibleWithServer;
-                            exceptionType = SynchronizationExceptionType.ApplicationIncompatibleWithServer;
+                        case HttpStatusCode.Forbidden:
+                            exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
                             break;
                     }
                     break;

@@ -1,54 +1,66 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http.Filters;
+using System.Web.Http.Routing;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
+using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
-    public enum SyncLogAction
-    {
-        MarkQuestionnaireAsSuccessfullyHandled,
-        TrackCurrentUserRequest,
-        TrackQuestionnaireRequest,
-        TrackAggregateRootIdsRequest,
-    }
-
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class WriteToSyncLogAttribute : ActionFilterAttribute
     {
-        private readonly SyncLogAction logAction;
-        private readonly string synchronizationItemType;
+        private readonly SynchronizationLogType logAction;
 
-        public ISyncLogger SyncLogger
+        private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
         {
-            get { return ServiceLocator.Current.GetInstance<ISyncLogger>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>(); }
         }
 
-        public IGlobalInfoProvider GlobalInfoProvider
+        private IGlobalInfoProvider globalInfoProvider
         {
             get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
         }
 
-        public IUserWebViewFactory UserInfoViewFactory
+        private IUserWebViewFactory userInfoViewFactory
         {
             get { return ServiceLocator.Current.GetInstance<IUserWebViewFactory>(); }
         }
 
-        public ILogger Logger
+        private IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory
+        {
+            get { return ServiceLocator.Current.GetInstance<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(); }
+        }
+
+        private IUserViewFactory userViewFactory
+        {
+            get { return ServiceLocator.Current.GetInstance<IUserViewFactory>(); }
+        }
+
+        private ILogger logger
         {
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public WriteToSyncLogAttribute(SyncLogAction logAction, string synchronizationItemType)
+        public WriteToSyncLogAttribute(SynchronizationLogType logAction)
         {
             this.logAction = logAction;
-            this.synchronizationItemType = synchronizationItemType;
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext context)
@@ -57,87 +69,149 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
             try
             {
+                var logItem = new SynchronizationLogItem
+                {
+                    DeviceId = this.GetInterviewerDeviceId(),
+                    InterviewerId = this.globalInfoProvider.GetCurrentUser().Id,
+                    InterviewerName = this.globalInfoProvider.GetCurrentUser().Name,
+                    LogDate = DateTime.UtcNow,
+                    Type = this.logAction
+                };
+
                 switch (this.logAction)
                 {
-                    case SyncLogAction.TrackAggregateRootIdsRequest:
-                        this.TrackAggregateRootIdsRequest();
+                    case SynchronizationLogType.CanSynchronize:
+                        logItem.DeviceId = context.GetActionArgument<string>("id");
+                        if (context.Response.IsSuccessStatusCode) 
+                            logItem.Log = SyncLogMessages.CanSynchronize;
+                        else if (context.Response.StatusCode == HttpStatusCode.UpgradeRequired)
+                            logItem.Log =  SyncLogMessages.DeviceUpdateRequired.FormatString(context.GetActionArgument<int>("version"));
+                        else if (context.Response.StatusCode == HttpStatusCode.Forbidden)
+                            logItem.Log = SyncLogMessages.DeviceRelinkRequired;
                         break;
-
-                    case SyncLogAction.TrackCurrentUserRequest:
-                        this.TrackCurrentUserRequest();
+                    case SynchronizationLogType.HasInterviewerDevice:
+                        logItem.Log = string.IsNullOrEmpty(logItem.DeviceId) ? SyncLogMessages.DeviceCanBeAssignedToInterviewer : SyncLogMessages.InterviewerHasDevice;
                         break;
-
-                    case SyncLogAction.TrackQuestionnaireRequest:
-                        this.TrackQuestionnaireRequest(context);
+                    case SynchronizationLogType.LinkToDevice:
+                        logItem.DeviceId = context.GetActionArgument<string>("id");
+                        logItem.Log = SyncLogMessages.LinkToDevice;
                         break;
-
-                    case SyncLogAction.MarkQuestionnaireAsSuccessfullyHandled:
-                        this.MarkQuestionnaireAsSuccessfullyHandled(context);
+                    case SynchronizationLogType.GetInterviewer:
+                        logItem.Log = this.GetInterviewerLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetCensusQuestionnaires:
+                        logItem.Log = this.GetQuestionnairesLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetQuestionnaire:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaire, context);
+                        break;
+                    case SynchronizationLogType.QuestionnaireProcessed:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireProcessed, context);
+                        break;
+                    case SynchronizationLogType.GetQuestionnaireAssembly:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAssembly, context);
+                        break;
+                    case SynchronizationLogType.QuestionnaireAssemblyProcessed:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context);
+                        break;
+                    case SynchronizationLogType.GetInterviewPackages:
+                        logItem.Log = this.GetInterviewPackagesLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetInterviewPackage:
+                        logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgument<string>("id"));
+                        break;
+                    case SynchronizationLogType.InterviewPackageProcessed:
+                        logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgument<string>("id"));
                         break;
 
                     default:
                         throw new ArgumentException("logAction");
                 }
+                this.synchronizationLogItemPlainStorageAccessor.Store(logItem, Guid.NewGuid());
             }
             catch (Exception exception)
             {
-                this.Logger.Error("Error updating sync log.", exception);
+                this.logger.Error("Error updating sync log.", exception);
             }
         }
 
-        private void TrackAggregateRootIdsRequest()
+        private string GetInterviewPackagesLogMessage(HttpActionExecutedContext context)
         {
-            this.SyncLogger.TrackArIdsRequest(
-                this.GetInterviewerDeviceId(),
-                this.GlobalInfoProvider.GetCurrentUser().Id,
-                this.synchronizationItemType,
-                new[] { "all" });
+            var interviewPackagesApiView = this.GetResponseObject<InterviewPackagesApiView>(context);
+            var lastSynchronizationPackageId = context.GetActionArgument<string>("lastPackageId");
+
+            var messagesByInterviewPackages = interviewPackagesApiView.Packages.Select(x=>this.GetMessageByInterviewPackageType(context, x)).ToList();
+
+            return SyncLogMessages.GetInterviewPackages.FormatString(string.IsNullOrEmpty(lastSynchronizationPackageId) ? SyncLogMessages.EmptyDevice : lastSynchronizationPackageId,
+                !messagesByInterviewPackages.Any()
+                    ? SyncLogMessages.NoNewInterviewPackagesToDownload
+                    : string.Join("<br>", messagesByInterviewPackages));
         }
 
-        private void TrackQuestionnaireRequest(HttpActionExecutedContext context)
+        private string GetMessageByInterviewPackageType(HttpActionExecutedContext context, SynchronizationChunkMeta synchronizationChunkMeta)
         {
-            var id = context.GetActionArgument<Guid>("id");
-            var version = context.GetActionArgument<int>("version");
+            if (synchronizationChunkMeta.ItemType == SyncItemType.Interview)
+            {
+                return SyncLogMessages.UpdateInterviewPackage.FormatString(synchronizationChunkMeta.InterviewId,
+                    synchronizationChunkMeta.Id, synchronizationChunkMeta.SortIndex,
+                    new UrlHelper(context.Request).Link("Default",
+                        new {controller = "Interview", action = "Details", id = synchronizationChunkMeta.InterviewId}));
+            }
 
-            this.SyncLogger.TrackPackageRequest(
-                this.GetInterviewerDeviceId(),
-                this.GlobalInfoProvider.GetCurrentUser().Id,
-                this.GetSyncLogQuestionnaireId(id, version));
+            if (synchronizationChunkMeta.ItemType == SyncItemType.DeleteInterview)
+            {
+                return SyncLogMessages.DeleteInterviewPackage.FormatString(synchronizationChunkMeta.InterviewId,
+                    synchronizationChunkMeta.Id, synchronizationChunkMeta.SortIndex,
+                    new UrlHelper(context.Request).Link("Default",
+                        new { controller = "Interview", action = "Details", id = synchronizationChunkMeta.InterviewId }));
+            }
+
+            return "Unknown interview package type";
         }
 
-        private void TrackCurrentUserRequest()
+        private string GetInterviewerLogMessage(HttpActionExecutedContext context)
         {
-            this.SyncLogger.TrackPackageRequest(
-                this.GetInterviewerDeviceId(),
-                this.GlobalInfoProvider.GetCurrentUser().Id,
-                this.GetSyncLogUserId(this.GlobalInfoProvider.GetCurrentUser().Id));
+            var interviewerApiView = this.GetResponseObject<InterviewerApiView>(context);
+
+            var supervisorInfo = this.userViewFactory.Load(new UserViewInputModel(interviewerApiView.SupervisorId));
+            return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo.UserName, supervisorInfo.PublicKey.FormatGuid());
         }
 
-        private void MarkQuestionnaireAsSuccessfullyHandled(HttpActionExecutedContext context)
+        private string GetQuestionnairesLogMessage(HttpActionExecutedContext context)
         {
-            var id = context.GetActionArgument<Guid>("id");
-            var version = context.GetActionArgument<int>("version");
+            List<QuestionnaireIdentity> censusQuestionnaireIdentities =
+                this.GetResponseObject<List<QuestionnaireIdentity>>(context);
 
-            this.SyncLogger.MarkPackageAsSuccessfullyHandled(
-                this.GetInterviewerDeviceId(),
-                this.GlobalInfoProvider.GetCurrentUser().Id,
-                this.GetSyncLogQuestionnaireId(id, version));
+            var censusQuestionnaires = censusQuestionnaireIdentities.Select(x => this.questionnaireBrowseItemFactory.Load(
+                new QuestionnaireItemInputModel(x.QuestionnaireId, x.Version)));
+
+            var messagesByCensusQuestionnaires = censusQuestionnaires.Select(
+                censusQuestionnaire => SyncLogMessages.CensusQuestionnaire.FormatString(censusQuestionnaire.Title,
+                    new QuestionnaireIdentity(censusQuestionnaire.QuestionnaireId, censusQuestionnaire.Version)));
+
+            return SyncLogMessages.GetCensusQuestionnaires.FormatString(string.Join("<br>", messagesByCensusQuestionnaires));
         }
 
-        private Guid GetInterviewerDeviceId()
+        private string GetQuestionnaireLogMessage(string messageFormat, HttpActionExecutedContext context)
         {
-            return this.UserInfoViewFactory.Load(
-                new UserWebViewInputModel(this.GlobalInfoProvider.GetCurrentUser().Name, null)).DeviceId.ToGuid();
+            var questionnaire = this.questionnaireBrowseItemFactory.Load(
+                new QuestionnaireItemInputModel(context.GetActionArgument<Guid>("id"),
+                    context.GetActionArgument<int>("version")));
+
+            return messageFormat.FormatString(questionnaire.Title,
+                new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
 
-        private string GetSyncLogQuestionnaireId(Guid questionnaireId, long questionnaireVersion)
+        private string GetInterviewerDeviceId()
         {
-            return string.Format("{0}${1}", this.synchronizationItemType, new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            return this.userInfoViewFactory.Load(
+                new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null)).DeviceId;
         }
 
-        private string GetSyncLogUserId(Guid userId)
+        private T GetResponseObject<T>(HttpActionExecutedContext context) where T : class
         {
-            return string.Format("{0}${1}", this.synchronizationItemType, userId.FormatGuid());
+            var objectContent = context.Response.Content as ObjectContent;
+            return objectContent == null ? null : (T)objectContent.Value;
         }
     }
 }

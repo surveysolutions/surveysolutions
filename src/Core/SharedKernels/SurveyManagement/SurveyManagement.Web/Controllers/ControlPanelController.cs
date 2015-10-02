@@ -130,5 +130,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             return this.View();
         }
+
+        public ActionResult SynchronizationLog()
+        {
+            return this.View();
+        }
     }
 }

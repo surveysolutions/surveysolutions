@@ -39,7 +39,7 @@
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip />
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -254,6 +254,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />
+    <Reference Include="System.Collections.Concurrent" />
     <Reference Include="System.Core" />
     <Reference Include="System.Globalization" />
     <Reference Include="System.IO" />
@@ -281,10 +282,6 @@
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.AppCompat">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.AppCompat.22.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Android.Support.v7.CardView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.CardView.22.2.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.CardView.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.MediaRouter">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.MediaRouter.21.0.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
@@ -315,7 +312,6 @@
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
     <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
-    <Compile Include="CustomBindings\MvxListViewFixHeightBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
@@ -406,6 +402,7 @@
     <Compile Include="Syncronization\ChangeLogManipulator.cs" />
     <Compile Include="Implementations\Services\InterviewerApplicationUpdater.cs" />
     <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorage.cs" />
+    <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorageSettings.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="Utils\AndroidUIHelper.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />

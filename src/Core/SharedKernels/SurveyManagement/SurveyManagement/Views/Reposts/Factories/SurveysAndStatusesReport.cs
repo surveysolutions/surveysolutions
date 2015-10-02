@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -24,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         {
             var inteviewsGroupByTemplateAndStatus = this.interviewSummaryReader.Query(_ =>
             {
-                var filetredInterviews = ApplyFilter(input, _);
+                IQueryable<InterviewSummary> filetredInterviews = ApplyFilter(input, _);
 
                 var interviews = (from f in filetredInterviews
                                  group f by new {f.QuestionnaireId, f.QuestionnaireVersion, f.QuestionnaireTitle, f.Status} into g
@@ -46,8 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         QuestionnaireId =               questionnaire.QuestionnaireId,
                         QuestionnaireVersion =          questionnaire.QuestionnaireVersion,
                         QuestionnaireTitle =            questionnaire.QuestionnaireTitle,
-                        ResponsibleName = input.ResponsibleName,
-                        TeamLeadName = input.TeamLeadName,
+                        ResponsibleName = input.ResponsibleName ?? string.Empty,
+                        TeamLeadName = input.TeamLeadName ?? string.Empty,
                         SupervisorAssignedCount =       Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned).InterviewsCount),
                         CompletedCount =                Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.Completed).InterviewsCount),
@@ -62,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 return statistics;
             });
 
-            var currentPage = inteviewsGroupByTemplateAndStatus
+            List<HeadquarterSurveysAndStatusesReportLine> currentPage = inteviewsGroupByTemplateAndStatus
                            .Select(doc => new HeadquarterSurveysAndStatusesReportLine
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
@@ -80,12 +79,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    QuestionnaireVersion = doc.QuestionnaireVersion,
                                    QuestionnaireTitle = doc.QuestionnaireTitle,
                                    
-                                   Responsible = !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : doc.ResponsibleName
+                                   Responsible = GetResponsibleName(doc)
                            }).ToList();
 
-            var totalCount = this.interviewSummaryReader.Query(_ =>
+            int totalCount = this.interviewSummaryReader.Query(_ =>
             {
-                var result = ApplyFilter(input, _).GroupBy(x => new { x.QuestionnaireId, x.QuestionnaireVersion}).ToList().Distinct().Count();
+                int result = ApplyFilter(input, _)
+                            .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion })
+                            .Distinct()
+                            .ToList()
+                            .Count;
 
                 return result;
             });
@@ -95,6 +98,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     TotalCount = totalCount,
                     Items = currentPage
                 };
+        }
+
+        private static string GetResponsibleName(StatisticsLineGroupedByUserAndTemplate doc)
+        {
+            return !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : (doc.ResponsibleName ?? string.Empty);
         }
 
         private static CounterObject CountInStatus(List<CounterObject> interviews, dynamic questionnaire, InterviewStatus status)
@@ -112,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
             if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
-                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName == input.TeamLeadName);
+                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
             }
 
             return filteredInterviews;
