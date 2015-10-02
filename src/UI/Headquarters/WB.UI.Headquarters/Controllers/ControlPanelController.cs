@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Controllers
                     try
                     {
                         this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                        this.dataExportRepositoryWriter.AddExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.ApprovedByHeadquarter);
+                        this.dataExportRepositoryWriter.AddOrUpdateExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.ApprovedByHeadquarter);
                         this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
                     }
                     catch (Exception ex)
