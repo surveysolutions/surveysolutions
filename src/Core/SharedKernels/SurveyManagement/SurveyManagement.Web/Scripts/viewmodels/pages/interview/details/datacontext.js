@@ -100,6 +100,14 @@
         };
     };
 
+    commands[config.commands.hQRevokeApprovedInterviewCommand] = function (args) {
+        return {
+            interviewId: interviewId,
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
     var getCommand = function(commandName, args) {
         return {
             type: commandName,

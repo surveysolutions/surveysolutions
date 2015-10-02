@@ -271,6 +271,10 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         $('#rejectModal').modal('show');
     };
     
+    self.showRevokeApprovedModal = function () {
+        $('#revokeApprovedModal').modal('show');
+    };
+
     self.approveInterview = function () {
         self.changeState(config.commands.approveInterviewCommand);
     };
@@ -283,6 +287,10 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
     self.hQRejectInterview = function () {
         self.changeState(config.commands.hQRejectInterviewCommand);
+    };
+
+    self.hQRevokeApprovedInterview = function () {
+        self.changeState(config.commands.hQRevokeApprovedInterviewCommand);
     };
 
     self.changeState = function (commandName) {

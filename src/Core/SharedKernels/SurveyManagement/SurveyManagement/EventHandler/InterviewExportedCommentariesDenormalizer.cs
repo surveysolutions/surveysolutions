@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewRejectedByHQ>,
-        IEventHandler<AnswerCommented>
+        IEventHandler<AnswerCommented>,
+        IEventHandler<InterviewApprovedByHQRevoked>
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
@@ -155,6 +156,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
                 InterviewExportedAction.RejectedByHeadquarter, evnt.Payload.Comment, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<InterviewApprovedByHQRevoked> evnt)
+        {
+            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+                InterviewExportedAction.ApprovedByHeadquarterRevoked, evnt.Payload.Comment, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt)

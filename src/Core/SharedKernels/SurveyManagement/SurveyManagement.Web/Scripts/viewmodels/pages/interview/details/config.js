@@ -26,7 +26,8 @@
             rejectInterviewCommand: "RejectInterviewCommand",
 
             hQApproveInterviewCommand: "HqApproveInterviewCommand",
-            hQRejectInterviewCommand: "HqRejectInterviewCommand"
+            hQRejectInterviewCommand: "HqRejectInterviewCommand",
+            hQRevokeApprovedInterviewCommand: "HqRevokeApprovedInterviewCommand",
         },
         statusMap = {
             Created: "Created",

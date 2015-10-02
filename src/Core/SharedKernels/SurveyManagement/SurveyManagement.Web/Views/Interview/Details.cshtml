@@ -89,6 +89,10 @@
                     <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
                     <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                 }
+                @if (Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
+                {
+                    <button class="btn" data-bind="click: showApproveModal">Revoke Approved</button>
+                }
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">all</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Enabled})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Enabled)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Enabled)"></i> enabled (<span>@Model.Statistic.EnabledCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Answered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Answered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Answered)"></i> answered (<span>@Model.Statistic.AnsweredCount</span>)</a>

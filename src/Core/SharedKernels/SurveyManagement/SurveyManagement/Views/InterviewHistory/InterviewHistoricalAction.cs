@@ -21,5 +21,6 @@
         GroupDisabled,
         QuestionDeclaredValid,
         QuestionDeclaredInvalid,
+        ApproveByHeadquarterRevoked
     }
 }
