@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                 case InterviewExportedAction.Restored:
                     return InterviewStatus.Restored;
                 case InterviewExportedAction.UnapprovedByHeadquarter:
-                    return null;
+                    return InterviewStatus.ApprovedBySupervisor;
             }
             return null;
         }
