@@ -39,7 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.SupervisorAssigned,
             InterviewExportedAction.Completed, InterviewExportedAction.ApprovedBySupervisor,
-            InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restored
+            InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restored,
+            InterviewExportedAction.UnapprovedByHeadquarter
         };
 
         public FileBasedDataExportRepositoryWriter(
@@ -87,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             filebasedExportedDataAccessor.DeleteAllDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
-            if (action == InterviewExportedAction.ApprovedByHeadquarter)
+            if (action == InterviewExportedAction.ApprovedByHeadquarter || action == InterviewExportedAction.UnapprovedByHeadquarter)
                 filebasedExportedDataAccessor.DeleteApprovedDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (interviewActionsForDataUpdate.Contains(action))
