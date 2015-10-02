@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -55,7 +47,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, QuestionsEnabled>,
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
-        IUpdateHandler<InterviewHistoryView, AnswerRemoved>
+        IUpdateHandler<InterviewHistoryView, AnswerRemoved>,
+        IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQRevoked>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
@@ -513,6 +506,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null, null,
                 CreateGroupParameters(group.Id, group.RosterVector));
             }
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApprovedByHQRevoked> evnt)
+        {
+            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveByHeadquarterRevoked, evnt.Payload.UserId, evnt.EventTimeStamp,
+                CreateCommentParameters(evnt.Payload.Comment));
+
             return view;
         }
     }

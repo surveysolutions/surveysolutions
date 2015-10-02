@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
 
                         { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
                         { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },
+                        { "HqRevokeApprovedInterviewCommand", typeof ( HqRevokeApprovedInterviewCommand) },
                         { "ArchiveUserCommad", typeof ( ArchiveUserCommad) },
                         { "UnarchiveUserCommand", typeof ( UnarchiveUserCommand) }
                     };
