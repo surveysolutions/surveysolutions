@@ -231,6 +231,10 @@ namespace WB.UI.Interviewer.Activities
                 this.backupManager.Restore();
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetPositiveButton("OK",  (o, args) =>
+                {
+                    this.StartActivity(new Intent(this, typeof(SplashActivity)));   
+                });
                 alert.SetTitle("Success");
                 alert.SetMessage("Tablet was successfully restored");
                 alert.Show();
