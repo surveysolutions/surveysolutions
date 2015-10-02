@@ -471,7 +471,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewApprovedByHQ @event) { }
 
-        public virtual void Apply(InterviewApprovedByHQRevoked @event) { }
+        public virtual void Apply(UnapprovedByHeadquarters @event) { }
 
         public virtual void Apply(InterviewRejected @event)
         {
@@ -1613,12 +1613,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment));
         }
 
-        public void HqRevokeApproved(Guid userId, string comment)
+        public void UnapproveByHeadquarters(Guid userId, string comment)
         {
             ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedByHeadquarters);
 
-            this.ApplyEvent(new InterviewApprovedByHQRevoked(userId, comment));
+            this.ApplyEvent(new UnapprovedByHeadquarters(userId, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
         }
 

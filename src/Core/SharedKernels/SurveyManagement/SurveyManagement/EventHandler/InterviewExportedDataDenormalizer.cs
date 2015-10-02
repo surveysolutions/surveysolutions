@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewRejectedByHQ>,
         IEventHandler<InterviewRestored>,
-        IEventHandler<InterviewApprovedByHQRevoked>
+        IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
@@ -123,10 +123,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.dataExportWriter.DeleteInterview(evnt.EventSourceId);
         }
 
-        public void Handle(IPublishedEvent<InterviewApprovedByHQRevoked> evnt)
+        public void Handle(IPublishedEvent<UnapprovedByHeadquarters> evnt)
         {
             this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
-                InterviewExportedAction.ApprovedByHeadquarterRevoked);
+                InterviewExportedAction.UnapprovedByHeadquarter);
         }
     }
 }

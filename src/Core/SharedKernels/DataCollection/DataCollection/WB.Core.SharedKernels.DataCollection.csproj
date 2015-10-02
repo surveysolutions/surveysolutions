@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
-    <Compile Include="Commands\Interview\HqRevokeApprovedInterviewCommand.cs" />
+    <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="DataCollectionInfrastructureModule.cs" />
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
-    <Compile Include="Events\Interview\InterviewApprovedByHQRevoked.cs" />
+    <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserArchived.cs" />
