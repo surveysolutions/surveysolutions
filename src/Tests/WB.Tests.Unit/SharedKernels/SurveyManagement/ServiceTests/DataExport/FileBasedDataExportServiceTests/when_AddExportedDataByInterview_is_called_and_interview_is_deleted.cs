@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         };
 
         Because of = () =>
-            fileBasedDataExportRepositoryWriter.AddExportedDataByInterviewWithAction(Guid.NewGuid(), InterviewExportedAction.Completed);
+            fileBasedDataExportRepositoryWriter.AddOrUpdateExportedDataByInterviewWithAction(Guid.NewGuid(), InterviewExportedAction.Completed);
 
         It should_never_calll_AddOrUpdateInterviewRecords = () =>
             dataExportWriterMock.Verify(x => x.AddOrUpdateInterviewRecords(Moq.It.IsAny<InterviewDataExportView>(), Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()), Times.Never);

@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.CreateExportedFileStructure(questionnaireExportStructure);
         }
 
-        public void AddExportedDataByInterviewWithAction(Guid interviewId, InterviewExportedAction action)
+        public void AddOrUpdateExportedDataByInterviewWithAction(Guid interviewId, InterviewExportedAction action)
         {
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
             if (interviewSummary == null)

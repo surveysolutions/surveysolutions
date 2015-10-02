@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             try
             {
                 this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                this.dataExportRepositoryWriter.AddExportedDataByInterviewWithAction(input.InterviewId, InterviewExportedAction.ApprovedByHeadquarter);
+                this.dataExportRepositoryWriter.AddOrUpdateExportedDataByInterviewWithAction(input.InterviewId, InterviewExportedAction.ApprovedByHeadquarter);
                 this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
             }
             catch (Exception exception)
