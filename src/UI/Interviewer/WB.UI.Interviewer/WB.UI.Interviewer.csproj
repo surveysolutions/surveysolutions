@@ -254,6 +254,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections" />
+    <Reference Include="System.Collections.Concurrent" />
     <Reference Include="System.Core" />
     <Reference Include="System.Globalization" />
     <Reference Include="System.IO" />
