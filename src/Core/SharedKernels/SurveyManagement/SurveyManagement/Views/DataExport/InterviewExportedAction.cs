@@ -13,6 +13,6 @@
         RejectedByHeadquarter,
         Deleted,
         Restored,
-        ApprovedByHeadquarterRevoked
+        UnapprovedByHeadquarter
     }
 }

@@ -271,8 +271,8 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         $('#rejectModal').modal('show');
     };
     
-    self.showRevokeApprovedModal = function () {
-        $('#revokeApprovedModal').modal('show');
+    self.showUnapproveByHeadquarterModal = function () {
+        $('#unapproveByHeadquarterModal').modal('show');
     };
 
     self.approveInterview = function () {
@@ -289,8 +289,8 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         self.changeState(config.commands.hQRejectInterviewCommand);
     };
 
-    self.hQRevokeApprovedInterview = function () {
-        self.changeState(config.commands.hQRevokeApprovedInterviewCommand);
+    self.unapproveByHeadquarter = function () {
+        self.changeState(config.commands.unapproveByHeadquarterCommand);
     };
 
     self.changeState = function (commandName) {

@@ -3,9 +3,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class HqRevokeApprovedInterviewCommand : InterviewCommand
+    public class UnapproveByHeadquartersCommand : InterviewCommand
     {
-        public HqRevokeApprovedInterviewCommand(Guid interviewId, Guid userId, string comment)
+        public UnapproveByHeadquartersCommand(Guid interviewId, Guid userId, string comment)
             : base(interviewId, userId)
         {
             this.Comment = comment;

@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewStatuses, TextListQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, InterviewApprovedByHQRevoked>
+        IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
@@ -415,7 +415,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewApprovedByHQRevoked> evnt)
+        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<UnapprovedByHeadquarters> evnt)
         {
             var interviewSummary = interviewSummares.GetById(evnt.EventSourceId);
             if (interviewSummary == null)
@@ -427,7 +427,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
-                InterviewExportedAction.ApprovedByHeadquarterRevoked,
+                InterviewExportedAction.UnapprovedByHeadquarter,
                 evnt.EventTimeStamp,
                 evnt.Payload.Comment);
         }

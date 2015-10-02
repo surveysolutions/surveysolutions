@@ -100,7 +100,7 @@
         };
     };
 
-    commands[config.commands.hQRevokeApprovedInterviewCommand] = function (args) {
+    commands[config.commands.unapproveByHeadquarterCommand] = function (args) {
         return {
             interviewId: interviewId,
             commentTime: new Date(),
