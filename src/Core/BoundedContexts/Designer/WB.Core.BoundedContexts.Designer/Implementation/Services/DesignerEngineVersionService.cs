@@ -28,15 +28,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Potatoid release (introduced RosterVector)</summary>
         private readonly Version version_9 = new Version(9, 0, 0);
 
-        /// <summary>Hidden questions release</summary>
+        /// <summary>Hidden questions and random value release</summary>
         private readonly Version version_10 = new Version(10, 0, 0);
 
-        /// <summary>Random value for questionnaire</summary>
-        private readonly Version version_11 = new Version(11, 0, 0);
-
+        
         public Version GetLatestSupportedVersion()
         {
-            return version_11;
+            return version_10;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
