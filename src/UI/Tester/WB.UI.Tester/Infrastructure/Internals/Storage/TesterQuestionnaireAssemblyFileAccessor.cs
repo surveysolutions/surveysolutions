@@ -5,13 +5,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {
-    public class QuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
+    public class TesterQuestionnaireAssemblyFileAccessor : IQuestionnaireAssemblyFileAccessor
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string assemblyStorageDirectory;
 
-        public QuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
+        public TesterQuestionnaireAssemblyFileAccessor(string assemblyStorageDirectory, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.assemblyStorageDirectory = assemblyStorageDirectory;
