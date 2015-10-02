@@ -44,7 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             ILiteEventRegistry eventRegistry,
-            IMvxMessenger messenger,
             ISideBarSectionViewModelsFactory modelsFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
