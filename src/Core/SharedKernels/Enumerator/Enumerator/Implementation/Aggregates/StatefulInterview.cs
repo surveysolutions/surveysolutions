@@ -39,23 +39,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private CalculatedState calculated = null;
         private IQuestionnaire cachedQuestionnaire = null;
 
-        private readonly Dictionary<string, BaseInterviewAnswer> answers;
-        private readonly Dictionary<string, InterviewGroup> groups;
-        private readonly Dictionary<string, List<Identity>> rosterInstancesIds;
-        private readonly Dictionary<string, bool> notAnsweredQuestionsValidityStatus;
-        private readonly Dictionary<string, bool> notAnsweredQuestionsEnablementStatus;
-        private readonly Dictionary<string, string> notAnsweredQuestionsInterviewerComments;
+        private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
+        private readonly ConcurrentDictionary<string, InterviewGroup> groups;
+        private readonly ConcurrentDictionary<string, List<Identity>> rosterInstancesIds;
+        private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
+        private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
+        private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
 
         public StatefulInterview(ILogger logger, IQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
-            this.answers = new Dictionary<string, BaseInterviewAnswer>();
-            this.groups = new Dictionary<string, InterviewGroup>();
-            this.rosterInstancesIds = new Dictionary<string, List<Identity>>();
-            this.notAnsweredQuestionsValidityStatus = new Dictionary<string, bool>();
-            this.notAnsweredQuestionsEnablementStatus = new Dictionary<string, bool>();
-            this.notAnsweredQuestionsInterviewerComments = new Dictionary<string, string>();
+            this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
+            this.groups = new ConcurrentDictionary<string, InterviewGroup>();
+            this.rosterInstancesIds = new ConcurrentDictionary<string, List<Identity>>();
+            this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
+            this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
+            this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
         }
 
         private void ResetCalculatedState()
@@ -376,7 +376,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 var rosterIdentity = this.RosterInstancesIds[rosterParentKey].Find(roster => roster.Id == rosterInstance.GroupId &&
                                                                                              roster.RosterVector.SequenceEqual(fullRosterVector));
 
-                this.groups.Remove(rosterKey);
+                InterviewGroup removedGroup;
+                this.groups.TryRemove(rosterKey, out removedGroup);
                 this.RosterInstancesIds[rosterParentKey].Remove(rosterIdentity);
             }
         }
@@ -724,7 +725,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             };
             if (!this.rosterInstancesIds.ContainsKey(rosterParentKey))
             {
-                this.rosterInstancesIds.Add(rosterParentKey, new List<Identity>());
+                this.rosterInstancesIds[rosterParentKey] = new List<Identity>();
             }
 
             this.rosterInstancesIds[rosterParentKey].Add(rosterIdentity);
@@ -1142,19 +1143,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey))
                 {
                     question.IsEnabled = this.notAnsweredQuestionsEnablementStatus[questionKey];
-                    this.notAnsweredQuestionsEnablementStatus.Remove(questionKey);
+                    bool removedItemEnablementStatus;
+                    this.notAnsweredQuestionsEnablementStatus.TryRemove(questionKey, out removedItemEnablementStatus);
                 }
 
                 if (this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
                 {
                     question.IsValid = this.notAnsweredQuestionsValidityStatus[questionKey];
-                    this.notAnsweredQuestionsValidityStatus.Remove(questionKey);
+                    bool removedItemValidityStatus;
+                    this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
                 }
 
                 if (this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey))
                 {
                     question.InterviewerComment = this.notAnsweredQuestionsInterviewerComments[questionKey];
-                    this.notAnsweredQuestionsInterviewerComments.Remove(questionKey);
+                    string removedItemInterviewerComment;
+                    this.notAnsweredQuestionsInterviewerComments.TryRemove(questionKey, out removedItemInterviewerComment);
                 }
             }
 
