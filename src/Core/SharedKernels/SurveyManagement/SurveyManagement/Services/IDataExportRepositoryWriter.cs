@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
     public interface IDataExportRepositoryWriter : IReadSideRepositoryCleaner, ICacheableRepositoryWriter
     {
-        void AddExportedDataByInterviewWithAction(Guid interviewId,InterviewExportedAction action);
+        void AddOrUpdateExportedDataByInterviewWithAction(Guid interviewId,InterviewExportedAction action);
         void DeleteInterview(Guid interviewId);
         void CreateExportStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure);
         void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion);
