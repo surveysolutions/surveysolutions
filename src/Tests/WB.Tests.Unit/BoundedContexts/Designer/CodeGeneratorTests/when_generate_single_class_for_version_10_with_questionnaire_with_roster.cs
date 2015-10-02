@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
 {
-    internal class when_generate_single_class_for_version_11_with_questionnaire_with_roster : CodeGeneratorTestsContext
+    internal class when_generate_single_class_for_version_10_with_questionnaire_with_roster : CodeGeneratorTestsContext
     {
         Establish context = () =>
         {
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         It should_generate_class_with_AbstractConditionalLevelInstanceV4 = () =>
             generatedClassContent.ShouldContain("AbstractConditionalLevelInstanceV4");
 
-        private static Version version = new Version(11, 0, 0);
+        private static Version version = new Version(10, 0, 0);
         private static CodeGenerator generator;
         private static string generatedClassContent;
         private static readonly Guid chapterId = Guid.Parse("11111111111111111111111111111111");

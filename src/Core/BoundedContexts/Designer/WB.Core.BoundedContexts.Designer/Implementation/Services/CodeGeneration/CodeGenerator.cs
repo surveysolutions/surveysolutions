@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
         {
-            return targetVersion.Major < 11 ? 
+            return targetVersion.Major < 10 ? 
                 new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText() : 
                 new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
         }
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
 
-            if (version.Major < 11)
+            if (version.Major < 10)
                 return new CodeGenerationSettings(
                     abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2" },

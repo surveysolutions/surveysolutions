@@ -4,5 +4,5 @@
   <integer name="BufferSize">512</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
-  <string name="DesignerEndpoint">https://design-rc.mysurvey.solutions/api/v9</string>
+  <string name="DesignerEndpoint">https://design-rc.mysurvey.solutions/api/v10</string>
 </resources>
