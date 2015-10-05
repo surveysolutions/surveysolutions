@@ -123,6 +123,15 @@ namespace WB.Core.GenericSubdomains.Portable
                 }
             }
 
+            if (objectType == typeof(double))
+            {
+                double doubleValue;
+                if (double.TryParse(text, out doubleValue))
+                {
+                    returnValue = doubleValue;
+                }
+            }
+
             if (objectType == typeof(DateTime))
             {
                 DateTime dateValue;
