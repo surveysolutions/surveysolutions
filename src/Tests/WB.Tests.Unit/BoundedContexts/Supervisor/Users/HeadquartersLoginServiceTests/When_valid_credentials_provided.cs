@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServiceTests
 {
     [Subject(typeof(HeadquartersLoginService))]
-    public class when_valid_credentials_provided
+    internal class when_valid_credentials_provided
     {
         private const string UserDetailsUri = "http://localhost/userDetails";
 

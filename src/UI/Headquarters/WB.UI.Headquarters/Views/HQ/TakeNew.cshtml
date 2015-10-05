@@ -38,8 +38,9 @@
 
             var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "Execute"})';
             var interviewListUrl = '@Url.Action("Interviews", "HQ", new {}, Request.Url.Scheme)';
+            var supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
 
-            var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl);
+            var model = new Supervisor.VM.NewInterview(commandExecutionUrl, questionnaire, interviewListUrl, supervisorsUrl);
 
             var isViewModelValid = function() {
                 if (!model.isValid()) {
@@ -87,7 +88,7 @@
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return item.label()}}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: selectedOption, typeaheadOptions: {source: options(), displayText: function(item){return item.label()}, shouldFitToParent: false, showLoadMore: false}, valueupdate:'afterkeydown'" type="text" />
                     <div class="input-group-btn" data-bind="click: function(){ selectedOption(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
@@ -187,7 +188,8 @@
             <label class="col-sm-2 control-label">Responsible</label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors(), displayText: function(item){return item.name()}}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <span data-bind="spinner: isSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>

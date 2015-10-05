@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
@@ -8,7 +7,6 @@ using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Plugins.Messenger;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -21,6 +19,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
         private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
+        private MvxSubscriptionToken interviewCompleteActivityToken;
 
         private Toolbar toolbar;
 
@@ -42,8 +41,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 
-            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
-
             this.SetSupportActionBar(this.toolbar);
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             this.SupportActionBar.SetHomeButtonEnabled(true);
@@ -57,6 +54,8 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewModel = this.ViewModel;
                 viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
+
+            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
             this.layoutManager = new LinearLayoutManager(this);
             this.recyclerView.SetLayoutManager(this.layoutManager);
@@ -72,13 +71,25 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
+            this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompleteMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
+        }
+
+        private void OnInterviewCompleteActivity(InterviewCompleteMessage obj)
+        {
+            this.Finish();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            this.Dispose();
+
+            if (IsFinishing)
+            {
+                this.Dispose();
+
+                ViewModel.Dispose();
+            }
         }
 
         private void OnSectionChange(SectionChangeMessage msg)
@@ -93,7 +104,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 Application.SynchronizationContext.Post(_ =>
                 {
                     this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
-                }, 
+                },
                 null);
             }
         }
@@ -103,6 +114,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(this.scrollToAnchorSubscriptionToken);
+            messenger.Unsubscribe<InterviewCompleteMessage>(this.interviewCompleteActivityToken);
             base.OnStop();
         }
 

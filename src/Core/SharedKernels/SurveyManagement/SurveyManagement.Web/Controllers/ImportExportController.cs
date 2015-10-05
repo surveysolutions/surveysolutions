@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.AsyncManager,
                 () =>
                 {
-                    IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                     try
                     {
                         this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version, type);
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     }
                     finally
                     {
-                        IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                     }
                 });
         }
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.AsyncManager,
                 () =>
                 {
-                    IsolatedThreadManager.MarkCurrentThreadAsIsolated();
+                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                     try
                     {
                         this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version, type);
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     }
                     finally
                     {
-                        IsolatedThreadManager.ReleaseCurrentThreadFromIsolation();
+                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                     }
                 });
         }
@@ -180,6 +180,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult GetHistoryCompleted(string result)
         {
             return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
+        }
+
+        public void GetDDIAsync(Guid id, long version)
+        {
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedDDIMetadata(id, version);
+                    }
+                    catch (Exception exc)
+                    {
+                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
+        }
+
+        public ActionResult GetDDICompleted(string result)
+        {
+            return result != null ? this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result)) : null;
         }
     }
 }

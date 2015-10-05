@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
 
 
         [Serializable]
-        internal class InvokeResults
+        public class InvokeResults
         {
             public bool Success { get; set; }
         }

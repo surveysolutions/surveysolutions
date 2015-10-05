@@ -19,11 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExp
         Establish context = () =>
         {
             interviewExportedDataStorageMock=new Mock<IReadSideRepositoryWriter<InterviewExportedDataRecord>>();
-            interviewHistoryStorageMock = new Mock<IReadSideRepositoryWriter<InterviewHistory>>();
             readSideRepositoryDataExportWriter =
                 CreateReadSideRepositoryDataExportWriter(
-                    interviewExportedDataStorage: interviewExportedDataStorageMock.Object,
-                    interviewActionsDataStorage: interviewHistoryStorageMock.Object);
+                    interviewExportedDataStorage: interviewExportedDataStorageMock.Object);
         };
 
         Because of = () =>
@@ -38,7 +36,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ReadSideRepositoryDataExp
         private static ReadSideRepositoryDataExportWriter readSideRepositoryDataExportWriter;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Mock<IReadSideRepositoryWriter<InterviewExportedDataRecord>> interviewExportedDataStorageMock;
-        private static Mock<IReadSideRepositoryWriter<InterviewHistory>> interviewHistoryStorageMock;
 
     }
 }

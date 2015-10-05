@@ -16,7 +16,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     [TestFixture]
-    public class QuestionnaireDenormalizerTests
+    internal class QuestionnaireDenormalizerTests
     {
         [SetUp]
         public void SetUp()

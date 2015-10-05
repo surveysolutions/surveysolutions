@@ -39,6 +39,7 @@ namespace WB.Core.Synchronization.MetaInfo
             metaInfo.Status = (int) doc.Status;
             metaInfo.CreatedOnClient = doc.CreatedOnClient;
             metaInfo.Comments = doc.Comments;
+            metaInfo.RejectDateTime = doc.RejectDateTime;
 
             var featuredQuestionList = new List<FeaturedQuestionMeta>();
 

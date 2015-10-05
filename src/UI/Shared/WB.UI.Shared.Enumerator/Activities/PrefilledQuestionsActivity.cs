@@ -18,6 +18,10 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             get { return Resource.Layout.prefilled_questions; }
         }
+        public override void OnBackPressed()
+        {
+            this.ViewModel.NavigateToPreviousViewModel();
+        }
 
         protected override void OnCreate(Bundle bundle)
         {

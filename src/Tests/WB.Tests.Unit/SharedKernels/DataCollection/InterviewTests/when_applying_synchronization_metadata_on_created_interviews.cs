@@ -24,13 +24,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionnaire &&
                     repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
         };
 
         Cleanup stuff = () =>
@@ -46,11 +42,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 var exceptionByStatuses = new List<InterviewStatus>();
                 foreach (var interviewStatus in Enum.GetValues(typeof (InterviewStatus)).Cast<InterviewStatus>())
                 {
-                    var interview = new Interview();
+                    var interview = Create.Interview(questionnaireRepository: questionnaireRepository);
                     interview.Apply(new InterviewStatusChanged(originalInterviewStatus, ""));
                     try
                     {
-                        interview.CreateInterviewFromSynchronizationMetadata(interview.EventSourceId, userId, questionnaireId,1, interviewStatus, null, "",
+                        interview.CreateInterviewFromSynchronizationMetadata(interview.EventSourceId, userId, questionnaireId,1, interviewStatus, null, "", null,
                             false, false);
                         exceptionByStatuses.Add(interviewStatus);
                     }
@@ -123,5 +119,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static Dictionary<InterviewStatus, InterviewStatus[]> interviewStatusesWhichWasChangedWithoutException =
             new Dictionary<InterviewStatus, InterviewStatus[]>();
+
+        private static IQuestionnaireRepository questionnaireRepository;
     }
 }

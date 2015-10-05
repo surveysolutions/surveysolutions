@@ -14,7 +14,7 @@ using MockRepository = Rhino.Mocks.MockRepository;
 namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 {
     [TestFixture]
-    public class InProcessEventBusSpecs
+    internal class InProcessEventBusSpecs
     {
         [SetUp]
         public void SetUp()

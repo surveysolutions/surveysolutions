@@ -30,7 +30,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0 (build 1)")]
 
-[assembly: InternalsVisibleTo("Ncqrs.Tests")]
-[assembly: InternalsVisibleTo("Ncqrs.Spec")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]

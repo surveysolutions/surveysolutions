@@ -3,20 +3,24 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupStateViewModel : MvxNotifyPropertyChanged
     {
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
 
         protected GroupStateViewModel()
         {
         }
 
-        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository)
+        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository,
+            IUserInterfaceStateService userInterfaceStateService)
         {
             this.interviewRepository = interviewRepository;
+            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         private string interviewId;
@@ -27,41 +31,49 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             this.interviewId = interviewId;
             this.group = groupIdentity;
-
-            this.UpdateFromModel();
+            this.UpdateFromGroupModel();
         }
 
-        public int AnsweredQuestionsCount { get; private set; }
-        public int SubgroupsCount { get; private set; }
-        public int QuestionsCount { get; private set; }
-        public int InvalidAnswersCount { get; private set; }
+        public int AnsweredQuestionsCount { get; protected set; }
+        public int SubgroupsCount { get; protected set; }
+        public int QuestionsCount { get; protected set; }
+        public int InvalidAnswersCount { get; protected set; }
 
         private GroupStatus status;
         public GroupStatus Status
         {
             get { return this.status; }
-            private set { this.RaiseAndSetIfChanged(ref this.status, value); }
+            protected set { this.RaiseAndSetIfChanged(ref this.status, value); }
         }
 
         private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
             get { return this.simpleStatus; }
-            private set { this.RaiseAndSetIfChanged(ref this.simpleStatus, value); }
+            protected set { this.RaiseAndSetIfChanged(ref this.simpleStatus, value); }
         }
 
-        public void UpdateFromModel()
+        public virtual void UpdateFromGroupModel()
         {
-            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+            try
+            {
+                userInterfaceStateService.NotifyRefreshStarted();
 
-            this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
-            this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
-            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
-            this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.group);
+                IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+         
+                this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
+                this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
+                this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
+                this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.group);
 
-            this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
+                this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
 
-            this.Status = this.CalculateDetailedStatus();
+                this.Status = this.CalculateDetailedStatus();
+            }
+            finally
+            {
+                userInterfaceStateService.NotifyRefreshFinished();
+            }
         }
 
         private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
@@ -83,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             return SimpleGroupStatus.Completed;
         }
 
-        private GroupStatus CalculateDetailedStatus()
+        protected GroupStatus CalculateDetailedStatus()
         {
             switch (this.SimpleStatus)
             {

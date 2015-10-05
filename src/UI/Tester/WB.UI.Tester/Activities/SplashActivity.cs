@@ -1,16 +1,32 @@
 using Android.App;
 using Android.Content.PM;
+using Cirrious.CrossCore;
+using Cirrious.MvvmCross.Droid.Views;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.UI.Shared.Enumerator.Activities;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Activities
 {
     [Activity(NoHistory = true, MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, Theme = "@style/AppTheme")]
-    public class SplashActivity : BaseActivity<SplashViewModel>
+    public class SplashActivity : MvxSplashScreenActivity
     {
-        protected override int ViewResourceId
+        public SplashActivity()
+            : base(Resource.Layout.splash)
         {
-            get { return Resource.Layout.splash; }
+        }
+
+        protected override void TriggerFirstNavigate()
+        {
+            IPrincipal principal = Mvx.Resolve<IPrincipal>();
+            IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
+
+            if (principal.IsAuthenticated)
+            {
+                viewModelNavigationService.NavigateTo<DashboardViewModel>();
+            }
+            else
+                viewModelNavigationService.NavigateTo<LoginViewModel>();
         }
     }
 }

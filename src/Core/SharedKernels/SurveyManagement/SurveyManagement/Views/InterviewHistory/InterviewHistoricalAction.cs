@@ -5,6 +5,7 @@
         SupervisorAssigned,
         InterviewerAssigned,
         AnswerSet,
+        AnswerRemoved,
         CommentSet,
         Completed,
         Restarted,

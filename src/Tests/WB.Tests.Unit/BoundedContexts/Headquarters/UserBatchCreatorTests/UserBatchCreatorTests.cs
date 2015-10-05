@@ -18,7 +18,7 @@ using System.Linq;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 {
     [TestFixture]
-    public class UserBatchCreatorTests
+    internal class UserBatchCreatorTests
     {
         [Test]
         public void

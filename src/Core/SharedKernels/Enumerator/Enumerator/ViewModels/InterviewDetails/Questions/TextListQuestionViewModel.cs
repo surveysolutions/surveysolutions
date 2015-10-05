@@ -14,10 +14,11 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
+    public class TextListQuestionViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel, IDisposable
     {
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
@@ -117,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
             this.maxAnswerCount = questionModel.MaxAnswerCount;
 
-            this.IsAddNewItemVisible = !this.maxAnswerCount.HasValue || this.Answers.Count < this.maxAnswerCount.Value;
+            this.IsAddNewItemVisible = this.IsNeedShowAddNewItem();
         }
 
         private async void ListItemDeleted(object sender, EventArgs eventArgs)
@@ -159,10 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void SaveAnswers()
         {
-            if (this.maxAnswerCount.HasValue)
-            {
-                this.IsAddNewItemVisible = this.Answers.Count < this.maxAnswerCount.Value;
-            }
+            this.IsAddNewItemVisible = this.IsNeedShowAddNewItem();
 
             if (this.Answers.Any(x => string.IsNullOrWhiteSpace(x.Title)))
             {
@@ -191,6 +189,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private bool IsNeedShowAddNewItem()
+        {
+            var isInvalidMaxAnswerCountRule = this.maxAnswerCount.HasValue && this.Answers.Count >= this.maxAnswerCount.Value;
+            var isInvalidRosterSizeRule = this.isRosterSizeQuestion && this.Answers.Count >= Constants.MaxRosterRowCount;
+            return !(isInvalidMaxAnswerCountRule || isInvalidRosterSizeRule);
+        }
+
         private TextListItemViewModel CreateListItemViewModel(decimal value, string title)
         {
             var optionViewModel = new TextListItemViewModel
@@ -205,6 +210,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             optionViewModel.ItemDeleted += this.ListItemDeleted;
 
             return optionViewModel;
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

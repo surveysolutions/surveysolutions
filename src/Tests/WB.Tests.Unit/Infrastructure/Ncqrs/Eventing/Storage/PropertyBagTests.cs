@@ -11,7 +11,7 @@ namespace Ncqrs.Tests.Eventing.Storage
     using System.Linq;
 
     [TestFixture]
-    public class PropertyBagTests
+    internal class PropertyBagTests
     {
         [SetUp]
         public void SetUp()

@@ -6,7 +6,6 @@ using Ncqrs.Eventing.Storage;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.User
 {
-    [EventName("RavenQuestionnaire.Core:Events:UserChanged")]
     public class UserChanged
     {
         public string Email { get; set; }

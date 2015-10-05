@@ -41,8 +41,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         /// </summary>
         public string ResponsibleName { get; set; }
 
-        public Guid? TeamLeadId { get; set; }
-
         /// <summary>
         /// Name of supervisor (which is a team lead), needed for team-based reports.
         /// </summary>

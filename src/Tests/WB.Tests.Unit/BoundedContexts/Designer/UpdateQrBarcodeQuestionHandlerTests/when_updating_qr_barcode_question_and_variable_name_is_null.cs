@@ -1,5 +1,6 @@
 using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: null,
                     variableLabel: null, enablementCondition: null, instructions: null,
-                    responsibleId: responsibleId, validationExpression: null, validationMessage: null));
+                    responsibleId: responsibleId, validationExpression: null, validationMessage: null, scope: QuestionScope.Interviewer));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 

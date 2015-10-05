@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOptions
 {
-    public class when_updating_question_setting_to_cascade_from_non_existing_question : QuestionnaireTestsContext
+    internal class when_updating_question_setting_to_cascade_from_non_existing_question : QuestionnaireTestsContext
     {
         Establish context = () =>
         {

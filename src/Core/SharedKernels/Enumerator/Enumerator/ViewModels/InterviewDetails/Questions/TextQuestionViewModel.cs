@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -17,13 +18,18 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class TextQuestionViewModel : MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel, 
-        ILiteEventHandler<TextQuestionAnswered>
+        IInterviewEntityViewModel,
+        ILiteEventHandler<TextQuestionAnswered>,
+        ILiteEventHandler<AnswerRemoved>,
+        IDisposable
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IPrincipal principal;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+
+        public event EventHandler AnswerRemoved;
+
         private Identity questionIdentity;
         private string interviewId;
 
@@ -64,6 +70,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateSelfFromModel();
         }
 
+        public void Dispose()
+        {
+            this.liteEventRegistry.Unsubscribe(this, interviewId); 
+            this.QuestionState.Dispose();
+        }
+
         private string answer;
         public string Answer
         {
@@ -101,6 +113,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxCommand ValueChangeCommand
         {
             get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand<string>(this.SendAnswerTextQuestionCommand)); }
+        }
+
+        private IMvxCommand answerRemoveCommand;
+
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return this.answerRemoveCommand ??
+                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
+            }
+        }
+
+        private async Task RemoveAnswer()
+        {
+            try
+            {
+                var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId), 
+                    this.principal.CurrentUserIdentity.UserId,
+                    this.questionIdentity,
+                    DateTime.UtcNow);
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
+
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+
+            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
         }
 
         private async void SendAnswerTextQuestionCommand(string text)
@@ -152,6 +195,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId == this.questionIdentity.Id &&
                 @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
+                this.UpdateSelfFromModel();
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
+            {
+                QuestionState.IsAnswered = false;
                 this.UpdateSelfFromModel();
             }
         }

@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class QuestionnaireModelBuilder : IQuestionnaireModelBuilder
     {
+        const int RosterUpperBoundDefaultValue = 40;
+
         public QuestionnaireModel BuildQuestionnaireModel(QuestionnaireDocument questionnaireDocument)
         {
             questionnaireDocument.ConnectChildrenWithParent();
@@ -28,11 +30,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 GroupsRosterLevelDepth = new Dictionary<Guid, int>(),
                 QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>()
             };
-
-            questionnaireDocument.Children.Add(new Group(UIResources.Interview_Complete_Screen_Title)
-            {
-                PublicKey = questionnaireModel.FinishGroupId
-            });
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
@@ -267,10 +264,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     break;
                 case QuestionType.TextList:
                     var listQuestion = question as TextListQuestion;
+
+                    var maxAnswerCount = isRosterSizeQuestion
+                           ? listQuestion.MaxAnswerCount.HasValue ? listQuestion.MaxAnswerCount : RosterUpperBoundDefaultValue
+                           : listQuestion.MaxAnswerCount;
+
                     questionModel = new TextListQuestionModel
                     {
                         IsRosterSizeQuestion = isRosterSizeQuestion,
-                        MaxAnswerCount = listQuestion.MaxAnswerCount
+                        MaxAnswerCount = maxAnswerCount
                     };
                     break;
                 case QuestionType.QRBarcode:

@@ -23,7 +23,7 @@ using WB.UI.Shared.Web.Membership;
 namespace WB.Tests.Unit.Applications.Designer
 {
     [TestFixture]
-    public class AdminControllerTests
+    internal class AdminControllerTests
     {
         [SetUp]
         public void Setup()

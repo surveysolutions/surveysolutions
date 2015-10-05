@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.DataCollection;
+﻿using System;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {

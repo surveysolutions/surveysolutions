@@ -20,14 +20,14 @@ namespace WB.UI.Designer.Api
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly ILogger logger;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IDesignerExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IDesignerExpressionsEngineVersionService expressionsEngineVersionService)
+        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory, IDesignerEngineVersionService engineVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
+            this.engineVersionService = engineVersionService;
         }
 
         [HttpGet]
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Api
             var questionnaire = GetQuestionnaire(id).Source;
 
             string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire,
-                expressionsEngineVersionService.GetLatestSupportedVersion());
+                this.engineVersionService.GetLatestSupportedVersion());
 
             return Request.CreateResponse(HttpStatusCode.OK, generated);
         }
@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Api
             var questionnaire = GetQuestionnaire(id).Source;
 
             var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire,
-                expressionsEngineVersionService.GetLatestSupportedVersion());
+                this.engineVersionService.GetLatestSupportedVersion());
             
             var resultBuilder =new StringBuilder();
             
@@ -68,7 +68,7 @@ namespace WB.UI.Designer.Api
             var questionnaire = GetQuestionnaire(id).Source;
             string assembly;
             var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
-                expressionsEngineVersionService.GetLatestSupportedVersion(), out assembly);
+                this.engineVersionService.GetLatestSupportedVersion(), out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)

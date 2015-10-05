@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;
@@ -18,6 +19,11 @@ namespace WB.Core.Infrastructure.EventHandlers
         where TStorage : class, IReadSideStorage<TEntity>
     {
         private readonly TStorage readSideStorage;
+
+        private IEventTypeResolver EventTypeResolver
+        {
+            get { return ServiceLocator.Current.GetInstance<IEventTypeResolver>(); }
+        }
 
         protected AbstractFunctionalEventHandler(TStorage readSideStorage)
         {
@@ -88,7 +94,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
         {
             var evntType = ExtractEventType(method);
-            NcqrsEnvironment.RegisterEventDataType(evntType);
+            EventTypeResolver.RegisterEventDataType(evntType);
             oldEventBus.RegisterHandler(evntType, this.Handle);
         }
 

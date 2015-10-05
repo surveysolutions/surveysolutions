@@ -3,6 +3,7 @@
 	  xmlns:local="http://schemas.android.com/apk/res-auto">
  <item
       android:id="@+id/dashboard_refresh"
+      android:title="Refresh"
       local:showAsAction="ifRoom"
       android:icon="@drawable/dashboard_refresh_icon" />
  <item
