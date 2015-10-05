@@ -199,7 +199,7 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates' && isQuestionScopeSupervisorOrPrefilled) {
+                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -326,6 +326,9 @@
                 return allScopes.filter(function (o) {
                     if (currentQuestion.type == 'MultyOption')
                         return o.value !== 'Prefilled';
+
+                    if (currentQuestion.type == 'GpsCoordinates')
+                        return o.value !== 'Supervisor';
 
                     return o.value !== 'Prefilled' && o.value !== 'Supervisor';
                 });

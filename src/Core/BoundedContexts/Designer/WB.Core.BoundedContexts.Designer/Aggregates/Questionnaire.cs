@@ -1553,7 +1553,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateGpsCoordinatesQuestion(
             Guid questionId,
             string title,
-            string variableName, string variableLabel,
+            string variableName, 
+            string variableLabel,
+            bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
             string validationExpression,
@@ -1567,7 +1569,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -1577,6 +1579,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
                 QuestionScope = scope,
+                Featured = isPreFilled,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
