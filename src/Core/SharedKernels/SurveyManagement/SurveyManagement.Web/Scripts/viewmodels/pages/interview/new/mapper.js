@@ -79,12 +79,21 @@
                     item.latitude = ko.observableArray([]);
                     item.latitude("0");
                     item.latitude.extend({ required: true });
-                    item.latitude.extend({ numericValidator: true });
+                    item.latitude.extend({ gps_latitude: true });
 
                     item.longitude = ko.observableArray([]);
                     item.longitude("0");
                     item.longitude.extend({ required: true });
-                    item.longitude.extend({ numericValidator: true });
+                    item.longitude.extend({ gps_longitude: true });
+
+
+                    self.showMapUrl = function () {
+                        return ko.computed({
+                            read: function () {
+                                return "http://maps.google.com/maps?q=" + item.latitude() + "," + item.longitude();
+                            }
+                        }, this);
+                    };
                     break;
 
             }
