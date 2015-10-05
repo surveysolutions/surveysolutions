@@ -183,8 +183,8 @@
                 <span class="help-block" data-bind="validationMessage: longitude"></span>
              
             </div>
-            <div class="col-sm-2">
-                <a href="#">show on map</a>
+            <div class="col-sm-2" data-bind="visible: longitude.isValid() && latitude.isValid()">
+                <a data-bind="attr: { href: showMapUrl() }" target="_blank">show on map</a>
             </div>
             </div>
     </script>

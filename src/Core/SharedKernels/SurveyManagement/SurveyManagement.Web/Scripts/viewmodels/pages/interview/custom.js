@@ -58,6 +58,34 @@ ko.validation.rules['digit'] = {
     },
     message: 'Please enter a digit'
 };
+
+ko.validation.rules['gps_latitude'] = {
+    validator: function (value, validate) {
+        if (_.isEmpty(value))
+            return validate && false;
+
+        if (isNaN(value)) {
+            return validate && false;
+        }
+        var latitude = parseFloat(value);
+        return validate && latitude > -80 && latitude < 80;
+    },
+    message: 'Please enter valid latitude'
+};
+
+ko.validation.rules['gps_longitude'] = {
+    validator: function (value, validate) {
+        if (_.isEmpty(value))
+            return validate && false;
+        if (isNaN(value)) {
+            return validate && false;
+        }
+        var longitude = parseFloat(value);
+        return validate &&  longitude > -180 && longitude < 180;
+    },
+    message: 'Please enter valid longitude'
+};
+
 ko.bindingHandlers.maskFormatter = {
     
     init: function (element, valueAccessor) {
