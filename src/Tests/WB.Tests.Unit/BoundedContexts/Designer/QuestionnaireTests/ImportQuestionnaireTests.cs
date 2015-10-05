@@ -14,7 +14,7 @@ using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImport
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
-    public class ImportQuestionnaireTests : QuestionnaireTestsContext
+    internal class ImportQuestionnaireTests : QuestionnaireTestsContext
     {
         [SetUp]
         public void SetUp()

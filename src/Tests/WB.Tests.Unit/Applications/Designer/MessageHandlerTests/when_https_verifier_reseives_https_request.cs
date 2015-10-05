@@ -5,7 +5,7 @@ using Machine.Specifications;
 
 namespace WB.Tests.Unit.Applications.Designer.MessageHandlerTests
 {
-    public class when_https_verifier_reseives_https_request : MessageHandlerTestContext
+    internal class when_https_verifier_reseives_https_request : MessageHandlerTestContext
     {
         Establish context = () =>
         {

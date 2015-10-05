@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
             plainInterviewSynchronizationFileRepository = CreateFileSyncRepository(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
-        Because of = () => plainInterviewSynchronizationFileRepository.RemoveBinaryDataFromSyncFolder(interviewId,"fileName");
+        Because of = () => plainInterviewSynchronizationFileRepository.RemoveInterviewImage(interviewId,"fileName");
 
         It should_not_put_files_in_sync_storage = () =>
             fileSystemAccessorMock.Verify(x=>x.DeleteFile(Moq.It.IsAny<string>()), Times.Never);

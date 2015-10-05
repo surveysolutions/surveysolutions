@@ -5,9 +5,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class HelpViewModel : BaseViewModel
     {
-        public override void NavigateToPreviousViewModel()
+        public void NavigateToPreviousViewModel()
         {
-            
         }
     }
 }

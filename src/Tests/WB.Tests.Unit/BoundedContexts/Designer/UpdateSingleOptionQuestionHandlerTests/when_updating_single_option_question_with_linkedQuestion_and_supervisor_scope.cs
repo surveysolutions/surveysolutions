@@ -9,7 +9,7 @@ using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
 {
-    public class when_updating_single_option_question_with_linkedQuestion_and_supervisor_scope : QuestionnaireTestsContext
+    internal class when_updating_single_option_question_with_linkedQuestion_and_supervisor_scope : QuestionnaireTestsContext
     {
         Establish context = () =>
         {

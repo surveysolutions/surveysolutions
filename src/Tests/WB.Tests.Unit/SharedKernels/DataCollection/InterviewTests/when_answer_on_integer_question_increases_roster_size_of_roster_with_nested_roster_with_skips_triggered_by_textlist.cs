@@ -53,14 +53,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     && _.GetNestedRostersOfGroupById(parentRosterGroupId) == new[] { nestedRosterGroupId }
                     && _.GetRosterSizeQuestion(nestedRosterGroupId) == testListQuestionWhichIncreasesNestedRosterSizeId);
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new TextListQuestionAnswered(userId, testListQuestionWhichIncreasesNestedRosterSizeId, new decimal[0],
                 DateTime.Now, new[] { new Tuple<decimal, string>(40, "t1") }));
             eventContext = new EventContext();

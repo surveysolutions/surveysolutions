@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -15,36 +14,37 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class Interview : AggregateRootMappedByConvention, ISnapshotable<InterviewState>
+    public class Interview : AggregateRootMappedByConvention
     {
         private static readonly decimal[] EmptyRosterVector = { };
 
         protected Guid questionnaireId;
-        private Guid interviewerId;
+        protected Guid interviewerId;
 
         protected long questionnaireVersion;
         private bool wasCompleted;
         private bool wasHardDeleted;
-        private InterviewStatus status;
+        protected InterviewStatus status;
 
-        private IInterviewExpressionStateV2 expressionProcessorStatePrototype = null;
-        private IInterviewExpressionStateV2 ExpressionProcessorStatePrototype
+        private IInterviewExpressionStateV4 expressionProcessorStatePrototype = null;
+        private IInterviewExpressionStateV4 ExpressionProcessorStatePrototype
         {
             get
             {
                 if (this.expressionProcessorStatePrototype == null)
                 {
-                    var stateProvider = this.ExpressionProcessorStatePrototypeProvider;
+                    var stateProvider = this.expressionProcessorStatePrototypeProvider;
                     this.expressionProcessorStatePrototype = stateProvider.GetExpressionState(this.questionnaireId, this.questionnaireVersion);
+                    this.expressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
                 }
 
                 return this.expressionProcessorStatePrototype;
@@ -90,40 +90,42 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.status = @event.InterviewData.Status;
             this.wasCompleted = @event.InterviewData.WasCompleted;
             this.ExpressionProcessorStatePrototype =
-                ExpressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
+                this.expressionProcessorStatePrototypeProvider.GetExpressionState(@event.InterviewData.QuestionnaireId, @event.InterviewData.QuestionnaireVersion);
+
+            this.ExpressionProcessorStatePrototype.SetInterviewProperties(new InterviewProperties(EventSourceId));
 
             this.interviewState.AnswersSupportedInExpressions = @event.InterviewData.Answers == null
-                ? new Dictionary<string, object>()
+                ? new ConcurrentDictionary<string, object>()
                 : @event.InterviewData.Answers
                     .Where(
                         question =>
                             !(question.Answer is GeoPosition || question.Answer is decimal[] || question.Answer is decimal[][] ||
                                 question.Answer is Tuple<decimal, string>[]))
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => question.Answer);
 
             this.interviewState.LinkedSingleOptionAnswersBuggy = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>()
+                ? new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[]) // bug: here we get multioption questions as well
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => Tuple.Create(question.Id, question.QuestionRosterVector, (decimal[])question.Answer));
 
             this.interviewState.LinkedMultipleOptionsAnswers = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>()
+                ? new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is decimal[][])
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => Tuple.Create(question.Id, question.QuestionRosterVector, (decimal[][])question.Answer));
 
             this.interviewState.TextListAnswers = @event.InterviewData.Answers == null
-                ? new Dictionary<string, Tuple<decimal, string>[]>()
+                ? new ConcurrentDictionary<string, Tuple<decimal, string>[]>()
                 : @event.InterviewData.Answers
                     .Where(question => question.Answer is Tuple<decimal, string>[])
-                    .ToDictionary(
+                    .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
                         question => (Tuple<decimal, string>[])question.Answer
                     );
@@ -486,98 +488,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (var identity in @event.Questions)
             {
-                // if single option question with this identity is absent, nothing will happen
-                this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(identity.Id, identity.RosterVector, null);
-           }
+                RemoveAnswerFromExpressionProcessorState(this.ExpressionProcessorStatePrototype, identity.Id,
+                    identity.RosterVector);
+            }
         }
 
-        public InterviewState CreateSnapshot()
+        public virtual void Apply(AnswerRemoved @event)
         {
-            if (wasHardDeleted)
-                return new InterviewState(wasHardDeleted);
-
-            return new InterviewState(
-                this.questionnaireId,
-                this.questionnaireVersion,
-                this.status,
-                this.interviewState.AnswersSupportedInExpressions,
-                this.interviewState.LinkedSingleOptionAnswersBuggy,
-                this.interviewState.LinkedMultipleOptionsAnswers,
-                this.interviewState.TextListAnswers,
-                this.interviewState.AnsweredQuestions,
-                this.interviewState.AnswerComments,
-                this.interviewState.DisabledGroups,
-                this.interviewState.DisabledQuestions,
-                this.interviewState.RosterGroupInstanceIds,
-                this.interviewState.ValidAnsweredQuestions,
-                this.interviewState.InvalidAnsweredQuestions,
-                this.wasCompleted,
-                this.ExpressionProcessorStatePrototype, this.interviewerId);
+            this.interviewState.RemoveAnswers(new[] { new Identity(@event.QuestionId, @event.RosterVector) });
+            RemoveAnswerFromExpressionProcessorState(this.ExpressionProcessorStatePrototype, @event.QuestionId, @event.RosterVector);
         }
 
-        public void RestoreFromSnapshot(InterviewState snapshot)
+        private void RemoveAnswerFromExpressionProcessorState(IInterviewExpressionState state, Guid questionId, decimal[] rosterVector)
         {
-            this.ExpressionProcessorStatePrototype = snapshot.ExpressionProcessorState;
-            this.questionnaireId = snapshot.QuestionnaireId;
-            this.questionnaireVersion = snapshot.QuestionnaireVersion;
-            this.status = snapshot.Status;
-            this.interviewState.AnswersSupportedInExpressions = snapshot.AnswersSupportedInExpressions;
-            this.interviewState.LinkedSingleOptionAnswersBuggy = snapshot.LinkedSingleOptionAnswers;
-            this.interviewState.LinkedMultipleOptionsAnswers = snapshot.LinkedMultipleOptionsAnswers;
-            this.interviewState.TextListAnswers = snapshot.TextListAnswers;
-            this.interviewState.AnsweredQuestions = snapshot.AnsweredQuestions;
-            this.interviewState.AnswerComments = snapshot.AnswerComments;
-            this.interviewState.DisabledGroups = snapshot.DisabledGroups;
-            this.interviewState.DisabledQuestions = snapshot.DisabledQuestions;
-            this.interviewState.RosterGroupInstanceIds = snapshot.RosterGroupInstanceIds;
-            this.interviewState.ValidAnsweredQuestions = snapshot.ValidAnsweredQuestions;
-            this.interviewState.InvalidAnsweredQuestions = snapshot.InvalidAnsweredQuestions;
-            this.wasCompleted = snapshot.WasCompleted;
-            this.wasHardDeleted = snapshot.WasHardDeleted;
-            this.interviewerId = snapshot.InterviewewerId;
+            state.UpdateNumericIntegerAnswer(questionId, rosterVector, null);
+            state.UpdateNumericRealAnswer(questionId, rosterVector, null);
+            state.UpdateDateAnswer(questionId, rosterVector, null);
+            state.UpdateMediaAnswer(questionId, rosterVector, null);
+            state.UpdateTextAnswer(questionId, rosterVector, null);
+            state.UpdateQrBarcodeAnswer(questionId, rosterVector, null);
+            state.UpdateSingleOptionAnswer(questionId, rosterVector, null);
+            state.UpdateMultiOptionAnswer(questionId, rosterVector, null);
+            state.UpdateGeoLocationAnswer(questionId, rosterVector, 0, 0, 0, 0);
+            state.UpdateTextListAnswer(questionId, rosterVector, null);
+            state.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, null);
+            state.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, null);
         }
 
         #region Dependencies
 
-        private ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        private readonly ILogger logger;
 
         /// <remarks>
         /// Repository operations are time-consuming.
         /// So this repository may be used only in command handlers.
         /// And should never be used in event handlers!!
         /// </remarks>
-        private static IQuestionnaireRepository QuestionnaireRepository
-        {
-            get { return ServiceLocator.Current.GetInstance<IQuestionnaireRepository>(); }
-        }
+        private readonly IQuestionnaireRepository questionnaireRepository;
 
-        private IInterviewExpressionStatePrototypeProvider ExpressionProcessorStatePrototypeProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>(); }
-        }
+        private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
 
         #endregion
 
-        #region .ctors
-
-        /// <remarks>Is used to restore aggregate from event stream.</remarks>
-        public Interview()
+        public Interview(ILogger logger, IQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
         {
-        }
-
-        public Interview(Func<Guid> getQuestionnaireId, Func<long> getVersion, Guid id)
-            : base(id)
-        {
-            this.SetQuestionnaireProperties(getQuestionnaireId(), getVersion());
-
-            if (ExpressionProcessorStatePrototype == null)
-            {
-                throw new InterviewException(string.Format("Interview activation error. Code EC0002. QuestionnaireId: {0}, Questionnaire version: {1}, InterviewId: {2}", getQuestionnaireId(), getVersion(), id));
-            }
-
+            this.logger = logger;
+            this.questionnaireRepository = questionnaireRepository;
+            this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
         }
 
         private void SetQuestionnaireProperties(Guid questionnaireId, long questionnaireVersion)
@@ -586,18 +543,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.questionnaireVersion = questionnaireVersion;
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long version, PreloadedDataDto preloadedData, DateTime answersTime,
-            Guid supervisorId)
-            : this(() => questionnaireId, () => version, id)
-        {
-            this.CreateInterviewWithPreloadedData(questionnaireId, version, preloadedData, supervisorId, answersTime, userId);
-        }
-
         public void CreateInterviewWithPreloadedData(Guid questionnaireId, long version, PreloadedDataDto preloadedData, Guid supervisorId, DateTime answersTime, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, version);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, version);
 
             var interviewChangeStructures = new InterviewChangeStructures();
 
@@ -649,19 +599,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime, Guid supervisorId)
-            : this(() => questionnaireId, () => questionnaireVersion, id)
-        {
-            this.CreateInterview(questionnaireId, questionnaireVersion, supervisorId, answersToFeaturedQuestions, answersTime, userId);
-        }
-
         public void CreateInterview(Guid questionnaireId, long questionnaireVersion, Guid supervisorId,
             Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
 
             var interviewChangeStructures = new InterviewChangeStructures();
             var newAnswers =
@@ -699,18 +642,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime)
-            : this(() => questionnaireId, () => GetQuestionnaireOrThrow(questionnaireId).Version, id)
-        {
-            this.CreateInterviewForTesting(questionnaireId, answersToFeaturedQuestions, answersTime, userId);
-        }
-
         public void CreateInterviewForTesting(Guid questionnaireId, Dictionary<Guid, object> answersToFeaturedQuestions, DateTime answersTime, Guid userId)
         {
-            this.SetQuestionnaireProperties(questionnaireId, GetQuestionnaireOrThrow(questionnaireId).Version);
+            this.SetQuestionnaireProperties(questionnaireId, this.GetQuestionnaireOrThrow(questionnaireId).Version);
 
-            IQuestionnaire questionnaire = GetQuestionnaireOrThrow(questionnaireId);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId);
 
             var interviewChangeStructures = new InterviewChangeStructures();
 
@@ -746,28 +682,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(enablementAndValidityChanges);
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long? questionnaireVersion, DateTime answersTime, Guid supervisorId)
-            : this(() => questionnaireId, () =>
-            {
-                IQuestionnaire questionnaire = questionnaireVersion.HasValue
-                    ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
-                    : GetQuestionnaireOrThrow(questionnaireId);
-
-                return questionnaire.Version;
-            }, id)
-        {
-            this.CreateInterviewOnClient(questionnaireId, questionnaireVersion, supervisorId, answersTime, userId);
-        }
-
         public void CreateInterviewOnClient(Guid questionnaireId, long? questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, (questionnaireVersion.HasValue
-                    ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
-                    : GetQuestionnaireOrThrow(questionnaireId)).Version);
+                    ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
+                    : this.GetQuestionnaireOrThrow(questionnaireId)).Version);
 
             IQuestionnaire questionnaire = questionnaireVersion.HasValue
-                ? GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
-                : GetQuestionnaireOrThrow(questionnaireId);
+                ? this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion.Value)
+                : this.GetQuestionnaireOrThrow(questionnaireId);
 
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
 
@@ -792,47 +715,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid)
-            : this(() => questionnaireId, () => questionnaireVersion, id)
-        {
-            this.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId);
-        }
-
         public void CreateInterviewCreatedOnClient(Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool isValid, Guid userId)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
             this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaireVersion));
             this.ApplyEvent(new SynchronizationMetadataApplied(userId, questionnaireId, questionnaireVersion,
-                interviewStatus, featuredQuestionsMeta, true, null));
+                interviewStatus, featuredQuestionsMeta, true, null, null));
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, string.Empty));
             this.ApplyValidationEvent(isValid);
         }
 
-        public Interview(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid, bool createdOnClient)
-            : this(() => questionnaireId, () => questionnaireVersion, id)
-        {
-            this.CreateInterviewFromSynchronizationMetadata(id, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, comments, valid, createdOnClient);
-        }
-
-        public Interview(Guid id, Guid userId, Guid supervisorId, InterviewSynchronizationDto interviewDto, DateTime synchronizationTime)
-            : this(() => interviewDto.QuestionnaireId, () => interviewDto.QuestionnaireVersion, id)
-        {
-            this.SynchronizeInterviewFromHeadquarters(id, userId, supervisorId, interviewDto, synchronizationTime);
-        }
-
-        #endregion
-
         #region StaticMethods
 
-        private static Dictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
+        private static ConcurrentDictionary<string, DistinctDecimalList> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
         {
-            return synchronizationDto.RosterGroupInstances.ToDictionary(
+            return synchronizationDto.RosterGroupInstances.ToConcurrentDictionary(
                 pair => ConversionHelper.ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemRosterVector),
                 pair => new DistinctDecimalList(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
         }
@@ -1261,7 +1162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
@@ -1279,7 +1180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState);
 
@@ -1297,7 +1198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
@@ -1317,7 +1218,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
@@ -1333,7 +1234,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion,
                 this.interviewState);
 
@@ -1356,7 +1257,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion,
                 this.interviewState);
 
@@ -1379,7 +1280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckLinkedMultiOptionQuestionInvariants(questionId, rosterVector, selectedRosterVectors, questionnaire, answeredQuestion);
 
@@ -1403,7 +1304,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
@@ -1419,7 +1320,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
                 this.interviewState);
 
@@ -1437,7 +1338,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, answers);
 
@@ -1459,7 +1360,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
@@ -1487,7 +1388,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion);
 
@@ -1508,6 +1409,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         #endregion
+
+        public void RemoveAnswer(Guid questionId, decimal[] rosterVector, Guid userId, DateTime removeTime)
+        {
+            ThrowIfInterviewHardDeleted();
+
+            var answeredQuestion = new Identity(questionId, rosterVector);
+
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+
+            ThrowIfQuestionDoesNotExist(questionId, questionnaire);
+            ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
+            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
+
+            IInterviewExpressionStateV2 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+
+            InterviewChanges interviewChanges = this.CalculateInterviewChangesOnAnswerRemove(this.interviewState,
+                userId, questionId, rosterVector, removeTime, questionnaire, expressionProcessorState);
+
+            this.ApplyInterviewChanges(interviewChanges);
+
+        }
 
         public void ReevaluateSynchronizedInterview()
         {
@@ -1537,7 +1459,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CommentAnswer(Guid userId, Guid questionId, decimal[] rosterVector, DateTime commentTime, string comment)
         {
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
 
@@ -1547,7 +1469,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void SetFlagToAnswer(Guid userId, Guid questionId, decimal[] rosterVector)
         {
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
 
@@ -1557,7 +1479,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void RemoveFlagFromAnswer(Guid userId, Guid questionId, decimal[] rosterVector)
         {
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
 
@@ -1756,7 +1678,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.SetQuestionnaireProperties(interviewDto.QuestionnaireId, interviewDto.QuestionnaireVersion);
 
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(interviewDto.QuestionnaireId,
+            IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(interviewDto.QuestionnaireId,
                 interviewDto.QuestionnaireVersion);
 
             var rosters = CalculateRostersFromInterviewSynchronizationDto(interviewDto);
@@ -1862,7 +1784,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
 
-            GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
+            this.GetHistoricalQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
 
             var isInterviewNeedToBeCreated = createdOnClient && this.Version == 0;
 
@@ -1886,7 +1808,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void CreateInterviewFromSynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,
             InterviewStatus interviewStatus,
-            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, string comments, bool valid,
+            AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, 
+            string comments, 
+            DateTime? rejectedDateTime, 
+            bool valid,
             bool createdOnClient)
         {
             this.SetQuestionnaireProperties(questionnaireId, questionnaireVersion);
@@ -1901,7 +1826,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaireVersion,
                 interviewStatus,
                 featuredQuestionsMeta,
-                createdOnClient, comments));
+                createdOnClient, 
+                comments,
+                rejectedDateTime));
 
             this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
 
@@ -2176,6 +2103,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (AnswerChange change in interviewByAnswerChanges)
             {
+                if (change.Answer == null)
+                {
+                    this.ApplyEvent(new AnswerRemoved(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime));
+                    continue;
+                }
+
                 switch (change.InterviewChangeType)
                 {
                     case AnswerChangeType.Text:
@@ -2759,6 +2692,97 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 AnswerChangeType.GeoLocation, answerTime, questionnaire, expressionProcessorState);
         }
 
+
+
+        private InterviewChanges CalculateInterviewChangesOnAnswerRemove(
+            InterviewStateDependentOnAnswers state, Guid userId, Guid questionId,
+            decimal[] rosterVector, DateTime removeTime, IQuestionnaire questionnaire,
+            IInterviewExpressionStateV2 expressionProcessorState)
+        {
+            List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
+            Func<Guid, decimal[], bool> isRoster = (groupId, groupOuterScopeRosterVector)
+                => rosterIds.Contains(groupId)
+                    && AreEqualRosterVectors(groupOuterScopeRosterVector, rosterVector);
+
+            var rosterInstanceIds = new DistinctDecimalList();
+
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds =
+                (currentstate, groupId, groupOuterRosterVector)
+                    => isRoster(groupId, groupOuterRosterVector)
+                        ? rosterInstanceIds
+                        : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
+
+            RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector,
+                rosterInstanceIds, null, questionnaire, (s, i) => null);
+
+            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
+
+            //Update State
+            RemoveAnswerFromExpressionProcessorState(expressionProcessorState, questionId, rosterVector);
+
+            var answersToRemoveByCascading = this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state).ToArray();
+            
+            expressionProcessorState.DisableQuestions(answersToRemoveByCascading);
+
+            var rosterInstancesToRemove = this.GetUnionOfUniqueRosterDataPropertiesByRosterAndNestedRosters(
+                d => d.RosterInstancesToRemove, new RosterIdentityComparer(), rosterCalculationData);
+
+            List<RosterIdentity> rosterInstancesWithAffectedTitles = CalculateRosterInstancesWhichTitlesAreAffected(questionId, rosterVector, questionnaire);
+
+            foreach (var rosterInstancesWithAffectedTitle in rosterInstancesWithAffectedTitles)
+            {
+                expressionProcessorState.UpdateRosterTitle(rosterInstancesWithAffectedTitle.GroupId,
+                    rosterInstancesWithAffectedTitle.OuterRosterVector,
+                    rosterInstancesWithAffectedTitle.RosterInstanceId, null);
+            }
+
+            rosterInstancesToRemove.ForEach(r => expressionProcessorState.RemoveRoster(r.GroupId, r.OuterRosterVector, r.RosterInstanceId));
+            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
+            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
+
+            enablementChanges.QuestionsToBeEnabled.AddRange(rosterCalculationData.DisabledAnswersToEnableByDecreasedRosterSize);
+            enablementChanges.GroupsToBeEnabled.AddRange(rosterCalculationData.DisabledGroupsToEnableByDecreasedRosterSize);
+
+            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
+                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
+                    state,
+                    enablementChanges.GroupsToBeDisabled,
+                    enablementChanges.QuestionsToBeDisabled,
+                    questionnaire, getRosterInstanceIds);
+
+            IEnumerable<Identity> answersForLinkedQuestionsToRemoveByEmptyAnswer = this
+                .GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
+                    state,
+                    new Identity(questionId, rosterVector).ToEnumerable(),
+                    questionnaire,
+                    GetRosterInstanceIds);
+
+
+            List<Identity> answersForLinkedQuestionsToRemove = Enumerable
+                .Union(answersForLinkedQuestionsToRemoveByEmptyAnswer, answersForLinkedQuestionsToRemoveByDisabling)
+                .ToList();
+
+            var interviewByAnswerChange = new List<AnswerChange>
+            {
+                new AnswerChange(AnswerChangeType.RemoveAnswer, userId, questionId, rosterVector, removeTime, null)
+            };
+
+            var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, getRosterInstanceIds));
+
+            var interviewChanges= new InterviewChanges(interviewByAnswerChange,
+                enablementChanges,
+                validationChanges,
+                rosterCalculationData,
+                answersForLinkedQuestionsToRemove,
+                rosterInstancesWithAffectedTitles,
+                null,
+                substitutionChanges);
+
+            interviewChanges.AnswersForLinkedQuestionsToRemove.AddRange(answersToRemoveByCascading);
+            
+            return interviewChanges;
+        }
+
         private IInterviewExpressionStateV2 PrepareExpressionProcessorStateForCalculations()
         {
             IInterviewExpressionStateV2 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
@@ -3000,12 +3024,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var rosterInstanceIds = this.GetRosterInstancesById(state, questionnaire, nestedRosterId, outerRosterVector, getAnswer);
 
-                Func<InterviewStateDependentOnAnswers, Guid, decimal[], DistinctDecimalList> getRosterInstanceIds =
-                    (currentState, groupId, groupOuterRosterVector)
-                        => isRoster(groupId, groupOuterRosterVector)
-                            ? new DistinctDecimalList(rosterInstanceIds.Keys)
-                            : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
-
                 yield return
                     this.CalculateRosterData(state, questionnaire,
                         new List<Guid> { nestedRosterId }, outerRosterVector, rosterInstanceIds.ToDictionary(x => x.Key, x => x.Value.Item2),
@@ -3217,14 +3235,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
 
-            List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state,
-                nestedRosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector,
-                questionnaire);
-
-            List<Identity> disabledAnswersToEnableByDecreasedRosterSize = GetDisabledAnswersToEnableByDecreasedRosterSize(state,
-                nestedRosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
-
             var listOfRosterInstanceIdsForRemove = new List<RosterIdentity>();
+
+            List<Identity> answersToRemoveByDecreasedRosterSize = new List<Identity>();
 
             var rosterInstantiatesFromNestedLevels = new List<RosterCalculationData>();
             foreach (var nestedRosterId in nestedRosterIds)
@@ -3242,19 +3255,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     listOfRosterInstanceIdsForRemove.Add(rosterIdForDelete);
 
+                    answersToRemoveByDecreasedRosterSize.AddRange(
+                        this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
+                            state,
+                            rosterIdForDelete.GroupId,
+                            new List<decimal> { rosterIdForDelete.RosterInstanceId },
+                            rosterIdForDelete.OuterRosterVector,
+                            questionnaire));
+
                     rosterInstantiatesFromNestedLevels.Add(CalculateNestedRostersDataForDelete(state, questionnaire, nestedRosterId,
                         new List<decimal> { rosterIdForDelete.RosterInstanceId }, outerVectorForExtend));
                 }
             }
 
-            List<Identity> disabledGroupsToEnableByDecreasedRosterSize = GetDisabledGroupsToEnableByDecreasedRosterSize(state,
-               listOfRosterInstanceIdsForRemove, questionnaire);
+            var disabledAnswersToEnableByDecreasedRosterSize = this.GetDisabledAnswersToEnableByDecreasedRosterSize(state,
+                nestedRosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
 
-            return new RosterCalculationData(new List<RosterIdentity>(), listOfRosterInstanceIdsForRemove, new List<RosterIdentity>(),
-                answersToRemoveByDecreasedRosterSize, disabledAnswersToEnableByDecreasedRosterSize, disabledGroupsToEnableByDecreasedRosterSize,
-                new Dictionary<decimal, string>(), rosterInstantiatesFromNestedLevels);
+            var disabledGroupsToEnableByDecreasedRosterSize = this.GetDisabledGroupsToEnableByDecreasedRosterSize(state,
+                listOfRosterInstanceIdsForRemove, questionnaire);
+
+            return new RosterCalculationData(
+                new List<RosterIdentity>(), 
+                listOfRosterInstanceIdsForRemove, 
+                new List<RosterIdentity>(),
+                answersToRemoveByDecreasedRosterSize, 
+                disabledAnswersToEnableByDecreasedRosterSize,
+                disabledGroupsToEnableByDecreasedRosterSize,
+                new Dictionary<decimal, string>(),
+                rosterInstantiatesFromNestedLevels);
         }
-
       
         private static List<RosterIdentity> CalculateRosterInstancesWhichTitlesAreAffected(Guid questionId, decimal[] rosterVector,
             IQuestionnaire questionnaire)
@@ -3627,9 +3656,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        protected static IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
+        protected IQuestionnaire GetHistoricalQuestionnaireOrThrow(Guid id, long version)
         {
-            IQuestionnaire questionnaire = QuestionnaireRepository.GetHistoricalQuestionnaire(id, version);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetHistoricalQuestionnaire(id, version);
 
             if (questionnaire == null)
                 throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version), InterviewDomainExceptionType.QuestionnaireIsMissing);
@@ -3637,9 +3666,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questionnaire;
         }
 
-        private static IQuestionnaire GetQuestionnaireOrThrow(Guid id)
+        private IQuestionnaire GetQuestionnaireOrThrow(Guid id)
         {
-            IQuestionnaire questionnaire = QuestionnaireRepository.GetQuestionnaire(id);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(id);
 
             if (questionnaire == null)
                 throw new InterviewException(string.Format("Questionnaire with id '{0}' is not found.", id));
@@ -3666,6 +3695,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 outerRosterVector.Take(questionnaire.GetRosterLevelForQuestion(rosterSizeQuestionId.Value)).ToArray());
 
             var answerOnRosterSizeQuestion = getAnswer(state, rosterSizeQuestionIdentity);
+
             var questionType = questionnaire.GetQuestionType(rosterSizeQuestionId.Value);
             switch (questionType)
             {
@@ -3682,7 +3712,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         }
                         catch (InvalidCastException e)
                         {
-                            this.Logger.Error("invalid cast of int answer on trigger question", e);
+                            this.logger.Error("invalid cast of int answer on trigger question", e);
                         }
                     }
 
@@ -3787,11 +3817,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (rosterInstanceIdsBeingRemoved.Count == 0)
                 return new List<Identity>();
 
-            return rosterIds
-                .SelectMany(rosterId =>
-                    this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state, rosterId, rosterInstanceIdsBeingRemoved,
-                        nearestToOuterRosterVector, questionnaire))
+            var answersToRemoveIfRosterInstancesAreRemoved = rosterIds
+                .SelectMany(rosterId => this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state, rosterId, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire))
                 .ToList();
+
+            return answersToRemoveIfRosterInstancesAreRemoved;
         }
 
         private List<Identity> GetDisabledGroupsToEnableByDecreasedRosterSize(
@@ -4115,55 +4145,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return enablementAndValidityChanges;
         }
 
-        private static void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
+        private void UpdateExpressionProcessorStateWithAnswerChange(AnswerChange answerChange,
             IInterviewExpressionState expressionProcessorState)
         {
             switch (answerChange.InterviewChangeType)
             {
+                case AnswerChangeType.RemoveAnswer:
+                    RemoveAnswerFromExpressionProcessorState(expressionProcessorState, answerChange.QuestionId,
+                        answerChange.RosterVector);
+                    break;
                 case AnswerChangeType.Text:
-                    expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
+                    expressionProcessorState.UpdateTextAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (string) answerChange.Answer);
                     break;
                 case AnswerChangeType.DateTime:
-                    expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector, (DateTime)answerChange.Answer);
+                    expressionProcessorState.UpdateDateAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (DateTime) answerChange.Answer);
                     break;
                 case AnswerChangeType.TextList:
                     expressionProcessorState.UpdateTextListAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (Tuple<decimal, string>[])answerChange.Answer);
+                        (Tuple<decimal, string>[]) answerChange.Answer);
                     break;
                 case AnswerChangeType.GeoLocation:
-                    {
-                        var answer = answerChange.Answer as GeoLocationPoint;
-                        expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                            answer.Latitude,
-                            answer.Longitude,
-                            answer.Accuracy,
-                            answer.Altitude);
-                    }
+                {
+                    var answer = answerChange.Answer as GeoLocationPoint;
+                    expressionProcessorState.UpdateGeoLocationAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        answer.Latitude,
+                        answer.Longitude,
+                        answer.Accuracy,
+                        answer.Altitude);
+                }
                     break;
                 case AnswerChangeType.QRBarcode:
-                    expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector, (string)answerChange.Answer);
+                    expressionProcessorState.UpdateQrBarcodeAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        (string) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericInteger:
-                    expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId, answerChange.RosterVector, (int)answerChange.Answer);
+                    expressionProcessorState.UpdateNumericIntegerAnswer(answerChange.QuestionId,
+                        answerChange.RosterVector, (int) answerChange.Answer);
                     break;
                 case AnswerChangeType.NumericReal:
-                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector, Convert.ToDouble(answerChange.Answer));
+                    expressionProcessorState.UpdateNumericRealAnswer(answerChange.QuestionId, answerChange.RosterVector,
+                        Convert.ToDouble(answerChange.Answer));
                     break;
                 case AnswerChangeType.SingleOptionLinked:
-                    expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[])answerChange.Answer);
+                    expressionProcessorState.UpdateLinkedSingleOptionAnswer(answerChange.QuestionId,
+                        answerChange.RosterVector,
+                        (decimal[]) answerChange.Answer);
                     break;
                 case AnswerChangeType.SingleOption:
                     expressionProcessorState.UpdateSingleOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal)answerChange.Answer);
+                        (decimal) answerChange.Answer);
                     break;
                 case AnswerChangeType.MultipleOptionsLinked:
-                    expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[][])answerChange.Answer);
+                    expressionProcessorState.UpdateLinkedMultiOptionAnswer(answerChange.QuestionId,
+                        answerChange.RosterVector,
+                        (decimal[][]) answerChange.Answer);
                     break;
                 case AnswerChangeType.MultipleOptions:
                     expressionProcessorState.UpdateMultiOptionAnswer(answerChange.QuestionId, answerChange.RosterVector,
-                        (decimal[])answerChange.Answer);
+                        (decimal[]) answerChange.Answer);
                     break;
             }
         }

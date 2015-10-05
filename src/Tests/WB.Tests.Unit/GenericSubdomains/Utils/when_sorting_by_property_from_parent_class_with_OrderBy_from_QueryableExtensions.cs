@@ -5,7 +5,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
-    public class when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions
+    internal class when_sorting_by_property_from_parent_class_with_OrderBy_from_QueryableExtensions
     {
         public class ParentClass
         {

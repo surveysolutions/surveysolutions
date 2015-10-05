@@ -9,14 +9,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    public class when_signed_out : DashboardViewModelTestContext
+    internal class when_signed_out : DashboardViewModelTestContext
     {
         Establish context = () =>
         {
-            viewModel = CreateDashboardViewModel(
-                principal: mockOfPrincipal.Object,
-                viewModelNavigationService: mockOfViewModelNavigationService.Object
-                );
+            viewModel = CreateDashboardViewModel(viewModelNavigationService: mockOfViewModelNavigationService.Object);
         };
 
         Because of = () => viewModel.SignOutCommand.Execute();
@@ -25,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         It should_be_navigated_to_login_view_model = () => mockOfViewModelNavigationService.Verify(_ => _.NavigateTo<LoginViewModel>(), Times.Once);
         
         private static DashboardViewModel viewModel;
-        private static readonly Mock<IPrincipal> mockOfPrincipal = new Mock<IPrincipal>();
+        
         private static readonly Mock<IViewModelNavigationService> mockOfViewModelNavigationService = new Mock<IViewModelNavigationService>();
     }
 }

@@ -38,7 +38,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             };
         }
 
-        public void SignIn(string usernName, string password, bool staySignedIn)
+        public bool SignIn(string usernName, string password, bool staySignedIn)
         {
             if (staySignedIn)
             {
@@ -49,6 +49,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             this.IsAuthenticated = true;
             this.currentUserIdentity.Name = usernName;
             this.currentUserIdentity.Password = password;
+
+            return this.IsAuthenticated;
         }
 
         public void SignOut()

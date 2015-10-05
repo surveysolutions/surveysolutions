@@ -121,10 +121,10 @@
     <value>Questionnaire must contain at least one question.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Validation condition has syntax error (only few first questions are shown).</value>
+    <value>Validation condition has syntax error.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Enabling condition has syntax error (only few first questions/sub-sections/rosters are shown).</value>
+    <value>Enabling condition has syntax error.</value>
   </data>
   <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
     <value>Validation condition references nonexistent question.</value>
@@ -143,9 +143,6 @@
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
     <value>Linked question references question not under roster.</value>
-  </data>
-  <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has validation condition referencing question from deeper roster level.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title substitution cannot be marked as prefilled.</value>
@@ -238,7 +235,7 @@
     <value>Question cannot have empty variable name.</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>Variable name cannot be a reserved word.</value>
+    <value>Variable name or roster ID cannot be a reserved word.</value>
   </data>
   <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
     <value>If question uses %rostertitle% in title it need to be placed inside roster.</value>
@@ -265,16 +262,16 @@
     <value>Question of this type is not supported.</value>
   </data>
   <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
-    <value>Roster cannot have empty variable name.</value>
+    <value>Roster cannot have empty roster ID.</value>
   </data>
   <data name="WB0068_RosterHasNotUniqueVariableName" xml:space="preserve">
-    <value>Another roster with the same variable name already exists.</value>
+    <value>Another roster with the same roster ID already exists.</value>
   </data>
   <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
-    <value>Roster has invalid variable name.</value>
+    <value>Roster has invalid roster ID.</value>
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
-    <value>Roster has variable name equal to questionnaire title.</value>
+    <value>Roster has roster ID equal to questionnaire title.</value>
   </data>
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Static text cannot be empty.</value>
@@ -371,12 +368,6 @@
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
     <value>Max number of answers for roster size question cannot be greater then 40.</value>
-  </data>
-  <data name="WB0006_QuestionConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has condition referencing question from deeper roster level.</value>
-  </data>
-  <data name="WB0007_GroupConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Group has condition referencing question from deeper roster level.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Sub-section can have no more than 10 parent sub-sections.</value>

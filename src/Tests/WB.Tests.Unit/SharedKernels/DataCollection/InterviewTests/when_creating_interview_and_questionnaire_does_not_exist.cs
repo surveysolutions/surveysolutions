@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            interviewId = Guid.Parse("11000000000000000000000000000000");
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
@@ -29,23 +28,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(repositoryWithoutQuestionnaire);
+            interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
         };
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, DateTime.Now, responsibleSupervisorId));
+                interview.CreateInterview(questionnaireId, 1, responsibleSupervisorId, answersToFeaturedQuestions, DateTime.Now, userId));
 
         It should_throw_interview_exception = () =>
-            exception.ShouldBeOfType<InterviewException>();
+            exception.ShouldBeOfExactType<InterviewException>();
 
         private static Exception exception;
         private static Guid questionnaireId;
         private static Guid userId;
         private static Guid responsibleSupervisorId;
-        private static Guid interviewId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
+        private static Interview interview;
     }
 }

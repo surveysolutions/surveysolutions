@@ -26,7 +26,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class MultiOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>
+        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IDisposable
     {
         private readonly AnswerNotifier answerNotifier;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -91,6 +93,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.GenerateOptions(interview, questionnaire));
         }
 
+        public void Dispose()
+        {
+            this.eventRegistry.Unsubscribe(this, interviewId.FormatGuid());
+            this.answerNotifier.QuestionAnswered -= this.LinkedToQuestionAnswered;
+            this.QuestionState.Dispose();
+        }
+
         private void LinkedToQuestionAnswered(object sender, EventArgs e)
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
@@ -144,15 +153,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             foreach (var question in @event.Questions)
             {
-                if (question.Id == this.linkedToQuestionId)
-                {
-                    var shownAnswer = this.Options.SingleOrDefault(x => x.Value.SequenceEqual(question.RosterVector));
-                    if (shownAnswer != null)
-                    {
-                        this.InvokeOnMainThread(() => this.Options.Remove(shownAnswer));
-                        this.RaisePropertyChanged(() => this.HasOptions);
-                    }
-                }
+                RemoveOptionIfQuestionIsSourceofTheLink(question.Id, question.RosterVector);
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            RemoveOptionIfQuestionIsSourceofTheLink(@event.QuestionId, @event.RosterVector);
+        }
+
+        private void RemoveOptionIfQuestionIsSourceofTheLink(Guid removedQuestionId,
+            decimal[] removedQuestionRosterVector)
+        {
+            if (removedQuestionId != this.linkedToQuestionId)
+                return;
+            var shownAnswer = this.Options.SingleOrDefault(x => x.Value.SequenceEqual(removedQuestionRosterVector));
+            if (shownAnswer != null)
+            {
+                this.InvokeOnMainThread(() => this.Options.Remove(shownAnswer));
+                this.RaisePropertyChanged(() => this.HasOptions);
             }
         }
 

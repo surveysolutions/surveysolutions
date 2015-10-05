@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
-
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.IoC;
@@ -44,7 +43,6 @@ namespace WB.UI.Tester
 
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof (SplashViewModel), typeof (SplashActivity)},
                 {typeof (LoginViewModel), typeof (LoginActivity)},
                 {typeof (InterviewViewModel), typeof (InterviewActivity)},
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},

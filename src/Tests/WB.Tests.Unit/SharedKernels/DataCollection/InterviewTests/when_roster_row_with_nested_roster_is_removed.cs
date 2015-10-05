@@ -52,28 +52,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     && _.GetRosterLevelForQuestion(questionInParentRosterId) == 1
                     && _.GetRostersFromTopToSpecifiedQuestion(questionInParentRosterId) == new[] { parentRosterGroupId });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
-
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now,
-                2));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionWhichIncreasesRosterSizeId, new decimal[0], DateTime.Now, 2));
 
             interview.Apply(Create.Event.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 0, null));
             interview.Apply(Create.Event.RosterInstancesAdded(parentRosterGroupId, new decimal[0], 1, null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId, new decimal[] { 0 }, 0, null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId, new decimal[] { 1 }, 0, null));
 
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionInParentRosterId, new decimal[]{0}, DateTime.Now,
-               2));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionInParentRosterId, new decimal[]{0}, DateTime.Now, 2));
 
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionInParentRosterId, new decimal[] { 1 }, DateTime.Now,
-               2));
+            interview.Apply(new NumericIntegerQuestionAnswered(userId, questionInParentRosterId, new decimal[] { 1 }, DateTime.Now, 2));
+
             eventContext = new EventContext();
         };
 

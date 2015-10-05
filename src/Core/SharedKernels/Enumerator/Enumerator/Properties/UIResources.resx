@@ -183,8 +183,8 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
   </data>
-  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Your version of application does not support of this questionnaire. Please, update application.</value>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>New version of application was released. Please, update the application</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
     <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
@@ -258,8 +258,8 @@
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>No connection to the Survey Solutions Designer. Please make sure that the website is available.</value>
   </data>
-  <data name="SettingsText" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Troubleshooting</value>
   </data>
   <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
     <value>Allow to send an anonymous information about crashes of application</value>
@@ -461,13 +461,139 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
-  <data name="Interviewer_Login_ActiveUsers_Label" xml:space="preserve">
-    <value>Active users: {0}</value>
-  </data>
   <data name="Interviewer_DashboardTitle" xml:space="preserve">
     <value>Assignments/Census for {0}</value>
   </data>
   <data name="SynchronizationText" xml:space="preserve">
     <value>Synchronization</value>
+  </data>
+  <data name="Interviewer_Troubleshooting" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
+  <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
+    <value>To complete screen</value>
+  </data>
+  <data name="Confirmation_Interviewer_ReassignUserToAnotherDevice" xml:space="preserve">
+    <value>Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?</value>
+  </data>
+  <data name="Confirmation_Interviewer_RemoveAllDataFromOldDevice" xml:space="preserve">
+    <value>All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>You already assigned to another device</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Relink</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>If you relink to this device &lt;br/&gt; all data on the old one will be lost</value>
+  </data>
+  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
+    <value>have not been updated</value>
+  </data>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>were updated {0}</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>No questionnaires found</value>
+  </data>
+  <data name="Login_Validation_EndpointIsUnreachable" xml:space="preserve">
+    <value>Entered endpoint is unreachable. Check internet connection or enter correct url</value>
+  </data>
+  <data name="Login_App_Version" xml:space="preserve">
+    <value>version {0}</value>
+  </data>
+  <data name="Login_App_NewVersionAvailable" xml:space="preserve">
+    <value>new version available</value>
+  </data>
+  <data name="Login_EndpointWasNotReached" xml:space="preserve">
+    <value>Endpoint was not reached</value>
+  </data>
+  <data name="Login_EndpointWasReached" xml:space="preserve">
+    <value>Endpoint was reached</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Synchronization endpoint</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Your account doesn't have Interviewer role</value>
+  </data>
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>No internet access to supervisor application. Check server adddress and(or) network settings</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>No network. Check your network settings</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>Request cancelled by user</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>Unexpected error</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Something went wrong and backup failed to be created</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Backup was saved to {0}</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>New version exists. Would you like to download and update application?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>You have the latest version of application</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Error occurred on version check. Please, check settings or try again later.</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Something went wrong and tabled failed to be restored</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Tablet was successfully restored</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Create backup</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Version: {0}. Check for a new version</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Restore from backup</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Send tablet's information</value>
+  </data>
+  <data name="Login_WrondPassword" xml:space="preserve">
+    <value>Wrong password</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Information package is successfully sent</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Information package of size {0} will be sent via network. Are you sure you want to send it?</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Sending of information package is failed</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Try to sign in online</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Google Play Services are not available</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>You cannot start MvxLocation service more than once</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Location Client not started</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>You do not have any assignments on this device. Send tablet information, clear application's data and login by another account</value>
   </data>
 </root>

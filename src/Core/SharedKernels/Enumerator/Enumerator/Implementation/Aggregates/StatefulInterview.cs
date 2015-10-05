@@ -3,10 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -15,9 +14,12 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
-using WB.Core.SharedKernels.Enumerator.Entities;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
 
@@ -37,30 +39,30 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private CalculatedState calculated = null;
         private IQuestionnaire cachedQuestionnaire = null;
 
-        private readonly Dictionary<string, BaseInterviewAnswer> answers;
-        private readonly Dictionary<string, InterviewGroup> groups;
-        private readonly Dictionary<string, List<Identity>> rosterInstancesIds;
-        private readonly Dictionary<string, bool> notAnsweredQuestionsValidityStatus;
-        private readonly Dictionary<string, bool> notAnsweredQuestionsEnablementStatus;
-        private readonly Dictionary<string, string> notAnsweredQuestionsInterviewerComments;
+        private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
+        private readonly ConcurrentDictionary<string, InterviewGroup> groups;
+        private readonly ConcurrentDictionary<string, List<Identity>> rosterInstancesIds;
+        private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
+        private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
+        private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
 
-        public StatefulInterview()
+        public StatefulInterview(ILogger logger, IQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+            : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
-            this.answers = new Dictionary<string, BaseInterviewAnswer>();
-            this.groups = new Dictionary<string, InterviewGroup>();
-            this.rosterInstancesIds = new Dictionary<string, List<Identity>>();
-            this.notAnsweredQuestionsValidityStatus = new Dictionary<string, bool>();
-            this.notAnsweredQuestionsEnablementStatus = new Dictionary<string, bool>();
-            this.notAnsweredQuestionsInterviewerComments = new Dictionary<string, string>();
+            this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
+            this.groups = new ConcurrentDictionary<string, InterviewGroup>();
+            this.rosterInstancesIds = new ConcurrentDictionary<string, List<Identity>>();
+            this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
+            this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
+            this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
         }
 
         private void ResetCalculatedState()
         {
             this.calculated = new CalculatedState();
         }
-
-
+       
         protected new void Apply(SynchronizationMetadataApplied @event)
         {
             base.Apply(@event);
@@ -240,8 +242,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             @event.Questions.ForEach(x =>
-                this.Answers[ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector)].RemoveAnswer()
-            );
+            {
+                var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(x.Id, x.RosterVector);
+                if (this.Answers.ContainsKey(questionId))
+                {
+                    this.Answers[questionId].RemoveAnswer();
+                }
+            });
+        }
+
+        internal new void Apply(AnswerRemoved @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            var questionId = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
+            if (this.Answers.ContainsKey(questionId))
+                this.Answers[questionId].RemoveAnswer();
         }
 
         public new void Apply(AnswersDeclaredValid @event)
@@ -359,7 +376,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 var rosterIdentity = this.RosterInstancesIds[rosterParentKey].Find(roster => roster.Id == rosterInstance.GroupId &&
                                                                                              roster.RosterVector.SequenceEqual(fullRosterVector));
 
-                this.groups.Remove(rosterKey);
+                InterviewGroup removedGroup;
+                this.groups.TryRemove(rosterKey, out removedGroup);
                 this.RosterInstancesIds[rosterParentKey].Remove(rosterIdentity);
             }
         }
@@ -373,7 +391,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
+            this.InterviewerCompleteComment = @event.Comment;
             this.IsCompleted = true;
+        }
+
+        public new void Apply(InterviewRejected @event)
+        {
+            base.Apply(@event);
+
+            this.SupervisorRejectComment = @event.Comment;
         }
 
         public new void Apply(InterviewRestarted @event)
@@ -404,8 +430,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string QuestionnaireId { get { return this.QuestionnaireIdentity.ToString(); } }
-
+        public Guid InterviewerId { get { return this.interviewerId; } }
+        public InterviewStatus Status { get { return status; } }
         public Guid Id { get; set; }
+        public string InterviewerCompleteComment { get; private set; }
+        public string SupervisorRejectComment { get; private set; }
 
         public IReadOnlyDictionary<string, BaseInterviewAnswer> Answers
         {
@@ -567,43 +596,47 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 case AnswerType.Integer:
                     this.GetOrCreateAnswer<IntegerNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToInt32(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (int?) Convert.ToInt32(answerDto.Answer));
                     break;
                 case AnswerType.Decimal:
                     this.GetOrCreateAnswer<RealNumericAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToDecimal(answerDto.Answer));
+                        .SetAnswer((decimal?) answerDto.Answer);
                     break;
                 case AnswerType.DateTime:
                     this.GetOrCreateAnswer<DateTimeAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToDateTime(answerDto.Answer));
+                        .SetAnswer((DateTime?)answerDto.Answer);
                     break;
                 case AnswerType.OptionCodeArray:
                     this.GetOrCreateAnswer<MultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((decimal[])answerDto.Answer);
+                        .SetAnswers(answerDto.Answer as decimal[]);
                     break;
                 case AnswerType.RosterVectorArray:
                     this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((decimal[][])answerDto.Answer);
+                        .SetAnswers(answerDto.Answer as decimal[][]);
                     break;
                 case AnswerType.OptionCode:
                     this.GetOrCreateAnswer<SingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer(Convert.ToDecimal(answerDto.Answer));
+                        .SetAnswer(answerDto.Answer == null ? null : (decimal?)Convert.ToDecimal(answerDto.Answer));
                     break;
                 case AnswerType.RosterVector:
                     this.GetOrCreateAnswer<LinkedSingleOptionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswer((decimal[])answerDto.Answer);
+                        .SetAnswer(answerDto.Answer as decimal[]);
                     break;
                 case AnswerType.DecimalAndStringArray:
                     this.GetOrCreateAnswer<TextListAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((Tuple<decimal, string>[])answerDto.Answer);
+                        .SetAnswers(answerDto.Answer as Tuple<decimal, string>[]);
                     break;
                 case AnswerType.String:
                     this.GetOrCreateAnswer<TextAnswer>(answerDto.Id, answerDto.RosterVector).SetAnswer((string)answerDto.Answer);
                     break;
                 case AnswerType.GpsData:
                     var geoAnswer = answerDto.Answer as GeoPosition;
-                    this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector)
+                    var gpsQuestion = this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector);
+                    if (geoAnswer!=null)
+                        this.GetOrCreateAnswer<GpsCoordinatesAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswer(geoAnswer.Latitude, geoAnswer.Longitude, geoAnswer.Accuracy, geoAnswer.Altitude);
+                    else
+                        gpsQuestion.RemoveAnswer();
                     break;
                 case AnswerType.FileName:
                     this.GetOrCreateAnswer<MultimediaAnswer>(answerDto.Id, answerDto.RosterVector)
@@ -692,7 +725,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             };
             if (!this.rosterInstancesIds.ContainsKey(rosterParentKey))
             {
-                this.rosterInstancesIds.Add(rosterParentKey, new List<Identity>());
+                this.rosterInstancesIds[rosterParentKey] = new List<Identity>();
             }
 
             this.rosterInstancesIds[rosterParentKey].Add(rosterIdentity);
@@ -770,6 +803,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public int CountActiveInterviewerQuestionsInGroupOnly(Identity group)
         {
+            if (group == null) throw new ArgumentNullException("group");
             return this
                 .GetEnabledInterviewerChildQuestions(group)
                 .Count;
@@ -837,7 +871,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 groupIdentity.RosterVector,
                 questionnaire,
                 GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
-            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(x => x.Value != null && x.Value.IsAnswered && !x.Value.IsValid);
+
+            return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(
+                x => x.Value != null 
+                && x.Value.IsEnabled 
+                && x.Value.IsAnswered 
+                && !x.Value.IsValid);
         }
 
         public int CountInvalidInterviewerQuestionsInGroupOnly(Identity group)
@@ -1104,19 +1143,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(questionKey))
                 {
                     question.IsEnabled = this.notAnsweredQuestionsEnablementStatus[questionKey];
-                    this.notAnsweredQuestionsEnablementStatus.Remove(questionKey);
+                    bool removedItemEnablementStatus;
+                    this.notAnsweredQuestionsEnablementStatus.TryRemove(questionKey, out removedItemEnablementStatus);
                 }
 
                 if (this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
                 {
                     question.IsValid = this.notAnsweredQuestionsValidityStatus[questionKey];
-                    this.notAnsweredQuestionsValidityStatus.Remove(questionKey);
+                    bool removedItemValidityStatus;
+                    this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
                 }
 
                 if (this.notAnsweredQuestionsInterviewerComments.ContainsKey(questionKey))
                 {
                     question.InterviewerComment = this.notAnsweredQuestionsInterviewerComments[questionKey];
-                    this.notAnsweredQuestionsInterviewerComments.Remove(questionKey);
+                    string removedItemInterviewerComment;
+                    this.notAnsweredQuestionsInterviewerComments.TryRemove(questionKey, out removedItemInterviewerComment);
                 }
             }
 

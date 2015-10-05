@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.PrefilledQuestions.Add(startButton);
         }
 
-        public override void NavigateToPreviousViewModel()
+        public void NavigateToPreviousViewModel()
         {
             this.viewModelNavigationService.NavigateToDashboard();
         }

@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</ProjectGuid>
@@ -41,8 +41,6 @@
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
-    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
-    <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Designer\Questionnaire.cs" />
@@ -91,6 +89,9 @@
     <Compile Include="Documents\UserLight.cs" />
     <Compile Include="Documents\UserRoles.cs" />
     <Compile Include="Implementation\Services\SubstitutionService.cs" />
+    <Compile Include="Implementation\ServiceVariables\ServiceColumns.cs" />
+    <Compile Include="Implementation\ServiceVariables\ServiceVariable.cs" />
+    <Compile Include="Implementation\ServiceVariables\ServiceVariableType.cs" />
     <Compile Include="IReadSideRepositoryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISubstitutionService.cs" />

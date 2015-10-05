@@ -3,7 +3,7 @@ using WB.Core.Infrastructure;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests
 {
-    public class InMemoryTemporaryDataRepositoryAccessor<T> : ITemporaryDataStorage<T> where T : class
+    internal class InMemoryTemporaryDataRepositoryAccessor<T> : ITemporaryDataStorage<T> where T : class
     {
         private readonly Dictionary<string,T> container=new Dictionary<string, T>(); 
 

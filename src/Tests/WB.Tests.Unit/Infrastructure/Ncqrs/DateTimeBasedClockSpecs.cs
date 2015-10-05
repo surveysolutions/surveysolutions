@@ -8,7 +8,7 @@ using WB.Tests.Unit;
 namespace Ncqrs.Tests
 {
     [TestFixture]
-    public class DateTimeBasedClockSpecs
+    internal class DateTimeBasedClockSpecs
     {
         [SetUp]
         public void SetUp()

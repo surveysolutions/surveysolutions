@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServiceTests
 {
-    public class when_hq_service_fails
+    internal class when_hq_service_fails
     {
         Establish context = () =>
         {

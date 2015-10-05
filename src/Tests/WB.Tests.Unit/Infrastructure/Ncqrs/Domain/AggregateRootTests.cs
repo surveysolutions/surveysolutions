@@ -13,7 +13,7 @@ using MockRepository = Rhino.Mocks.MockRepository;
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class AggregateRootTests
+    internal class AggregateRootTests
     {
         [SetUp]
         public void SetUp()

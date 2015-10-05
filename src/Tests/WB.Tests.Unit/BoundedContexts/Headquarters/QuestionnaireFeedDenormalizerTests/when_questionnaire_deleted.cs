@@ -14,7 +14,7 @@ using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questio
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.QuestionnaireFeedDenormalizerTests
 {
     [Subject(typeof (QuestionnaireFeedDenormalizer))]
-    public class when_questionnaire_deleted
+    internal class when_questionnaire_deleted
     {
         Establish context = () =>
         {

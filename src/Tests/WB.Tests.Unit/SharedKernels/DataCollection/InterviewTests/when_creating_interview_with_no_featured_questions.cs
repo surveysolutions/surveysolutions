@@ -18,7 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext = new EventContext();
 
-            interviewId = Guid.Parse("11000000000000000000000000000000");
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
@@ -31,13 +30,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => repository.GetQuestionnaire(questionnaireId) == questionaire &&
                 repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, DateTime.Now, responsibleSupervisorId);
+            interview.CreateInterviewOnClient(questionnaireId, questionnaireVersion, responsibleSupervisorId, DateTime.Now, userId);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();
@@ -61,6 +58,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static long questionnaireVersion;
         private static Guid userId;
         private static Guid responsibleSupervisorId;
-        private static Guid interviewId;
+        private static Interview interview;
     }
 }

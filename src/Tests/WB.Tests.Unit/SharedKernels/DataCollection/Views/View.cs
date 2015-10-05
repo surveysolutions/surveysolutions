@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.Views
 {
-    public class View : IReadSideRepositoryEntity
+    internal class View : IReadSideRepositoryEntity
     {
         public long Version { get; set; }
     }

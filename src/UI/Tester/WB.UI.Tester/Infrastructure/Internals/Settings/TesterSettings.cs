@@ -1,19 +1,15 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Preferences;
-using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
-    internal class TesterSettings : ITesterSettings, IEnumeratorSettings
+    internal class TesterSettings : IEnumeratorSettings
     {
-        private const string ApplicationNameParameterName = "ApplicationName";
-        private const string DesignerEndpointParameterName = "DesignerEndpointV9";
+        private const string DesignerEndpointParameterName = "DesignerEndpointV10";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
@@ -44,7 +40,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
-        public TimeSpan RequestTimeout
+        public TimeSpan Timeout
         {
             get
             {
@@ -83,30 +79,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return defValue;
             }
         }
-
-        public string ApplicationVersion
-        {
-            get
-            {
-                return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
-            }
-        }
-
-        public string EngineVersion
-        {
-            get { return this.versionService.GetExpressionsEngineSupportedVersion().ToString(); }
-        }
-
-        public string OSVersion
-        {
-            get { return Build.VERSION.Release; }
-        }
-
-        public string ApplicationName
-        {
-            get { return SharedPreferences.GetString(ApplicationNameParameterName, Application.Context.Resources.GetString(Resource.String.ApplicationName)); }
-        }
-
+        
         public static bool IsDebug
         {
             get

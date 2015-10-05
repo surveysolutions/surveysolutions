@@ -6,9 +6,8 @@ namespace Main.Core.Entities.SubEntities
     {
         SingleOption = 0,
 
-        [Obsolete] YesNo = 1,
-
-        [Obsolete] DropDownList = 2,
+        [Obsolete("db contains at least one questionnaire")]
+        YesNo = 1,
 
         MultyOption = 3,
 
@@ -20,7 +19,8 @@ namespace Main.Core.Entities.SubEntities
 
         Text = 7,
 
-        [Obsolete] AutoPropagate = 8,
+        [Obsolete("db contains a bunch of them")]
+        AutoPropagate = 8,
 
         TextList = 9,
 

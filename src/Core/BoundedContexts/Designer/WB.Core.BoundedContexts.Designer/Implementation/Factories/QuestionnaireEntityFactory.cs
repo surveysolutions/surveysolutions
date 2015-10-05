@@ -64,7 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 case QuestionType.MultyOption:
                     return new MultyOptionsQuestion();
 
-                case QuestionType.DropDownList:
                 case QuestionType.SingleOption:
                 case QuestionType.YesNo:
                     return new SingleQuestion();

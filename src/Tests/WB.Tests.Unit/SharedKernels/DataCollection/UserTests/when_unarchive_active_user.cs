@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            user = CreateUser();
+            user = Create.User();
         };
 
         Because of = () =>

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
 {
@@ -14,7 +17,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
     {
         Establish context = () =>
         {
-            questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
+                => processor.GetIdentifiersUsedInExpression("roster.Max(x => x.age) > maxAge") == new[] { "roster", "age", "maxAge" });
+
+            questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.Apply(Create.Event.AddGroup(chapterId));
             questionnaire.Apply(Create.Event.AddGroup(rosterId, variableName: "roster", parentId: chapterId));
             questionnaire.Apply(Create.Event.GroupBecameRoster(rosterId));
@@ -24,8 +30,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
             questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(rosterQuestionId, variableName: "age"));
             questionnaire.Apply(Create.Event.AddTextQuestion(existingQuestionId, parentId: chapterId));
             questionnaire.Apply(Create.Event.UpdateNumericIntegerQuestion(existingQuestionId, variableName: "maxAge"));
-
-            RegisterExpressionProcessorMock("roster.Max(x => x.age) > maxAge", new[] { "roster", "age", "maxAge" });
 
             eventContext = new EventContext();
         };

@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
@@ -23,7 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         private Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -63,19 +63,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-                CreateInterviewExpressionStateProviderStub());
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, preloadedDataDto, answersTime, supervisorId);
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
 
         Cleanup stuff = () =>
         {
@@ -96,7 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
         private static EventContext eventContext;
-        private static Guid interviewId;
         private static Guid userId;
         private static Guid questionnaireId;
         private static PreloadedDataDto preloadedDataDto;
@@ -107,5 +100,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static int prefilledIntQuestionAnswer;
         private static Guid rosterTitleQuestionId;
         private static string rosterTitleQuestionAnswer;
+        private static Interview interview;
     }
 }

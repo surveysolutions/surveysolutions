@@ -8,7 +8,7 @@ using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
