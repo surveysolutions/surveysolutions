@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
@@ -40,6 +41,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return false;
             }
             return obj is QuestionnaireIdentity && this.Equals((QuestionnaireIdentity)obj);
+        }
+
+        public static QuestionnaireIdentity Parse(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentNullException("the id is null or empty string");
+
+            var idParameters = id.Split('$');
+            if (idParameters.Length != 2)
+                throw new FormatException(String.Format("id value '{0}' is not in the correct format.", id));
+
+            try
+            {
+                var questionnaireId = Guid.Parse(idParameters[0]);
+                var version = long.Parse(idParameters[1]);
+
+                return new QuestionnaireIdentity(questionnaireId, version);
+            }
+            catch (Exception e)
+            {
+                throw new FormatException(String.Format("id value '{0}' is not in the correct format.", id), e);
+            }
         }
     }
 }
