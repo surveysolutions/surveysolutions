@@ -78,20 +78,25 @@
     <Compile Include="Entities\Interview\SingleOptionAnswer.cs" />
     <Compile Include="Entities\Interview\TextAnswer.cs" />
     <Compile Include="Entities\Interview\TextListAnswer.cs" />
-    <Compile Include="Entities\QuestionnaireIdentity.cs" />
     <Compile Include="Events\InterviewAnswersFromSyncPackageRestored.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
+    <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
+    <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
+    <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
+    <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\InterviewCompletionService.cs" />
     <Compile Include="Services\IQuestionnaireModelBuilder.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
@@ -116,7 +121,6 @@
     <Compile Include="Models\Questionnaire\Questions\SingleOptionQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\TextListQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\TextQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireReferenceModel.cs" />
     <Compile Include="Models\Questionnaire\RosterModel.cs" />
     <Compile Include="Models\Questionnaire\StaticTextModel.cs" />
@@ -130,13 +134,15 @@
     <Compile Include="Services\IAnswerToStringService.cs" />
     <Compile Include="Services\IInterviewViewModelFactory.cs" />
     <Compile Include="Services\IUserInteractionService.cs" />
+    <Compile Include="Services\IUserInterfaceStateService.cs" />
     <Compile Include="Services\IViewModelNavigationService.cs" />
     <Compile Include="EnumeratorSharedKernelModule.cs" />
     <Compile Include="Services\MaskText\MaskedText.cs" />
     <Compile Include="Services\MaskText\Range.cs" />
     <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\GroupChangedEventArgs.cs" />
+    <Compile Include="ViewModels\InterviewSummaryNavigationViewModel.cs" />
+    <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\ActiveGroupViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnsweringViewModel.cs" />
@@ -144,14 +150,15 @@
     <Compile Include="ViewModels\InterviewDetails\BeforeGroupChangedEventArgs.cs" />
     <Compile Include="ViewModels\InterviewDetails\BreadCrumbItemViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\BreadcrumbsViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Groups\InterviewStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupStateViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupStatus.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\GroupViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\SimpleGroupStatus.cs" />
     <Compile Include="ViewModels\InterviewDetails\IInterviewEntityViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\EnumeratorInterviewViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\InterviewCompletionStatisticsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\CompleteInterviewViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\InterviewCompleteMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\ISideBarSectionViewModelsFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\CascadingSingleOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\DateTimeQuestionViewModel.cs" />
@@ -184,7 +191,7 @@
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionViewModelFactory.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarShownMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\StaticTextViewModel.cs" />
-    <Compile Include="ViewModels\NavigationParams.cs" />
+    <Compile Include="ViewModels\NavigationIdentity.cs" />
     <Compile Include="ViewModels\NavigationState.cs" />
     <Compile Include="ViewModels\InterviewDetails\SectionChangeMessage.cs" />
     <Compile Include="ViewModels\ObservableRangeCollection.cs" />
@@ -192,6 +199,7 @@
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +234,10 @@
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="SiaqodbPortable, Version=4.0.2.27, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Siaqodb.5.0.0.7\lib\portable-net45+win+wpa81\SiaqodbPortable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>

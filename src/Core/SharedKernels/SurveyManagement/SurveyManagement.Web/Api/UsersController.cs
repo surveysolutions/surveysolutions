@@ -48,8 +48,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [Route("apis/v1/supervisors/{supervisorId:guid}/interviewers")]
         public UserApiView Intervievers(Guid supervisorId, int limit = 10, int offset = 1)
         {
-            var input = new InterviewersInputModel(supervisorId)
+            var input = new InterviewersInputModel
             {
+                ViewerId = supervisorId,
                 Page = this.CheckAndRestrictOffset(offset),
                 PageSize = this.CheckAndRestrictLimit(limit),
             };

@@ -42,7 +42,7 @@ try {
 		-KeystorePassword $KeystorePassword `
 		-KeystoreName 'WBCapi.keystore' `
 		-KeystoreAlias 'wbcapipublish' `
-		-CapiProject 'src\UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj' `
+		-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
 

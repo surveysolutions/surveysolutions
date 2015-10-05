@@ -644,6 +644,9 @@
                 question.variable = data.variable;
                 question.type = data.type;
                 question.linkedToQuestionId = data.linkedToQuestionId;
+                question.hasValidation = data.hasValidation;
+                question.hasCondition = data.hasCondition;
+
             });
 
             $rootScope.$on('staticTextUpdated', function (event, data) {
@@ -660,6 +663,7 @@
                 var group = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(group)) return;
                 group.title = data.title;
+                group.hasCondition = data.hasCondition;
             });
 
             $rootScope.$on('rosterUpdated', function (event, data) {
@@ -667,6 +671,7 @@
                 if (_.isNull(roster)) return;
                 roster.title = data.title;
                 roster.variable = data.variable;
+                roster.hasCondition = data.hasCondition;
             });
         }
     );

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             var interviews = Mock.Of<IReadSideKeyValueStorage<InterviewData>>(x => x.GetById(interviewId.FormatGuid()) == storedInterview);
 
             synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
-                x => x.BuildFrom(storedInterview, userId, InterviewStatus.RejectedBySupervisor, comments) == synchronizationDto);
+                x => x.BuildFrom(storedInterview, userId, InterviewStatus.RejectedBySupervisor, comments, Moq.It.IsAny<DateTime?>()) == synchronizationDto);
             
             denormalizer = CreateDenormalizer(
                 interviews : interviews,

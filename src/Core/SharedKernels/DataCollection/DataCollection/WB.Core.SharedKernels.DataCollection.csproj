@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
+    <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
     <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
     <Compile Include="DataCollectionInfrastructureModule.cs" />
     <Compile Include="DataTransferObjects\AnswerType.cs" />
+    <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserArchived.cs" />
@@ -252,9 +254,9 @@
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
+    <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
-    <Compile Include="Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\DomainQuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
@@ -269,7 +271,9 @@
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
+    <Compile Include="Utils\CuncurrentDictionaryExtensions.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
@@ -306,6 +310,10 @@
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
     <Compile Include="Views\UserDocument.cs" />
+    <Compile Include="WebApi\InterviewApiView.cs" />
+    <Compile Include="WebApi\InterviewPackageApiView.cs" />
+    <Compile Include="WebApi\QuestionnaireApiView.cs" />
+    <Compile Include="WebApi\InterviewerApiView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -315,6 +323,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
       <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
@@ -326,12 +338,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Implementation\ReadSide\" />
     <Folder Include="Implementation\Services\" />
-    <Folder Include="Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>

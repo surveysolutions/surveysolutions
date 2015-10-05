@@ -23,9 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
 
             filebasedExportedDataAccessor = CreateFilebasedExportedDataAccessor(
                 fileSystemAccessor:fileSystemAccessorMock.Object,
-                dataFiles: new[] { "f1", "f2" },
                 environmentFiles: new[] { "e1", "e2" },
-                zipCallback: (f, d) => addedFiles = f.ToArray());
+                dataFiles:new[] { "f1", "f2" },
+                zipCallback: (f) => addedFiles = f.ToArray());
         };
 
         Because of = () =>

@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            userAr = CreateUser();
+            userAr = Create.User();
             linkUserToDeviceCommand = Create.Command.LinkUserToDeviceCommand(userId, deviceId);
             eventContext = Create.EventContext();
         };

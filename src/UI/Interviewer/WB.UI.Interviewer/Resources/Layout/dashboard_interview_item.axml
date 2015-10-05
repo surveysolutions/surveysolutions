@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    style="@style/Dashboard_InterviewListItem">
+
+  <LinearLayout style="@style/Dashboard_InterviewItem_Layout"
+    local:MvxBind="Click LoadDashboardItemCommand;">
+    <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
+                  local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
+    <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
+
+      <TextView style="@style/Dashboard_InterviewItem_Title"
+        local:MvxBind="Text QuestionariName;" />
+      
+      <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
+          android:orientation="vertical"
+          local:MvxBind="ItemsSource PrefilledQuestions;"
+          local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
+
+      <TextView style="@style/Dashboard_InterviewItem_Comment"
+          local:MvxBind="Text DateComment;
+                         TextColor InterviewStatusToColor(Status);" />
+      
+      <TextView style="@style/Dashboard_InterviewItem_Comment"
+          local:MvxBind="Text Comment;
+                         TextColor InterviewStatusToColor(Status);" />
+      
+    </LinearLayout>
+  </LinearLayout>
+  <Button style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
+    android:text="\u2573"
+    local:MvxBind="Click RemoveInterviewCommand;
+                         Visible IsSupportedRemove;" />
+</RelativeLayout>
+

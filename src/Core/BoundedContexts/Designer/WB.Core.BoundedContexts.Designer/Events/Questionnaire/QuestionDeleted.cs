@@ -3,8 +3,6 @@
     using System;
 
     using Ncqrs.Eventing.Storage;
-
-    [EventName("RavenQuestionnaire.Core:Events:QuestionDeleted")]
     public class QuestionDeleted : QuestionnaireActiveEvent
     {
         public QuestionDeleted() {}

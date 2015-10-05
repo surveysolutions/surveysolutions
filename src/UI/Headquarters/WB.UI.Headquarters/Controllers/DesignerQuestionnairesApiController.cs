@@ -72,17 +72,16 @@ namespace WB.UI.Headquarters.Controllers
                 credentials: this.designerUserCredentials, 
                 request: new QuestionnaireListRequest()
                 {
-                    Filter = data.Request.Filter,
-                    PageIndex = data.Pager.Page,
-                    PageSize = data.Pager.PageSize,
+                    Filter = data.Filter,
+                    PageIndex = data.PageIndex,
+                    PageSize = data.PageSize,
                     SortOrder = data.SortOrder.GetOrderRequestString()
                 });
 
             return new DesignerQuestionnairesView()
                 {
                     Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() { Id = x.Id, Title = x.Title }),
-                    TotalCount = list.TotalCount,
-                    ItemsSummary = null
+                    TotalCount = list.TotalCount
                 };
         }
 

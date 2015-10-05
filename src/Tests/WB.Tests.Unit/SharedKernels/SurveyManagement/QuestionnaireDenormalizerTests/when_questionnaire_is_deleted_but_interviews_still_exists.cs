@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizerTests
 {
-    public class when_questionnaire_is_deleted_but_interviews_still_exists : QuestionnaireDenormalizerTestsContext
+    internal class when_questionnaire_is_deleted_but_interviews_still_exists : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>
         {

@@ -27,7 +27,13 @@ namespace WB.Tests.Integration
                 .Returns(fileSystemIoAccessor);
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
-            NcqrsEnvironment.Deconfigure();
+        }
+
+        public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
+        {
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<TInstance>())
+                .Returns(instance);
         }
     }
 }

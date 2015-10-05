@@ -46,5 +46,10 @@ namespace WB.UI.Tester
         {
             command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
         }
+
+        public void Include(TableRow row)
+        {
+            row.Visibility = ViewStates.Gone;
+        }
     }
 }

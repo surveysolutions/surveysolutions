@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
     [TestFixture]
-    public class UserARTests
+    internal class UserARTests
     {
         private EventContext eventContext;
 
@@ -137,9 +137,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             // arrange
             bool isLockedBySupervisor = true;
             bool isLockedByHQ = false;
+            User user = CreateUserAR();
 
             // act
-            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", new UserRoles[] { }, isLockedBySupervisor, isLockedByHQ, null, string.Empty, string.Empty);
+            user.CreateUser(
+                "my@email.com", isLockedBySupervisor, isLockedByHQ, "pwd", Guid.NewGuid(),
+                new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().IsLockedBySupervisor, Is.EqualTo(true));
@@ -150,9 +153,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             // arrange
             string specifiedName = "Green Lantern";
+            User user = CreateUserAR();
 
             // act
-            new User(Guid.NewGuid(), specifiedName, "pwd", "my@email.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
+            user.CreateUser(
+                "my@email.com", false, false, "pwd", Guid.NewGuid(),
+                new UserRoles[] { }, null, specifiedName, string.Empty, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Name, Is.EqualTo(specifiedName));
@@ -163,9 +169,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             // arrange
             string specifiedPassword = "hhg<8923s:0";
+            User user = CreateUserAR();
 
             // act
-            new User(Guid.NewGuid(), "name", specifiedPassword, "my@email.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
+            user.CreateUser(
+                "my@email.com", false, false, specifiedPassword, Guid.NewGuid(),
+                new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Password, Is.EqualTo(specifiedPassword));
@@ -176,9 +185,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             // arrange
             string specifiedEmail = "gmail@chucknorris.com";
+            User user = CreateUserAR();
 
             // act
-            new User(Guid.NewGuid(), "name", "pwd", specifiedEmail, new UserRoles[] { }, false, false, null, string.Empty,string.Empty);
+            user.CreateUser(
+                specifiedEmail, false, false, "pwd", Guid.NewGuid(),
+                new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Email, Is.EqualTo(specifiedEmail));
@@ -189,31 +201,36 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             // arrange
             Guid specifiedPublicKey = Guid.NewGuid();
+            User user = CreateUserAR();
 
             // act
-            new User(specifiedPublicKey, "name", "pwd", "my@email.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
+            user.CreateUser(
+                "my@email.com", false, false, "pwd", specifiedPublicKey,
+                new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
             Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().PublicKey, Is.EqualTo(specifiedPublicKey));
         }
 
         [Test]
-        public void ctor_When_three_roles_are_specified_Then_raised_NewUserCreated_event_with_specified_roles()
+        public void ctor_When_two_roles_are_specified_Then_raised_NewUserCreated_event_with_specified_roles()
         {
             // arrange
-            IEnumerable<UserRoles> threeSpecifedRoles = new [] { UserRoles.Supervisor,  UserRoles.User };
+            UserRoles[] twoSpecifedRoles = { UserRoles.Supervisor, UserRoles.User };
+            User user = CreateUserAR();
 
             // act
-            new User(Guid.NewGuid(), "name", "pwd", "my@email.com", threeSpecifedRoles.ToArray(), false, false, null,string.Empty,string.Empty);
+            user.CreateUser(
+                "my@email.com", false, false, "pwd", Guid.NewGuid(),
+                twoSpecifedRoles, null, "name", string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Roles, Is.EquivalentTo(threeSpecifedRoles));
+            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Roles, Is.EquivalentTo(twoSpecifedRoles));
         }
 
         private static User CreateUserAR()
         {
-            Guid id = Guid.Parse("11111111111111111111111111111111");
-            return new User(id, "name", "pwd", "e@example.com", new UserRoles[] { }, false, false, null,string.Empty,string.Empty);
+            return new User();
         }
 
         private T GetSingleRaisedEvent<T>()

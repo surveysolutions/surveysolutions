@@ -89,20 +89,9 @@
                 item.isSelected(dto.Selected || false);
                 return item;
             }
-        },
-        user = {
-            getDtoId: function (dto) { return dto.PublicKey; },
-            fromDto: function (dto) {
-                var item = new model.User();
-                item.id(dto.PublicKey);
-                item.name(dto.UserName);
-                item.email(dto.Email);
-                return item;
-            }
-        };
+        }
     return {
         question: question,
-        user: user,
         option: option
     };
 };

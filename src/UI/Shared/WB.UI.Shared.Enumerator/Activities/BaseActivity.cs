@@ -17,10 +17,5 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnViewModelSet();
             this.SetContentView(this.ViewResourceId);
         }
-
-        public override void OnBackPressed()
-        {
-            this.ViewModel.NavigateToPreviousViewModel();
-        }
     }
 }

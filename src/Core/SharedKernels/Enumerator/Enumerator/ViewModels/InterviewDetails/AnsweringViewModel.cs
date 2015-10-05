@@ -3,21 +3,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class AnsweringViewModel : MvxNotifyPropertyChanged
     {
         private readonly ICommandService commandService;
+        readonly IUserInterfaceStateService userInterfaceStateService;
 
         private int inProgressDepth = 0;
 
         protected AnsweringViewModel() { }
 
-        public AnsweringViewModel(ICommandService commandService)
+        public AnsweringViewModel(ICommandService commandService, IUserInterfaceStateService userInterfaceStateService)
         {
             this.commandService = commandService;
+            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         private bool inProgress;
@@ -39,11 +43,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
+            await this.ExecuteCommand(answerCommand);
+        }
+
+        public virtual async Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
+        {
+            await this.ExecuteCommand(command);
+        }
+
+        private async Task ExecuteCommand(ICommand answerCommand)
+        {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             try
             {
                 this.StartInProgressIndicator();
+
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
 
                 lock (this.cancellationLockObject)
                 {
@@ -54,9 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 await
                     this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token);
             }
-            catch (OperationCanceledException)
-            {
-            }
+            catch (OperationCanceledException) {}
             finally
             {
                 lock (this.cancellationLockObject)

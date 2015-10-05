@@ -80,6 +80,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account doesn&apos;t have Interviewer role.
+        /// </summary>
+        public static string AccountIsNotAnInterviewer {
+            get {
+                return ResourceManager.GetString("AccountIsNotAnInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first..
         /// </summary>
         public static string AccountIsNotApprovedOnServer {
@@ -130,6 +139,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string CheckForUpdatesText {
             get {
                 return ResourceManager.GetString("CheckForUpdatesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?.
+        /// </summary>
+        public static string Confirmation_Interviewer_ReassignUserToAnotherDevice {
+            get {
+                return ResourceManager.GetString("Confirmation_Interviewer_ReassignUserToAnotherDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?.
+        /// </summary>
+        public static string Confirmation_Interviewer_RemoveAllDataFromOldDevice {
+            get {
+                return ResourceManager.GetString("Confirmation_Interviewer_RemoveAllDataFromOldDevice", resourceCulture);
             }
         }
         
@@ -190,11 +217,38 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No questionnaires found.
+        /// </summary>
+        public static string Dashboard_EmptySearchResult {
+            get {
+                return ResourceManager.GetString("Dashboard_EmptySearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to have not been updated.
+        /// </summary>
+        public static string Dashboard_HasNotBeenUpdated {
+            get {
+                return ResourceManager.GetString("Dashboard_HasNotBeenUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0:dd MMM HH:mm}.
         /// </summary>
         public static string Dashboard_LastEntryDate_Format {
             get {
                 return ResourceManager.GetString("Dashboard_LastEntryDate_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to were updated {0}.
+        /// </summary>
+        public static string Dashboard_LastUpdated {
+            get {
+                return ResourceManager.GetString("Dashboard_LastUpdated", resourceCulture);
             }
         }
         
@@ -244,6 +298,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization endpoint.
+        /// </summary>
+        public static string EndpointHint {
+            get {
+                return ResourceManager.GetString("EndpointHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web Service Endpoint:.
         /// </summary>
         public static string EndpointText {
@@ -276,6 +339,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string GpsQuestion_Timeout {
             get {
                 return ResourceManager.GetString("GpsQuestion_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No internet access to supervisor application. Check server adddress and(or) network settings.
+        /// </summary>
+        public static string HostUnreachable {
+            get {
+                return ResourceManager.GetString("HostUnreachable", resourceCulture);
             }
         }
         
@@ -330,15 +402,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_PreconditionFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your version of application does not support of this questionnaire. Please, update application..
-        /// </summary>
-        public static string ImportQuestionnaire_Error_UpgradeRequired {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_Error_UpgradeRequired", resourceCulture);
             }
         }
         
@@ -622,6 +685,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To complete screen.
+        /// </summary>
+        public static string Interview_NextCompleteInterview_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_NextCompleteInterview_ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
@@ -793,11 +865,56 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active users: {0}.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string Interviewer_Login_ActiveUsers_Label {
+        public static string Interviewer_RelinkDevice_Cancel {
             get {
-                return ResourceManager.GetString("Interviewer_Login_ActiveUsers_Label", resourceCulture);
+                return ResourceManager.GetString("Interviewer_RelinkDevice_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You already assigned to another device.
+        /// </summary>
+        public static string Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage {
+            get {
+                return ResourceManager.GetString("Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relink.
+        /// </summary>
+        public static string Interviewer_RelinkDevice_RelinkButtonText {
+            get {
+                return ResourceManager.GetString("Interviewer_RelinkDevice_RelinkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you relink to this device &lt;br/&gt; all data on the old one will be lost.
+        /// </summary>
+        public static string Interviewer_RelinkDevice_RelinkMessage {
+            get {
+                return ResourceManager.GetString("Interviewer_RelinkDevice_RelinkMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string Interviewer_Troubleshooting {
+            get {
+                return ResourceManager.GetString("Interviewer_Troubleshooting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try to sign in online.
+        /// </summary>
+        public static string Interviewer_TryOnlineLogin {
+            get {
+                return ResourceManager.GetString("Interviewer_TryOnlineLogin", resourceCulture);
             }
         }
         
@@ -829,11 +946,65 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to new version available.
+        /// </summary>
+        public static string Login_App_NewVersionAvailable {
+            get {
+                return ResourceManager.GetString("Login_App_NewVersionAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to version {0}.
+        /// </summary>
+        public static string Login_App_Version {
+            get {
+                return ResourceManager.GetString("Login_App_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Endpoint was not reached.
+        /// </summary>
+        public static string Login_EndpointWasNotReached {
+            get {
+                return ResourceManager.GetString("Login_EndpointWasNotReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Endpoint was reached.
+        /// </summary>
+        public static string Login_EndpointWasReached {
+            get {
+                return ResourceManager.GetString("Login_EndpointWasReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
         /// </summary>
         public static string Login_Error_NotFound {
             get {
                 return ResourceManager.GetString("Login_Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entered endpoint is unreachable. Check internet connection or enter correct url.
+        /// </summary>
+        public static string Login_Validation_EndpointIsUnreachable {
+            get {
+                return ResourceManager.GetString("Login_Validation_EndpointIsUnreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong password.
+        /// </summary>
+        public static string Login_WrondPassword {
+            get {
+                return ResourceManager.GetString("Login_WrondPassword", resourceCulture);
             }
         }
         
@@ -883,6 +1054,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No network. Check your network settings.
+        /// </summary>
+        public static string NoNetwork {
+            get {
+                return ResourceManager.GetString("NoNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Android version:.
         /// </summary>
         public static string OSVersionText {
@@ -910,6 +1090,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google Play Services are not available.
+        /// </summary>
+        public static string PlayServicesLocationWatcher_Google_Play_Services_are_not_available {
+            get {
+                return ResourceManager.GetString("PlayServicesLocationWatcher_Google_Play_Services_are_not_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location Client not started.
+        /// </summary>
+        public static string PlayServicesLocationWatcher_Location_Client_not_started {
+            get {
+                return ResourceManager.GetString("PlayServicesLocationWatcher_Location_Client_not_started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot start MvxLocation service more than once.
+        /// </summary>
+        public static string PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once {
+            get {
+                return ResourceManager.GetString("PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to START.
         /// </summary>
         public static string PrefilledQuestions_StartInterview {
@@ -933,6 +1140,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string RealQuestion_Hint {
             get {
                 return ResourceManager.GetString("RealQuestion_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request cancelled by user.
+        /// </summary>
+        public static string RequestCanceledByUser {
+            get {
+                return ResourceManager.GetString("RequestCanceledByUser", resourceCulture);
             }
         }
         
@@ -1009,15 +1225,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings.
-        /// </summary>
-        public static string SettingsText {
-            get {
-                return ResourceManager.GetString("SettingsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sign out.
         /// </summary>
         public static string SignOutText {
@@ -1032,6 +1239,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have any assignments on this device. Send tablet information, clear application&apos;s data and login by another account.
+        /// </summary>
+        public static string Synchronization_UserLinkedToAnotherDevice_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Description", resourceCulture);
             }
         }
         
@@ -1072,6 +1288,150 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create backup.
+        /// </summary>
+        public static string Troubleshooting_Backup {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong and backup failed to be created.
+        /// </summary>
+        public static string Troubleshooting_BackupErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup was saved to {0}.
+        /// </summary>
+        public static string Troubleshooting_BackupWasSaved {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupWasSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: {0}. Check for a new version.
+        /// </summary>
+        public static string Troubleshooting_CurrentVersion_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("Troubleshooting_CurrentVersion_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package is successfully sent.
+        /// </summary>
+        public static string Troubleshooting_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package of size {0} will be sent via network. Are you sure you want to send it?.
+        /// </summary>
+        public static string Troubleshooting_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        /// </summary>
+        public static string Troubleshooting_NewVerisonExist {
+            get {
+                return ResourceManager.GetString("Troubleshooting_NewVerisonExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of application.
+        /// </summary>
+        public static string Troubleshooting_NoNewVersion {
+            get {
+                return ResourceManager.GetString("Troubleshooting_NoNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong and tabled failed to be restored.
+        /// </summary>
+        public static string Troubleshooting_RestorationErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestorationErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore from backup.
+        /// </summary>
+        public static string Troubleshooting_Restore {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}.
+        /// </summary>
+        public static string Troubleshooting_RestoreConfirmation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoreConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet was successfully restored.
+        /// </summary>
+        public static string Troubleshooting_RestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending of information package is failed.
+        /// </summary>
+        public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendingOfInformationPackageErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send tablet&apos;s information.
+        /// </summary>
+        public static string Troubleshooting_SendTabletInformation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendTabletInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string Troubleshooting_Title {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred on version check. Please, check settings or try again later..
+        /// </summary>
+        public static string Troubleshooting_Unknown_ErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Unknown_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try again.
         /// </summary>
         public static string TryAgainLink {
@@ -1086,6 +1446,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error.
+        /// </summary>
+        public static string UnexpectedException {
+            get {
+                return ResourceManager.GetString("UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version of application was released. Please, update the application.
+        /// </summary>
+        public static string UpgradeRequired {
+            get {
+                return ResourceManager.GetString("UpgradeRequired", resourceCulture);
             }
         }
         

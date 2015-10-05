@@ -5,11 +5,10 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public struct InterviewItemId
     {
-        public InterviewItemId(Guid id, decimal[] rosterVector)
+        public InterviewItemId(Guid id, decimal[] rosterVector):this()
         {
             Id = id;
-            this.interviewItemRosterVector = rosterVector ?? new decimal[0];
-            this.RosterVector = null;
+            this.InterviewItemRosterVector = rosterVector ?? new decimal[0];
         }
 
         public InterviewItemId(Guid id)
@@ -17,24 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
         public Guid Id;
 
-        public decimal[] InterviewItemRosterVector
-        {
-            get
-            {
-                if (this.interviewItemRosterVector == null)
-                {
-                    this.interviewItemRosterVector = this.RestoreFromRosterVectorInOldIntFormat();
-                }
-
-                return this.interviewItemRosterVector;
-            }
-            set { this.interviewItemRosterVector = value; }
-        }
-
-        private decimal[] interviewItemRosterVector;
-
-        [Obsolete("please use InterviewItemRosterVector instead")] 
-        public int[] RosterVector;
+        public decimal[] InterviewItemRosterVector { get; set; }
 
         public bool CompareWithVector(decimal[] vector)
         {
@@ -78,13 +60,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
-        }
-
-        private decimal[] RestoreFromRosterVectorInOldIntFormat()
-        {
-            if (this.RosterVector == null)
-                return new decimal[0];
-            return this.RosterVector.Select(Convert.ToDecimal).ToArray();
         }
 
         private string DecimalValueToString(decimal decimalValue)

@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SingleOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
         public event EventHandler BeforeSelected;
-
+        public event EventHandler AnswerRemoved;
         public EnablementViewModel Enablement { get; set; }
 
         public decimal[] RosterVector { get; set; }
@@ -44,11 +44,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public IMvxCommand RemoveAnswerCommand
+        {
+            get
+            {
+                return new MvxCommand(OnAnswerRemoved);
+            }
+        }
+
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; set; }
 
         private void OnBeforeSelected()
         {
             if (this.BeforeSelected != null) this.BeforeSelected.Invoke(this, EventArgs.Empty);
+        }
+
+
+        protected virtual void OnAnswerRemoved()
+        {
+            var handler = this.AnswerRemoved;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
     }
 }

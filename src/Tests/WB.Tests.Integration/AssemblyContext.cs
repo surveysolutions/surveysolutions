@@ -11,12 +11,6 @@ namespace WB.Tests.Integration
         public void OnAssemblyStart()
         {
             Setup.MockedServiceLocator();
-
-            NcqrsEnvironment.SetDefault(Mock.Of<ILogger>());
-            NcqrsEnvironment.SetGetter<ILogger>(Mock.Of<ILogger>);
-            NcqrsEnvironment.SetGetter<IClock>(Mock.Of<IClock>);
-
-            NcqrsEnvironment.Deconfigure();
         }
 
         public void OnAssemblyComplete() {}

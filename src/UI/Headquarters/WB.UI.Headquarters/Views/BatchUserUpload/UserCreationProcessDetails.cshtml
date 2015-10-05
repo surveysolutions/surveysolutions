@@ -7,13 +7,18 @@
 @{
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
 }
-<div class="row-fluid">
+<div class="row-fluid" data-bind="visible: isDeleted()">
+    <h3>
+        @BatchUpload.UserPreloadingProcessIsMissing
+    </h3>
+</div>
+<div class="row-fluid" data-bind="visible: !isDeleted()">
 
     <h3 data-bind="visible: state()==@((int)UserPrelodingState.CreatingUsers) || state()==@((int)UserPrelodingState.ReadyForUserCreation)"><b data-bind="text: createdUsersCount"></b> @BatchUpload.OutOf <b data-bind="text: recordsCount"></b> @BatchUpload.UsersHaveBeenCreated</h3>
 
     <div data-bind="visible: state()==@((int) UserPrelodingState.Finished)">
         <h3>@BatchUpload.All <b data-bind="text: recordsCount"></b> @BatchUpload.UsersHaveBeenCreated</h3>
-        @Html.ActionLink(BatchUpload.BrowseTeams, "Index","Supervisor", null, new { @class = "btn btn-default btn-primary" })
+        @Html.ActionLink(BatchUpload.BrowseTeams, "Index", "Supervisor", null, new { @class = "btn btn-default btn-primary" })
     </div>
 
     <div data-bind="visible: state()==@((int)UserPrelodingState.FinishedWithError)">
@@ -27,7 +32,7 @@
 {
     @Scripts.Render("~/Scripts/components/bindings.js", "~/Scripts/pages/userpreloading.js")
     <script type="text/javascript">
-        var updateVerificationStatusApiUrl = '@(Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "PreloadingApi", action = "UserPreloadingDetails"})+"/"+Model)';
+        var updateVerificationStatusApiUrl = '@(Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UserPreloading", action = "UserPreloadingDetails"})+"/"+Model)';
         var viewModel = new Supervisor.VM.Preloading.UserPreloading(updateVerificationStatusApiUrl, [@((int)UserPrelodingState.CreatingUsers), @((int)UserPrelodingState.ReadyForUserCreation)]);
         viewModel.load();
 

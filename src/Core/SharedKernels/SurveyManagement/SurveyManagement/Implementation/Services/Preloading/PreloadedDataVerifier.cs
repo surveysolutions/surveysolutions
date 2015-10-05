@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -24,15 +25,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
         private readonly IUserViewFactory userViewFactory;
-
-
-        private static class ServiceColumns
-        {
-            public const string Id = "Id";
-            public const string ParentId = "ParentId";
-
-            public const string SupervisorName = "_Supervisor";
-        }
         
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
@@ -239,7 +231,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private IEnumerable<string> GetListOfPermittedExtraColumnsForLevel(HeaderStructureForLevel levelExportStructure)
         {
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
+            {
                 yield return ServiceColumns.SupervisorName;
+            }
+            
         }
 
         private IEnumerable<PreloadedDataVerificationReference> OrphanRosters(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,

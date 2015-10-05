@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
-    public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
+    internal class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,
         IQueryableReadSideRepositoryReader<T> 
         where T : class, IReadSideRepositoryEntity

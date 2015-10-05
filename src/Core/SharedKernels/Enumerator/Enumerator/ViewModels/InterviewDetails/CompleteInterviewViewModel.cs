@@ -1,66 +1,83 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CompleteInterviewViewModel : MvxViewModel, IInterviewEntityViewModel
+    public class CompleteInterviewViewModel : MvxNotifyPropertyChanged
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-
+        private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IInterviewCompletionService completionService;
-        
+        private readonly IStatefulInterviewRepository interviewRepository;
+
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
             IPrincipal principal, 
-            IInterviewCompletionService completionService)
+            IInterviewCompletionService completionService, 
+            IStatefulInterviewRepository interviewRepository, 
+            IMvxMessenger messenger,
+            InterviewStateViewModel interviewState)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.principal = principal;
             this.completionService = completionService;
+            this.interviewRepository = interviewRepository;
+            this.messenger = messenger;
+            this.InterviewState = interviewState;
         }
 
         Guid interviewId;
 
-        public Identity Identity { get { return null; } }
-
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId)
         {
             this.interviewId = Guid.Parse(interviewId);
+
+            InterviewState.Init(interviewId, null);
+
+            var questionsCount = InterviewState.QuestionsCount;//  interview.CountActiveQuestionsInInterview();
+            this.AnsweredCount = InterviewState.AnsweredQuestionsCount;// interview.CountAnsweredQuestionsInInterview();
+            this.ErrorsCount = InterviewState.InvalidAnswersCount;// interview.CountInvalidQuestionsInInterview();
+            this.UnansweredCount = questionsCount - this.AnsweredCount;
         }
+
+        public int AnsweredCount { get; set; }
+
+        public int UnansweredCount { get; set; }
+
+        public int ErrorsCount { get; set; }
+
+
+        public InterviewStateViewModel InterviewState { get; set; }
 
         private IMvxCommand completeInterviewCommand;
         public IMvxCommand CompleteInterviewCommand
         {
             get
             {
-                return this.completeInterviewCommand ?? (this.completeInterviewCommand = new MvxCommand(async () => await this.CompleteInterviewAsync()));
+                return this.completeInterviewCommand ?? 
+                    (this.completeInterviewCommand = new MvxCommand(async () => await this.CompleteInterviewAsync(), () => !wasThisInterviewCompleted));
             }
         }
 
-        private string completeComment;
-        public string CompleteComment
-        {
-            get { return this.completeComment; }
-            set { this.completeComment = value; this.RaisePropertyChanged(); }
-        }
+        public string CompleteComment { get; set; }
 
         private bool wasThisInterviewCompleted = false;
 
         private async Task CompleteInterviewAsync()
         {
-            if (this.wasThisInterviewCompleted) return;
-
             this.wasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
@@ -75,6 +92,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.completionService.CompleteInterview(this.interviewId, this.principal.CurrentUserIdentity.UserId);
 
             this.viewModelNavigationService.NavigateToDashboard();
+
+            messenger.Publish(new InterviewCompleteMessage(this));
         }
+
     }
 }

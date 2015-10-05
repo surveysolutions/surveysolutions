@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
-
+        private readonly string unknown = "Unknown";
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
         public override object[] Readers
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] {this.users, this.interviewSummares}; }
         }
 
-        private InterviewStatuses RecordFirstAnswerIfNeeded(InterviewStatuses interviewStatuses, Guid interviewId, Guid userId, DateTime answerTime)
+        private InterviewStatuses RecordFirstAnswerIfNeeded(Guid eventIdentifier, InterviewStatuses interviewStatuses, Guid interviewId, Guid userId, DateTime answerTime)
         {
             if(!interviewStatuses.InterviewCommentedStatuses.Any())
                    return interviewStatuses;
@@ -72,14 +72,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             interviewStatuses = AddCommentedStatus(
+               eventIdentifier,
                interviewStatuses,
                userId,
                interviewSummary.TeamLeadId,
                interviewSummary.ResponsibleId,
                InterviewExportedAction.FirstAnswerSet,
                answerTime,
-               "",
-               GetResponsibleIdName(userId));
+               "");
 
             return interviewStatuses;
         }
@@ -120,14 +120,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.Restarted,
                  evnt.Payload.RestartTime ?? evnt.EventTimeStamp,
-                evnt.Payload.Comment,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                evnt.Payload.Comment);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<SupervisorAssigned> evnt)
@@ -137,14 +137,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 evnt.Payload.SupervisorId,
                 null,
                 InterviewExportedAction.SupervisorAssigned,
                 evnt.EventTimeStamp,
-                null,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                null);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewCompleted> evnt)
@@ -154,14 +154,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.Completed,
                 evnt.Payload.CompleteTime ?? evnt.EventTimeStamp,
-                evnt.Payload.Comment,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                evnt.Payload.Comment);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRejected> evnt)
@@ -171,14 +171,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.RejectedBySupervisor,
                 evnt.Payload.RejectTime ?? evnt.EventTimeStamp,
-                evnt.Payload.Comment,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                evnt.Payload.Comment);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewApproved> evnt)
@@ -188,14 +188,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.ApprovedBySupervisor,
                 evnt.Payload.ApproveTime ?? evnt.EventTimeStamp,
-                evnt.Payload.Comment,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                evnt.Payload.Comment);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRejectedByHQ> evnt)
@@ -205,14 +205,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.RejectedByHeadquarter,
                 evnt.EventTimeStamp,
-                evnt.Payload.Comment,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                evnt.Payload.Comment);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewApprovedByHQ> evnt)
@@ -222,14 +222,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.ApprovedByHeadquarter,
                 evnt.EventTimeStamp,
-                evnt.Payload.Comment,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                evnt.Payload.Comment);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewerAssigned> evnt)
@@ -239,14 +239,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 evnt.Payload.InterviewerId,
                 InterviewExportedAction.InterviewerAssigned,
                 evnt.Payload.AssignTime ?? evnt.EventTimeStamp,
-                null,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                null);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewDeleted> evnt)
@@ -255,26 +255,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 null,
                 null,
                 InterviewExportedAction.Deleted,
                 evnt.EventTimeStamp,
-                null,
                 null);
         }
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewHardDeleted> evnt)
         {
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 null,
                 null,
                 InterviewExportedAction.Deleted,
                 evnt.EventTimeStamp,
-                null,
                 null);
         }
 
@@ -288,19 +288,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return interviewStatuses;
 
             return AddCommentedStatus(
+                evnt.EventIdentifier,
                 interviewStatuses,
                 evnt.Payload.UserId,
                 interviewSummary.TeamLeadId,
                 interviewSummary.ResponsibleId,
                 InterviewExportedAction.Restored,
                 evnt.EventTimeStamp,
-                null,
-                GetResponsibleIdName(evnt.Payload.UserId));
+                null);
         }
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            return Monads.Maybe(() => this.users.GetById(responsibleId).UserName) ?? "Unknown";
+            return Monads.Maybe(() => this.users.GetById(responsibleId).UserName) ?? unknown;
         }
 
         private InterviewStatuses CreateInterviewStatuses(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
@@ -315,14 +315,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         private InterviewStatuses AddCommentedStatus(
+            Guid eventId,
             InterviewStatuses interviewStatuses,
             Guid userId,
             Guid? supervisorId,
             Guid? interviewerId,
             InterviewExportedAction status,
             DateTime timestamp,
-            string comment,
-            string responsibleName)
+            string comment)
         {
             TimeSpan? timeSpanWithPreviousStatus = null;
 
@@ -332,14 +332,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
             var supervisorName = supervisorId.HasValue ? GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? GetResponsibleIdName(interviewerId.Value) : "";
+
+            var statusOriginator = this.users.GetById(userId);
+
             interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
+                eventId,
                 userId,
                 supervisorId,
                 interviewerId,
                 status,
                 timestamp,
                 comment,
-                responsibleName,
+                statusOriginator == null ? unknown : statusOriginator.UserName,
+                statusOriginator == null || !statusOriginator.Roles.Any()
+                    ? UserRoles.Undefined
+                    : statusOriginator.Roles.First(),
                 timeSpanWithPreviousStatus,
                 supervisorName,
                 interviewerName));
@@ -349,62 +356,62 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<TextListQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
 
         public InterviewStatuses Update(InterviewStatuses currentState, IPublishedEvent<PictureQuestionAnswered> evnt)
         {
-            return RecordFirstAnswerIfNeeded(currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
+            return RecordFirstAnswerIfNeeded(evnt.EventIdentifier, currentState, evnt.EventSourceId, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc);
         }
     }
 }

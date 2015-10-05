@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -13,24 +16,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
-        private readonly IDataExportService dataExportService;
-        private readonly IEnvironmentContentService environmentContentService;
+        private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
+        private readonly ITabularFormatExportService tabularFormatExportService;
+        private readonly IEnvironmentContentService environmentContentService; 
         private readonly ILogger logger;
+        private IMetadataExportService metadataExportService;
 
         private const string ExportedDataFolderName = "ExportedData";
         private const string ExportedFilesFolderName = "ExportedFiles";
+        private const string allDataFolder = "AllData";
+        private const string approvedDataFolder = "ApprovedData";
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
         private readonly string pathToHistoryFiles;
-
-        public FilebasedExportedDataAccessor(IFileSystemAccessor fileSystemAccessor,
-            string folderPath, IDataExportService dataExportService, IEnvironmentContentService environmentContentService, ILogger logger, IArchiveUtils archiveUtils, InterviewHistorySettings interviewHistorySettings)
+        
+        private readonly ConcurrentDictionary<string, object> cancellationLockObjects = new ConcurrentDictionary<string, object>(); 
+        private readonly HashSet<string> dataFoldersToDelete=new HashSet<string>(); 
+        public FilebasedExportedDataAccessor(
+            IFileSystemAccessor fileSystemAccessor,
+            string folderPath, 
+            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
+            IMetadataExportService metadataExportService,
+            IEnvironmentContentService environmentContentService, 
+            ILogger logger, 
+            IArchiveUtils archiveUtils, 
+            InterviewDataExportSettings interviewDataExportSettings, 
+            ITabularFormatExportService tabularFormatExportService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.dataExportService = dataExportService;
+            this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
+            this.metadataExportService = metadataExportService;
             this.environmentContentService = environmentContentService;
             this.logger = logger;
             this.archiveUtils = archiveUtils;
+            this.tabularFormatExportService = tabularFormatExportService;
             this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
@@ -41,10 +60,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
 
-            if (interviewHistorySettings.EnableInterviewHistory)
+            if (interviewDataExportSettings.EnableInterviewHistory)
             {
-                this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewHistorySettings.DirectoryPath,
-                    interviewHistorySettings.ExportedDataFolderName);
+                this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
+                    interviewDataExportSettings.ExportedDataFolderName);
 
                 if (!fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
                     fileSystemAccessor.CreateDirectory(this.pathToHistoryFiles);
@@ -117,6 +136,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
+        public void DeleteAllDataFolder(Guid questionnaireId, long version)
+        {
+            var dataFolder = GetAllDataFolder(questionnaireId, version);
+            dataFoldersToDelete.Add(dataFolder);
+        }
+
+        public void DeleteApprovedDataFolder(Guid questionnaireId, long version)
+        {
+            var dataFolder = GetApprovedDataFolder(questionnaireId, version);
+            dataFoldersToDelete.Add(dataFolder);
+        }
+
+        private string GetAllDataFolder(Guid questionnaireId, long version)
+        {
+            return this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(
+                    questionnaireId, version), allDataFolder);
+        }
+
+        private string GetApprovedDataFolder(Guid questionnaireId, long version)
+        {
+            return this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(
+                    questionnaireId, version), approvedDataFolder);
+        }
+
         private void CreateExportFolder(string folderPath)
         {
             var dataFolderForTemplatePath = folderPath;
@@ -140,42 +183,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
         }
 
-        public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType)
+        public string GetFilePathToExportedCompressedData(Guid questionnaireId, long version,
+            ExportDataType exportDataType)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
-
-            var fileName = string.Format("{0}_{1}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath), exportDataType.ToString());
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
-
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-
-            var filesToArchive = new List<string>();
-
-            switch (exportDataType)
-            {
-                case ExportDataType.Stata:
-                {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
-                    break;
-                }
-                case ExportDataType.Spss:
-                {
-                    filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
-                    break;
-                }
-                case ExportDataType.Tab:
-                default:
-                {
-                    filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
-                    filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath));
-                    break;
-                }
-            }
-
-            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
-
-            return archiveFilePath;
+            return GetFilePathToExportedCompressedDataImpl(questionnaireId, version, exportDataType, "All",
+                GetAllDataFolder, this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync);
         }
 
         public string GetFilePathToExportedCompressedHistoryData(Guid questionnaireId, long version)
@@ -192,48 +204,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (fileSystemAccessor.IsDirectoryExists(dataDirectoryPath))
                 filesToArchive.AddRange(fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath));
 
-            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
+            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
 
             return archiveFilePath;
         }
 
         public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
-
-            var fileName = string.Format("{0}_{1}_Approved.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath), exportDataType.ToString());
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
-
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-
-            var filesToArchive = new List<string>();
-
-
-            switch (exportDataType)
-            {
-                case ExportDataType.Stata:
-                    {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetStataDataFilesForQuestionnaireInApprovedState(questionnaireId, version, dataDirectoryPath));
-                        break;
-                    }
-                case ExportDataType.Spss:
-                    {
-                        filesToArchive.AddRange(this.dataExportService.CreateAndGetSpssDataFilesForQuestionnaireInApprovedState(questionnaireId, version, dataDirectoryPath));
-                        break;
-                    }
-                case ExportDataType.Tab:
-                default:
-                    {
-                        filesToArchive.AddRange(this.dataExportService.GetDataFilesForQuestionnaireByInterviewsInApprovedState(questionnaireId, version, dataDirectoryPath));
-                        filesToArchive.AddRange(this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version, dataDirectoryPath)); 
-                        break;
-                    }
-            }
-
-            archiveUtils.ZipFiles(filesToArchive, new string[0], archiveFilePath);
-          
-            return archiveFilePath;
+            return GetFilePathToExportedCompressedDataImpl(questionnaireId, version, exportDataType, "Approved",
+                GetApprovedDataFolder, this.tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync);
         }
 
         public string GetFilePathToExportedBinaryData(Guid questionnaireId, long version)
@@ -245,7 +224,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
-            archiveUtils.ZipFiles(new string[0], new[] { fileDirectoryPath }, archiveFilePath);
+            archiveUtils.ZipDirectory(fileDirectoryPath, archiveFilePath);
+
+            return archiveFilePath;
+        }
+
+        public string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version)
+        {
+            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+
+            var fileName = string.Format("{0}_ddi.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath));
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
+
+            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+            var filesToArchive = new List<string>
+            {
+                this.metadataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId, version,
+                    dataDirectoryPath)
+            };
+
+            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
 
             return archiveFilePath;
         }
@@ -268,6 +268,84 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         protected string PreviousCopiesFolderPath
         {
             get { return this.fileSystemAccessor.CombinePath(this.pathToExportedData, string.Format("_prv_{0}", DateTime.Now.Ticks)); }
+        }
+
+        private string GetFilePathToExportedCompressedDataImpl(
+            Guid questionnaireId, 
+            long version, 
+            ExportDataType exportDataType, 
+            string fileSuffix, 
+            Func<Guid, long, string> getPathToDataFolder,
+            Func<Guid, long, string, Task> exportDataToFolderAsync)
+        {
+            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
+
+            var fileName = string.Format("{0}_{1}_{2}.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath), exportDataType, fileSuffix);
+            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
+           
+            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+            var filesToArchive = new List<string>();
+
+            var directoryWithExportedDataPath = getPathToDataFolder(questionnaireId, version);
+
+            var folderLockObject = GetLockObjectForFolder(directoryWithExportedDataPath);
+
+            lock (folderLockObject)
+            {
+                if (dataFoldersToDelete.Contains(directoryWithExportedDataPath))
+                {
+                    fileSystemAccessor.DeleteDirectory(directoryWithExportedDataPath);
+                    dataFoldersToDelete.Remove(directoryWithExportedDataPath);
+                }
+
+                if (!fileSystemAccessor.IsDirectoryExists(directoryWithExportedDataPath))
+                {
+                    this.fileSystemAccessor.CreateDirectory(directoryWithExportedDataPath);
+                    exportDataToFolderAsync(questionnaireId, version, directoryWithExportedDataPath)
+                        .WaitAndUnwrapException();
+                }
+
+                var exportedTabularDataFiles =
+                    tabularFormatExportService.GetTabularDataFilesFromFolder(directoryWithExportedDataPath);
+                switch (exportDataType)
+                {
+                    case ExportDataType.Stata:
+                    {
+                        filesToArchive.AddRange(
+                            this.tabularDataToExternalStatPackageExportService
+                                .CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, version,
+                                    exportedTabularDataFiles));
+                        break;
+                    }
+                    case ExportDataType.Spss:
+                    {
+                        filesToArchive.AddRange(
+                            this.tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire
+                                (questionnaireId, version, exportedTabularDataFiles));
+                        break;
+                    }
+                    case ExportDataType.Tab:
+                    default:
+                    {
+                        filesToArchive.AddRange(exportedTabularDataFiles);
+                        filesToArchive.AddRange(
+                            this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version,
+                                dataDirectoryPath));
+                        break;
+                    }
+                }
+
+                archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+            }
+
+            return archiveFilePath;
+        }
+
+        private object GetLockObjectForFolder(string folder)
+        {
+            return cancellationLockObjects.GetOrAdd(folder, (f) => new object());
         }
     }
 }

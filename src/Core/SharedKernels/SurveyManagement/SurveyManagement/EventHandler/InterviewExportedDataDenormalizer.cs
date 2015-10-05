@@ -14,9 +14,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewExportedDataDenormalizer : 
+    internal class InterviewExportedDataDenormalizer :
         BaseDenormalizer, IAtomicEventHandler,
-        IEventHandler<InterviewApprovedByHQ>, 
+        IEventHandler<InterviewApprovedByHQ>,
         IEventHandler<SupervisorAssigned>,
         IEventHandler<InterviewerAssigned>,
         IEventHandler<InterviewCompleted>,
@@ -30,24 +30,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
-        private readonly IReadSideRepositoryWriter<InterviewStatuses> statuses;
-        private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
-            IReadSideRepositoryWriter<UserDocument> userDocumentWriter, 
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, IReadSideRepositoryWriter<InterviewStatuses> statuses)
+            IReadSideRepositoryWriter<UserDocument> userDocumentWriter,
+            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
         {
             this.dataExportWriter = dataExportWriter;
             this.users = userDocumentWriter;
             this.interviewSummaryStorage = interviewSummaryStorage;
-            this.statuses = statuses;
         }
 
         public override object[] Writers
         {
-            get { return new object[] { dataExportWriter }; }
+            get { return new object[] {dataExportWriter}; }
         }
 
         public void CleanWritersByEventSource(Guid eventSourceId)
@@ -57,79 +54,62 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Readers
         {
-            get { return new object[] { users, interviewSummaryStorage, statuses }; }
+            get { return new object[] {users, interviewSummaryStorage}; }
         }
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            RecordAction(InterviewExportedAction.ApprovedByHeadquarter, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
-        }
-
-        private void UpdateInterviewData(Guid interviewId, Guid userId, DateTime timeStamp, InterviewExportedAction action)
-        {
-            this.dataExportWriter.AddExportedDataByInterview(interviewId);
-
-            RecordAction(action, userId, interviewId, timeStamp);
-        }
-
-        private void RecordAction(InterviewExportedAction action, Guid userId, Guid interviewId, DateTime timeStamp)
-        {
-            this.dataExportWriter.AddInterviewAction(action, interviewId, userId, timeStamp);
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.ApprovedByHeadquarter);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.SupervisorAssigned);
-        }
-
-        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
-        {
-            RecordAction(InterviewExportedAction.InterviewerAssigned, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.SupervisorAssigned);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            var interviewStatusHistory = this.statuses.GetById(evnt.EventSourceId);
-            if (interviewStatusHistory == null)
-                return;
-
-            var recordedStatusesForInterview = interviewStatusHistory.InterviewCommentedStatuses.ToList();
-
-            while (recordedStatusesForInterview.Any())
-            {
-                var lastStatusRecors = recordedStatusesForInterview.Last();
-                if (listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(lastStatusRecors.Status))
-                    break;
-
-                if (lastStatusRecors.Status == InterviewExportedAction.FirstAnswerSet)
-                    this.dataExportWriter.AddInterviewAction(lastStatusRecors.Status, evnt.EventSourceId,
-                        lastStatusRecors.StatusChangeOriginatorId, lastStatusRecors.Timestamp);
-                
-                recordedStatusesForInterview.Remove(lastStatusRecors);
-            }
-
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId,
-                evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, InterviewExportedAction.Completed);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
-        {
-            RecordAction(InterviewExportedAction.Restarted, evnt.Payload.UserId, evnt.EventSourceId, evnt.Payload.RestartTime ?? evnt.EventTimeStamp);
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.Completed);
         }
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.ApprovedBySupervisor);
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.ApprovedBySupervisor);
         }
 
         public void Handle(IPublishedEvent<InterviewRejected> evnt)
         {
-            UpdateInterviewData(evnt.EventSourceId, evnt.Payload.UserId, evnt.EventTimeStamp, InterviewExportedAction.RejectedBySupervisor);
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.RejectedBySupervisor);
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestored> evnt)
+        {
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.Restored);
+        }
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
+        {
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.InterviewerAssigned);
+        }
+
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt)
+        {
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.Restarted);
         }
 
         public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
-            RecordAction(InterviewExportedAction.RejectedByHeadquarter, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
+
+            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.RejectedByHeadquarter);
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)
@@ -140,32 +120,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
             this.dataExportWriter.DeleteInterview(evnt.EventSourceId);
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestored> evnt)
-        {
-            var interviewSummary = interviewSummaryStorage.GetById(evnt.EventSourceId);
-            if (interviewSummary == null)
-            {
-                return;
-            }
-
-            var interviewStatusHistory = this.statuses.GetById(evnt.EventSourceId);
-            if (interviewStatusHistory == null)
-            {
-                throw new NullReferenceException(string.Format("Missing interview status changes history for interview {0}", evnt.EventSourceId));
-            }
-
-            foreach (var interviewCommentedStatus in interviewStatusHistory.InterviewCommentedStatuses)
-            {
-                this.dataExportWriter.AddInterviewAction(interviewCommentedStatus.Status, evnt.EventSourceId, interviewCommentedStatus.StatusChangeOriginatorId, interviewCommentedStatus.Timestamp);
-            }
-
-            if (interviewStatusHistory.InterviewCommentedStatuses.Any() &&
-                interviewStatusHistory.InterviewCommentedStatuses.Last().Status != InterviewExportedAction.Restored)
-            {
-                RecordAction(InterviewExportedAction.Restored, evnt.Payload.UserId, evnt.EventSourceId, evnt.EventTimeStamp);
-            }
         }
     }
 }

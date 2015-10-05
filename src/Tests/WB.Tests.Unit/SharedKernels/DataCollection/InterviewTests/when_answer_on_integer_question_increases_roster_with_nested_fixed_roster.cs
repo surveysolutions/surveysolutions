@@ -52,14 +52,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         && _.GetFixedRosterTitles(fixedRosterGroupId) == new[] { new FixedRosterTitle(0, title1), new FixedRosterTitle(1, title2) }
                                                         );
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             eventContext = new EventContext();
         };
 

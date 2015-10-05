@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsFeedDenormalizerTests
 {
     [Subject(typeof (InterviewsFeedDenormalizer))]
-    public class when_interview_rejected
+    internal class when_interview_rejected
     {
         Establish context = () =>
         {

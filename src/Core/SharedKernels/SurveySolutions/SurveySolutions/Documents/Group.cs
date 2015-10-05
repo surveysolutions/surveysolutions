@@ -42,7 +42,9 @@ namespace Main.Core.Entities.SubEntities
 
         public RosterSizeSourceType RosterSizeSource { get; set; }
 
-        [Obsolete]
+        [Obsolete("Compatibility with clients version lower 4.2")]
+        //survived after clean due to the old clients that should work with designer
+        //could be removed after all clients have version higher or equal 4.2.0
         public string[] RosterFixedTitles 
         {
             set

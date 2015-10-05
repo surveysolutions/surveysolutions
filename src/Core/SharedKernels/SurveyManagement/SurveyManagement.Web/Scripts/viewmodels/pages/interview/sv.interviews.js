@@ -1,8 +1,17 @@
-﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsibles, users, commandExecutionUrl) {
+﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, usersToAssignUrl, commandExecutionUrl) {
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 
-    self.Users = users;
+    self.IsAssignToLoading = ko.observable(false);
+    self.UsersToAssignUrl = usersToAssignUrl;
+    self.Users = function (query, sync, pageSize) {
+        self.IsAssignToLoading(true);
+        self.SendRequest(self.UsersToAssignUrl, { query: query, pageSize: pageSize }, function (response) {
+            sync(response.Users, response.TotalCountByQuery);
+        }, true, true, function() {
+            self.IsAssignToLoading(false);
+        });
+    }
     self.AssignTo = ko.observable();
 
     self.CanAssignTo = ko.computed(function() {

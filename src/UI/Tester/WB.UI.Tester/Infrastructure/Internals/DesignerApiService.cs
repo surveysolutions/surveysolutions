@@ -54,11 +54,11 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return serverQuestionnaires;
         }
 
-        public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<decimal> downloadProgress, CancellationToken token)
+        public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
         {
             Questionnaire downloadedQuestionnaire = null;
 
-            downloadedQuestionnaire = await this.restService.GetWithProgressAsync<Questionnaire>(
+            downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
                 url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
                 credentials:
                     new RestCredentials
@@ -66,7 +66,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
                         Login = this.userIdentity.Name,
                         Password = this.userIdentity.Password
                     },
-                progressPercentage: downloadProgress, token: token);
+                onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
             return downloadedQuestionnaire;
         }

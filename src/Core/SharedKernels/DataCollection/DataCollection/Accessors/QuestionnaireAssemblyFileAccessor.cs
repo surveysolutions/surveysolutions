@@ -34,10 +34,13 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)
         {
+            this.StoreAssembly(questionnaireId, questionnaireVersion, Convert.FromBase64String(assemblyAsBase64));
+        }
+
+        public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
+        {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
-
-            var assembly = Convert.FromBase64String(assemblyAsBase64);
 
             if (assembly.Length == 0)
                 throw new Exception(string.Format("Assembly file is empty. Cannot be saved. Questionnaire: {0}, version: {1}", questionnaireId, questionnaireVersion));
@@ -85,6 +88,11 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
                 return null;
 
             return this.fileSystemAccessor.ReadAllBytes(pathToAssembly);
+        }
+
+        public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
+        {
+            return this.fileSystemAccessor.IsFileExists(this.GetFullPathToAssembly(questionnaireId, questionnaireVersion));
         }
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)

@@ -2,6 +2,6 @@
 {
     public class TeamsAndStatusesReportLine : ReportLineCounters
     {
-        public string ResponsibleName { get; set; }
+        
     }
 }

@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
 
             syncManagerMock = new Mock<ISyncManager>();
             syncManagerMock.Setup(x => x.ReceiveUserSyncPackage(deviceId, packageId, userId)).Returns(userSyncPackageDto);
-            
-            request = CreateSyncPackageRequest(packageId, deviceId);
+
+            request = CreateSyncPackageRequest(packageId, deviceId, previousSuccessfullyHandledPackageId: previousSuccessfullyHandledPackageId);
             controller = CreateSyncController(syncManager: syncManagerMock.Object, globalInfo: globalInfo);
         };
 
@@ -39,6 +39,9 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         It should_return_sync_package_formed_by_SyncManager = () =>
             result.ShouldEqual(userSyncPackageDto);
 
+        It should_mark_previous_package_as_successful = () =>
+          syncManagerMock.Verify(x => x.MarkPackageAsSuccessfullyHandled(previousSuccessfullyHandledPackageId, deviceId, userId));
+
         private static UserSyncPackageDto result;
         private static UserSyncPackageDto userSyncPackageDto;
         
@@ -47,6 +50,7 @@ namespace WB.Tests.Unit.Applications.Supervisor.SyncControllerTests
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static Guid deviceId = androidId.ToGuid();
         private static string packageId = "some package";
+        private static string previousSuccessfullyHandledPackageId = "previous";
         private static SyncPackageRequest request;
         private static Mock<ISyncManager> syncManagerMock;
     }
