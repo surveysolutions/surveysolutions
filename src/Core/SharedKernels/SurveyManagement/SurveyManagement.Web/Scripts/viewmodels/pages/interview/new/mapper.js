@@ -65,6 +65,7 @@
                 case "DateTime":
                     item.selectedOption(new Date());
                     item.selectedOption.extend({ required: true, date: true });
+                    break;
                 case "Text":
                     item.settings(dto.Settings);
                     var isTextSettingsEmpty = _.isEmpty(dto.Settings);
@@ -73,6 +74,19 @@
                             item.mask(dto.Settings.Mask);
                     }
                     item.selectedOption.extend({ required: true });
+                    break;
+                case "GpsCoordinates":
+                    item.latitude = ko.observableArray([]);
+                    item.latitude("0");
+                    item.latitude.extend({ required: true });
+                    item.latitude.extend({ numericValidator: true });
+
+                    item.longitude = ko.observableArray([]);
+                    item.longitude("0");
+                    item.longitude.extend({ required: true });
+                    item.longitude.extend({ numericValidator: true });
+                    break;
+
             }
             return item;
         }
