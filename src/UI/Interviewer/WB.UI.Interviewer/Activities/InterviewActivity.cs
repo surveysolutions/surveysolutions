@@ -1,5 +1,7 @@
 using Android.App;
 using Android.Views;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -10,6 +12,11 @@ namespace WB.UI.Interviewer.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : EnumeratorInterviewActivity<InterviewerInterviewViewModel>
     {
+        private ICommandService CommandService
+        {
+            get { return ServiceLocator.Current.GetInstance<ICommandService>(); }   
+        }
+
         protected override int MenuResourceId { get { return Resource.Menu.interview; } }
 
         public override async void OnBackPressed()
@@ -21,8 +28,10 @@ namespace WB.UI.Interviewer.Activities
                 });
         }
 
-        protected override void OnMenuItemSelected(int resourceId)
+        protected override async void OnMenuItemSelected(int resourceId)
         {
+            await this.CommandService.WaitPendingCommandsAsync().ConfigureAwait(false);
+
             switch (resourceId)
             {
                 case Resource.Id.interview_dashboard:
@@ -34,8 +43,8 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
-
             }
+
             this.Finish();
         }
     }
