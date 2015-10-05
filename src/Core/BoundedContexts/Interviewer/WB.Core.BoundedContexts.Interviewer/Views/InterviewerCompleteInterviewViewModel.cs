@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,10 +25,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.changeLogManipulator = changeLogManipulator;
         }
 
-        protected override void CloseInterview()
+        protected override async Task CloseInterview()
         {
             this.changeLogManipulator.CloseDraftRecord(interviewId, principal.CurrentUserIdentity.UserId);
-            base.CloseInterview();
+            await base.CloseInterview();
         }
     }
 }

@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 this.changeLogManipulator.CreateOrReopenDraftRecord(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
             }
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 RaiseStartingLongOperation();
                 this.packageRestoreService.CheckAndApplySyncPackage(this.InterviewId);
@@ -182,11 +182,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 if (interview.CreatedOnClient)
                 {
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
                 }
                 else
                 {
-                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
                 }
             });
         }

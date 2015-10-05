@@ -43,9 +43,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(() =>
+                return this.navigateToDashboardCommand ?? (this.navigateToDashboardCommand = new MvxCommand(async () =>
                 {
-                    this.viewModelNavigationService.NavigateTo<DashboardViewModel>();
+                    await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
                 }));
             }
         }
@@ -55,9 +55,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             get
             {
-                return this.navigateToHelpCommand ?? (this.navigateToHelpCommand = new MvxCommand(() =>
+                return this.navigateToHelpCommand ?? (this.navigateToHelpCommand = new MvxCommand(async () =>
                 {
-                    this.viewModelNavigationService.NavigateTo<HelpViewModel>();
+                    await this.viewModelNavigationService.NavigateToAsync<HelpViewModel>();
                 }));
             }
         }
@@ -65,13 +65,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(this.SignOut)); }
+            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
         }
 
-        void SignOut()
+        private async Task SignOut()
         {
             this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         public async Task NavigateToPreviousViewModelAsync(Action navigateToIfHistoryIsEmpty)
@@ -79,15 +79,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             await this.navigationState.NavigateBackAsync(navigateToIfHistoryIsEmpty);
         }
 
-        public void NavigateBack()
+        public async Task NavigateBack()
         {
             if (this.PrefilledQuestions.Any())
             {
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.interviewId);
             }
             else
             {
-                this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
 
         }

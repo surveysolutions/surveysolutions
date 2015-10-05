@@ -67,10 +67,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interviewerIdentity.SupervisorId);
             await this.commandService.ExecuteAsync(createInterviewOnClientCommand);
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 this.changeLogManipulator.CreatePublicRecord(interviewId);
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
             });
         }
 

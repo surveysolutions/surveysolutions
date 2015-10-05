@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             await this.commandService.WaitPendingCommandsAsync();
 
-            this.viewModelNavigationService.NavigateToInterview(interviewId);
+            await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId);
         }
     }
 }
