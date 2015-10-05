@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -130,7 +129,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         question => (Tuple<decimal, string>[])question.Answer
                     );
 
-            this.interviewState.AnsweredQuestions = new HashSet<string>(
+            this.interviewState.AnsweredQuestions = new ConcurrentHashSet<string>(
                 @event.InterviewData.Answers.Select(
                     question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector)));
 
@@ -970,9 +969,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : "<<MISSING GROUP>>";
         }
 
-        private static HashSet<string> ToHashSetOfIdAndRosterVectorStrings(IEnumerable<InterviewItemId> synchronizationIdentities)
+        private static ConcurrentHashSet<string> ToHashSetOfIdAndRosterVectorStrings(IEnumerable<InterviewItemId> synchronizationIdentities)
         {
-            return new HashSet<string>(
+            return new ConcurrentHashSet<string>(
                 synchronizationIdentities.Select(
                     question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.InterviewItemRosterVector)));
         }
