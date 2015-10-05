@@ -288,12 +288,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
         }
 
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync()); }
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -42,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
         }
 
-        public void Init(string interviewId)
+        public async void Init(string interviewId)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
 
@@ -56,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (questionnaire.PrefilledQuestionsIds.Count == 0)
             {
-                this.viewModelNavigationService.NavigateToInterview(interviewId);
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId);
                 return;
             }
 
@@ -71,9 +72,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.PrefilledQuestions.Add(startButton);
         }
 
-        public void NavigateToPreviousViewModel()
+        public async Task NavigateToPreviousViewModelAsync()
         {
-            this.viewModelNavigationService.NavigateToDashboard();
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
         }
     }
 }

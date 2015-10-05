@@ -1,35 +1,61 @@
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
     public class ViewModelNavigationService : MvxNavigatingObject, IViewModelNavigationService
     {
-        public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel
+        private readonly ICommandService commandService;
+        private readonly IUserInteractionService userInteractionServiceAwaiter;
+        private readonly IUserInterfaceStateService userInterfaceStateService;
+
+        public ViewModelNavigationService(ICommandService commandService,
+            IUserInteractionService userInteractionServiceAwaiter,
+            IUserInterfaceStateService userInterfaceStateService)
         {
+            this.commandService = commandService;
+            this.userInteractionServiceAwaiter = userInteractionServiceAwaiter;
+            this.userInterfaceStateService = userInterfaceStateService;
+        }
+
+        public async Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
+        {
+            await this.WaitPendingOperationsCompletionAsync();
+            
             this.ShowViewModel<TViewModel>();
         }
 
-        public void NavigateTo<TViewModel>(object perameterValuesObject) where TViewModel : IMvxViewModel
+        public async Task NavigateToAsync<TViewModel>(object perameterValuesObject) where TViewModel : IMvxViewModel
         {
+            await this.WaitPendingOperationsCompletionAsync();
+            
             this.ShowViewModel<TViewModel>(perameterValuesObject);
         }
 
-        public void NavigateToDashboard()
+        public async Task NavigateToDashboardAsync()
         {
-            this.NavigateTo<DashboardViewModel>();
+            await this.NavigateToAsync<DashboardViewModel>();
         }
 
-        public void NavigateToInterview(string interviewId)
+        public async Task NavigateToInterviewAsync(string interviewId)
         {
-            this.NavigateTo<InterviewViewModel>(new {interviewId = interviewId});
+            await this.NavigateToAsync<InterviewViewModel>(new { interviewId = interviewId });
         }
 
-        public void NavigateToPrefilledQuestions(string interviewId)
+        public async Task NavigateToPrefilledQuestionsAsync(string interviewId)
         {
-            this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
+            await this.NavigateToAsync<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
+        }
+
+        private async Task WaitPendingOperationsCompletionAsync()
+        {
+            await this.userInteractionServiceAwaiter.WaitPendingUserInteractionsAsync().ConfigureAwait(false);
+            await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
+            await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
         }
     }
 }

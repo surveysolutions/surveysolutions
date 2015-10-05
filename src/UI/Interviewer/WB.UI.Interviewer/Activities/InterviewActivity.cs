@@ -16,7 +16,7 @@ namespace WB.UI.Interviewer.Activities
         {
             await this.ViewModel.NavigateToPreviousViewModelAsync(() =>
                 {
-                    Application.SynchronizationContext.Post(_ => { this.ViewModel.NavigateBack(); }, null);
+                    Application.SynchronizationContext.Post(async _ => { await this.ViewModel.NavigateBack(); }, null);
                     this.Finish();
                 });
         }

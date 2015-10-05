@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
                     this.principal.SignIn(userName: LoginName, password: Password, staySignedIn: StaySignedIn);
-                    this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
+                    await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();   
                 }
             }
             catch (RestException ex)

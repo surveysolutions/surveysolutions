@@ -16,17 +16,19 @@ namespace WB.UI.Tester.Activities
         {
         }
 
-        protected override void TriggerFirstNavigate()
+        protected override async void TriggerFirstNavigate()
         {
             IPrincipal principal = Mvx.Resolve<IPrincipal>();
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 
             if (principal.IsAuthenticated)
             {
-                viewModelNavigationService.NavigateTo<DashboardViewModel>();
+                await viewModelNavigationService.NavigateToAsync<DashboardViewModel>();
             }
             else
-                viewModelNavigationService.NavigateTo<LoginViewModel>();
+            {
+                await viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            }
         }
     }
 }

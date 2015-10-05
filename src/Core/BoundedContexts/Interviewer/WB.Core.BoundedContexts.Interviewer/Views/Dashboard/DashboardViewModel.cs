@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+                await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
                 return;
             }
 
@@ -243,18 +243,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand SignOutCommand
         {
-            get { return new MvxCommand(this.SignOut); }
+            get { return new MvxCommand(async () => await this.SignOut()); }
         }
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
         }
 
-        void SignOut()
+        async Task SignOut()
         {
             this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         public void Dispose()
