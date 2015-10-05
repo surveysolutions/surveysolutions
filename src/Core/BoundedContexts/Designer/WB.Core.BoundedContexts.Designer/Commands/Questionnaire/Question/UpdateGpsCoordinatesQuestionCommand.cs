@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionId,
             string title,
             string variableName, string variableLabel,
+            bool isPreFilled,
             string enablementCondition,
             string validationExpression,
             string validationMessage,
@@ -25,10 +26,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.Scope = scope;
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
+            this.IsPreFilled = isPreFilled;
         }
 
         public string ValidationMessage { get; set; }
         public string ValidationExpression { get; set; }
         public QuestionScope Scope { get; set; }
+        public bool IsPreFilled { get; set; }
     }
 }

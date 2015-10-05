@@ -2043,13 +2043,14 @@ namespace WB.Tests.Unit
             return new User();
         }
 
-        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1")
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1", bool isPrefilled=false)
         {
             return new GpsCoordinateQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variableName,
-                QuestionType = QuestionType.GpsCoordinates
+                QuestionType = QuestionType.GpsCoordinates,
+                Featured = isPrefilled
             };
         }
 
