@@ -73,7 +73,7 @@
                 <!-- ko foreach: options -->
                 <div class="radio">
                     <label data-bind='attr: { "for": optionFor }'>
-                        <input type='radio' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOption"/>
+                        <input type='radio' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOption" />
                         <span data-bind="text: label"></span>
                     </label>
                 </div>
@@ -104,7 +104,7 @@
                 <!-- ko foreach: options -->
                 <div class="checkbox">
                     <label data-bind='attr: { "for": optionFor }'>
-                        <input type='checkbox' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOptions"/>
+                        <input type='checkbox' data-bind="attr: { value: id, name: $parent.variable, id: optionFor }, checked: $parent.selectedOptions" />
                         <span data-bind="text: label"></span>
                     </label>
                 </div>
@@ -119,7 +119,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input class="form-control" type="text" data-bind="numericformatter: selectedOption, valueUpdate: 'afterkeydown'"/>
+                    <input class="form-control" type="text" data-bind="numericformatter: selectedOption, valueUpdate: 'afterkeydown'" />
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -132,7 +132,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }"/>
+                    <input class="form-control" type="text" data-date-format="mm/dd/yy" data-bind="datepicker: selectedOption, datepickerOptions: {date: selectedOption }" />
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -145,7 +145,7 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'"/>
+                    <input type="number" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'" />
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
@@ -158,23 +158,35 @@
             <div class="col-sm-2">
                 <div class="input-group">
                     <span class="input-group-addon">T</span>
-                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown', maskFormatter:mask"/>
+                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown', maskFormatter:mask" />
                 </div>
                 <span class="help-block" data-bind="validationMessage: selectedOption"></span>
             </div>
         </div>
     </script>
     <script type="text/html" id="GpsCoordinates">
-        <div class="form-group" data-bind="validationElement: selectedOption">
+        <div class="form-group">
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
             <div class="col-sm-2">
-                <div class="input-prepend">
-                    <span class="add-on">T</span>
-                    <input type="text" class="form-control" data-bind="value: selectedOption, valueUpdate: 'afterkeydown'"/>
+                <div class="input-group" data-bind="validationElement: latitude">
+                    <span class="input-group-addon">φ</span>
+                    <input type="text" class="form-control" data-bind="numericformatter: latitude, valueUpdate: 'afterkeydown'"/>
+
                 </div>
-                <span class="help-block" data-bind="validationMessage: selectedOption"></span>
+                <span class="help-block" data-bind="validationMessage: latitude"></span>
             </div>
-        </div>
+            <div class="col-sm-2">
+                <div class="input-group" data-bind="validationElement: longitude">
+                    <span class="input-group-addon">λ</span>
+                    <input type="text" class="form-control" data-bind="numericformatter: longitude, valueUpdate: 'afterkeydown'"/>
+                </div>
+                <span class="help-block" data-bind="validationMessage: longitude"></span>
+             
+            </div>
+            <div class="col-sm-2">
+                <a href="#">show on map</a>
+            </div>
+            </div>
     </script>
 }
 
@@ -188,7 +200,7 @@
             <label class="col-sm-2 control-label">Responsible</label>
             <div class="col-md-2">
                 <div class="input-group">
-                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <input class="form-control" data-bind="typeahead: responsible, typeaheadOptions: {source: supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
                     <span data-bind="spinner: isSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ responsible(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
