@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -69,7 +70,6 @@ namespace WB.UI.Interviewer.Ninject
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var plainQuestionnaireStore = new SqlitePlainStorageAccessor<QuestionnaireDocument>(plainStore);
-            var questionnaireModelStore = new QuestionnaireModelRepository(new SqlitePlainStorageAccessor<QuestionnaireModel>(plainStore));
             var fileSystem = new FileStorageService();
             var interviewMetaInfoFactory = new InterviewMetaInfoFactory(questionnaireStore);
 
@@ -98,6 +98,8 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
 
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().ToConstant(plainQuestionnaireStore);
+
+            var questionnaireModelStore = new QuestionnaireModelRepository(new SqlitePlainStorageAccessor<QuestionnaireModel>(plainStore), this.Kernel.Get<IPlainQuestionnaireRepository>());
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().ToConstant(questionnaireModelStore);
 
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
