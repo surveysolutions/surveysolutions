@@ -2099,13 +2099,14 @@ namespace WB.Tests.Unit
 
         }
 
-        public static InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null, long? questionnaireVersion = null, params TimeSpanBetweenStatuses[] timeSpans)
+        public static InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null, long? questionnaireVersion = null, string interviewId = null, params TimeSpanBetweenStatuses[] timeSpans)
         {
             return new InterviewStatusTimeSpans()
             {
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1,
-                TimeSpansBetweenStatuses = timeSpans.ToHashSet()
+                TimeSpansBetweenStatuses = timeSpans.ToHashSet(),
+                InterviewId = interviewId
             };
         }
 
