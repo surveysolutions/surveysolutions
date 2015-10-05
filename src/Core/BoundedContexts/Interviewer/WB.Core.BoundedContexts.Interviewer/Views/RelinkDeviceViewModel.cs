@@ -48,12 +48,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand CancelCommand
         {
-            get { return new MvxCommand(this.ReturnBack, () => !this.IsInProgress); }
+            get { return new MvxCommand(async () => await this.ReturnBack(), () => !this.IsInProgress); }
         }
 
         public IMvxCommand NavigateToTroubleshootingCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>(), () => !this.IsInProgress); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>(), () => !this.IsInProgress); }
         }
 
         private IMvxCommand relinkCommand;
@@ -75,10 +75,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userIdentityToRelink = userIdentity;
         }
 
-        private void ReturnBack()
+        private async Task ReturnBack()
         {
             this.cancellationTokenSource.Cancel();
-            this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
+            await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>(this.userIdentityToRelink);
         }
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
                 this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
-                this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
             {
@@ -113,9 +113,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public void NavigateToPreviousViewModel()
+        public async Task NavigateToPreviousViewModel()
         {
-            this.ReturnBack();
+            await this.ReturnBack();
         }
     }
 }

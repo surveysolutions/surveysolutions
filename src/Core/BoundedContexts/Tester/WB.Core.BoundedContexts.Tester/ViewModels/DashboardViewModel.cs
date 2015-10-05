@@ -220,7 +220,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }
+            get { return signOutCommand ?? (signOutCommand = new MvxCommand(async () => await this.SignOut())); }
         }
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -265,10 +265,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private bool isListEmpty;
 
-        private void SignOut()
+        private async Task SignOut()
         {
             this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         private void ShowPublicQuestionnaires()
@@ -337,7 +337,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
                 }
             }
             catch (RestException ex)

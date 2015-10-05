@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand SignInCommand
         {
-            get { return new MvxCommand(this.SignIn); }
+            get { return new MvxCommand(async () => await this.SignIn()); }
         }
 
         public IMvxCommand OnlineSignInCommand
@@ -92,17 +92,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
         }
 
-        public void Init()
+        public async void Init()
         {
             InterviewerIdentity currentInterviewer =
                 this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
 
             if (currentInterviewer == null)
             {
-                this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>();
+                await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>();
                 return;
             }
 
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ErrorMessage = InterviewerUIResources.Login_WrondPassword;
         }
 
-        private void SignIn()
+        private async Task SignIn()
         {
             var userName = this.UserName;
             var hashedPassword = this.passwordHasher.Hash(this.Password);
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 return;
             }
 
-            this.viewModelNavigationService.NavigateToDashboard();
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
         }
 
         private async Task RemoteSignInAsync()
@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.interviewersPlainStorage.StoreAsync(localInterviewer);
 
-                this.SignIn();
+                await this.SignIn();
             }
             catch (SynchronizationException ex)
             {

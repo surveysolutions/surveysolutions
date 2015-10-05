@@ -30,10 +30,10 @@ namespace WB.UI.Interviewer.Activities
 
             if (Mvx.Resolve<IPrincipal>().IsAuthenticated)
             {
-                viewModelNavigationService.NavigateToDashboard();
+                await viewModelNavigationService.NavigateToDashboardAsync();
             }
-            
-            viewModelNavigationService.NavigateTo<LoginViewModel>();
+
+            await viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         private async Task BackwardCompatibilityWithPotatoidAsync()
