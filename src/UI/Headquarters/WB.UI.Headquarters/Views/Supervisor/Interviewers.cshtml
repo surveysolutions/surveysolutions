@@ -15,7 +15,6 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
-        var $deviceUrl = '@Url.Action("Device", "TabletReport", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})', $commandExecutionUrl);
@@ -107,12 +106,6 @@
                     <a class="btn btn-success" data-bind="attr: { href: $editUrl + '/' + UserId() }">
                         <i class="icon icon-edit icon-white"></i> Edit
                     </a>
-                    @if (LegacyOptions.SupervisorFunctionsEnabled)
-                    {
-                    <!-- ko if:DeviceId()!=null -->
-                        <a class="btn btn-info" data-bind="attr: { href: $deviceUrl + '/' + DeviceId() }"><span class="glyphicon glyphicon-list"></span> Show sync log</a>
-                    <!-- /ko -->
-                    }
                     @if (User.IsInRole("Administrator"))
                     {
                         <div class="btn-group pull-right">
