@@ -38,6 +38,7 @@
         <div class="form-inline">
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.ApproveInterview">Approve</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.RejectInterview">Reject</button>
+            <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.UnapproveInterview">Unapprove</button>
             <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.DeleteInterview">Delete</button>
 
             <div class="input-group">
@@ -131,6 +132,11 @@
         @Html.Raw(Resources.Interviews.RejectConfirmMessage.FormatString(
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
+    </script>
+    <script type="text/html" id="confirm-unapprove-template">
+        @Html.Raw(Resources.Interviews.UnapproveConfirmMessage.FormatString(
+            "<span class='text-normal' data-bind='text: length'></span>",
+            InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-continue-message-template">
         <br />@Resources.Interviews.ContinueConfirmMessage
