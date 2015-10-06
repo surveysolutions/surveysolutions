@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Resources;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Interviewer.Services;
