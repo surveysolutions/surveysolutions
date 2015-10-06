@@ -32,5 +32,15 @@
             "#confirm-continue-message-template"
         );
     };
+
+    self.UnapproveInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "UnapproveByHeadquarterCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return item.CanUnapprove(); },
+            "#confirm-unapprove-template",
+            "#confirm-continue-message-template"
+        );
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.HQInterviews, Supervisor.VM.InterviewsBase);
