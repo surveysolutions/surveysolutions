@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (questionsWithAnswersOnMultimediaQuestions.Any())
             {
-                if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
+                if (!fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                     fileSystemAccessor.CreateDirectory(filesFolderForInterview);
             }
 
