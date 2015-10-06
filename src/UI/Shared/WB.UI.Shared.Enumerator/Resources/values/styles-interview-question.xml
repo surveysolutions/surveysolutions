@@ -241,6 +241,8 @@
   <style name="Interview_Question_TextAnswer" parent="Interview_Question_Instruction_Details">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_gravity">center_horizontal</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_TextAnswer_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Question_TextAnswer_margin_bottom</item>
     <item name="android:textStyle">bold|italic</item>
