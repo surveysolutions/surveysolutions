@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,17 +12,21 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_preloaded_data_with_archive_is_present_and_unzipped_with_2_files_GetPreloadedDataOfPanel_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_preload_zip_with_tab_and_txt_files : FilebasedPreloadedDataRepositoryTestContext
     {
         private Establish context = () =>
         {
+            var pathToParentDirectoryOfZipFile = preLoadedData + "\\" + archiveId;
+            var pathToUnzippedDirectory = pathToParentDirectoryOfZipFile + "\\Unzipped";
+
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName + ".zip" });
-            fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName});
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId + "\\Unzipped"))
-                .Returns(new string[] { "1.tab", "2.tab" });
-            fileSystemAccessor.Setup(x => x.GetFileExtension(Moq.It.IsAny<string>())).Returns(".tab");
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(pathToParentDirectoryOfZipFile)).Returns(new string[] { archiveName + ".zip" });
+            fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(pathToParentDirectoryOfZipFile)).Returns(new string[] { archiveName});
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(pathToUnzippedDirectory))
+                .Returns(new [] { tabFileName, txtFileName });
+            fileSystemAccessor.Setup(x => x.GetFileExtension(tabFileName)).Returns(".tab");
+            fileSystemAccessor.Setup(x => x.GetFileExtension(txtFileName)).Returns(".txt");
             archiveUtils=new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(true);
 
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             result.Length.ShouldEqual(2);
 
         It should_first_pre_loaded_data_name_should_be_1_tab = () =>
-            result[0].FileName.ShouldEqual("1.tab");
+            result[0].FileName.ShouldEqual(tabFileName);
 
         It should_first_pre_loaded_data_has_one_row = () =>
             result[0].Content.Length.ShouldEqual(1);
@@ -59,8 +59,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         It should_first_pre_loaded_data_header_has_value_equal_to_q1 = () =>
            result[0].Header[0].ShouldEqual("q1");
 
-        It should_second_pre_loaded_data_name_should_be_2_tab = () =>
-           result[1].FileName.ShouldEqual("2.tab");
+        It should_second_pre_loaded_data_name_should_be_2_txt = () =>
+           result[1].FileName.ShouldEqual(txtFileName);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;
@@ -69,6 +69,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         private static Mock<IRecordsAccessorFactory> recordsAccessorFactory;
         private static string archiveName="test";
         private static string preLoadedData = "PreLoadedData";
+        private static string tabFileName = "1.tab";
+        private static string txtFileName = "2.txt";
         private static string archiveId = Guid.NewGuid().FormatGuid();
     }
 }
