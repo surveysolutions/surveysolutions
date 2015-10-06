@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.SynchronizeInterviewEvents(userId, questionnaireId, questionnaireVersion,
                 InterviewStatus.Completed, eventsToPublish, false);
 
-         It should_raise_all_passed_events_only = () =>
-             eventContext.Events.Select(e => e.Payload).ShouldEqual(eventsToPublish);
+        It should_raise_all_passed_events = () =>
+            eventsToPublish.All(x => eventContext.Events.Any(publishedEvent => publishedEvent.Payload.Equals(x)));
 
         private static EventContext eventContext;
         private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
@@ -50,6 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static Interview interview;
 
-        private static object[] eventsToPublish = new object[] {new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]), new InterviewReceivedBySupervisor()};
+        private static object[] eventsToPublish = new object[] {new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0])};
     }
 }

@@ -46,8 +46,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_raise_InterviewStatusChanged_event = () =>
           eventContext.ShouldContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.Restored);
 
+        It should_raise_interview_received_by_supervisor_event = () =>
+          eventContext.ShouldContainEvent<InterviewReceivedBySupervisor>();
+
         It should_raise_all_passed_events = () =>
-             eventContext.Events.Skip(2).Select(e => e.Payload).ShouldEqual(eventsToPublish);
+             eventsToPublish.All(x => eventContext.Events.Any(publishedEvent => publishedEvent.Payload.Equals(x)));
 
         private static EventContext eventContext;
         private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
@@ -56,6 +59,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static Interview interview;
 
-        private static object[] eventsToPublish = new object[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]), new InterviewReceivedBySupervisor() };
+        private static object[] eventsToPublish = new object[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
     }
 }
