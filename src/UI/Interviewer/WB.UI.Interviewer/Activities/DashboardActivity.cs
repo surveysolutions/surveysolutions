@@ -4,8 +4,10 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.CustomControls;
+using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -54,8 +56,13 @@ namespace WB.UI.Interviewer.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
+
+            menu.LocalizeMenuItems();
+
             return base.OnCreateOptionsMenu(menu);
         }
+
+        
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {

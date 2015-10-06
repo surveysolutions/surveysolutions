@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="AreYouSureYouWantToRemoveRowFromRosterFormat">Are you sure you want to remove {0} row(s) from dependent roster?</string>
-  <string name="AnswerIsNotPresentInFilteredComboboxOptionsList">Answer "{0}" cannot be saved, because it does not match any option</string>
   <string name="SendingOfInformationPackageIsCanceling">Cancelling.</string>
   <string name="drawer_open">Open</string>
   <string name="drawer_close">Close</string>
@@ -35,14 +34,6 @@
   <string name="InformationPackageIsSuccessfullySent">Information package is successfully sent.</string>
   <string name="AreYouSureYouWantToRestore">All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</string>
 
-  <string name="MenuItem_Title_Dashboard">Dashboard</string>
-  <string name="MenuItem_Title_SignOut">Sign out</string>
-  <string name="MenuItem_Title_Settings">Settings</string>
-  <string name="MenuItem_Title_Synchronization">Synchronization</string>
-  <string name="MenuItem_Title_SignOut">Sign out</string>
-  <string name="MenuItem_Title_Troubleshooting">Troubleshooting</string>
-  <string name="MenuItem_Title_Login">Login</string>
-  
   <string name="NoAssignments">You have no new assignments</string>
 
   <item  type="id"  name="QuestionnaireId" />
