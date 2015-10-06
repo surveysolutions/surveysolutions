@@ -193,7 +193,7 @@ for further instructions</value>
     <value>Server error. Please contact the support team at support@mysurvey.solutions.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Your application is not compatible with server one. Update your Interviewer application</value>
+    <value>Your application is not compatible with server one. Update your Interviewer application.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Provided Synchronization endpoint is invalid. Check settings.</value>

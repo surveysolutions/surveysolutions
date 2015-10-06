@@ -183,9 +183,6 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Запрашиваемый опросник содержит ошибки.  Пожалуйста, исправьте все ошибки в дизайнере опросников и попробуйте снова</value>
   </data>
-  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Ваша версия приложения не поддерживает открытие данного опросника. Обновите приложение</value>
-  </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
     <value>Нет связи с дизайнером Survey Solutions. Открыть локальную копию опросника?</value>
   </data>
@@ -532,5 +529,8 @@
   </data>
   <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
     <value>Произошла ошибка при отправке пакета с информацией о таблете</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Вашей учетной записи не назначена роль интервьювера</value>
   </data>
 </root>

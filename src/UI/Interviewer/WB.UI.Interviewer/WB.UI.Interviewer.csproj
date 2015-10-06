@@ -384,11 +384,6 @@
     <Compile Include="Ninject\AndroidCoreRegistry.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="Settings\EnumeratorSettings.cs" />
@@ -699,13 +694,6 @@
     <Folder Include="Syncronization\Update\" />
     <Folder Include="ViewModel\Dashboard\" />
     <Folder Include="Views\Login\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
