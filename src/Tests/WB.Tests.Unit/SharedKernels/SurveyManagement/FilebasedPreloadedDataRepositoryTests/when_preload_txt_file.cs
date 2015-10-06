@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,14 +12,14 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
-    internal class when_preloaded_data_with_single_csv_is_present_and_GetPreloadedDataOfSample_is_called : FilebasedPreloadedDataRepositoryTestContext
+    internal class when_preload_txt_file : FilebasedPreloadedDataRepositoryTestContext
     {
         private Establish context = () =>
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
-            fileSystemAccessor.Setup(x => x.GetFileExtension(Moq.It.IsAny<string>())).Returns(".tab");
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + csvFileId)).Returns(new string[] { csvFileName + ".tab" });
+            fileSystemAccessor.Setup(x => x.GetFileExtension(Moq.It.IsAny<string>())).Returns(".txt");
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + csvFileId)).Returns(new string[] { csvFileName + ".txt" });
 
             archiveUtils = new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(false);
@@ -37,8 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfSample(csvFileId);
 
 
-        It should_first_pre_loaded_data_name_should_be_test_tab = () =>
-            result.FileName.ShouldEqual("test.tab");
+        It should_first_pre_loaded_data_name_should_be_test_txt = () =>
+            result.FileName.ShouldEqual("test.txt");
 
         It should_first_pre_loaded_data_has_one_row = () =>
             result.Content.Length.ShouldEqual(1);
