@@ -3,10 +3,8 @@
     xmlns:local="http://schemas.android.com/apk/res-auto">
   <item
       android:id="@+id/menu_settings"
-      local:showAsAction="never"
-      android:title="@string/MenuItem_Title_Settings" />
+      local:showAsAction="never" />
   <item
     android:id="@+id/menu_troubleshooting"
-    local:showAsAction="never"
-    android:title="@string/MenuItem_Title_Troubleshooting" />
+    local:showAsAction="never" />
 </menu>
