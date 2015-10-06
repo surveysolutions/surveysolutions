@@ -10,29 +10,29 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    [Subject(typeof(InterviewSummaryEventHandlerFunctional))]
-    internal class InterviewSummaryEventHandlerFunctionalTestsContext
+    [Subject(typeof(InterviewSummaryDenormalizer))]
+    public class InterviewSummaryDenormalizerTestsContext
     {
-        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer()
+        public static InterviewSummaryDenormalizer CreateDenormalizer()
         {
             return CreateDenormalizer(users: Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
         }
 
-        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer(string userId, string userName)
+        public static InterviewSummaryDenormalizer CreateDenormalizer(string userId, string userName)
         {
             return CreateDenormalizer(users: CreateUsersWriterWith1User(userId, userName));
         }
 
-        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer(string user1Id, string user1Name,
+        public static InterviewSummaryDenormalizer CreateDenormalizer(string user1Id, string user1Name,
             string user2Id, string user2Name)
         {
             return CreateDenormalizer(users: CreateUsersWriterWith2Users(user1Id, user1Name, user2Id, user2Name));
         }
 
-        public static InterviewSummaryEventHandlerFunctional CreateDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null)
+        public static InterviewSummaryDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<UserDocument> users = null)
         {
             return
-                new InterviewSummaryEventHandlerFunctional(
+                new InterviewSummaryDenormalizer(
                     interviewSummary: CreateInterviewSummaryWriter(), questionnaires: CreateQuestionnaire(),
                     users: users ?? CreateUsersWriterWith1User(new Guid().ToString(), new Guid().ToString()));
         }

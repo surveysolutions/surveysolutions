@@ -57,6 +57,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected InterviewStateDependentOnAnswers interviewState = new InterviewStateDependentOnAnswers();
 
+        public virtual void Apply(InterviewReceivedByInterviewer @event) { }
+        public virtual void Apply(InterviewReceivedBySupervisor @event) { }
+
         public virtual void Apply(InterviewCreated @event)
         {
             this.questionnaireId = @event.QuestionnaireId;
@@ -1537,6 +1540,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public void MarkInterviewAsReceivedByInterviwer(Guid userId)
+        {
+            this.ThrowIfInterviewHardDeleted();
+
+            this.ApplyEvent(new InterviewReceivedByInterviewer());
+        }
+
         public void MarkInterviewAsSentToHeadquarters(Guid userId)
         {
             if (!this.wasHardDeleted)
@@ -1811,6 +1821,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(synchronizedEvent);
             }
+
+            this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 
         public void CreateInterviewFromSynchronizationMetadata(Guid id, Guid userId, Guid questionnaireId, long questionnaireVersion,

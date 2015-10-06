@@ -457,6 +457,16 @@ namespace WB.Tests.Unit
             {
                 return new InterviewSynchronized(synchronizationDto);
             }
+
+            public static InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
+            {
+                return new InterviewReceivedByInterviewer();
+            }
+
+            public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
+            {
+                return new InterviewReceivedBySupervisor();
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
