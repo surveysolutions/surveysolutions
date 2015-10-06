@@ -34,7 +34,11 @@
                        class="form-control" maxlength="32">
             </div>
         </div>
-
+        <div class="form-group" ng-show="activeQuestion.type=='GpsCoordinates' && activeQuestion.questionScope == 'Prefilled'">
+            <span class="edit-question-note">
+                This question will be treated as GPS navigation question for Interviewer
+            </span>
+        </div>
         <div class="form-group">
             <label for="edit-variable-label" class="wb-label">Variable label<help key="variableLabel" /></label><br>
             <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" maxlength="80">

@@ -7453,6 +7453,11 @@ input#edit-group-title {
   padding-left: 10px;
   width: 100%;
 }
+.edit-question-note{
+    font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
+    font-size: 14px;
+    color: #c1c7cb;
+}
 .roster-type-specific-block,
 .question-type-specific-block {
   background: #f1f2f3;
