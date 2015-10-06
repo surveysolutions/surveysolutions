@@ -10,10 +10,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
     public class TeamInterviewsFactory : IViewFactory<TeamInterviewsInputModel, TeamInterviewsView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
+        private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestionAnswersReader;
 
-        public TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
+        public TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader,
+            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestionAnswersReader)
         {
             this.reader = reader;
+            this.featuredQuestionAnswersReader = featuredQuestionAnswersReader;
         }
 
         public TeamInterviewsView Load(TeamInterviewsInputModel input)
@@ -33,17 +36,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             {
                 var counter = ApplyDynamicFilter(input, _);
                 return counter.Count();
-            }); 
+            });
+
+            var selectedSummaries = interviewsPage.Select(x => x.SummaryId).ToArray();
+            var answersToFeaturedQuestions = featuredQuestionAnswersReader.Query(_ => _.Where(x => selectedSummaries.Contains(x.InterviewSummary.SummaryId)).ToList());
 
             var teamInterviewsViewItems = interviewsPage
                 .Select(x => new TeamInterviewsViewItem {
-                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
-                    {
-                        Id = a.Questionid,
-                        Answer = a.Answer,
-                        Question = a.Title,
-                        Type = a.Type
-                    }).ToList(),
+                    FeaturedQuestions = 
+                        answersToFeaturedQuestions.Where(a => a.InterviewSummary.SummaryId == x.SummaryId).Select(a => new InterviewFeaturedQuestion
+                        {
+                            Id = a.Questionid,
+                            Answer = a.Answer,
+                            Question = a.Title,
+                            Type = a.Type
+                        }).ToList(),
                     InterviewId = x.InterviewId,
                     LastEntryDate = x.UpdateDate.ToShortDateString(),
                     ResponsibleId = x.ResponsibleId,
@@ -71,7 +78,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             var items = _.Where(x => !x.IsDeleted);
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.Contains(input.SearchBy)));
+                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().Contains(input.SearchBy.ToLower())));
             }
 
             if (input.Status.HasValue)
@@ -100,9 +107,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             var orderBy = model.Orders.FirstOrDefault();
             if (orderBy == null)
             {
-                return query.OrderByDescending(x=>x.UpdateDate);
+                return query.OrderByDescending(x => x.SummaryId);
             }
-            return query.OrderUsingSortExpression(model.Order).AsQueryable();
+
+            return query.OrderUsingSortExpression(model.Order).OrderBy(x => x.SummaryId).AsQueryable();
         }
 
     }
