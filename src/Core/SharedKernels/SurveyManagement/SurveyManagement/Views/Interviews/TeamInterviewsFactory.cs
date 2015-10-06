@@ -56,7 +56,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                         || x.Status == InterviewStatus.RejectedBySupervisor,
                     CanApproveOrReject = x.Status == InterviewStatus.Completed
                         || x.Status == InterviewStatus.RejectedByHeadquarters,
-                    CreatedOnClient = x.WasCreatedOnClient
+                    CreatedOnClient = x.WasCreatedOnClient,
+                    ReceivedByInterviewer = x.ReceivedByInterviewer
                 }).ToList();
             return new TeamInterviewsView
             {
