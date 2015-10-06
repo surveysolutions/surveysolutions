@@ -50,6 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static Interview interview;
 
-        private static object[] eventsToPublish = new object[] {new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0])};
+        private static object[] eventsToPublish = new object[] {new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]), new InterviewReceivedBySupervisor()};
     }
 }
