@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
                     })
         , interviewId.FormatGuid());
             
-            denormalizer = CreateInterviewStatusTimeSpanDenormalizer(statuses: interviewStatusesStorage, interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
+            denormalizer = CreateInterviewStatusTimeSpanDenormalizer(interviewCustomStatusTimestampStorage: interviewStatusTimeSpansStorage);
         };
 
         Because of = () => denormalizer.Handle(Create.UnapprovedByHeadquartersEvent(interviewId: interviewId));
@@ -42,7 +42,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         
 
         private static InterviewStatusTimeSpanDenormalizer denormalizer;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatusesStorage;
         private static TestInMemoryWriter<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
