@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        errorMessage = UIResources.Login_Error_NotFound;
+                        errorMessage = TesterUIResources.Login_Error_NotFound;
                         break;
                     default:
                         errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
