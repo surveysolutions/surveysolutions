@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformat
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.TabletInformation
 {
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.Tabl
                 }
                 catch (OperationCanceledException)
                 {
-                    this.OnProcessCanceled(TabletInformationSenderStrings.CanceledByUser);
+                    this.OnProcessCanceled(UIResources.RequestCanceledByUser);
                 }
                 catch (Exception e)
                 {

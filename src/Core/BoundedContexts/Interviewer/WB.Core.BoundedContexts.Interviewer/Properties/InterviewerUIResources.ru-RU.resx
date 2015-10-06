@@ -197,7 +197,16 @@
 У вашего акканта возможны следующие проблемы: пароль отличается от того что вы вводили, аккаунт заблокирован или удален Хедквотером.
 Пожалуйста введите ваш обновленный пароль. Если проблема не будет решена, пожалйста, обратитесь к Супервизору или Хедквотеру.</value>
   </data>
-  <data name="tion" xml:space="preserve">
-    <value>Вы уверены что хотите удалить интервью "{0}" ?</value>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись заблокирована. Обратитесь к вашему супервизору.</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Вашей учетной записи не назначена роль интервьювера</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись не подтверждена. Обратитесь к вашему супервизору.</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложени Interviewer.</value>
   </data>
 </root>
