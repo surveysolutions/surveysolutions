@@ -34,6 +34,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             return ZlpPathHelper.GetFileNameWithoutExtension(filePath);
         }
 
+        public string GetFileExtension(string filePath)
+        {
+            return ZlpPathHelper.GetExtension(filePath);
+        }
+
         public long GetFileSize(string filePath)
         {
             if (!this.IsFileExists(filePath))
