@@ -428,4 +428,19 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
     <value>Error occurred on version check. Please, check settings or try again later.</value>
   </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
 </root>

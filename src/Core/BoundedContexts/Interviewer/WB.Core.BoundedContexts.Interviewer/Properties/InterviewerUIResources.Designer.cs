@@ -353,6 +353,51 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string MenuItem_Title_Login {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string MenuItem_Title_Settings {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string MenuItem_Title_SignOut {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string MenuItem_Title_Troubleshooting {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Troubleshooting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No network. Check your network settings.
         /// </summary>
         public static string NoNetwork {

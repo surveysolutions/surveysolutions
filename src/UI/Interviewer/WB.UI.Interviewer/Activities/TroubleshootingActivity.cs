@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using Mono.CSharp;
 using Ninject;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,6 +19,7 @@ using WB.Core.Infrastructure.Backup;
 
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Implementations.Services;
+using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 using OperationCanceledException = System.OperationCanceledException;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -351,9 +353,12 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.troubleshooting, menu);
 
+            menu.LocalizeMenuItems();
+
             var loginItem = menu.FindItem(Resource.Id.menu_login);
             var dashboardItem = menu.FindItem(Resource.Id.menu_dashboard);
             var singoutItem = menu.FindItem(Resource.Id.menu_signout);
+
 
             if (ViewModel.IsAuthenticated)
             {

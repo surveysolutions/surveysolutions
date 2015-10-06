@@ -3,19 +3,14 @@
     xmlns:local="http://schemas.android.com/apk/res-auto">
   <item
       android:id="@+id/menu_login"
-      local:showAsAction="never"
-      android:title="@string/MenuItem_Title_Login" />
+      local:showAsAction="never" />
   <item
        android:id="@+id/menu_dashboard"
-       local:showAsAction="never"
-       android:title="@string/MenuItem_Title_Dashboard" />
+       local:showAsAction="never" />
   <item
       android:id="@+id/menu_settings"
-      local:showAsAction="never"
-      android:title="@string/MenuItem_Title_Settings" />
- 
+      local:showAsAction="never" />
   <item
       android:id="@+id/menu_signout"
-      local:showAsAction="never"
-      android:title="@string/MenuItem_Title_SignOut" />
+      local:showAsAction="never" />
 </menu>

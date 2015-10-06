@@ -2,10 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Graphics;
 using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
 
 namespace WB.UI.Interviewer.Utils

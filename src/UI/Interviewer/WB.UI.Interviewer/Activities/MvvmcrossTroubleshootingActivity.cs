@@ -3,6 +3,7 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -33,6 +34,9 @@ namespace WB.UI.Interviewer.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.settings, menu);
+
+            menu.LocalizeMenuItems();
+
             return base.OnCreateOptionsMenu(menu);
         }
 
