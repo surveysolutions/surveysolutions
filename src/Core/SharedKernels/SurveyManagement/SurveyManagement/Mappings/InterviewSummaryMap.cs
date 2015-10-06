@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Status);
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
+            Property(x => x.ReceivedByInterviewer);
 
             Set(x => x.AnswersToFeaturedQuestions,
                 collection => {
@@ -40,11 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 },
                 rel => { 
                     rel.OneToMany();
-                    
                 });
         }
     }
-
 
     public class QuestionAnswerMap : ClassMapping<QuestionAnswer>
     {

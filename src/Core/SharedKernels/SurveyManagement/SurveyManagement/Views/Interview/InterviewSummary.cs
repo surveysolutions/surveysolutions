@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual ISet<QuestionAnswer> AnswersToFeaturedQuestions { get; protected set; }
 
         public virtual bool WasCreatedOnClient { get; set; }
-
+        public virtual bool ReceivedByInterviewer { get; set; }
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {
             this.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer = answer;

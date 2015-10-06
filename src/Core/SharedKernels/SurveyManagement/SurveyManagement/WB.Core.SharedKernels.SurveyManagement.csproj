@@ -139,7 +139,7 @@
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
     <Compile Include="Implementation\Services\DataExport\DatasetWriterFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\IDatasetWriterFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\ITabFileReader.cs" />

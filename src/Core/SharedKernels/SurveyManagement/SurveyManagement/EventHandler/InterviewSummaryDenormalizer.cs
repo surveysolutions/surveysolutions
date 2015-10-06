@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewSummaryEventHandlerFunctional : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    public class InterviewSummaryDenormalizer : AbstractFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
@@ -35,13 +35,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
-        IUpdateHandler<InterviewSummary, AnswerRemoved>
+        IUpdateHandler<InterviewSummary, AnswerRemoved>,
+        IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
+        IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
 
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
-        public InterviewSummaryEventHandlerFunctional(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
+        public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
             : base(interviewSummary)
         {
@@ -296,6 +298,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     }
                     currentState.Status = evnt.Payload.Status;    
                 }
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewReceivedByInterviewer> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                interview.ReceivedByInterviewer = true;
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewReceivedBySupervisor> evnt)
+        {
+            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            {
+                interview.ReceivedByInterviewer = false;
             });
         }
 
