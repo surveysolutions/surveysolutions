@@ -19,22 +19,59 @@
     });
 
     self.Assign = function () {
-        self.sendCommandAfterFilterAndConfirm(
-            "AssignInterviewerCommand",
-            function (item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId }},
-            function(item) {
-                return item.CanBeReassigned()
-                    && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
-            },
-            "#confirm-assign-template",
-            "#confirm-continue-message-template",
-            function() {
-                self.AssignTo(undefined);
-            },
-            function() {
-                self.AssignTo(undefined);
+
+        var commandName = "AssignInterviewerCommand";
+        var parametersFunc = function(item) { return { InterviewerId: self.AssignTo().UserId, InterviewId: item.InterviewId } };
+        var filterFunc = function(item) {
+            return item.CanBeReassigned()
+                && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
+        };
+        var messageTemplateId = "#confirm-assign-template";
+        var continueMessageTemplateId = "#confirm-continue-message-template";
+        var onSuccessCommandExecuting = function() {
+            self.AssignTo(undefined);
+        };
+        var onCancelConfirmation = function () {
+            self.AssignTo(undefined);
+        };
+
+        var filteredItems = self.GetSelectedItemsAfterFilter(function(item) {
+                                return item.CanBeReassigned()
+                                    && !(item.Status() == 'InterviewerAssigned' && item.ResponsibleId() == self.AssignTo().UserId);
+                            });
+        var receivedByInterviewerItems = _.filter(filteredItems, function(item) { return item.ReceivedByInterviewer() === true });
+
+        var popupViewModel = {
+            allItems: filteredItems,
+            receivedItems: receivedByInterviewerItems
+        };
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, popupViewModel);
+
+        if (filteredItems.length === 0) {
+            bootbox.alert(messageHtml);
+            return;
+        }
+
+        messageHtml += $(continueMessageTemplateId).html();
+
+        bootbox.confirm(messageHtml, function (result) {
+            if (result) {
+                var itemsThatShouldBeReassigned = [];
+                if ($("#reassignReceivedByInterviewer").is(':checked')) {
+                    itemsThatShouldBeReassigned = filteredItems;
+                } else {
+                    itemsThatShouldBeReassigned = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === false });
+                }
+
+                if (itemsThatShouldBeReassigned.length > 0) {
+                    self.sendCommand(commandName, parametersFunc, itemsThatShouldBeReassigned, onSuccessCommandExecuting);
+                }
+            } else {
+                if (!_.isUndefined(onCancelConfirmation)) {
+                    onCancelConfirmation();
+                }
             }
-        );
+        });
     };
 
     self.ApproveInterview = function () {

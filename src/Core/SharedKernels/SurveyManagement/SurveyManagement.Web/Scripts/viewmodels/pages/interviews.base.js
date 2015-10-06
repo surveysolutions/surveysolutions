@@ -91,26 +91,32 @@
         self.search();
     };
 
-    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId, onSuccessCommandExecuting, onCancelConfirmation) {
-        var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
-        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
+    self.sendCommandAfterFilterAndConfirm = function (commandName,
+        parametersFunc,
+        filterFunc,
+        messageTemplateId,
+        continueMessageTemplateId,
+        onSuccessCommandExecuting,
+        onCancelConfirmation) {
+            var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
+            var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
-        if (filteredItems.length === 0) {
-            bootbox.alert(messageHtml);
-            return;
-        }
-
-        messageHtml += $(continueMessageTemplateId).html();
-
-        bootbox.confirm(messageHtml, function (result) {
-            if (result) {
-                self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
-            } else {
-                if (!_.isUndefined(onCancelConfirmation)) {
-                    onCancelConfirmation();
-                }
+            if (filteredItems.length === 0) {
+                bootbox.alert(messageHtml);
+                return;
             }
-        });
+
+            messageHtml += $(continueMessageTemplateId).html();
+
+            bootbox.confirm(messageHtml, function (result) {
+                if (result) {
+                    self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
+                } else {
+                    if (!_.isUndefined(onCancelConfirmation)) {
+                        onCancelConfirmation();
+                    }
+                }
+            });
     };
 
     self.sendCommand = function (commandName, parametersFunc, items, onSuccessCommandExecuting) {

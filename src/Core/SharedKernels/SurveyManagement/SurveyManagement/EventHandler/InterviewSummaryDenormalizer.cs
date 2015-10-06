@@ -255,6 +255,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 interview.ResponsibleId = evnt.Payload.InterviewerId;
                 interview.ResponsibleName = interviewerName;
                 interview.ResponsibleRole = UserRoles.Operator;
+
+                interview.ReceivedByInterviewer = false;
             });
         }
 
