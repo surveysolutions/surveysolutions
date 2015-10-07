@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult DownloadPackages(string fileName)
         {
-            return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
+            return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip",
+                this.tabletInformationService.GetPackageNameWithoutRegistrationId(fileName));
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]

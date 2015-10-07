@@ -139,6 +139,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
             return tabletLogView;
         }
 
+        public string GetPackageNameWithoutRegistrationId(string packageName)
+        {
+            var fileNameWithoutExtension = this.fileSystemAccessor.GetFileNameWithoutExtension(packageName);
+            var separatedValues = fileNameWithoutExtension.Split(Separator);
+            if (separatedValues.Length != 3)
+                return packageName;
+
+            return string.Format("{0}{1}{2}{3}", separatedValues[0], Separator, separatedValues[2], this.zipExtension);
+        }
+
         private string GetByUserNameGetById(Guid x)
         {
             var user = this.usersStorageReader.GetById(x);
