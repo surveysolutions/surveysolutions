@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 
@@ -41,6 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
         public override void Load()
         {
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+            this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
 
             if (this.usePlainQuestionnaireRepository)
             {
