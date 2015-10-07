@@ -21,6 +21,14 @@ namespace WB.UI.Tester.Activities
                 this.Finish();
             });
         }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(this.MenuResourceId, menu);
+
+            return base.OnCreateOptionsMenu(menu);
+        }
+
         protected override void OnMenuItemSelected(int resourceId)
         {
             switch (resourceId)

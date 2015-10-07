@@ -2,6 +2,7 @@ using Android.App;
 using Android.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
+using WB.UI.Interviewer.Utils;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -26,6 +27,15 @@ namespace WB.UI.Interviewer.Activities
                     Application.SynchronizationContext.Post(async _ => { await this.ViewModel.NavigateBack(); }, null);
                     this.Finish();
                 });
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(this.MenuResourceId, menu);
+
+            menu.LocalizeMenuItems();
+
+            return base.OnCreateOptionsMenu(menu);
         }
 
         protected override async void OnMenuItemSelected(int resourceId)
