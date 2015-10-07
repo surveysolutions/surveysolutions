@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
 
         protected static IEnumerable<string> GetXmlResourcesHavingHardcodedDimensions(string resourcesRelativePath)
         {
-            var resourcesFullPath = TestEnvironment.GetSourceFolder(resourcesRelativePath);
+            var resourcesFullPath = TestEnvironment.GetSourcePath(resourcesRelativePath);
 
             return TestEnvironment
                 .GetAllFilesFromSourceFolder(resourcesRelativePath, "*.xml", "*.axml")
