@@ -12,6 +12,7 @@
     <script type="text/javascript">
         var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
         var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
+        var $connectedToDeviceUrl = '@Url.Action("InterviewersConnectedToDevice", "Supervisor", new { area = string.Empty })';
         var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "DeleteSupervisor" })';
         $(function () {
@@ -66,6 +67,7 @@
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
+                <th data-bind='sortby : "ConnectedToDeviceInterviewersCount"'>Connected to device</th>
                 <th></th>
 
             </tr>
@@ -75,8 +77,11 @@
             <tr>
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
-                <td >
+                <td>
                     <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
+                </td>
+                <td>
+                    <a data-bind="attr:{href: $connectedToDeviceUrl + '/' + UserId()}, text: ConnectedToDeviceInterviewersCount() + ' / ' + InterviewersCount()"></a>
                 </td>
                 <td>
                     @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
