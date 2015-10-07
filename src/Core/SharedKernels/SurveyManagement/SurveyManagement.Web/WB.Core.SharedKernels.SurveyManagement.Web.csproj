@@ -222,12 +222,15 @@
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
+    <Compile Include="Models\InterviewersFilter.cs" />
+    <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
+    <Compile Include="Models\InterviewersListViewModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Properties\SyncLogMessages.Designer.cs">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>

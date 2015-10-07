@@ -40,37 +40,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView Interviewers(UsersListViewModel data)
+        public InterviewersView Interviewers(InterviewersListViewModel data)
         {
-            // Headquarter and Admin can view interviewers by any supervisor
-            // Supervisor can view only their interviewers
-            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                                 ? data.SupervisorId
-                                 : this.GlobalInfo.GetCurrentUser().Id;
-
-            if (viewerId == null) return null;
-
-            var input = new InterviewersInputModel
-            {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                ViewerId = viewerId.Value
-            };
-
-            return this.interviewersFactory.Load(input);
+            return GetInterviewers(data, archived: false);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView ArchivedInterviewers(UsersListViewModel data)
+        public InterviewersView ArchivedInterviewers(InterviewersListViewModel data)
+        {
+            return GetInterviewers(data, archived: true);
+        }
+
+        private InterviewersView GetInterviewers(InterviewersListViewModel data, bool archived)
         {
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
             Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                                 ? data.SupervisorId
-                                 : this.GlobalInfo.GetCurrentUser().Id;
+                ? data.SupervisorId
+                : this.GlobalInfo.GetCurrentUser().Id;
 
             if (viewerId == null) return null;
 
@@ -81,7 +69,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ViewerId = viewerId.Value,
                 Orders = data.SortOrder,
                 SearchBy = data.SearchBy,
-                Archived = true
+                Archived = archived,
+                ShowOnlyNotConnectedToDevice = data.ShowOnlyNotConnectedToDevice
             };
 
             return this.interviewersFactory.Load(input);

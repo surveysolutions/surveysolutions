@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -9,9 +10,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
 {
     class SupervisorsViewFactory : ISupervisorsViewFactory
     {
-        private class SupervisorUserDocument
+        private class SupervisorUserDocument 
         {
-            public UserDocument UserDocument { get; set; }
+            public Guid PublicKey { get; set; }
+            public DateTime CreationDate { get; set; }
+            public string UserName { get; set; }
+            public string Email { get; set; }
+            public bool IsLockedBySupervisor { get; set; }
+            public bool IsLockedByHQ { get; set; }
             public int InterviewersCount { get; set; }
             public int ConnectedToDeviceInterviewersCount { get; set; }
         }
@@ -37,12 +43,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
 
             })
             .Select(x => new SupervisorsItem(
-                        id: x.UserDocument.PublicKey,
-                        creationDate: x.UserDocument.CreationDate,
-                        email: x.UserDocument.Email,
-                        isLockedBySupervisor: x.UserDocument.IsLockedBySupervisor,
-                        isLockedByHQ: x.UserDocument.IsLockedByHQ,
-                        name: x.UserDocument.UserName,
+                        id: x.PublicKey,
+                        creationDate: x.CreationDate,
+                        email: x.Email,
+                        isLockedBySupervisor: x.IsLockedBySupervisor,
+                        isLockedByHQ: x.IsLockedByHQ,
+                        name: x.UserName,
                         interviewersCount: x.InterviewersCount,
                         connectedToDeviceInterviewersCount: x.ConnectedToDeviceInterviewersCount
                         ));
@@ -68,7 +74,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
 
             var supervisors = allUsers.Select(ud => new SupervisorUserDocument()
             {
-                UserDocument = ud,
+                PublicKey = ud.PublicKey,
+                CreationDate = ud.CreationDate,
+                Email = ud.Email,
+                IsLockedBySupervisor = ud.IsLockedBySupervisor,
+                IsLockedByHQ = ud.IsLockedByHQ,
+                UserName = ud.UserName,
                 InterviewersCount = _.Count(pr => pr.Supervisor.Id == ud.PublicKey),
                 ConnectedToDeviceInterviewersCount = _.Count(pr => pr.Supervisor.Id == ud.PublicKey && pr.DeviceId != null)
             });
