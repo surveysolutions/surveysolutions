@@ -4,6 +4,7 @@ using Machine.Specifications;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
 {
+    [Ignore("KP-6181")]
     internal class when_checking_availability_of_enumerator_resources_in_russian_comparing_to_english : ResourcesTranslationTestsContext
     {
         Because of = () =>
