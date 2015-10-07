@@ -117,46 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>Приложение Designer недоступно в текущий момент</value>
+  </data>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>list have not been updated</value>
+    <value>не обновлялись</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>list was updated {0}</value>
-  </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Connecting to server</value>
-  </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creating interview</value>
-  </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Downloading questionnaire -  {0}%</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Can't open the questionnaire "{0}". Your Designer user account is not authorized. Please check your login and password.</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
-  </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Preparing questionnaire to creating interview</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Saving interview dynamic link library to local storage</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Saving questionnaire to local storage</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Checking questionnaire for errors on the server</value>
-  </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
+    <value>обновлялись {0}</value>
   </data>
 </root>

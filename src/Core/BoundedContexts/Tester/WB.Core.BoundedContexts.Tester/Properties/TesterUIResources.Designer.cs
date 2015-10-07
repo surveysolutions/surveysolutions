@@ -62,16 +62,16 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to have not been updated.
+        ///   Looks up a localized string similar to list have not been updated.
         /// </summary>
-        internal static string Dashboard_HasNotBeenUpdated {
+        internal static string Dashboard_HaveNotBeenUpdated {
             get {
-                return ResourceManager.GetString("Dashboard_HasNotBeenUpdated", resourceCulture);
+                return ResourceManager.GetString("Dashboard_HaveNotBeenUpdated", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to were updated {0}.
+        ///   Looks up a localized string similar to list was updated {0}.
         /// </summary>
         internal static string Dashboard_LastUpdated {
             get {

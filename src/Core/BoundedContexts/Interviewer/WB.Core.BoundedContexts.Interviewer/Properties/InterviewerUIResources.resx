@@ -187,7 +187,7 @@ for further instructions</value>
     <value>{0} assignments for {1}</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>No internet access to the Survey Solutions Supervisor website. Check server adddress and(or) network settings</value>
+    <value>No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Server error. Please contact the support team at support@mysurvey.solutions.</value>
@@ -196,10 +196,10 @@ for further instructions</value>
     <value>Your application is not compatible with server one. Update your Interviewer application.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Provided Synchronization endpoint is invalid. Check settings.</value>
+    <value>Supervisor website address is invalid. Make sure that you entered correct url address.</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>If you forgot your password and headquarter has reset it you could try to sign in online</value>
+    <value>You could try to sign in online if you forgot your password or it was reset</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Authentication problem on the remote server too. Please contact your Supervisor or Headquarter</value>
@@ -259,7 +259,7 @@ for further instructions</value>
     <value>Interview settings</value>
   </data>
   <data name="Prefs_Title" xml:space="preserve">
-    <value />
+    <value>Settings</value>
   </data>
   <data name="RequestCanceledByUser" xml:space="preserve">
     <value>Request cancelled by user</value>

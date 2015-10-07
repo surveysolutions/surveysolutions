@@ -441,7 +441,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.HumanizedLastUpdateDate = lastUpdate.HasValue
                 ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: false))
-                : TesterUIResources.Dashboard_HasNotBeenUpdated;
+                : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 
         private List<QuestionnaireListItem> HightlightSearchTermInFilteredList(List<QuestionnaireListItem> questionnaireListItems, string searchTerm)
