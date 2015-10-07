@@ -9,7 +9,7 @@ namespace WB.Tests.Integration
     {
         public static IEnumerable<string> GetAllFilesFromSourceFolder(string relativePath, params string[] masks)
         {
-            var sourceFolder = GetSourceFolder(relativePath);
+            var sourceFolder = GetSourcePath(relativePath);
 
             if (!Directory.Exists(sourceFolder))
                 throw new DirectoryNotFoundException(relativePath);
@@ -17,12 +17,12 @@ namespace WB.Tests.Integration
             return masks.SelectMany(mask => Directory.EnumerateFiles(sourceFolder, mask, SearchOption.AllDirectories));
         }
 
-        public static string GetSourceFolder(string relativePath)
+        public static string GetSourcePath(string relativePath)
         {
-            return Path.Combine(GetSolutionFolder(), relativePath);
+            return Path.Combine(GetSolutionFolderPath(), relativePath);
         }
 
-        public static string GetSolutionFolder()
+        public static string GetSolutionFolderPath()
         {
             return Directory.GetParent(typeof (TestEnvironment).Assembly.Location).Parent.Parent.Parent.Parent.FullName;
         }
