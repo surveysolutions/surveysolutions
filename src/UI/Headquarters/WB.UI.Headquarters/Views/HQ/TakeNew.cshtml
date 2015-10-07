@@ -165,28 +165,29 @@
         </div>
     </script>
     <script type="text/html" id="GpsCoordinates">
-        <div class="form-group">
+        <div class="form-group" >
             <label class="col-sm-2 control-label" data-bind="html: title"></label>
-            <div class="col-sm-2">
-                <div class="input-group" data-bind="validationElement: latitude">
+            <div class="col-sm-2" data-bind="validationElement: latitude">
+                <div class="input-group">
                     <span class="input-group-addon">φ</span>
-                    <input type="text" class="form-control" data-bind="numericformatter: latitude, valueUpdate: 'afterkeydown'"/>
-
+                    <input type="text" class="form-control" data-bind="numericformatter: latitude, valueUpdate: 'afterkeydown'" />
                 </div>
                 <span class="help-block" data-bind="validationMessage: latitude"></span>
             </div>
             <div class="col-sm-2">
                 <div class="input-group" data-bind="validationElement: longitude">
                     <span class="input-group-addon">λ</span>
-                    <input type="text" class="form-control" data-bind="numericformatter: longitude, valueUpdate: 'afterkeydown'"/>
+                    <input type="text" class="form-control" data-bind="numericformatter: longitude, valueUpdate: 'afterkeydown'" />
                 </div>
+
                 <span class="help-block" data-bind="validationMessage: longitude"></span>
-             
             </div>
-            <div class="col-sm-2" data-bind="visible: longitude.isValid() && latitude.isValid()">
-                <a data-bind="attr: { href: showMapUrl() }" target="_blank">show on map</a>
+            <div class="col-sm-2">
+                <div class="input-group" data-bind="visible: isMapVisible()">
+                    <a data-bind="attr: { href: showMapUrl() }" target="_blank">show on map</a>
+                </div>
             </div>
-            </div>
+        </div>
     </script>
 }
 
