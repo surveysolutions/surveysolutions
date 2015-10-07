@@ -931,6 +931,78 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}.
+        /// </summary>
+        public static string Troubleshooting_Old_AreYouSureYouWantToRestore {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_AreYouSureYouWantToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating information package.
+        /// </summary>
+        public static string Troubleshooting_Old_CreatingInformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_CreatingInformationPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package.
+        /// </summary>
+        public static string Troubleshooting_Old_InformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package is successfully sent..
+        /// </summary>
+        public static string Troubleshooting_Old_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package of size {0} will be sent via network. Are you sure you want to send it?.
+        /// </summary>
+        public static string Troubleshooting_Old_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending information package.
+        /// </summary>
+        public static string Troubleshooting_Old_SendingInformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingInformationPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending of information package is cancelled. Reason: {0}.
+        /// </summary>
+        public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceled {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingOfInformationPackageIsCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelling.
+        /// </summary>
+        public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceling {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingOfInformationPackageIsCanceling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Something went wrong and tabled failed to be restored.
         /// </summary>
         public static string Troubleshooting_RestorationErrorMessage {
@@ -1026,6 +1098,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string UpgradeRequired {
             get {
                 return ResourceManager.GetString("UpgradeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }
