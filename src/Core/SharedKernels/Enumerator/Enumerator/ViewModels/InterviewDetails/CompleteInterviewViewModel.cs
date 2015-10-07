@@ -4,6 +4,8 @@ using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -16,7 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
         protected readonly IPrincipal principal;
-
 
         public CompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected Guid interviewId;
 
-        public void Init(string interviewId)
+        public virtual void Init(string interviewId)
         {
             this.interviewId = Guid.Parse(interviewId);
 
@@ -44,6 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
             this.UnansweredCount = questionsCount - this.AnsweredCount;
+
         }
 
         public int AnsweredCount { get; set; }
