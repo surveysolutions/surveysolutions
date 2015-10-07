@@ -124,11 +124,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.drawerToggle.SyncState();
         }
 
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            this.MenuInflater.Inflate(this.MenuResourceId, menu);
-            return base.OnCreateOptionsMenu(menu);
-        }
+       
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {

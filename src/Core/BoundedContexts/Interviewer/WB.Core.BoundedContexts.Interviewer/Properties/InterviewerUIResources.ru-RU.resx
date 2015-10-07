@@ -209,4 +209,19 @@
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложени Interviewer.</value>
   </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Опросники</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
+    <value>Устранение проблем</value>
+  </data>
 </root>

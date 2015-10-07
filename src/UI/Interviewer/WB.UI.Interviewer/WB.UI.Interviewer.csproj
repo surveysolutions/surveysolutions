@@ -324,7 +324,6 @@
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
     <Compile Include="InterviewerBoundedContextModule.cs" />
-    <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
@@ -467,11 +466,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -485,9 +479,6 @@
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
     <AndroidResource Include="Resources\Values\settings.xml" />
-    <AndroidResource Include="Resources\values-ru\strings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
@@ -689,6 +680,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Adapters\" />
     <Folder Include="Infrastructure\Internals\Security\" />
     <Folder Include="Resources\drawable-v21\" />
     <Folder Include="Services\" />
