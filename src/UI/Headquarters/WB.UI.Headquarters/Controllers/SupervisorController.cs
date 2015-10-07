@@ -132,13 +132,20 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Interviewers(Guid id)
+        public ActionResult Interviewers(InterviewersFilter filter)
         {
-            var supervisor = this.GetUserById(id);
+            var supervisor = this.GetUserById(filter.Id);
             if (supervisor == null)
                 throw new HttpException(404, string.Empty);
 
-            return this.View(supervisor);
+            InterviewersModel pageModel = new InterviewersModel()
+            {
+                SupervisorId = supervisor.PublicKey,
+                UserName = supervisor.UserName,
+                ShowOnlyNotConnectedToDevice = filter.ShowOnlyNotConnectedToDevice
+            };
+
+            return this.View(pageModel);
         }
     }
 }

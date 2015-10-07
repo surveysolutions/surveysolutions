@@ -4,7 +4,8 @@
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Headquarters.Code
-@model WB.Core.SharedKernels.SurveyManagement.Views.User.UserView
+
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
 @{
     Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
     ViewBag.Title = string.Format("{0}: Interviewers", Model.UserName);
@@ -19,7 +20,10 @@
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})', $commandExecutionUrl);
             model.GetFilterMethod = function () {
-                return { SupervisorId: '@Model.PublicKey' };
+                return {
+                    SupervisorId: '@Model.SupervisorId',
+                    ShowOnlyNotConnectedToDevice: @Model.ShowOnlyNotConnectedToDevice.ToString().ToLower()
+                };
             };
             ko.applyBindings(model);
             model.load();
@@ -30,7 +34,16 @@
 @section header
 {
     <h2 class="sinle-line-header">
-        @Model.UserName <small>interviewers</small>
+        @Model.UserName
+
+        @if (!Model.ShowOnlyNotConnectedToDevice)
+        {
+            <small>interviewers</small>
+        }
+        else
+        {
+            <small>interviewers not connected to device</small>
+        }
     </h2>
 }
 
@@ -40,7 +53,7 @@
         <div class="form-inline">
             @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
             {
-                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new {supervisorId = Model.PublicKey, area = string.Empty})">
+                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new {supervisorId = Model.SupervisorId, area = string.Empty})">
                     <i class="glyphicon glyphicon-user"></i> Create
                 </a>
                 if (User.IsInRole(UserRoles.Administrator.ToString()))
@@ -60,7 +73,7 @@
         </div>
     </div>
     <div class="btn-group pull-right">
-        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model.PublicKey })">
+        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model.SupervisorId })">
             <i class="glyphicon glyphicon glyphicon-book"></i> Archived interviewers
         </a>
     </div>
