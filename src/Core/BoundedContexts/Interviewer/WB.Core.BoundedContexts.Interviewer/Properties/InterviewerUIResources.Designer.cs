@@ -281,7 +281,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server adddress and(or) network settings.
+        ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
             get {
@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Synchronization endpoint is invalid. Check settings..
+        ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address..
         /// </summary>
         public static string InvalidEndpoint {
             get {
@@ -317,7 +317,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you forgot your password and headquarter has reset it you could try to sign in online.
+        ///   Looks up a localized string similar to You could try to sign in online if you forgot your password or it was reset.
         /// </summary>
         public static string Login_Online_Signin_Explanation_message {
             get {
@@ -542,7 +542,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Prefs_Title {
             get {
