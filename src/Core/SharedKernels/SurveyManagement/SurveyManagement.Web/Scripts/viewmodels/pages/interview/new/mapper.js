@@ -76,27 +76,19 @@
                     item.selectedOption.extend({ required: true });
                     break;
                 case "GpsCoordinates":
-                    item.latitude = ko.observableArray([]);
-                    item.latitude("0");
-                    item.latitude.extend({ required: true });
-                    item.latitude.extend({ gps_latitude: true });
+                    item.latitude.extend({ gps_latitude: true, required: true });
+                    item.longitude.extend({ gps_longitude: true, required: true });
 
-                    item.longitude = ko.observableArray([]);
-                    item.longitude("0");
-                    item.longitude.extend({ required: true });
-                    item.longitude.extend({ gps_longitude: true });
-
-
-                    self.showMapUrl = function () {
-                        return ko.computed({
-                            read: function () {
-                                return "http://maps.google.com/maps?q=" + item.latitude() + "," + item.longitude();
-                            }
-                        }, this);
+                    item.showMapUrl = function() {
+                        return "http://maps.google.com/maps?q=" + item.latitude() + "," + item.longitude();
+                    };
+                    item.isMapVisible = function () {
+                        return item.latitude.isValid() && item.longitude.isValid();
                     };
                     break;
 
             }
+
             return item;
         }
     },
