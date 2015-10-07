@@ -90,6 +90,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var metaInfo = this.serializer.Deserialize<InterviewMetaInfo>(item.MetaInfo);
             try
             {
+                this.capiCleanUpService.DeleteInterview(metaInfo.PublicKey);
+
                 bool createdOnClient = metaInfo.CreatedOnClient.GetValueOrDefault();
 
                 var featuredQuestionsMeta = metaInfo
