@@ -117,62 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutTitle" xml:space="preserve">
-    <value>О программе</value>
-  </data>
-  <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Ваша учетная запись была заблокирована администратором. Пожалуйста, обратитесь в службу поддержки Survey Solutions</value>
-  </data>
-  <data name="ApplicationNameText" xml:space="preserve">
-    <value>Имя приложения:</value>
-  </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
     <value>Мои опросники</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
     <value>Общие опросники</value>
   </data>
-  <data name="Dashboard_SearchText" xml:space="preserve">
-    <value>Поиск (по имени, автору)</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Опросники</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
     <value>Адрес веб-сервиса:</value>
-  </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Подключение к серверу</value>
-  </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Создание интервью</value>
-  </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Загрузка опросника -  {0}%</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>У Вас нет прав на просмотр данного опросника</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Запрашиваемый опросник не найден</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Запрашиваемый опросник содержит ошибки.  Пожалуйста, исправьте все ошибки в дизайнере опросников и попробуйте снова</value>
-  </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>Нет связи с дизайнером Survey Solutions. Открыть локальную копию опросника?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Погдотовка опросника к созданию интервью</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Сохранение динамически подключаемой библиотеки интервью на диск</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Сохранение опросника на диск</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Проверка опросника на наличие ошибок</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
     <value>На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время</value>
@@ -198,17 +153,11 @@
   <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
     <value>Нет связи с дизайнером Survey Solutions</value>
   </data>
-  <data name="Troubleshooting_Title" xml:space="preserve">
-    <value>Устранение неполадок</value>
-  </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Запомнить меня</value>
   </data>
   <data name="ErrorMessage_Unauthorized" xml:space="preserve">
     <value>Вы ввели неправильное имя или пароль</value>
-  </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Сервер с приложением Designer не отвечает. Проверьте адрес подключения к серверу или повторите попытку позже</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
     <value>НАЧАТЬ</value>
@@ -386,64 +335,13 @@
   <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
     <value>Завершить интервью</value>
   </data>
-  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
-    <value>не обновлялись</value>
-  </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>обновлялись {0}</value>
-  </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>Опросники не найдены</value>
   </data>
   <data name="EndpointHint" xml:space="preserve">
     <value>Домен синхронизации</value>
   </data>
-  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
-    <value>Возникла проблема при создании резервной копии. Обратитесь к разработчиками или повторите попытку позже</value>
-  </data>
-  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
-    <value>Резервная копия была создана и сохранена в файл {0}</value>
-  </data>
-  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>Cуществует более поздняя версия. Вы хотите загрузить обновление?</value>
-  </data>
-  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
-    <value>У вас последняя версия приложения</value>
-  </data>
-  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
-    <value>Произошла ошибка во время проверки версии. Проверьте настройке и повторите попытку позже</value>
-  </data>
-  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
-    <value>Возникла проблема при восстановлении из резервной копии. Обратитесь к разработчиками или повторите попытку позже</value>
-  </data>
-  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
-    <value>Данные успешно восстановлены из резервной копии</value>
-  </data>
-  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>Все данные будут перетерты. Вы уверены, что хотите продолжить? Если да, то убедитесь, что файл с резервной копией находится по следующему пути {0}</value>
-  </data>
-  <data name="Troubleshooting_Backup" xml:space="preserve">
-    <value>Создать резервную копию</value>
-  </data>
-  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
-    <value>Версия {0}. Проверить наличие обновлений</value>
-  </data>
-  <data name="Troubleshooting_Restore" xml:space="preserve">
-    <value>Восстановить из резервной копии</value>
-  </data>
-  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
-    <value>Отправить информацию о таблете</value>
-  </data>
-  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Инофрмация о таблете успешно отправлена</value>
-  </data>
-  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Пакета с информацией о таблете размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его?</value>
-  </data>
-  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
-    <value>Произошла ошибка при отправке пакета с информацией о таблете</value>
-  </data>
-  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Вашей учетной записи не назначена роль интервьювера</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
   </data>
 </root>
