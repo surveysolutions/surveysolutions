@@ -119,15 +119,25 @@ namespace WB.UI.Interviewer.EventHandlers
                 return;
 
             var prefilledQuestions = new List<FeaturedItem>();
-            foreach (var featuredQuestion in questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured))
+            var featuredQuestions = questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured).ToList();
+
+            QuestionnaireDTO.GpsCoordinates gpsLocation = null;
+
+            foreach (var featuredQuestion in featuredQuestions)
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
                 prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
+
+                if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item.Answer != null)
+                {
+                    var gpsAnswer = (GeoPosition) item.Answer;
+                    gpsLocation = new QuestionnaireDTO.GpsCoordinates(gpsAnswer.Latitude, gpsAnswer.Longitude);
+                }
             }
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
                 prefilledQuestions, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, rejectedDateTime,
-                createdOnClient, canBeDeleted);
+                gpsLocation, createdOnClient, canBeDeleted);
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
         }
 

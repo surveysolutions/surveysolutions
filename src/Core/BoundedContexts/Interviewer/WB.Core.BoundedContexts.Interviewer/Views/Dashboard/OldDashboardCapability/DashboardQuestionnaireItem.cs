@@ -3,15 +3,29 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
     public class DashboardQuestionnaireItem
     {
+        public class GpsCoordinates
+        {
+            public double Latitude { get; private set; }
+            public double Longitude { get; private set; }
+
+            public GpsCoordinates(double latitude, double longitude)
+            {
+                this.Latitude = latitude;
+                this.Longitude = longitude;
+            }
+        }
+
         public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, DashboardInterviewStatus status,
             IEnumerable<FeaturedItem> properties, string title, long questionnaireVersion, string comments, 
             DateTime? startedDateTime, DateTime? completedDateTime, DateTime? createdDateTime, 
-            DateTime? rejectedDateTime, bool? createdOnClient = false, bool canBeDeleted = false)
+            DateTime? rejectedDateTime, GpsCoordinates gpsLocation,
+            bool? createdOnClient = false, bool canBeDeleted = false)
         {
             this.PublicKey = publicKey;
             this.Status = status;
@@ -24,11 +38,14 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.CompletedDateTime = completedDateTime;
             this.CreatedDateTime = createdDateTime;
             this.RejectedDateTime = rejectedDateTime;
+            this.GpsLocation = gpsLocation;
             this.CreatedOnClient = createdOnClient;
             this.CanBeDeleted = canBeDeleted;
         }
 
         public IEnumerable<FeaturedItem> Properties { get; private set; }
+
+        public GpsCoordinates GpsLocation { get; private set; }
 
         public Guid PublicKey { get; private set; }
 
