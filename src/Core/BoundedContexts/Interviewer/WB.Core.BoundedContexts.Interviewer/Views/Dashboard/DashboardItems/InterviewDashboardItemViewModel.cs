@@ -85,13 +85,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxCommand NavigateToGpsLocationCommand
         {
-            get { return new MvxCommand(async () => await NavigateToGpsLocation(), () => this.HasGpsLocation); }
+            get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
         }
 
-        private async Task NavigateToGpsLocation()
+        private void NavigateToGpsLocation()
         {
-            await this.userInteractionService.AlertAsync(
-                string.Format("lat: {0}, lon: {1}", this.GpsLocation.Latitude, this.GpsLocation.Longitude));
+            this.userInteractionService.OpenMaps(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
         }
 
         private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
