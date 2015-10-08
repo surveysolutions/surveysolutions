@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public InterviewSummary(QuestionnaireDocument questionnaire) : this()
         {
-            foreach (var featuredQuestion in questionnaire.Find<IQuestion>(q => q.Featured))
+            foreach (var featuredQuestion in questionnaire.Find<IQuestion>(q => q.Featured && q.QuestionType != QuestionType.GpsCoordinates))
             {
                 var result = new QuestionAnswer
                 {
