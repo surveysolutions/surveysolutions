@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
         {
             supervisor1 = CreateSupervisor(supervisor1Id, "supervisor1");
             UserDocument interviewer11 = CreateInterviewer(interviewer11Id, supervisor1, "interviewer11", "device11");
-            UserDocument interviewer12 = CreateInterviewer(interviewer12Id, supervisor1, "interviewer12", "device12");
+            UserDocument interviewer12 = CreateInterviewer(interviewer12Id, supervisor1, "interviewer12", null);
 
             supervisor2 = CreateSupervisor(supervisor2Id, "supervisor2");
             UserDocument interviewer21 = CreateInterviewer(interviewer21Id, supervisor2, "interviewer21", "device21");
@@ -22,19 +22,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
             supervisor3 = CreateSupervisor(supervisor3Id, "supervisor3");
             UserDocument interviewer31 = CreateInterviewer(interviewer31Id, supervisor3, "interviewer31", "device31");
             UserDocument interviewer32 = CreateInterviewer(interviewer32Id, supervisor3, "interviewer32", null);
-            UserDocument interviewer33 = CreateInterviewer(interviewer33Id, supervisor3, "interviewer33", "device32");
+            UserDocument interviewer33 = CreateInterviewer(interviewer33Id, supervisor3, "interviewer33", null);
+            UserDocument interviewer34 = CreateInterviewer(interviewer34Id, supervisor3, "interviewer34", null, true);
 
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(
                 supervisor1, supervisor2, supervisor3,
                 interviewer11, interviewer12,
                 interviewer21,
-                interviewer31, interviewer32, interviewer33);
+                interviewer31, interviewer32, interviewer33, interviewer34);
 
             supervisorsViewFactory = CreateSupervisorsViewFactory(readerWithUsers);
 
             supervisorsInputModel = new SupervisorsInputModel()
             {
-                Order = "ConnectedToDeviceInterviewersCount",
+                Order = "NotConnectedToDeviceInterviewersCount",
                 Page = 0,
                 PageSize = 20
             };
@@ -54,6 +55,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
             result.Items.Skip(0).First().UserId.ShouldEqual(supervisor2.PublicKey);
             result.Items.Skip(1).First().UserId.ShouldEqual(supervisor1.PublicKey);
             result.Items.Skip(2).First().UserId.ShouldEqual(supervisor3.PublicKey);
+        };
+
+        It should_return_correct_count_of_not_connected_interviewers = () =>
+        {
+            result.Items.Skip(0).First().NotConnectedToDeviceInterviewersCount.ShouldEqual(0);
+            result.Items.Skip(1).First().NotConnectedToDeviceInterviewersCount.ShouldEqual(1);
+            result.Items.Skip(2).First().NotConnectedToDeviceInterviewersCount.ShouldEqual(2);
         };
 
         It should_return_correct_count_of_interviewers = () =>
@@ -79,5 +87,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
         private static Guid interviewer31Id = Guid.Parse("03111111111111111111111111111111");
         private static Guid interviewer32Id = Guid.Parse("03222222222222222222222222222222");
         private static Guid interviewer33Id = Guid.Parse("03333333333333333333333333333333");
+        private static Guid interviewer34Id = Guid.Parse("03444444444444444444444444444444");
     }
 }
