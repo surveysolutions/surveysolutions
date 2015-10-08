@@ -71,6 +71,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
             errors.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
 
+            errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions)(datas,preloadedDataService));
+            errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
+
             status.Errors = errors;
 
             var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.SupervisorName);
@@ -136,16 +139,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return new[]
                 {
                     this.Verifier(this.CoulmnWasntMappedOnQuestionInTemplate, "PL0003",
-                        PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
+                        PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion,
+                        PreloadedDataVerificationReferenceType.Column),
                     this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004",
-                        PreloadingVerificationMessages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File),
-                    this.Verifier(this.ServiceColumnsAreAbsent, "PL0007", PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
+                        PreloadingVerificationMessages.PL0004_FileWasntMappedRoster,
+                        PreloadedDataVerificationReferenceType.File),
+                    this.Verifier(this.ServiceColumnsAreAbsent, "PL0007",
+                        PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
                         PreloadedDataVerificationReferenceType.Column),
                     this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
                     this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
                     this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
                         PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
                     this.ErrorsByQuestionsWasntParsed,
+                    this.Verifier(this.ColumnDuplications),
+                    this.Verifier(this.ErrorsByGpsQuestions),
                     this.ErrorsBySupervisorName
                 };
             }
@@ -359,6 +367,78 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
+        private IEnumerable<PreloadedDataVerificationError> ColumnDuplications(
+            PreloadedDataByFile preloadedDataByFile,
+            IPreloadedDataService preloadedDataService)
+        {
+            var columnNameOnCountOfOccurrenceMap = new Dictionary<string, List<PreloadedDataVerificationReference>>();
+
+            for (int i = 0; i < preloadedDataByFile.Header.Length; i++)
+            {
+                var header = preloadedDataByFile.Header[i];
+
+                var headerLowerCase = header.Trim().ToLower();
+                if (!columnNameOnCountOfOccurrenceMap.ContainsKey(headerLowerCase))
+                    columnNameOnCountOfOccurrenceMap[headerLowerCase] = new List<PreloadedDataVerificationReference>();
+
+                columnNameOnCountOfOccurrenceMap[headerLowerCase].Add(CreateReference(i, preloadedDataByFile));
+            }
+
+            return
+                columnNameOnCountOfOccurrenceMap.Where(c => c.Value.Count > 1).Select(
+                    columnsWithDuplicate =>
+                        new PreloadedDataVerificationError("PL0031",
+                            PreloadingVerificationMessages.PL0031_ColumnNameDuplicatesFound,
+                            columnsWithDuplicate.Value.ToArray()));
+        }
+
+        private IEnumerable<PreloadedDataVerificationError> ErrorsByGpsQuestions(
+            PreloadedDataByFile levelData,
+            IPreloadedDataService preloadedDataService)
+        {
+            var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
+            if (levelExportStructure == null)
+                yield break;
+
+            var gpsExportedQuestions =
+                levelExportStructure.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.GpsCoordinates);
+
+            foreach (var gpsExportedQuestion in gpsExportedQuestions)
+            {
+                var gpsPreloadedQuestion = new GpsPreloadedQuestionFromDataSet(levelData, preloadedDataService, gpsExportedQuestion.VariableName);
+
+                for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
+                {
+                    double? latitude = gpsPreloadedQuestion.GetLatitudeFromRow(rowIndex);
+
+                    double? longitude = gpsPreloadedQuestion.GetLongitudeFromRow(rowIndex);
+
+                    if (!latitude.HasValue || !longitude.HasValue)
+                    {
+                        foreach (var notEmptyColumnIndex in gpsPreloadedQuestion.GetColumnsIdsWithNotEmptyValuesInRow(rowIndex))
+                        {
+                            yield return new PreloadedDataVerificationError("PL0030",
+                                PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
+                                CreateReference(rowIndex, notEmptyColumnIndex, levelData));
+                        }
+                    }
+
+                    if (gpsPreloadedQuestion.LatitudeColumnIndex.HasValue && latitude.HasValue &&
+                        (latitude.Value < -91 || latitude.Value > 90))
+                        yield return new PreloadedDataVerificationError("PL0032",
+                            PreloadingVerificationMessages
+                                .PL0032_LatitudeMustBeGeaterThenN90AndLessThen90,
+                            CreateReference(rowIndex, gpsPreloadedQuestion.LatitudeColumnIndex.Value, levelData));
+
+                    if (gpsPreloadedQuestion.LongitudeColumnIndex.HasValue && longitude.HasValue &&
+                        (longitude.Value < -181 || longitude.Value > 180))
+                        yield return new PreloadedDataVerificationError("PL0033",
+                            PreloadingVerificationMessages
+                                .PL0033_LongitudeMustBeGeaterThenN180AndLessThen180,
+                            CreateReference(rowIndex, gpsPreloadedQuestion.LongitudeColumnIndex.Value, levelData));
+                }
+            }
+        }
 
         private IEnumerable<PreloadedDataVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
@@ -530,6 +610,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         }
 
         private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> Verifier(
+            Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> fileValidator)
+        {
+            return (data, preloadedDataService) =>
+            {
+                return data.SelectMany(level => fileValidator(level, preloadedDataService));
+            };
+        }
+
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>> Verifier(
             Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<string>> getErrors, string code, string message,
             PreloadedDataVerificationReferenceType type)
         {
@@ -552,6 +641,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     .Select(
                         entity =>
                             new PreloadedDataVerificationError(code, message, entity)));
+        }
+
+        private PreloadedDataVerificationReference CreateReference(int y, PreloadedDataByFile levelData)
+        {
+            return new PreloadedDataVerificationReference(null, y,
+                PreloadedDataVerificationReferenceType.Column,
+                levelData.Header[y],
+                levelData.FileName);
+        }
+
+        private PreloadedDataVerificationReference CreateReference(int x, int y, PreloadedDataByFile levelData)
+        {
+            return new PreloadedDataVerificationReference(x, y,
+                PreloadedDataVerificationReferenceType.Cell,
+                string.Format("{0}:{1}", levelData.Header[y],
+                    levelData.Content[x][y]),
+                levelData.FileName);
         }
 
         private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
@@ -636,6 +742,96 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor());
             supervisorCache.Add(name, item);
             return item;
+        }
+
+        private class GpsPreloadedQuestionFromDataSet
+        {
+            public double? GetLatitudeFromRow(int rowIndex)
+            {
+                return GetValue<double>(this.dataSet.Content[rowIndex], this.dataSet.Header, LatitudeColumnIndex, gpsDocumentQuestion);
+            }
+
+            public double? GetLongitudeFromRow(int rowIndex)
+            {
+                return GetValue<double>(this.dataSet.Content[rowIndex], this.dataSet.Header, LongitudeColumnIndex, gpsDocumentQuestion);
+            }
+
+            public int[] GetColumnsIdsWithNotEmptyValuesInRow(int rowIndex)
+            {
+                var allIndexes = new[]
+                {
+                    LatitudeColumnIndex, LongitudeColumnIndex, AccuracyColumnIndex, AltitudeColumnIndex,
+                    TimestampColumnIndex
+                };
+                return
+                    allIndexes.Where(
+                        columnIndex =>
+                            columnIndex.HasValue &&
+                            !string.IsNullOrEmpty(this.dataSet.Content[rowIndex][columnIndex.Value]))
+                        .Select(columnIndex => columnIndex.Value)
+                        .ToArray();
+            }
+
+            public int? LatitudeColumnIndex { get; set; }
+            public int? LongitudeColumnIndex { get; set; }
+            public int? AccuracyColumnIndex { get; set; }
+            public int? AltitudeColumnIndex { get; set; }
+            public int? TimestampColumnIndex { get; set; }
+
+            private readonly PreloadedDataByFile dataSet;
+            private readonly IPreloadedDataService preloadedDataService;
+            private readonly IQuestion gpsDocumentQuestion;
+
+            public GpsPreloadedQuestionFromDataSet(PreloadedDataByFile dataSet, IPreloadedDataService preloadedDataService,
+                string gpsQuestionVariableName)
+            {
+                this.dataSet = dataSet;
+                this.preloadedDataService = preloadedDataService;
+                this.gpsDocumentQuestion = preloadedDataService.GetQuestionByVariableName(gpsQuestionVariableName);
+
+                LatitudeColumnIndex = this.GetColumnIndexOfGpsQuestionAnswerProperty(this.dataSet.Header, "latitude",
+                    gpsQuestionVariableName);
+                LongitudeColumnIndex = this.GetColumnIndexOfGpsQuestionAnswerProperty(this.dataSet.Header, "longitude",
+                    gpsQuestionVariableName);
+                AccuracyColumnIndex = this.GetColumnIndexOfGpsQuestionAnswerProperty(this.dataSet.Header, "accuracy",
+                    gpsQuestionVariableName);
+                AltitudeColumnIndex = this.GetColumnIndexOfGpsQuestionAnswerProperty(this.dataSet.Header, "altitude",
+                    gpsQuestionVariableName);
+                TimestampColumnIndex = this.GetColumnIndexOfGpsQuestionAnswerProperty(this.dataSet.Header, "timestamp",
+                    gpsQuestionVariableName);
+            }
+
+            private int? GetColumnIndexOfGpsQuestionAnswerProperty(string[] header, string propertyName, string variableName)
+            {
+                var columnName = string.Format("{0}_{1}", variableName, propertyName);
+                for (int i = 0; i < header.Length; i++)
+                {
+                    if (string.Equals(header[i].Trim(), columnName, StringComparison.InvariantCultureIgnoreCase))
+                        return i;
+                }
+                return null;
+            }
+
+            private T? GetValue<T>(string[] row, string[] header, int? columnIndex, IQuestion question) where T : struct
+            {
+                if (!columnIndex.HasValue)
+                    return null;
+
+                KeyValuePair<Guid, object> valueParseResult;
+
+                var parseResult = preloadedDataService.ParseQuestion(row[columnIndex.Value], header[columnIndex.Value], question, out valueParseResult);
+
+                if (parseResult != ValueParsingResult.OK)
+                    return null;
+                try
+                {
+                    return (T)valueParseResult.Value;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
         }
     }
 }
