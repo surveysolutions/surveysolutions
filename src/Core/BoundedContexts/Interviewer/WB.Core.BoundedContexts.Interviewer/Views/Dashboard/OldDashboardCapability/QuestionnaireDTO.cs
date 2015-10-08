@@ -53,7 +53,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public DateTime? CreatedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
 
-        public IEnumerable<FeaturedItem> GetProperties()
+        public IEnumerable<FeaturedItem> GetPrefilledQuestions()
         {
             return string.IsNullOrEmpty(this.Properties)
                 ? new FeaturedItem[0]

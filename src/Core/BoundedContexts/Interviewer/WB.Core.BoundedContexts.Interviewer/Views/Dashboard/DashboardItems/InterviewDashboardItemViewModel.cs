@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
             this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
             this.Comment = this.GetInterviewCommentByStatus(item);
-            this.PrefilledQuestions = this.GetPrefilledQuestions(item.Properties, 3);
+            this.PrefilledQuestions = this.GetTop3PrefilledQuestions(item.Properties);
             this.IsSupportedRemove = item.CanBeDeleted;
         }
 
@@ -118,14 +118,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<FeaturedItem> featuredItems, int count)
+        private List<PrefilledQuestion> GetTop3PrefilledQuestions(IEnumerable<FeaturedItem> featuredItems)
         {
             return featuredItems.Where(x => !x.StatsInvisible)
-                .Select(fi => new PrefilledQuestion()
-                {
-                    Answer = fi.Value,
-                    Question = fi.Title
-                }).Take(count).ToList();
+                                .Select(fi => new PrefilledQuestion {
+                                    Answer = fi.Value,
+                                    Question = fi.Title
+                                }).Take(3).ToList();
         }
 
         public bool IsSupportedRemove { get; set; }
