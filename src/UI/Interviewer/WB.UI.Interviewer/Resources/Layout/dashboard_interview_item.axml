@@ -4,7 +4,6 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical"
     style="@style/Dashboard_InterviewListItem">
-
   <LinearLayout style="@style/Dashboard_InterviewItem_Layout"
     local:MvxBind="Click LoadDashboardItemCommand;">
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
@@ -40,17 +39,9 @@
                   local:MvxBind="Text Comment;
                                  TextColor InterviewStatusToColor(Status);" />
 
-        <ImageButton android:layout_width="40dp"
-                     android:layout_height="40dp"
-                     android:background="@drawable/dashboard_location_bg"
-                     android:layout_gravity="bottom" />
+        <ImageButton style="@style/Dashboard_Location" />
       </LinearLayout>
-      
     </LinearLayout>
-    
   </LinearLayout>
-
-
-   
 </LinearLayout>
 
