@@ -134,7 +134,7 @@
 <script type="text/html" id="confirm-assign-template">
     <div class="container-fluid">
         <div class="row">
-            @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage.FormatString(
+            @Html.Raw(string.Format(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignConfirmMessage,
                 "<span class='text-normal' data-bind='text: allItems.length'></span>",
                 InterviewStatus.SupervisorAssigned.ToLocalizeString(),
                 InterviewStatus.InterviewerAssigned.ToLocalizeString(),
@@ -146,7 +146,7 @@
                     <div class="checkbox" style="margin-left: 0">
                         <label>
                             <input type="checkbox" id="reassignReceivedByInterviewer">
-                            @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignReceivedConfirm.FormatString(
+                            @Html.Raw(string.Format(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.AssignReceivedConfirm,
                             "<span data-bind='text: receivedItems.length'></span>"))
                         </label>
                     </div>
@@ -155,13 +155,13 @@
         </div></div>
 </script>
     <script type="text/html" id="confirm-approve-template">
-        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ApproveConfirmMessage.FormatString(
+        @Html.Raw(string.Format(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.ApproveConfirmMessage,
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-reject-template">
-        @Html.Raw(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.RejectConfirmMessage.FormatString(
+        @Html.Raw(string.Format(WB.Core.SharedKernels.SurveyManagement.Web.Resources.Interviews.RejectConfirmMessage
             "<span class='text-normal' data-bind='text: length'></span>",
             InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.RejectedByHeadquarters.ToLocalizeString()))

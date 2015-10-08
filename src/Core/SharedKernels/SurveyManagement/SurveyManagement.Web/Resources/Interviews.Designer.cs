@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include {0} interview(s) that received by interviewer.
+        ///   Looks up a localized string similar to Apply on {0} interview(s) which Interviewer already received.
         /// </summary>
         public static string AssignReceivedConfirm {
             get {
