@@ -31,6 +31,11 @@ namespace WB.UI.Interviewer.Activities
             this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
 
             this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle, interviewerSettings.Endpoint);
+            this.FindPreference(SettingsNames.Endpoint).PreferenceChange += (sender, e) =>
+            {
+                this.SetPreferenceTitleAndSummary(SettingsNames.Endpoint, InterviewerUIResources.Prefs_EndpointTitle, e.NewValue.ToString());
+            };
+
             this.SetPreferenceTitleAndSummary(SettingsNames.HttpResponseTimeout, InterviewerUIResources.Prefs_HttpResponseTimeoutTitle, InterviewerUIResources.Prefs_HttpResponseTimeoutSummary);
             this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle, InterviewerUIResources.Prefs_BufferSizeSummary);
             this.SetPreferenceTitleAndSummary(SettingsNames.GpsReceiveTimeoutSec, InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle, InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary);
