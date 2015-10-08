@@ -11,18 +11,11 @@
                   local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
-      <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-        <ImageButton android:layout_width="30dp"
-                     android:layout_height="30dp"
-                     android:gravity="center"
-                    android:background="@drawable/location_icon"/>
-        <TextView style="@style/Dashboard_InterviewItem_Title"
-                  android:layout_gravity="center_vertical"
-                  local:MvxBind="Text QuestionariName;" />
-      </LinearLayout>
-      
+      <TextView style="@style/Dashboard_InterviewItem_Title"
+                android:layout_gravity="center_vertical"
+                local:MvxBind="Text QuestionariName;" />
+
+
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           android:orientation="vertical"
           local:MvxBind="ItemsSource PrefilledQuestions;"
@@ -42,5 +35,15 @@
     android:text="\u2573"
     local:MvxBind="Click RemoveInterviewCommand;
                          Visible IsSupportedRemove;" />
+
+   <ImageButton android:layout_width="40dp"
+                     android:layout_height="40dp"
+                     android:background="@drawable/dashboard_location_default"
+                     android:layout_gravity="bottom"
+                     android:layout_alignParentRight="true"
+                     android:layout_alignParentBottom="true"
+                     android:layout_marginRight="5dp"
+                     android:layout_marginLeft="5dp"
+                     />
 </RelativeLayout>
 
