@@ -289,7 +289,7 @@ namespace WB.UI.Interviewer.EventHandlers
 
             if (questionnaire == null) return;
 
-            var featuredItems = questionnaire.GetProperties().ToList();
+            var featuredItems = questionnaire.GetPrefilledQuestions().ToList();
 
             var preFilledQuestion = featuredItems.FirstOrDefault(question => question.PublicKey == questionId);
 
