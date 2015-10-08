@@ -79,6 +79,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         interview.CompletedDateTime,
                         interview.CreatedDateTime,
                         interview.RejectedDateTime,
+                        interview.GpsLocation == null ? null : new DashboardQuestionnaireItem.GpsCoordinates(interview.GpsLocation.Latitude, interview.GpsLocation.Longitude),
                         interview.CreatedOnClient,
                         interview.JustInitilized.HasValue && interview.JustInitilized.Value);
  
