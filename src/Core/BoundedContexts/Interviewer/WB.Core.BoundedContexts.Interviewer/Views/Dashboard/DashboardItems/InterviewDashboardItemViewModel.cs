@@ -72,7 +72,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
             this.Comment = this.GetInterviewCommentByStatus(item);
             this.PrefilledQuestions = this.GetTop3PrefilledQuestions(item.Properties);
+            this.GpsLocation = item.GpsLocation;
             this.IsSupportedRemove = item.CanBeDeleted;
+        }
+
+        public GpsCoordinatesViewModel GpsLocation { get; private set; }
+
+        public bool HasGpsLocation
+        {
+            get { return this.GpsLocation != null; }
+        }
+
+        public IMvxCommand NavigateToGpsLocationCommand
+        {
+            get { return new MvxCommand(async () => await NavigateToGpsLocation(), () => this.HasGpsLocation); }
+        }
+
+        private async Task NavigateToGpsLocation()
+        {
+            await this.userInteractionService.AlertAsync(
+                string.Format("lat: {0}, lon: {1}", this.GpsLocation.Latitude, this.GpsLocation.Longitude));
         }
 
         private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
