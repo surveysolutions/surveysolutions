@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
             public bool IsLockedBySupervisor { get; set; }
             public bool IsLockedByHQ { get; set; }
             public int InterviewersCount { get; set; }
-            public int ConnectedToDeviceInterviewersCount { get; set; }
+            public int NotConnectedToDeviceInterviewersCount { get; set; }
         }
 
         private readonly IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor;
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
                         isLockedByHQ: x.IsLockedByHQ,
                         name: x.UserName,
                         interviewersCount: x.InterviewersCount,
-                        connectedToDeviceInterviewersCount: x.ConnectedToDeviceInterviewersCount
+                        notConnectedToDeviceInterviewersCount: x.NotConnectedToDeviceInterviewersCount
                         ));
 
 
@@ -80,8 +80,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
                 IsLockedBySupervisor = ud.IsLockedBySupervisor,
                 IsLockedByHQ = ud.IsLockedByHQ,
                 UserName = ud.UserName,
-                InterviewersCount = _.Count(pr => pr.Supervisor.Id == ud.PublicKey),
-                ConnectedToDeviceInterviewersCount = _.Count(pr => pr.Supervisor.Id == ud.PublicKey && pr.DeviceId != null)
+                InterviewersCount = _.Count(pr => pr.Supervisor.Id == ud.PublicKey && pr.IsArchived == false),
+                NotConnectedToDeviceInterviewersCount = _.Count(pr => pr.Supervisor.Id == ud.PublicKey && pr.DeviceId == null && pr.IsArchived == false)
             });
 
             return supervisors;

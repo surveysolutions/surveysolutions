@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
     {
         public SupervisorsItem(Guid id, string name, string email, DateTime creationDate,
             bool isLockedBySupervisor, bool isLockedByHQ, int interviewersCount, 
-            int connectedToDeviceInterviewersCount)
+            int notConnectedToDeviceInterviewersCount)
         {
             this.UserId = id;
             this.UserName = name;
@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
             this.IsLockedBySupervisor = isLockedBySupervisor;
             this.IsLockedByHQ = isLockedByHQ;
             this.InterviewersCount = interviewersCount;
-            this.ConnectedToDeviceInterviewersCount = connectedToDeviceInterviewersCount;
+            this.NotConnectedToDeviceInterviewersCount = notConnectedToDeviceInterviewersCount;
         }
 
         public bool IsLockedBySupervisor { get; private set; }
@@ -34,6 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
 
         public int InterviewersCount { get; private set; }
 
-        public int ConnectedToDeviceInterviewersCount { get; private set; }
+        public int NotConnectedToDeviceInterviewersCount { get; private set; }
     }
 }

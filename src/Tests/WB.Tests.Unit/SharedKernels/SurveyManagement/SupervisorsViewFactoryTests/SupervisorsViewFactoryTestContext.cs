@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
             };
         }
 
-        protected static UserDocument CreateInterviewer(Guid userId, UserDocument supervisor, string userName, string deviceId)
+        protected static UserDocument CreateInterviewer(Guid userId, UserDocument supervisor, string userName, string deviceId, bool isArchived = false)
         {
             return new UserDocument()
             {
@@ -50,6 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
                 UserName = userName,
                 PublicKey = userId,
                 DeviceId = deviceId,
+                IsArchived = isArchived,
                 Supervisor = new UserLight(supervisor.PublicKey, supervisor.UserName),
                 Roles = new HashSet<UserRoles>() { UserRoles.Operator } 
             };
