@@ -11,24 +11,12 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
     public class QuestionnaireDTO : DenormalizerRow
     {
-        public class GpsCoordinates
-        {
-            public double Latitude { get; private set; }
-            public double Longitude { get; private set; }
-
-            public GpsCoordinates(double latitude, double longitude)
-            {
-                this.Latitude = latitude;
-                this.Longitude = longitude;
-            }
-        }
-
         private ISerializer serializer
         {
             get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
         }
 
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, GpsCoordinates gpsLocation, bool? createdOnClient = false, bool justInitilized = false)
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, GpsCoordinatesViewModel gpsLocation, bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
             this.Status = (int)status;
@@ -41,7 +29,8 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.CreatedDateTime = createdDateTime;
             this.StartedDateTime = startedDateTime;
             this.RejectedDateTime = rejectedDateTime;
-            this.GpsLocation = gpsLocation;
+            this.GpsLocationLatitude = gpsLocation != null ? gpsLocation.Latitude : null as double?;
+            this.GpsLocationLongitude = gpsLocation != null ? gpsLocation.Longitude : null as double?;
 
             this.SetProperties(properties);
         }
@@ -65,7 +54,9 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public DateTime? CompletedDateTime { get; set; }
         public DateTime? CreatedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
-        public GpsCoordinates GpsLocation { get; private set; }
+
+        public double? GpsLocationLatitude { get; private set; }
+        public double? GpsLocationLongitude { get; private set; }
 
         public IEnumerable<FeaturedItem> GetPrefilledQuestions()
         {

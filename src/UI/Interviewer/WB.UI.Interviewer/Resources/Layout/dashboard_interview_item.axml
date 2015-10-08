@@ -39,7 +39,9 @@
                   local:MvxBind="Text Comment;
                                  TextColor InterviewStatusToColor(Status);" />
 
-        <ImageButton style="@style/Dashboard_Location" />
+        <ImageButton style="@style/Dashboard_Location"
+                     local:MvxBind="Visible HasGpsLocation;
+                                    Click NavigateToGpsLocationCommand;"/>
       </LinearLayout>
     </LinearLayout>
   </LinearLayout>
