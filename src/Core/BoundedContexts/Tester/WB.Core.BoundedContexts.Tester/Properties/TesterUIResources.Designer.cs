@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TesterUIResources {
+    public class TesterUIResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Tester.Properties.TesterUIResources", typeof(TesterUIResources).GetTypeInfo().Assembly);
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to list have not been updated.
         /// </summary>
-        internal static string Dashboard_HaveNotBeenUpdated {
+        public static string Dashboard_HaveNotBeenUpdated {
             get {
                 return ResourceManager.GetString("Dashboard_HaveNotBeenUpdated", resourceCulture);
             }
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to list was updated {0}.
         /// </summary>
-        internal static string Dashboard_LastUpdated {
+        public static string Dashboard_LastUpdated {
             get {
                 return ResourceManager.GetString("Dashboard_LastUpdated", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Connecting to server.
         /// </summary>
-        internal static string ImportQuestionnaire_CheckConnectionToServer {
+        public static string ImportQuestionnaire_CheckConnectionToServer {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_CheckConnectionToServer", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Creating interview.
         /// </summary>
-        internal static string ImportQuestionnaire_CreateInterview {
+        public static string ImportQuestionnaire_CreateInterview {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_CreateInterview", resourceCulture);
             }
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Downloading questionnaire -  {0}%.
         /// </summary>
-        internal static string ImportQuestionnaire_DownloadProgress {
+        public static string ImportQuestionnaire_DownloadProgress {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_DownloadProgress", resourceCulture);
             }
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password..
         /// </summary>
-        internal static string ImportQuestionnaire_Error_Forbidden {
+        public static string ImportQuestionnaire_Error_Forbidden {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_Forbidden", resourceCulture);
             }
@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. The questionnaire cannot be found. Please refresh the list of questionnaires..
         /// </summary>
-        internal static string ImportQuestionnaire_Error_NotFound {
+        public static string ImportQuestionnaire_Error_NotFound {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_NotFound", resourceCulture);
             }
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. The questionnaire has errors. Please fix this in Designer..
         /// </summary>
-        internal static string ImportQuestionnaire_Error_PreconditionFailed {
+        public static string ImportQuestionnaire_Error_PreconditionFailed {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_Error_PreconditionFailed", resourceCulture);
             }
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No connection to the Survey Solutions designer. Open a local copy of questionnaire?.
         /// </summary>
-        internal static string ImportQuestionnaire_OpenLocalInterview {
+        public static string ImportQuestionnaire_OpenLocalInterview {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_OpenLocalInterview", resourceCulture);
             }
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Preparing questionnaire to creating interview.
         /// </summary>
-        internal static string ImportQuestionnaire_PrepareQuestionnaire {
+        public static string ImportQuestionnaire_PrepareQuestionnaire {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_PrepareQuestionnaire", resourceCulture);
             }
@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Saving interview dynamic link library to local storage.
         /// </summary>
-        internal static string ImportQuestionnaire_StoreAssembly {
+        public static string ImportQuestionnaire_StoreAssembly {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_StoreAssembly", resourceCulture);
             }
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Saving questionnaire to local storage.
         /// </summary>
-        internal static string ImportQuestionnaire_StoreQuestionnaire {
+        public static string ImportQuestionnaire_StoreQuestionnaire {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_StoreQuestionnaire", resourceCulture);
             }
@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Checking questionnaire for errors on the server.
         /// </summary>
-        internal static string ImportQuestionnaire_VerifyOnServer {
+        public static string ImportQuestionnaire_VerifyOnServer {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_VerifyOnServer", resourceCulture);
             }
@@ -181,9 +181,135 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
         /// </summary>
-        internal static string Login_Error_NotFound {
+        public static string Login_Error_NotFound {
             get {
                 return ResourceManager.GetString("Login_Error_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaires.
+        /// </summary>
+        public static string MenuItem_Title_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string MenuItem_Title_Settings {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string MenuItem_Title_SignOut {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable SSL certificate validation.
+        /// </summary>
+        public static string Prefs_AcceptUnsignedSummary {
+            get {
+                return ResourceManager.GetString("Prefs_AcceptUnsignedSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accept all SSL certificates.
+        /// </summary>
+        public static string Prefs_AcceptUnsignedTitle {
+            get {
+                return ResourceManager.GetString("Prefs_AcceptUnsignedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection settings.
+        /// </summary>
+        public static string Prefs_ConnectionSettings {
+            get {
+                return ResourceManager.GetString("Prefs_ConnectionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL that is used to communicate with designer application.
+        /// </summary>
+        public static string Prefs_DesignerEndPointSummary {
+            get {
+                return ResourceManager.GetString("Prefs_DesignerEndPointSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Designer URL.
+        /// </summary>
+        public static string Prefs_DesignerEndPointTitle {
+            get {
+                return ResourceManager.GetString("Prefs_DesignerEndPointTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seconds to wait for coordinates.
+        /// </summary>
+        public static string Prefs_GpsReceiveTimeoutSecSummary {
+            get {
+                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPS Receive timeout.
+        /// </summary>
+        public static string Prefs_GpsReceiveTimeoutSecTitle {
+            get {
+                return ResourceManager.GetString("Prefs_GpsReceiveTimeoutSecTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of seconds to wait until server response.
+        /// </summary>
+        public static string Prefs_HttpResponseTimeoutSummary {
+            get {
+                return ResourceManager.GetString("Prefs_HttpResponseTimeoutSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server Response timeout.
+        /// </summary>
+        public static string Prefs_HttpResponseTimeoutTitle {
+            get {
+                return ResourceManager.GetString("Prefs_HttpResponseTimeoutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: {0}.
+        /// </summary>
+        public static string Prefs_VersionSummaryFormat {
+            get {
+                return ResourceManager.GetString("Prefs_VersionSummaryFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application version.
+        /// </summary>
+        public static string Prefs_VersionTitle {
+            get {
+                return ResourceManager.GetString("Prefs_VersionTitle", resourceCulture);
             }
         }
     }

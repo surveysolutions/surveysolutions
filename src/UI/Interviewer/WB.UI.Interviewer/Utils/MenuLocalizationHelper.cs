@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 
 namespace WB.UI.Interviewer.Utils
 {
-    public static class MunuLocalizationHelper
+    public static class MenuLocalizationHelper
     {
         public static void LocalizeMenuItems(this IMenu menu)
         {

@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
@@ -33,7 +34,7 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.relink, menu);
 
-            menu.LocalizeMenuItems();
+            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
 
             return base.OnCreateOptionsMenu(menu);
         }

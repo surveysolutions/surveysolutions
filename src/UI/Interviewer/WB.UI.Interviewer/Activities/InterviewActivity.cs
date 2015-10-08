@@ -1,6 +1,7 @@
 using Android.App;
 using Android.Views;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Interviewer.Utils;
 using WB.UI.Interviewer.ViewModel;
@@ -33,7 +34,9 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(this.MenuResourceId, menu);
 
-            menu.LocalizeMenuItems();
+            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
+            menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
 
             return base.OnCreateOptionsMenu(menu);
         }
