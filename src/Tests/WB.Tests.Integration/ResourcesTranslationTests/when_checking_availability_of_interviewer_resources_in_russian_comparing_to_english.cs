@@ -9,8 +9,8 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     {
         Because of = () =>
         {
-            englishResourceNames = GetStringResourceNamesFromResX(@"C:\Projects\SurveySolutions\src\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx").ToList();
-            russianResourceNames = GetStringResourceNamesFromResX(@"C:\Projects\SurveySolutions\src\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ru-RU.resx").ToList();
+            englishResourceNames = GetStringResourceNamesFromResX(@"Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx").ToList();
+            russianResourceNames = GetStringResourceNamesFromResX(@"Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ru-RU.resx").ToList();
         };
 
         It should_be_the_same_set_of_resources_in_russian_as_it_is_in_english = () =>
