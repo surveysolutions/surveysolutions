@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -62,7 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Select(referenceToQuestion => new SideBarPrefillQuestion
                 {
                     Question = questionnaire.Questions[referenceToQuestion.Id].Title,
-                    Answer = this.GetAnswer(interview, questionnaire, referenceToQuestion)
+                    Answer = this.GetAnswer(interview, questionnaire, referenceToQuestion),
+                    StatsInvisible = referenceToQuestion.ModelType == typeof(GpsCoordinatesQuestionModel)
                 })
                 .ToList();
 
@@ -141,6 +143,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable<dynamic> PrefilledQuestions { get; set; }
+
+        public IEnumerable<dynamic> PrefilledQuestionsStats
+        {
+            get { return PrefilledQuestions.Where(x => !x.StatsInvisible); }
+
+        }
 
         public void Dispose()
         {

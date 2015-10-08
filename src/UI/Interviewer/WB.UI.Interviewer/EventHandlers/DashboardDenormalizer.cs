@@ -118,15 +118,15 @@ namespace WB.UI.Interviewer.EventHandlers
             if (questionnaireTemplate == null)
                 return;
 
-            var items = new List<FeaturedItem>();
+            var prefilledQuestions = new List<FeaturedItem>();
             foreach (var featuredQuestion in questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured))
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-                items.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
+                prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
             }
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                items, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, rejectedDateTime,
+                prefilledQuestions, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, rejectedDateTime,
                 createdOnClient, canBeDeleted);
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
         }
@@ -144,7 +144,7 @@ namespace WB.UI.Interviewer.EventHandlers
                         });
                 if (answer == null)
                     return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                        string.Empty, featuredCategoricalOptions);
+                        string.Empty, featuredCategoricalOptions, false);
 
 
                 object objectAnswer;
@@ -162,7 +162,7 @@ namespace WB.UI.Interviewer.EventHandlers
                     featuredQuestion.QuestionText,
                     AnswerUtils.AnswerToString(objectAnswer,
                         (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
-                    featuredCategoricalOptions);
+                    featuredCategoricalOptions, false);
             }
 
             if (featuredQuestion.QuestionType == QuestionType.DateTime && answer is string)
@@ -171,7 +171,7 @@ namespace WB.UI.Interviewer.EventHandlers
             }
 
             return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                AnswerUtils.AnswerToString(answer));
+                AnswerUtils.AnswerToString(answer), featuredQuestion.QuestionType == QuestionType.GpsCoordinates);
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
