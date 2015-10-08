@@ -126,7 +126,8 @@ namespace WB.UI.Interviewer.EventHandlers
             foreach (var featuredQuestion in featuredQuestions)
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-                prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
+                if(featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
+                    prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
 
                 if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item != null)
                 {
@@ -159,7 +160,7 @@ namespace WB.UI.Interviewer.EventHandlers
                         });
                 if (answer == null)
                     return new FeaturedCategoricalItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                        string.Empty, featuredCategoricalOptions, false);
+                        string.Empty, featuredCategoricalOptions);
 
 
                 object objectAnswer;
@@ -177,7 +178,7 @@ namespace WB.UI.Interviewer.EventHandlers
                     featuredQuestion.QuestionText,
                     AnswerUtils.AnswerToString(objectAnswer,
                         (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
-                    featuredCategoricalOptions, false);
+                    featuredCategoricalOptions);
             }
 
             if (featuredQuestion.QuestionType == QuestionType.DateTime && answer is string)
@@ -186,7 +187,7 @@ namespace WB.UI.Interviewer.EventHandlers
             }
 
             return new FeaturedItem(featuredQuestion.PublicKey, featuredQuestion.QuestionText,
-                AnswerUtils.AnswerToString(answer), featuredQuestion.QuestionType == QuestionType.GpsCoordinates);
+                AnswerUtils.AnswerToString(answer));
         }
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
