@@ -17,9 +17,11 @@ namespace Main.Core.Entities.SubEntities
 
         public GeoPosition(dynamic propertyAnswerMap)
         {
-            this.Latitude = propertyAnswerMap.Latitude;
+            if (IsPropertyExist(propertyAnswerMap, "Latitude"))
+                this.Latitude = propertyAnswerMap.Latitude;
 
-            this.Longitude = propertyAnswerMap.Longitude;
+            if (IsPropertyExist(propertyAnswerMap, "Longitude"))
+                this.Longitude = propertyAnswerMap.Longitude;
 
             if (IsPropertyExist(propertyAnswerMap, "Accuracy"))
                 this.Accuracy = propertyAnswerMap.Accuracy;
