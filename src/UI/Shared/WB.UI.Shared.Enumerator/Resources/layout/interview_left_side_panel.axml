@@ -11,7 +11,7 @@
       style="@style/Interview_Sidebar_PrefilledQuestions_Container">
 
       <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
-                   local:MvxBind="ItemsSource PrefilledQuestions"
+                   local:MvxBind="ItemsSource PrefilledQuestionsStats"
                    local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
     </MaxHeightLinearLayout>
   </LinearLayout>

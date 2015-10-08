@@ -120,7 +120,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<FeaturedItem> featuredItems, int count)
         {
-            return featuredItems.Select(fi => new PrefilledQuestion()
+            return featuredItems.Where(x => !x.StatsInvisible)
+                .Select(fi => new PrefilledQuestion()
                 {
                     Answer = fi.Value,
                     Question = fi.Title
