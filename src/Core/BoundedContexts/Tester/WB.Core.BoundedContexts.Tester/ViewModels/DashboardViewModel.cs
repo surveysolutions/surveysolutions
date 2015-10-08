@@ -221,7 +221,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return signOutCommand ?? (signOutCommand = new MvxCommand(async () => await this.SignOut())); }
+            get { return signOutCommand ?? (signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
         }
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private bool isListEmpty;
 
-        private async Task SignOut()
+        private async Task SignOutAsync()
         {
             this.principal.SignOut();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();

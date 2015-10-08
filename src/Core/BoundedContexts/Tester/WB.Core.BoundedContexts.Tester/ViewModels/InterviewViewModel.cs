@@ -65,10 +65,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
+            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
         }
 
-        private async Task SignOut()
+        private async Task SignOutAsync()
         {
             this.principal.SignOut();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();

@@ -37,10 +37,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.CompleteComment = statefulInterview.InterviewerCompleteComment;
         }
 
-        protected override async Task CloseInterview()
+        protected override async Task CloseInterviewAsync()
         {
             this.changeLogManipulator.CloseDraftRecord(interviewId, principal.CurrentUserIdentity.UserId);
-            await base.CloseInterview();
+            await base.CloseInterviewAsync();
         }
     }
 }
