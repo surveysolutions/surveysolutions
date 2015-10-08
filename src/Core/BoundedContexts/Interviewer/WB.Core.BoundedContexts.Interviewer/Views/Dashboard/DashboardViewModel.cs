@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand SignOutCommand
         {
-            get { return new MvxCommand(async () => await this.SignOut()); }
+            get { return new MvxCommand(async () => await this.SignOutAsync()); }
         }
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
@@ -251,7 +251,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
         }
 
-        async Task SignOut()
+        private async Task SignOutAsync()
         {
             this.principal.SignOut();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
