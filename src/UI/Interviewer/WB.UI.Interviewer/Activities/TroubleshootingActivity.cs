@@ -353,7 +353,10 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.troubleshooting, menu);
 
-            menu.LocalizeMenuItems();
+            menu.LocalizeMenuItem(Resource.Id.menu_login, InterviewerUIResources.MenuItem_Title_Login);
+            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
+            menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+            menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
 
             var loginItem = menu.FindItem(Resource.Id.menu_login);
             var dashboardItem = menu.FindItem(Resource.Id.menu_dashboard);

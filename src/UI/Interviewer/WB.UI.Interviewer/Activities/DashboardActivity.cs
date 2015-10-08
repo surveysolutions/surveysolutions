@@ -57,12 +57,12 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
-            menu.LocalizeMenuItems();
+            menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+            menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
+            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
 
             return base.OnCreateOptionsMenu(menu);
         }
-
-        
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
