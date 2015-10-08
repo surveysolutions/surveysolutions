@@ -87,11 +87,10 @@
   </style>
 
   <style name="Dashboard_InterviewItem_Title" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
-    <item name="android:layout_alignParentLeft">true</item>
     <item name="android:layout_marginRight">@dimen/Dashboard_InterviewItem_Title_marginRight</item>
   </style>
 
