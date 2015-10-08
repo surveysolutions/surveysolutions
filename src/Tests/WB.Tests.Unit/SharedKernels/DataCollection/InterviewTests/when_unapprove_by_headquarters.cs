@@ -44,8 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private It should_raise_two_events = () =>
             eventContext.Events.Count().ShouldEqual(2);
 
-        It should_raise_InterviewApprovedByHQ_event = () =>
+        It should_raise_InterviewUnapprovedByHQ_event = () =>
             eventContext.ShouldContainEvent<UnapprovedByHeadquarters>(@event => @event.UserId == userId);
+
+        It should_raise_InterviewUnapprovedByHQ_with_comment = () =>
+            eventContext.GetEvent<UnapprovedByHeadquarters>().Comment.ShouldContain("[Approved by Headquarters was revoked]");
 
         It should_raise_InterviewStatusChanged_event = () =>
             eventContext.ShouldContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.ApprovedBySupervisor);
