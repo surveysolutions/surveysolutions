@@ -1627,7 +1627,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedByHeadquarters);
 
-            this.ApplyEvent(new UnapprovedByHeadquarters(userId, comment));
+            string unapproveCommentMessage = "[Approved by Headquarters was revoked]";
+            string unapproveComment = string.IsNullOrEmpty(comment)
+                ? unapproveCommentMessage
+                : string.Format("{0} \r\n {1}", unapproveCommentMessage, comment);
+            this.ApplyEvent(new UnapprovedByHeadquarters(userId, unapproveComment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
         }
 
