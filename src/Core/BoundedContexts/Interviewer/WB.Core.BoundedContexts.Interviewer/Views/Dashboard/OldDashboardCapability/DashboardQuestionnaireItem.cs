@@ -9,22 +9,10 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
     public class DashboardQuestionnaireItem
     {
-        public class GpsCoordinates
-        {
-            public double Latitude { get; private set; }
-            public double Longitude { get; private set; }
-
-            public GpsCoordinates(double latitude, double longitude)
-            {
-                this.Latitude = latitude;
-                this.Longitude = longitude;
-            }
-        }
-
         public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, DashboardInterviewStatus status,
             IEnumerable<FeaturedItem> properties, string title, long questionnaireVersion, string comments, 
             DateTime? startedDateTime, DateTime? completedDateTime, DateTime? createdDateTime, 
-            DateTime? rejectedDateTime, GpsCoordinates gpsLocation,
+            DateTime? rejectedDateTime, GpsCoordinatesViewModel gpsLocation,
             bool? createdOnClient = false, bool canBeDeleted = false)
         {
             this.PublicKey = publicKey;
@@ -45,7 +33,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
 
         public IEnumerable<FeaturedItem> Properties { get; private set; }
 
-        public GpsCoordinates GpsLocation { get; private set; }
+        public GpsCoordinatesViewModel GpsLocation { get; private set; }
 
         public Guid PublicKey { get; private set; }
 

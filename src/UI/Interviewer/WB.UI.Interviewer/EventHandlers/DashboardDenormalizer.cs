@@ -121,17 +121,22 @@ namespace WB.UI.Interviewer.EventHandlers
             var prefilledQuestions = new List<FeaturedItem>();
             var featuredQuestions = questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured).ToList();
 
-            QuestionnaireDTO.GpsCoordinates gpsLocation = null;
+            GpsCoordinatesViewModel gpsLocation = null;
 
             foreach (var featuredQuestion in featuredQuestions)
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
                 prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
 
-                if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item.Answer != null)
+                if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item != null)
                 {
-                    var gpsAnswer = (GeoPosition) item.Answer;
-                    gpsLocation = new QuestionnaireDTO.GpsCoordinates(gpsAnswer.Latitude, gpsAnswer.Longitude);
+                    var gpsAnswer = (string) item.Answer;
+                    string[] gpsAnswerChunks = gpsAnswer.Split(',', '[', ']');
+
+                    double latitude = double.Parse(gpsAnswerChunks[0], CultureInfo.InvariantCulture);
+                    double longitude = double.Parse(gpsAnswerChunks[1], CultureInfo.InvariantCulture);
+
+                    gpsLocation = new GpsCoordinatesViewModel(latitude, longitude);
                 }
             }
 
