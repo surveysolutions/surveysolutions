@@ -11,8 +11,17 @@
                   local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
-      <TextView style="@style/Dashboard_InterviewItem_Title"
-        local:MvxBind="Text QuestionariName;" />
+      <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+        <ImageButton android:layout_width="30dp"
+                     android:layout_height="30dp"
+                     android:gravity="center"
+                    android:background="@drawable/location_icon"/>
+        <TextView style="@style/Dashboard_InterviewItem_Title"
+                  android:layout_gravity="center_vertical"
+                  local:MvxBind="Text QuestionariName;" />
+      </LinearLayout>
       
       <MvxLinearLayout style="@style/Dashboard_InterviewItem_PrefilledQuestions"
           android:orientation="vertical"

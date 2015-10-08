@@ -26,7 +26,7 @@ namespace WB.UI.Interviewer.ViewModel.InterviewMetaInfo
                 return null;
 
             var featuredQuestionList = interview.CreatedOnClient != null && interview.CreatedOnClient.Value
-                ? interview.GetProperties()
+                ? interview.GetPrefilledQuestions()
                     .Select(
                         featuredQuestion =>
                             new FeaturedQuestionMeta(featuredQuestion.PublicKey, featuredQuestion.Title, featuredQuestion.Value)).ToList()
