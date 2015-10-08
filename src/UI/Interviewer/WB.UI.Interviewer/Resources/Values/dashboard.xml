@@ -79,7 +79,6 @@
   <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">fill_parent</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
     <item name="android:layout_marginRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
@@ -91,7 +90,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:fontFamily">Roboto</item>
-    <item name="android:layout_marginRight">@dimen/Dashboard_InterviewItem_Title_marginRight</item>
+    <item name="android:paddingTop">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
   </style>
 
   <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
@@ -99,9 +98,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:background">@android:color/transparent</item>
-    <item name="android:layout_alignParentRight">true</item>
     <item name="android:textSize">@dimen/textsize_20</item>
-    <item name="android:layout_gravity">top|right</item>
+    <item name="android:gravity">top</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
