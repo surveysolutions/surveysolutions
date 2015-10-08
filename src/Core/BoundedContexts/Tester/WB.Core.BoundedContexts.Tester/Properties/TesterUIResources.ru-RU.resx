@@ -126,4 +126,13 @@
   <data name="Dashboard_LastUpdated" xml:space="preserve">
     <value>обновлялись {0}</value>
   </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Опросники</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Выход</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomControls;
@@ -46,6 +47,10 @@ namespace WB.UI.Tester.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
+
+            menu.LocalizeMenuItem(Resource.Id.dashboard_settings, TesterUIResources.MenuItem_Title_Settings);
+            menu.LocalizeMenuItem(Resource.Id.dashboard_signout, TesterUIResources.MenuItem_Title_SignOut);
+
             return base.OnCreateOptionsMenu(menu);
         }
 

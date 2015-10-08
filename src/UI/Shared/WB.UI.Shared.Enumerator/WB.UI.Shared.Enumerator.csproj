@@ -168,6 +168,7 @@
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseMvxActivity.cs" />
     <Compile Include="Activities\EnumeratorInterviewActivity.cs" />
+    <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />

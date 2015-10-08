@@ -159,4 +159,46 @@
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
   </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Questionnaires</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>Disable SSL certificate validation</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>Accept all SSL certificates</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Connection settings</value>
+  </data>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>URL that is used to communicate with designer application</value>
+  </data>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>Designer URL</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Number of seconds to wait for coordinates</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>GPS Receive timeout</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Number of seconds to wait until server response</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Server Response timeout</value>
+  </data>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>Version: {0}</value>
+  </data>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>Application version</value>
+  </data>
 </root>
