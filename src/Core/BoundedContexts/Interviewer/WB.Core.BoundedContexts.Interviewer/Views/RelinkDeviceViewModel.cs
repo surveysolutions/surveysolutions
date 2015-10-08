@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand CancelCommand
         {
-            get { return new MvxCommand(async () => await this.ReturnBack(), () => !this.IsInProgress); }
+            get { return new MvxCommand(async () => await this.ReturnBackAsync(), () => !this.IsInProgress); }
         }
 
         public IMvxCommand NavigateToTroubleshootingCommand
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userIdentityToRelink = userIdentity;
         }
 
-        private async Task ReturnBack()
+        private async Task ReturnBackAsync()
         {
             this.cancellationTokenSource.Cancel();
             await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>(this.userIdentityToRelink);
@@ -113,9 +113,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public async Task NavigateToPreviousViewModel()
+        public async Task NavigateToPreviousViewModelAsync()
         {
-            await this.ReturnBack();
+            await this.ReturnBackAsync();
         }
     }
 }

@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand SignInCommand
         {
-            get { return new MvxCommand(async () => await this.SignIn()); }
+            get { return new MvxCommand(async () => await this.SignInAsync()); }
         }
 
         public IMvxCommand OnlineSignInCommand
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ErrorMessage = InterviewerUIResources.Login_WrondPassword;
         }
 
-        private async Task SignIn()
+        private async Task SignInAsync()
         {
             var userName = this.UserName;
             var hashedPassword = this.passwordHasher.Hash(this.Password);
@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.interviewersPlainStorage.StoreAsync(localInterviewer);
 
-                await this.SignIn();
+                await this.SignInAsync();
             }
             catch (SynchronizationException ex)
             {
