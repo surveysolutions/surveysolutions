@@ -634,6 +634,8 @@
     <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
     <AndroidResource Include="Resources\Drawable\location_icon.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_location_default.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_bg.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_pressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
