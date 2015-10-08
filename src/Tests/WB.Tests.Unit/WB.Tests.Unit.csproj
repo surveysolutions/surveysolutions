@@ -560,6 +560,10 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_column_duplicates.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_invalid_latitude_as_an_answer_on_gps_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_invalid_longitude_as_an_answer_on_gps_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_only_altitude_as_an_answer_on_gps_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />

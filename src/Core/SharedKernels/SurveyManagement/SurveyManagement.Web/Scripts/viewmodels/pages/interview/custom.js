@@ -70,7 +70,7 @@ ko.validation.rules['gps_latitude'] = {
             return false;
         }
         var latitude = parseFloat(value);
-        return latitude > -80 && latitude < 80;
+        return latitude > -90 && latitude < 90;
     },
     message: 'Please enter valid latitude'
 };
