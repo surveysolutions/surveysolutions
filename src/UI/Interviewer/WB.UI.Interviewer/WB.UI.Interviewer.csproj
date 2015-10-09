@@ -633,9 +633,12 @@
     <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
     <AndroidResource Include="Resources\Drawable\location_icon.png" />
-    <AndroidResource Include="Resources\Drawable\dashboard_location_default.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_default.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\dashboard_location_bg.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_location_pressed.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_location_bg.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -686,7 +689,6 @@
   <ItemGroup>
     <Folder Include="Controls\Adapters\" />
     <Folder Include="Infrastructure\Internals\Security\" />
-    <Folder Include="Resources\drawable-v21\" />
     <Folder Include="Services\" />
     <Folder Include="Syncronization\Update\" />
     <Folder Include="ViewModel\Dashboard\" />
