@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IMvxMessenger messenger;
         private readonly ISyncPackageRestoreService packageRestoreService;
 
-        public string QuestionariName { get; private set; }
+        public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
         public DashboardInterviewStatus Status { get; private set; }
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.InterviewId = item.PublicKey;
             this.Status = item.Status;
-            this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
             this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
             this.Comment = this.GetInterviewCommentByStatus(item);
             this.PrefilledQuestions = this.GetTop3PrefilledQuestions(item.Properties);
@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private async void RemoveInterview()
         {
             var isNeedDelete = await this.userInteractionService.ConfirmAsync(
-                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionariName),
+                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
 

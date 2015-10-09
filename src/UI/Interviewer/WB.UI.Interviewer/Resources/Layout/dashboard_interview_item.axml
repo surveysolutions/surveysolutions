@@ -16,7 +16,7 @@
                   android:layout_gravity="center_vertical"
                   android:layout_weight="1"
                   android:layout_width="0dp"
-                  local:MvxBind="Text QuestionariName;" />
+                  local:MvxBind="Text QuestionnaireName;" />
         <TextView style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
               android:text="\u2573"
               local:MvxBind="Click RemoveInterviewCommand;

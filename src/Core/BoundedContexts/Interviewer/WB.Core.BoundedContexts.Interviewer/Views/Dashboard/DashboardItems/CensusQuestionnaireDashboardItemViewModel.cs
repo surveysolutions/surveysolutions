@@ -43,11 +43,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.questionnaireId = Guid.Parse(surveyDto.QuestionnaireId);
             this.questionnaireVersion = surveyDto.QuestionnaireVersion;
-            this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, surveyDto.SurveyTitle, surveyDto.QuestionnaireVersion);
             this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
         }
 
-        public string QuestionariName { get; set; }
+        public string QuestionnaireName { get; set; }
         public string Comment { get; set; }
 
 
