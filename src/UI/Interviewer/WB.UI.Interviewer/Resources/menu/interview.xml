@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
 	  xmlns:local="http://schemas.android.com/apk/res-auto">
   <item
-      android:id="@+id/interview_dashboard"
+      android:id="@+id/menu_dashboard"
       local:showAsAction="never" />
   <item
       android:id="@+id/menu_troubleshooting"
       local:showAsAction="never" />
   <item
-      android:id="@+id/interview_signout"
+      android:id="@+id/menu_signout"
       local:showAsAction="never" />
 </menu>
