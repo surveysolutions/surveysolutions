@@ -151,6 +151,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set
             {
                 this.dashboardInformation = value;
+                this.RaisePropertyChanged(() => IsExistsAnyCensusQuestionniories);
                 this.RaisePropertyChanged(() => NewInterviewsCount);
                 this.RaisePropertyChanged(() => IsExistsAnyNewInterview);
                 this.RaisePropertyChanged(() => StartedInterviewsCount);
@@ -199,7 +200,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public int RejectedInterviewsCount { get { return this.dashboardInformation.RejectedInterviews.Count(); } }
 
         public bool IsExistsAnyCensusQuestionniories { get { return this.dashboardInformation.CensusQuestionnaires.Any(); } }
-        public bool IsExistsAnyNewInterview { get { return this.dashboardInformation.CensusQuestionnaires.Any() && this.NewInterviewsCount > 0; } }
+        public bool IsExistsAnyNewInterview { get { return this.NewInterviewsCount > 0; } }
         public bool IsExistsAnyStartedInterview { get { return this.StartedInterviewsCount > 0; } }
         public bool IsExistsAnyCompletedInterview { get { return this.CompletedInterviewsCount > 0; } }
         public bool IsExistsAnyRejectedInterview { get { return this.RejectedInterviewsCount > 0; } }
