@@ -7,7 +7,7 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
 
       <TextView style="@style/Dashboard_InterviewItem_Title"
-          local:MvxBind="Text QuestionariName;" />
+          local:MvxBind="Text QuestionnaireName;" />
 
       <Button style="@style/Dashboard_InterviewItem_CreateButton"
         local:MvxBind="Text Localization('Dashboard_CreateInterview');
