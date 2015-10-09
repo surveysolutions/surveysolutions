@@ -47,13 +47,13 @@ namespace WB.UI.Interviewer.Activities
 
             switch (resourceId)
             {
-                case Resource.Id.interview_dashboard:
+                case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
                 case Resource.Id.menu_troubleshooting:
                     this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
                     break;
-                case Resource.Id.interview_signout:
+                case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
             }
