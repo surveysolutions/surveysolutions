@@ -8,8 +8,69 @@ using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Settings
 {
-    internal class InterviewerSettings : EnumeratorSettings, IInterviewerSettings
+    internal class InterviewerSettings : IInterviewerSettings
     {
+        protected static ISharedPreferences NewSharedPreferences
+        {
+            get { return PreferenceManager.GetDefaultSharedPreferences(Application.Context); }
+        }
+
+        protected static ISharedPreferences OldSharedPreferences
+        {
+            get { return Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private); }
+        }
+
+        public string Endpoint
+        {
+            get
+            {
+                var endpoint = GetSetting(SettingsNames.Endpoint, string.Empty);
+                return endpoint;
+            }
+        }
+
+        public TimeSpan Timeout
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout);
+                string httpResponseTimeoutSec = GetSetting(SettingsNames.HttpResponseTimeout, defValue.ToString());
+
+                int result;
+                return int.TryParse(httpResponseTimeoutSec, out result)
+                    ? new TimeSpan(0, 0, result)
+                    : new TimeSpan(0, 0, defValue);
+            }
+        }
+
+        public int BufferSize
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize);
+                string bufferSize = GetSetting(SettingsNames.BufferSize, defValue.ToString());
+
+                int result;
+                return int.TryParse(bufferSize, out result) ? result : defValue;
+            }
+        }
+
+        public bool AcceptUnsignedSslCertificate
+        {
+            get { return false; }
+        }
+
+        public int GpsReceiveTimeoutSec
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec);
+                string gpsReceiveTimeoutSec = GetSetting(SettingsNames.GpsReceiveTimeoutSec, defValue.ToString());
+
+                int result;
+                return int.TryParse(gpsReceiveTimeoutSec, out result) ? result : defValue;
+            }
+        }
 
         public string GetDeviceId()
         {
@@ -69,14 +130,21 @@ namespace WB.UI.Interviewer.Settings
 
         private static string GetSetting(string settingName, string defaultValue)
         {
-            return SharedPreferences.GetString(settingName, defaultValue);
+            var  newPreference = NewSharedPreferences.GetString(settingName, defaultValue);
+            return !string.IsNullOrEmpty(newPreference)
+                ? newPreference
+                : OldSharedPreferences.GetString(settingName, defaultValue);
         }
 
         private static void SetSetting(string settingName, string settingValue)
         {
-            ISharedPreferencesEditor prefEditor = SharedPreferences.Edit();
-            prefEditor.PutString(settingName, settingValue);
-            prefEditor.Commit();
+            ISharedPreferencesEditor newPrefEditor = NewSharedPreferences.Edit();
+            newPrefEditor.PutString(settingName, settingValue);
+            newPrefEditor.Commit();
+
+            ISharedPreferencesEditor oldPrefEditor = OldSharedPreferences.Edit();
+            oldPrefEditor.PutString(settingName, settingValue);
+            oldPrefEditor.Commit();
         }
     }
 }
