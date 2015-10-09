@@ -135,4 +135,70 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Выход</value>
   </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Количество секунд,  в течении которых будет ожидаться получение GPS координат</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Время ожидания при считывании GPS координат</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Количество секунд,  в течении которых будет ожидаться получение ответа от сервера</value>
+  </data>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>URL приложения Designer</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Время ожидания при общении с сервером</value>
+  </data>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>URL для подключения к приложению Survey Solutions Designer</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Настройки подключения</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>Принимать все SSL сертификаты</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>Невозможно открыть опросник {0}. Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль</value>
+  </data>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>Скачиваем опросник - {0}%</value>
+  </data>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>Создаем новое интервью</value>
+  </data>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>Подключаемся к серверу</value>
+  </data>
+  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
+    <value>Невозможно подключиться к Survey Solutions Designer.</value>
+  </data>
+  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
+    <value>Подготовка опросника к созданию интервью</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
+    <value>Сохранение библиотеки с выражениями в локальном хранилище</value>
+  </data>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>Сохранение опросника в локальном хранилище</value>
+  </data>
+  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
+    <value>Удаленная проверка опросника на наличие ошибок.</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>Отключить проверку SSL сертификатов</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>Невозможно открыть опросник {0}. Опросник не найден. Обновите список опросников, пожалуйста.</value>
+  </data>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>Версия  {0}</value>
+  </data>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>Невозможно открыть опросник {0}. Опросник сожержит ошибки. Исправьте, пожалуйста, их в дизайнере опросников.</value>
+  </data>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>Версия приложения</value>
+  </data>
 </root>
