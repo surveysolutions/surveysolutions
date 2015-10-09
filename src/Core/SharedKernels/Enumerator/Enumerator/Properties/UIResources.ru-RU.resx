@@ -344,4 +344,46 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Сервис Google Play недоступен</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Клиент местоположения не запущен</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>Вы не можете запустить более одного сервиса MvxLocation</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>У вас нет ниодного интервью на устройстве. Отправьте информацию о таблете, очистите данные приложения и войдите под другой учетной записью</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Interviewer</value>
+  </data>
+  <data name="Interviewer_DashboardTitle" xml:space="preserve">
+    <value>Интервью/Перепись для {0}</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Попробуйте войти онлайн</value>
+  </data>
+  <data name="Interviewer_Troubleshooting" xml:space="preserve">
+    <value>Устранение неполадок</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>Если вы перепревяжетесь к этому устройству, то все данные собранные на других устройствах будут удалены</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Перепривязать</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>Ваша учетная запись уже привязан к другому устройству</value>
+  </data>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись заблокирована. Обратитесь в службу поддержки по адресу support@mysurvey.solutions.</value>
+  </data>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>Но</value>
+  </data>
 </root>
