@@ -9,8 +9,8 @@
         </div>
         <div class="qname-block">
             <div class="conditions-block">
-                <div class="enabling-group-marker condition-item" ng-if="item.hasCondition">&#x26AB;</div>
-                <div class="validation-group-marker condition-item" ng-if="item.hasValidation">&#x26AB;</div>
+                <div class="enabling-group-marker condition-item" ng-if="item.hasCondition"></div>
+                <div class="validation-group-marker condition-item" ng-if="item.hasValidation"></div>
             </div>
             <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
         </div>

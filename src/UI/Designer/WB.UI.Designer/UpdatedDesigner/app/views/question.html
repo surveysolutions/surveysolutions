@@ -74,7 +74,7 @@
         </div>
 
     <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
-        <span class="enabling-group-marker">&#x26AB;</span>
+        <div class="enabling-group-marker"></div>
         <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression"/></label>
         <div class="pseudo-form-control">
             <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
@@ -82,7 +82,7 @@
     </div>
 
     <div class="form-group validation-group" ng-show="doesQuestionSupportValidations()">
-        <span class="validation-group-marker">&#x26AB;</span>
+        <div class="validation-group-marker"></div>
         <label for="edit-question-validation-expression">Validation condition <help key="validationExpression"/></label>
         <div class="pseudo-form-control">
             <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>

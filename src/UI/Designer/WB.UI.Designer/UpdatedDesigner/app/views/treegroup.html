@@ -14,7 +14,7 @@
             <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
         </div>
         <div class="qname-block">
-            <span class="enabling-group-marker condition-item" ng-if="item.hasCondition">&#x26AB;</span>
+            <span class="enabling-group-marker condition-item" ng-if="item.hasCondition"></span>
             <span ng-if="item.isRoster" ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
         </div>
     </a>
