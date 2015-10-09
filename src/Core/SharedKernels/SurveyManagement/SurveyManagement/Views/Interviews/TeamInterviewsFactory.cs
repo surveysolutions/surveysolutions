@@ -107,10 +107,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             var orderBy = model.Orders.FirstOrDefault();
             if (orderBy == null)
             {
-                return query.OrderByDescending(x => x.SummaryId);
+                return query.OrderByDescending(x => x.UpdateDate);
             }
-
-            return query.OrderUsingSortExpression(model.Order).OrderBy(x => x.SummaryId).AsQueryable();
+            return query.OrderUsingSortExpression(model.Order).AsQueryable();
         }
 
     }
