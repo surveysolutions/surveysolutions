@@ -9,7 +9,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
     {
         public static QuestionnaireDocument CreateQuestionnaireWithTwoPrefieldIncludingOneGPS(Guid questionnaireId)
         {
-            if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
             QuestionnaireDocument questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
 
             Guid questionId = Guid.Parse("23232323232323232323232323232311");
