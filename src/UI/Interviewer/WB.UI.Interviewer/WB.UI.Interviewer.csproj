@@ -385,7 +385,6 @@
     <Compile Include="Ninject\InterviewerUIModule.cs" />
     <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
-    <Compile Include="Settings\EnumeratorSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
