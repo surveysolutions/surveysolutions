@@ -9,9 +9,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool createdOnClient, string comments,
-            DateTime? rejectedDateTime)
+            DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
             : base(userId)
         {
+            this.InterviewerAssignedDateTime = interviewerAssignedDateTime;
             this.Comments = comments;
             this.RejectedDateTime = rejectedDateTime;
             this.QuestionnaireId = questionnaireId;
@@ -31,5 +32,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public string Comments { get; private set; }
         public DateTime? RejectedDateTime { get; private set; }
+        public DateTime? InterviewerAssignedDateTime { get; private set; }
     }
 }

@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewData == null)
                 return;
 
-            var interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId, newStatus, comments, timestamp);
+            var interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId, newStatus, comments, timestamp, null);
 
             this.SaveInterview(interviewSyncData, 
                 interviewData.ResponsibleId, 
@@ -173,7 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void ResendInterviewForPerson(InterviewData interview, Guid responsibleId, DateTime timestamp, string packageId, long globalSequence)
         {
-            InterviewSynchronizationDto interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interview, responsibleId, InterviewStatus.InterviewerAssigned, null, null);
+            InterviewSynchronizationDto interviewSyncData = this.synchronizationDtoFactory.BuildFrom(interview, responsibleId, InterviewStatus.InterviewerAssigned, null, null, timestamp);
             this.SaveInterview(interviewSyncData, interview.ResponsibleId, timestamp, interview.QuestionnaireId, interview.QuestionnaireVersion, packageId, globalSequence);
         }
 

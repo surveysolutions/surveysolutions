@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
@@ -14,15 +16,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
-        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures)
+        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
+
+        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
+           IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory)
         {
             if (questionnriePropagationStructures == null) throw new ArgumentNullException("questionnriePropagationStructures");
             this.questionnriePropagationStructures = questionnriePropagationStructures;
+            this.interviewStatusesFactory = interviewStatusesFactory;
         }
 
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
         {
-            var result = BuildFrom(interview, interview.ResponsibleId, interview.Status, comments, rejectedDateTime);
+            var result = BuildFrom(interview, interview.ResponsibleId, interview.Status, comments, rejectedDateTime, interviewerAssignedDateTime);
             return result;
         }
 
@@ -32,8 +38,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 return null;
             return question.Comments.Last().Text;
         }
-        public InterviewSynchronizationDto BuildFrom(InterviewData interview, 
-            Guid userId, InterviewStatus status, string comments, DateTime? rejectedDateTime)
+        public InterviewSynchronizationDto BuildFrom(InterviewData interview,
+            Guid userId, InterviewStatus status, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
         {
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
@@ -81,10 +87,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
                     propagatedGroupInstanceCounts);
             }
+
+            if (!interviewerAssignedDateTime.HasValue)
+            {
+                var interviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel {InterviewId = interview.InterviewId});
+                var interviewerAssignedStatus = interviewStatuses.StatusHistory.Find(
+                    interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
+
+                if (interviewerAssignedStatus != null)
+                {
+                    interviewerAssignedDateTime = interviewerAssignedStatus.Date;
+                }
+            }
+
             return new InterviewSynchronizationDto(interview.InterviewId,
                 status, 
                 comments,
                 rejectedDateTime,
+                interviewerAssignedDateTime,
                 userId,
                 interview.QuestionnaireId,
                 interview.QuestionnaireVersion,

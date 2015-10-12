@@ -53,8 +53,12 @@ namespace WB.UI.Headquarters.API.Resources
                 ? interviewSummary.UpdateDate
                 : (DateTime?) null;
 
+            var interviewerAssignedDateTime = interviewSummary != null && interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                ? interviewSummary.UpdateDate
+                : (DateTime?)null;
+
             InterviewData document = interviewData;
-            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document, comments, rejectedDateTime);
+            InterviewSynchronizationDto interviewSynchronizationDto = this.factory.BuildFrom(document, comments, rejectedDateTime, interviewerAssignedDateTime);
 
             var result = this.Request.CreateResponse(HttpStatusCode.OK, interviewSynchronizationDto,
                 new JsonNetFormatter(new JsonSerializerSettings
