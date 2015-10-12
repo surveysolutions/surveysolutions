@@ -108,6 +108,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     featuredQuestionsMeta, 
                     metaInfo.Comments,
                     metaInfo.RejectDateTime,
+                    metaInfo.InterviewerAssignedDateTime,
                     true, 
                     createdOnClient);
 
