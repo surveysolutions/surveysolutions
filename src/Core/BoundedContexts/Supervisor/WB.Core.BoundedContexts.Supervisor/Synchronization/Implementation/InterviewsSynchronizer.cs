@@ -437,6 +437,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             DateTime? rejectedDateTime = interviewSummary.Status == InterviewStatus.RejectedBySupervisor
                 ? interviewSummary.UpdateDate
                 : (DateTime?) null;
+            DateTime? interviewerAssignedDateTime = interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                ? interviewSummary.UpdateDate
+                : (DateTime?)null;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions
@@ -451,6 +454,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 ResponsibleId = interviewSummary.ResponsibleId,
                 Status = (int)interviewSummary.Status,
                 RejectDateTime = rejectedDateTime,
+                InterviewerAssignedDateTime = interviewerAssignedDateTime,
                 TemplateId = interviewSummary.QuestionnaireId,
                 Comments = lastComment,
                 Valid = !interviewSummary.HasErrors,

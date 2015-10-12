@@ -89,7 +89,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.FeaturedQuestionsMeta, 
                 evnt.Payload.CreatedOnClient,
                 false,
-                evnt.EventTimeStamp,
+                evnt.Payload.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
                 null,
                 evnt.Payload.RejectedDateTime);
         }
@@ -131,13 +131,9 @@ namespace WB.UI.Interviewer.EventHandlers
 
                 if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item != null)
                 {
-                    var gpsAnswer = (string) item.Answer;
-                    string[] gpsAnswerChunks = gpsAnswer.Split(',', '[', ']');
-
-                    double latitude = double.Parse(gpsAnswerChunks[0], CultureInfo.InvariantCulture);
-                    double longitude = double.Parse(gpsAnswerChunks[1], CultureInfo.InvariantCulture);
-
-                    gpsLocation = new GpsCoordinatesViewModel(latitude, longitude);
+                    var answerOnPrefilledGeolocationQuestion = item.Answer as GeoPosition;
+                    if (answerOnPrefilledGeolocationQuestion != null)
+                        gpsLocation = new GpsCoordinatesViewModel(answerOnPrefilledGeolocationQuestion.Latitude, answerOnPrefilledGeolocationQuestion.Longitude);
                 }
             }
 
@@ -201,7 +197,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.InterviewData.Answers, 
                 evnt.Payload.InterviewData.CreatedOnClient,
                 canBeDeleted: false,
-                createdDateTime: evnt.EventTimeStamp,
+                createdDateTime:  evnt.Payload.InterviewData.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
                 startedDateTime: null,
                 rejectedDateTime: null);
         }
