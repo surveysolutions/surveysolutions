@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, userId, questionnaireId,
+                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, null, userId, questionnaireId,
                     questionnaire.Version,
                     new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] {}, new decimal[] { 1 }, string.Empty) },
                     new HashSet<InterviewItemId>(),
