@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
 
-            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null);
+            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null, null);
 
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);

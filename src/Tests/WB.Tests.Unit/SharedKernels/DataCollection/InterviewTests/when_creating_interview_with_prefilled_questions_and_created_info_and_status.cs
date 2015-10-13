@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            interview.CreateInterviewFromSynchronizationMetadata(interviewId, userId, questionnaireId, 1, interviewStatus, featuredQuestionsMeta, comments, rejectedDateTime, isValid, createdOnClient);
+            interview.CreateInterviewFromSynchronizationMetadata(interviewId, userId, questionnaireId, 1, interviewStatus, featuredQuestionsMeta, comments, rejectedDateTime, interviewerAssignedDateTime, isValid, createdOnClient);
 
         It should_event_context_contains_3_events = () =>
             eventContext.Events.Count().ShouldEqual(3);
@@ -67,6 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid interviewId = Guid.Parse("11000000000000000000000000000000");
         private static string comments = "status chance comment";
         private static DateTime? rejectedDateTime = DateTime.Now;
+        private static DateTime? interviewerAssignedDateTime = DateTime.Now;
         private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
         private static InterviewStatus interviewStatus = InterviewStatus.Completed;
 
