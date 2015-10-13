@@ -229,8 +229,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.Statistics = statistics;
                 this.IsSynchronizationInProgress = false;
             }
-
-            if (this.shouldUpdatePasswordOfInterviewer)
+            
+            if (!this.Token.IsCancellationRequested && this.shouldUpdatePasswordOfInterviewer)
             {
                 var newPassword = await this.GetNewPasswordAsync();
                 if (newPassword == null)

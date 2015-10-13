@@ -177,7 +177,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async Task RunSynchronizationAsync()
         {
             await this.Synchronization.SynchronizeAsync();
-            await this.RefreshDashboardAsync();
+            if (this.Synchronization.Status == SynchronizationStatus.Success)
+                await this.RefreshDashboardAsync();
         }
 
         public string DashboardTitle
@@ -249,11 +250,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.NavigateToTroubleshootingAsync()); }
+        }
+
+        private async Task NavigateToTroubleshootingAsync()
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>();
         }
 
         private async Task SignOutAsync()
         {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+
             this.principal.SignOut();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
