@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                         }
                     }.ToList());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.SupervisorAssigned, "", null,
+            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.SupervisorAssigned, "", null, null,
                         userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                         new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                         new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);

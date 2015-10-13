@@ -91,12 +91,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             if (!interviewerAssignedDateTime.HasValue)
             {
                 var interviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel {InterviewId = interview.InterviewId});
-                var interviewerAssignedStatus = interviewStatuses.StatusHistory.Find(
-                    interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
-
-                if (interviewerAssignedStatus != null)
+                if (interviewStatuses != null)
                 {
-                    interviewerAssignedDateTime = interviewerAssignedStatus.Date;
+                    var interviewerAssignedStatus = interviewStatuses.StatusHistory.Find(
+                       interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
+
+                    if (interviewerAssignedStatus != null)
+                    {
+                        interviewerAssignedDateTime = interviewerAssignedStatus.Date;
+                    }   
                 }
             }
 
