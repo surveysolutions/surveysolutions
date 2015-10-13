@@ -1586,7 +1586,7 @@ namespace WB.Tests.Unit
             return
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: 1, featuredQuestionsMeta: featuredQuestionsMeta,
-                    createdOnClient: createdOnClient, comments: null, rejectedDateTime: null));
+                    createdOnClient: createdOnClient, comments: null, rejectedDateTime: null, interviewerAssignedDateTime: null));
         }
 
         private static Guid GetGuidIdByStringId(string stringId)
@@ -2196,7 +2196,9 @@ namespace WB.Tests.Unit
             return new InterviewSynchronizationDto(
                 Guid.NewGuid(),
                 status,
-                "", null,
+                "", 
+                null,
+                null,
                 userId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(), 
                 1, 
