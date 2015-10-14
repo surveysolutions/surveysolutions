@@ -111,7 +111,7 @@
                 }
             </td>
             <td>
-                @if (LegacyOptions.SupervisorFunctionsEnabled && User.IsInRole(UserRoles.Observer.ToString()))
+                @if (LegacyOptions.SupervisorFunctionsEnabled && (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Observer.ToString())))
                 {
                     <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
                         <i class="glyphicon glyphicon-user"></i>
