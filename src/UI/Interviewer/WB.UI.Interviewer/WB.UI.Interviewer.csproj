@@ -688,9 +688,6 @@
     <Folder Include="Controls\Adapters\" />
     <Folder Include="Infrastructure\Internals\Security\" />
     <Folder Include="Services\" />
-    <Folder Include="Syncronization\Update\" />
-    <Folder Include="ViewModel\Dashboard\" />
-    <Folder Include="Views\Login\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
