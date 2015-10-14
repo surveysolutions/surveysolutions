@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Main.Core.Entities.SubEntities
@@ -26,7 +27,19 @@ namespace Main.Core.Entities.SubEntities
 
         public override string ToString()
         {
-            return string.Format("{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
+            return string.Format(CultureInfo.InvariantCulture, "{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
+        }
+
+        public static GeoPosition FromString(string value)
+        {
+            string[] stringParts = value.Split(',', '[', ']');
+
+            return new GeoPosition(
+                double.Parse(stringParts[0], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[1], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[2], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[3], CultureInfo.InvariantCulture),
+                default(DateTimeOffset));
         }
 
         public static object ParseProperty(string value, string propertyName)
