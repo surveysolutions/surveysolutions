@@ -90,6 +90,7 @@
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
+    <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
