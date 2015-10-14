@@ -15,29 +15,6 @@ namespace Main.Core.Entities.SubEntities
 
         public GeoPosition(){}
 
-        public GeoPosition(dynamic propertyAnswerMap)
-        {
-            if (IsPropertyExist(propertyAnswerMap, "Latitude"))
-                this.Latitude = propertyAnswerMap.Latitude;
-
-            if (IsPropertyExist(propertyAnswerMap, "Longitude"))
-                this.Longitude = propertyAnswerMap.Longitude;
-
-            if (IsPropertyExist(propertyAnswerMap, "Accuracy"))
-                this.Accuracy = propertyAnswerMap.Accuracy;
-
-            if (IsPropertyExist(propertyAnswerMap, "Timestamp"))
-                this.Timestamp = propertyAnswerMap.Timestamp;
-
-            if (IsPropertyExist(propertyAnswerMap, "Altitude"))
-                this.Altitude = propertyAnswerMap.Altitude;
-        }
-
-        private bool IsPropertyExist(dynamic propertyAnswerMap, string name)
-        {
-            return ((IDictionary<String, object>)propertyAnswerMap).ContainsKey(name);
-        }
-
         public GeoPosition(double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp)
         {
             this.Latitude = latitude;
@@ -54,7 +31,7 @@ namespace Main.Core.Entities.SubEntities
 
         public static object ParseProperty(string value, string propertyName)
         {
-            if (!PropertyNames.Contains(propertyName))
+            if (!PropertyNames.Any(p => p.Equals(propertyName, StringComparison.OrdinalIgnoreCase)))
                 throw new ArgumentException(
                     String.Format("{0} property is missing at GeoPosition object. Value {1} can't be parsed",
                         propertyName,
