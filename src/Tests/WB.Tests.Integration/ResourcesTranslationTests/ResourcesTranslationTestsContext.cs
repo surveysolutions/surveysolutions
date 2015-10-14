@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -43,6 +44,31 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         private static IEnumerable<string> GetStringFormatEntries(string value)
         {
             return StringFormatParameterRegex.Matches(value).Cast<Match>().Select(match => match.Value);
+        }
+
+        protected static string ToOriginalResourceFileName(string translatedResourceFileName)
+        {
+            return RemoveTranslatedResourceFileExtension(translatedResourceFileName) + ".resx";
+        }
+
+        protected static string GetOriginalResourceFileNameWithoutExtension(string resourceFileName)
+        {
+            return RemoveOriginalResourceFileExtension(Path.GetFileName(resourceFileName));
+        }
+
+        protected static string GetTranslatedResourceFileNameWithoutExtension(string resourceFileName)
+        {
+            return RemoveTranslatedResourceFileExtension(Path.GetFileName(resourceFileName));
+        }
+
+        private static string RemoveOriginalResourceFileExtension(string resourceFileName)
+        {
+            return resourceFileName.Substring(0, resourceFileName.Length - 5);
+        }
+
+        private static string RemoveTranslatedResourceFileExtension(string resourceFileName)
+        {
+            return resourceFileName.Substring(0, resourceFileName.Length - 11);
         }
     }
 }
