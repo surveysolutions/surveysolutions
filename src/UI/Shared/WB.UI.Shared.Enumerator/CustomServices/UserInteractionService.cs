@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
-using Android.Content.Res;
 using Android.Text;
 using Android.Widget;
 using Cirrious.CrossCore;
@@ -12,30 +9,17 @@ using Cirrious.CrossCore.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 
-namespace WB.UI.Shared.Enumerator.CustomServices.UserInteraction
+namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    public class UserInteractionService : IUserInteractionService
+    internal class UserInteractionService : IUserInteractionService
     {
         private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
         private static TaskCompletionSource<object> userInteractionsAwaiter = null;
 
-        protected Activity CurrentActivity
+        private Activity CurrentActivity
         {
-            get
-            {
-                return Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
-            }
-        }
-
-        public void OpenMaps(double latitude, double longitude)
-        {
-            var geoUri = Android.Net.Uri.Parse(
-                string.Format("geo:{0},{1}?q={0},{1}(Target+Location)", latitude.ToString(CultureInfo.InvariantCulture), longitude.ToString(CultureInfo.InvariantCulture)));
-
-            var mapIntent = new Intent(Intent.ActionView, geoUri);
-
-            this.CurrentActivity.StartActivity(mapIntent);
+            get { return Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity; }
         }
 
         public Task<bool> ConfirmAsync(

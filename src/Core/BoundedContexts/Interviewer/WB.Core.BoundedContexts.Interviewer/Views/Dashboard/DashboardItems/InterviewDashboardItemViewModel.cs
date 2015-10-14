@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IMvxMessenger messenger;
         private readonly ISyncPackageRestoreService packageRestoreService;
+        private readonly IExternalAppLauncher externalAppLauncher;
 
         public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
@@ -51,7 +52,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IChangeLogManipulator changeLogManipulator,
             ICapiCleanUpService capiCleanUpService,
             IMvxMessenger messenger, 
-            ISyncPackageRestoreService packageRestoreService)
+            ISyncPackageRestoreService packageRestoreService,
+            IExternalAppLauncher externalAppLauncher)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
@@ -62,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.capiCleanUpService = capiCleanUpService;
             this.messenger = messenger;
             this.packageRestoreService = packageRestoreService;
+            this.externalAppLauncher = externalAppLauncher;
         }
 
         public void Init(DashboardQuestionnaireItem item)
@@ -90,7 +93,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private void NavigateToGpsLocation()
         {
-            this.userInteractionService.OpenMaps(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
+            this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
         }
 
         private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
