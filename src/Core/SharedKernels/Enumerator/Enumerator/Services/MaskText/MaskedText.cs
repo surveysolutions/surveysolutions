@@ -340,7 +340,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
                 }
             }
 
-            if (end == this.mask.Length)
+            if (end == this.LastValidPosition())
             {
                 range.End = this.rawText.Length;
             }
