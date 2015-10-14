@@ -242,10 +242,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Archived.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
+    <Compile Include="Resources\TabletSyncMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerSyncStrings.resx</DependentUpon>
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Interviews.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -396,9 +396,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Archived.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerSyncStrings.resx">
+    <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerSyncStrings.Designer.cs</LastGenOutput>
+      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.resx">
