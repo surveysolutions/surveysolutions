@@ -126,21 +126,38 @@ namespace WB.UI.Interviewer.EventHandlers
             foreach (var featuredQuestion in featuredQuestions)
             {
                 var item = answeredQuestions.FirstOrDefault(q => q.Id == featuredQuestion.PublicKey);
-                if(featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
+
+                if (featuredQuestion.QuestionType != QuestionType.GpsCoordinates)
+                {
                     prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
+                }
 
                 if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item != null)
                 {
-                    var answerOnPrefilledGeolocationQuestion = item.Answer as GeoPosition;
+                    var answerOnPrefilledGeolocationQuestion = GetGeoPositionAnswer(item);
                     if (answerOnPrefilledGeolocationQuestion != null)
+                    {
                         gpsLocation = new GpsCoordinatesViewModel(answerOnPrefilledGeolocationQuestion.Latitude, answerOnPrefilledGeolocationQuestion.Longitude);
+                    }
                 }
             }
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
                 prefilledQuestions, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, rejectedDateTime,
                 gpsLocation, createdOnClient, canBeDeleted);
+
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
+        }
+
+        private static GeoPosition GetGeoPositionAnswer(AnsweredQuestionSynchronizationDto item)
+        {
+            if (item.Answer is GeoPosition)
+                return (GeoPosition) item.Answer;
+
+            if (item.Answer is string)
+                return GeoPosition.FromString((string) item.Answer);
+
+            return null;
         }
 
         private FeaturedItem CreateFeaturedItem(IQuestion featuredQuestion, object answer)
