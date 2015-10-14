@@ -227,7 +227,8 @@
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
-    <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
+    <Compile Include="CustomServices\ExternalAppLauncher.cs" />
+    <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />

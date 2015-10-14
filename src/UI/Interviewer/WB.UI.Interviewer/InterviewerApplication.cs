@@ -52,8 +52,8 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.Syncronization.Implementation;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Login;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.CustomServices;
-using WB.UI.Shared.Enumerator.CustomServices.UserInteraction;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
@@ -189,6 +189,7 @@ namespace WB.UI.Interviewer
 
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
+                new EnumeratorUIModule(),
                 new InterviewerUIModule(),
 
                 new InterviewerBoundedContextModule(),
@@ -198,9 +199,6 @@ namespace WB.UI.Interviewer
 
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
-
-            this.kernel.Bind<IUserInteractionService>().To<UserInteractionService>();
-            this.kernel.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
             this.kernel.Bind<InterviewPackageIdsStorageSettings>()
                 .ToConstant(new InterviewPackageIdsStorageSettings(basePath, SynchronizationPackagesFileName));
