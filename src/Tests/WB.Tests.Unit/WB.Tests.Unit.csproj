@@ -420,6 +420,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
+    <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\QuestionnaireModelBuilderTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\when_building_model_and_questionnaire_document_has_list_roster_without_max_value.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
