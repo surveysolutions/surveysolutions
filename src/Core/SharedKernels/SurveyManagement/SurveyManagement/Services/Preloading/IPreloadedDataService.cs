@@ -25,9 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 
         decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues);
 
-        Dictionary<string, Tuple<string, int>[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
-
-        ValueParsingResult ParseQuestion(string answer, string columnName, IQuestion question, out KeyValuePair<Guid, object> parsedValue);
+        ValueParsingResult ParseQuestionInLevel(string answer, string columnName, HeaderStructureForLevel level, out object parsedValue);
 
         PreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
 
@@ -35,6 +33,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 
         string GetValidFileNameForTopLevelQuestionnaire();
 
-        IQuestion GetQuestionByVariableName(string variableName);
+        bool IsQuestionRosterSize(string variableName);
     }
 }

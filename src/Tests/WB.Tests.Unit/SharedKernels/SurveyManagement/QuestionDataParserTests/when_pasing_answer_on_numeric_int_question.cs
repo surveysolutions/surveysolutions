@@ -22,12 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName, question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
+                    questionDataParser.TryParse(answer, questionVarName, question, out parcedValue);
 
         private It should_result_be_equal_to_1 = () =>
-            parcedValue.Value.ShouldEqual(1);
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            parcedValue.Key.ShouldEqual(questionId);
+            parcedValue.ShouldEqual(1);
     }
 }
