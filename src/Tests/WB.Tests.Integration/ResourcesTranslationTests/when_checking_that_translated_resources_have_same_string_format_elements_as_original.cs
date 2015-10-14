@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         private static IEnumerable<string> GetTranslatedResourcesNotCorrespondingToOriginalByStringFormat(string translatedResourceFile)
         {
-            string originalResourceFile = translatedResourceFile.Substring(0, translatedResourceFile.Length - 11) + ".resx";
+            string originalResourceFile = ToOriginalResourceFileName(translatedResourceFile);
 
             Dictionary<string, string> translatedResources = GetStringResourcesFromResX(translatedResourceFile);
             Dictionary<string, string> originalResources = GetStringResourcesFromResX(originalResourceFile);
