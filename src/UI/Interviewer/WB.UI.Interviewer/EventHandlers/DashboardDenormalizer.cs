@@ -122,6 +122,7 @@ namespace WB.UI.Interviewer.EventHandlers
             var featuredQuestions = questionnaireTemplate.Questionnaire.Find<IQuestion>(q => q.Featured).ToList();
 
             GpsCoordinatesViewModel gpsLocation = null;
+            string prefilledGpsQuestionId = null;
 
             foreach (var featuredQuestion in featuredQuestions)
             {
@@ -132,8 +133,10 @@ namespace WB.UI.Interviewer.EventHandlers
                     prefilledQuestions.Add(this.CreateFeaturedItem(featuredQuestion, item == null ? null : item.Answer));
                 }
 
-                if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates && item != null)
+                if (featuredQuestion.QuestionType == QuestionType.GpsCoordinates)
                 {
+                    prefilledGpsQuestionId = featuredQuestion.PublicKey.FormatGuid();
+
                     var answerOnPrefilledGeolocationQuestion = GetGeoPositionAnswer(item);
                     if (answerOnPrefilledGeolocationQuestion != null)
                     {
@@ -144,13 +147,16 @@ namespace WB.UI.Interviewer.EventHandlers
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
                 prefilledQuestions, questionnaireTemplate.Version, comments, assignedDateTime, startedDateTime, rejectedDateTime,
-                gpsLocation, createdOnClient, canBeDeleted);
+                prefilledGpsQuestionId, gpsLocation, createdOnClient, canBeDeleted);
 
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
         }
 
         private static GeoPosition GetGeoPositionAnswer(AnsweredQuestionSynchronizationDto item)
         {
+            if (item == null)
+                return null;
+
             if (item.Answer is GeoPosition)
                 return (GeoPosition) item.Answer;
 
@@ -322,7 +328,18 @@ namespace WB.UI.Interviewer.EventHandlers
 
             var preFilledQuestion = featuredItems.FirstOrDefault(question => question.PublicKey == questionId);
 
-            if (preFilledQuestion != null)
+            if (questionId.FormatGuid() == questionnaire.GpsLocationQuestionId && answer == null)
+            {
+                questionnaire.GpsLocationLatitude = null;
+                questionnaire.GpsLocationLongitude = null;
+            }
+            else if (questionId.FormatGuid() == questionnaire.GpsLocationQuestionId && answer is GeoPosition)
+            {
+                var gpsAnswer = (GeoPosition) answer;
+                questionnaire.GpsLocationLatitude = gpsAnswer.Latitude;
+                questionnaire.GpsLocationLongitude = gpsAnswer.Longitude;
+            }
+            else if (preFilledQuestion != null)
             {
                 preFilledQuestion.Value = this.getAnswer(preFilledQuestion, answer);
                 questionnaire.SetProperties(featuredItems);
