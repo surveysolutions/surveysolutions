@@ -796,7 +796,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                allQuestionsInGroup,
                groupIdentity.RosterVector,
                questionnaire,
-               GetRosterInstanceIds);
+               GetRosterInstanceIds).ToList();
 
             return questionInstances.Count(this.IsEnabled);
         }
@@ -849,7 +849,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds);
+                GetRosterInstanceIds).ToList();
 
             return questionInstances.Count(this.WasAnswered);
         }
@@ -870,7 +870,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
+                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString).ToList();
 
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(
                 x => x.Value != null 

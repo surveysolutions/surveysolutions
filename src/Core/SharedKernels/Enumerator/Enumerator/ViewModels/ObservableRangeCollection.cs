@@ -55,5 +55,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             });
         }
+
+        public void NotifyItemChanged(int itemIndex)
+        {
+            if (itemIndex < 0 || this.Count <= itemIndex)
+                return;
+
+            var item = this[itemIndex];
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item,
+                    item, itemIndex));
+            });
+        }
     }
 }
