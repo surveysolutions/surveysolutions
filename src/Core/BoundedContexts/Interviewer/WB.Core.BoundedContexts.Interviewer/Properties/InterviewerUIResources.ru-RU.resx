@@ -155,12 +155,12 @@
     <value>Синхронизировать</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Синхронизируйтись для получения новых заданий
+    <value>Синхронизируйтесь для получения новых заданий
 или свяжитесь с вашим супервайзером
 для дальнейших инструкций</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
-    <value>У вас нету новых заданий</value>
+    <value>У Вас нет новых заданий</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
     <value>Нет новых</value>
@@ -198,13 +198,13 @@
 Пожалуйста введите ваш обновленный пароль. Если проблема не будет решена, пожалйста, обратитесь к Супервизору или Хедквотеру.</value>
   </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Ваша учетная запись заблокирована. Обратитесь к вашему супервизору.</value>
+    <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>Вашей учетной записи не назначена роль интервьювера</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Ваша учетная запись не подтверждена. Обратитесь к вашему супервизору.</value>
+    <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложени Interviewer.</value>
@@ -246,7 +246,7 @@
     <value>Сайт Survey Solutions Supervisor находится на техническом обслуживании. Извините за доставленные неудобства</value>
   </data>
   <data name="NoNetwork" xml:space="preserve">
-    <value>Нет подключения к сети. Проверье настройки сети</value>
+    <value>Нет подключения к сети. Проверьте настройки сети</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>О приложении</value>
