@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -264,15 +265,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InvalidateViewModelsByConditions(@event.Groups);
         }
 
-        private void InvalidateViewModelsByConditions(IEnumerable<Identity> viewModelIdentities)
+        private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
         {
-            foreach (var viewModelIdentity in viewModelIdentities)
-            {
-                var interviewEntity =
-                    this.Items.OfType<IInterviewEntityViewModel>().FirstOrDefault(x => x.Identity.Equals(viewModelIdentity));
+            var readOnlyItems = Items.ToArray();
 
-                if (interviewEntity != null)
-                    this.Items[this.Items.IndexOf(interviewEntity)] = interviewEntity;
+            for (int i = 0; i < readOnlyItems.Length; i++)
+            {
+                var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
+                if (interviewEntityViewModel != null && viewModelIdentities.Contains(interviewEntityViewModel.Identity))
+                    // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
+                    this.Items.NotifyItemChanged(i);
             }
         }
 
