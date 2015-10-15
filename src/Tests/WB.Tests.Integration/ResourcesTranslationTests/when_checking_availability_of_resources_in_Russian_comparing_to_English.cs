@@ -14,6 +14,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
             englishResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.resx")
+                .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"))
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"))
                 .Where(IsEnumeratorOrTesterOrInterviwerFile);
 
