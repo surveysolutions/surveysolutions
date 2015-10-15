@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created on {0}.
+        ///   Looks up a localized string similar to Assigned on {0}.
         /// </summary>
         public static string DashboardItem_CreatedOn {
             get {
