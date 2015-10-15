@@ -112,7 +112,7 @@ namespace WB.UI.Interviewer.EventHandlers
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
+        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
         {
             var questionnaireTemplate = this.questionnaireStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
             if (questionnaireTemplate == null)
@@ -143,7 +143,7 @@ namespace WB.UI.Interviewer.EventHandlers
             }
 
             var questionnaireDto = new QuestionnaireDTO(interviewId, responsibleId, questionnaireId, status,
-                prefilledQuestions, questionnaireTemplate.Version, comments, createdDateTime, startedDateTime, rejectedDateTime,
+                prefilledQuestions, questionnaireTemplate.Version, comments, assignedDateTime, startedDateTime, rejectedDateTime,
                 gpsLocation, createdOnClient, canBeDeleted);
 
             this.questionnaireDtoDocumentStorage.Store(questionnaireDto, interviewId);
@@ -214,7 +214,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.InterviewData.Answers, 
                 evnt.Payload.InterviewData.CreatedOnClient,
                 canBeDeleted: false,
-                createdDateTime:  evnt.Payload.InterviewData.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
+                assignedDateTime:  evnt.Payload.InterviewData.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
                 startedDateTime: null,
                 rejectedDateTime: null);
         }
