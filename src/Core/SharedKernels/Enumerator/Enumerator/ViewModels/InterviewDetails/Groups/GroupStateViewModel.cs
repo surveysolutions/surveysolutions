@@ -10,17 +10,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class GroupStateViewModel : MvxNotifyPropertyChanged
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IUserInterfaceStateService userInterfaceStateService;
 
         protected GroupStateViewModel()
         {
         }
 
-        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository,
-            IUserInterfaceStateService userInterfaceStateService)
+        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository)
         {
             this.interviewRepository = interviewRepository;
-            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         private string interviewId;
@@ -55,25 +52,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public virtual void UpdateFromGroupModel()
         {
-            try
-            {
-                userInterfaceStateService.NotifyRefreshStarted();
-
-                IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
          
-                this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
-                this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
-                this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
-                this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.group);
+            this.QuestionsCount = interview.CountActiveInterviewerQuestionsInGroupOnly(this.group);
+            this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
+            this.AnsweredQuestionsCount = interview.CountAnsweredInterviewerQuestionsInGroupOnly(this.group);
+            this.InvalidAnswersCount = interview.CountInvalidInterviewerQuestionsInGroupOnly(this.group);
 
-                this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
+            this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
 
-                this.Status = this.CalculateDetailedStatus();
-            }
-            finally
-            {
-                userInterfaceStateService.NotifyRefreshFinished();
-            }
+            this.Status = this.CalculateDetailedStatus();
         }
 
         private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
