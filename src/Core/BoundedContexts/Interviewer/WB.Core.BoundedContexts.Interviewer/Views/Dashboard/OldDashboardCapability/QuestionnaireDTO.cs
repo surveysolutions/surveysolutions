@@ -16,7 +16,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
         }
 
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, GpsCoordinatesViewModel gpsLocation, bool? createdOnClient = false, bool justInitilized = false)
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, string gpsQuestionId, GpsCoordinatesViewModel gpsLocation, bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
             this.Status = (int)status;
@@ -29,6 +29,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.CreatedDateTime = createdDateTime;
             this.StartedDateTime = startedDateTime;
             this.RejectedDateTime = rejectedDateTime;
+            this.GpsLocationQuestionId = gpsQuestionId;
             this.GpsLocationLatitude = gpsLocation != null ? gpsLocation.Latitude : null as double?;
             this.GpsLocationLongitude = gpsLocation != null ? gpsLocation.Longitude : null as double?;
 
@@ -55,8 +56,9 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public DateTime? CreatedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
 
-        public double? GpsLocationLatitude { get; private set; }
-        public double? GpsLocationLongitude { get; private set; }
+        public string GpsLocationQuestionId { get; private set; }
+        public double? GpsLocationLatitude { get; set; }
+        public double? GpsLocationLongitude { get; set; }
 
         public IEnumerable<FeaturedItem> GetPrefilledQuestions()
         {
