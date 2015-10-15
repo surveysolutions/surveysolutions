@@ -343,7 +343,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         if (rosterVector == "")
             return [];
 
-        return rosterVector.split('_').map(function (vector) { return vector; });
+        return rosterVector.split('_');
     }
 
     function prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector) {
