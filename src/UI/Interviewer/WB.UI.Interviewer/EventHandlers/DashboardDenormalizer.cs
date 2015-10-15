@@ -216,7 +216,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 canBeDeleted: false,
                 assignedDateTime:  evnt.Payload.InterviewData.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
                 startedDateTime: null,
-                rejectedDateTime: null);
+                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
