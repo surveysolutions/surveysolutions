@@ -138,9 +138,12 @@ namespace WB.UI.Interviewer
             bus.RegisterHandler(dashboardeventHandler, typeof(TextQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(SingleOptionQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof (NumericRealQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(NumericRealQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(GeoLocationQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(QRBarcodeQuestionAnswered));
 
             bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
