@@ -35,7 +35,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             var commentTemplate = $("<div/>").html($('#comment-template').html())[0];
             ko.applyBindings(commentInfo, commentTemplate);
 
-            var commentListElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList"));
+            var commentListElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList") + '"]');
             if (commentListElement.children().length == 0) {
                 var commentsCounterElement = $("#commentsCounter");
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
@@ -61,7 +61,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
             if (question.isAnswerFlagged) {
                 if (filter.filteredBy == 'Flagged') {
-                    var answerRowElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow"));
+                    var answerRowElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow") + '"]');
                     answerRowElement.remove();
                 } else {
                     $(element).removeClass("btn-info");
@@ -78,7 +78,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     }
 
     self.saveFilteredComboboxAnswer = function(questionId, underscoreJoinedQuestionRosterVector) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answerLabel = answerElement.val();
 
         var filteredCombobox = _.find(self.filteredComboboxes, function (item) {
@@ -118,7 +118,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.saveTextAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answer = answerElement.val();
         var observableTextAnswer = ko.observable(answer).extend({ required: true });
 
@@ -134,7 +134,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.saveNumericIntegerAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answer = answerElement.val();
         var observableTextAnswer = ko.observable(answer).extend({ required: true, numericValidator: -1 });
 
@@ -150,7 +150,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.saveNumericRealAnswer = function (questionId, underscoreJoinedQuestionRosterVector, countOfDecimalPlaces) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answer = answerElement.val();
         var observableTextAnswer = ko.observable(answer).extend({ required: true });
         if (countOfDecimalPlaces) {
@@ -343,7 +343,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         if (rosterVector == "")
             return [];
 
-        return rosterVector.split('_').map(function (vector) { return vector.replace('-', '.'); });
+        return rosterVector.split('_').map(function (vector) { return vector; });
     }
 
     function prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector) {

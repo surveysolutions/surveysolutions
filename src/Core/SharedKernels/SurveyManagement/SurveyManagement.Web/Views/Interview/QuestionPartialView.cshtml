@@ -283,6 +283,6 @@
 
     public string Stringify(decimal[] array)
     {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture).Replace('.', '-')));
+        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
     }
 }
