@@ -9,7 +9,9 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     {
         Establish context = () =>
         {
-            translatedResourceFiles = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx");
+            translatedResourceFiles = Enumerable.Concat(
+                TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"),
+                TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"));
         };
 
         Because of = () =>
@@ -46,7 +48,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 string originalStringFormatEntries = GetStringFormatEntriesAsString(originalResourceValue);
 
                 if (translatedStringFormatEntries != originalStringFormatEntries)
-                    yield return string.Format("{0}: has {1}, but should have {2}", translatedResource.Key, translatedStringFormatEntries, originalStringFormatEntries);
+                    yield return string.Format("{0}: has '{1}', but should have '{2}'", translatedResource.Key, translatedStringFormatEntries, originalStringFormatEntries);
             }
         }
     }
