@@ -1021,7 +1021,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}.
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is presented at {0}.
         /// </summary>
         public static string Troubleshooting_RestoreConfirmation {
             get {

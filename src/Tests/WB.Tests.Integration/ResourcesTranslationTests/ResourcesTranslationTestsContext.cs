@@ -63,12 +63,17 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         private static string RemoveOriginalResourceFileExtension(string resourceFileName)
         {
-            return resourceFileName.Substring(0, resourceFileName.Length - 5);
+            return TrimEndAfterLastDot(resourceFileName);
         }
 
         private static string RemoveTranslatedResourceFileExtension(string resourceFileName)
         {
-            return resourceFileName.Substring(0, resourceFileName.Length - 11);
+            return TrimEndAfterLastDot(TrimEndAfterLastDot(resourceFileName));
+        }
+
+        private static string TrimEndAfterLastDot(string value)
+        {
+            return value.Substring(0, value.LastIndexOf('.'));
         }
     }
 }
