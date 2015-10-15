@@ -8,17 +8,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class InterviewStateViewModel : GroupStateViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IUserInterfaceStateService userInterfaceStateService;
 
         protected InterviewStateViewModel()
         {
         }
 
-        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository,
-            IUserInterfaceStateService userInterfaceStateService)
+        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository)
         {
             this.interviewRepository = interviewRepository;
-            this.userInterfaceStateService = userInterfaceStateService;
         }
 
         private string interviewId;
@@ -31,24 +28,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public override void UpdateFromGroupModel()
         {           
-            try
-            {
-                userInterfaceStateService.NotifyRefreshStarted();
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
 
-                IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+            this.QuestionsCount = interview.CountActiveQuestionsInInterview();
+            this.SubgroupsCount = 0;
+            this.AnsweredQuestionsCount = interview.CountAnsweredQuestionsInInterview();
+            this.InvalidAnswersCount = interview.CountInvalidQuestionsInInterview();
 
-                this.QuestionsCount = interview.CountActiveQuestionsInInterview();
-                this.SubgroupsCount = 0;
-                this.AnsweredQuestionsCount = interview.CountAnsweredQuestionsInInterview();
-                this.InvalidAnswersCount = interview.CountInvalidQuestionsInInterview();
-
-                this.SimpleStatus = this.CalculateInterviewSimpleStatus();
-                this.Status = this.CalculateDetailedStatus();
-            }
-            finally
-            {
-                userInterfaceStateService.NotifyRefreshFinished();
-            }
+            this.SimpleStatus = this.CalculateInterviewSimpleStatus();
+            this.Status = this.CalculateDetailedStatus();
         }
 
         private SimpleGroupStatus CalculateInterviewSimpleStatus()
