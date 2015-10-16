@@ -550,7 +550,6 @@
     <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
