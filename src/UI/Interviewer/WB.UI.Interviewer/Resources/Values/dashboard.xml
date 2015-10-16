@@ -106,6 +106,7 @@
     <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:background">@android:color/transparent</item>
     <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:paddingTop">@dimen/Dashboard_InterviewItem_RemoveInterviewButton_paddingTop</item>
     <item name="android:gravity">top</item>
   </style>
 
