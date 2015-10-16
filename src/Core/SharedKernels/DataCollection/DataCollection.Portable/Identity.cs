@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public Identity(Guid id, RosterVector rosterVector)
         {
             this.Id = id;
-            this.RosterVector = rosterVector ?? new RosterVector(new decimal[]{});
+            this.RosterVector = rosterVector ?? RosterVector.Empty;
         }
 
         public override string ToString()

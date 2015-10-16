@@ -56,7 +56,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public DateTime? CreatedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
 
-        public string GpsLocationQuestionId { get; private set; }
+        public string GpsLocationQuestionId { get; set; }
         public double? GpsLocationLatitude { get; set; }
         public double? GpsLocationLongitude { get; set; }
 
