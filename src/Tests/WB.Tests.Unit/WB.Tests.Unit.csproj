@@ -562,7 +562,8 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewExportedDataEventHandlerTests\when_interview_unapproved_by_headquarters_event_handled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_preiods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_42.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_negative_answer.cs" />

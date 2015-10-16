@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
 {
-    internal class when_load_quantity_report_for_interviewers_where_one_out_of_three_preiods_is_in_future : QuantityReportFactoryTestContext
+    internal class when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future : QuantityReportFactoryTestContext
     {
         Establish context = () =>
         {
