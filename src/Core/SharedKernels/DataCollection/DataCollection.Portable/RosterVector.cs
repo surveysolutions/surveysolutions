@@ -8,6 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class RosterVector : IEnumerable<decimal>
     {
+        public static readonly RosterVector Empty = new decimal[]{};
+
         private readonly ReadOnlyCollection<decimal> coordinates;
 
         public RosterVector(IEnumerable<decimal> coordinates)

@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -16,10 +17,9 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 
-namespace WB.UI.Interviewer.EventHandlers
+namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability
 {
     public class DashboardDenormalizer :                                            
                                       BaseDenormalizer,
@@ -112,7 +112,11 @@ namespace WB.UI.Interviewer.EventHandlers
         }
 
 
-        private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status, string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions, bool createdOnClient, bool canBeDeleted, DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
+        private void AddOrUpdateInterviewToDashboard(
+            Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status,
+            string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions,
+            bool createdOnClient, bool canBeDeleted,
+            DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
         {
             var questionnaireTemplate = this.questionnaireStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
             if (questionnaireTemplate == null)
@@ -157,11 +161,13 @@ namespace WB.UI.Interviewer.EventHandlers
             if (item == null)
                 return null;
 
-            if (item.Answer is GeoPosition)
-                return (GeoPosition) item.Answer;
+            var geoPositionAnswer = item.Answer as GeoPosition;
+            if (geoPositionAnswer != null)
+                return geoPositionAnswer;
 
-            if (item.Answer is string)
-                return GeoPosition.FromString((string) item.Answer);
+            var geoPositionString = item.Answer as string;
+            if (geoPositionString != null)
+                return GeoPosition.FromString(geoPositionString);
 
             return null;
         }
@@ -196,7 +202,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 return new FeaturedCategoricalItem(featuredQuestion.PublicKey, 
                     featuredQuestion.QuestionText,
                     AnswerUtils.AnswerToString(objectAnswer,
-                        (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
+                        (optionValue) => GetCategoricalAnswerOptionText(featuredCategoricalOptions, optionValue)),
                     featuredCategoricalOptions);
             }
 
@@ -341,7 +347,7 @@ namespace WB.UI.Interviewer.EventHandlers
             }
             else if (preFilledQuestion != null)
             {
-                preFilledQuestion.Value = this.getAnswer(preFilledQuestion, answer);
+                preFilledQuestion.Value = GetAnswer(preFilledQuestion, answer);
                 questionnaire.SetProperties(featuredItems);
             }
             else if (!questionnaire.StartedDateTime.HasValue)
@@ -356,7 +362,7 @@ namespace WB.UI.Interviewer.EventHandlers
             this.questionnaireDtoDocumentStorage.Store(questionnaire, interviewId);
         }
 
-        private string getAnswer(FeaturedItem featuredQuestion, object answer)
+        private static string GetAnswer(FeaturedItem featuredQuestion, object answer)
         {
             if (answer == null)
                 return string.Empty;
@@ -364,11 +370,11 @@ namespace WB.UI.Interviewer.EventHandlers
             var featuredCategoricalQuestion = featuredQuestion as FeaturedCategoricalItem;
             if (featuredCategoricalQuestion != null)
                 return AnswerUtils.AnswerToString(Convert.ToDecimal(answer, CultureInfo.InvariantCulture),
-                    (optionValue) => getCategoricalAnswerOptionText(featuredCategoricalQuestion.Options, optionValue));
+                    (optionValue) => GetCategoricalAnswerOptionText(featuredCategoricalQuestion.Options, optionValue));
             return AnswerUtils.AnswerToString(answer);
         }
 
-        private static string getCategoricalAnswerOptionText(
+        private static string GetCategoricalAnswerOptionText(
             IEnumerable<FeaturedCategoricalOption> featuredCategoricalOptions, decimal optionValue)
         {
             var featuredCategoricalOption =
