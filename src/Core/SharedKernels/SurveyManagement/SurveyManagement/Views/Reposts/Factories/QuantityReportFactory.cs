@@ -52,6 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(AddPeriod(from, period, i).Date, AddPeriod(from, period, i + 1).Date))
+                    .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();
 
             var users =
