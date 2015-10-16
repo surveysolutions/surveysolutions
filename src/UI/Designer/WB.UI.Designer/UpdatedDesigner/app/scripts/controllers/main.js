@@ -22,8 +22,9 @@ angular.module('designerApp')
                 combo: 'ctrl+b',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 description: 'Compile',
-                callback: function () {
+                callback: function (event) {
                     $scope.verify();
+                    event.preventDefault();
                 }
             });
 
