@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
+        public bool HasComment { get; private set; }
 
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -77,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.PrefilledQuestions = this.GetTop3PrefilledQuestions(item.Properties);
             this.GpsLocation = item.GpsLocation;
             this.IsSupportedRemove = item.CanBeDeleted;
+            this.HasComment = !string.IsNullOrEmpty(this.Comment);
         }
 
         public GpsCoordinatesViewModel GpsLocation { get; private set; }

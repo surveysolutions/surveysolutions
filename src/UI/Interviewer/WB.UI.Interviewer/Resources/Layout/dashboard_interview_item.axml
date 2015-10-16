@@ -9,7 +9,7 @@
     <LinearLayout style="@style/Dashboard_InterviewItem_StatusPanel"
                   local:MvxBind="BackgroundStyle InterviewStatusToColor(Status);"/>
     <LinearLayout style="@style/Dashboard_InterviewItem_InformationBlock">
-      <LinearLayout android:layout_width="match_parent" 
+      <LinearLayout android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
         <TextView style="@style/Dashboard_InterviewItem_Title"
@@ -27,18 +27,22 @@
           local:MvxBind="ItemsSource PrefilledQuestions;"
           local:MvxItemTemplate="@layout/dashboard_item_prefilled_question" />
 
-      <TextView style="@style/Dashboard_InterviewItem_Comment"
-          local:MvxBind="Text DateComment;
-                         TextColor InterviewStatusToColor(Status);" />
-      <LinearLayout android:layout_width="match_parent" 
+      <LinearLayout android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-        <TextView style="@style/Dashboard_InterviewItem_Comment"
-                  android:layout_weight="1"
-                  android:layout_width="0dp"
-                  local:MvxBind="Text Comment;
-                                 TextColor InterviewStatusToColor(Status);" />
 
+        <LinearLayout android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+          <TextView style="@style/Dashboard_InterviewItem_Comment"
+                    local:MvxBind="Text DateComment;
+                         TextColor InterviewStatusToColor(Status);" />
+          <TextView style="@style/Dashboard_InterviewItem_Comment"
+                    local:MvxBind="Text Comment;
+                                 Visible HasComment;
+                                 TextColor InterviewStatusToColor(Status);" />
+        </LinearLayout>
         <ImageButton style="@style/Dashboard_Location"
                      local:MvxBind="Visible HasGpsLocation;
                                     Click NavigateToGpsLocationCommand;"/>
