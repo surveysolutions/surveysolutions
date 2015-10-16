@@ -8,15 +8,14 @@
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
-        var $deviceUrl = '@Url.Action("Device", "TabletReport", new { area = string.Empty })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})');
-        model.GetFilterMethod = function () {
-            return { SupervisorId: '@Model' };
-        };
-        ko.applyBindings(model);
-        model.load();
-    });
+            model.GetFilterMethod = function () {
+                return { SupervisorId: '@Model' };
+            };
+            ko.applyBindings(model);
+            model.load();
+        });
     </script>
 }
 
@@ -81,9 +80,6 @@
                     <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
                         <i class="icon icon-edit icon-white"></i> Edit
                     </a>
-                    <!-- ko if:DeviceId()!=null -->
-                    <a class="btn btn-info" data-bind="attr: { href: $deviceUrl + '/' + DeviceId() }"><span class="glyphicon glyphicon-list"></span> Show sync log</a>
-                    <!-- /ko -->
                 </td>
             </tr>
             <!-- /ko -->
