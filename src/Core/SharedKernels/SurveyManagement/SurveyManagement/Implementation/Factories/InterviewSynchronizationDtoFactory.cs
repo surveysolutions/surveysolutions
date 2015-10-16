@@ -93,8 +93,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 var interviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel {InterviewId = interview.InterviewId});
                 if (interviewStatuses != null)
                 {
-                    var interviewerAssignedStatus = interviewStatuses.StatusHistory.Find(
-                       interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
+                    var interviewerAssignedStatus =
+                        interviewStatuses.StatusHistory.OrderBy(interviewStatus => interviewStatus.Date).LastOrDefault(
+                            interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
 
                     if (interviewerAssignedStatus != null)
                     {
