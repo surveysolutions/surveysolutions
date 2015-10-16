@@ -16,7 +16,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
         }
 
-        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, string gpsQuestionId, GpsCoordinatesViewModel gpsLocation, bool? createdOnClient = false, bool justInitilized = false)
+        public QuestionnaireDTO(Guid id, Guid responsible, Guid survey, InterviewStatus status, IEnumerable<FeaturedItem> properties, long surveyVersion, string comments, DateTime? createdDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime, string gpsQuestionId, GpsCoordinatesViewModel gpsLocation, bool? createdOnClient = false, bool justInitilized = false)
         {
             this.Id = id.FormatGuid();
             this.Status = (int)status;
