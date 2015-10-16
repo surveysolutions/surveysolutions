@@ -24,11 +24,7 @@
     this.ReportTypeName = ko.observable();
 
     self.GetPeriodName = function (period) {
-        return ko.computed({
-            read: function () {
-                return moment(period.From()).format(dateFormat) + "-" + moment(period.To()).format(dateFormat);
-            }
-        }, this);
+        return moment(period.From()).format(dateFormat);
     };
 
     self.FormatSpeedPeriod = function(data) {
