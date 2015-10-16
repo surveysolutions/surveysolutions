@@ -89,7 +89,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.FeaturedQuestionsMeta, 
                 evnt.Payload.CreatedOnClient,
                 false,
-                evnt.Payload.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
+                evnt.Payload.InterviewerAssignedDateTime,
                 null,
                 evnt.Payload.RejectedDateTime);
         }
@@ -220,7 +220,7 @@ namespace WB.UI.Interviewer.EventHandlers
                 evnt.Payload.InterviewData.Answers, 
                 evnt.Payload.InterviewData.CreatedOnClient,
                 canBeDeleted: false,
-                assignedDateTime:  evnt.Payload.InterviewData.InterviewerAssignedDateTime ?? evnt.EventTimeStamp,
+                assignedDateTime:  evnt.Payload.InterviewData.InterviewerAssignedDateTime,
                 startedDateTime: null,
                 rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime);
         }
