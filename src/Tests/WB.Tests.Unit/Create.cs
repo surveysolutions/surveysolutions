@@ -35,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
@@ -81,6 +82,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
@@ -107,6 +109,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Supervisor.Controllers;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
@@ -466,6 +469,12 @@ namespace WB.Tests.Unit
             public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
             {
                 return new InterviewReceivedBySupervisor();
+            }
+
+            public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
+            {
+                return new GeoLocationQuestionAnswered(
+                    Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
             }
         }
 
@@ -1633,9 +1642,14 @@ namespace WB.Tests.Unit
                 new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
         }
 
-        public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
+        public static Identity Identity(string id, RosterVector rosterVector)
         {
-            return new WB.Core.SharedKernels.DataCollection.Identity(id, rosterVector);
+            return Create.Identity(Guid.Parse(id), rosterVector);
+        }
+
+        public static Identity Identity(Guid id, RosterVector rosterVector)
+        {
+            return new Identity(id, rosterVector);
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -2257,6 +2271,21 @@ namespace WB.Tests.Unit
         public static InterviewComment InterviewComment(string comment=null)
         {
             return new InterviewComment() {Comment = comment};
+        }
+
+        public static QuestionnaireDTO QuestionnaireDTO()
+        {
+            return new QuestionnaireDTO();
+        }
+
+        public static DashboardDenormalizer DashboardDenormalizer(
+            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null)
+        {
+            return new DashboardDenormalizer(
+                questionnaireDtoDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
+                Mock.Of<IReadSideRepositoryWriter<SurveyDto>>(),
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
     }
 }

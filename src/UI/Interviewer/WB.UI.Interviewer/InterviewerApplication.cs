@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Interviewer.ErrorReporting;
 using WB.Core.BoundedContexts.Interviewer.EventHandler;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
