@@ -50,10 +50,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewId = interviewId;
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            if (interview == null) throw new Exception("Interview is null.");
+            if (interview == null) throw new Exception("Interview is null. interviewId: " + interviewId);
 
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
-            if (questionnaire == null) throw new Exception("questionnaire is null");
+            if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
             if (questionnaire.PrefilledQuestionsIds.Count == 0)
             {
