@@ -100,13 +100,13 @@
   </style>
 
   <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">@dimen/Theme_Button_min_height</item>
+    <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
     <item name="android:background">@drawable/dashboard_remove_icon</item>
     <item name="android:textSize">@dimen/textsize_20</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_RemoveInterviewButton_paddingTop</item>
-    <item name="android:gravity">top</item>
+    <item name="android:gravity">center</item>
   </style>
 
   <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
