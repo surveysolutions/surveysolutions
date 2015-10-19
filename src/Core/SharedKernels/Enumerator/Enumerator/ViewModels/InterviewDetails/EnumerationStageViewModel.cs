@@ -105,16 +105,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             
             GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
 
-            bool isThisIsLastInterviewSection = this.questionnaire.GroupsHierarchy.Last().Id == navigationParams.TargetGroup.Id;
-
-            await this.CreateRegularGroupScreen(navigationParams, @group, isThisIsLastInterviewSection);
+            await this.CreateRegularGroupScreen(navigationParams, @group);
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
                 this.eventRegistry.Subscribe(this, this.interviewId);
             }
         }
 
-        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs navigationParams, GroupModel @group, bool isThisIsLastInterviewSection)
+        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs navigationParams, GroupModel @group)
         {
             if (@group is RosterModel)
             {
@@ -130,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             await Task.Run(() =>
             {
-                this.LoadFromModel(navigationParams.TargetGroup, isThisIsLastInterviewSection);
+                this.LoadFromModel(navigationParams.TargetGroup);
                 this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
             });
         }
@@ -150,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.messenger.Publish(new ScrollToAnchorMessage(this, anchorElementIndex));
         }
 
-        private void LoadFromModel(Identity groupIdentity, bool isThisIsLastInterviewSection)
+        private void LoadFromModel(Identity groupIdentity)
         {
             this.Items.Clear();
 
@@ -168,18 +166,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.Items.Add(x);
                 }
 
-                if (isThisIsLastInterviewSection)
-                {
-                    var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<InterviewSummaryNavigationViewModel>();
-                    previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
-                    this.Items.Add(previousGroupNavigationViewModel);
-                }
-                else
-                {
-                    var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                    previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
-                    this.Items.Add(previousGroupNavigationViewModel);
-                }
+                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+                this.Items.Add(previousGroupNavigationViewModel);
             }
             finally
             {
