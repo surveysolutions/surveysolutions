@@ -214,7 +214,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         break;
                 }
 
-                this.Status = SynchronizationStatus.Fail;
+                this.Status = ex.Type == SynchronizationExceptionType.RequestCanceledByUser 
+                    ? SynchronizationStatus.Canceled
+                    : SynchronizationStatus.Fail;
                 this.SetProgressOperation(errorTitle, errorDescription);
             }
             catch (Exception ex)
