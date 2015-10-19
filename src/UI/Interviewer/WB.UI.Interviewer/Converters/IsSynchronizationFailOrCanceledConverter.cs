@@ -6,11 +6,11 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 
 namespace WB.UI.Interviewer.Converters
 {
-    public class IsSynchronizationFailConverter : MvxValueConverter<SynchronizationStatus, bool>
+    public class IsSynchronizationFailOrCanceledConverter : MvxValueConverter<SynchronizationStatus, bool>
     {
         protected override bool Convert(SynchronizationStatus status, Type targetType, object parameter, CultureInfo culture)
         {
-            return status == SynchronizationStatus.Fail;
+            return status == SynchronizationStatus.Fail || status == SynchronizationStatus.Canceled;
         }
     }
 }
