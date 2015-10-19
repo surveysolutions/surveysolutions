@@ -200,14 +200,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     groupIdentity: this.navigationState.CurrentGroup,
                     navigationState: this.navigationState).ToList();
 
-                foreach (var addedRosterInstance in @event.Instances)
+                for (int i = 0; i < viewModelEntities.Count; i++)
                 {
-                    var viewModelEntity = viewModelEntities.FirstOrDefault(x => x.Identity.Equals(addedRosterInstance.GetIdentity()));
+                    var viewModelEntity = viewModelEntities[i];
 
-                    if (viewModelEntity != null)
+                    if (@event.Instances.Any(rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
                     {
-                        var itemIndex = viewModelEntities.IndexOf(viewModelEntity);
-                        this.Items.Insert(itemIndex, viewModelEntity);
+                        this.Items.Insert(i, viewModelEntity);
                     }
                 }
             }
