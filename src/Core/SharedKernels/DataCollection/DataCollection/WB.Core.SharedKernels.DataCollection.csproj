@@ -188,7 +188,6 @@
     </Compile>
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
