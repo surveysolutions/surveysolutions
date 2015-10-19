@@ -90,6 +90,11 @@
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
+    <Compile Include="Properties\UIResources.uk-UA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.uk-UA.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -255,6 +260,10 @@
       <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\UIResources.uk-UA.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.uk-UA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
