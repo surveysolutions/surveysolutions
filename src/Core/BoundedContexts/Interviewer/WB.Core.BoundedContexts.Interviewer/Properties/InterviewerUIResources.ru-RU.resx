@@ -222,7 +222,7 @@
     <value>Выход</value>
   </data>
   <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Устранение проблем</value>
+    <value>Устранение неполадок</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
@@ -276,7 +276,7 @@
     <value>Найдена новая версия. Хотите ли вы скачать новую версию и обновить приложение?</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? 
+    <value>Информационный пакет размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его? 
 </value>
   </data>
   <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
@@ -409,7 +409,7 @@
     <value>Отправка информации об устройстве</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? </value>
+    <value>Информационный пакет размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его? </value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Информационный пакет успешно отправлен</value>
