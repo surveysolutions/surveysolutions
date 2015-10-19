@@ -124,7 +124,7 @@
     <value>Закончено {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Создано {0}</value>
+    <value>Назначено {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
     <value>В прогрессе</value>
@@ -222,7 +222,7 @@
     <value>Выход</value>
   </data>
   <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Устранение неполадок</value>
+    <value>Устранение проблем</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
@@ -276,7 +276,7 @@
     <value>Найдена новая версия. Хотите ли вы скачать новую версию и обновить приложение?</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его? 
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? 
 </value>
   </data>
   <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
@@ -337,10 +337,10 @@
     <value>{0}  новых интервью скачано</value>
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Были обновлены все назначения</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
-    <value>опросники</value>
+    <value>вопросники</value>
   </data>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
     <value>Интервью заблокированы до окончания синхронизации</value>
@@ -409,7 +409,7 @@
     <value>Отправка информации об устройстве</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его? </value>
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? </value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Информационный пакет успешно отправлен</value>
@@ -436,10 +436,10 @@
     <value>ID устройства</value>
   </data>
   <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>Перевод</value>
+    <value>URL-адрес, который используется для связи с приложением руководителя</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Количество секунд для ожидания координаты</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Настройки интервью</value>
@@ -448,7 +448,7 @@
     <value>Запрос отменен пользователем</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Время ожидания при подключении к веб-сайта обследования решения руководителя. Проверьте подключение к Интернету.</value>
   </data>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Отменить</value>
@@ -460,18 +460,15 @@
     <value>Невозможно подключиться к  Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Время ожидания ответа сервера</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Количество секунд ожидания до ответа сервера</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Перевод</value>
+    <value>Время ожидания получения GPS</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL приложения Supervisor</value>
-  </data>
-  <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Назначено {0}</value>
   </data>
 </root>
