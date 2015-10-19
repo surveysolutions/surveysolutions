@@ -209,6 +209,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assigned on {0}.
+        /// </summary>
+        public static string DashboardItem_AssignedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Census mode, Interviews created: {0}.
         /// </summary>
         public static string DashboardItem_CensusModeComment {
@@ -227,7 +236,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned on {0}.
+        ///   Looks up a localized string similar to Created on {0}.
         /// </summary>
         public static string DashboardItem_CreatedOn {
             get {

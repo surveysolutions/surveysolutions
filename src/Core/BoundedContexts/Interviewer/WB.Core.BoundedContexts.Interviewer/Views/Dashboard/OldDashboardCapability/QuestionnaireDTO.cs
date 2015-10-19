@@ -51,6 +51,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public bool? CreatedOnClient { get; set; }
         public long SurveyVersion { get; set; }
 
+        public DateTime? CreatedDateTime { get; set; }
         public DateTime? StartedDateTime { get; set; }
         public DateTime? CompletedDateTime { get; set; }
         public DateTime? InterviewerAssignedDateTime { get; set; }

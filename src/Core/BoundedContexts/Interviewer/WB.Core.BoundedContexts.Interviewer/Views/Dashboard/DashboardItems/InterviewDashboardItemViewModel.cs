@@ -103,6 +103,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             switch (status)
             {
                 case DashboardInterviewStatus.New:
+                    if (item.InterviewerAssignedDateTime.HasValue)
+                        return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, item.InterviewerAssignedDateTime);
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_CreatedOn, item.CreatedDateTime);
                 case DashboardInterviewStatus.InProgress:
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_StartedOn, item.StartedDateTime);

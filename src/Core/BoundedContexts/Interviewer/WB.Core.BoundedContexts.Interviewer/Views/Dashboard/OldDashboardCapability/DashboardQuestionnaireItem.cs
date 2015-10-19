@@ -11,7 +11,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
     {
         public DashboardQuestionnaireItem(Guid publicKey, Guid surveyKey, DashboardInterviewStatus status,
             IEnumerable<FeaturedItem> properties, string title, long questionnaireVersion, string comments, 
-            DateTime? startedDateTime, DateTime? completedDateTime, DateTime? createdDateTime, 
+            DateTime? startedDateTime, DateTime? completedDateTime, DateTime? createdDateTime, DateTime? interviewerAssignedDateTime, 
             DateTime? rejectedDateTime, GpsCoordinatesViewModel gpsLocation,
             bool? createdOnClient = false, bool canBeDeleted = false)
         {
@@ -26,6 +26,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
             this.CompletedDateTime = completedDateTime;
             this.CreatedDateTime = createdDateTime;
             this.RejectedDateTime = rejectedDateTime;
+            this.InterviewerAssignedDateTime = interviewerAssignedDateTime;
             this.GpsLocation = gpsLocation;
             this.CreatedOnClient = createdOnClient;
             this.CanBeDeleted = canBeDeleted;
@@ -58,5 +59,7 @@ namespace WB.UI.Interviewer.ViewModel.Dashboard
         public DateTime? CreatedDateTime { get; private set; }
 
         public DateTime? RejectedDateTime { get; private set; }
+
+        public DateTime? InterviewerAssignedDateTime { get; private set; }
     }
 }
