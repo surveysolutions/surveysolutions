@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.GetChapterOf
         {
             targetGroupId = Guid.NewGuid();
             chapterId = Guid.NewGuid();
-            questionnaire = Create.CreateQuestionnaireDocumentWithOneChapter(
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 chapterId,
                 new Group
                 {
