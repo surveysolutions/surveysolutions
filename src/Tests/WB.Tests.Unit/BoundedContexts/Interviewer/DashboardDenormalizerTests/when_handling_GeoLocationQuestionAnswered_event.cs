@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using It = Machine.Specifications.It;
+using it = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             @event = Create.Event.GeoLocationQuestionAnswered(Create.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
 
             var questionnaireDtoDocumentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(writer
-                => writer.GetById(Moq.It.IsAny<string>()) == dashboardItem);
+                => writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             denormalizer = Create.DashboardDenormalizer(questionnaireDtoDocumentStorage: questionnaireDtoDocumentStorage);
         };

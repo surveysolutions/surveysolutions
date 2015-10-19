@@ -477,6 +477,15 @@ namespace WB.Tests.Unit
                 return new GeoLocationQuestionAnswered(
                     Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
             }
+
+            public static InterviewOnClientCreated InterviewOnClientCreated(
+                Guid? questionnaireId = null, long? questionnaireVersion = null)
+            {
+                return new InterviewOnClientCreated(
+                    Guid.NewGuid(),
+                    questionnaireId ?? Guid.NewGuid(),
+                    questionnaireVersion ?? 1);
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -1080,12 +1089,12 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            return CreateQuestionnaireDocumentWithOneChapter(null, children);
+            return QuestionnaireDocumentWithOneChapter(null, children);
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument();
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
@@ -2280,13 +2289,24 @@ namespace WB.Tests.Unit
         }
 
         public static DashboardDenormalizer DashboardDenormalizer(
-            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null)
+            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage = null)
         {
             return new DashboardDenormalizer(
                 questionnaireDtoDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
                 Mock.Of<IReadSideRepositoryWriter<SurveyDto>>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                questionnaireStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 Mock.Of<IPlainQuestionnaireRepository>());
+        }
+
+        public static QuestionnaireDocumentVersioned QuestionnaireDocumentVersioned(
+            QuestionnaireDocument questionnaireDocument, long? version = null)
+        {
+            return new QuestionnaireDocumentVersioned
+            {
+                Questionnaire = questionnaireDocument,
+                Version = version ?? 77,
+            };
         }
     }
 }
