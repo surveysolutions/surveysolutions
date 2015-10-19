@@ -307,7 +307,7 @@
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
-    <Compile Include="Converters\IsSynchronizationFailConverter.cs" />
+    <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />

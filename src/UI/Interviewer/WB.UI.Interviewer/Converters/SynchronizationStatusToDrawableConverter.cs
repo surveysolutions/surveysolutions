@@ -16,6 +16,7 @@ namespace WB.UI.Interviewer.Converters
                     return Resource.Drawable.synchronization_download_indicator;
                 case SynchronizationStatus.Upload:
                     return Resource.Drawable.synchronization_upload_indicator;
+                case SynchronizationStatus.Canceled:
                 case SynchronizationStatus.Fail:
                     return Resource.Drawable.synchronization_fail_process_indicator;
                 case SynchronizationStatus.Success:

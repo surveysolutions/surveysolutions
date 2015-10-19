@@ -25,7 +25,7 @@
       </RelativeLayout>
       <RelativeLayout style="@style/FullWidthWrappingLayout">
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
-                      local:MvxBind="Visible And(IsSynchronizationFail(Synchronization.Status), Not(Synchronization.HasUserAnotherDevice))">
+                      local:MvxBind="Visible And(IsSynchronizationFailOrCanceled(Synchronization.Status), Not(Synchronization.HasUserAnotherDevice))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Fail_State_NewInterviews_Format'), Synchronization.Statistics.NewInterviewsCount, Synchronization.Statistics.TotalNewInterviewsCount)" />
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
@@ -39,7 +39,7 @@
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
-                      local:MvxBind="Visible And(Not(IsSynchronizationFail(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress))">
+                      local:MvxBind="Visible And(Not(IsSynchronizationFailOrCanceled(Synchronization.Status)), Not(Synchronization.IsSynchronizationInProgress))">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Format(Localization('Synchronization_Success_State_UploadedInterviews_Format'), Synchronization.Statistics.TotalCompletedInterviewsCount)" />
 
@@ -53,7 +53,7 @@
         </LinearLayout>
 
         <LinearLayout style="@style/Dashboard_Synchronization_Statistics_Holder"
-                      local:MvxBind="Visible And(IsSynchronizationFail(Synchronization.Status), Synchronization.HasUserAnotherDevice)">
+                      local:MvxBind="Visible And(IsSynchronizationFailOrCanceled(Synchronization.Status), Synchronization.HasUserAnotherDevice)">
           <TextView style="@style/Dashboard_Synchronization_Statistics_Text"
                     local:MvxBind="Text Localization('Synchronization_UserLinkedToAnotherDevice_Description'); TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
         </LinearLayout>
