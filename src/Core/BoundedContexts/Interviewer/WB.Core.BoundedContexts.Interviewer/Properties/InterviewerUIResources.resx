@@ -133,7 +133,7 @@
     <value>Completed on {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Assigned on {0}</value>
+    <value>Created on {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
     <value>In progress</value>
@@ -469,5 +469,8 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Assigned on {0}</value>
   </data>
 </root>
