@@ -18,6 +18,8 @@
                   android:layout_width="0dp"
                   local:MvxBind="Text QuestionnaireName;" />
         <TextView style="@style/Dashboard_InterviewItem_RemoveInterviewButton"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
               android:text="\u2573"
               local:MvxBind="Click RemoveInterviewCommand;
                              Visible IsSupportedRemove;" />
