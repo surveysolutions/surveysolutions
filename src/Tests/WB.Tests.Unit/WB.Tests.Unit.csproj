@@ -404,6 +404,7 @@
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingVerifierTests\UserPreloadingVerifierTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_AnswersRemoved_event_for_prefilled_GPS_question.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewOnClientCreated_event_and_one_of_prefilled_questions_is_GPS.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\InterviewDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\when_rejected_interview_is_created_on_client.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\LoginViewModelTestContext.cs" />
