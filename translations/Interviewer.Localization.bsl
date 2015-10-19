@@ -330,7 +330,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_EndpointSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="URL that is used to communicate with supervisor application" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="URL-адрес, который используется для связи с приложением руководителя" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="URL-адреса, що використовується для спілкування з додатком супервізора" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -344,28 +344,28 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of seconds to wait for coordinates" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Количество секунд для ожидания координаты" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Кількість секунд очікування на отримання координат" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="GPS Receive timeout" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Время ожидания получения GPS" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Час очікування GPS" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_HttpResponseTimeoutSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of seconds to wait until server response" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Количество секунд ожидания до ответа сервера" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Кількість секунд очікування на відповідь серверу" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_HttpResponseTimeoutTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Server Response timeout" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Время ожидания ответа сервера" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Час очікування відповіді сервера" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
@@ -400,7 +400,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="RequestTimeout" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Timeout when connecting to the Survey Solutions Supervisor website. Check your internet connection." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Время ожидания при подключении к веб-сайта обследования решения руководителя. Проверьте подключение к Интернету." ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Вичерпано час очікування під час підключення до веб-сайту. Перевірте підключення до Інтернету." ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -506,12 +506,13 @@
           <lis>
             <li lc="nn-nn" tx="questionnaires" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="запитальники" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="вопросники" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Success_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="All assignments were updated" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Перевод" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Были обновлены все назначения" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Всі призначення було оновлено" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
