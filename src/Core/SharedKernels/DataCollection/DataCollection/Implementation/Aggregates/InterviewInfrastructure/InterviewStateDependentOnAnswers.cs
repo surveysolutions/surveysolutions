@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.AnsweredQuestions = new ConcurrentHashSet<string>();
             this.DisabledGroups = new ConcurrentHashSet<string>();
             this.DisabledQuestions = new ConcurrentHashSet<string>();
-            this.RosterGroupInstanceIds = new ConcurrentDictionary<string, DistinctDecimalList>();
+            this.RosterGroupInstanceIds = new ConcurrentDictionary<string, ConcurrentHashSet<decimal>>();
             this.ValidAnsweredQuestions = new ConcurrentHashSet<string>();
             this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
         public ConcurrentHashSet<string> DisabledQuestions { set; get; }
-        public ConcurrentDictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
+        public ConcurrentDictionary<string, ConcurrentHashSet<decimal>> RosterGroupInstanceIds { set; get; }
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
@@ -102,9 +102,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in instances)
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
-                DistinctDecimalList rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? RosterGroupInstanceIds[rosterGroupKey]
-                    : new DistinctDecimalList();
+                    : new ConcurrentHashSet<decimal>();
 
                 rosterRowInstances.Add(instance.RosterInstanceId);
 
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? RosterGroupInstanceIds[rosterGroupKey]
-                    : new DistinctDecimalList();
+                    : new ConcurrentHashSet<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
 
                 RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;

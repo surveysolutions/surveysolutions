@@ -77,6 +77,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -1638,7 +1639,7 @@ namespace WB.Tests.Unit
                 new Dictionary<string, Tuple<decimal, string>[]>(), new HashSet<string>(),
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
-                new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
+                new HashSet<string>(), new Dictionary<string, ConcurrentHashSet<decimal>>(),
                 new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
         }
 
