@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -15,13 +16,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly ILogger logger;
         protected string interviewId;
 
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IViewModelNavigationService viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            ILogger logger)
         {
             if (interviewViewModelFactory == null) throw new ArgumentNullException("interviewViewModelFactory");
             if (plainQuestionnaireRepository == null) throw new ArgumentNullException("plainQuestionnaireRepository");
@@ -32,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.logger = logger;
         }
 
         public string QuestionnaireTitle { get; set; }
@@ -50,7 +54,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.interviewId = interviewId;
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            if (interview == null) throw new Exception("Interview is null. interviewId: " + interviewId);
+            if (interview == null)
+            {
+                logger.Error("Interview is null. interviewId: " + interviewId);
+                await viewModelNavigationService.NavigateToDashboardAsync();
+                return;
+            }
 
             var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
