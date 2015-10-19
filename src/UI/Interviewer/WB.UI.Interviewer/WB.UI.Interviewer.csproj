@@ -410,7 +410,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\ActionBar.axml">
       <SubType>AndroidResource</SubType>
@@ -637,6 +636,11 @@
     <AndroidResource Include="Resources\Drawable\dashboard_location_bg.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_location_pressed.xml" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_location_bg.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon_pressed.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
