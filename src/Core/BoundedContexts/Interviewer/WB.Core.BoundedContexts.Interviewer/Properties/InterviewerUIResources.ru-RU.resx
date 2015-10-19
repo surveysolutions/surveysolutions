@@ -471,4 +471,7 @@
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL приложения Supervisor</value>
   </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Назначено на {0}</value>
+  </data>
 </root>
