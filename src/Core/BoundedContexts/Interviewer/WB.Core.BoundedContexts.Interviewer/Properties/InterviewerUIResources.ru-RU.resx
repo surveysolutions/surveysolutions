@@ -124,7 +124,7 @@
     <value>Закончено {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Назначено {0}</value>
+    <value>Создано {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
     <value>В прогрессе</value>
@@ -470,5 +470,8 @@
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL приложения Supervisor</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Назначено {0}</value>
   </data>
 </root>
