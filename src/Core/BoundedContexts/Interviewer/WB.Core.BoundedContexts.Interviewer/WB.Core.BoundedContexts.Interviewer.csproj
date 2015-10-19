@@ -144,6 +144,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.ru-RU.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\InterviewerUIResources.uk-UA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.uk-UA.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\ICapiCleanUpService.cs" />
     <Compile Include="Services\ICapiDataSynchronizationService.cs" />
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
@@ -235,6 +240,10 @@
     <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.ru-RU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.uk-UA.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
