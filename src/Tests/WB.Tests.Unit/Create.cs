@@ -2209,7 +2209,8 @@ namespace WB.Tests.Unit
         }
 
         public static InterviewSynchronizationDto InterviewSynchronizationDto(
-            Guid? questionnaireId = null, 
+            Guid? questionnaireId = null,
+            long? questionnaireVersion = null,
             Guid? userId = null, 
             AnsweredQuestionSynchronizationDto[] answers = null,
             HashSet<InterviewItemId> disabledGroups = null,
@@ -2226,7 +2227,7 @@ namespace WB.Tests.Unit
                 null,
                 userId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(), 
-                1, 
+                questionnaireVersion ?? 1, 
                 answers ?? new AnsweredQuestionSynchronizationDto[0],
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
@@ -2310,6 +2311,15 @@ namespace WB.Tests.Unit
             };
         }
 
+        public static AnsweredQuestionSynchronizationDto AnsweredQuestionSynchronizationDto(
+            Guid? questionId = null, decimal[] rosterVector = null, object answer = null)
+        {
+            return new AnsweredQuestionSynchronizationDto(
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? RosterVector.Empty,
+                answer ?? "42",
+                "no comment");
+        }
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(Guid? questionnaireId=null)
         {
             return new QuestionnaireBrowseItem()

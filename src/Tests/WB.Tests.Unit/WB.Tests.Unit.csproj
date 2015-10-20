@@ -405,6 +405,8 @@
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_AnswersRemoved_event_for_prefilled_GPS_question.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewOnClientCreated_event_and_one_of_prefilled_questions_is_GPS.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewSynchronized_event_and_one_of_prefilled_questions_is_GPS_with_answer_of_GeoPosition_type.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewSynchronized_event_and_one_of_prefilled_questions_is_GPS_with_answer_of_string_type.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\InterviewDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\InterviewDashboardItemViewModelTests\when_rejected_interview_is_created_on_client.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\LoginViewModelTestContext.cs" />
@@ -447,6 +449,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_2.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
