@@ -1257,7 +1257,7 @@ namespace WB.Tests.Unit
         }
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string mask = null, string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer)
+            string mask = null, string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled=false)
             
         {
             return new TextQuestion("Question T")
@@ -1270,7 +1270,8 @@ namespace WB.Tests.Unit
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
                 StataExportCaption = variable,
-                QuestionScope = scope
+                QuestionScope = scope,
+                Featured = preFilled
             };
         }
 
@@ -2306,6 +2307,29 @@ namespace WB.Tests.Unit
             {
                 Questionnaire = questionnaireDocument,
                 Version = version ?? 77,
+            };
+        }
+
+        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(Guid? questionnaireId=null)
+        {
+            return new QuestionnaireBrowseItem()
+            {
+                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
+                Version = 1
+            };
+        }
+
+        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
+        {
+            return new QuestionnaireBrowseItem(questionnaire, 1, false);
+        }
+
+        public static ExportedHeaderItem ExportedHeaderItem(Guid? questionId=null, string variableName="var")
+        {
+            return new ExportedHeaderItem()
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ColumnNames = new[] {variableName}
             };
         }
     }
