@@ -15,6 +15,7 @@
         UnsupportedLinkedQuestion,
 
         GeneralErrorOccured,
-        UnsupportedMultimediaQuestion
+        UnsupportedMultimediaQuestion,
+        CommaIsUnsupportedInAnswer
     }
 }

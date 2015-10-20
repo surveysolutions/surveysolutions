@@ -331,7 +331,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Latitude must be geater then -90° and less then 90°..
+        ///   Looks up a localized string similar to Latitude must be greater  then -90° and less then 90°..
         /// </summary>
         internal static string PL0032_LatitudeMustBeGeaterThenN90AndLessThen90 {
             get {
@@ -340,11 +340,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Longitude  must be geater then -180° and less then 180°..
+        ///   Looks up a localized string similar to Longitude  must be greater then -180° and less then 180°..
         /// </summary>
         internal static string PL0033_LongitudeMustBeGeaterThenN180AndLessThen180 {
             get {
                 return ResourceManager.GetString("PL0033_LongitudeMustBeGeaterThenN180AndLessThen180", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;,&quot; symbolIs not allowed in numeric answers. Please use &quot;.&quot; as decimal separator..
+        /// </summary>
+        internal static string PL0034_CommaSymbolIsNotAllowedInNumericAnswer {
+            get {
+                return ResourceManager.GetString("PL0034_CommaSymbolIsNotAllowedInNumericAnswer", resourceCulture);
             }
         }
     }

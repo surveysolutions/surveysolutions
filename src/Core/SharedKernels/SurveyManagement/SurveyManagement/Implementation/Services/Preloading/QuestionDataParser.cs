@@ -32,6 +32,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (question is IMultimediaQuestion)
                 return ValueParsingResult.UnsupportedMultimediaQuestion;
 
+            if (answer.Contains(',') && !this.IsCommaAllowedInAnswer(question.QuestionType))
+                return ValueParsingResult.CommaIsUnsupportedInAnswer;
+
             switch (question.QuestionType)
             {
                 case QuestionType.Text:
@@ -65,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                 case QuestionType.AutoPropagate:
                     int intValue;
-                    if (!int.TryParse(answer, out intValue))
+                    if (!int.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out intValue))
                         return ValueParsingResult.AnswerAsIntWasNotParsed;
 
                     parsedValue = intValue;
@@ -80,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     if (numericQuestion.IsInteger)
                     {
                         int intNumericValue;
-                        if (!int.TryParse(answer, out intNumericValue))
+                        if (!int.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out intNumericValue))
                             return ValueParsingResult.AnswerAsIntWasNotParsed;
 
                         parsedValue = intNumericValue;
@@ -88,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         return ValueParsingResult.OK;
                     }
                     decimal decimalNumericValue;
-                    if (!decimal.TryParse(answer, out decimalNumericValue))
+                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalNumericValue))
                         return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                 {
                     parsedValue = decimalNumericValue;
@@ -111,7 +114,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         return ValueParsingResult.QuestionTypeIsIncorrect;
 
                     decimal decimalAnswerValue;
-                    if (!decimal.TryParse(answer, out decimalAnswerValue))
+                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalAnswerValue))
                         return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                     if (!this.GetAnswerOptionsAsValues(question).Contains(decimalAnswerValue))
                         return ValueParsingResult.ParsedValueIsNotAllowed;
@@ -125,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         return ValueParsingResult.QuestionTypeIsIncorrect;
 
                     decimal answerValue;
-                    if (!decimal.TryParse(answer, out answerValue))
+                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out answerValue))
                         return ValueParsingResult.AnswerAsDecimalWasNotParsed;
                     if (!this.GetAnswerOptionsAsValues(question).Contains(answerValue))
                         return ValueParsingResult.ParsedValueIsNotAllowed;
@@ -136,6 +139,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return ValueParsingResult.GeneralErrorOccured;                    
 
         }
+
+        private bool IsCommaAllowedInAnswer(QuestionType type)
+        {
+            return
+                !new[]
+                {QuestionType.MultyOption, QuestionType.SingleOption, QuestionType.Numeric, QuestionType.GpsCoordinates}
+                    .Contains(type);
+        }
+
 
         public object BuildAnswerFromStringArray(Tuple<string, string>[] answersWithColumnName, IQuestion question)
         {
