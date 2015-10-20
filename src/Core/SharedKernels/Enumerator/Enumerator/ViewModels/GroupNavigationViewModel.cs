@@ -30,8 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private string interviewId;
+        private string questionnaireId;
         private NavigationState navigationState;
-        private QuestionnaireModel questionnaire;
 
         private Identity currentGroupIdentity;
         private Identity groupOrSectionToNavigateIdentity;
@@ -48,15 +48,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private GroupStateViewModel groupState;
         public GroupStateViewModel GroupState
         {
-            get { return this.groupState; } 
-            set { this.groupState = value; this.RaisePropertyChanged(); }
+            get { return this.groupState; }
+            set { this.RaiseAndSetIfChanged(ref this.groupState, value); }
         }
 
         private string navigationItemTitle;
         public string NavigationItemTitle
         {
             get { return this.navigationItemTitle; }
-            set { this.navigationItemTitle = value; this.RaisePropertyChanged(); }
+            set { this.RaiseAndSetIfChanged(ref this.navigationItemTitle, value); }
         }
 
         public IMvxCommand NavigateCommand
@@ -91,10 +91,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.eventRegistry.Subscribe(this, interviewId);
 
             var interview = this.interviewRepository.Get(interviewId);
-            this.questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            this.questionnaireId = interview.QuestionnaireId;
 
+            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
             if (!questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue)
+            {
                 this.SetNextEnabledSection();
+            }
             else
             {
                 this.groupOrSectionToNavigateIdentity = this.GetParentGroupOrRosterIdentity();
@@ -117,8 +120,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private Identity GetParentGroupOrRosterIdentity()
         {
-            var parentId = this.questionnaire.GroupsParentIdMap[this.currentGroupIdentity.Id].Value;
-            int rosterLevelOfParent = this.questionnaire.GroupsRosterLevelDepth[this.currentGroupIdentity.Id];
+            var questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+            var parentId = questionnaire.GroupsParentIdMap[this.currentGroupIdentity.Id].Value;
+            int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[this.currentGroupIdentity.Id];
             decimal[] parentRosterVector = this.currentGroupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
             return new Identity(parentId, parentRosterVector);
         }
@@ -145,10 +149,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.groupOrSectionToNavigateIdentity = null;
             this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Clear();
 
-            int currentSectionIndex = this.questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.currentGroupIdentity.Id);
-            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < this.questionnaire.GroupsHierarchy.Count; sectionIndex++)
+            var questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+
+            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.currentGroupIdentity.Id);
+            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < questionnaire.GroupsHierarchy.Count; sectionIndex++)
             {
-                var nextSectionIdentity = new Identity(this.questionnaire.GroupsHierarchy[sectionIndex].Id, new decimal[0]);
+                var nextSectionIdentity = new Identity(questionnaire.GroupsHierarchy[sectionIndex].Id, RosterVector.Empty);
 
                 if (!this.CanNavigateToSection(nextSectionIdentity))
                 {
@@ -169,10 +175,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
-                    title = UIResources.Interview_PreviousGroupNavigation_ButtonText;
+                    title = UIResources.Interview_ParentGroup_ButtonText;
                     break;
                 case NavigationGroupType.LastSection:
-                    title = UIResources.Interview_NextCompleteInterview_ButtonText;
+                    title = UIResources.Interview_CompleteScreen_ButtonText;
                     break;
                 case NavigationGroupType.Section:
                     title = UIResources.Interview_NextSection_ButtonText;
