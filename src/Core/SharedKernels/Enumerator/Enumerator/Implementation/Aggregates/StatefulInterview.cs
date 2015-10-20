@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
         private readonly ConcurrentDictionary<string, InterviewGroup> groups;
-        private readonly ConcurrentDictionary<Identity, int?> rosterInstancesIdsOnSortIndexMap;
+        private readonly ConcurrentDictionary<Identity, int?> sortIndexesOfRosterInstanses;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
             this.groups = new ConcurrentDictionary<string, InterviewGroup>();
-            this.rosterInstancesIdsOnSortIndexMap = new ConcurrentDictionary<Identity, int?>();
+            this.sortIndexesOfRosterInstanses = new ConcurrentDictionary<Identity, int?>();
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
@@ -375,7 +375,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.groups.TryRemove(rosterKey, out removedGroup);
 
                 int? removeSortIndex;
-                this.rosterInstancesIdsOnSortIndexMap.TryRemove(new Identity(rosterInstance.GroupId, fullRosterVector), out removeSortIndex);
+                this.sortIndexesOfRosterInstanses.TryRemove(new Identity(rosterInstance.GroupId, fullRosterVector), out removeSortIndex);
             }
         }
 
@@ -712,7 +712,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 ParentRosterVector = rosterInstance.OuterRosterVector,
                 RowCode = rosterInstance.RosterInstanceId
             };
-            this.rosterInstancesIdsOnSortIndexMap[rosterIdentity] = rosterInstance.SortIndex;
+            this.sortIndexesOfRosterInstanses[rosterIdentity] = rosterInstance.SortIndex;
         }
 
         private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
@@ -923,7 +923,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                             this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                                 entity,
                                 groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds)
-                                .OrderBy(x => this.rosterInstancesIdsOnSortIndexMap[x] ?? x.RosterVector.Last()))
+                                .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last()))
                     {
                         yield return rosterInstance;
                     }
