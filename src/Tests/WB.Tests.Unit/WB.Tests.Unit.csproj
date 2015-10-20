@@ -414,6 +414,8 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_singing_in_and_user_exist_and_wrong_password_were_entered.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_singing_in_and_user_exist_and_wrong_password_were_entered_4_times.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\LoginViewModelTests\when_singing_in_remotly_and_user_exist_and_password_were_entered.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\PrefilledQuestionsViewModelTestContext.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\when_opening_not_existed_interview.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_FeaturedItem_list_with_json_utils.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
