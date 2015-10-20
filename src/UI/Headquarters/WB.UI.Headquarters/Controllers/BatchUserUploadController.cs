@@ -74,7 +74,15 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult ImportUserDetails(string id)
         {
-            return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
+            try
+            {
+                return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
+                return RedirectToAction("UserBatchUploads");
+            }
         }
 
         [HttpPost]
@@ -82,10 +90,18 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult VerifyUserPreloadig(string id)
         {
-            this.userPreloadingService.EnqueueForValidation(id);
-            return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
+            try
+            {
+                this.userPreloadingService.EnqueueForValidation(id);
+                return this.RedirectToAction("UserPreloadigVerificationDetails", new {id});
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
+                return RedirectToAction("UserBatchUploads");
+            }
         }
-        
+
         [ObserverNotAllowed]
         public ActionResult UserPreloadigVerificationDetails(string id)
         {
@@ -97,8 +113,16 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult CreateUsers(string id)
         {
-            this.userPreloadingService.EnqueueForUserCreation(id);
-            return this.RedirectToAction("UserCreationProcessDetails", new { id });
+            try
+            {
+                this.userPreloadingService.EnqueueForUserCreation(id);
+                return this.RedirectToAction("UserCreationProcessDetails", new {id});
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
+                return RedirectToAction("UserBatchUploads");
+            }
         }
 
         [ObserverNotAllowed]
