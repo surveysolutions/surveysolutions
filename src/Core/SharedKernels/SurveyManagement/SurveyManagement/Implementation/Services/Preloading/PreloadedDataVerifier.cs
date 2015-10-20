@@ -431,7 +431,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return new PreloadedDataVerificationError("PL0030",
                             PreloadingVerificationMessages.PL0030_GpsMandatoryFilds,
-                            CreateReference(rowIndex, notEmptyColumnIndex, levelData));
+                            CreateReference(notEmptyColumnIndex, rowIndex, levelData));
                     }
                 }
 
@@ -439,13 +439,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     yield return new PreloadedDataVerificationError("PL0032",
                         PreloadingVerificationMessages
                             .PL0032_LatitudeMustBeGeaterThenN90AndLessThen90,
-                        CreateReference(rowIndex, latitudeColumnIndex, levelData));
+                        CreateReference(latitudeColumnIndex, rowIndex, levelData));
 
                 if (longitude.HasValue && (longitude.Value < -181 || longitude.Value > 180))
                     yield return new PreloadedDataVerificationError("PL0033",
                         PreloadingVerificationMessages
                             .PL0033_LongitudeMustBeGeaterThenN180AndLessThen180,
-                        CreateReference(rowIndex, longitudeColumnIndex, levelData));
+                        CreateReference(longitudeColumnIndex, rowIndex, levelData));
             }
         }
 
@@ -477,7 +477,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     yield return new PreloadedDataVerificationError("PL0022",
                         PreloadingVerificationMessages
                             .PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
-                        CreateReference(rowIndex, columnIndex, levelData));
+                        CreateReference(columnIndex, rowIndex, levelData));
                 }
 
                 if (parsedValue > Constants.MaxRosterRowCount)
@@ -486,7 +486,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         yield return new PreloadedDataVerificationError("PL0029",
                             PreloadingVerificationMessages
                                 .PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40,
-                            CreateReference(rowIndex, columnIndex, levelData));
+                            CreateReference(columnIndex, rowIndex, levelData));
                     }
                 }
             }
@@ -591,6 +591,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                                 yield return
                                     new PreloadedDataVerificationError("PL0019",
                                         PreloadingVerificationMessages.PL0019_ExpectedDecimalNotParsed,
+                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                            PreloadedDataVerificationReferenceType.Cell,
+                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                                row[columnIndex]),
+                                            levelData.FileName));
+                                break;
+                            case ValueParsingResult.CommaIsUnsupportedInAnswer:
+                                yield return
+                                    new PreloadedDataVerificationError("PL0034",
+                                        PreloadingVerificationMessages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer,
                                         new PreloadedDataVerificationReference(columnIndex, rowIndex,
                                             PreloadedDataVerificationReferenceType.Cell,
                                             string.Format("{0}:{1}", levelData.Header[columnIndex],
@@ -776,8 +786,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             return new PreloadedDataVerificationReference(x, y,
                 PreloadedDataVerificationReferenceType.Cell,
-                string.Format("{0}:{1}", levelData.Header[y],
-                    levelData.Content[x][y]),
+                string.Format("{0}:{1}", levelData.Header[x],
+                    levelData.Content[y][x]),
                 levelData.FileName);
         }
 
