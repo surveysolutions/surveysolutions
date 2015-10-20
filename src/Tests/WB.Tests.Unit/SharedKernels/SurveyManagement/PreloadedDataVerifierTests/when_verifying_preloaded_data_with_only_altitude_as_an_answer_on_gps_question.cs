@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_error_with_single_reference_pointing_on_first_row= () =>
-           result.Errors.First().References.First().PositionX.ShouldEqual(0);
+            result.Errors.First().References.First().PositionY.ShouldEqual(0);
 
         It should_return_error_with_single_reference_pointing_on_second_column = () =>
-         result.Errors.First().References.First().PositionY.ShouldEqual(1);
+            result.Errors.First().References.First().PositionX.ShouldEqual(1);
 
 
         private static PreloadedDataVerifier preloadedDataVerifier;
