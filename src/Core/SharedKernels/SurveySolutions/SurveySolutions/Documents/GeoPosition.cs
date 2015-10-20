@@ -50,10 +50,10 @@ namespace Main.Core.Entities.SubEntities
                         propertyName,
                         value));
 
-            if (propertyName == "Timestamp")
-                return DateTimeOffset.Parse(value);
+            if (propertyName.Equals("Timestamp", StringComparison.OrdinalIgnoreCase))
+                return DateTimeOffset.Parse(value, CultureInfo.InvariantCulture.DateTimeFormat);
 
-            return double.Parse(value);
+            return double.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
         }
 
         public static string[] PropertyNames { get { return propertyNames; } }
