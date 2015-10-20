@@ -210,7 +210,7 @@
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>Все ({0}) вопросы отвеченны</value>
   </data>
-  <data name="Interview_PreviousGroupNavigation_ButtonText" xml:space="preserve">
+  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
     <value>На уровень выше</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
@@ -332,7 +332,7 @@
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Окончание</value>
   </data>
-  <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Завершить интервью</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
