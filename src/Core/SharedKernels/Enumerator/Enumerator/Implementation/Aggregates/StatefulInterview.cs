@@ -1050,8 +1050,30 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(group.Id);
 
-            return this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
-                this.interviewState, groupsAndRosters, group.RosterVector, questionnaire, GetRosterInstanceIds).ToReadOnlyCollection();
+            var result = new List<Identity>();
+            foreach (var entity in groupsAndRosters)
+            {
+                if (questionnaire.IsRosterGroup(entity))
+                {
+                    foreach (var rosterInstance in
+                            this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                                entity,
+                                group.RosterVector, questionnaire, GetRosterInstanceIds)
+                                .OrderBy(x => this.rosterInstancesIdsOnSortIndexMap[x] ?? x.RosterVector.Last()))
+                    {
+                        result.Add(rosterInstance);
+                    }
+                }
+                else
+                {
+                    foreach (var entityInstance in this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
+                            group.RosterVector, questionnaire, GetRosterInstanceIds))
+                    {
+                        result.Add(entityInstance);
+                    }
+                }
+            }
+            return result.ToReadOnlyCollection();
         }
 
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestions(Identity group)
