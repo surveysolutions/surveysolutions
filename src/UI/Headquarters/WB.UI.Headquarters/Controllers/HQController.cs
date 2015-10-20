@@ -91,7 +91,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
-                FeaturedQuestions = new List<FeaturedQuestionItem>(featuredQuestionItems)
+                FeaturedQuestions = featuredQuestionItems
             };
 
             return this.View(viewModel);
