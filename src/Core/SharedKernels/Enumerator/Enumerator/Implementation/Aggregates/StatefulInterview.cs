@@ -797,7 +797,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             return this
                 .GetGroupsAndRostersInGroup(group)
-                .Count;
+                .Count();
         }
 
         public int CountAnsweredQuestionsInInterview()
@@ -1036,21 +1036,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.InterviewerComment;
         }
 
-        private ReadOnlyCollection<Identity> GetGroupsAndRostersInGroup(Identity group)
+        private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
         {
             return GetOrCalculate(
                 group,
-                this.GetGroupsAndRostersInGroupImpl,
+                (groupId) => this.GetGroupsAndRostersInGroupImpl(groupId).ToReadOnlyCollection(),
                 this.calculated.GroupsAndRostersInGroup);
         }
 
-        private ReadOnlyCollection<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
+        private IEnumerable<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(group.Id);
 
-            var result = new List<Identity>();
             foreach (var entity in groupsAndRosters)
             {
                 if (questionnaire.IsRosterGroup(entity))
@@ -1061,7 +1060,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                                 group.RosterVector, questionnaire, GetRosterInstanceIds)
                                 .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last()))
                     {
-                        result.Add(rosterInstance);
+                        yield return rosterInstance;
                     }
                 }
                 else
@@ -1069,11 +1068,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     foreach (var entityInstance in this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
                             group.RosterVector, questionnaire, GetRosterInstanceIds))
                     {
-                        result.Add(entityInstance);
+                        yield return entityInstance;
                     }
                 }
             }
-            return result.ToReadOnlyCollection();
         }
 
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestions(Identity group)
