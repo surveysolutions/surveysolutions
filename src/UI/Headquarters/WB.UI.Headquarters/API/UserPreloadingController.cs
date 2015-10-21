@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API
             {
                 return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
-            return Request.CreateResponse();
+            return Request.CreateResponse(true);
         }
 
         public UserPreloadingProcessesView AllUserPreloadingProcesses(AllUserPreloadingProcessesRequest request)

@@ -43,6 +43,7 @@
                                 else
                                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
                             }
+                            self.search();
                         }).always(function () {
                             self.IsPageLoaded(true);
                             self.IsAjaxComplete(true);
