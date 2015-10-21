@@ -37,6 +37,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_return_single_PL0030_error = () =>
             result.Errors.First().Code.ShouldEqual("PL0034");
 
+        It should_return_single_error_with_explanation_in_message = () =>
+           result.Errors.First().Message.ToLower().ToSeparateWords().ShouldContain("symbol", "not", "allowed", "numeric", "answers", "please", "use", "decimal", "separator");
+
         It should_return_error_with_single_reference = () =>
             result.Errors.First().References.Count().ShouldEqual(1);
 

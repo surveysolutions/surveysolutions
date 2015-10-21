@@ -349,7 +349,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;,&quot; symbolIs not allowed in numeric answers. Please use &quot;.&quot; as decimal separator..
+        ///   Looks up a localized string similar to &quot;,&quot; symbol is not allowed in numeric answers. Please use &quot;.&quot; as decimal separator..
         /// </summary>
         internal static string PL0034_CommaSymbolIsNotAllowedInNumericAnswer {
             get {
