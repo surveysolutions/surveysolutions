@@ -22,7 +22,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         public override void Load()
         {
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
+            this.Kernel.Bind<IEventStoreApiService>().ToMethod(_ => this.GetEventStoreApiService()).InSingletonScope();
             this.Kernel.Bind<IEventStore>().ToMethod(_ => this.Kernel.Get<IStreamableEventStore>());
+        }
+
+        private IEventStoreApiService GetEventStoreApiService()
+        {
+            return new EventStoreApiService(this.settings);
         }
 
         private IStreamableEventStore GetEventStore()

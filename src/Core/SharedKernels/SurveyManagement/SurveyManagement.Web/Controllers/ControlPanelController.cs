@@ -5,6 +5,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ISettingsProvider settingsProvider;
         private readonly ITransactionManagerProvider transactionManagerProvider;
+        private readonly IEventStoreApiService eventStoreApiService;
 
         public ControlPanelController(IServiceLocator serviceLocator,
             IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
@@ -30,13 +32,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
             ISettingsProvider settingsProvider, 
-            ITransactionManagerProvider transactionManagerProvider)
+            ITransactionManagerProvider transactionManagerProvider,
+            IEventStoreApiService eventStoreApiService)
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.settingsProvider = settingsProvider;
             this.transactionManagerProvider = transactionManagerProvider;
+            this.eventStoreApiService = eventStoreApiService;
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
@@ -134,6 +138,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult SynchronizationLog()
         {
             return this.View();
+        }
+
+        public ActionResult EventStore()
+        {
+            return this.View();
+        }
+
+        public ActionResult RunScavenge()
+        {
+            eventStoreApiService.RunScavenge();
+            object model = "Scavenge has executed at " + DateTime.Now;
+            return this.View("EventStore", model);
         }
     }
 }
