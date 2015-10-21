@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -26,9 +28,17 @@ namespace WB.UI.Headquarters.API
 
         [ObserverNotAllowedApi]
         [HttpPost]
-        public void DeleteUserPreloadingProcess(string id)
+        public HttpResponseMessage DeleteUserPreloadingProcess(string id)
         {
-            this.userPreloadingService.DeletePreloadingProcess(id);
+            try
+            {
+                this.userPreloadingService.DeletePreloadingProcess(id);
+            }
+            catch (Exception e)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+            return Request.CreateResponse();
         }
 
         public UserPreloadingProcessesView AllUserPreloadingProcesses(AllUserPreloadingProcessesRequest request)
