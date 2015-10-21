@@ -215,6 +215,6 @@
     <value>Longitude  must be greater then -180° and less then 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
-    <value>"," symbolIs not allowed in numeric answers. Please use "." as decimal separator.</value>
+    <value>"," symbol is not allowed in numeric answers. Please use "." as decimal separator.</value>
   </data>
 </root>

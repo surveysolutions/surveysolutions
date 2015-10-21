@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 {
     internal class QuestionDataParser : IQuestionDataParser
     {
+        private readonly QuestionType[] QuestionTypesCommaFirbidden = new[] { QuestionType.MultyOption, QuestionType.SingleOption, QuestionType.Numeric, QuestionType.GpsCoordinates };
         public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue)
         {
             parsedValue =null;
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (question is IMultimediaQuestion)
                 return ValueParsingResult.UnsupportedMultimediaQuestion;
 
-            if (answer.Contains(',') && !this.IsCommaAllowedInAnswer(question.QuestionType))
+            if (answer.Contains(',') && QuestionTypesCommaFirbidden.Contains(question.QuestionType))
                 return ValueParsingResult.CommaIsUnsupportedInAnswer;
 
             switch (question.QuestionType)
@@ -139,15 +140,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return ValueParsingResult.GeneralErrorOccured;                    
 
         }
-
-        private bool IsCommaAllowedInAnswer(QuestionType type)
-        {
-            return
-                !new[]
-                {QuestionType.MultyOption, QuestionType.SingleOption, QuestionType.Numeric, QuestionType.GpsCoordinates}
-                    .Contains(type);
-        }
-
 
         public object BuildAnswerFromStringArray(Tuple<string, string>[] answersWithColumnName, IQuestion question)
         {
