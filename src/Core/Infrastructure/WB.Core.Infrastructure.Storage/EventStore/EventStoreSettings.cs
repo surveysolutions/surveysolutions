@@ -6,6 +6,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         {
             InitializeProjections = true;
             MaxCountToRead = 1024;
+            UseJson = true;
         }
 
         public string ServerIP { get; set; }
@@ -18,6 +19,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         /// Flag that indicates if event store can create and use projections
         /// </summary>
         public bool InitializeProjections { get; set; }
+
+        public bool UseJson { get; set; }
 
         public string Login { get; set; }
 
