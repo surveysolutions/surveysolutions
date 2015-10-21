@@ -134,7 +134,9 @@
   <ItemGroup>
     <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
+    <Compile Include="EventStore\IEventStoreApiService.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
+    <Compile Include="EventStore\Implementation\EventStoreApiService.cs" />
     <Compile Include="EventStore\Implementation\EventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />

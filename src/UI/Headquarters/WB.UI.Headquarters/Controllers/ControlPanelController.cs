@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -46,8 +47,9 @@ namespace WB.UI.Headquarters.Controllers
             ISettingsProvider settingsProvider,
             IDataExportRepositoryWriter dataExportRepositoryWriter,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
-            ITransactionManagerProvider transactionManagerProvider)
-            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider)
+            ITransactionManagerProvider transactionManagerProvider,
+            IEventStoreApiService eventStoreApiService)
+            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
