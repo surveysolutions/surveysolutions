@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -14,6 +15,7 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
@@ -108,7 +110,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            var position = Position.Start;
+            Position position = Position.Start;
             AllEventsSlice slice;
 
             do
@@ -175,16 +177,37 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return EventsPrefix + eventSourceId.FormatGuid();
         }
 
-        CommittedEvent ToCommittedEvent(ResolvedEvent resolvedEvent)
+        private CommittedEvent ToCommittedEvent(ResolvedEvent resolvedEvent)
         {
-            var value = Encoding.GetString(resolvedEvent.Event.Data);
-            var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
             try
             {
-                var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
-                var eventData = JsonConvert.DeserializeObject(value,
-                    eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase()),
-                    JsonSerializerSettings);
+                EventMetada metadata;
+                object eventData;
+
+                var resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
+                if (resolvedEvent.Event.IsJson)
+                {
+                    var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
+                    var value = Encoding.GetString(resolvedEvent.Event.Data);
+                    metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
+                    eventData = JsonConvert.DeserializeObject(value,
+                        resolvedEventType,
+                        JsonSerializerSettings);
+                }
+                else
+                {
+                    var dataStream = new MemoryStream(resolvedEvent.Event.Data);
+                    dataStream.Seek(0, SeekOrigin.Begin);
+                    BsonReader dataReader = new BsonReader(dataStream);
+                    
+                    JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
+                    eventData = serializer.Deserialize(dataReader, resolvedEventType);
+
+                    var metaStream = new MemoryStream(resolvedEvent.Event.Metadata);
+                    metaStream.Seek(0, SeekOrigin.Begin);
+                    BsonReader metaReader = new BsonReader(metaStream);
+                    metadata = serializer.Deserialize<EventMetada>(metaReader);
+                }
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
@@ -206,25 +229,51 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         internal EventData BuildEventData(UncommittedEvent @event)
         {
-            var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
             var globalSequence = this.GetNextSequnce();
-            var metaData = JsonConvert.SerializeObject(new EventMetada
+            byte[] eventDataBytes;
+            byte[] eventMetadataBytes;
+
+            var eventMetada = new EventMetada
             {
                 Timestamp = @event.EventTimeStamp,
                 Origin = @event.Origin,
                 EventSourceId = @event.EventSourceId,
                 GlobalSequence = globalSequence
-            });
+            };
+
+            if (this.settings.UseJson)
+            {
+                var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
+                var metaData = JsonConvert.SerializeObject(eventMetada);
+                eventDataBytes = Encoding.GetBytes(eventString);
+                eventMetadataBytes = Encoding.GetBytes(metaData);
+            }
+            else
+            {
+                eventDataBytes = SerializeToBson(@event.Payload);
+                eventMetadataBytes = SerializeToBson(eventMetada);
+            }
+
             @event.GlobalSequence = globalSequence;
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
-                true,
-                Encoding.GetBytes(eventString),
-                Encoding.GetBytes(metaData));
+                this.settings.UseJson,
+                eventDataBytes,
+                eventMetadataBytes);
             return eventData;
         }
 
-        TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
+        private byte[] SerializeToBson(object data)
+        {
+            JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
+            MemoryStream payloadEventStream = new MemoryStream();
+
+            BsonWriter writer = new BsonWriter(payloadEventStream);
+            serializer.Serialize(writer, data);
+            return payloadEventStream.ToArray();
+        }
+
+        private TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
         {
             using (var timeoutTokenSource = new CancellationTokenSource())
             {
