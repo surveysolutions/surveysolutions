@@ -39,7 +39,7 @@
                             } else {
                                 var jsonException = $.parseJSON(jqXhr.responseText);
                                 if (!Supervisor.Framework.Objects.isUndefined(jsonException))
-                                    self.ShowError(jsonException.ExceptionMessage);
+                                    self.ShowError(jsonException.Message);
                                 else
                                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
                             }
