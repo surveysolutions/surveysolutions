@@ -185,7 +185,7 @@
     };
 
     self.rebuild = function() {
-        if (confirm("Are you sure you want to rebuild read layer at " + window.location.host + " ?")) {
+        if (confirm("Are you sure you want to rebuild read side data at " + window.location.host + " ?")) {
             self.SendRequest(self.rebuildApiUrl, {
                 numberOfSkipedEvents: self.numberOfSkipedEvents(),
                 rebuildType: self.rebuildByType(),
