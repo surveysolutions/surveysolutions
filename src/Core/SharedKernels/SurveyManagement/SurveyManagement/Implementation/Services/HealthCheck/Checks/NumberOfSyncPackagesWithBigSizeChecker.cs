@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
                 {
                     this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
                 }
-                var bigInterviewsPackages = this.interviewSyncPackes.Query(_ => _.Count(x => (x.ContentSize + x.MetaInfoSize) > WarningLength));
+                var bigInterviewsPackages = this.interviewSyncPackes.Query(_ => _.Count(x => x.SerializedPackageSize > WarningLength));
                 var bigQuestionnaire = this.questionnairesRepository.Query(_ => _.Count(x => x.SerializedQuestionnaireSize > WarningLength));
 
                 if (bigInterviewsPackages + bigQuestionnaire == 0)
