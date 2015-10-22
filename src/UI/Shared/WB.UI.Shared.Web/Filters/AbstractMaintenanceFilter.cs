@@ -16,16 +16,25 @@ namespace WB.UI.Shared.Web.Filters
 
             if (this.ReadSideStatusService.AreViewsBeingRebuiltNow())
             {
-                filterContext.Result =
-                    new RedirectToRouteResult(
-                        new RouteValueDictionary(
-                            new
-                            {
-                                controller = "Maintenance",
-                                action = "WaitForReadSideRebuild",
-                                returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
-                            }));
+                RedirectToMaintenanceAction(filterContext, "WaitForReadSideRebuild");
             }
+
+            if (this.ReadSideStatusService.IsReadSideOutdated())
+            {
+                RedirectToMaintenanceAction(filterContext, "ReadSideIsOutdated");
+            }
+        }
+
+        private static void RedirectToMaintenanceAction(ActionExecutingContext filterContext, string actionName)
+        {
+            filterContext.Result =
+                new RedirectToRouteResult(
+                    new RouteValueDictionary(new
+                    {
+                        controller = "Maintenance",
+                        action = actionName,
+                        returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
+                    }));
         }
 
         protected abstract bool IsMaintenanceController(ControllerBase controller);
