@@ -7,16 +7,14 @@ namespace WB.UI.Shared.Web.Filters
 {
     public abstract class AbstractMaintenanceFilter : ActionFilterAttribute
     {
-        private IReadSideStatusService readSideStatusService
-        {
-            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
-        }
+        private IReadSideStatusService ReadSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (this.IsControlPanelController(filterContext.Controller)) return;
+            if (this.IsMaintenanceController(filterContext.Controller)) return;
 
-            if (!(this.IsMaintenanceController(filterContext.Controller)) && this.readSideStatusService.AreViewsBeingRebuiltNow())
+            if (this.ReadSideStatusService.AreViewsBeingRebuiltNow())
             {
                 filterContext.Result =
                     new RedirectToRouteResult(
@@ -24,7 +22,7 @@ namespace WB.UI.Shared.Web.Filters
                             new
                             {
                                 controller = "Maintenance",
-                                action = "WaitForReadLayerRebuild",
+                                action = "WaitForReadSideRebuild",
                                 returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
                             }));
             }

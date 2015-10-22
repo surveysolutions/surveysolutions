@@ -526,7 +526,7 @@
     <EmbeddedResource Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
-    <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
     <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
