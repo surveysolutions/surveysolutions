@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
