@@ -1,8 +1,9 @@
 ﻿namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
-    public interface IReadSideCleaner
+    public interface IReadSideCheckerAndCleaner
     {
         void ReCreateViewDatabase();
         void CreateIndexesAfterRebuildReadSide();
+        bool CheckDatabaseConnection();
     }
 }

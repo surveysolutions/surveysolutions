@@ -8,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class PostgresReadSideCleaner : IReadSideCleaner
+    internal class PostgresReadSideCleaner : IReadSideCheckerAndCleaner
     {
         private readonly PostgreConnectionSettings connectionSettings;
         private readonly SchemaUpdate schemaUpdate;
@@ -49,6 +49,18 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     dbCommand.CommandText = "CREATE UNIQUE INDEX ON userdocuments ((lower(username)));";
                     dbCommand.ExecuteNonQuery();
                 }
+            }
+        }
+
+        public bool CheckDatabaseConnection()
+        {
+            var builder = new NpgsqlConnectionStringBuilder(this.connectionSettings.ConnectionString);
+            builder.Database = "postgres"; // System DB name.
+
+            using (var connection = new NpgsqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                return connection.State == System.Data.ConnectionState.Open;
             }
         }
     }

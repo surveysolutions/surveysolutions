@@ -379,7 +379,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         } 
     })";
 
-                    manager.CreateContinuousAsync(CountProjectionName, ProjectionQuery, userCredentials).WaitAndUnwrapException();
+                    manager.CreateContinuousAsync(CountProjectionName, ProjectionQuery, userCredentials)
+                        .WaitAndUnwrapException();
+                }
+                catch (Exception exception)
+                {
+                    this.logger.Fatal("Error on configuration Event Store", exception);
+                    throw;
                 }
             }
         }

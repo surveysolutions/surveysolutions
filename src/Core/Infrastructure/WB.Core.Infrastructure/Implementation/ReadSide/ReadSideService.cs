@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
-        private readonly IReadSideCleaner readSideCleaner;
+        private readonly IReadSideCheckerAndCleaner readSideCleaner;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
 
@@ -58,7 +58,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         public ReadSideService(IStreamableEventStore eventStore, 
             IEventDispatcher eventBus, 
             ILogger logger,
-            IReadSideCleaner readSideCleaner, 
+            IReadSideCheckerAndCleaner readSideCleaner, 
             ITransactionManagerProviderManager transactionManagerProviderManager)
         {
             if (InstanceCount > 0)
@@ -511,7 +511,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             ThrowIfShouldStopViewsRebuilding();
 
-            this.logger.Info("Starting rebuild Read Side");
+            this.logger.Info("Starting rebuild Read Side. Skip Events Count: " + skipEventsCount);
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
@@ -561,7 +561,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     @event.EventSourceId));
             }
 
-            this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.FailedEventsCount));
+            this.logger.Info(String.Format("Rebuild of read side finished successfully. Processed {0} events, failed {1}", this.processedEventsCount, this.FailedEventsCount));
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
