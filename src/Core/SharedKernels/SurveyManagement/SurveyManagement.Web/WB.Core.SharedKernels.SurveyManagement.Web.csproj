@@ -562,6 +562,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <EmbeddedResource Include="Views\ControlPanel\SynchronizationLog.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\EventStore.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
