@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                     _ =>
-                        _.GetById(It.IsAny<string>()) == (questionnaire ?? new QuestionnaireExportStructure())));
+                        _.GetById(It.IsAny<string>()) == (questionnaire ?? new QuestionnaireExportStructure())), new InterviewDataExportSettings("", false, 10000, 100));
         }
 
         protected static InterviewHistoryView CreateInterviewHistoryView(Guid? interviewId=null)
