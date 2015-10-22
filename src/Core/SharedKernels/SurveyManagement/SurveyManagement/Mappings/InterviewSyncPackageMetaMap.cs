@@ -12,21 +12,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Id(x => x.PackageId, id => id.Generator(Generators.Assigned));
 
             Property(x => x.InterviewId);
-            Property(x => x.VersionedQuestionnaireId);
-            Property(x => x.Timestamp);
             Property(x => x.UserId);
             Property(x => x.ItemType);
-            Property(x => x.ContentSize);
-            Property(x => x.MetaInfoSize);
+            Property(x => x.SerializedPackageSize);
             Property(x => x.SortIndex);
-
-            Property(x => x.Content, pm =>
-            {
-                pm.Lazy(true);
-                pm.Update(false);
-            });
-
-            Property(x => x.Meta, pm => pm.Update(false));
         }
     }
 }

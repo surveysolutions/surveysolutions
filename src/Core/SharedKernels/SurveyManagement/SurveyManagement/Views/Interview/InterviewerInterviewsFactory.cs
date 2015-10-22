@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -12,13 +16,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly InterviewSynchronizationDtoFactory synchronizationDtoFactory;
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
+        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            InterviewSynchronizationDtoFactory synchronizationDtoFactory,
+            IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
+            IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.synchronizationDtoFactory = synchronizationDtoFactory;
+            this.interviewDataRepository = interviewDataRepository;
+            this.interviewStatusesFactory = interviewStatusesFactory;
         }
 
         public IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId)
@@ -54,6 +67,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                 IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor
             });
+        }
+
+        public InterviewSynchronizationDto GetInterview(Guid interviewId)
+        {
+            var interviewData = this.interviewDataRepository.GetById(interviewId);
+
+            var orderedInterviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel()
+            {
+                InterviewId = interviewId
+            }).StatusHistory.Where(status =>
+                status.Status == InterviewStatus.RejectedBySupervisor ||
+                status.Status == InterviewStatus.InterviewerAssigned)
+                .OrderBy(status => status.Date);
+
+            var lastInterviewStatus = orderedInterviewStatuses.LastOrDefault();
+
+            var lastInterviewerAssignedStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
+            var lastRejectedBySupervisorStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
+
+            var lastRejectedBySupervisorDate = lastRejectedBySupervisorStatus == null
+                ? (DateTime?) null
+                : lastRejectedBySupervisorStatus.Date;
+
+            var lastInterviewerAssignedDate = lastInterviewerAssignedStatus == null
+                ? (DateTime?) null
+                : lastInterviewerAssignedStatus.Date;
+
+
+            return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
+                lastInterviewStatus.Status, lastInterviewStatus.Comment, lastRejectedBySupervisorDate,
+                lastInterviewerAssignedDate);
         }
     }
 }
