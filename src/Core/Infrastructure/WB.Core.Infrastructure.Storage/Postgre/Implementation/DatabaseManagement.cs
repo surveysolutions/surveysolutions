@@ -27,17 +27,5 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 }
             }
         }
-
-        private static bool CheckConnectionString(string connectionString)
-        {
-            var builder = new NpgsqlConnectionStringBuilder(connectionString);
-            builder.Database = "postgres"; // System DB name.
-
-            using (var connection = new NpgsqlConnection(builder.ConnectionString))
-            {
-                connection.Open();
-                return connection.State == System.Data.ConnectionState.Open;
-            }
-        }
-    }
+   }
 }

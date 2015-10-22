@@ -40,6 +40,11 @@
                                     </tr>
                                 </table>
                             </li>
+                            <li class="list-group-item" data-bind="css: {'has-error': readSideError }">
+                                <span class="badge" data-bind="text:readSideStatus"></span>
+                                ReadSide connection status
+                                <p data-bind="text:readSideError"></p>
+                            </li>
                         </ul>
                     </div>
                 </div>
