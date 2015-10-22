@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                     _ =>
                         _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) ==
                         environmentFiles),
-                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewDataExportSettings(string.Empty, false,10000),
+                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewDataExportSettings(string.Empty, false,10000,100),
                 Mock.Of<ITabularFormatExportService>(_ => _.GetTabularDataFilesFromFolder(Moq.It.IsAny<string>()) == (dataFiles?? new string[0])));
         }
 
