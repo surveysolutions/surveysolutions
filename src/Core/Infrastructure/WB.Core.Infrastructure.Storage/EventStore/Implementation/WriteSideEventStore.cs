@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
+using EventStore.ClientAPI.Projections;
 using EventStore.ClientAPI.SystemData;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
