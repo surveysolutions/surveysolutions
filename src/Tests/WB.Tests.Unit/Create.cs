@@ -2331,7 +2331,7 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
-            return new QuestionnaireBrowseItem(questionnaire, 1, false);
+            return new QuestionnaireBrowseItem(questionnaire, 1, false, 0);
         }
 
         public static ExportedHeaderItem ExportedHeaderItem(Guid? questionId=null, string variableName="var")
