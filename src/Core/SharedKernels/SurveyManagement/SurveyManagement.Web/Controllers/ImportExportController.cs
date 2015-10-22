@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     }
                     catch (Exception e)
                     {
-                        this.logger.Fatal("Error on import ", e);
+                        this.logger.Error("Error on import ", e);
                     }
                 };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);

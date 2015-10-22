@@ -195,7 +195,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         var userErrorMessage = string.Format("Error when creating user {0} in role {1}", model.UserName, role);
                         this.Error(userErrorMessage);
-                        this.Logger.Fatal(userErrorMessage, ex);
+                        this.Logger.Error(userErrorMessage, ex);
                     }
                 }
                 else
@@ -233,7 +233,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     var userErrorMessage = "Error when updating password for user";
                     this.Error(userErrorMessage);
-                    this.Logger.Fatal(userErrorMessage, ex);
+                    this.Logger.Error(userErrorMessage, ex);
                 }
             }
             else

@@ -11,17 +11,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
         private readonly IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker;
         private readonly IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker;
         private readonly IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker;
+        private readonly IAtomicHealthCheck<ReadSideHealthCheckResult> readSideHealthChecker;
 
         public HealthCheckService(
             IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck,
             IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker,
             IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker,
-            IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker)
+            IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker,
+            IAtomicHealthCheck<ReadSideHealthCheckResult> readSideHealthChecker)
         {
             this.folderPermissionChecker = folderPermissionChecker;
             this.numberOfSyncPackagesWithBigSizeChecker = numberOfSyncPackagesWithBigSizeChecker;
             this.eventStoreHealthCheck = eventStoreHealthCheck;
             this.numberOfUnhandledPackagesChecker = numberOfUnhandledPackagesChecker;
+            this.readSideHealthChecker = readSideHealthChecker;
         }
 
         public HealthCheckResults Check()
@@ -36,24 +39,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             var numberOfSyncPackagesWithBigSize = numberOfSyncPackagesWithBigSizeChecker.Check();
             var folderPermissionCheckResult = folderPermissionChecker.Check();
 
+            var readSideHealthCheckResult = readSideHealthChecker.Check();
+
             HealthCheckStatus status = GetGlobalStatus(eventStoreHealthCheckResult,
-                numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult);
+                numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult, 
+                readSideHealthCheckResult);
 
             return new HealthCheckResults(status, eventStoreHealthCheckResult,
-                numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult);
+                numberOfUnhandledPackages, numberOfSyncPackagesWithBigSize, folderPermissionCheckResult, 
+                readSideHealthCheckResult);
         }
 
         private HealthCheckStatus GetGlobalStatus(EventStoreHealthCheckResult eventStoreHealthCheckResult, 
             NumberOfUnhandledPackagesHealthCheckResult numberOfUnhandledPackages, 
             NumberOfSyncPackagesWithBigSizeCheckResult numberOfSyncPackagesWithBigSize, 
-            FolderPermissionCheckResult folderPermissionCheckResult)
+            FolderPermissionCheckResult folderPermissionCheckResult,
+            ReadSideHealthCheckResult readSideHealthCheckResult)
         {
             HashSet<HealthCheckStatus> statuses = new HashSet<HealthCheckStatus>(
             new[] {
                     eventStoreHealthCheckResult.Status,
                     folderPermissionCheckResult.Status,
                     numberOfUnhandledPackages.Status,
-                    numberOfSyncPackagesWithBigSize.Status
+                    numberOfSyncPackagesWithBigSize.Status,
+                    readSideHealthCheckResult.Status
                 });
 
             if (statuses.Contains(HealthCheckStatus.Down))

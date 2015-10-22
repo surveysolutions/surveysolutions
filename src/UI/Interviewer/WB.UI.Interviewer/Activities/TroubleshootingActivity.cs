@@ -272,7 +272,7 @@ namespace WB.UI.Interviewer.Activities
             }
             catch (Exception exception)
             {
-                this.Logger.Fatal("Error occured during Backup. ", exception);
+                this.Logger.Error("Error occurred during Backup. ", exception);
             }
 
             var alert = new AlertDialog.Builder(this);

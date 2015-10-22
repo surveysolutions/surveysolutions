@@ -172,12 +172,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     dataFolderForTemplatePath, copyPath));
 
                 this.fileSystemAccessor.CopyFileOrDirectory(dataFolderForTemplatePath, copyPath);
-
-                this.logger.Info(string.Format("Existing directory for export structure {0} copied to {1}", dataFolderForTemplatePath, copyPath));
-
                 this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
-
-                this.logger.Info(string.Format("Existing directory for export structure {0} deleted", dataFolderForTemplatePath));
             }
 
             this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);

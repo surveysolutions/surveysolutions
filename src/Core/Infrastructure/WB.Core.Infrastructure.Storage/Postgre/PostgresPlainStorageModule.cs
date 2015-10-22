@@ -13,6 +13,7 @@ using Ninject;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
@@ -30,7 +31,16 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         public override void Load()
         {
             this.Bind<PostgresPlainStorageSettings>().ToConstant(this.settings);
-            DatabaseManagement.CreateDatabase(settings.ConnectionString);
+            
+            try
+            {
+                DatabaseManagement.CreateDatabase(settings.ConnectionString);
+            }
+            catch (Exception exc)
+            {
+                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                throw;
+            }
 
             this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory())
                                         .InSingletonScope()
