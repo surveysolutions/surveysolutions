@@ -80,6 +80,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             return areViewsBeingRebuiltNow;
         }
 
+        public bool IsReadSideOutdated()
+        {
+            return false;
+        }
+
         #endregion // IReadLayerStatusService implementation
 
         #region IReadLayerAdministrationService implementation

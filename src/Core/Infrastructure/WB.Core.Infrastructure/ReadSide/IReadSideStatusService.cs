@@ -3,5 +3,6 @@
     public interface IReadSideStatusService
     {
         bool AreViewsBeingRebuiltNow();
+        bool IsReadSideOutdated();
     }
 }
