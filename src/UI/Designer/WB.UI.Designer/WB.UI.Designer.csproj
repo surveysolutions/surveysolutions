@@ -1275,7 +1275,7 @@
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
