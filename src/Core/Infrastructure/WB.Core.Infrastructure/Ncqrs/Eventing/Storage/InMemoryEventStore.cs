@@ -48,11 +48,12 @@ namespace Ncqrs.Eventing.Storage
             return new CommittedEventStream(id);
         }
 
-        public void Store(UncommittedEventStream eventStream)
+        public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             Queue<CommittedEvent> events;
             if (eventStream.IsNotEmpty)
             {
+                List<CommittedEvent> result = new List<CommittedEvent>();
                 if (!_events.TryGetValue(eventStream.SourceId, out events))
                 {
                     events = new Queue<CommittedEvent>();
@@ -61,16 +62,22 @@ namespace Ncqrs.Eventing.Storage
 
                 foreach (var evnt in eventStream)
                 {
-                    events.Enqueue(new CommittedEvent(eventStream.CommitId, 
+                    var committedEvent = new CommittedEvent(eventStream.CommitId, 
                         evnt.Origin, 
                         evnt.EventIdentifier, 
                         eventStream.SourceId, 
                         evnt.EventSequence,
                         evnt.EventTimeStamp, 
                         events.Count,
-                        evnt.Payload));
+                        evnt.Payload);
+                    events.Enqueue(committedEvent);
+                    result.Add(committedEvent);   
                 }
+
+                return new CommittedEventStream(eventStream.SourceId, result);
             }
+
+            return new CommittedEventStream(eventStream.SourceId);
         }
     }
 }

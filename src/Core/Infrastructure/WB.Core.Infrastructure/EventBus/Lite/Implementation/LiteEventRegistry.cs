@@ -45,7 +45,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }));
         }
 
-        public IEnumerable<Action<object>> GetHandlers(UncommittedEvent @event)
+        public IEnumerable<Action<object>> GetHandlers(CommittedEvent @event)
         {
             Type eventType = @event.Payload.GetType();
             string eventKey = GetEventKey(eventType, @event.EventSourceId.FormatGuid());

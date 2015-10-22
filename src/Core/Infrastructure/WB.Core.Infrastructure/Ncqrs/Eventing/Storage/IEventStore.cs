@@ -21,6 +21,6 @@ namespace Ncqrs.Eventing.Storage
         /// Persists the <paramref name="eventStream"/> in the store as a single and atomic commit.
         /// </summary>
         /// <param name="eventStream">The <see cref="UncommittedEventStream"/> to commit.</param>
-        void Store(UncommittedEventStream eventStream);
+        CommittedEventStream Store(UncommittedEventStream eventStream);
     }
 }

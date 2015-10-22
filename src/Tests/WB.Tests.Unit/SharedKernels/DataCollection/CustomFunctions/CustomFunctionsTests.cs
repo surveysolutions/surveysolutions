@@ -546,6 +546,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
+        [SetCulture("en-US")]
         public void Test_IsNumber()
         {
             Assert.AreEqual(true, "3.1415".IsNumber());

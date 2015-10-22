@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -140,15 +141,15 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
 
-            this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
 
             try
             {
-                this.eventBus.PublishUncommittedEvents(aggregate);
+                this.eventBus.PublishCommitedEvents(aggregate, commitedEvents);
             }
             finally
             {
-                aggregate.MarkChangesAsCommitted();
+                aggregate.MarkChangesAsPublished();
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
         }

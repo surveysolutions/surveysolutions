@@ -1,4 +1,6 @@
-﻿using Machine.Specifications;
+﻿using System.Globalization;
+using System.Threading;
+using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
@@ -23,6 +25,8 @@ namespace WB.Tests.Unit
 
         public static void SetupServiceLocator()
         {
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             if (ServiceLocator.IsLocationProviderSet)
                 return;
 

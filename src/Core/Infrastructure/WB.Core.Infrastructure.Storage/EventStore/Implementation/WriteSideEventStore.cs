@@ -127,14 +127,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             } while (!slice.IsEndOfStream);
         }
 
-        public void Store(UncommittedEventStream eventStream)
+        public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             if (eventStream.IsNotEmpty)
             {
                 var expectedStreamVersion = eventStream.InitialVersion - 1;
                 var stream = GetStreamName(eventStream.SourceId);
 
-                var events = eventStream.Select(BuildEventData).ToList();
+                List<EventData> events = eventStream.Select(BuildEventData).ToList();
                 using (var writeTimeout = new CancellationTokenSource())
                 {
                     writeTimeout.CancelAfter(this.defaultTimeout);
@@ -142,7 +142,29 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     this.connection.AppendToStreamAsync(stream, expectedStreamVersion, events)
                         .WaitAndUnwrapException(writeTimeout.Token);
                 }
+
+                List<CommittedEvent> result = new List<CommittedEvent>();
+                var originalEventsArray = eventStream.ToArray();
+                Guid commitId = Guid.NewGuid();
+
+                for (int i = 0; i < events.Count; i++)
+                {
+                    var uncommittedEvent = originalEventsArray[i];
+                    var item = new CommittedEvent(commitId, 
+                                          uncommittedEvent.Origin, 
+                                          uncommittedEvent.EventIdentifier,
+                                          uncommittedEvent.EventSourceId, 
+                                          uncommittedEvent.EventSequence,
+                                          uncommittedEvent.EventTimeStamp,
+                                          uncommittedEvent.GlobalSequence,
+                                          uncommittedEvent.Payload);
+                    result.Add(item);
+                }
+
+                return new CommittedEventStream(eventStream.SourceId, result);
             }
+
+           return new CommittedEventStream(eventStream.SourceId);
         }
 
         public int CountOfAllEvents()
@@ -255,6 +277,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
 
             @event.GlobalSequence = globalSequence;
+
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
                 this.settings.UseJson,

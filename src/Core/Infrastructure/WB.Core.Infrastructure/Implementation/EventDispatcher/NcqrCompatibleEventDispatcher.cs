@@ -118,18 +118,16 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
-        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
+        public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUncommittedChanges());
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnPublishedChanges());
 
-            this.eventStore.Store(eventStream);
+            return this.eventStore.Store(eventStream);
         }
 
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
+        public void PublishCommitedEvents(IAggregateRoot aggregate, CommittedEventStream commitedEvents)
         {
-            var uncommittedChanges = aggregateRoot.GetUncommittedChanges();
-
-            this.Publish(uncommittedChanges);
+            this.Publish(commitedEvents);
         }
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,

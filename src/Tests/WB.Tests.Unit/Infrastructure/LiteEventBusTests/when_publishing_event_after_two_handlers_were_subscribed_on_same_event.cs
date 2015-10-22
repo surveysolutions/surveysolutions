@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -27,7 +28,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommittedEvents(aggregateRoot);
+            eventBus.PublishCommitedEvents(aggregateRoot, new CommittedEventStream(aggregateRoot.EventSourceId, 
+                Create.CommittedEvent(payload: dummyEventStub, eventSourceId: aggregateRoot.EventSourceId)));
 
         It should_call_Handle_once_for_first_handler = () =>
             firstHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());
