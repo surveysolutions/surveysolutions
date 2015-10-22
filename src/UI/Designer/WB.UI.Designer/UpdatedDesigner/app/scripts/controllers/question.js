@@ -344,7 +344,9 @@
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
+                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                            $scope.activeQuestion.questionScope = 'Interviewer';
+                        }
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
                         $scope.activeQuestion.cascadeFromQuestion = null;
