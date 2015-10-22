@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -11,13 +12,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
         private const int WarningLength = 2097152;
 
         private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackes;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackages;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesRepository;
 
         public NumberOfSyncPackagesWithBigSizeChecker(IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> interviewSyncPackes,
-            IQueryableReadSideRepositoryReader<QuestionnaireSyncPackageMeta> questionnaireSyncPackages)
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesRepository)
         {
             this.interviewSyncPackes = interviewSyncPackes;
-            this.questionnaireSyncPackages = questionnaireSyncPackages;
+            this.questionnairesRepository = questionnairesRepository;
         }
 
         public NumberOfSyncPackagesWithBigSizeCheckResult Check()
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             try
             {
                 var bigInterviewsPackages = this.interviewSyncPackes.Query(_ => _.Count(x => (x.ContentSize + x.MetaInfoSize) > WarningLength));
-                var bigQuestionnaire = this.questionnaireSyncPackages.Query(_ => _.Count(x => (x.ContentSize + x.MetaInfoSize) > WarningLength));
+                var bigQuestionnaire = this.questionnairesRepository.Query(_ => _.Count(x => x.SerializedQuestionnaireSize > WarningLength));
 
                 if (bigInterviewsPackages + bigQuestionnaire == 0) 
                     return NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0);

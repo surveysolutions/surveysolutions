@@ -1,8 +1,9 @@
 using System;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
-    public class InterviewSyncPackageMeta : IOrderableSyncPackage
+    public class InterviewSyncPackageMeta : IView
     {
         //DO not delete - is used for deserialization
         public InterviewSyncPackageMeta()
