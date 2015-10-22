@@ -52,9 +52,13 @@ namespace WB.UI.Interviewer.Implementations.Services
             }
         }
 
-        public void Store(UncommittedEventStream eventStream)
+        public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
-            this.WrapConnection(eventStream.SourceId, connection => connection.InsertAll(eventStream.Select(x => x.ToStoredEvent())));
+            List<StoredEvent> storedEvents = eventStream.Select(x => x.ToStoredEvent()).ToList();
+            this.WrapConnection(eventStream.SourceId, connection => connection.InsertAll(storedEvents));
+
+
+            return new CommittedEventStream(eventStream.SourceId, storedEvents.Select(x => x.ToCommitedEvent(eventStream.SourceId)));
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)

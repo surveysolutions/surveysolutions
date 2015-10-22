@@ -43,10 +43,10 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             var eventBus = Mock.Of<IEventBus>();
             Mock.Get(eventBus)
-                .Setup(bus => bus.PublishUncommittedEvents(aggregateFromRepository))
-                .Callback<IAggregateRoot>((aggregate) =>
+                .Setup(bus => bus.PublishCommitedEvents(aggregateFromRepository, Moq.It.IsAny<CommittedEventStream>()))
+                .Callback<IAggregateRoot, CommittedEventStream>((aggregate, events) =>
                 {
-                    publishedEvents = aggregate.GetUncommittedChanges();
+                    publishedEvents = aggregate.GetUnPublishedChanges();
                 });
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();

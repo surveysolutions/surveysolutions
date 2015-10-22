@@ -1,5 +1,6 @@
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
@@ -20,7 +21,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommittedEvents(aggregateRoot);
+            eventBus.PublishCommitedEvents(aggregateRoot, new CommittedEventStream(aggregateRoot.EventSourceId, 
+                Create.CommittedEvent(eventSourceId: aggregateRoot.EventSourceId, payload: new DummyEvent())));
 
         It should_not_call_Handle_for_this_handler = () =>
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DummyEvent>()), Times.Never);

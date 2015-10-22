@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -26,7 +27,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommittedEvents(aggregateRoot);
+            eventBus.PublishCommitedEvents(aggregateRoot, new CommittedEventStream(aggregateRoot.EventSourceId, 
+                Create.CommittedEvent(payload: eventStub, eventSourceId: aggregateRoot.EventSourceId)));
 
         It should_not_call_Handle_for_handler_assigned_on_different_event = () =>
             handlerOnDifferentEventMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);

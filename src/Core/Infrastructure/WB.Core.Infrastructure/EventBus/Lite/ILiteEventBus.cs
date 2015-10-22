@@ -1,11 +1,12 @@
-﻿using WB.Core.Infrastructure.Aggregates;
+﻿using Ncqrs.Eventing;
+using WB.Core.Infrastructure.Aggregates;
 
 
 namespace WB.Core.Infrastructure.EventBus.Lite
 {
     public interface ILiteEventBus
     {
-        void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin);
-        void PublishUncommittedEvents(IAggregateRoot aggregateRoot);
+        CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin);
+        void PublishCommitedEvents(IAggregateRoot aggregate, CommittedEventStream commitedEvents);
     }
 }

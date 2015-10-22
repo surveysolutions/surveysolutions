@@ -1,5 +1,6 @@
 using System;
 using Machine.Specifications;
+using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 
@@ -15,7 +16,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => eventBus.PublishUncommittedEvents(aggregateRoot));
+            exception = Catch.Exception(() => eventBus.PublishCommitedEvents(aggregateRoot, 
+                new CommittedEventStream(aggregateRoot.EventSourceId, Create.CommittedEvent(payload: new DummyEvent(), eventSourceId: aggregateRoot.EventSourceId))));
 
         It should_nothing_happen_including_exceptions = () =>
             exception.ShouldBeNull();
