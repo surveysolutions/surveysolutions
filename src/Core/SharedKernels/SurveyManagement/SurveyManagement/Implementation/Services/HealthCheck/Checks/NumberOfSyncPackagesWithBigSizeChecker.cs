@@ -27,9 +27,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
 
         public NumberOfSyncPackagesWithBigSizeCheckResult Check()
         {
+            var shouldUseOwnTransaction = !this.transactionManagerProvider.GetTransactionManager().IsQueryTransactionStarted;
             try
             {
-                this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                if (shouldUseOwnTransaction)
+                {
+                    this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                }
                 var bigInterviewsPackages = this.interviewSyncPackes.Query(_ => _.Count(x => (x.ContentSize + x.MetaInfoSize) > WarningLength));
                 var bigQuestionnaire = this.questionnairesRepository.Query(_ => _.Count(x => x.SerializedQuestionnaireSize > WarningLength));
 
@@ -47,7 +51,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
             }
             finally
             {
-                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                if (shouldUseOwnTransaction)
+                {
+                    this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                }
             }
         }
     }
