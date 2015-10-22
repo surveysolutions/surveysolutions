@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         {
             UncommittedEvent[] uncommittedEvents = events.Select(o => CreateUncommitedEvent(o, eventSourceId)).ToArray();
             Mock<IAggregateRoot> mock = new Mock<IAggregateRoot>();
-            mock.Setup(a => a.GetUncommittedChanges()).Returns(uncommittedEvents);
+            mock.Setup(a => a.GetUnPublishedChanges()).Returns(uncommittedEvents);
             mock.Setup(x => x.EventSourceId).Returns(eventSourceId);
             return mock.Object;
         }

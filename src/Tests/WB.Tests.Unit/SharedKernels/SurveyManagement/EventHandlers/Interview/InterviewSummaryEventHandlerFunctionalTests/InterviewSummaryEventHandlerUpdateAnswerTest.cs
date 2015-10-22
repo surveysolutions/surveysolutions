@@ -73,6 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         [Test]
+        [SetCulture("en-US")]
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]

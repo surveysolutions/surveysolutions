@@ -50,7 +50,7 @@ namespace Ncqrs.Domain
             }
         }
 
-        public IEnumerable<UncommittedEvent> GetUncommittedChanges()
+        public IEnumerable<UncommittedEvent> GetUnPublishedChanges()
         {
             return this.changes.ToList();
         }
@@ -60,7 +60,7 @@ namespace Ncqrs.Domain
             this.EventSourceId = id;
         }
 
-        public void MarkChangesAsCommitted()
+        public void MarkChangesAsPublished()
         {
             this.changes.Clear();
         }

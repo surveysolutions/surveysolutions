@@ -63,22 +63,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
             viewModel.Init(interviewId, id);
 
-            Identity[] changedTitleIds = { new Identity(substitutionTargetQuestionId, Empty.RosterVector) };
-            var eventsToBePublished = new List<UncommittedEvent>
-            {
-                Create.UncommittedEvent(new SubstitutionTitlesChanged(changedTitleIds))
-            };
-
-            fakeInterview = Mock.Of<IAggregateRoot>(x => x.GetUncommittedChanges() == eventsToBePublished);
+            changedTitleIds =
+                new Identity[]
+                {
+                    new Identity(substitutionTargetQuestionId, Empty.RosterVector)
+                };
+            fakeInterview = Create.Interview();
         };
 
-        Because of = () => liteEventBus.PublishUncommittedEvents(fakeInterview);
+        Because of = () => liteEventBus.PublishCommitedEvents(fakeInterview, new CommittedEventStream(fakeInterview.EventSourceId, 
+            Create.CommittedEvent(payload:new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
         static IAggregateRoot fakeInterview;
+        private static Identity[] changedTitleIds;
     }
 }
 
