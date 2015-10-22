@@ -134,34 +134,14 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 var expectedStreamVersion = eventStream.InitialVersion - 1;
                 var stream = GetStreamName(eventStream.SourceId);
 
-                List<EventData> events = eventStream.Select(BuildEventData).ToList();
-                using (var writeTimeout = new CancellationTokenSource())
-                {
-                    writeTimeout.CancelAfter(this.defaultTimeout);
+                List<Tuple<EventData, CommittedEvent>> dataToStore = 
+                    eventStream.Select(@event => this.BuildEventData(@event, eventStream.CommitId)).ToList();
 
-                    this.connection.AppendToStreamAsync(stream, expectedStreamVersion, events)
-                        .WaitAndUnwrapException(writeTimeout.Token);
-                }
+                var eventDatas = dataToStore.Select(x => x.Item1);
+                var committedEvents = dataToStore.Select(x => x.Item2);
 
-                List<CommittedEvent> result = new List<CommittedEvent>();
-                var originalEventsArray = eventStream.ToArray();
-                Guid commitId = Guid.NewGuid();
-
-                for (int i = 0; i < events.Count; i++)
-                {
-                    var uncommittedEvent = originalEventsArray[i];
-                    var item = new CommittedEvent(commitId, 
-                                          uncommittedEvent.Origin, 
-                                          uncommittedEvent.EventIdentifier,
-                                          uncommittedEvent.EventSourceId, 
-                                          uncommittedEvent.EventSequence,
-                                          uncommittedEvent.EventTimeStamp,
-                                          uncommittedEvent.GlobalSequence,
-                                          uncommittedEvent.Payload);
-                    result.Add(item);
-                }
-
-                return new CommittedEventStream(eventStream.SourceId, result);
+                this.RunWithDefaultTimeout(this.connection.AppendToStreamAsync(stream, expectedStreamVersion, eventDatas));
+                return new CommittedEventStream(eventStream.SourceId, committedEvents);
             }
 
            return new CommittedEventStream(eventStream.SourceId);
@@ -244,7 +224,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
         }
 
-        internal EventData BuildEventData(UncommittedEvent @event)
+        private Tuple<EventData, CommittedEvent> BuildEventData(UncommittedEvent @event, Guid commitId)
         {
             var globalSequence = this.GetNextSequnce();
             byte[] eventDataBytes;
@@ -269,14 +249,22 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 eventDataBytes = SerializeToBson(@event.Payload);
             }
 
-            @event.GlobalSequence = globalSequence;
-
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
                 this.settings.UseJson,
                 eventDataBytes,
                 eventMetadataBytes);
-            return eventData;
+
+            var committedEvent = new CommittedEvent(commitId,
+                                          @event.Origin,
+                                          @event.EventIdentifier,
+                                          @event.EventSourceId,
+                                          @event.EventSequence,
+                                          @event.EventTimeStamp,
+                                          globalSequence,
+                                          @event.Payload);
+
+            return Tuple.Create(eventData, committedEvent);
         }
 
         private byte[] SerializeToBson(object data)
