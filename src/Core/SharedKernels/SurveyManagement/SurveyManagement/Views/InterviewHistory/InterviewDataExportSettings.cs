@@ -8,6 +8,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
     public class InterviewDataExportSettings
     {
+        public InterviewDataExportSettings()
+        {
+            this.EnableInterviewHistory = false;
+            this.MaxRecordsCountPerOneExportQuery = 1000;
+            this.LimitOfCachedItemsByDenormalizer = 100;
+            this.DirectoryPath = String.Empty;
+        }
+
         public InterviewDataExportSettings(string directoryPath, bool enableInterviewHistory, int maxRecordsCountPerOneExportQuery, int limitOfCachedItemsByDenormalizer)
         {
             this.EnableInterviewHistory = enableInterviewHistory;
