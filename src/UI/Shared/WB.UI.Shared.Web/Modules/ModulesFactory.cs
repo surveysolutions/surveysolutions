@@ -21,18 +21,22 @@ namespace WB.UI.Shared.Web.Modules
                 eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
                 eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
                 eventStoreConnectionSettings.MaxCountToRead = int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]);
-
-                string useJsonSetting = WebConfigurationManager.AppSettings["EventStore.UseJson"];
-                bool useJson;
-                if (bool.TryParse(useJsonSetting, out useJson))
-                {
-                    eventStoreConnectionSettings.UseJson = useJson;
-                }
+                eventStoreConnectionSettings.UseJson = TryParseBool(WebConfigurationManager.AppSettings["EventStore.UseJson"]).GetValueOrDefault();
 
                 return new EventStoreWriteSideModule(eventStoreConnectionSettings);
             }
 
             return null;
+        }
+
+        private static bool? TryParseBool(string value)
+        {
+            bool result;
+            if (bool.TryParse(value, out result))
+            {
+                return result;
+            }
+            return false;
         }
     }
 }
