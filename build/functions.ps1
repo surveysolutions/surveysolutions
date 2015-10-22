@@ -3,7 +3,7 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 }
 
 function GetPathToMSBuild() {
-    return 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe'
+    return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
 function GetPathToConfigTransformator() {
