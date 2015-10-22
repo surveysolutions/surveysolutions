@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Moq;
 
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -33,11 +34,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
                 x => x.BuildFrom(storedInterview, userId, InterviewStatus.RejectedBySupervisor, comments, Moq.It.IsAny<DateTime?>(), Moq.It.IsAny<DateTime?>()) == synchronizationDto);
+
+            var serializer = Mock.Of<ISerializer>(x=>x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()) == String.Empty);
             
             denormalizer = CreateDenormalizer(
                 interviews : interviews,
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object,
-                synchronizationDtoFactory: synchronizationDtoFactory);
+                synchronizationDtoFactory: synchronizationDtoFactory,
+                serializer: serializer);
         };
 
         Because of = () =>
