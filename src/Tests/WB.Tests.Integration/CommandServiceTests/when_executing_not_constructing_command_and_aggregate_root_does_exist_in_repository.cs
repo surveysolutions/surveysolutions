@@ -42,11 +42,22 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
             var eventBus = Mock.Of<IEventBus>();
-            Mock.Get(eventBus)
-                .Setup(bus => bus.PublishCommitedEvents(aggregateFromRepository, Moq.It.IsAny<CommittedEventStream>()))
-                .Callback<IAggregateRoot, CommittedEventStream>((aggregate, events) =>
+            var eventBusMock = Mock.Get(eventBus);
+            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()))
+                     .Returns((IAggregateRoot aggregate, string origin) =>
+                     {
+                         return new CommittedEventStream(aggregate.EventSourceId,
+                             aggregate.GetUnPublishedChanges()
+                                      .Select(x => Create.CommittedEvent(payload: x.Payload,
+                                                     eventSourceId: x.EventSourceId,
+                                                     eventSequence: x.EventSequence)));
+                     });
+
+            eventBusMock
+                .Setup(bus => bus.PublishCommitedEvents(Moq.It.IsAny<CommittedEventStream>()))
+                .Callback<CommittedEventStream>(events =>
                 {
-                    publishedEvents = aggregate.GetUnPublishedChanges();
+                    publishedEvents = events;
                 });
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
@@ -67,7 +78,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
-        private static IEnumerable<UncommittedEvent> publishedEvents;
+        private static CommittedEventStream publishedEvents;
         private static Mock<IAggregateSnapshotter> snapshooterMock;
         private static Aggregate aggregateFromRepository;
     }

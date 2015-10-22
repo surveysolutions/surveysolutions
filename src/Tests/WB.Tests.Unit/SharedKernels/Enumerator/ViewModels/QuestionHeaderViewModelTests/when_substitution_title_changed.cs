@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             fakeInterview = Create.Interview();
         };
 
-        Because of = () => liteEventBus.PublishCommitedEvents(fakeInterview, new CommittedEventStream(fakeInterview.EventSourceId, 
+        Because of = () => liteEventBus.PublishCommitedEvents(new CommittedEventStream(fakeInterview.EventSourceId, 
             Create.CommittedEvent(payload:new SubstitutionTitlesChanged(changedTitleIds), eventSourceId: fakeInterview.EventSourceId)));
 
         It should_change_item_title = () => viewModel.Title.ShouldEqual("Old title new value");

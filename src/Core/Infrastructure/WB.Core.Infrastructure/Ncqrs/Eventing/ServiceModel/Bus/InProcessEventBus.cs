@@ -49,7 +49,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             this.Publish(aggregateRoot.GetUnPublishedChanges());
         }
 
-        public void PublishCommitedEvents(IAggregateRoot aggregate, CommittedEventStream commitedEvents)
+        public void PublishCommitedEvents(CommittedEventStream commitedEvents)
         {
             this.Publish(commitedEvents);
         }
