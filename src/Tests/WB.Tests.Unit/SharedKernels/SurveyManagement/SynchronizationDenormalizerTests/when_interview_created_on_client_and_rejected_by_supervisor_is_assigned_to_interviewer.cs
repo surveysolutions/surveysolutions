@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -42,11 +43,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 
+            var serializer = Mock.Of<ISerializer>(x => x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()) == String.Empty);
+
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object, 
                 interviewSummarys: interviewSummaryWriterMock.Object,
-                synchronizationDtoFactory: synchronizationDtoFactory);
+                synchronizationDtoFactory: synchronizationDtoFactory,
+                serializer: serializer);
         };
 
         Because of = () => synchronizationDenormalizer.Handle(Create.InterviewerAssignedEvent());

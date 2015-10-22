@@ -79,8 +79,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
                     this.MarkInterviewForClientDeleting(evnt.EventSourceId, 
                         interviewSummary.ResponsibleId, 
-                        evnt.EventTimeStamp, interviewSummary.QuestionnaireId, 
-                        interviewSummary.QuestionnaireVersion,
                         evnt.EventIdentifier.FormatGuid(),
                         evnt.GlobalSequence);
                     break;
@@ -108,9 +106,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             {
                 this.MarkInterviewForClientDeleting(evnt.EventSourceId, 
                     interviewResponsibleInfo.UserId, 
-                    evnt.EventTimeStamp,
-                    interviewSummary.QuestionnaireId, 
-                    interviewSummary.QuestionnaireVersion,
                     evnt.EventIdentifier.FormatGuid(),
                     evnt.GlobalSequence);
             }
@@ -148,9 +143,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             this.MarkInterviewForClientDeleting(evnt.EventSourceId, 
                 interviewSummary.ResponsibleId, 
-                evnt.EventTimeStamp,
-                interviewSummary.QuestionnaireId, 
-                interviewSummary.QuestionnaireVersion,
                 evnt.EventIdentifier.FormatGuid(),
                 evnt.GlobalSequence);
         }
@@ -190,48 +182,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             string packageId, 
             long globalSequence)
         {
+            var sizeOfInterview = this.serializer.Serialize(doc, TypeSerializationSettings.AllTypes).Length;
+            var sizeOfInterviewMetadata = this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes).Length;
             this.StoreChunk(
                 doc.Id,
-                questionnaireId,
-                questionnaireVersion,
                 responsibleId,
                 SyncItemType.Interview,
-                this.serializer.Serialize(doc, TypeSerializationSettings.AllTypes),
-                this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes),
-                timestamp,
+                sizeOfInterview + sizeOfInterviewMetadata,
                 packageId,
                 globalSequence);
         }
 
         public void MarkInterviewForClientDeleting(Guid interviewId, 
             Guid? responsibleId, 
-            DateTime timestamp, 
-            Guid questionnaireId, 
-            long questionnaireVersion, 
             string packageId, 
             long globalSequence)
         {
             this.StoreChunk(
                 interviewId,
-                questionnaireId,
-                questionnaireVersion,
                 responsibleId,
                 SyncItemType.DeleteInterview,
-                interviewId.ToString(),
-                string.Empty,
-                timestamp,
+                0,
                 packageId,
                 globalSequence);
         }
 
         public void StoreChunk(Guid interviewId, 
-            Guid questionnaireId, 
-            long questionnaireVersion, 
             Guid? userId, 
             string itemType, 
-            string content, 
-            string metaInfo, 
-            DateTime timestamp, 
+            int packageSize, 
             string packageId, 
             long globalSequence)
         {
@@ -239,16 +218,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             var syncPackageMeta = new InterviewSyncPackageMeta(
                 interviewId,
-                questionnaireId,
-                questionnaireVersion,
-                timestamp,
                 userId,
                 itemType,
-                string.IsNullOrEmpty(content) ? 0 : content.Length,
-                string.IsNullOrEmpty(metaInfo) ? 0 : metaInfo.Length)
+                packageSize)
             {
-                Meta = metaInfo,
-                Content = content,
                 PackageId = id,
                 SortIndex = globalSequence
             };
