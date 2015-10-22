@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
-                Mock.Of<ISerializer>(),new InterviewDataExportSettings("",false,10000), 
+                Mock.Of<ISerializer>(),new InterviewDataExportSettings("",false,10000, 100), 
                 new TestInMemoryWriter<InterviewExportedDataRecord>(),
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
                 interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),

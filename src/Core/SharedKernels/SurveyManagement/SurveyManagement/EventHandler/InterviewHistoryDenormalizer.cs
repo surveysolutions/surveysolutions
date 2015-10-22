@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -53,16 +54,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+
+        private readonly ConcurrentDictionary<string, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<string, QuestionnaireExportStructure>();
+        private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
+
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
         public InterviewHistoryDenormalizer(
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
+            InterviewDataExportSettings interviewDataExportSettings)
             : base(readSideStorage)
         {
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.questionnaireReader = questionnaireReader;
+            this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
         public override object[] Readers
@@ -361,9 +369,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return new InterviewHistoricalRecordView(0, action, userName, userRole, parameters, timestamp);
         }
 
+        private void ReduceCacheIfNeeded<T>(ConcurrentDictionary<string, T> cache)
+        {
+            if (cache.Count > interviewDataExportSettings.LimitOfCachedItemsByDenormalizer)
+            {
+                var cachedItemKeysToRemove = cache.Keys.Take(cache.Count - interviewDataExportSettings.LimitOfCachedItemsByDenormalizer).ToList();
+                foreach (var cachedItemKeyToRemove in cachedItemKeysToRemove)
+                {
+                    T removedItem;
+                    cache.TryRemove(cachedItemKeyToRemove, out removedItem);
+                }
+            }
+        }
+
+        private QuestionnaireExportStructure GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        {
+            var combinedQuestionnaireId = string.Format("{0}${1}", questionnaireId.FormatGuid(), questionnaireVersion);
+
+            var cachedQuestionnaireExportStructure = this.cacheQuestionnaireExportStructure.GetOrAdd(combinedQuestionnaireId,
+                (key) => this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+
+            ReduceCacheIfNeeded(cacheQuestionnaireExportStructure);
+
+            return cachedQuestionnaireExportStructure;
+        }
+
         private UserDocument GetUserDocument(Guid originatorId)
         {
-            return userReader.GetById(originatorId);
+            var cachedUserDocument = this.cacheUserDocument.GetOrAdd(originatorId.FormatGuid(),
+                (key) => userReader.GetById(key));
+
+            ReduceCacheIfNeeded(cacheUserDocument);
+
+            return cachedUserDocument;
         }
 
         private string GetUserName(UserDocument responsible)
@@ -393,7 +431,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if(view ==null)
                 return;
 
-            var questionnaire = questionnaireReader.AsVersioned().Get(view.QuestionnaireId.FormatGuid(), view.QuestionnaireVersion);
+            var questionnaire = GetQuestionnaire(view.QuestionnaireId, view.QuestionnaireVersion);
             if (questionnaire == null)
                 return;
 
