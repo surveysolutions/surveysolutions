@@ -4,11 +4,11 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
-    public class EventStoreHealthCheck : IAtomicHealthCheck<EventStoreHealthCheckResult>
+    public class EventStoreHealthChecker : IAtomicHealthCheck<EventStoreHealthCheckResult>
     {
         private readonly IStreamableEventStore eventStore;
 
-        public EventStoreHealthCheck(IStreamableEventStore eventStore)
+        public EventStoreHealthChecker(IStreamableEventStore eventStore)
         {
             this.eventStore = eventStore;
         }
