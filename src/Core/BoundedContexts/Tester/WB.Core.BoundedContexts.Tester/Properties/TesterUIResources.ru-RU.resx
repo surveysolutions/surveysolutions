@@ -196,7 +196,7 @@
     <value>Версия  {0}</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Невозможно открыть опросник {0}. Опросник сожержит ошибки. Исправьте, пожалуйста, их в дизайнере опросников.</value>
+    <value>Невозможно открыть опросник {0}. Опросник содержит ошибки. Исправьте, пожалуйста, их в Survey Solutions Designer.</value>
   </data>
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>Версия приложения</value>

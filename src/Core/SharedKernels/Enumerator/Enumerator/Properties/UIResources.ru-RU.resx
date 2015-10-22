@@ -148,10 +148,10 @@
     <value>Пароль</value>
   </data>
   <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
-    <value>Время ожидания ответа от сервера дизвйнера Survey Solutions истекло. Пожалуйста, проверьте Ваше интернет соединение</value>
+    <value>Время ожидания ответа от сервера Survey Solutions Designer истекло. Пожалуйста, проверьте Ваше интернет соединение.</value>
   </data>
   <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
-    <value>Нет связи с дизайнером Survey Solutions</value>
+    <value>Нет связи с Survey Solutions Designer.</value>
   </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Запомнить меня</value>
