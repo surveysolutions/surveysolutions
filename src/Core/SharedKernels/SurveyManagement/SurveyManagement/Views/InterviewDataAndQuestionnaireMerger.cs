@@ -107,29 +107,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             return interview.Levels.FirstOrDefault(w => w.Value.ScopeVectors.Count==1 && w.Value.ScopeVectors.ContainsKey(new ValueVector<Guid>())).Value;
         }
 
-        private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(Guid groupId, InterviewData interviewData,
+        private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(Guid groupId,
+            InterviewData interviewData,
             QuestionnaireRosterStructure questionnaireRoster)
         {
-        //    Guid[] rosterScope = null;
-            //totally not efficient
             foreach (var scopeId in questionnaireRoster.RosterScopes.Keys)
             {
                 foreach (var trigger in questionnaireRoster.RosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.Keys)
                 {
                     if (trigger == groupId)
                     {
-                      //  rosterScope = scopeId;
-
-
-                        return interviewData.Levels.Where(w => w.Value.ScopeVectors.ContainsKey(scopeId));
-                   //     break;
+                        return
+                            interviewData.Levels.Where(w => w.Value.ScopeVectors.ContainsKey(scopeId))
+                                .OrderBy(x => x.Value.ScopeVectors.First().Value ?? x.Value.RosterVector.Last());
                     }
                 }
             }
-           // if (rosterScope==null)
-                throw new ArgumentException(string.Format("group {0} is missing in any roster scope of questionnaire", groupId));
-
-
+            throw new ArgumentException(string.Format("group {0} is missing in any roster scope of questionnaire",
+                groupId));
         }
 
         private IEnumerable<InterviewGroupView> GetCompletedRosterGroups(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
