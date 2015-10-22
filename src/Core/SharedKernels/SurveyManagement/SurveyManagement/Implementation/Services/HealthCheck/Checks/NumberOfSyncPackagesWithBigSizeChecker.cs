@@ -22,10 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
         {
             this.interviewSyncPackes = interviewSyncPackes;
             this.questionnairesRepository = questionnairesRepository;
-            ITransactionManagerProvider transactionManagerProvider)
-        {
-            this.interviewSyncPackes = interviewSyncPackes;
-            this.questionnaireSyncPackages = questionnaireSyncPackages;
             this.transactionManagerProvider = transactionManagerProvider;
         }
 
