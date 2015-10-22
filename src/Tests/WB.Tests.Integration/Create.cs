@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -410,6 +411,21 @@ namespace WB.Tests.Integration
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>());
+        }
+
+
+        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
+    Guid? eventIdentifier = null, int eventSequence = 1)
+        {
+            return new CommittedEvent(
+                Guid.Parse("33330000333330000003333300003333"),
+                origin,
+                eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
+                eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
+                eventSequence,
+                new DateTime(2014, 10, 22),
+                0,
+                payload ?? "some payload");
         }
 
         public static FileSystemIOAccessor FileSystemIOAccessor()

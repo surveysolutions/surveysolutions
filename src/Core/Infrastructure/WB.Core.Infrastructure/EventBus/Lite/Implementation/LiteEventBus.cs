@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommitedEvents(IAggregateRoot aggregate, CommittedEventStream commitedEvents)
+        public void PublishCommitedEvents(CommittedEventStream commitedEvents)
         {
             foreach (var uncommittedChange in commitedEvents)
             {

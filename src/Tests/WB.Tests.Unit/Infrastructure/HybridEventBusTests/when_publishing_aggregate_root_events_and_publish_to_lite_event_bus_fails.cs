@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
 
             var liteEventBus = Mock.Of<ILiteEventBus>();
             Mock.Get(liteEventBus)
-                .Setup(bus => bus.PublishCommitedEvents(aggregateRoot, commitedStream))
+                .Setup(bus => bus.PublishCommitedEvents(commitedStream))
                 .Throws<Exception>();
 
             hybridEventBus = Create.HybridEventBus(liteEventBus: liteEventBus, cqrsEventBus: cqrsEventBusMock.Object);
@@ -26,13 +26,13 @@ namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                hybridEventBus.PublishCommitedEvents(aggregateRoot, commitedStream));
+                hybridEventBus.PublishCommitedEvents(commitedStream));
 
         It should_fail = () =>
             exception.ShouldNotBeNull();
 
         It should_publish_aggregate_root_events_to_cqrs_event_bus = () =>
-            cqrsEventBusMock.Verify(bus => bus.PublishCommitedEvents(aggregateRoot, commitedStream), Times.Once);
+            cqrsEventBusMock.Verify(bus => bus.PublishCommitedEvents(commitedStream), Times.Once);
 
         private static Exception exception;
         private static HybridEventBus hybridEventBus;

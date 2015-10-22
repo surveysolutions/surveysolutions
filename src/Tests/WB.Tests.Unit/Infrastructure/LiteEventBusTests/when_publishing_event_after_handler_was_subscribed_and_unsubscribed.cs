@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishCommitedEvents(aggregateRoot, new CommittedEventStream(aggregateRoot.EventSourceId, 
+            eventBus.PublishCommitedEvents(new CommittedEventStream(aggregateRoot.EventSourceId, 
                 Create.CommittedEvent(eventSourceId: aggregateRoot.EventSourceId, payload: new DummyEvent())));
 
         It should_not_call_Handle_for_this_handler = () =>
