@@ -145,8 +145,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             if (isSupervisorFunctionsEnabled)
             {
                 this.Kernel.RegisterDenormalizer<InterviewSynchronizationDenormalizer>();
-                this.Kernel.RegisterDenormalizer<UserSynchronizationDenormalizer>();
-                this.Kernel.RegisterDenormalizer<QuestionnaireSynchronizationDenormalizer>();
                 this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
 

@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         private IList<T> GetUpdateFromLastPackage<T>(Guid userId, string lastSyncedPackageId,
             Func<Guid, long?, IQueryable<T>> groupedQuery, Func<Guid, IQueryable<T>> allQuery)
-            where T : IOrderableSyncPackage
+            where T : InterviewSyncPackageMeta
         {
             if (lastSyncedPackageId == null)
             {

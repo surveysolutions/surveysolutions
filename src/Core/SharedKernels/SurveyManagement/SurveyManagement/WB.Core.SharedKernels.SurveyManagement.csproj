@@ -159,11 +159,9 @@
     <Compile Include="Mappings\InterviewSummaryMap.cs" />
     <Compile Include="Mappings\InterviewSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\QuestionnaireFeedEntryMap.cs" />
-    <Compile Include="Mappings\QuestionnaireSyncPackageMetaMap.cs" />
     <Compile Include="Mappings\TabletDocumentMap.cs" />
     <Compile Include="Mappings\TimeSpanBetweenStatusesMap.cs" />
     <Compile Include="Mappings\UserChangedFeedEntryMap.cs" />
-    <Compile Include="Mappings\UserSyncPackageMetaMap.cs" />
     <Compile Include="QuartzIntegration\QuartzNinjectModule.cs" />
     <Compile Include="QuartzIntegration\NinjectSchedulerFactory.cs" />
     <Compile Include="Mappings\QuestionnaireBrowseItemMap.cs" />
@@ -180,10 +178,8 @@
     <Compile Include="Services\Export\ExportDataType.cs" />
     <Compile Include="EventHandler\QuestionnaireDetailsForChart.cs" />
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
-    <Compile Include="EventHandler\QuestionnaireSynchronizationDenormalizer.cs" />
     <Compile Include="EventHandler\StatisticsGroupedByDateAndTemplate.cs" />
     <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
-    <Compile Include="EventHandler\UserSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
@@ -452,7 +448,6 @@
     <Compile Include="Views\SynchronizationLog\SynchronizationLogItem.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogType.cs" />
     <Compile Include="Views\TabletInformation\TabletInformationView.cs" />
-    <Compile Include="Views\TabletInformation\TabletLogView.cs" />
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />
     <Compile Include="Views\TakeNew\TakeNewInterviewInputModel.cs" />

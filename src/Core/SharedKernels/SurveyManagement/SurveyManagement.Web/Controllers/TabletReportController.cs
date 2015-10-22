@@ -1,7 +1,5 @@
 ﻿using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
@@ -11,7 +9,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private readonly ITabletInformationService tabletInformationService;
 
-        public TabletReportController(ILogger logger, ITabletInformationService tabletInformationService)
+        public TabletReportController(ITabletInformationService tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
         }

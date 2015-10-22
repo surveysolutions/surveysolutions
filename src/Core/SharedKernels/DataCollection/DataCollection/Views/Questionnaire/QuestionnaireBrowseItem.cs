@@ -23,7 +23,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             DateTime lastEntryDate, 
             Guid? createdBy, 
             bool isPublic, 
-            bool allowCensusMode)
+            bool allowCensusMode,
+            long serializedQuestionnaireSize)
         {
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
@@ -33,10 +34,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
             this.CreatedBy = createdBy;
             this.IsPublic = isPublic;
             this.AllowCensusMode = allowCensusMode;
+            this.SerializedQuestionnaireSize = serializedQuestionnaireSize;
         }
 
-        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode)
-            : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode)
+        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long serializedQuestionnaireSize)
+            : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode, serializedQuestionnaireSize)
         {
             this.FeaturedQuestions =
                 doc.Find<IQuestion>(q => q.Featured)
@@ -67,6 +69,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
         public virtual bool AllowCensusMode { get; set; }
 
         public virtual bool Disabled { get; set; }
+
+        public virtual long SerializedQuestionnaireSize { get; set; }
 
         [IgnoreDataMember]
         public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }

@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.EventHandler
 
         private void StoreBrowseItem(Guid id, long version, QuestionnaireDocument document, bool allowCensusMode)
         {
-            var browseItem = new QuestionnaireBrowseItem(document, version, allowCensusMode);
+            var browseItem = new QuestionnaireBrowseItem(document, version, allowCensusMode, 0);
             this.documentStorage.AsVersioned().Store(browseItem, id.FormatGuid(), version);
         }
 
