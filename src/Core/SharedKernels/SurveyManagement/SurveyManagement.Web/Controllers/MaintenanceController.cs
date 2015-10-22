@@ -10,5 +10,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             return this.View(model: returnUrl);
         }
+
+        [NoTransaction]
+        public ActionResult ReadSideIsOutdated(string returnUrl)
+        {
+            return this.View(model: returnUrl);
+        }
     }
 }
