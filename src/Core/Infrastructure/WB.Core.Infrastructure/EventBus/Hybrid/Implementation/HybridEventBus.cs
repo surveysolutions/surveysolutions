@@ -24,11 +24,11 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
             return this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
         }
 
-        public void PublishCommitedEvents(IAggregateRoot aggregate, CommittedEventStream commitedEvents)
+        public void PublishCommitedEvents(CommittedEventStream commitedEvents)
         {
             ActionUtils.ExecuteInIndependentTryCatchBlocks(
-                () => this.liteEventBus.PublishCommitedEvents(aggregate, commitedEvents),
-                () => this.cqrsEventBus.PublishCommitedEvents(aggregate, commitedEvents));
+                () => this.liteEventBus.PublishCommitedEvents(commitedEvents),
+                () => this.cqrsEventBus.PublishCommitedEvents(commitedEvents));
         }
 
         public void Publish(IPublishableEvent eventMessage)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using FluentAssertions.Events;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -41,12 +42,24 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetLatest(typeof(Aggregate), aggregateId) == null as Aggregate);
 
             var eventBus = Mock.Of<IEventBus>();
-            Mock.Get(eventBus)
-                .Setup(bus => bus.PublishCommitedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<CommittedEventStream>()))
-                .Callback<IAggregateRoot, CommittedEventStream>((aggregate, events) =>
+            var eventBusMock = Mock.Get(eventBus);
+
+            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()))
+                        .Returns((IAggregateRoot aggregate, string origin) =>
+                        {
+                            constructedAggregateId = aggregate.EventSourceId;
+                            return new CommittedEventStream(aggregate.EventSourceId,
+                                aggregate.GetUnPublishedChanges()
+                                         .Select(x => Create.CommittedEvent(payload: x.Payload, 
+                                                        eventSourceId: x.EventSourceId,
+                                                        eventSequence: x.EventSequence)));
+                        });
+
+            eventBusMock
+                .Setup(bus => bus.PublishCommitedEvents(Moq.It.IsAny<CommittedEventStream>()))
+                .Callback<CommittedEventStream>(events =>
                 {
-                    publishedEvents = aggregate.GetUnPublishedChanges();
-                    constructedAggregateId = aggregate.EventSourceId;
+                    publishedEvents = events;
                 });
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
@@ -73,7 +86,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.Parse("11111111111111111111111111111111");
-        private static IEnumerable<UncommittedEvent> publishedEvents;
+        private static CommittedEventStream publishedEvents;
         private static Guid constructedAggregateId;
         private static Mock<IAggregateSnapshotter> snapshooterMock;
     }

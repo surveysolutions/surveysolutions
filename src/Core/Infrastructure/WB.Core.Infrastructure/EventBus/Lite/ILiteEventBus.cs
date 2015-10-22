@@ -7,6 +7,6 @@ namespace WB.Core.Infrastructure.EventBus.Lite
     public interface ILiteEventBus
     {
         CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin);
-        void PublishCommitedEvents(IAggregateRoot aggregate, CommittedEventStream commitedEvents);
+        void PublishCommitedEvents(CommittedEventStream commitedEvents);
     }
 }

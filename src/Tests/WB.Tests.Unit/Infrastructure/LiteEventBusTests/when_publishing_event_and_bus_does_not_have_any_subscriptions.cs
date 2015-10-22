@@ -16,8 +16,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => eventBus.PublishCommitedEvents(aggregateRoot, 
-                new CommittedEventStream(aggregateRoot.EventSourceId, Create.CommittedEvent(payload: new DummyEvent(), eventSourceId: aggregateRoot.EventSourceId))));
+            exception = Catch.Exception(() => eventBus.PublishCommitedEvents(new CommittedEventStream(aggregateRoot.EventSourceId, Create.CommittedEvent(payload: new DummyEvent(), eventSourceId: aggregateRoot.EventSourceId))));
 
         It should_nothing_happen_including_exceptions = () =>
             exception.ShouldBeNull();

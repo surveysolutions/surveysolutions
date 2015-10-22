@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishCommitedEvents(aggregateRoot, new CommittedEventStream(aggregateRoot.EventSourceId, 
+            eventBus.PublishCommitedEvents(new CommittedEventStream(aggregateRoot.EventSourceId, 
                 Create.CommittedEvent(payload: dummyEventStub, eventSourceId: aggregateRoot.EventSourceId)));
 
         It should_call_Handle_once_for_first_handler = () =>
