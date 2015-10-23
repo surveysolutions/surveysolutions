@@ -712,7 +712,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have less than 10.000 options..
+        ///   Looks up a localized string similar to Cascading combo box question should have less than 15,000 options..
         /// </summary>
         internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -766,7 +766,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has length more than 10000 characters..
+        ///   Looks up a localized string similar to Enabling condition has length more than 10,000 characters..
         /// </summary>
         internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -775,7 +775,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition has length more than 10000 characters..
+        ///   Looks up a localized string similar to Validation condition has length more than 10,000 characters..
         /// </summary>
         internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
             get {
