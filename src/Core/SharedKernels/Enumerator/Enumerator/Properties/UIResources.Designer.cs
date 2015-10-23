@@ -361,6 +361,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To complete screen.
+        /// </summary>
+        public static string Interview_CompleteScreen_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_CompleteScreen_ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
@@ -469,15 +478,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To complete screen.
-        /// </summary>
-        public static string Interview_NextCompleteInterview_ButtonText {
-            get {
-                return ResourceManager.GetString("Interview_NextCompleteInterview_ButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
@@ -487,20 +487,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To parent .
+        /// </summary>
+        public static string Interview_ParentGroup_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_ParentGroup_ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
             get {
                 return ResourceManager.GetString("Interview_PreviousGroupNavigation_AnsweredQuestions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To parent .
-        /// </summary>
-        public static string Interview_PreviousGroupNavigation_ButtonText {
-            get {
-                return ResourceManager.GetString("Interview_PreviousGroupNavigation_ButtonText", resourceCulture);
             }
         }
         

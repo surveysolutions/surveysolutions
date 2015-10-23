@@ -124,7 +124,7 @@
     <value>Закончено {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Назначено {0}</value>
+    <value>Cоздано {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
     <value>В прогрессе</value>
@@ -181,7 +181,7 @@
     <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру.</value>
+    <value>Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Обновляем задания</value>
@@ -276,7 +276,7 @@
     <value>Найдена новая версия. Хотите ли вы скачать новую версию и обновить приложение?</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? 
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?
 </value>
   </data>
   <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
@@ -334,7 +334,7 @@
     <value>{0} отклоненных интервью получено</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0}  новых интервью скачано</value>
+    <value>{0} новых интервью скачано</value>
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>Были обновлены все назначения</value>
@@ -349,7 +349,7 @@
     <value>интервью</value>
   </data>
   <data name="Synchronization_Fail_Title" xml:space="preserve">
-    <value>Синхронизация оборвалась. Повторите попытку позже, пожалуйста.</value>
+    <value>Синхронизация оборвалась. Повторите попытку позже, пожалуйста</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} из {1} законченных интервью отправлено</value>
@@ -409,7 +409,7 @@
     <value>Отправка информации об устройстве</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? </value>
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Информационный пакет успешно отправлен</value>
@@ -427,13 +427,13 @@
     <value>Размер пакета передачи данных</value>
   </data>
   <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID регистрации</value>
+    <value>ID регистрации:</value>
   </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Настройки подключения</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
-    <value>ID устройства</value>
+    <value>ID устройства:</value>
   </data>
   <data name="Prefs_EndpointSummary" xml:space="preserve">
     <value>URL-адрес, который используется для связи с приложением руководителя</value>
@@ -454,10 +454,10 @@
     <value>Отменить</value>
   </data>
   <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>ID установки</value>
+    <value>ID установки:</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Невозможно подключиться к  Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>
+    <value>Невозможно подключиться к Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Время ожидания ответа сервера</value>
@@ -472,6 +472,6 @@
     <value>URL приложения Supervisor</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Назначено на {0}</value>
+    <value>Назначено {0}</value>
   </data>
 </root>
