@@ -136,7 +136,7 @@
     <value>New version of application was released. Please, update the application</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Server error. Please contact the support team at support@mysurvey.solutions.</value>
+    <value>Server error. Please contact the support team at support@mysurvey.solutions</value>
   </data>
   <data name="LoginNameHint" xml:space="preserve">
     <value>Your login</value>
@@ -291,7 +291,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Tap to enter text  ({0})</value>
   </data>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
-    <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative.</value>
+    <value>Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Answer '{0}' is incorrect because answer is greater than Roster upper bound '{1}'.</value>
@@ -351,7 +351,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Cancel</value>
   </data>
   <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
-    <value>You already assigned to another device</value>
+    <value>You are already assigned to another device</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
     <value>Relink</value>
