@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {
-    internal class when_cascading_question_has_10001_options : QuestionnaireVerifierTestsContext
+    internal class when_cascading_question_has_15001_options : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                 Answers = new List<Answer>()
             };
 
-            for (int i = 0; i <= 10000; i++)
+            for (int i = 0; i <= 15000; i++)
             {
                 childSingleOptionQuestion.Answers.Add(new Answer
                 {

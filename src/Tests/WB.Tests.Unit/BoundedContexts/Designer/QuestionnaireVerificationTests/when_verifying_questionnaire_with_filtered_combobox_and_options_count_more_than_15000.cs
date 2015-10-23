@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000 : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_15000 : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                         IsFilteredCombobox = true,
                         Answers =
                             new List<Answer>(
-                                new Answer[5001].Select(
+                                new Answer[15001].Select(
                                     answer =>
                                         new Answer()
                                         {
