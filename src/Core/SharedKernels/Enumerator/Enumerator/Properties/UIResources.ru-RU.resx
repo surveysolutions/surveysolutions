@@ -142,7 +142,7 @@
     <value>Survey Solutions Questionnaire Tester</value>
   </data>
   <data name="ErrorMessage_Maintenance" xml:space="preserve">
-    <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
+    <value>The website of survey solutions designer is in maintenance mode now. Sorry for the inconvenience</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Пароль</value>
@@ -199,7 +199,7 @@
     <value>Нажмите для ввода даты</value>
   </data>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
-    <value>Отсканировать штрих-код </value>
+    <value>Отсканировать штрих-код</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как цело число</value>
@@ -209,9 +209,6 @@
   </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>Все ({0}) вопросы отвеченны</value>
-  </data>
-  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
-    <value>На уровень выше</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Внимание: неотвеченных вопросов - {0}</value>
@@ -235,13 +232,13 @@
     <value>Опции будут доступны после ответа на соответствующий вопрос</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Ответ "{0}" не совпадает ни с одной опцией</value>
+    <value>Ответ "{0}" не соответствует ни с одной опцией</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>Нажмите, чтобы сделать фото</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Ответ "{0}" не соответствует ни одной опции</value>
+    <value>Ответ "{0}" не соответствует ни с одной опцией</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
     <value>Опросники не обнаружены
@@ -285,7 +282,7 @@
     <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="TextQuestion_MaskHint" xml:space="preserve">
-    <value>Нажмите для ввода текста  ({0})</value>
+    <value>Нажмите для ввода текста ({0})</value>
   </data>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
@@ -331,9 +328,6 @@
   </data>
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Окончание</value>
-  </data>
-  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
-    <value>Завершить интервью</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>Опросники не найдены</value>
@@ -385,5 +379,11 @@
   </data>
   <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
     <value>Но</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>Завершить интервью</value>
+  </data>
+  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
+    <value>На уровень выше</value>
   </data>
 </root>
