@@ -29,6 +29,9 @@
 
     self.isRebuildRunning = ko.observable(false);
 
+    self.readSideApplicationVersion = ko.observable(-1);
+    self.readSideDatabaseVersion = ko.observable(-1);
+
     self.readSideRepositoryWriters = ko.observableArray([]);
     self.rebuildDenormalizerStatistic = ko.observableArray([]);
     self.rebuildErrors = ko.observableArray([]);
@@ -75,6 +78,9 @@
     self.updateStatus = function() {
         self.SendRequest(self.updateRebuildStatusApiUrl, {}, function(data) {
             self.isRebuildRunning(data.IsRebuildRunning);
+
+            self.readSideApplicationVersion(data.ReadSideApplicationVersion);
+            self.readSideDatabaseVersion(data.ReadSideDatabaseVersion);
 
             self.currentRebuildStatus(data.CurrentRebuildStatus);
             self.lastRebuildDate(data.LastRebuildDate);

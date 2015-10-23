@@ -77,7 +77,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.settings = settings;
         }
 
-        #region IReadLayerStatusService implementation
+        #region IReadSideStatusService implementation
 
         public bool AreViewsBeingRebuiltNow()
         {
@@ -89,12 +89,25 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (this.AreViewsBeingRebuiltNow())
                 return false;
 
-            return this.GetReadSideDatabaseVersion() != this.settings.ReadSideVersion;
+            return this.GetReadSideDatabaseVersion() != this.GetReadSideApplicationVersion();
         }
 
-        #endregion // IReadLayerStatusService implementation
+        public int GetReadSideApplicationVersion()
+        {
+            return this.settings.ReadSideVersion;
+        }
 
-        #region IReadLayerAdministrationService implementation
+        public int? GetReadSideDatabaseVersion()
+        {
+            if (this.AreViewsBeingRebuiltNow())
+                return null as int?;
+
+            return 0;
+        }
+
+        #endregion // IReadSideStatusService implementation
+
+        #region IReadSideAdministrationService implementation
 
         public void RebuildAllViewsAsync(int skipEvents)
         {
@@ -166,6 +179,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             return new ReadSideStatus()
             {
                 IsRebuildRunning = this.AreViewsBeingRebuiltNow(),
+
+                ReadSideApplicationVersion = this.GetReadSideApplicationVersion(),
+                ReadSideDatabaseVersion = this.GetReadSideDatabaseVersion(),
+
                 CurrentRebuildStatus = statusMessage,
                 LastRebuildDate = this.lastRebuildDate,
                 EventPublishingDetails = new ReadSideEventPublishingDetails()
@@ -210,7 +227,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             return storage.GetType().Name;
         }
 
-        #endregion // IReadLayerAdministrationService implementation
+        #endregion // IReadSideAdministrationService implementation
 
         private void RebuildViewsForEventSources(IEventHandler[] handlers, Guid[] eventSourceIds)
         {
@@ -622,11 +639,6 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private static string GetStorageEntityName(IReadSideStorage writer)
         {
             return writer.ViewType.Name;
-        }
-
-        private int GetReadSideDatabaseVersion()
-        {
-            return 0;
         }
 
         #region Error reporting methods

@@ -6,6 +6,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
     public class ReadSideStatus
     {
         public bool IsRebuildRunning { get; set; }
+        public int ReadSideApplicationVersion { get; set; }
+        public int? ReadSideDatabaseVersion { get; set; }
         public IEnumerable<ReadSideRepositoryWriterStatus> StatusByRepositoryWriters { get; set; }
         public IEnumerable<ReadSideDenormalizerStatistic> ReadSideDenormalizerStatistics { get; set; }
         public IEnumerable<ReadSideRepositoryWriterError> RebuildErrors { get; set; }

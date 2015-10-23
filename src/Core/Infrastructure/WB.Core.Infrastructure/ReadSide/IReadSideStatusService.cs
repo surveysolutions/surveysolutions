@@ -4,5 +4,8 @@
     {
         bool AreViewsBeingRebuiltNow();
         bool IsReadSideOutdated();
+
+        int GetReadSideApplicationVersion();
+        int? GetReadSideDatabaseVersion();
     }
 }
