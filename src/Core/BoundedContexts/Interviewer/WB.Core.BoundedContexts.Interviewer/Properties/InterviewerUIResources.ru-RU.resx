@@ -124,10 +124,10 @@
     <value>Закончено {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Назначено {0}</value>
+    <value>Cоздано {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>В процессе</value>
+    <value>В прогрессе</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Не начатое</value>
@@ -156,7 +156,7 @@
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
     <value>Синхронизируйтесь для получения новых заданий
-или свяжитесь с Вашим супервизором
+или свяжитесь с вашим супервайзером
 для дальнейших инструкций</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
@@ -166,7 +166,7 @@
     <value>Нет новых</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Это интервью завершено. Хотите переоткрыть его?</value>
+    <value>Это интервтю завершено. Хотите переоткрыть его?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Отклоненные {0}</value>
@@ -181,7 +181,7 @@
     <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Проблемы аутентификации с удаленным сервером. Пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
+    <value>Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Обновляем задания</value>
@@ -193,9 +193,9 @@
     <value>{0} интервью удалено</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись интервьюера ('{0}'). 
-С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили ранее, учетная запись заблокирована или удалена Хедквотером.
-Пожалуйста, введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
+    <value>Проблемы аутентификации. Мы не можем подтвердить ваш аккаунт интервьюера('{0}'). 
+У вашего акканта возможны следующие проблемы: пароль отличается от того что вы вводили, аккаунт заблокирован или удален Хедквотером.
+Пожалуйста введите ваш обновленный пароль. Если проблема не будет решена, пожалйста, обратитесь к Супервизору или Хедквотеру.</value>
   </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
     <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
@@ -207,7 +207,7 @@
     <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложение Interviewer.</value>
+    <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложени Interviewer.</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Опросники</value>
@@ -234,10 +234,10 @@
     <value>Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Адрес сайта Supervisor неверный. Убедитесь, что Вы ввели корректный url-адрес</value>
+    <value>Адрес сайта Supervisor неверный. Убедитесь, что вы ввели корректный url-адрес</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>Вы можете попробовать войти онлайн, если Вы забыли пароль или он был изменен</value>
+    <value>Вы можете попробовать войти онлайн, если вы забыли пароль или он был изменен</value>
   </data>
   <data name="Login_WrondPassword" xml:space="preserve">
     <value>Неверный пароль</value>
@@ -270,13 +270,14 @@
     <value>Все текущие данные будут стерты. Вы уверены, что хотите продолжить восстановление из резервной копии? Если да, то убедитесь, что резервная копия существует по пути {0}</value>
   </data>
   <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
-    <value>У Вас последняя версия приложения</value>
+    <value>У вас последняя версия приложения</value>
   </data>
   <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>Найдена новая версия. Хотите ли Вы скачать новую версию и обновить приложение?</value>
+    <value>Найдена новая версия. Хотите ли вы скачать новую версию и обновить приложение?</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его?</value>
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?
+</value>
   </data>
   <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Информационный пакет успешно отправлен</value>
@@ -333,7 +334,7 @@
     <value>{0} отклоненных интервью получено</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0}  новых интервью скачано</value>
+    <value>{0} новых интервью скачано</value>
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>Были обновлены все назначения</value>
@@ -348,7 +349,7 @@
     <value>интервью</value>
   </data>
   <data name="Synchronization_Fail_Title" xml:space="preserve">
-    <value>Синхронизация оборвалась. Повторите попытку позже, пожалуйста.</value>
+    <value>Синхронизация оборвалась. Повторите попытку позже, пожалуйста</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} из {1} законченных интервью отправлено</value>
@@ -408,7 +409,7 @@
     <value>Отправка информации об устройстве</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его? </value>
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Информационный пакет успешно отправлен</value>
@@ -426,13 +427,13 @@
     <value>Размер пакета передачи данных</value>
   </data>
   <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID регистрации</value>
+    <value>ID регистрации:</value>
   </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Настройки подключения</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
-    <value>ID устройства</value>
+    <value>ID устройства:</value>
   </data>
   <data name="Prefs_EndpointSummary" xml:space="preserve">
     <value>URL-адрес, который используется для связи с приложением руководителя</value>
@@ -453,10 +454,10 @@
     <value>Отменить</value>
   </data>
   <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>ID установки</value>
+    <value>ID установки:</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Невозможно подключиться к  Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>
+    <value>Невозможно подключиться к Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Время ожидания ответа сервера</value>
@@ -471,6 +472,6 @@
     <value>URL приложения Supervisor</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Назначено на {0}</value>
+    <value>Назначено {0}</value>
   </data>
 </root>
