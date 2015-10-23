@@ -96,9 +96,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
                 items = items.Where(x => (x.QuestionnaireVersion == input.QuestionnaireVersion));
             }
 
-            items = !string.IsNullOrWhiteSpace(input.ResponsibleName)
-                ? items.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower())
-                : items.Where(x => x.TeamLeadId == input.ViewerId);
+            if (input.ViewerId.HasValue)
+            {
+                items = items.Where(x => x.TeamLeadId == input.ViewerId);
+            }
+            if (!string.IsNullOrEmpty(input.ResponsibleName))
+            {
+                items = items.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower() || x.TeamLeadName == input.ResponsibleName.ToLower());
+            }
+
             return items;
         }
 
