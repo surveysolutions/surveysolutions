@@ -1203,7 +1203,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\parent_cascading_question_should_exist.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_form_roster_references_parent_from_parent_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_has_10001_options.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_has_15001_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_has_condition_or_validation_expression.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_have_repeating_pair_of_Value_and_ParentValue.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\CascadingDropdownTests\when_cascading_question_is_in_roster_with_its_parent.cs" />
@@ -1272,7 +1272,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_circular_references.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_empty_static_text.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_featured_question_of_illegal_types.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_5000.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_filtered_combobox_and_options_count_more_than_15000.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_filtered_combobox_and_question_is_linked.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_where_roster_size_source_is_fixedtitles_and_number_of_titles_more_than_40.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_group_where_roster_size_source_is_question_that_does_not_have_roster_size_question.cs" />
