@@ -118,87 +118,87 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>list have not been updated</value>
+    <value>la liste n'a pas été mise à jour</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>list was updated {0}</value>
+    <value>la liste a été mise à jour {0}</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Connecting to server</value>
+    <value>En cours de se connecter au serveur</value>
   </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creating interview</value>
+    <value>En train de créer un entretien</value>
   </data>
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Downloading questionnaire -  {0}%</value>
+    <value>Téléchargement du questionnaire en cours - {0} %</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Can't open the questionnaire "{0}". Your Designer user account is not authorized. Please check your login and password</value>
+    <value>Impossible d'ouvrir le questionnaire « {0} ». Votre compte d'utilisateur de Designer n'est pas autorisé à accéder à ce questionnaire. Veuillez vérifier votre login et mot de passe.</value>
   </data>
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire "{0}". The questionnaire cannot be found. Please refresh the list of questionnaires.</value>
+    <value>Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire ne peut pas être retrouvé. Veuillez actualiser la liste des questionnaires.</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Can't open the questionnaire "{0}". The questionnaire has errors. Please fix this in Designer.</value>
+    <value>Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire comporte des erreurs. Veuillez faire des corrections au questionnaire sur le site Designer.</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>No connection to the Survey Solutions designer. Open a local copy of questionnaire?</value>
+    <value>Aucune connexion avec le site Designer de Survey Solutions. Ouvrir une copie locale du questionnaire?</value>
   </data>
   <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Preparing questionnaire to create interview</value>
+    <value>En train de préparer le questionnaire pour l'entretien</value>
   </data>
   <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Saving interview dynamic link library to local storage</value>
+    <value>En train de sauvegarder une bibliothèque au stockage local de liens dynamiques</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Saving questionnaire to local storage</value>
+    <value>En train de sauvegarder le questionnaire au stockage local</value>
   </data>
   <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Checking questionnaire for errors on the server</value>
+    <value>En cours de détecter d'erreurs dans le questionnaire</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Designer web application is not accessible at this moment. Check connection setting or try again later</value>
+    <value>Le site Designer n'est pas accessible en ce moment. Veuillez vérifiez votre connexion ou réessayez plus tard</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Paramètres</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Sign out</value>
+    <value>Se déconnecter</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Disable SSL certificate validation</value>
+    <value>Désactiver la validation de certificat SSL</value>
   </data>
   <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Accept all SSL certificates</value>
+    <value>Accepter tous les certificats SSL</value>
   </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Connection settings</value>
+    <value>Paramètres de connexion</value>
   </data>
   <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>URL that is used to communicate with designer application</value>
+    <value>URL utilisé pour communiquer avec application de Designer</value>
   </data>
   <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>Designer URL</value>
+    <value>URL du site Designer</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Number of seconds to wait for coordinates</value>
+    <value>Délai de réponse, en secondes, pour les coordonnées GPS</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>GPS Receive timeout</value>
+    <value>Le délai de réponse du GPS a expiré</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Number of seconds to wait until server response</value>
+    <value>Délai de réponse, en secondes, pour le serveur</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Server Response timeout</value>
+    <value>Le délai de réponse du serveur a expiré</value>
   </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Version: {0}</value>
+    <value>Version : {0}</value>
   </data>
   <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Application version</value>
+    <value>Version de l'application</value>
   </data>
 </root>

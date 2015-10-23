@@ -133,7 +133,7 @@
     <value>Завершено {0}</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Створити  інтервью</value>
+    <value>Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Нові {0}</value>
@@ -172,7 +172,7 @@
     <value>Завершено о {0}</value>
   </data>
   <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Призначено на {0}</value>
+    <value>Створено {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
     <value>Триває</value>
@@ -453,10 +453,10 @@
     <value>Виправлення неполадок</value>
   </data>
   <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
-    <value>Сталася помилка під час перевірки версії. Будь ласка, перевірте налаштування або повторіть спробу пізніше.</value>
+    <value>Сталася помилка під час перевірки версії. Будь ласка, перевірте налаштування або повторіть спробу пізніше</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
-    <value>Логін або пароль вказано невірно.</value>
+    <value>Логін або пароль вказано невірно</value>
   </data>
   <data name="UnexpectedException" xml:space="preserve">
     <value>Неочікувана помилка</value>
@@ -466,5 +466,8 @@
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Попередження</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Призначено {0}</value>
   </data>
 </root>

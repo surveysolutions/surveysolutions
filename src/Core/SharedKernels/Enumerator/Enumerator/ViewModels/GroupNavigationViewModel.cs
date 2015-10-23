@@ -169,10 +169,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
-                    title = UIResources.Interview_PreviousGroupNavigation_ButtonText;
+                    title = UIResources.Interview_ParentGroup_ButtonText;
                     break;
                 case NavigationGroupType.LastSection:
-                    title = UIResources.Interview_NextCompleteInterview_ButtonText;
+                    title = UIResources.Interview_CompleteScreen_ButtonText;
                     break;
                 case NavigationGroupType.Section:
                     title = UIResources.Interview_NextSection_ButtonText;
