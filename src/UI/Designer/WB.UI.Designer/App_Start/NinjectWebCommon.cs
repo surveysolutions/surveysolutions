@@ -77,7 +77,10 @@ namespace WB.UI.Designer.App_Start
             var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly }; 
+            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
+
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -104,6 +107,7 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            kernel.Bind<ReadSideSettings>().ToConstant(readSideSettings);
             kernel.Bind<ReadSideService>().ToSelf().InSingletonScope();
             kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());

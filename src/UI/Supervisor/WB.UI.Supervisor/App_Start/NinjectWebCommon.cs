@@ -29,6 +29,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -145,6 +146,9 @@ namespace WB.UI.Supervisor.App_Start
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
 
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -153,6 +157,7 @@ namespace WB.UI.Supervisor.App_Start
                     new InterviewDataExportSettings(basePath, false,
                         WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000),
                         WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToInt(100)),
+                    readSideSettings,
                     isSupervisorFunctionsEnabled: true,
                     interviewLimitCount: interviewCountLimit));
 
