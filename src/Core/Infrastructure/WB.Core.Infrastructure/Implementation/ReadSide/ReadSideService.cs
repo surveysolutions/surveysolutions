@@ -50,6 +50,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
         private readonly ReadSideSettings settings;
+        private readonly IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage;
 
         static ReadSideService()
         {
@@ -62,7 +63,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             ILogger logger,
             IReadSideCheckerAndCleaner readSideCleaner, 
             ITransactionManagerProviderManager transactionManagerProviderManager,
-            ReadSideSettings settings)
+            ReadSideSettings settings,
+            IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of {1} when following count of instances exists: {0}.", InstanceCount, typeof(ReadSideService).Name));
@@ -75,6 +77,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.readSideCleaner = readSideCleaner;
             this.transactionManagerProviderManager = transactionManagerProviderManager;
             this.settings = settings;
+            this.readSideVersionStorage = readSideVersionStorage;
         }
 
         #region IReadSideStatusService implementation
@@ -102,7 +105,18 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (this.AreViewsBeingRebuiltNow())
                 return null as int?;
 
-            return 0;
+            try
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().BeginQueryTransaction();
+
+                ReadSideVersion readSideDatabaseVersion = this.readSideVersionStorage.GetById(ReadSideVersion.IdOfCurrent);
+
+                return readSideDatabaseVersion?.Version;
+            }
+            finally
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().RollbackQueryTransaction();
+            }
         }
 
         #endregion // IReadSideStatusService implementation
@@ -311,7 +325,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         UpdateStatusMessage(string.Format("Cleaning views for {0} and event source {1}", cleanerName, eventSourceId));
                         atomicEventHandler.CleanWritersByEventSource(eventSourceId);
-                        UpdateStatusMessage(string.Format("Views for {0}  and event source {1} was cleaned.", cleanerName, eventSourceId));
+                        UpdateStatusMessage(string.Format("Views for {0} and event source {1} was cleaned.", cleanerName, eventSourceId));
                     }
                 }
 
@@ -332,7 +346,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.DisableWritersCacheForHandlers(handlers);
                 }
 
-                UpdateStatusMessage("Rebuild specific views succeeded.");
+                UpdateStatusMessage("Rebuild views by event source succeeded.");
+                logger.Info("Rebuild views by event source succeeded.");
             }
             catch (OperationCanceledException exception)
             {
@@ -351,7 +366,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
         }
 
-        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers, bool isPartiallyRebuild)
+        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers, bool isPartialRebuild)
         {
             try
             {
@@ -365,7 +380,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     if (skipEvents == 0)
                     {
-                        this.CleanUpWritersForHandlers(handlers, isPartiallyRebuild);
+                        this.CleanUpWritersForHandlers(handlers, isPartialRebuild);
+                    }
+
+                    if (!isPartialRebuild)
+                    {
+                        this.CleanReadSideVersion();
                     }
 
                     try
@@ -378,8 +398,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         this.DisableWritersCacheForHandlers(handlers);
 
-                        if(!isPartiallyRebuild && this.readSideCleaner != null) 
+                        if(!isPartialRebuild && this.readSideCleaner != null)
                             this.readSideCleaner.CreateIndexesAfterRebuildReadSide();
+                    }
+
+                    if (!isPartialRebuild)
+                    {
+                        this.StoreReadSideVersion();
                     }
                 }
                 finally
@@ -387,8 +412,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                 }
 
-                UpdateStatusMessage("Rebuild specific views succeeded.");
-                logger.Info("Rebuild views succeeded");
+                UpdateStatusMessage(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
+                logger.Info(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
             }
             catch (OperationCanceledException exception)
             {
@@ -405,6 +430,44 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 areViewsBeingRebuiltNow = false;
             }
+        }
+
+        private void CleanReadSideVersion()
+        {
+            UpdateStatusMessage("Cleaning read side version");
+
+            try
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                this.readSideVersionStorage.Remove(ReadSideVersion.IdOfCurrent);
+                this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+            }
+            catch
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                throw;
+            }
+
+            UpdateStatusMessage("Read side version cleaned");
+        }
+
+        private void StoreReadSideVersion()
+        {
+            UpdateStatusMessage("Storing read side version");
+
+            try
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                this.readSideVersionStorage.Store(new ReadSideVersion(this.GetReadSideApplicationVersion()), ReadSideVersion.IdOfCurrent);
+                this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+            }
+            catch
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                throw;
+            }
+
+            UpdateStatusMessage("Read side version stored");
         }
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
