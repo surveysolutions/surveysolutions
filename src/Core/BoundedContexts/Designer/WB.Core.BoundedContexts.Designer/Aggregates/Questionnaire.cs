@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private const int MaxChapterItemsCount = 400;
         private const int MaxTitleLength = 500;
         private const int maxFilteredComboboxOptionsCount = 15000;
+        private const int maxCascadingComboboxOptionsCount = 15000;
         private const int MaxGroupDepth = 10;
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
@@ -1773,7 +1774,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateCascadingComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
         {
             ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-
+            ThrowDomainExceptionIfCascadingComboboxIsInvalid(questionId, options);
             ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
 
             ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
@@ -3182,6 +3183,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.FilteredComboboxQuestionOptionsMaxLength,
                     string.Format("Combo box question {0} contains more than {1} options",
                         FormatQuestionForException(questionId, this.innerDocument), maxFilteredComboboxOptionsCount));
+            }
+        }
+
+        private void ThrowDomainExceptionIfCascadingComboboxIsInvalid(Guid questionId, Option[] options)
+        {
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+            if (categoricalOneAnswerQuestion == null)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.QuestionNotFound,
+                    string.Format("Combo box with public key {0} can't be found", questionId));
+            }
+            
+            if (options != null && options.Length > maxCascadingComboboxOptionsCount)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalCascadingQuestionOptionsMaxLength,
+                    string.Format("Combo box question {0} contains more than {1} options",
+                        FormatQuestionForException(questionId, this.innerDocument), maxCascadingComboboxOptionsCount));
             }
         }
 

@@ -140,6 +140,8 @@
 
         CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
 
-        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
+
+        CategoricalCascadingQuestionOptionsMaxLength
     }
 }

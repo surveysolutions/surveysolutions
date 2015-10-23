@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
         private const int MaxExpressionLength = 10000;
+        private const int MaxOptionsCountInCascadingQuestion = 15000;
+        private const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         {
@@ -156,7 +158,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
-                    Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
+                    Verifier<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
                     Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
                     Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
                     Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
@@ -291,7 +293,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool CascadingQuestionHasMoreThanAllowedOptions(SingleQuestion question)
         {
-            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 10000;
+            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > MaxOptionsCountInCascadingQuestion;
         }
 
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)
@@ -387,9 +389,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                    question.Answers != null && question.Answers.Count > 200;
         }
 
-        private static bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)
+        private static bool FilteredComboboxContainsMoreThanMaxOptions(IQuestion question)
         {
-            return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > 5000;
+            return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > MaxOptionsCountInFilteredComboboxQuestion;
         }
 
         private static bool FilteredComboboxIsLinked(IQuestion question)
