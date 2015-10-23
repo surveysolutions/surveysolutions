@@ -49,17 +49,20 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IReadSideCheckerAndCleaner readSideCleaner;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
+        private readonly ReadSideSettings settings;
 
         static ReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadSideService(IStreamableEventStore eventStore, 
+        public ReadSideService(
+            IStreamableEventStore eventStore,
             IEventDispatcher eventBus, 
             ILogger logger,
             IReadSideCheckerAndCleaner readSideCleaner, 
-            ITransactionManagerProviderManager transactionManagerProviderManager)
+            ITransactionManagerProviderManager transactionManagerProviderManager,
+            ReadSideSettings settings)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of {1} when following count of instances exists: {0}.", InstanceCount, typeof(ReadSideService).Name));
@@ -71,6 +74,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.logger = logger;
             this.readSideCleaner = readSideCleaner;
             this.transactionManagerProviderManager = transactionManagerProviderManager;
+            this.settings = settings;
         }
 
         #region IReadLayerStatusService implementation
@@ -82,7 +86,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         public bool IsReadSideOutdated()
         {
-            return false;
+            if (this.AreViewsBeingRebuiltNow())
+                return false;
+
+            return this.GetReadSideDatabaseVersion() != this.settings.ReadSideVersion;
         }
 
         #endregion // IReadLayerStatusService implementation
@@ -615,6 +622,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private static string GetStorageEntityName(IReadSideStorage writer)
         {
             return writer.ViewType.Name;
+        }
+
+        private int GetReadSideDatabaseVersion()
+        {
+            return 0;
         }
 
         #region Error reporting methods

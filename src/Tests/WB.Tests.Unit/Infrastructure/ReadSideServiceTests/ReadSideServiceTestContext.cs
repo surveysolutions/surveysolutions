@@ -29,7 +29,8 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
                 streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
                 readSideCleaner ?? Mock.Of<IReadSideCheckerAndCleaner>(),
-                transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()));
+                transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
+                Create.ReadSideSettings());
         }
 
         protected static void WaitRebuildReadsideFinish(ReadSideService readSideService)

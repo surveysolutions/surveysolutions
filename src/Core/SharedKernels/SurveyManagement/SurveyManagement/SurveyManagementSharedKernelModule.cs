@@ -55,11 +55,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly int? interviewLimitCount;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly ReadSideSettings readSideSettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
             InterviewDataExportSettings interviewDataExportSettings,
+            ReadSideSettings readSideSettings,
             bool isSupervisorFunctionsEnabled,
             int? interviewLimitCount = null)
         {
@@ -70,6 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.hqEnabled = hqEnabled;
             this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.readSideSettings = readSideSettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
         }
@@ -164,6 +167,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
               .To<IncomingSyncPackagesQueue>()
               .InSingletonScope();
 
+            this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();
             this.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());

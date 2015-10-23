@@ -56,6 +56,7 @@ using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
@@ -2341,6 +2342,11 @@ namespace WB.Tests.Unit
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ColumnNames = new[] {variableName}
             };
+        }
+
+        public static ReadSideSettings ReadSideSettings()
+        {
+            return new ReadSideSettings(readSideVersion: 0);
         }
     }
 }
