@@ -1,10 +1,14 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Utils;
@@ -20,6 +24,10 @@ namespace WB.UI.Interviewer.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
+        private readonly IMvxMessenger messenger = Mvx.Resolve<IMvxMessenger>();
+        private MvxSubscriptionToken syncStartSubscriptionToken;
+        private MvxSubscriptionToken syncEndSubscriptionToken;
+
         protected override int ViewResourceId
         {
             get { return Resource.Layout.dashboard; }
@@ -28,6 +36,9 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            this.syncStartSubscriptionToken = this.messenger.Subscribe<SyncronizationStartedMessage>(this.OnSyncStart);
+            this.syncEndSubscriptionToken = this.messenger.Subscribe<SyncronizationStoppedMessage>(this.OnSyncStop);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
@@ -40,6 +51,16 @@ namespace WB.UI.Interviewer.Activities
             recyclerView.Adapter = adapter;
         }
 
+        private void OnSyncStop(SyncronizationStoppedMessage obj)
+        {
+            Window.ClearFlags(WindowManagerFlags.KeepScreenOn);
+        }
+
+        private void OnSyncStart(SyncronizationStartedMessage obj)
+        {
+            Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+        }
+
         public override void OnBackPressed()
         {
             
@@ -48,6 +69,15 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnStop()
         {
             base.OnStop();
+
+            if (this.syncEndSubscriptionToken != null)
+            {
+                this.messenger.Unsubscribe<SyncronizationStoppedMessage>(this.syncEndSubscriptionToken);
+            }
+            if (this.syncStartSubscriptionToken != null)
+            {
+                this.messenger.Unsubscribe<SyncronizationStartedMessage>(this.syncStartSubscriptionToken);
+            }
 
             if (this.ViewModel != null)
                 this.ViewModel.Synchronization.CancelSynchronizationCommand.Execute();
