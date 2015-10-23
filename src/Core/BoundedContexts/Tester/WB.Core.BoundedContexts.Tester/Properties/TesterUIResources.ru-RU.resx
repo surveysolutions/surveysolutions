@@ -136,13 +136,13 @@
     <value>Выход</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Количество секунд,  в течении которых будет ожидаться получение GPS координат</value>
+    <value>Количество секунд, в течении которых будет ожидаться получение GPS координат</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
     <value>Время ожидания при считывании GPS координат</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Количество секунд,  в течении которых будет ожидаться получение ответа от сервера</value>
+    <value>Количество секунд, в течении которых будет ожидаться получение ответа от сервера</value>
   </data>
   <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
     <value>URL приложения Designer</value>
@@ -172,7 +172,7 @@
     <value>Подключаемся к серверу</value>
   </data>
   <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>Невозможно подключиться к Survey Solutions Designer.</value>
+    <value>Невозможно подключиться к Survey Solutions Designer. Хотите открыть локальную копию?</value>
   </data>
   <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
     <value>Подготовка опросника к созданию интервью</value>
@@ -184,7 +184,7 @@
     <value>Сохранение опросника в локальном хранилище</value>
   </data>
   <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Удаленная проверка опросника на наличие ошибок.</value>
+    <value>Удаленная проверка опросника на наличие ошибок</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
     <value>Отключить проверку SSL сертификатов</value>
@@ -193,10 +193,10 @@
     <value>Невозможно открыть опросник {0}. Опросник не найден. Обновите список опросников, пожалуйста.</value>
   </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Версия  {0}</value>
+    <value>Версия:  {0}</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Невозможно открыть опросник {0}. Опросник сожержит ошибки. Исправьте, пожалуйста, их в дизайнере опросников.</value>
+    <value>Невозможно открыть опросник {0}. Опросник содержит ошибки. Исправьте, пожалуйста, их в Survey Solutions Designer.</value>
   </data>
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>Версия приложения</value>
