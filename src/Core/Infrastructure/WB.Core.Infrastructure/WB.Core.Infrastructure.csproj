@@ -155,6 +155,7 @@
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\IViewFactory.cs" />
     <Compile Include="ReadSide\ReadSideSettings.cs" />
+    <Compile Include="ReadSide\ReadSideVersion.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
     <Compile Include="PlainStorage\IPlainKeyValueStorage.cs" />
