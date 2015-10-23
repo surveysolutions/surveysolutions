@@ -102,7 +102,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
             }
             if (!string.IsNullOrEmpty(input.ResponsibleName))
             {
-                items = items.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower() || x.TeamLeadName == input.ResponsibleName.ToLower());
+                var lowerResponsibleName = input.ResponsibleName.ToLower();
+                items = items.Where(x => x.ResponsibleName.ToLower() == lowerResponsibleName || x.TeamLeadName == lowerResponsibleName);
             }
 
             return items;
