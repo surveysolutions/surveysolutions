@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
@@ -54,6 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository;
         private readonly IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository;
         private CancellationTokenSource synchronizationCancellationTokenSource;
+        private IMvxMessenger messenger;
 
         public SynchronizationViewModel(
             ISynchronizationService synchronizationService,
@@ -73,7 +75,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IPrincipal principal,
             IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository,
-            IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository)
+            IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository, 
+            IMvxMessenger messenger)
         {
             this.synchronizationService = synchronizationService;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
@@ -93,6 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.passwordHasher = passwordHasher;
             this.questionnaireInfoRepository = questionnaireInfoRepository;
             this.interviewInfoRepository = interviewInfoRepository;
+            this.messenger = messenger;
 
             this.restCredentials = new RestCredentials()
             {
@@ -169,6 +173,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Status = SynchronizationStatus.Download;
             this.IsSynchronizationInfoShowed = true;
             this.IsSynchronizationInProgress = true;
+            this.messenger.Publish(new SyncronizationStartedMessage(this));
 
             try
             {
@@ -230,6 +235,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.Statistics = statistics;
                 this.IsSynchronizationInProgress = false;
+                this.messenger.Publish(new SyncronizationStoppedMessage(this));
             }
             
             if (!this.Token.IsCancellationRequested && this.shouldUpdatePasswordOfInterviewer)
@@ -490,5 +496,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
                 this.synchronizationCancellationTokenSource.Cancel();
         }    
+    }
+
+    public class SyncronizationStoppedMessage : MvxMessage
+    {
+        public SyncronizationStoppedMessage(object sender) : base(sender)
+        {
+        }
+    }
+
+    public class SyncronizationStartedMessage : MvxMessage
+    {
+        public SyncronizationStartedMessage(object sender) : base(sender)
+        {
+        }
     }
 }
