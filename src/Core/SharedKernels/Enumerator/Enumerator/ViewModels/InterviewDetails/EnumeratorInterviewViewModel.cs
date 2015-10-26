@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CurrentStage.Init(interviewId, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
-            this.navigationState.GroupChanged += this.NavigationStateOnOnGroupChanged;
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
             await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
@@ -81,26 +81,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            if (this.navigationState.CurrentGroupType == ScreenType.Group)
+            if (this.navigationState.CurrentScreenType == ScreenType.Group)
             {
                 this.UpdateGroupStatus(this.navigationState.CurrentGroup);
             }
         }
 
-        private void NavigationStateOnOnGroupChanged(ScreenChangedEventArgs newGroupIdentity)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (newGroupIdentity.TargetScreen != ScreenType.Group)
+            if (eventArgs.TargetScreen != ScreenType.Group)
             {
                 this.UpdateInterviewStatus(null, ScreenType.Complete);
                 return;
             }
 
             IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
-            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(newGroupIdentity.TargetGroup);
+            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
 
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
 
-            this.UpdateGroupStatus(newGroupIdentity.TargetGroup);
+            this.UpdateGroupStatus(eventArgs.TargetGroup);
         }
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.navigationState.GroupChanged -= this.NavigationStateOnOnGroupChanged;
+            this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
             this.CurrentStage.Dispose();
             this.answerNotifier.Dispose();

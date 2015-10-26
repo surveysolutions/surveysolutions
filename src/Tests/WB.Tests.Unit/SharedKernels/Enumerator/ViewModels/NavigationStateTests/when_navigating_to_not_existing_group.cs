@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             navigationState = Create.NavigationState(
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
-            navigationState.GroupChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
+            navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
         };
 
         Because of = () =>

@@ -64,68 +64,76 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
 
             this.eventRegistry.Subscribe(this, interviewId);
+            
+            var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            this.questionnaireId = interview.QuestionnaireId;
+            var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
+            var groupModel =
+                questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[navigationIdentity.TargetGroup.Id];
 
-
-            if (navigationIdentity.TargetScreen == ScreenType.Group)
+            groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
+            this.root = root;
+            this.Parent = parent;
+            this.SectionIdentity = navigationIdentity.TargetGroup;
+            this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
+            this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
+            this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
+            if (groupModel is RosterModel)
             {
-                var interview = this.statefulInterviewRepository.Get(this.interviewId);
-                this.questionnaireId = interview.QuestionnaireId;
-                var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
-                var groupModel =
-                    questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[navigationIdentity.TargetGroup.Id];
-
-                groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
-                this.root = root;
-                this.Parent = parent;
-                this.SectionIdentity = navigationIdentity.TargetGroup;
-                this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
-                this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
-                this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
-                if (groupModel is RosterModel)
-                {
-                    string rosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
-                    this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
-                }
-                else
-                {
-                    this.Title = groupModel.Title;
-                }
-                if (this.Parent != null)
-                {
-                    this.IsSelected = this.Parent.IsSelected;
-                }
+                string rosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
+                this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
             }
-            else if (navigationIdentity.TargetScreen == ScreenType.Complete)
+            else
             {
-                this.Parent = null;
-                this.HasChildren = false;
-                this.NodeDepth = 0;
-                this.IsCurrent = navigationState.CurrentGroupType == ScreenType.Complete;
-                this.Title = UIResources.Interview_Complete_Screen_Title;
-                groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
+                this.Title = groupModel.Title;
             }
+            if (this.Parent != null)
+            {
+                this.IsSelected = this.Parent.IsSelected;
+            }
+           
             this.SideBarGroupState = groupStateViewModel;
             this.ScreenType = navigationIdentity.TargetScreen;
             this.NavigationState = navigationState;
-            this.NavigationState.GroupChanged += this.NavigationState_OnGroupChanged;
-            this.NavigationState.BeforeGroupChanged += this.NavigationState_OnBeforeGroupChanged;
+            this.NavigationState.ScreenChanged += this.OnScreenChanged;
+            this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
         }
 
-        void NavigationState_OnBeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs)
+        public void InitCompleteScreenItem(string interviewId, GroupStateViewModel groupStateViewModel, NavigationState navigationState)
+        {
+            this.interviewId = interviewId;
+
+            this.eventRegistry.Subscribe(this, interviewId);
+            
+            this.Parent = null;
+            this.HasChildren = false;
+            this.NodeDepth = 0;
+            this.IsCurrent = navigationState.CurrentScreenType == ScreenType.Complete;
+            this.Title = UIResources.Interview_Complete_Screen_Title;
+            groupStateViewModel.Init(interviewId, null);
+
+            this.SideBarGroupState = groupStateViewModel;
+            this.ScreenType = ScreenType.Complete;
+            this.NavigationState = navigationState;
+            this.NavigationState.ScreenChanged += this.OnScreenChanged;
+            this.NavigationState.BeforeScreenChanged += this.OnBeforeScreenChanged;
+        }
+
+        void OnBeforeScreenChanged(BeforeScreenChangedEventArgs eventArgs)
         {
             this.IsCurrent = false;
         }
 
-        void NavigationState_OnGroupChanged(ScreenChangedEventArgs newNavigationIdentity)
+        void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (this.ScreenType != newNavigationIdentity.TargetScreen)
+            if (this.ScreenType != eventArgs.TargetScreen)
                 return;
 
-            if (newNavigationIdentity.TargetScreen == ScreenType.Complete)
+            if (eventArgs.TargetScreen == ScreenType.Complete)
             {
                 this.IsCurrent = true;
             }
-            else if (this.SectionIdentity.Equals(newNavigationIdentity.TargetGroup))
+            else if (this.SectionIdentity.Equals(eventArgs.TargetGroup))
             {
                 this.IsCurrent = true;
                 if (!this.Expanded)
@@ -299,8 +307,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.NavigationState.GroupChanged -= this.NavigationState_OnGroupChanged;
-            this.NavigationState.BeforeGroupChanged -= this.NavigationState_OnBeforeGroupChanged;
+            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+            this.NavigationState.BeforeScreenChanged -= this.OnBeforeScreenChanged;
         }
 
         public void RefreshHasChildrenFlag()

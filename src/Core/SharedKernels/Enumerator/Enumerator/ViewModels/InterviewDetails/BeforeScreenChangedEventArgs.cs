@@ -3,9 +3,9 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class BeforeGroupChangedEventArgs : EventArgs
+    public class BeforeScreenChangedEventArgs : EventArgs
     {
-        public BeforeGroupChangedEventArgs(Identity currentGroup, Identity targetGroup)
+        public BeforeScreenChangedEventArgs(Identity currentGroup, Identity targetGroup)
         {
             this.CurrentGroup = currentGroup;
             this.TargetGroup = targetGroup;
