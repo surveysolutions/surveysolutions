@@ -51,6 +51,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
         private readonly ReadSideSettings settings;
         private readonly IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage;
+        private int? cachedReadSideDatabaseVersion = null as int?;
 
         static ReadSideService()
         {
@@ -92,6 +93,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (this.AreViewsBeingRebuiltNow())
                 return false;
 
+            this.InitializeDatabaseVersionIfNeeded();
+
             return this.GetReadSideDatabaseVersion() != this.GetReadSideApplicationVersion();
         }
 
@@ -105,11 +108,16 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (this.AreViewsBeingRebuiltNow())
                 return null as int?;
 
+            if (this.cachedReadSideDatabaseVersion.HasValue)
+                return this.cachedReadSideDatabaseVersion.Value;
+
             try
             {
                 this.transactionManagerProviderManager.GetTransactionManager().BeginQueryTransaction();
 
                 ReadSideVersion readSideDatabaseVersion = this.readSideVersionStorage.GetById(ReadSideVersion.IdOfCurrent);
+
+                this.cachedReadSideDatabaseVersion = readSideDatabaseVersion?.Version;
 
                 return readSideDatabaseVersion?.Version;
             }
@@ -436,6 +444,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Cleaning read side version");
 
+            this.cachedReadSideDatabaseVersion = null;
+
             try
             {
                 this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
@@ -455,6 +465,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             UpdateStatusMessage("Storing read side version");
 
+            this.cachedReadSideDatabaseVersion = null;
+
             try
             {
                 this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
@@ -468,6 +480,19 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
 
             UpdateStatusMessage("Read side version stored");
+        }
+
+        private void InitializeDatabaseVersionIfNeeded()
+        {
+            if (this.GetReadSideDatabaseVersion() == null && this.IsWriteSideEmpty())
+            {
+                this.StoreReadSideVersion();
+            }
+        }
+
+        private bool IsWriteSideEmpty()
+        {
+            return this.eventStore.CountOfAllEvents() == 0;
         }
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
