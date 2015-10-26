@@ -17,9 +17,10 @@
         var $AllDataUrl = '@Url.Action("GetAllData", "ImportExport")';
         var $ApprovedDataUrl = '@Url.Action("GetApprovedData", "ImportExport")';
         var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
-        var $HistoryUrl = '@Url.Action("GetHistory", "ImportExport")';
+        var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "Paradata" })';
+        var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata" })';
         var $DDIUrl = '@Url.Action("GetDDI", "ImportExport")';
-
+        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire" })';
         $(function() {
             var templates = [
                 @foreach (var item in Model)
@@ -28,7 +29,7 @@
                 }
             ];
 
-            var model = new Supervisor.VM.ExportData(templates);
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl);
             ko.applyBindings(model);
         });
 
@@ -131,13 +132,15 @@
             {
                 <td>
                     <div>
-
-                        <a class="btn btn-default btn-block" data-bind="attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        Last updated on <i>04/18/2015</i>
+                        <a class="btn btn-default" data-bind="attr: { href: $UpdateHistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                            <i class="glyphicon glyphicon-refresh">
+                            </i>
+                        </a>
+                        <a class="btn btn-default" data-bind="attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                             <i class="glyphicon glyphicon-download">
                             </i>
-                            Data
                         </a>
-
                     </div>
                 </td>
             }
