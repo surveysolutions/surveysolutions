@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -15,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -64,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Subscribe(this, interviewId);
 
             this.navigationState = navigationState;
-            this.navigationState.GroupChanged += this.NavigationStateGroupChanged;
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
             this.questionnaireId = questionnaireId;
             this.interviewId = interviewId;
 
@@ -87,23 +85,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             }
 
-            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(NavigationIdentity.CreateForCompleteScreen(),  navigationState, interviewId));
+            sections.Add(this.modelsFactory.BuildCompleteScreenSectionItem(navigationState, interviewId));
 
             this.Sections = new ObservableCollection<SideBarSectionViewModel>(sections);
             this.UpdateSideBarTree();
         }
 
-        private void NavigationStateGroupChanged(ScreenChangedEventArgs navigationParams)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            this.HighlightCurrentSection(navigationParams);
+            this.HighlightCurrentSection(eventArgs);
         }
 
-        private void HighlightCurrentSection(ScreenChangedEventArgs navigationParams)
+        private void HighlightCurrentSection(ScreenChangedEventArgs eventArgs)
         {
             var allTreeElements = new ReadOnlyCollection<SideBarSectionViewModel>(this.Sections)
                 .TreeToEnumerable(x => x.Children).ToList();
             SideBarSectionViewModel selectedGroup = allTreeElements
-                .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(navigationParams.TargetGroup));
+                .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(eventArgs.TargetGroup));
 
             var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
@@ -283,7 +281,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this, interviewId);
-            this.navigationState.GroupChanged -= this.NavigationStateGroupChanged;
+            this.navigationState.ScreenChanged -= this.OnScreenChanged;
         }
     }
 }
