@@ -354,8 +354,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.DisableWritersCacheForHandlers(handlers);
                 }
 
-                UpdateStatusMessage("Rebuild views by event source succeeded.");
-                logger.Info("Rebuild views by event source succeeded.");
+                UpdateStatusMessage("Rebuild views by event sources succeeded.");
+                logger.Info("Rebuild views by event sources succeeded.");
             }
             catch (OperationCanceledException exception)
             {
