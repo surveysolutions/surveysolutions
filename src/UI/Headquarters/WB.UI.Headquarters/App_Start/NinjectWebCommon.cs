@@ -19,6 +19,8 @@ using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -179,6 +181,8 @@ namespace WB.UI.Headquarters
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
+  			var dataExportSettings = new DataExportSettings(userPreloadingConfigurationSection.CreationIntervalInSeconds);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -191,7 +195,7 @@ namespace WB.UI.Headquarters
                     readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, dataExportSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
@@ -222,6 +226,7 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<UserPreloadingVerificationTask>().Configure();
             ServiceLocator.Current.GetInstance<UserBatchCreatingTask>().Configure();
             ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
+            ServiceLocator.Current.GetInstance<DataExportTask>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
