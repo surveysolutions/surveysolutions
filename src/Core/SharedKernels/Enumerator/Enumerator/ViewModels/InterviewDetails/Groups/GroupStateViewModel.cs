@@ -3,7 +3,6 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -106,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             return this.AnsweredQuestionsCount > 0;
         }
 
-        private bool AreAllQuestionsAnswered()
+        protected bool AreAllQuestionsAnswered()
         {
             return this.QuestionsCount == this.AnsweredQuestionsCount;
         }

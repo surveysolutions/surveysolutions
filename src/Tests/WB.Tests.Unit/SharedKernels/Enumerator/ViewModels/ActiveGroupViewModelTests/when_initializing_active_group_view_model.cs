@@ -10,12 +10,12 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModelTests
 {
-    internal class when_initializing_active_group_view_model : ActiveGroupViewModelTestContext
+    internal class when_initializing_active_group_view_model : EnumerationStageViewModelTestContext
     {
         Establish context = () =>
         {
             interviewRepositoryMock.Setup(x => x.Get(Moq.It.IsAny<string>())).Returns(Mock.Of<IStatefulInterview>());
-            enumerationStage = CreateActiveGroupViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
+            enumerationStage = CreateEnumerationStageViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
         };
 
         Because of = () => enumerationStage.Init(interviewId, navigationState.Object);

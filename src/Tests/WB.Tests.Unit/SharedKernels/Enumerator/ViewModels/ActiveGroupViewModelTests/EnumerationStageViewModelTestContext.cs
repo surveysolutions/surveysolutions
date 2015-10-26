@@ -11,9 +11,9 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModelTests
 {
-    internal class ActiveGroupViewModelTestContext
+    internal class EnumerationStageViewModelTestContext
     {
-        public static EnumerationStageViewModel CreateActiveGroupViewModel(
+        public static EnumerationStageViewModel CreateEnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,

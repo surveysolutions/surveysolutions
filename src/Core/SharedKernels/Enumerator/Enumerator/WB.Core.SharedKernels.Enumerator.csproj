@@ -167,7 +167,7 @@
     <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnsweringViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnswerNotifier.cs" />
-    <Compile Include="ViewModels\InterviewDetails\BeforeGroupChangedEventArgs.cs" />
+    <Compile Include="ViewModels\InterviewDetails\BeforeScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\InterviewDetails\BreadCrumbItemViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\BreadcrumbsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Groups\InterviewStateViewModel.cs" />
