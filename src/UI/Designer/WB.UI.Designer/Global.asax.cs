@@ -47,9 +47,13 @@ namespace WB.UI.Designer
             var httpContext = ((MvcApplication)sender).Context;
 
             var ex = Server.GetLastError();
+            var httpEx = ex as HttpException;
 
             var logger = ServiceLocator.Current.GetInstance<ILogger>();
-            logger.Error("Unexpected error occurred", ex);
+            if (!(httpEx != null && httpEx.GetHttpCode() == 404))
+            {
+                logger.Error("Unexpected error occurred", ex);
+            }
 
             var controller = new ErrorController();
             var routeData = new RouteData();
@@ -70,9 +74,8 @@ namespace WB.UI.Designer
                 currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
             }
 
-            if (ex is HttpException)
+            if (httpEx != null)
             {
-                var httpEx = ex as HttpException;
 
                 switch (httpEx.GetHttpCode())
                 {
