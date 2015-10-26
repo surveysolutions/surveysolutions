@@ -272,15 +272,5 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        public ActionResult DataExport()
-        {
-            this.ViewBag.ActivePage = MenuItem.DataExport;
-            this.ViewBag.EnableInterviewHistory = this.interviewDataExportSettings.EnableInterviewHistory;
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
-
-            return this.View(usersAndQuestionnaires.Questionnaires);
-        }
     }
 }

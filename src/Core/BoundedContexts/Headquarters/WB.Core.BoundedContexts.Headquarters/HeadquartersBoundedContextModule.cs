@@ -1,5 +1,8 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
@@ -21,11 +24,13 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         private readonly bool supervisorFunctionsEnabled;
         private readonly UserPreloadingSettings userPreloadingSettings;
+        private readonly DataExportSettings dataExportSettings;
 
-        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings)
+        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, DataExportSettings dataExportSettings)
         {
             this.supervisorFunctionsEnabled = supervisorFunctionsEnabled;
             this.userPreloadingSettings = userPreloadingSettings;
+            this.dataExportSettings = dataExportSettings;
         }
 
         public override void Load()
@@ -47,6 +52,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>();
+
+            this.Bind<DataExportSettings>().ToConstant(this.dataExportSettings);
+            this.Bind<IDataExportService>().To<DataExportService>();
+            this.Bind<IDataExporter>().To<DataExporter>();
+            this.Bind<IQuestionnaireDataExportServiceFactory>().To<QuestionnaireDataExportServiceFactory>();
         }
     }
 }
