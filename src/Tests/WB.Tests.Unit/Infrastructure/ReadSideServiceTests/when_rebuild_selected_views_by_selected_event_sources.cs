@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.Is<Dictionary<IEventHandler, Stopwatch>>(handlers => handlers.Count() == 1 && handlers.First().Key == eventHandlerMock.Object)), Times.Once);
 
         It should_return_readble_status = () =>
-            readSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild specific views succeeded.");
+            readSideService.GetRebuildStatus().CurrentRebuildStatus.ShouldContain("Rebuild views by event sources succeeded.");
 
         private static ReadSideService readSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
