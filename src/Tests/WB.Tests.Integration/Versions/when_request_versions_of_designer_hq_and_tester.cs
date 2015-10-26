@@ -1,12 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.UI.Designer.Api;
 
 namespace WB.Tests.Integration.Versions

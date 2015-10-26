@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswerRemoved>,
         IDisposable
     {
-        const int RosterUpperBoundDefaultValue = 40;
+        internal const int RosterUpperBoundDefaultValue = 40;
 
         private readonly IPrincipal principal; 
         private readonly ILiteEventRegistry liteEventRegistry;

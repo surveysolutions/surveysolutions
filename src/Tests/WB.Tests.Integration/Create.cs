@@ -162,7 +162,7 @@ namespace WB.Tests.Integration
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToList() ?? new List<IComposite>(),
             };
         }
 
