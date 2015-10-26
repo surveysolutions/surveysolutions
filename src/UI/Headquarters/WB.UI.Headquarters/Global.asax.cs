@@ -24,7 +24,6 @@ using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
-using System.Net;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 
 namespace WB.UI.Headquarters
