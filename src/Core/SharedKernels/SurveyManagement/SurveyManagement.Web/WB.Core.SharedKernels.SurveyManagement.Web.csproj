@@ -356,6 +356,7 @@
     <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
+    <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />

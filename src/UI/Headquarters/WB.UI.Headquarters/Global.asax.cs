@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
@@ -24,6 +25,7 @@ using WB.UI.Shared.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 using System.Net;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 
 namespace WB.UI.Headquarters
 {
@@ -76,6 +78,8 @@ namespace WB.UI.Headquarters
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
+            if (lastError.IsHttpNotFound()) return;
+
             this.logger.Error("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
