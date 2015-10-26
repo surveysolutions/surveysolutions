@@ -10,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
@@ -73,6 +74,8 @@ namespace WB.UI.Supervisor
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
+            if (lastError.IsHttpNotFound()) return;
+
             this.logger.Error("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
