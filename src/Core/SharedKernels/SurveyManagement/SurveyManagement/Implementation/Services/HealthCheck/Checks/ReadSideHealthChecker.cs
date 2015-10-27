@@ -6,8 +6,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
 {
     public class ReadSideHealthChecker : IAtomicHealthCheck<ReadSideHealthCheckResult>
     {
-        private readonly IReadSideCheckerAndCleaner readSideCheckerAndCleaner;
-        public ReadSideHealthChecker(IReadSideCheckerAndCleaner readSideCheckerAndCleaner)
+        private readonly IPostgresReadSideBootstraper readSideCheckerAndCleaner;
+        public ReadSideHealthChecker(IPostgresReadSideBootstraper readSideCheckerAndCleaner)
         {
             this.readSideCheckerAndCleaner = readSideCheckerAndCleaner;
         }

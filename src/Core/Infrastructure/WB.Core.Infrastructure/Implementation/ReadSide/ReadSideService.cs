@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
-        private readonly IReadSideCheckerAndCleaner readSideCleaner;
+        private readonly IPostgresReadSideBootstraper readSideCleaner;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
         private readonly ReadSideSettings settings;
@@ -62,7 +62,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             IStreamableEventStore eventStore,
             IEventDispatcher eventBus, 
             ILogger logger,
-            IReadSideCheckerAndCleaner readSideCleaner, 
+            IPostgresReadSideBootstraper readSideCleaner, 
             ITransactionManagerProviderManager transactionManagerProviderManager,
             ReadSideSettings settings,
             IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage)
