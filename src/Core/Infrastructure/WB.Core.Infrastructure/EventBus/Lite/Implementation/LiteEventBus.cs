@@ -22,14 +22,14 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
         public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnPublishedChanges());
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
 
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommitedEvents(CommittedEventStream commitedEvents)
+        public void PublishCommitedEvents(CommittedEventStream committedEvents)
         {
-            foreach (var uncommittedChange in commitedEvents)
+            foreach (var uncommittedChange in committedEvents)
             {
                 var handlers = this.liteEventRegistry.GetHandlers(uncommittedChange);
 

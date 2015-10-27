@@ -142,6 +142,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             commandHandler.Invoke(command, aggregate);
 
             CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            aggregate.MarkChangesAsCommitted();
 
             try
             {
@@ -149,7 +150,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
             finally
             {
-                aggregate.MarkChangesAsPublished();
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
         }
