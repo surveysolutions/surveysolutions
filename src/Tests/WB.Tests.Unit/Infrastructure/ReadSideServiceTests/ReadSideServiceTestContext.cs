@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
     {
         protected static ReadSideService CreateReadSideService(IStreamableEventStore streamableEventStore = null,
             IEventDispatcher eventDispatcher = null,
-            IReadSideCheckerAndCleaner readSideCleaner = null,
+            IPostgresReadSideBootstraper readSideCleaner = null,
             ITransactionManagerProviderManager transactionManagerProviderManager = null)
         {
             ReadSideService.InstanceCount = 0;
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
             return new ReadSideService(
                 streamableEventStore ?? Mock.Of<IStreamableEventStore>(),
                 eventDispatcher ?? Mock.Of<IEventDispatcher>(), Mock.Of<ILogger>(),
-                readSideCleaner ?? Mock.Of<IReadSideCheckerAndCleaner>(),
+                readSideCleaner ?? Mock.Of<IPostgresReadSideBootstraper>(),
                 transactionManagerProviderManager ?? Mock.Of<ITransactionManagerProviderManager>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Create.ReadSideSettings(),
                 Mock.Of<IReadSideKeyValueStorage<ReadSideVersion>>());
