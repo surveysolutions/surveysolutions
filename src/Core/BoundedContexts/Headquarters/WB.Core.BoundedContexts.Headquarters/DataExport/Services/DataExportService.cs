@@ -9,10 +9,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class DataExportService: IDataExportService
     {
         private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
+        private readonly IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage;
 
-        public DataExportService(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
+        public DataExportService(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage, IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage)
         {
             this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
+            this.exportedDataReferenceStorage = exportedDataReferenceStorage;
         }
 
         public string DeQueueDataExportProcessId()
@@ -29,6 +31,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             dataExportProcessDtoStorage.Store(exportProcess, exportProcess.DataExportProcessId);
 
+            var exportedDataReference = new ExportedDataReference()
+            {
+                CreationDate = DateTime.UtcNow,
+                DataExportProcessId = exportProcess.DataExportProcessId,
+                DataExportType = exportProcess.DataExportType,
+                ExportedDataReferenceId = Guid.NewGuid().FormatGuid(),
+                QuestionnaireId = exportProcess.QuestionnaireId,
+                QuestionnaireVersion = exportProcess.QuestionnaireVersion
+            };
+            exportedDataReferenceStorage.Store(exportedDataReference, exportedDataReference.ExportedDataReferenceId);
             return exportProcess.DataExportProcessId;
         }
 
@@ -60,7 +72,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     QuestionnaireVersion = questionnaireVersion,
                     Status = DataExportStatus.Queued
                 }, processId);
-
             return processId;
         }
 

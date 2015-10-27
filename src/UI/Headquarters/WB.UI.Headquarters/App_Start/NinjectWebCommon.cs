@@ -182,16 +182,17 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
   			var dataExportSettings = new DataExportSettings(userPreloadingConfigurationSection.CreationIntervalInSeconds);
-
+            var interviewDataExportSettings=
+            new InterviewDataExportSettings(basePath,
+                bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
+                WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000),
+                WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToInt(100));
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewDataExportSettings(basePath,
-                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
-                        WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000),
-                        WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToInt(100)),
+                    interviewDataExportSettings,
                     readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
