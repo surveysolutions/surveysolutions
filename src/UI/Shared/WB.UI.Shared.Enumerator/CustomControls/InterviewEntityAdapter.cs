@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
@@ -14,6 +17,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class InterviewEntityAdapter : MvxRecyclerViewAdapter
     {
+        private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>(); 
         private const int UnknownViewType = -1;
 
         public InterviewEntityAdapter(Context context, IMvxAndroidBindingContext bindingContext)
@@ -75,15 +79,19 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         private EnablementViewModel GetEnablementViewModel(dynamic item)
         {
-            try
+            Type type = item.GetType();
+            if (!hasEnablementViewModel.ContainsKey(type))
+            {
+                var doesTypeHasQuestionState = type.GetProperties().Any(ptp => ptp.Name == "QuestionState");
+                hasEnablementViewModel[type] = doesTypeHasQuestionState;
+            }
+
+            if (hasEnablementViewModel[type])
             {
                 var enablementModel = item.QuestionState.Enablement;
-                return enablementModel as EnablementViewModel;
+                return (EnablementViewModel)enablementModel;
             }
-            catch (RuntimeBinderException)
-            {
                 
-            }
             return null;
         }
 
