@@ -120,14 +120,14 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnPublishedChanges());
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
 
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommitedEvents(CommittedEventStream commitedEvents)
+        public void PublishCommitedEvents(CommittedEventStream committedEvents)
         {
-            this.Publish(commitedEvents);
+            this.Publish(committedEvents);
         }
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,

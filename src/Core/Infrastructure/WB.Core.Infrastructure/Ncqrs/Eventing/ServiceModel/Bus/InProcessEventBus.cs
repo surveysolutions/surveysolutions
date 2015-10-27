@@ -39,19 +39,14 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnPublishedChanges());
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
 
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
+        public void PublishCommitedEvents(CommittedEventStream committedEvents)
         {
-            this.Publish(aggregateRoot.GetUnPublishedChanges());
-        }
-
-        public void PublishCommitedEvents(CommittedEventStream commitedEvents)
-        {
-            this.Publish(commitedEvents);
+            this.Publish(committedEvents);
         }
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)

@@ -10,20 +10,20 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
     {
         Establish context = () =>
         {
-            aggregateRoot = SetupAggregateRootWithOneEventReadyForPublishing<DummyEvent>();
+            eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
             eventBus = Create.LiteEventBus();
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => eventBus.PublishCommitedEvents(new CommittedEventStream(aggregateRoot.EventSourceId, Create.CommittedEvent(payload: new DummyEvent(), eventSourceId: aggregateRoot.EventSourceId))));
+            exception = Catch.Exception(() => eventBus.PublishCommitedEvents(eventsToPublish));
 
         It should_nothing_happen_including_exceptions = () =>
             exception.ShouldBeNull();
 
 
         private static ILiteEventBus eventBus;
-        private static IAggregateRoot aggregateRoot;
+        private static CommittedEventStream eventsToPublish;
         private static Exception exception;
     }
 }

@@ -47,7 +47,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                      .Returns((IAggregateRoot aggregate, string origin) =>
                      {
                          return new CommittedEventStream(aggregate.EventSourceId,
-                             aggregate.GetUnPublishedChanges()
+                             aggregate.GetUnCommittedChanges()
                                       .Select(x => Create.CommittedEvent(payload: x.Payload,
                                                      eventSourceId: x.EventSourceId,
                                                      eventSequence: x.EventSequence)));

@@ -135,7 +135,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 var expectedStreamVersion = eventStream.InitialVersion - 1;
                 var stream = GetStreamName(eventStream.SourceId);
 
-                List<Tuple<EventData, CommittedEvent>> dataToStore = 
+                List<Tuple<EventData, CommittedEvent>> dataToStore =
                     eventStream.Select(@event => this.BuildEventData(@event, eventStream.CommitId)).ToList();
 
                 var eventDatas = dataToStore.Select(x => x.Item1);
@@ -145,7 +145,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 return new CommittedEventStream(eventStream.SourceId, committedEvents);
             }
 
-           return new CommittedEventStream(eventStream.SourceId);
+            return new CommittedEventStream(eventStream.SourceId);
         }
 
         public int CountOfAllEvents()

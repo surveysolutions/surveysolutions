@@ -38,7 +38,6 @@ namespace WB.Tests.Unit.Infrastructure.HybridEventBusTests
         private static HybridEventBus hybridEventBus;
 
         private static readonly Mock<IEventBus> cqrsEventBusMock = new Mock<IEventBus>();
-        private static readonly IAggregateRoot aggregateRoot = Mock.Of<IAggregateRoot>();
         private static CommittedEventStream commitedStream;
     }
 }

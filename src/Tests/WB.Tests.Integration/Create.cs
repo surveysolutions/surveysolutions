@@ -414,8 +414,11 @@ namespace WB.Tests.Integration
         }
 
 
-        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, object payload = null,
-    Guid? eventIdentifier = null, int eventSequence = 1)
+        public static CommittedEvent CommittedEvent(string origin = null, 
+            Guid? eventSourceId = null,
+            object payload = null,
+            Guid? eventIdentifier = null, 
+            int eventSequence = 1)
         {
             return new CommittedEvent(
                 Guid.Parse("33330000333330000003333300003333"),
@@ -426,6 +429,15 @@ namespace WB.Tests.Integration
                 new DateTime(2014, 10, 22),
                 0,
                 payload ?? "some payload");
+        }
+
+        public static CommittedEventStream CommittedEventStream(Guid eventSourceId, IEnumerable<UncommittedEvent> events)
+        {
+            return new CommittedEventStream(eventSourceId,
+                events
+                    .Select(x => Create.CommittedEvent(payload: x.Payload,
+                        eventSourceId: x.EventSourceId,
+                        eventSequence: x.EventSequence)));
         }
 
         public static FileSystemIOAccessor FileSystemIOAccessor()
