@@ -102,7 +102,6 @@
     <Compile Include="Ncqrs\Eventing\AggregateRootEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEventStream.cs" />
-    <Compile Include="Ncqrs\Eventing\Event.cs" />
     <Compile Include="Ncqrs\Eventing\EventMergeUtils.cs" />
     <Compile Include="Ncqrs\Eventing\EventNotHandledException.cs" />
     <Compile Include="Ncqrs\Eventing\EventSourceInformation.cs" />
