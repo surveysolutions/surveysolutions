@@ -6,6 +6,7 @@ using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.WriteSide;
 using WB.UI.Interviewer.Extensions;
@@ -14,6 +15,7 @@ namespace WB.UI.Interviewer.Implementations.Services
 {
     public class MvvmCrossSqliteEventStore : IEventStore, IBackupable, IWriteSideCleaner
     {
+        private const int GlobalSequence = -1;
         private readonly string folderName;
         private readonly ISQLiteConnectionFactory connectionFactory;
         private readonly object locker = new object();
@@ -54,11 +56,10 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
-            List<StoredEvent> storedEvents = eventStream.Select(x => x.ToStoredEvent()).ToList();
+            List<StoredEvent> storedEvents = eventStream.Select(ToStoredEvent).ToList();
             this.WrapConnection(eventStream.SourceId, connection => connection.InsertAll(storedEvents));
 
-
-            return new CommittedEventStream(eventStream.SourceId, storedEvents.Select(x => x.ToCommitedEvent(eventStream.SourceId)));
+            return new CommittedEventStream(eventStream.SourceId, storedEvents.Select(x => ToCommitedEvent(x, eventStream.SourceId)));
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
@@ -71,7 +72,7 @@ namespace WB.UI.Interviewer.Implementations.Services
                     .Where(
                         x => x.Sequence >= minVersion &&
                                 x.Sequence <= maxVersion).ToList()
-                    .Select(x => x.ToCommitedEvent(id));
+                    .Select(x => ToCommitedEvent(x, id));
             });
 
             return new CommittedEventStream(id, events);
@@ -102,6 +103,40 @@ namespace WB.UI.Interviewer.Implementations.Services
         {
             var file = Path.Combine(this.FullPathToFolder, aggregateId.ToString());
             if (File.Exists(file)) File.Delete(file);
+        }
+
+        private static CommittedEvent ToCommitedEvent(StoredEvent storedEvent, Guid eventSourceId)
+        {
+            var eventTimeStamp = DateTime.FromBinary(storedEvent.TimeStamp);
+            return new CommittedEvent(Guid.Parse(storedEvent.CommitId), storedEvent.Origin, Guid.Parse(storedEvent.EventId),
+                                      eventSourceId, storedEvent.Sequence,
+                                      eventTimeStamp,
+                                      GlobalSequence,
+                                      GetObject(storedEvent.Data));
+        }
+
+        private static StoredEvent ToStoredEvent(UncommittedEvent evt)
+        {
+            return new StoredEvent(evt.CommitId, evt.Origin, evt.EventIdentifier, evt.EventSequence, evt.EventTimeStamp, evt.Payload);
+        }
+
+        private static object GetObject(string json)
+        {
+            var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
+            foreach (var type in new[] { "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked", "UserUnlockedBySupervisor" })
+            {
+                replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(
+                    string.Format("Main.Core.Events.User.{0}, Main.Core", type),
+                    string.Format("Main.Core.Events.User.{0}, WB.Core.SharedKernels.DataCollection", type));
+            }
+
+            return JsonConvert.DeserializeObject(replaceOldAssemblyNames,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    FloatParseHandling = FloatParseHandling.Decimal
+                });
         }
     }
 }
