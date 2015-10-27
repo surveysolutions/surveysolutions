@@ -33,7 +33,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             foreach (var eventMessage in eventMessages)
             {
-                Publish(eventMessage);
+                this.Publish(eventMessage);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         }
 
         [ContractVerification(false)]
-        protected List<Action<PublishedEvent>> GetHandlersForEvent(IPublishableEvent eventMessage)
+        protected List<Action<PublishedEvent>> GetHandlersForEvent(IUncommittedEvent eventMessage)
         {
             if (eventMessage == null)
                 return null;

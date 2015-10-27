@@ -5,7 +5,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     /// <summary>
     /// Base clas for representing published events. Can be used when type of the event payload does not matter.
     /// </summary>
-    public abstract class PublishedEvent : IPublishableEvent
+    public abstract class PublishedEvent : IUncommittedEvent
     {
         private readonly object _payload;
         private readonly int _eventSequence;

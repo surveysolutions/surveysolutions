@@ -70,7 +70,7 @@ namespace WB.Core.Synchronization.SyncProvider
             foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
             {
                 this.eventStore.Store(uncommittedEventStream);
-              //  myEventBus.Publish(uncommittedEventStream.Select(e => e as IPublishableEvent));
+              //  myEventBus.Publish(uncommittedEventStream.Select(e => e as IUncommittedEvent));
             }
         }
 

@@ -30,12 +30,12 @@ namespace WB.Core.Infrastructure.EventHandlers
             this.readSideStorage = readSideStorage;
         }
 
-        protected void Handle(IPublishableEvent evt)
+        protected void Handle(IUncommittedEvent evt)
         {
             this.Handle(evt, this.readSideStorage);
         }
 
-        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+        public void Handle(IEnumerable<IUncommittedEvent> publishableEvents, Guid eventSourceId)
         {
             using (var inMemoryStorage = new InMemoryViewWriter<TEntity>(this.readSideStorage, eventSourceId))
             {
@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             }
         }
 
-        private void Handle(IPublishableEvent evt, IReadSideStorage<TEntity> storage)
+        private void Handle(IUncommittedEvent evt, IReadSideStorage<TEntity> storage)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
@@ -108,13 +108,13 @@ namespace WB.Core.Infrastructure.EventHandlers
             return storage.GetById(id);
         }
 
-        private PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
+        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        private bool Handles(IPublishableEvent evt)
+        private bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
             return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());

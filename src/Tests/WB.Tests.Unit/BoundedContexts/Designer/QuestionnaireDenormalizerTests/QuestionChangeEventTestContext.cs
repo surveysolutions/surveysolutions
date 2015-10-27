@@ -71,14 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         internal static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
         {
-            IPublishedEvent<T> e = new PublishedEvent<T>(new UncommittedEvent(Guid.NewGuid(),
-                questionnaireId,
-                1,
-                1,
-                DateTime.Now,
-                evnt)
-                );
-            return e;
+            return new PublishedEvent<T>(Create.PublishableEvent(eventSourceId: questionnaireId, payload: evnt));
         }
     }
 }
