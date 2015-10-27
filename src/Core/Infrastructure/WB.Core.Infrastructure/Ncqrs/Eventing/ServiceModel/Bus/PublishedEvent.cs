@@ -3,43 +3,6 @@
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     /// <summary>
-    /// An interface that represents an event during its publishing and handling. At this stage event objects are genericaly typed
-    /// to the actual payload type.
-    /// </summary>
-    /// <remarks>
-    /// This interface is internal and is not mean to be implemented in user code. It is necessary because "out" type parameters can
-    /// only be declared by interfaces (not classes). <see cref="IEventHandler{TEvent}"/> needs to declare "in" type parameter so
-    /// <see cref="IPublishedEvent{TEvent}"/> have to have "out" modifier.
-    /// </remarks>
-    /// <typeparam name="TEvent">Type of the payload.</typeparam>
-    public interface IPublishedEvent<out TEvent> : IPublishableEvent
-    {        
-        /// <summary>
-        /// Gets the payload of the event.
-        /// </summary>
-        new TEvent Payload { get;}
-    }
-
-    /// <summary>
-    /// Provides default <see cref="IPublishedEvent{TEvent}"/> interface implementation.
-    /// </summary>
-    /// <typeparam name="TEvent">Type of the event.</typeparam>
-    public class PublishedEvent<TEvent> : PublishedEvent, IPublishedEvent<TEvent>
-    {
-        /// <summary>
-        /// Gets the payload of the event.
-        /// </summary>
-        public new TEvent Payload
-        {
-            get { return (TEvent)base.Payload; }
-        }
-
-        public PublishedEvent(IPublishableEvent evnt) : base(evnt)
-        {
-        }
-    }
-
-    /// <summary>
     /// Base clas for representing published events. Can be used when type of the event payload does not matter.
     /// </summary>
     public abstract class PublishedEvent : IPublishableEvent
@@ -58,12 +21,12 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// </summary>
         public Guid CommitId
         {
-            get { return _commitId; }
+            get { return this._commitId; }
         }
 
         public string Origin
         {
-            get { return _origin; }
+            get { return this._origin; }
         }
 
         /// <summary>
@@ -71,7 +34,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// </summary>
         public object Payload
         {
-            get { return _payload; }
+            get { return this._payload; }
         }
 
         /// <summary>
@@ -79,7 +42,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// </summary>
         public Guid EventIdentifier
         {
-            get { return _eventIdentifier; }
+            get { return this._eventIdentifier; }
         }
 
         /// <summary>
@@ -89,7 +52,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// in time where this event occurred.</value>
         public DateTime EventTimeStamp
         {
-            get { return _eventTimeStamp; }
+            get { return this._eventTimeStamp; }
         }
 
         /// <summary>
@@ -98,7 +61,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// <value>The id of the event source that caused the event.</value>
         public Guid EventSourceId
         {
-            get { return _eventSourceId; }
+            get { return this._eventSourceId; }
         }
 
         /// <summary>
@@ -110,24 +73,43 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// <value>A number that represents the order of where this events occurred in the sequence.</value>
         public int EventSequence
         {
-            get { return _eventSequence; }
+            get { return this._eventSequence; }
         }
 
         public long GlobalSequence
         {
-            get { return globalSequence; }
+            get { return this.globalSequence; }
         }
 
         protected PublishedEvent(IPublishableEvent evnt)            
         {            
-            _payload = evnt.Payload;           
-            _eventSourceId = evnt.EventSourceId;
-            _eventSequence = evnt.EventSequence;
-            _eventIdentifier = evnt.EventIdentifier;
-            _eventTimeStamp = evnt.EventTimeStamp;
-            _commitId = evnt.CommitId;
-            _origin = evnt.Origin;
-            globalSequence = evnt.GlobalSequence;
+            this._payload = evnt.Payload;           
+            this._eventSourceId = evnt.EventSourceId;
+            this._eventSequence = evnt.EventSequence;
+            this._eventIdentifier = evnt.EventIdentifier;
+            this._eventTimeStamp = evnt.EventTimeStamp;
+            this._commitId = evnt.CommitId;
+            this._origin = evnt.Origin;
+            this.globalSequence = evnt.GlobalSequence;
+        }
+    }
+
+    /// <summary>
+    /// Provides default <see cref="IPublishedEvent{TEvent}"/> interface implementation.
+    /// </summary>
+    /// <typeparam name="TEvent">Type of the event.</typeparam>
+    public class PublishedEvent<TEvent> : PublishedEvent, IPublishedEvent<TEvent>
+    {
+        /// <summary>
+        /// Gets the payload of the event.
+        /// </summary>
+        public new TEvent Payload
+        {
+            get { return (TEvent)base.Payload; }
+        }
+
+        public PublishedEvent(IPublishableEvent evnt) : base(evnt)
+        {
         }
     }
 }

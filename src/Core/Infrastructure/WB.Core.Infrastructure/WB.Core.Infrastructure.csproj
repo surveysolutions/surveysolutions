@@ -110,6 +110,7 @@
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBus.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
+    <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\PublishedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\RegisterAllHandlersInAssemblyExtension.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\EntityThresholdedDomainEventHandlerWrapper.cs" />
