@@ -6,17 +6,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthC
 {
     public class ReadSideHealthChecker : IAtomicHealthCheck<ReadSideHealthCheckResult>
     {
-        private readonly IPostgresReadSideBootstraper readSideCheckerAndCleaner;
-        public ReadSideHealthChecker(IPostgresReadSideBootstraper readSideCheckerAndCleaner)
+        private readonly IPostgresReadSideBootstraper postgresReadSideBootstraper;
+        public ReadSideHealthChecker(IPostgresReadSideBootstraper postgresReadSideBootstraper)
         {
-            this.readSideCheckerAndCleaner = readSideCheckerAndCleaner;
+            this.postgresReadSideBootstraper = postgresReadSideBootstraper;
         }
 
         public ReadSideHealthCheckResult Check()
         {
             try
             {
-                return readSideCheckerAndCleaner.CheckDatabaseConnection() ? 
+                return postgresReadSideBootstraper.CheckDatabaseConnection() ? 
                     ReadSideHealthCheckResult.Happy() : 
                     ReadSideHealthCheckResult.Down("Read side database is not available.");
             }
