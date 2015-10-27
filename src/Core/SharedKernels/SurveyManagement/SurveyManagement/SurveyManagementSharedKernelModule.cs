@@ -181,13 +181,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
 
-            if (this.interviewDataExportSettings.EnableInterviewHistory)
-            {
-                this.Unbind<IReadSideRepositoryWriter<InterviewHistoryView>>();
-                this.Bind<IReadSideRepositoryWriter<InterviewHistoryView>>().To<InterviewHistoryWriter>().InSingletonScope();
-                this.Kernel.RegisterDenormalizer<InterviewHistoryDenormalizer>();
-            }
-
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
             this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>().To<NumberOfSyncPackagesWithBigSizeChecker>();

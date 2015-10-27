@@ -10,10 +10,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     public class ExportedDataReferenceViewFactory: IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel>
     {
         private readonly IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage;
+        private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
 
-        public ExportedDataReferenceViewFactory(IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage)
+        public ExportedDataReferenceViewFactory(IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage, IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
         {
             this.exportedDataReferenceStorage = exportedDataReferenceStorage;
+            this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
         }
 
         public ExportedDataReferencesViewModel Load(ExportedDataReferenceInputModel input)
@@ -25,12 +27,38 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                             d =>
                                 d.DataExportType == DataExportType.Paradata &&
                                 d.QuestionnaireId == input.QuestionnaireId &&
-                                d.QuestionnaireVersion == input.QuestionnaireVersion)
-                            .OrderByDescending(x => x.CreationTime)
+                                d.QuestionnaireVersion == input.QuestionnaireVersion &&
+                                d.DataExportProcessId != null)
+                            .OrderByDescending(x => x.CreationDate)
                             .FirstOrDefault());
-
+            ExportedDataReferencesView exportedDataReferencesView = null;
+            if (paradataReference != null)
+            {
+                exportedDataReferencesView = new ExportedDataReferencesView()
+                {
+                    DataExportType = paradataReference.DataExportType,
+                    ExportedDataReferenceId = paradataReference.ExportedDataReferenceId,
+                    LastUpdateDate = paradataReference.CreationDate
+                };
+                if (string.IsNullOrEmpty(paradataReference.ExportedDataPath))
+                {
+                    var paraDataExportProcess =
+                        dataExportProcessDtoStorage.GetById(paradataReference.ExportedDataReferenceId);
+                    if (paraDataExportProcess != null)
+                    {
+                        exportedDataReferencesView.ExportedDataReferenceId = paradataReference.ExportedDataReferenceId;
+                        exportedDataReferencesView.LastUpdateDate = paraDataExportProcess.LastUpdateDate;
+                        exportedDataReferencesView.ProgressInPercents = paraDataExportProcess.ProgressInPercents;
+                    }
+                }
+                else
+                {
+                    exportedDataReferencesView.HasDataToExport = true;
+                    exportedDataReferencesView.LastUpdateDate = paradataReference.FinishDate;
+                }
+            }
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                paradataReference);
+                exportedDataReferencesView);
         }
     }
 }
