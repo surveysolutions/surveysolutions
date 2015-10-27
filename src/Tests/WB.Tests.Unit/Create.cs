@@ -136,7 +136,7 @@ namespace WB.Tests.Unit
             mock.Setup(x => x.Origin).Returns(origin);
             mock.Setup(x => x.EventIdentifier).Returns(eventIdentifier);
             mock.Setup(x => x.EventTimeStamp).Returns((eventTimeStamp ?? DateTime.Now));
-            var publishableEventMock =mock.As<IPublishableEvent>();
+            var publishableEventMock =mock.As<IUncommittedEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
             return mock.Object;
         }
@@ -1675,9 +1675,9 @@ namespace WB.Tests.Unit
                 && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
         }
 
-        public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null)
+        public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, object payload = null)
         {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == new object() && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
+            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new object()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
         }
 
         public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
