@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
-        private readonly IPostgresReadSideBootstraper readSideCleaner;
+        private readonly IPostgresReadSideBootstraper postgresReadSideBootstraper;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
         private readonly ReadSideSettings settings;
@@ -62,7 +62,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             IStreamableEventStore eventStore,
             IEventDispatcher eventBus, 
             ILogger logger,
-            IPostgresReadSideBootstraper readSideCleaner, 
+            IPostgresReadSideBootstraper postgresReadSideBootstraper, 
             ITransactionManagerProviderManager transactionManagerProviderManager,
             ReadSideSettings settings,
             IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage)
@@ -75,7 +75,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
-            this.readSideCleaner = readSideCleaner;
+            this.postgresReadSideBootstraper = postgresReadSideBootstraper;
             this.transactionManagerProviderManager = transactionManagerProviderManager;
             this.settings = settings;
             this.readSideVersionStorage = readSideVersionStorage;
@@ -406,8 +406,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         this.DisableWritersCacheForHandlers(handlers);
 
-                        if(!isPartialRebuild && this.readSideCleaner != null)
-                            this.readSideCleaner.CreateIndexesAfterRebuildReadSide();
+                        if(!isPartialRebuild && this.postgresReadSideBootstraper != null)
+                            this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
                     }
 
                     if (!isPartialRebuild)
@@ -544,7 +544,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                   .Distinct()
                   .ToArray();
 
-            if(!isPartiallyRebuild && this.readSideCleaner != null) this.readSideCleaner.ReCreateViewDatabase();
+            if(!isPartiallyRebuild && this.postgresReadSideBootstraper != null) this.postgresReadSideBootstraper.ReCreateViewDatabase();
 
             foreach (var readSideRepositoryCleaner in cleaners)
             {
