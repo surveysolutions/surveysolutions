@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
-    public interface IReadSideCheckerAndCleaner
+    public interface IPostgresReadSideBootstraper
     {
         void ReCreateViewDatabase();
         void CreateIndexesAfterRebuildReadSide();

@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         {
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
 
-            this.Kernel.Bind<IReadSideCheckerAndCleaner>().To<PostgresReadSideCleaner>();
+            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
 
             this.Kernel.Bind(typeof(PostgreReadSideRepository<>)).ToSelf().InSingletonScope();
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetReadSideRepositoryWriter).InSingletonScope(); 

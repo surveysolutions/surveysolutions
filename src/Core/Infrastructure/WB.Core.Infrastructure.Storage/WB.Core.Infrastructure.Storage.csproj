@@ -158,7 +158,7 @@
     <Compile Include="Postgre\Implementation\PostgresReadSideKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\NoTransactionCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
-    <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />
+    <Compile Include="Postgre\Implementation\PostgresReadSideBootstraper.cs" />
     <Compile Include="Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
     <Compile Include="Postgre\Implementation\TransactionManagerProvider.cs" />
