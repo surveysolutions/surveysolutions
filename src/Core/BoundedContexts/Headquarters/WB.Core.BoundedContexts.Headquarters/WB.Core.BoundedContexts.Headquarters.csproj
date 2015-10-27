@@ -125,6 +125,7 @@
     <Compile Include="DataExport\Services\IQuestionnaireParaDataExportService.cs" />
     <Compile Include="DataExport\Tasks\DataExportTask.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceInputModel.cs" />
+    <Compile Include="DataExport\Views\ExportedDataReferencesView.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesViewModel.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceViewFactory.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />

@@ -20,7 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Mapping
             Property(x => x.QuestionnaireVersion);
             Property(x => x.DataExportType);
             Property(x => x.ExportedDataPath);
-            Property(x => x.CreationTime);
+            Property(x => x.CreationDate);
+            Property(x => x.FinishDate);
+            Property(x => x.DataExportProcessId);
         }
     }
 }
