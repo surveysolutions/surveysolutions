@@ -376,7 +376,6 @@
     <Compile Include="Implementations\Services\MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Implementations\Services\QuestionnaireModelRepository.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
-    <Compile Include="Extensions\StoredEventExtensions.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Ninject\AndroidCoreRegistry.cs" />
