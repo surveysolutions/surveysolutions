@@ -10,7 +10,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     /// <item><see cref="UncommittedEvent"/> which is used when processing/publishing events that were not previously presisted.</item>
     /// </list>
     /// </summary>
-    public interface IPublishableEvent : IEvent
+    public interface IUncommittedEvent : IEvent
     {
         /// <summary>
         /// Gets the id of the event source that caused the event.
@@ -38,7 +38,10 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// Gets the event payload.
         /// </summary>
         object Payload { get; }
+    }
 
+    public interface IPublishableEvent : IUncommittedEvent
+    {
         long GlobalSequence { get; }
-    }    
+    }
 }
