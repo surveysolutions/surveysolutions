@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         {
             eventStub = CreateDummyEvent();
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            aggregateRoot = SetupAggregateRootWithEventReadyForPublishing(eventSourceId, eventStub);
+            eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
 
             var eventRegistry = Create.LiteEventRegistry();
             eventBus = Create.LiteEventBus(eventRegistry);
@@ -25,16 +25,15 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishCommitedEvents(new CommittedEventStream(eventSourceId,
-                Create.CommittedEvent(payload: eventStub, eventSourceId: aggregateRoot.EventSourceId)));
+            eventBus.PublishCommitedEvents(eventsToPublish);
 
         It should_not_call_Handle_for_this_handler = () =>
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);
 
         private static ILiteEventBus eventBus;
         private static DummyEvent eventStub;
-        private static IAggregateRoot aggregateRoot;
         private static Mock<ILiteEventHandler<DifferentDummyEvent>> handlerMock;
         private static Guid eventSourceId;
+        private static CommittedEventStream eventsToPublish;
     }
 }

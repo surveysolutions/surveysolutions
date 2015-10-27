@@ -48,11 +48,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                         .Returns((IAggregateRoot aggregate, string origin) =>
                         {
                             constructedAggregateId = aggregate.EventSourceId;
-                            return new CommittedEventStream(aggregate.EventSourceId,
-                                aggregate.GetUnPublishedChanges()
-                                         .Select(x => Create.CommittedEvent(payload: x.Payload, 
-                                                        eventSourceId: x.EventSourceId,
-                                                        eventSequence: x.EventSequence)));
+                            return Create.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
                         });
 
             eventBusMock
