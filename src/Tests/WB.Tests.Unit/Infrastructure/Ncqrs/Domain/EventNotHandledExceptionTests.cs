@@ -18,8 +18,11 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class FooEvent : Event
-        {}
+        public class FooEvent : IEvent
+        {
+            public Guid EventIdentifier { get; }
+            public DateTime EventTimeStamp { get; }
+        }
 
         [Test]
         public void Constructing_an_instance_should_initialize_the_message()
