@@ -11,13 +11,15 @@ using Microsoft.Practices.ServiceLocation;
 using Mono.CSharp;
 using Ninject;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
-
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Implementations.Services;
+using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 using OperationCanceledException = System.OperationCanceledException;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -252,7 +254,7 @@ namespace WB.UI.Interviewer.Activities
         {
             var alertWarningAboutRestore = this.CreateYesNoDialog(this,
                this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click,
-               this.Resources.GetString(Resource.String.Warning), message: string.Format(this.Resources.GetString(Resource.String.AreYouSureYouWantToRestore), this.backupManager.RestorePath));
+               InterviewerUIResources.Warning, message: string.Format(InterviewerUIResources.Troubleshooting_Old_AreYouSureYouWantToRestore, this.backupManager.RestorePath));
 
             alertWarningAboutRestore.Show();
         }
@@ -295,17 +297,17 @@ namespace WB.UI.Interviewer.Activities
 
         void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
         {
-            this.tvSyncResult.Text = this.Resources.GetText(Resource.String.InformationPackageIsSuccessfullySent);
+            this.tvSyncResult.Text = InterviewerUIResources.Troubleshooting_Old_InformationPackageIsSuccessfullySent;
         }
 
         private void btnSendTabletInfo_ProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
         {
-            this.tvSyncResult.Text = string.Format(this.Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceled), e.Reason);
+            this.tvSyncResult.Text = string.Format(InterviewerUIResources.Troubleshooting_Old_SendingOfInformationPackageIsCanceled, e.Reason);
         }
 
         private void btnSendTabletInfo_SenderCanceled(object sender, EventArgs e)
         {
-            this.tvSyncResult.Text = this.Resources.GetText(Resource.String.SendingOfInformationPackageIsCanceling);
+            this.tvSyncResult.Text = InterviewerUIResources.Troubleshooting_Old_SendingOfInformationPackageIsCanceling;
         }
 
         protected override void OnStart()
@@ -318,8 +320,8 @@ namespace WB.UI.Interviewer.Activities
         public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
         {
             var builder = new AlertDialog.Builder(activity);
-            builder.SetNegativeButton(this.Resources.GetString(Resource.String.No), noHandler);
-            builder.SetPositiveButton(this.Resources.GetString(Resource.String.Yes), yesHandler);
+            builder.SetNegativeButton(UIResources.No, noHandler);
+            builder.SetPositiveButton(UIResources.Yes, yesHandler);
             builder.SetCancelable(false);
             if (!string.IsNullOrWhiteSpace(title))
             {
@@ -351,9 +353,15 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.troubleshooting, menu);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_login, InterviewerUIResources.MenuItem_Title_Login);
+            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
+            menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+            menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
+
             var loginItem = menu.FindItem(Resource.Id.menu_login);
             var dashboardItem = menu.FindItem(Resource.Id.menu_dashboard);
             var singoutItem = menu.FindItem(Resource.Id.menu_signout);
+
 
             if (ViewModel.IsAuthenticated)
             {

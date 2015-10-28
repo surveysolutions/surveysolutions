@@ -7,6 +7,6 @@
     local:MvxBind="
       HideKeyboardOnClick .; 
       Click NavigateCommand; 
-      ButtonGroupStyle NavigateToGroupViewModel.GroupState; 
-      Text  NavigationItemTitle"/>
+      ButtonGroupStyle GroupState; 
+      Text NavigationItemTitle"/>
 </LinearLayout>

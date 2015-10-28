@@ -187,19 +187,19 @@ for further instructions</value>
     <value>{0} assignments for {1}</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>No internet access to the Survey Solutions Supervisor website. Check server adddress and(or) network settings</value>
+    <value>No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
-    <value>Server error. Please contact the support team at support@mysurvey.solutions.</value>
+    <value>Server error. Please contact the support team at support@mysurvey.solutions</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Your application is not compatible with server one. Update your Interviewer application</value>
+    <value>Your application is not compatible with server one. Update your Interviewer application.</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Provided Synchronization endpoint is invalid. Check settings.</value>
+    <value>Supervisor website address is invalid. Make sure that you entered correct url address</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>If you forgot your password and headquarter has reset it you could try to sign in online</value>
+    <value>You could try to sign in online if you forgot your password or it was reset</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
     <value>Authentication problem on the remote server too. Please contact your Supervisor or Headquarter</value>
@@ -259,7 +259,7 @@ for further instructions</value>
     <value>Interview settings</value>
   </data>
   <data name="Prefs_Title" xml:space="preserve">
-    <value />
+    <value>Settings</value>
   </data>
   <data name="RequestCanceledByUser" xml:space="preserve">
     <value>Request cancelled by user</value>
@@ -379,5 +379,98 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Create backup</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Something went wrong and backup failed to be created</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Backup was saved to {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Version: {0}. Check for a new version</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Information package is successfully sent</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Information package of size {0} will be sent via network. Are you sure you want to send it?</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>New version exists. Would you like to download and update application?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>You have the latest version of application</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Something went wrong and tabled failed to be restored</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Restore from backup</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is presented at {0}</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Tablet was successfully restored</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Sending of information package is failed</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Send tablet's information</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Error occurred on version check. Please, check settings or try again later</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
+    <value>Troubleshooting</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>Creating information package</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>Information package</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Information package is successfully sent</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Information package of size {0} will be sent via network. Are you sure you want to send it?</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>Sending information package</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>Sending of information package is cancelled. Reason: {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>Cancelling</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Assigned on {0}</value>
   </data>
 </root>

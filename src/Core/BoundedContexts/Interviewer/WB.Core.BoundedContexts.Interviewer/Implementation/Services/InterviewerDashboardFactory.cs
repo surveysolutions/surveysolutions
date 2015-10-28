@@ -71,14 +71,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var dashboardQuestionnaireItem = new DashboardQuestionnaireItem(Guid.Parse(interview.Id),
                         Guid.Parse(interview.Survey),
                         interviewCategory,
-                        interview.GetProperties(),
+                        interview.GetPrefilledQuestions(),
                         questionnaire.SurveyTitle,
                         questionnaire.QuestionnaireVersion,
                         interview.Comments,
                         interview.StartedDateTime,
                         interview.CompletedDateTime,
                         interview.CreatedDateTime,
+                        interview.InterviewerAssignedDateTime,
                         interview.RejectedDateTime,
+                        interview.GpsLocationLatitude.HasValue && interview.GpsLocationLongitude.HasValue
+                            ? new GpsCoordinatesViewModel(interview.GpsLocationLatitude.Value, interview.GpsLocationLongitude.Value)
+                            : null,
                         interview.CreatedOnClient,
                         interview.JustInitilized.HasValue && interview.JustInitilized.Value);
  

@@ -17,14 +17,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     internal class ReadSideRepositoryDataExportWriter : IDataExportWriter
     {
         private readonly IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
 
         public ReadSideRepositoryDataExportWriter(
             IReadSideRepositoryWriter<InterviewExportedDataRecord> interviewExportedDataStorage, 
-            IJsonUtils jsonUtils)
+            ISerializer serializer)
         {
             this.interviewExportedDataStorage = interviewExportedDataStorage;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
         }
 
         public void AddOrUpdateInterviewRecords(InterviewDataExportView item, Guid questionnaireId, long questionnaireVersion)
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
-                Data = jsonUtils.SerializeToByteArray(interviewData),
+                Data = this.serializer.SerializeToByteArray(interviewData),
                 LastAction = interviewDataExportView.Action
             };
 

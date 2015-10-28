@@ -103,6 +103,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation
                     decimal[] answerAsDecimalArray = JsonArrayToStringArray(answer.Answer).Select(x=>x.Parse<decimal>()).ToArray();
                     answerValue = answerAsDecimalArray;
                     break;
+                case QuestionType.GpsCoordinates:
+                    var splitedCoordinates = answerAsString.Split('$');
+                    if(splitedCoordinates.Length!=2)
+                        throw new FormatException(String.Format("value '{0}' is not in the correct format.", answerAsString));
+                    answerValue = new GeoPosition(splitedCoordinates[0].Parse<double>(), splitedCoordinates[1].Parse<double>(), 0, 0, DateTime.Now);
+                    break;
             }
 
             if (answerValue == null)

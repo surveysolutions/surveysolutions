@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly HeadquartersPullContext headquartersPullContext;
         private readonly HeadquartersPushContext headquartersPushContext;
         private readonly IEventStore eventStore;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader;
         private readonly IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader;
         private readonly Func<HttpMessageHandler> httpMessageHandler;
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             HeadquartersPullContext headquartersPullContext,
             HeadquartersPushContext headquartersPushContext,
             IEventStore eventStore,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepositoryReader,
             IQueryableReadSideRepositoryReader<ReadyToSendToHeadquartersInterview> readyToSendInterviewsRepositoryReader,
             Func<HttpMessageHandler> httpMessageHandler,
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             if (headquartersPullContext == null) throw new ArgumentNullException("headquartersPullContext");
             if (headquartersPushContext == null) throw new ArgumentNullException("headquartersPushContext");
             if (eventStore == null) throw new ArgumentNullException("eventStore");
-            if (jsonUtils == null) throw new ArgumentNullException("jsonUtils");
+            if (serializer == null) throw new ArgumentNullException("serializer");
             if (archiver == null) throw new ArgumentNullException("archiver");
             if (plainTransactionManager == null) throw new ArgumentNullException("plainTransactionManager");
             if (cqrsTransactionManager == null) throw new ArgumentNullException("cqrsTransactionManager");
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             this.headquartersPullContext = headquartersPullContext;
             this.headquartersPushContext = headquartersPushContext;
             this.eventStore = eventStore;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.interviewSummaryRepositoryReader = interviewSummaryRepositoryReader;
             this.readyToSendInterviewsRepositoryReader = readyToSendInterviewsRepositoryReader;
             this.httpMessageHandler = httpMessageHandler;
@@ -437,6 +437,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
             DateTime? rejectedDateTime = interviewSummary.Status == InterviewStatus.RejectedBySupervisor
                 ? interviewSummary.UpdateDate
                 : (DateTime?) null;
+            DateTime? interviewerAssignedDateTime = interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                ? interviewSummary.UpdateDate
+                : (DateTime?)null;
 
             var featuredQuestionList = interviewSummary.WasCreatedOnClient
                 ? interviewSummary.AnswersToFeaturedQuestions
@@ -451,6 +454,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
                 ResponsibleId = interviewSummary.ResponsibleId,
                 Status = (int)interviewSummary.Status,
                 RejectDateTime = rejectedDateTime,
+                InterviewerAssignedDateTime = interviewerAssignedDateTime,
                 TemplateId = interviewSummary.QuestionnaireId,
                 Comments = lastComment,
                 Valid = !interviewSummary.HasErrors,
@@ -461,14 +465,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
             var syncItem = new SyncItem
             {
-                Content = this.archiver.CompressString(this.jsonUtils.Serialize(eventsToSend)),
+                Content = this.archiver.CompressString(this.serializer.Serialize(eventsToSend)),
                 IsCompressed = true,
                 ItemType = SyncItemType.Interview,
-                MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metadata)),
+                MetaInfo = this.archiver.CompressString(this.serializer.Serialize(metadata)),
                 RootId = interviewId
             };
 
-            return this.jsonUtils.Serialize(syncItem);
+            return this.serializer.Serialize(syncItem);
         }
 
         private void SendInterviewData(Guid interviewId, string interviewData)
@@ -492,7 +496,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
                 try
                 {
-                    serverOperationSucceeded = this.jsonUtils.Deserialize<bool>(result);
+                    serverOperationSucceeded = this.serializer.Deserialize<bool>(result);
                 }
                 catch (Exception exception)
                 {

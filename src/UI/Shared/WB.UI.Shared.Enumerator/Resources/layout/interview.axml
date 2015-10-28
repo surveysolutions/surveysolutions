@@ -26,7 +26,7 @@
                                        local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        local:MvxBind="ColorByInterviewStatus Status;">
       <TextView style="@style/InterviewToolbarTitle"
-                local:MvxBind="Text CurrentGroup.Name" />
+                local:MvxBind="Text CurrentStage.Name" />
     </android.support.v7.widget.Toolbar>
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -39,7 +39,7 @@
       android:id="@+id/interviewEntitiesList"
       android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
       android:scrollbars="vertical"
-      local:MvxBind="ItemsSource CurrentGroup.Items" />
+      local:MvxBind="ItemsSource CurrentStage.Items" />
       
     </ScrollView>
   </LinearLayout>

@@ -37,12 +37,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
+
+            var preloadedService = new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure,
+                questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>(), null);
             return
                 new PreloadedDataVerifier(
                     Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
                         _ =>
                             _.GetById(Moq.It.IsAny<string>()) == (questionnaireDocument != null
-                                ? new QuestionnaireDocumentVersioned() { Questionnaire = questionnaireDocument }
+                                ? new QuestionnaireDocumentVersioned() {Questionnaire = questionnaireDocument}
                                 : null)),
                     Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
                         _ =>
@@ -51,8 +54,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                         _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
-                            _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(), Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
-                                (preloadedDataService ?? Mock.Of<IPreloadedDataService>())),
+                            _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(),
+                                Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
+                            (preloadedDataService ?? preloadedService)),
                     userViewFactory ?? Mock.Of<IUserViewFactory>());
         }
 

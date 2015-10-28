@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         {
             usersRepository = Mock.Of<IReadSideRepositoryWriter<UserDocument>>();
 
-            jsonUtilsMock = new Mock<IJsonUtils>();
+            jsonUtilsMock = new Mock<ISerializer>();
 
             jsonUtilsMock.Setup(x => x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()))
                 .Callback((object u, TypeSerializationSettings serializationSettings) => user = u as UserDocument);
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             denormalizer = CreateDenormalizer(
                 userPackageStorageWriter: userSyncPackageWriter.Object,
                 users: usersRepository,
-                jsonUtils: jsonUtilsMock.Object);
+                serializer: jsonUtilsMock.Object);
         };
 
         Because of = () =>
@@ -71,6 +71,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         private static string email = "vasya@the.best";
         private static bool isLockedBySupervisor = true;
         private static bool isLocked = true;
-        private static Mock<IJsonUtils> jsonUtilsMock;
+        private static Mock<ISerializer> jsonUtilsMock;
     }
 }

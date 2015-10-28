@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
     {
         Establish context = () =>
         {
-            jsonUtils =
+            _jsonSerializer =
                 CreateNewtonJsonUtils(new Dictionary<string, string>()
                 {
                     {
@@ -21,13 +21,13 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         };
 
         Because of = () =>
-            result = jsonUtils.Deserialize<IEnumerable<FeaturedItem>>(serializedQuestionnaire);
+            result = _jsonSerializer.Deserialize<IEnumerable<FeaturedItem>>(serializedQuestionnaire);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
         private const string serializedQuestionnaire = @"[{""$type"":""WB.UI.Capi.ViewModel.Dashboard.FeaturedItem, WB.UI.Capi"",""PublicKey"":""41a029ff-d7a0-724d-6668-902256c82197"",""Title"":""Prefilled"",""Value"":""first""}]";
-        private static NewtonJsonUtils jsonUtils;
+        private static NewtonJsonSerializer _jsonSerializer;
         private static IEnumerable<FeaturedItem> result;
     }
 }

@@ -35,13 +35,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                => utils.Deserialize<bool>(positiveResponse) == true);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 httpMessageHandler: () => httpMessageHandler,
                 interviewSynchronizationFileStorage: fileSyncRepository.Object,
-                jsonUtils: jsonUtils);
+                serializer: jsonUtils);
         };
 
         Because of = () =>

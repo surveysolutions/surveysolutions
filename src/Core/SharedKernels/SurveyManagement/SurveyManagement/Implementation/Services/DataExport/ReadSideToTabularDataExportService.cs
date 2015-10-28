@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriterFactory csvWriterFactory;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
 
         private readonly IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             ITransactionManagerProvider transactionManagerProvider, 
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriterFactory csvWriterFactory, 
-            IJsonUtils jsonUtils, 
+            ISerializer serializer, 
             InterviewDataExportSettings interviewDataExportSettings,
             IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage, 
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage, 
@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewActionsDataStorage = interviewActionsDataStorage;
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
 
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.returnRecordLimit = interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
@@ -321,7 +321,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             foreach (var interviewExportedDataRecord in interviewDatas)
             {
-                var data = jsonUtils.Deserialize<Dictionary<string, string[]>>(interviewExportedDataRecord.Data);
+                var data = this.serializer.Deserialize<Dictionary<string, string[]>>(interviewExportedDataRecord.Data);
                 foreach (var levelName in data.Keys)
                 {
                     foreach (var dataByLevel in data[levelName])

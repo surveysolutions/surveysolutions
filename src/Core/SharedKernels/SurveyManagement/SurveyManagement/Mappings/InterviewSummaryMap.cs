@@ -26,31 +26,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Status);
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
+            Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
+            {
+                cm.Default(false);
+                cm.NotNullable(true);
+            }));
 
             Set(x => x.AnswersToFeaturedQuestions,
                 collection => {
                     collection.Key(c => {
                         c.Column("InterviewSummaryId");
-                        
                     });
-                    collection.Table("AnswersToFeaturedQuestions");
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
-                    collection.Lazy(CollectionLazy.NoLazy);
                 },
                 rel => { 
                     rel.OneToMany();
-                    
                 });
         }
     }
-
 
     public class QuestionAnswerMap : ClassMapping<QuestionAnswer>
     {
         public QuestionAnswerMap()
         {
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
+            Table("AnswersToFeaturedQuestions");
             Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
             Property(x => x.Answer, col => col.Column("AnswerValue"));

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             () =>
                 gpsResult =
                     questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "_Latitude", "1"), new Tuple<string, string>(questionVarName + "_Longitude", "2"), new Tuple<string, string>(questionVarName + "_Accuracy", "3") },
-                        question, CreateQuestionnaireDocumentWithOneChapter(question)).Value.Value as GeoPosition;
+                        question) as GeoPosition;
 
         It should_return_result_of_type_GeoPosition = () =>
             gpsResult.ShouldNotBeNull();

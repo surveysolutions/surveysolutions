@@ -33,6 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     && _.HasGroup(rosterBId) == true
                     && _.GetAllUnderlyingQuestions(rosterAId) == new Guid[0]
                     && _.GetAllUnderlyingQuestions(rosterAId) == new Guid[0]
+                    && _.GetRosterLevelForGroup(rosterAId) == 1
+                    && _.GetRosterLevelForGroup(rosterBId) == 1
                 );
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);

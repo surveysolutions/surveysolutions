@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
-    public class ProtobufSerializer : IProtobufJsonUtils
+    public class ProtobufSerializer : IProtobufSerializer
     {
         public string Serialize(object item)
         {

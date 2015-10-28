@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 return new[]
                 {
-                    Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),
+                    Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),               
                     Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount, "WB0021", VerificationMessages.WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultianswerQuestionIsFeatured, "WB0022",VerificationMessages.WB0022_PrefilledQuestionsOfIllegalType),
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
                     Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),                 
-
+                    VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
@@ -186,6 +186,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByConditionAndValidationExpressions
                 };
             }
+        }
+
+        private IEnumerable<QuestionnaireVerificationError> VerifyGpsPrefilledQuestions(QuestionnaireDocument document, VerificationState state)
+        {
+            var gpsPrefilledQuestions= document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
+            if (gpsPrefilledQuestions.Length < 2)
+                return Enumerable.Empty<QuestionnaireVerificationError>();
+
+            var gpsPrefilledQuestionsReferences = gpsPrefilledQuestions.Select(CreateReference).ToArray();
+
+            return new[]
+            {
+                new QuestionnaireVerificationError("WB0006",
+                    VerificationMessages.WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled,
+                    gpsPrefilledQuestionsReferences)
+            };
         }
 
         private static bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state)

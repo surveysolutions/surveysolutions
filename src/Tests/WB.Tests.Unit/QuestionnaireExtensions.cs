@@ -41,7 +41,7 @@ namespace WB.Tests.Unit
             Guid responsibleId)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, string.Empty, string.Empty, instructions, responsibleId);
+            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel,false, scope, enablementCondition, string.Empty, string.Empty, instructions, responsibleId);
         }
 
         public static void AddDateTimeQuestion(

@@ -23,12 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer,questionVarName, question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
+                    questionDataParser.TryParse(answer,questionVarName, question, out parcedValue);
 
         private It should_result_be_equal_to_4_28_2014 = () =>
-            parcedValue.Value.ShouldEqual(DateTime.Parse("4/28/2014", CultureInfo.InvariantCulture.DateTimeFormat));
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            parcedValue.Key.ShouldEqual(questionId);
+            parcedValue.ShouldEqual(DateTime.Parse("4/28/2014", CultureInfo.InvariantCulture.DateTimeFormat));
     }
 }

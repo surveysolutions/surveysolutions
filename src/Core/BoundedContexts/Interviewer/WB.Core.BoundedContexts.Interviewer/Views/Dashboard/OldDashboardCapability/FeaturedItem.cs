@@ -15,5 +15,6 @@ namespace WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard
         public string Title { get; private set; }
 
         public string Value { get; set; }
+        
     }
 }

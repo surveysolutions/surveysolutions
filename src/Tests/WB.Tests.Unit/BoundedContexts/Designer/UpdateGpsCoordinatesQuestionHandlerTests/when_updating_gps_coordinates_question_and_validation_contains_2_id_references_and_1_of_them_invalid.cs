@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     title: title,
                     variableName: variableName,
                     variableLabel: null,
+                    isPreFilled: false,
                     scope: scope,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,

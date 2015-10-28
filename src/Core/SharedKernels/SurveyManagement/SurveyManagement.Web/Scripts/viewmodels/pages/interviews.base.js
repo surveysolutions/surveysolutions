@@ -23,6 +23,8 @@
     self.SelectedStatus = ko.observable('');
     self.SearchBy = ko.observable('');
 
+    self.TemplateName = ko.observable();
+
     self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
         prefilledQuestions.forEach(function(prefilledQuestion) {
             if (prefilledQuestion.Type() == /*DateTime*/5) {
@@ -69,39 +71,52 @@
 
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
 
+        updateTemplateName(self.SelectedTemplate());
+
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
         self.Url.query['status'] = self.QueryString['status'] || "";
         self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
 
-        self.SelectedTemplate.subscribe(self.filter);
+        self.SelectedTemplate.subscribe(
+            function (value) {
+                updateTemplateName(value);
+                self.filter();
+            });
+
         self.SelectedResponsible.subscribe(self.filter);
         self.SelectedStatus.subscribe(self.filter);
 
         self.search();
     };
 
-    self.sendCommandAfterFilterAndConfirm = function (commandName, parametersFunc, filterFunc, messageTemplateId, continueMessageTemplateId, onSuccessCommandExecuting, onCancelConfirmation) {
-        var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
-        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
+    self.sendCommandAfterFilterAndConfirm = function (commandName,
+        parametersFunc,
+        filterFunc,
+        messageTemplateId,
+        continueMessageTemplateId,
+        onSuccessCommandExecuting,
+        onCancelConfirmation) {
+            var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
+            var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
-        if (filteredItems.length === 0) {
-            bootbox.alert(messageHtml);
-            return;
-        }
-
-        messageHtml += $(continueMessageTemplateId).html();
-
-        bootbox.confirm(messageHtml, function (result) {
-            if (result) {
-                self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
-            } else {
-                if (!_.isUndefined(onCancelConfirmation)) {
-                    onCancelConfirmation();
-                }
+            if (filteredItems.length === 0) {
+                bootbox.alert(messageHtml);
+                return;
             }
-        });
+
+            messageHtml += $(continueMessageTemplateId).html();
+
+            bootbox.confirm(messageHtml, function (result) {
+                if (result) {
+                    self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
+                } else {
+                    if (!_.isUndefined(onCancelConfirmation)) {
+                        onCancelConfirmation();
+                    }
+                }
+            });
     };
 
     self.sendCommand = function (commandName, parametersFunc, items, onSuccessCommandExecuting) {
@@ -121,5 +136,9 @@
             self.search();
         }, true);
     };
+
+    var updateTemplateName = function (value) {
+        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

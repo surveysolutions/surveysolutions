@@ -16,19 +16,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.ChangeLog
         private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory;
         private readonly IArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
 
         public FileChangeLogStore(
             IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory,
             IArchiveUtils archiver, 
             IFileSystemAccessor fileSystemAccessor,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             string environmentalPersonalFolderPath)
         {
             this.metaInfoFactory = metaInfoFactory;
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.changelogPath = fileSystemAccessor.CombinePath(environmentalPersonalFolderPath, ChangelogFolder);
             if (!fileSystemAccessor.IsDirectoryExists(this.changelogPath))
             {
@@ -47,13 +47,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.ChangeLog
 
             var syncItem = new SyncItem()
                 {
-                    Content = this.archiver.CompressString(this.jsonUtils.Serialize(recordData)),
+                    Content = this.archiver.CompressString(this.serializer.Serialize(recordData)),
                     IsCompressed = true,
                     ItemType = SyncItemType.Interview,
-                    MetaInfo = this.archiver.CompressString(this.jsonUtils.Serialize(metaData)),
+                    MetaInfo = this.archiver.CompressString(this.serializer.Serialize(metaData)),
                     RootId = eventSourceId
                 };
-            this.fileSystemAccessor.WriteAllText(path, this.jsonUtils.Serialize(syncItem));
+            this.fileSystemAccessor.WriteAllText(path, this.serializer.Serialize(syncItem));
         }
 
         public string GetChangesetContent(Guid recordId)

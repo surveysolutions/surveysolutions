@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
         }
 
         public void Init(InterviewerIdentity userIdentity)
@@ -117,6 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.IsUserValid = true;
             this.IsEndpointValid = true;
+            bool isNeedNavigateToRelinkPage = false;
 
             this.interviewerSettings.SetSyncAddressPoint(this.Endpoint);
 
@@ -150,7 +151,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
 
                 this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
-                this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
             {
@@ -168,8 +169,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         this.IsUserValid = false;
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
-                        this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
-                        return;
+                        isNeedNavigateToRelinkPage = true;
+                        break;
                 }
                 this.ErrorMessage = ex.Message;
             }
@@ -183,6 +184,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.IsInProgress = false;
                 cancellationTokenSource = null;
             }
+
+            if (isNeedNavigateToRelinkPage)
+                await this.viewModelNavigationService.NavigateToAsync<RelinkDeviceViewModel>(interviewerIdentity);
         }
 
         public void CancellInProgressTask()

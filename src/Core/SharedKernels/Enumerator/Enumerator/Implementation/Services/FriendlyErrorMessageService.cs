@@ -22,34 +22,34 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             switch (ex.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:
-                    if (ex.Message.Contains("lock")) return UIResources.AccountIsLockedOnServer;
-                    if (ex.Message.Contains("not approved")) return UIResources.AccountIsNotApprovedOnServer;
-                    return UIResources.Unauthorized;
+                    if (ex.Message.Contains("lock")) return UIResources.ErrorMessage_AccountIsLockedOnServer;
+                    if (ex.Message.Contains("not approved")) return UIResources.ErrorMessage_AccountIsNotApprovedOnServer;
+                    return UIResources.ErrorMessage_Unauthorized;
 
                 case HttpStatusCode.ServiceUnavailable:
                     var isMaintenance = ex.Message.Contains("maintenance");
 
                     if (!isMaintenance) this.logger.Warn("Server error", ex);
 
-                    return isMaintenance ? UIResources.Maintenance : UIResources.ServiceUnavailable;
+                    return isMaintenance ? UIResources.ErrorMessage_Maintenance : UIResources.ErrorMessage_ServiceUnavailable;
 
                 case HttpStatusCode.RequestTimeout:
-                    return UIResources.RequestTimeout;
+                    return UIResources.ErrorMessage_RequestTimeout;
 
                 case HttpStatusCode.UpgradeRequired:
-                    return UIResources.UpgradeRequired;
+                    return UIResources.ErrorMessage_UpgradeRequired;
 
                 case HttpStatusCode.NotFound:
                     this.logger.Warn("Server error", ex);
-                    return UIResources.InvalidEndpoint;
+                    return UIResources.ErrorMessage_InvalidEndpoint;
 
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Redirect:
-                    return UIResources.InvalidEndpoint;
+                    return UIResources.ErrorMessage_InvalidEndpoint;
 
                 case HttpStatusCode.InternalServerError:
                     this.logger.Warn("Server error", ex);
-                    return UIResources.InternalServerError;
+                    return UIResources.ErrorMessage_InternalServerError;
             }
 
             return null;

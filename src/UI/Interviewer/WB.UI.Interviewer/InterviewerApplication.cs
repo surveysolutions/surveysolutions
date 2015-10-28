@@ -21,6 +21,7 @@ using WB.Core.BoundedContexts.Interviewer.ErrorReporting;
 using WB.Core.BoundedContexts.Interviewer.EventHandler;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
@@ -52,8 +53,8 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.Syncronization.Implementation;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Login;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.CustomServices;
-using WB.UI.Shared.Enumerator.CustomServices.UserInteraction;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
@@ -138,9 +139,12 @@ namespace WB.UI.Interviewer
             bus.RegisterHandler(dashboardeventHandler, typeof(TextQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(SingleOptionQuestionAnswered));
-            bus.RegisterHandler(dashboardeventHandler, typeof (NumericRealQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(NumericRealQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(NumericIntegerQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(DateTimeQuestionAnswered));
+
+            bus.RegisterHandler(dashboardeventHandler, typeof(GeoLocationQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(QRBarcodeQuestionAnswered));
 
             bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
@@ -189,6 +193,7 @@ namespace WB.UI.Interviewer
 
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
+                new EnumeratorUIModule(),
                 new InterviewerUIModule(),
 
                 new InterviewerBoundedContextModule(),
@@ -198,9 +203,6 @@ namespace WB.UI.Interviewer
 
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
-
-            this.kernel.Bind<IUserInteractionService>().To<UserInteractionService>();
-            this.kernel.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
             this.kernel.Bind<InterviewPackageIdsStorageSettings>()
                 .ToConstant(new InterviewPackageIdsStorageSettings(basePath, SynchronizationPackagesFileName));
@@ -231,7 +233,6 @@ namespace WB.UI.Interviewer
 
             this.kernel.Unbind<ISyncPackageRestoreService>();
             this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
-            this.kernel.Bind<IInterviewCompletionService>().To<InterviewerInterviewCompletionService>().InSingletonScope();
 
 
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>();

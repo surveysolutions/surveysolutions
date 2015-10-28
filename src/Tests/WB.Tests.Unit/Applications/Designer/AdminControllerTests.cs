@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.Applications.Designer
                 zipUtils ?? ZipUtilsMock.Object,
                 commandService ?? CommandServiceMock.Object,
                 questionnaireViewFactory ?? questionnaireViewFactoryMock.Object,
-                Mock.Of<IJsonUtils>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""),
+                Mock.Of<ISerializer>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""),
                 Mock.Of<IViewFactory<AccountListViewInputModel, AccountListView>>());
         }
 

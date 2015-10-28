@@ -117,44 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutTitle" xml:space="preserve">
-    <value>О программе</value>
-  </data>
-  <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Ваша учетная запись была заблокирована администратором. Пожалуйста, обратитесь в службу поддержки Survey Solutions</value>
-  </data>
-  <data name="ApplicationNameText" xml:space="preserve">
-    <value>Имя приложения:</value>
-  </data>
-  <data name="ApplicationVersionText" xml:space="preserve">
-    <value>Версия приложения:</value>
-  </data>
-  <data name="BufferSizeText" xml:space="preserve">
-    <value>Размер пакета принимаемых/передаваемых данных, который используется при синхронизации с сервером</value>
-  </data>
-  <data name="BufferSizeUnitsText" xml:space="preserve">
-    <value>в байтах</value>
-  </data>
-  <data name="CheckForUpdatesText" xml:space="preserve">
-    <value>Проверить обновления</value>
-  </data>
-  <data name="ConfirmationNoText" xml:space="preserve">
-    <value>Нет</value>
-  </data>
-  <data name="ConfirmationText" xml:space="preserve">
-    <value>Подтверждение</value>
-  </data>
-  <data name="ConfirmationYesText" xml:space="preserve">
-    <value>Да</value>
-  </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
     <value>Мои опросники</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
     <value>Общие опросники</value>
-  </data>
-  <data name="Dashboard_SearchText" xml:space="preserve">
-    <value>Поиск (по имени, автору)</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Опросники</value>
@@ -162,53 +129,8 @@
   <data name="EndpointText" xml:space="preserve">
     <value>Адрес веб-сервиса:</value>
   </data>
-  <data name="EngineVersionText" xml:space="preserve">
-    <value>Версия ядра:</value>
-  </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Подключение к серверу</value>
-  </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Создание интервью</value>
-  </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Загрузка опросника -  {0}%</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>У Вас нет прав на просмотр данного опросника</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>Запрашиваемый опросник не найден</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Запрашиваемый опросник содержит ошибки.  Пожалуйста, исправьте все ошибки в дизайнере опросников и попробуйте снова</value>
-  </data>
-  <data name="ImportQuestionnaire_Error_UpgradeRequired" xml:space="preserve">
-    <value>Ваша версия приложения не поддерживает открытие данного опросника. Обновите приложение</value>
-  </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>Нет связи с дизайнером Survey Solutions. Открыть локальную копию опросника?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Погдотовка опросника к созданию интервью</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Сохранение динамически подключаемой библиотеки интервью на диск</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Сохранение опросника на диск</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Проверка опросника на наличие ошибок</value>
-  </data>
-  <data name="InternalServerError" xml:space="preserve">
+  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
     <value>На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время</value>
-  </data>
-  <data name="LastModifiedDateTitle" xml:space="preserve">
-    <value>Изменено:</value>
-  </data>
-  <data name="LegacyText" xml:space="preserve">
-    <value>@ 2015 The World Bank Group, Все права защищены.</value>
   </data>
   <data name="LoginNameHint" xml:space="preserve">
     <value>Имя пользователя</value>
@@ -219,65 +141,26 @@
   <data name="LoginTitleText" xml:space="preserve">
     <value>Survey Solutions Questionnaire Tester</value>
   </data>
-  <data name="Maintenance" xml:space="preserve">
-    <value>The website of survey solutions designer is on the maintenance mode now. Sorry for the inconvenience</value>
-  </data>
-  <data name="OSVersionText" xml:space="preserve">
-    <value>Версия адроида:</value>
-  </data>
-  <data name="OwnerNameTitle" xml:space="preserve">
-    <value>Автор:</value>
+  <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>The website of survey solutions designer is in maintenance mode now. Sorry for the inconvenience</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Пароль</value>
   </data>
-  <data name="RequestTimeout" xml:space="preserve">
-    <value>Время ожидания ответа от сервера дизвйнера Survey Solutions истекло. Пожалуйста, проверьте Ваше интернет соединение</value>
+  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Время ожидания ответа от сервера Survey Solutions Designer истекло. Пожалуйста, проверьте Ваше интернет соединение.</value>
   </data>
-  <data name="ResetSettingsConfirmationText" xml:space="preserve">
-    <value>Вы действительно хотите сбросить все параметры в состояние по умолчанию?</value>
-  </data>
-  <data name="ResetSettingsSuccessText" xml:space="preserve">
-    <value>Все параметры были сброшены в состояние по умолчанию</value>
-  </data>
-  <data name="ResetSettingsText" xml:space="preserve">
-    <value>По умолчанию</value>
-  </data>
-  <data name="SaveSettingsSuccessText" xml:space="preserve">
-    <value>Ваши настройки успешно сохранены</value>
-  </data>
-  <data name="SaveSettingsText" xml:space="preserve">
-    <value>Сохранить</value>
-  </data>
-  <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Нет связи с дизайнером Survey Solutions</value>
-  </data>
-  <data name="Troubleshooting_Title" xml:space="preserve">
-    <value>Устранение неполадок</value>
-  </data>
-  <data name="Settings_AllowToSendInfoByCrashesText" xml:space="preserve">
-    <value>Разрешить отправлять анонимную информацию о всех крушениях приложения</value>
-  </data>
-  <data name="SignOutText" xml:space="preserve">
-    <value>Выйти</value>
+  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>Нет связи с Survey Solutions Designer.</value>
   </data>
   <data name="StaySignedInText" xml:space="preserve">
     <value>Запомнить меня</value>
   </data>
-  <data name="TryAgainLink" xml:space="preserve">
-    <value>Попробовать снова</value>
-  </data>
-  <data name="Unauthorized" xml:space="preserve">
+  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
     <value>Вы ввели неправильное имя или пароль</value>
-  </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Сервер с приложением Designer не отвечает. Проверьте адрес подключения к серверу или повторите попытку позже</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
     <value>НАЧАТЬ</value>
-  </data>
-  <data name="PrefilledQuestions_ToolbarTitle" xml:space="preserve">
-    <value>Начальная информация по обследованию</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
     <value>Определить местоположение</value>
@@ -309,15 +192,6 @@
   <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
     <value>Ответ не сохранён</value>
   </data>
-  <data name="ConfirmationCancelText" xml:space="preserve">
-    <value>Отмена</value>
-  </data>
-  <data name="ConfirmationTryAgainText" xml:space="preserve">
-    <value>Попробовать снова</value>
-  </data>
-  <data name="Interview_GeoLocation_Confirm_NoLocation" xml:space="preserve">
-    <value>Не могу определить Ваше местоположение</value>
-  </data>
   <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
     <value>Ваш комментарий</value>
   </data>
@@ -325,7 +199,7 @@
     <value>Нажмите для ввода даты</value>
   </data>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
-    <value>Отсканировать штрих-код </value>
+    <value>Отсканировать штрих-код</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как цело число</value>
@@ -335,9 +209,6 @@
   </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
     <value>Все ({0}) вопросы отвеченны</value>
-  </data>
-  <data name="Interview_PreviousGroupNavigation_ButtonText" xml:space="preserve">
-    <value>На уровень выше</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Внимание: неотвеченных вопросов - {0}</value>
@@ -354,20 +225,20 @@
   <data name="GpsQuestion_Timeout" xml:space="preserve">
     <value>Не удается получить вашу гео позицию. Выйдите на открытое пространство или увеличте значение таймаута в настройках.</value>
   </data>
-  <data name="InvalidEndpoint" xml:space="preserve">
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Указан неверный адрес Survey Solutions Designer. Проверьте настройки.</value>
   </data>
   <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
     <value>Опции будут доступны после ответа на соответствующий вопрос</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Ответ "{0}" не совпадает ни с одной опцией</value>
+    <value>Ответ "{0}" не соответствует ни с одной опцией</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>Нажмите, чтобы сделать фото</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Ответ "{0}" не соответствует ни одной опции</value>
+    <value>Ответ "{0}" не соответствует ни с одной опцией</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
     <value>Опросники не обнаружены
@@ -411,7 +282,7 @@
     <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="TextQuestion_MaskHint" xml:space="preserve">
-    <value>Нажмите для ввода текста  ({0})</value>
+    <value>Нажмите для ввода текста ({0})</value>
   </data>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
@@ -422,7 +293,7 @@
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Нельзя сохранить пустое значение</value>
   </data>
-  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Ваша учетная запись не подтверждена на сервере. Пожалуйста, прежде чем войти, подтвердите Вашу учетную запись, с помощью ссылки которую мы выслали Вам на почтовый ящик.</value>
   </data>
   <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
@@ -438,7 +309,7 @@
     <value>По закрытию этого интервью оно будет помечено как законченное и будет загружено супервизору во время вашей следующей синхронизации</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
-    <value>Ошибочных</value>
+    <value>Ошибок</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>Нет</value>
@@ -458,79 +329,61 @@
   <data name="Interview_Complete_Screen_Title" xml:space="preserve">
     <value>Окончание</value>
   </data>
-  <data name="Interview_NextCompleteInterview_ButtonText" xml:space="preserve">
-    <value>Завершить интервью</value>
-  </data>
-  <data name="Dashboard_HasNotBeenUpdated" xml:space="preserve">
-    <value>не обновлялись</value>
-  </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>обновлялись {0}</value>
-  </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
     <value>Опросники не найдены</value>
-  </data>
-  <data name="Login_Validation_EndpointIsUnreachable" xml:space="preserve">
-    <value>Невозможно подключиться к введенному домену. Проверьте настройки подключения или введи правильный домен</value>
-  </data>
-  <data name="Login_App_Version" xml:space="preserve">
-    <value>версия {0}</value>
-  </data>
-  <data name="Login_App_NewVersionAvailable" xml:space="preserve">
-    <value>доступна новая версия</value>
-  </data>
-  <data name="Login_EndpointWasNotReached" xml:space="preserve">
-    <value>Связь с доменом не установлена</value>
-  </data>
-  <data name="Login_EndpointWasReached" xml:space="preserve">
-    <value>Связь с доменом установлена</value>
   </data>
   <data name="EndpointHint" xml:space="preserve">
     <value>Домен синхронизации</value>
   </data>
-  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
-    <value>Возникла проблема при создании резервной копии. Обратитесь к разработчиками или повторите попытку позже</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
   </data>
-  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
-    <value>Резервная копия была создана и сохранена в файл {0}</value>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Сервис Google Play недоступен</value>
   </data>
-  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>Cуществует более поздняя версия. Вы хотите загрузить обновление?</value>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Клиент местоположения не запущен</value>
   </data>
-  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
-    <value>У вас последняя версия приложения</value>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>Вы не можете запустить более одного сервиса MvxLocation</value>
   </data>
-  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
-    <value>Произошла ошибка во время проверки версии. Проверьте настройке и повторите попытку позже</value>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>У вас нет ниодного интервью на устройстве. Отправьте информацию о таблете, очистите данные приложения и войдите под другой учетной записью</value>
   </data>
-  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
-    <value>Возникла проблема при восстановлении из резервной копии. Обратитесь к разработчиками или повторите попытку позже</value>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Interviewer</value>
   </data>
-  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
-    <value>Данные успешно восстановлены из резервной копии</value>
+  <data name="Interviewer_DashboardTitle" xml:space="preserve">
+    <value>Интервью/Перепись для {0}</value>
   </data>
-  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>Все данные будут перетерты. Вы уверены, что хотите продолжить? Если да, то убедитесь, что файл с резервной копией находится по следующему пути {0}</value>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Попробуйте войти онлайн</value>
   </data>
-  <data name="Troubleshooting_Backup" xml:space="preserve">
-    <value>Создать резервную копию</value>
+  <data name="Interviewer_Troubleshooting" xml:space="preserve">
+    <value>Устранение неполадок</value>
   </data>
-  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
-    <value>Версия {0}. Проверить наличие обновлений</value>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>Если вы перепревяжетесь к этому устройству, то все данные собранные на других устройствах будут удалены</value>
   </data>
-  <data name="Troubleshooting_Restore" xml:space="preserve">
-    <value>Восстановить из резервной копии</value>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Перепривязать</value>
   </data>
-  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
-    <value>Отправить информацию о таблете</value>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Отмена</value>
   </data>
-  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Инофрмация о таблете успешно отправлена</value>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>Ваша учетная запись уже привязана к другому устройству</value>
   </data>
-  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Пакета с информацией о таблете размером {0} будет отправлен по сети. Вы уверены, что хотите отправить его?</value>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись заблокирована. Обратитесь в службу поддержки по адресу support@mysurvey.solutions.</value>
   </data>
-  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
-    <value>Произошла ошибка при отправке пакета с информацией о таблете</value>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>Но</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>Завершить интервью</value>
+  </data>
+  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
+    <value>На уровень выше</value>
   </data>
 </root>

@@ -48,13 +48,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 
             bool isSupervisor = viewer.Roles.Any(role => role == UserRoles.Supervisor);
             if (isSupervisor)
-                return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy, input.Archived);
+                return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy, input.Archived, input.ShowOnlyNotConnectedToDevice);
 
             throw new ArgumentException(String.Format("Operation is allowed only for ViewerId and Hq users. Current viewer roles are {0}",
                 String.Concat(viewer.Roles)));
         }
 
-        protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy, bool archived)
+        protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy, bool archived, bool showOnlyNotConnectedToDevice)
         {
             List<UserDocument> userDocuments = this.users.Query(_ =>
             {
@@ -62,6 +62,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                 if (!string.IsNullOrWhiteSpace(searchBy))
                 {
                     all = all.Where(x => x.UserName.Contains(searchBy) || x.Email.Contains(searchBy));
+                }
+
+                if (showOnlyNotConnectedToDevice)
+                {
+                    all = all.Where(x => x.DeviceId == null);
                 }
 
                 all = all.Where(user =>

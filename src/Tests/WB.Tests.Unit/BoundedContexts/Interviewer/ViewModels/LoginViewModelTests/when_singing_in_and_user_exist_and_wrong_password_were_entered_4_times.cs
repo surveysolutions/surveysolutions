@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         Because of = () => viewModel.SignInCommand.Execute();
 
         It should_not_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(), Times.Never);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(), Times.Never);
 
         It should_show_online_login_button = () =>
             viewModel.IsOnlineLoginButtonVisible.ShouldBeTrue();

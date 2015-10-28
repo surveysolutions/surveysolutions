@@ -9,5 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         List<TabletInformationView> GetAllTabletInformationPackages();
         string GetFullPathToContentFile(string packageName);
         TabletLogView GetTabletLog(string deviceId);
+        string GetPackageNameWithoutRegistrationId(string packageName);
     }
 }

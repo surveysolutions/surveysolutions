@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
 {
     internal class ActiveGroupViewModelTestContext
     {
-        public static ActiveGroupViewModel CreateActiveGroupViewModel(
+        public static EnumerationStageViewModel CreateActiveGroupViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null)
         {
-            return new ActiveGroupViewModel(
+            return new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),

@@ -1,3 +1,1 @@
-- HQ/SV/DS are compatible with EventStore 3.2.2
-
-- HQ/SV needs read side rebuild
+- Rebuild read side on SV/HQ is needed for 5.2.0 version

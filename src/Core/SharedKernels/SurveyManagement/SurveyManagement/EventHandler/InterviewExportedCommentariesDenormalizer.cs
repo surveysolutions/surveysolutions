@@ -25,7 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewRejectedByHQ>,
-        IEventHandler<AnswerCommented>
+        IEventHandler<AnswerCommented>,
+        IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
@@ -102,9 +103,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
-              InterviewExportedAction.ApprovedByHeadquarter, evnt.Payload.Comment,
-              evnt.EventTimeStamp);
+            Guid interviewId = evnt.EventSourceId;
+            InterviewCommentaries interviewCommentaries = this.interviewCommentariesStorage.GetById(interviewId);
+            if (interviewCommentaries == null)
+                return;
+
+            if (!string.IsNullOrEmpty(evnt.Payload.Comment))
+                this.AddInterviewComment(
+                    interviewCommentaries: interviewCommentaries,
+                    originatorId: evnt.Payload.UserId,
+                    comment: evnt.Payload.Comment,
+                    roster: String.Empty,
+                    variableName: "@@" + InterviewExportedAction.ApprovedByHeadquarter,
+                    rosterVector: new decimal[0],
+                    timestamp: evnt.EventTimeStamp);
+
+            interviewCommentaries.IsApprovedByHQ = true;
+
+            this.interviewCommentariesStorage.Store(interviewCommentaries, interviewId);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
@@ -155,6 +171,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
                 InterviewExportedAction.RejectedByHeadquarter, evnt.Payload.Comment, evnt.EventTimeStamp);
+        }
+
+        public void Handle(IPublishedEvent<UnapprovedByHeadquarters> evnt)
+        {
+            this.StoreCommentForStatusChange(evnt.EventSourceId, evnt.Payload.UserId,
+                InterviewExportedAction.UnapprovedByHeadquarter, evnt.Payload.Comment, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<AnswerCommented> evnt)

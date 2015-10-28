@@ -139,7 +139,7 @@
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewSummaryEventHandlerFunctional.cs" />
+    <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
     <Compile Include="Implementation\Services\DataExport\DatasetWriterFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\IDatasetWriterFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\ITabFileReader.cs" />
@@ -384,6 +384,9 @@
     <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
+    <Compile Include="Views\Questionnaire\SampleUploadView.cs" />
+    <Compile Include="Views\Questionnaire\SampleUploadViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\SampleUploadViewInputModel.cs" />
     <Compile Include="Views\Reposts\Factories\QuantityReportFactory.cs" />
     <Compile Include="Views\Reposts\Factories\SpeedReportFactory.cs" />
     <Compile Include="Views\Reposts\InputModels\QuantityByInterviewersReportInputModel.cs" />
@@ -431,6 +434,11 @@
     <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
     <Compile Include="Views\SampleImport\TempFileImportData.cs" />
+    <Compile Include="Views\Supervisor\ISupervisorsViewFactory.cs" />
+    <Compile Include="Views\Supervisor\SupervisorsInputModel.cs" />
+    <Compile Include="Views\Supervisor\SupervisorsItem.cs" />
+    <Compile Include="Views\Supervisor\SupervisorsView.cs" />
+    <Compile Include="Views\Supervisor\SupervisorsViewFactory.cs" />
     <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
     <Compile Include="Views\Survey\SurveysInputModel.cs" />
     <Compile Include="Views\Survey\SurveyStatusViewItem.cs" />

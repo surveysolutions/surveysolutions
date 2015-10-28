@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
     {
         protected static CapiDataSynchronizationService CreateCapiDataSynchronizationService(IChangeLogManipulator changeLogManipulator = null,
             ICommandService commandService = null, 
-            IJsonUtils jsonUtils = null,
+            ISerializer serializer = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null, 
             ICapiSynchronizationCacheService capiSynchronizationCacheService = null,
             ICapiCleanUpService capiCleanUpService = null, 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
                 capiCleanUpService ?? Mock.Of<ICapiCleanUpService>(),
                 Mock.Of<ILogger>(), 
                 capiSynchronizationCacheService ?? Mock.Of<ICapiSynchronizationCacheService>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(),
+                serializer ?? Mock.Of<ISerializer>(),
                 interviewMetaInfoFactory ?? Mock.Of<IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo>>(),
                 principal ?? Mock.Of<IPrincipal>());
         }

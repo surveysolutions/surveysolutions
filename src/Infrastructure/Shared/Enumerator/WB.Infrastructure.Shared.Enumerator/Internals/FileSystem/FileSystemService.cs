@@ -24,6 +24,11 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             return Path.GetFileNameWithoutExtension(filePath);
         }
 
+        public string GetFileExtension(string filePath)
+        {
+            return Path.GetExtension(filePath);
+        }
+
         public long GetFileSize(string filePath)
         {
             if (!this.IsFileExists(filePath))

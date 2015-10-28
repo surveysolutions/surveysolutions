@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your application is not compatible with server one. Update your Interviewer application.
+        ///   Looks up a localized string similar to Your application is not compatible with server one. Update your Interviewer application..
         /// </summary>
         public static string ApplicationIncompatibleWithServer {
             get {
@@ -209,6 +209,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assigned on {0}.
+        /// </summary>
+        public static string DashboardItem_AssignedOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_AssignedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Census mode, Interviews created: {0}.
         /// </summary>
         public static string DashboardItem_CensusModeComment {
@@ -281,7 +290,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server adddress and(or) network settings.
+        ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
             get {
@@ -299,7 +308,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Synchronization endpoint is invalid. Check settings..
+        ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address..
         /// </summary>
         public static string InvalidEndpoint {
             get {
@@ -317,7 +326,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you forgot your password and headquarter has reset it you could try to sign in online.
+        ///   Looks up a localized string similar to You could try to sign in online if you forgot your password or it was reset.
         /// </summary>
         public static string Login_Online_Signin_Explanation_message {
             get {
@@ -349,6 +358,51 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Maintenance {
             get {
                 return ResourceManager.GetString("Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string MenuItem_Title_Dashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string MenuItem_Title_Login {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string MenuItem_Title_Settings {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        public static string MenuItem_Title_SignOut {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string MenuItem_Title_Troubleshooting {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Troubleshooting", resourceCulture);
             }
         }
         
@@ -497,7 +551,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Prefs_Title {
             get {
@@ -814,6 +868,222 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create backup.
+        /// </summary>
+        public static string Troubleshooting_Backup {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong and backup failed to be created.
+        /// </summary>
+        public static string Troubleshooting_BackupErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup was saved to {0}.
+        /// </summary>
+        public static string Troubleshooting_BackupWasSaved {
+            get {
+                return ResourceManager.GetString("Troubleshooting_BackupWasSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: {0}. Check for a new version.
+        /// </summary>
+        public static string Troubleshooting_CurrentVersion_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("Troubleshooting_CurrentVersion_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package is successfully sent.
+        /// </summary>
+        public static string Troubleshooting_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package of size {0} will be sent via network. Are you sure you want to send it?.
+        /// </summary>
+        public static string Troubleshooting_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        /// </summary>
+        public static string Troubleshooting_NewVerisonExist {
+            get {
+                return ResourceManager.GetString("Troubleshooting_NewVerisonExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of application.
+        /// </summary>
+        public static string Troubleshooting_NoNewVersion {
+            get {
+                return ResourceManager.GetString("Troubleshooting_NoNewVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}.
+        /// </summary>
+        public static string Troubleshooting_Old_AreYouSureYouWantToRestore {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_AreYouSureYouWantToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating information package.
+        /// </summary>
+        public static string Troubleshooting_Old_CreatingInformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_CreatingInformationPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package.
+        /// </summary>
+        public static string Troubleshooting_Old_InformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package is successfully sent..
+        /// </summary>
+        public static string Troubleshooting_Old_InformationPackageIsSuccessfullySent {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageIsSuccessfullySent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information package of size {0} will be sent via network. Are you sure you want to send it?.
+        /// </summary>
+        public static string Troubleshooting_Old_InformationPackageSizeWarningFormat {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_InformationPackageSizeWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending information package.
+        /// </summary>
+        public static string Troubleshooting_Old_SendingInformationPackage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingInformationPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending of information package is cancelled. Reason: {0}.
+        /// </summary>
+        public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceled {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingOfInformationPackageIsCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelling.
+        /// </summary>
+        public static string Troubleshooting_Old_SendingOfInformationPackageIsCanceling {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Old_SendingOfInformationPackageIsCanceling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong and tabled failed to be restored.
+        /// </summary>
+        public static string Troubleshooting_RestorationErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestorationErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore from backup.
+        /// </summary>
+        public static string Troubleshooting_Restore {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Restore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is presented at {0}.
+        /// </summary>
+        public static string Troubleshooting_RestoreConfirmation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoreConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tablet was successfully restored.
+        /// </summary>
+        public static string Troubleshooting_RestoredSuccessfully {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending of information package is failed.
+        /// </summary>
+        public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendingOfInformationPackageErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send tablet&apos;s information.
+        /// </summary>
+        public static string Troubleshooting_SendTabletInformation {
+            get {
+                return ResourceManager.GetString("Troubleshooting_SendTabletInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Troubleshooting.
+        /// </summary>
+        public static string Troubleshooting_Title {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred on version check. Please, check settings or try again later..
+        /// </summary>
+        public static string Troubleshooting_Unknown_ErrorMessage {
+            get {
+                return ResourceManager.GetString("Troubleshooting_Unknown_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your login or password is incorrect.
         /// </summary>
         public static string Unauthorized {
@@ -837,6 +1107,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string UpgradeRequired {
             get {
                 return ResourceManager.GetString("UpgradeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }

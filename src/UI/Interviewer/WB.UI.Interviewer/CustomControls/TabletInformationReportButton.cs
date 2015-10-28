@@ -6,7 +6,9 @@ using Android.Util;
 using Android.Widget;
 using Ninject;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Interviewer.CustomControls
 {
@@ -60,12 +62,12 @@ namespace WB.UI.Interviewer.CustomControls
             this.DestroyDialog();
             this.ProgressDialog = new ProgressDialog(this.activity);
 
-            this.ProgressDialog.SetTitle(this.Resources.GetText(Resource.String.InformationPackage));
+            this.ProgressDialog.SetTitle(InterviewerUIResources.Troubleshooting_Old_InformationPackage);
             this.ProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            this.ProgressDialog.SetMessage(this.Resources.GetText(Resource.String.CreatingInformationPackage));
+            this.ProgressDialog.SetMessage(InterviewerUIResources.Troubleshooting_Old_CreatingInformationPackage);
             this.ProgressDialog.SetCancelable(false);
 
-            this.ProgressDialog.SetButton(this.Resources.GetText(Resource.String.Cancel), this.TabletInformationSenderCanceled);
+            this.ProgressDialog.SetButton(UIResources.Cancel, this.TabletInformationSenderCanceled);
 
             this.ProgressDialog.Show();
 
@@ -124,15 +126,13 @@ namespace WB.UI.Interviewer.CustomControls
             {
                 var builder = new AlertDialog.Builder(this.activity);
 
-                builder.SetMessage(
-                    string.Format(this.Resources.GetText(Resource.String.InformationPackageSizeWarningFormat),
-                        FileSizeUtils.SizeSuffix(e.FileSize)));
+                builder.SetMessage(string.Format(InterviewerUIResources.Troubleshooting_Old_InformationPackageSizeWarningFormat, FileSizeUtils.SizeSuffix(e.FileSize)));
 
-                builder.SetPositiveButton(this.Resources.GetText(Resource.String.Yes), (s, positiveEvent) =>
+                builder.SetPositiveButton(UIResources.Yes, (s, positiveEvent) =>
                 {
-                    this.ProgressDialog.SetMessage(this.Resources.GetText(Resource.String.SendingInformationPackage)); remoteCommandDoneEvent.Set();
+                    this.ProgressDialog.SetMessage(InterviewerUIResources.Troubleshooting_Old_SendingInformationPackage); remoteCommandDoneEvent.Set();
                 });
-                builder.SetNegativeButton(this.Resources.GetText(Resource.String.No), (s, negativeEvent) =>
+                builder.SetNegativeButton(UIResources.No, (s, negativeEvent) =>
                 {
                     this.tabletInformationSender.Cancel();
                     remoteCommandDoneEvent.Set();

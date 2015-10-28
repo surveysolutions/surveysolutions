@@ -71,12 +71,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;
+        ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;
         ///&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;..
         /// </summary>
         public static string AssignConfirmMessage {
             get {
                 return ResourceManager.GetString("AssignConfirmMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply on {0} interview(s) which Interviewer already received.
+        /// </summary>
+        public static string AssignReceivedConfirm {
+            get {
+                return ResourceManager.GetString("AssignReceivedConfirm", resourceCulture);
             }
         }
         

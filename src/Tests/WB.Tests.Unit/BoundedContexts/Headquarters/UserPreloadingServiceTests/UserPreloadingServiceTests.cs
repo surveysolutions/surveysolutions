@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
         {
             var processId = "aaa";
             var userPreloadingProcessStorage = new TestPlainStorage<UserPreloadingProcess>();
-            userPreloadingProcessStorage.Store(Create.UserPreloadingProcess(userPreloadingProcessId: processId, state: UserPrelodingState.Validating), processId);
+            userPreloadingProcessStorage.Store(Create.UserPreloadingProcess(userPreloadingProcessId: processId, state: UserPrelodingState.Validated), processId);
             var userPreloadingService =
                 this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage);
 

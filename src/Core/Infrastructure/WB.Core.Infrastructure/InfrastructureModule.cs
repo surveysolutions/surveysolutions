@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure
 
             registry.Bind<IAggregateSupportsSnapshotValidator, AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
-            registry.Bind<ISnapshotStore, InMemoryCachedSnapshotStore>();
+            registry.BindAsSingleton<ISnapshotStore, InMemoryCachedSnapshotStore>();
         }
     }
 }

@@ -106,6 +106,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only one GPS question could be marked as prefilled.
+        /// </summary>
+        internal static string WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled {
+            get {
+                return ResourceManager.GetString("WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
         internal static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {

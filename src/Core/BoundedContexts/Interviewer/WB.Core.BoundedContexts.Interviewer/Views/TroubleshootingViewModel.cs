@@ -1,4 +1,5 @@
-﻿using Cirrious.MvvmCross.ViewModels;
+﻿using System.Threading.Tasks;
+using Cirrious.MvvmCross.ViewModels;
 
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -20,24 +21,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
         public IMvxCommand NavigateToLoginCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<LoginViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>()); }
         }
         
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync()); }
         }
 
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(this.SignOut)); }
+            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
         }
 
-        void SignOut()
+        private async Task SignOut()
         {
             this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         public bool IsAuthenticated

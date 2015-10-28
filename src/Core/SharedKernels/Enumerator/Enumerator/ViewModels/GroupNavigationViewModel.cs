@@ -1,17 +1,25 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class GroupNavigationViewModel : MvxNotifyPropertyChanged
+    public class GroupNavigationViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<GroupsEnabled>, ILiteEventHandler<GroupsDisabled>, IDisposable
     {
+        private enum NavigationGroupType { Section, LastSection, InsideGroupOrRoster }
         public class GroupStatistics
         {
             public int EnabledQuestionsCount { get; set; }
@@ -22,107 +30,214 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         private string interviewId;
-        private Identity groupIdentity;
         private NavigationState navigationState;
+        private QuestionnaireModel questionnaire;
+
+        private Identity currentGroupIdentity;
+        private Identity groupOrSectionToNavigateIdentity;
+        private NavigationGroupType navigationGroupType;
+        private readonly List<Identity> listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection = new List<Identity>();
 
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly ILiteEventRegistry eventRegistry;
+        private readonly IInterviewViewModelFactory interviewViewModelFactory;
+        private readonly ICommandService commandService;
+        private readonly AnswerNotifier answerNotifier;
 
-        public GroupViewModel NavigateToGroupViewModel { get; private set; }
+        private GroupStateViewModel groupState;
+        public GroupStateViewModel GroupState
+        {
+            get { return this.groupState; } 
+            set { this.groupState = value; this.RaisePropertyChanged(); }
+        }
 
-        protected GroupNavigationViewModel(){}
+        private string navigationItemTitle;
+        public string NavigationItemTitle
+        {
+            get { return this.navigationItemTitle; }
+            set { this.navigationItemTitle = value; this.RaisePropertyChanged(); }
+        }
+
+        public IMvxCommand NavigateCommand
+        {
+            get { return new MvxCommand(async () => await this.NavigateAsync()); }
+        }
+
+        protected GroupNavigationViewModel() { }
 
         public GroupNavigationViewModel(
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            GroupViewModel navigateToGroupViewModel)
+            ILiteEventRegistry eventRegistry,
+            IInterviewViewModelFactory interviewViewModelFactory,
+            ICommandService commandService,
+            AnswerNotifier answerNotifier)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.NavigateToGroupViewModel = navigateToGroupViewModel;
+            this.eventRegistry = eventRegistry;
+            this.interviewViewModelFactory = interviewViewModelFactory;
+            this.commandService = commandService;
+            this.answerNotifier = answerNotifier;
         }
 
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.groupIdentity = groupIdentity;
+            this.currentGroupIdentity = groupIdentity;
             this.navigationState = navigationState;
 
+            this.eventRegistry.Subscribe(this, interviewId);
+
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            this.IsInSection = !questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue;
-            this.NavigateToIdentity = this.GetNavigateToIdentity(questionnaire);
+            this.questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
 
-            if (this.NavigateToIdentity != null)
+            if (!questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue)
+                this.SetNextEnabledSection();
+            else
             {
-                this.NavigateToGroupViewModel.Init(this.interviewId, this.NavigateToIdentity, groupIdentity, this.navigationState);
+                this.groupOrSectionToNavigateIdentity = this.GetParentGroupOrRosterIdentity();
+                this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
-            
-            NavigationItemTitle = IsInSection
-                ? UIResources.Interview_NextSection_ButtonText
-                : UIResources.Interview_PreviousGroupNavigation_ButtonText;
+
+            this.SetNavigationItemTitle();
+            this.SetGroupState();
+
+            var questionsToListen = interview.GetChildQuestions(groupIdentity);
+            this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+            this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
         }
 
-        private Identity NavigateToIdentity { get; set; }
-
-        public string NavigationItemTitle { get; set; }
-
-        private bool isInSection;
-        public bool IsInSection
+        private void QuestionAnswered(object sender, EventArgs e)
         {
-            get { return this.isInSection; }
-            set { this.isInSection = value; this.RaisePropertyChanged(); }
+            this.GroupState.UpdateFromGroupModel();
+            this.RaisePropertyChanged(() => this.GroupState);
         }
 
-        public IMvxCommand NavigateCommand
+        private Identity GetParentGroupOrRosterIdentity()
         {
-            get { return new MvxCommand(async () => await this.NavigateAsync(), () => this.NavigateToIdentity != null); }
+            var parentId = this.questionnaire.GroupsParentIdMap[this.currentGroupIdentity.Id].Value;
+            int rosterLevelOfParent = this.questionnaire.GroupsRosterLevelDepth[this.currentGroupIdentity.Id];
+            decimal[] parentRosterVector = this.currentGroupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
+            return new Identity(parentId, parentRosterVector);
+        }
+
+        private void SetGroupState()
+        {
+            switch (this.navigationGroupType)
+            {
+                case NavigationGroupType.InsideGroupOrRoster:
+                case NavigationGroupType.Section:
+                    this.groupState = this.interviewViewModelFactory.GetNew<GroupStateViewModel>();
+                    break;
+                case NavigationGroupType.LastSection:
+                    this.groupState = this.interviewViewModelFactory.GetNew<InterviewStateViewModel>();
+                    break;
+            }
+
+            this.groupState.Init(this.interviewId, this.currentGroupIdentity);
+            this.RaisePropertyChanged(() => this.GroupState);
+        }
+ 
+        private void SetNextEnabledSection()
+        {
+            this.groupOrSectionToNavigateIdentity = null;
+            this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Clear();
+
+            int currentSectionIndex = this.questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.currentGroupIdentity.Id);
+            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < this.questionnaire.GroupsHierarchy.Count; sectionIndex++)
+            {
+                var nextSectionIdentity = new Identity(this.questionnaire.GroupsHierarchy[sectionIndex].Id, new decimal[0]);
+
+                if (!this.CanNavigateToSection(nextSectionIdentity))
+                {
+                    this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Add(nextSectionIdentity);
+                    continue;
+                }
+
+                this.groupOrSectionToNavigateIdentity = nextSectionIdentity;
+                break;
+            }
+
+            this.navigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
+        }
+
+        private void SetNavigationItemTitle()
+        {
+            string title = string.Empty;
+            switch (this.navigationGroupType)
+            {
+                case NavigationGroupType.InsideGroupOrRoster:
+                    title = UIResources.Interview_ParentGroup_ButtonText;
+                    break;
+                case NavigationGroupType.LastSection:
+                    title = UIResources.Interview_CompleteScreen_ButtonText;
+                    break;
+                case NavigationGroupType.Section:
+                    title = UIResources.Interview_NextSection_ButtonText;
+                    break;
+            }
+
+            this.NavigationItemTitle = title;
+        }
+
+        private bool CanNavigateToSection(Identity group)
+        {
+            var interview = this.interviewRepository.Get(this.interviewId);
+
+            return interview.HasGroup(group) && interview.IsEnabled(group);
         }
 
         private async Task NavigateAsync()
         {
-            if (this.IsInSection)
+            await this.commandService.WaitPendingCommandsAsync();
+            switch (this.navigationGroupType)
             {
-                await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.NavigateToIdentity));
-            }
-            else
-            {
-                await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(this.NavigateToIdentity, anchoredElementIdentity: this.groupIdentity));
-            }
-        }
-
-        private Identity GetNavigateToIdentity(QuestionnaireModel questionnaire)
-        {
-            if (this.IsInSection)
-            {
-                return this.GetNextSectionIdentity(questionnaire);
-            }
-            else
-            {
-                return this.GetParentIdentity(questionnaire);
+                case NavigationGroupType.InsideGroupOrRoster:
+                    await this.navigationState.NavigateToAsync(
+                        NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity,
+                            anchoredElementIdentity: this.currentGroupIdentity));
+                    break;
+                case NavigationGroupType.Section:
+                    await this.navigationState.NavigateToAsync(
+                        NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity));
+                    break;
+                case NavigationGroupType.LastSection:
+                    await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForCompleteScreen());
+                    break;
             }
         }
 
-        private Identity GetParentIdentity(QuestionnaireModel questionnaire)
+        private void UpdateNavigation()
         {
-            var parentId = questionnaire.GroupsParentIdMap[this.groupIdentity.Id].Value;
-            int rosterLevelOfParent = questionnaire.GroupsRosterLevelDepth[this.groupIdentity.Id];
-            decimal[] parentRosterVector = this.groupIdentity.RosterVector.Take(rosterLevelOfParent).ToArray();
-            return new Identity(parentId, parentRosterVector);
+            this.SetNextEnabledSection();
+            this.SetNavigationItemTitle();
+            this.SetGroupState();
         }
 
-        private Identity GetNextSectionIdentity(QuestionnaireModel questionnaire)
+        public void Dispose()
         {
-            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.groupIdentity.Id);
+            this.eventRegistry.Unsubscribe(this, this.interviewId);
 
-            if (currentSectionIndex >= questionnaire.GroupsHierarchy.Count - 1)
-            {
-                return null;
-            }
-            else
-            {
-                return new Identity(questionnaire.GroupsHierarchy[currentSectionIndex + 1].Id, new decimal[0]);
-            }
+            this.answerNotifier.QuestionAnswered -= this.QuestionAnswered;
+            this.answerNotifier.Dispose();
+        }
+
+        public void Handle(GroupsEnabled @event)
+        {
+            if (this.navigationGroupType == NavigationGroupType.InsideGroupOrRoster) return;
+            if (!this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Intersect(@event.Groups).Any()) return;
+
+            this.UpdateNavigation();
+        }
+
+        public void Handle(GroupsDisabled @event)
+        {
+            if (this.navigationGroupType == NavigationGroupType.InsideGroupOrRoster) return;
+            if (!@event.Groups.Contains(this.groupOrSectionToNavigateIdentity)) return;
+
+            this.UpdateNavigation();
         }
     }
 }
