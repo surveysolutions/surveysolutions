@@ -19,23 +19,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly Dictionary<string, InterviewHistoryView> cache = new Dictionary<string, InterviewHistoryView>();
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly int maxCountOfCachedEntities = 1024;
         private bool cacheEnabled = false;
+        private readonly string pathToHistoryFiles;
 
         public InterviewHistoryWriter(ICsvWriterFactory csvWriterFactory, IFileSystemAccessor fileSystemAccessor,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
+            InterviewDataExportSettings interviewDataExportSettings)
         {
             this.csvWriterFactory = csvWriterFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewSummaryReader = interviewSummaryReader;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+
+            this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
+                interviewDataExportSettings.ExportedDataFolderName);
+
+            if (!fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
+                fileSystemAccessor.CreateDirectory(this.pathToHistoryFiles);
         }
 
 
         public void Clear()
         {
-            filebasedExportedDataAccessor.CleanExportHistoryFolder();
+            if (fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
+            {
+                Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
+                Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
+            }
         }
 
         public void Store(InterviewHistoryView view, string id)
@@ -236,7 +246,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 
         private string GetPathToQuestionnaireFolder(Guid questionnaireId, long version)
         {
-            return filebasedExportedDataAccessor.GetFolderPathOfHistoryByQuestionnaire(questionnaireId, version);
+            return fileSystemAccessor.CombinePath(pathToHistoryFiles,
+               string.Format("{0}-{1}", questionnaireId, version));
         }
 
         private string GetPathToInterviewHistoryFile(string interviewId, Guid questionnaireId, long version)

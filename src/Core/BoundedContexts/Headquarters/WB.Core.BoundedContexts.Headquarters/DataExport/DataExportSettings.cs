@@ -2,11 +2,8 @@
 {
     public class DataExportSettings
     {
-        public DataExportSettings(int dataExportIntervalInSeconds)
+        public DataExportSettings()
         {
-            this.DataExportIntervalInSeconds = dataExportIntervalInSeconds;
         }
-
-        public int DataExportIntervalInSeconds { get; private set; }
     }
 }

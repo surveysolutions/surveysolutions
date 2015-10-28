@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             this.readSideStorage = readSideStorage;
         }
 
-        protected void Handle(IPublishableEvent evt)
+        public void Handle(IPublishableEvent evt)
         {
             this.Handle(evt, this.readSideStorage);
         }

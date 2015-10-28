@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
                 .Returns<Guid, long>((id, v) => string.Format("{0}-{1}", id, v));
             return new InterviewHistoryWriter(Mock.Of<ICsvWriterFactory>(_=>_.OpenCsvWriter(It.IsAny<Stream>(),It.IsAny<string>())== Mock.Of<ICsvWriterService>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), filebasedExportedDataAccessor ?? filebasedExportedDataAccessorMock.Object);
+                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), new InterviewDataExportSettings("", true,1,1));
         }
 
         protected static InterviewHistoryView CreateInterviewHistoryView(Guid? id=null)

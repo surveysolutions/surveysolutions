@@ -181,7 +181,7 @@ namespace WB.UI.Headquarters
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
-  			var dataExportSettings = new DataExportSettings(userPreloadingConfigurationSection.CreationIntervalInSeconds);
+  			var dataExportSettings = new DataExportSettings();
             var interviewDataExportSettings=
             new InterviewDataExportSettings(basePath,
                 bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),

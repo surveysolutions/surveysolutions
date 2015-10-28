@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>();
 
             this.Bind<DataExportSettings>().ToConstant(this.dataExportSettings);
-            this.Bind<IDataExportService>().To<DataExportService>();
+            this.Bind<IDataExportQueue>().To<DataExportQueue>();
             this.Bind<IDataExporter>().To<DataExporter>();
             this.Bind<IQuestionnaireDataExportServiceFactory>().To<QuestionnaireDataExportServiceFactory>();
         }
