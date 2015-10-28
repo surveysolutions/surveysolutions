@@ -338,9 +338,6 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
-  <data name="Interviewer_DashboardTitle" xml:space="preserve">
-    <value>Assignments/Census for {0}</value>
-  </data>
   <data name="Interviewer_Troubleshooting" xml:space="preserve">
     <value>Troubleshooting</value>
   </data>

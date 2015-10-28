@@ -141,20 +141,8 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
   </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>No hay conexión con el Survey Solutions Designer. Abrir una copia local del cuestionario?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Preparando cuestionario para crear entrevista</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Guardando biblioteca de vínculos dinámicos de entrevista en almacenamiento local</value>
-  </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>Guardando cuestionario en almacenamiento local</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Buscando errores de cuestionario en el servidor</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>

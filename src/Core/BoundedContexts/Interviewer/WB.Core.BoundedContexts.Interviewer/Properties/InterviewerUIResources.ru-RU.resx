@@ -294,9 +294,6 @@
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Создать резервную копию</value>
   </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Некоторые интервью были обновлены</value>
-  </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Ваша учетная запись перепривязана к другому устройству</value>
   </data>
@@ -314,12 +311,6 @@
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>интервью</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>картинки по интервью</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>картинки</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} из {1} {2} обработано</value>
@@ -414,9 +405,6 @@
   <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
     <value>Информационный пакет успешно отправлен</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>условия/проверки</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} из {1} {2} обработано</value>
   </data>
@@ -426,17 +414,11 @@
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Размер пакета передачи данных</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID регистрации:</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Настройки подключения</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>ID устройства:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>URL-адрес, который используется для связи с приложением руководителя</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
     <value>Количество секунд для ожидания координаты</value>
@@ -452,9 +434,6 @@
   </data>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Отменить</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>ID установки:</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Невозможно подключиться к Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>

@@ -243,17 +243,11 @@
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Tamanho do pacote de comunicação</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID de registro do cliente:</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Configurações de Conexão</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>ID do dispositivo:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>URL que é usada para se comunicar com o aplicativo supervisor</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>Supervisor URL</value>
@@ -269,9 +263,6 @@
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Tempo limite de resposta do servidor</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>ID de instalação:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Configurações de entrevista</value>
@@ -291,17 +282,11 @@
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>condições/validações</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} feito</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Atualizando as atribuições</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Algumas atribuições foram atualizadas</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} de {1} entrevistas eliminadas</value>
@@ -353,12 +338,6 @@
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} feito</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>imagens</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>imagens por entrevistas</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>entrevistas</value>
