@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -57,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataExportQueue>().To<DataExportQueue>();
             this.Bind<IDataExporter>().To<DataExporter>();
             this.Bind<IQuestionnaireDataExportServiceFactory>().To<QuestionnaireDataExportServiceFactory>();
+            this.Bind<IParaDataWriter>().To<TabularParaDataWriter>();
         }
     }
 }

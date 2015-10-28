@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -21,31 +22,37 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
-        private readonly ICsvWriterFactory csvWriterFactory;
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IParaDataWriter paraDataWriter;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainTransactionManager plainTransactionManager;
 
         private readonly IDataExportQueue dataExportQueue;
-        public QuestionnaireDataExportServiceFactory(IStreamableEventStore eventStore, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, IReadSideRepositoryWriter<UserDocument> userReader, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, InterviewDataExportSettings interviewDataExportSettings, ICsvWriterFactory csvWriterFactory, IFileSystemAccessor fileSystemAccessor, ITransactionManagerProvider transactionManagerProvider, IDataExportQueue dataExportQueue, IPlainTransactionManager plainTransactionManager)
+        public QuestionnaireDataExportServiceFactory(
+            IStreamableEventStore eventStore, 
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
+            IReadSideRepositoryWriter<UserDocument> userReader, 
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
+            InterviewDataExportSettings interviewDataExportSettings, 
+            ITransactionManagerProvider transactionManagerProvider, 
+            IDataExportQueue dataExportQueue,
+            IPlainTransactionManager plainTransactionManager, IParaDataWriter paraDataWriter)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.questionnaireReader = questionnaireReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
-            this.csvWriterFactory = csvWriterFactory;
-            this.fileSystemAccessor = fileSystemAccessor;
             this.transactionManagerProvider = transactionManagerProvider;
             this.dataExportQueue = dataExportQueue;
             this.plainTransactionManager = plainTransactionManager;
+            this.paraDataWriter = paraDataWriter;
         }
 
         public IDataExportService CreateQuestionnaireDataExportService(DataExportFormat dataExportFormat)
         {
             if (dataExportFormat == DataExportFormat.TabularData)
                 return new TabularFormatDataExportService(eventStore, interviewSummaryReader, userReader,
-                    questionnaireReader, interviewDataExportSettings, csvWriterFactory, fileSystemAccessor, transactionManagerProvider, dataExportQueue, plainTransactionManager);
+                    questionnaireReader,interviewDataExportSettings, transactionManagerProvider, dataExportQueue, plainTransactionManager, paraDataWriter);
 
             throw new NotSupportedException();
         }

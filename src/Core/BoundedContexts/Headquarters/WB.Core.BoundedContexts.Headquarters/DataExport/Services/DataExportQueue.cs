@@ -30,18 +30,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             exportProcess.LastUpdateDate = DateTime.UtcNow;
 
             dataExportProcessDtoStorage.Store(exportProcess, exportProcess.DataExportProcessId);
+            return exportProcess.DataExportProcessId;
+        }
 
+        private void CreateExportedDataReferene(DataExportProcessDto exportProcess)
+        {
             var exportedDataReference = new ExportedDataReferenceDto()
             {
                 CreationDate = DateTime.UtcNow,
                 DataExportProcessId = exportProcess.DataExportProcessId,
                 DataExportFormat = exportProcess.DataExportFormat,
+                DataExportType = exportProcess.DataExportType,
                 ExportedDataReferenceId = Guid.NewGuid().FormatGuid(),
                 QuestionnaireId = exportProcess.QuestionnaireId,
                 QuestionnaireVersion = exportProcess.QuestionnaireVersion
             };
-            exportedDataReferenceStorage.Store(exportedDataReference, exportedDataReference.ExportedDataReferenceId);
-            return exportProcess.DataExportProcessId;
+            this.exportedDataReferenceStorage.Store(exportedDataReference, exportedDataReference.ExportedDataReferenceId);
         }
 
         public string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion,
@@ -60,19 +64,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             string processId = Guid.NewGuid().FormatGuid();
 
-            dataExportProcessDtoStorage.Store(
-                new DataExportProcessDto()
-                {
-                    BeginDate = DateTime.UtcNow,
-                    DataExportProcessId = processId,
-                    DataExportFormat = exportFormat,
-                    LastUpdateDate = DateTime.UtcNow,
-                    ProgressInPercents = 0,
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion,
-                    Status = DataExportStatus.Queued,
-                    DataExportType = DataExportType.Data
-                }, processId);
+            var exportProcess = new DataExportProcessDto()
+            {
+                BeginDate = DateTime.UtcNow,
+                DataExportProcessId = processId,
+                DataExportFormat = exportFormat,
+                LastUpdateDate = DateTime.UtcNow,
+                ProgressInPercents = 0,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Status = DataExportStatus.Queued,
+                DataExportType = DataExportType.Data
+            };
+
+            this.dataExportProcessDtoStorage.Store(exportProcess, processId);
+            this.CreateExportedDataReferene(exportProcess);
             return processId;
         }
 
@@ -90,18 +96,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 throw new InvalidOperationException();
 
             string processId = Guid.NewGuid().FormatGuid();
-
-            dataExportProcessDtoStorage.Store(
-                new DataExportProcessDto()
-                {
-                    BeginDate = DateTime.UtcNow,
-                    DataExportProcessId = processId,
-                    DataExportFormat = exportFormat,
-                    LastUpdateDate = DateTime.UtcNow,
-                    ProgressInPercents = 0,
-                    Status = DataExportStatus.Queued,
-                    DataExportType = DataExportType.ParaData
-                }, processId);
+            var exportProcess = new DataExportProcessDto()
+            {
+                BeginDate = DateTime.UtcNow,
+                DataExportProcessId = processId,
+                DataExportFormat = exportFormat,
+                LastUpdateDate = DateTime.UtcNow,
+                ProgressInPercents = 0,
+                Status = DataExportStatus.Queued,
+                DataExportType = DataExportType.ParaData
+            };
+            this.dataExportProcessDtoStorage.Store(exportProcess, processId);
+            this.CreateExportedDataReferene(exportProcess);
             return processId;
         }
 
@@ -110,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return dataExportProcessDtoStorage.GetById(processId);
         }
 
-        public void FinishDataExportProcess(string processId)
+        public void FinishDataExportProcess(string processId, string exportedDataPath)
         {
             var dataExportProcess = GetDataExportProcess(processId);
             if(dataExportProcess== null || dataExportProcess.Status != DataExportStatus.Running)
@@ -119,6 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.Status=DataExportStatus.Finished;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = 100;
+            dataExportProcess.ExportedDataPath = exportedDataPath;
 
             dataExportProcessDtoStorage.Store(dataExportProcess, dataExportProcess.DataExportProcessId);
         }

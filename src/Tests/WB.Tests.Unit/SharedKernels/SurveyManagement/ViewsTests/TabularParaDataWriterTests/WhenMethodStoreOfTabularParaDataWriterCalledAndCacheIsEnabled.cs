@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -12,9 +9,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHistoryWriterTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDataWriterTests
 {
-    internal class when_method_Store_of_InterviewHistoryWriter_called_and_cache_is_enabled : InterviewHistoryWriterTestContext
+    internal class WhenMethodStoreOfTabularParaDataWriterCalledAndCacheIsEnabled : TabularParaDataWriterTestContext
     {
         Establish context = () =>
         {
@@ -28,20 +25,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHisto
             interviewSummaryWriterMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(new InterviewSummary() { QuestionnaireId = questionnaireId, QuestionnaireVersion = questionnaireVersion, InterviewId = interviewId });
           
-            interviewHistoryWriter = CreateInterviewHistoryWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
-            interviewHistoryWriter.EnableCache();
+            _tabularParaDataWriter = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            interviewHistoryWriter.Store(interviewHistoryView, interviewHistoryView.InterviewId.FormatGuid());
+            _tabularParaDataWriter.Store(interviewHistoryView, interviewHistoryView.InterviewId.FormatGuid());
 
         It should_not_create_any_files = () =>
             fileSystemAccessorMock.Verify(x => x.OpenOrCreateFile(Moq.It.IsAny<string>(),Moq.It.IsAny<bool>()), Times.Never);
 
         It should_store_view_in_cache = () =>
-            interviewHistoryWriter.GetById(interviewHistoryView.InterviewId.FormatGuid()).ShouldEqual(interviewHistoryView);
+            _tabularParaDataWriter.GetById(interviewHistoryView.InterviewId.FormatGuid()).ShouldEqual(interviewHistoryView);
 
-        private static InterviewHistoryWriter interviewHistoryWriter;
+        private static TabularParaDataWriter _tabularParaDataWriter;
         private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryWriterMock;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static InterviewHistoryView interviewHistoryView;

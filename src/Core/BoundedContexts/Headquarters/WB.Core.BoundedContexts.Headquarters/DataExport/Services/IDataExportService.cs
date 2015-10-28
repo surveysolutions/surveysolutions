@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal interface IDataExportService
     {
-        void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId);
-        void ExportParaData(string dataExportProcessId);
+        string ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId);
+        string ExportParaData(string dataExportProcessId);
     }
 }
