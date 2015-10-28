@@ -44,7 +44,7 @@ function BuildNewDesigner(){
     Push-Location -Path $targetLocation
     Write-Host $installCommand
     iex $installCommand #install node js dependencies
-    &gulp #will execute script gulpfile.js in UpdatedDesigner folder
+    &gulp | Write-Host #will execute script gulpfile.js in UpdatedDesigner folder
     Pop-Location
 }
 function CheckPrerequisites() {
