@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__more_than_15000_options__ = () =>
-            new[] { "more than", 5000.ToString(), "options" }.ShouldEachConformTo(
+            new[] { string.Format("more than {0} ", 15000.ToString()), "options" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 
