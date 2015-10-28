@@ -243,17 +243,11 @@
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Розмір пакета даних</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>Реєстраційний код клієнта:</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Параметри підключення</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>Ідентифікатор пристрою:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>URL-адреса, що використовується для спілкування з додатком супервізора</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL адреса супервізора</value>
@@ -269,9 +263,6 @@
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Час очікування відповіді сервера</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>КОД інсталяції:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Настройки інтерв'ю</value>
@@ -291,17 +282,11 @@
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>умови/перевірки</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} з {1} {2} зроблено</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Оновлення завдань</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Деякі призначення були оновлені</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} з {1} інтерв'ю було видалено</value>
@@ -353,12 +338,6 @@
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} з {1} {2} зроблено</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>зображення</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>зображення по інтерв'ю</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>інтерв'ю</value>
