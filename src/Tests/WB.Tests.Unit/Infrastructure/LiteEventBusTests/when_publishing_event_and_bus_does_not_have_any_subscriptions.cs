@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => eventBus.PublishCommitedEvents(eventsToPublish));
+            exception = Catch.Exception(() => eventBus.PublishCommittedEvents(eventsToPublish));
 
         It should_nothing_happen_including_exceptions = () =>
             exception.ShouldBeNull();

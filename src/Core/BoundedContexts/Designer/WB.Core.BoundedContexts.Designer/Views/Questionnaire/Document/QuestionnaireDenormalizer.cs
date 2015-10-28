@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             UpdateQuestion(evnt, EventConverter.QuestionChangedToQuestionData(evnt));
         }
 
-        protected void AddQuestion(IUncommittedEvent evnt, Guid groupId, QuestionData data)
+        protected void AddQuestion(IPublishableEvent evnt, Guid groupId, QuestionData data)
         {
             QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             if (item == null)
@@ -210,7 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        protected void UpdateQuestion(IUncommittedEvent evnt, QuestionData data)
+        protected void UpdateQuestion(IPublishableEvent evnt, QuestionData data)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, document);
         }
 
-        protected void CloneQuestion(IUncommittedEvent evnt, Guid groupId,int index, QuestionData data)
+        protected void CloneQuestion(IPublishableEvent evnt, Guid groupId,int index, QuestionData data)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             IQuestion result = questionnaireEntityFactory.CreateQuestion(data);
@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         }
 
         #region Static text modifications
-        private void AddStaticText(IUncommittedEvent evnt, Guid entityId, Guid parentId, string text)
+        private void AddStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, string text)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -277,7 +277,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
 
-        private void UpdateStaticText(IUncommittedEvent evnt, Guid entityId, string text)
+        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
 
-        private void CloneStaticText(IUncommittedEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text)
+        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -426,7 +426,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.UpdateQuestionnaire(evnt, document);
         }
 
-        private void UpdateQuestionnaire(IUncommittedEvent evnt, QuestionnaireDocument document)
+        private void UpdateQuestionnaire(IPublishableEvent evnt, QuestionnaireDocument document)
         {
             document.LastEntryDate = evnt.EventTimeStamp;
             document.LastEventSequence = evnt.EventSequence;

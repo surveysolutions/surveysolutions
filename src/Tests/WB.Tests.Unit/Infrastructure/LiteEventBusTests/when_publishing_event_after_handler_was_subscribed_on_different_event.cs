@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishCommitedEvents(eventsToPublish);
+            eventBus.PublishCommittedEvents(eventsToPublish);
 
         It should_not_call_Handle_for_this_handler = () =>
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);

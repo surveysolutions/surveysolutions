@@ -80,7 +80,7 @@ namespace WB.Tests.Unit
             var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
             var eventHandlerAsFunctional = eventHandlerMock.As<IFunctionalEventHandler>();
             eventHandlerAsFunctional
-                .Setup(_ => _.Handle(It.IsAny<IEnumerable<IUncommittedEvent>>(), It.IsAny<Guid>()))
+                .Setup(_ => _.Handle(It.IsAny<IEnumerable<IPublishableEvent>>(), It.IsAny<Guid>()))
                 .Throws<Exception>();
 
             return eventHandlerMock.Object;
