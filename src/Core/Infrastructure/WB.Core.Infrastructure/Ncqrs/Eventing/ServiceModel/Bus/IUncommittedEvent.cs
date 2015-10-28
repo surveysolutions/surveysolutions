@@ -39,9 +39,4 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// </summary>
         object Payload { get; }
     }
-
-    public interface IPublishableEvent : IUncommittedEvent
-    {
-        long GlobalSequence { get; }
-    }
 }
