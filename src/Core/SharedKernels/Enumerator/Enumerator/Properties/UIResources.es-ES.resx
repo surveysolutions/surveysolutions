@@ -314,9 +314,6 @@ Puede crear o editar sus cuestionarios en Survey Solutions Designer
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Entrevistador de Survey Solutions</value>
   </data>
-  <data name="Interviewer_DashboardTitle" xml:space="preserve">
-    <value>Tareas/censo para {0}</value>
-  </data>
   <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>

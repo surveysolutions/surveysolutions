@@ -353,9 +353,6 @@
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
-  <data name="Interviewer_DashboardTitle" xml:space="preserve">
-    <value>Интервью/Перепись для {0}</value>
-  </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Попробуйте войти онлайн</value>
   </data>

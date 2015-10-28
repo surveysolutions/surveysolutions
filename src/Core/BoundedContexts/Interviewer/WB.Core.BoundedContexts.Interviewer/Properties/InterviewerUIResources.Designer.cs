@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions..
+        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions.
         /// </summary>
         public static string InternalServerError {
             get {
@@ -308,7 +308,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address..
+        ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
         /// </summary>
         public static string InvalidEndpoint {
             get {
@@ -452,15 +452,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Client Registration ID:.
-        /// </summary>
-        public static string Prefs_ClientRegistrationIdTitle {
-            get {
-                return ResourceManager.GetString("Prefs_ClientRegistrationIdTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Connection settings.
         /// </summary>
         public static string Prefs_ConnectionSettings {
@@ -475,15 +466,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Prefs_DeviceIdTitle {
             get {
                 return ResourceManager.GetString("Prefs_DeviceIdTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to URL that is used to communicate with supervisor application.
-        /// </summary>
-        public static string Prefs_EndpointSummary {
-            get {
-                return ResourceManager.GetString("Prefs_EndpointSummary", resourceCulture);
             }
         }
         
@@ -529,15 +511,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Prefs_HttpResponseTimeoutTitle {
             get {
                 return ResourceManager.GetString("Prefs_HttpResponseTimeoutTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Installation ID:.
-        /// </summary>
-        public static string Prefs_InstallationIdTitle {
-            get {
-                return ResourceManager.GetString("Prefs_InstallationIdTitle", resourceCulture);
             }
         }
         
@@ -596,15 +569,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to conditions/validations.
-        /// </summary>
-        public static string Synchronization_Conditions_Validations {
-            get {
-                return ResourceManager.GetString("Synchronization_Conditions_Validations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} {2} done.
         /// </summary>
         public static string Synchronization_Download_Description_Format {
@@ -619,15 +583,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Download_Title {
             get {
                 return ResourceManager.GetString("Synchronization_Download_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Some assignments were updated.
-        /// </summary>
-        public static string Synchronization_Fail_Description {
-            get {
-                return ResourceManager.GetString("Synchronization_Fail_Description", resourceCulture);
             }
         }
         
@@ -781,24 +736,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Upload_Description_Format {
             get {
                 return ResourceManager.GetString("Synchronization_Upload_Description_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to images.
-        /// </summary>
-        public static string Synchronization_Upload_Images_Text {
-            get {
-                return ResourceManager.GetString("Synchronization_Upload_Images_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to images by interviews.
-        /// </summary>
-        public static string Synchronization_Upload_ImagesByInterviews_Text {
-            get {
-                return ResourceManager.GetString("Synchronization_Upload_ImagesByInterviews_Text", resourceCulture);
             }
         }
         
@@ -967,7 +904,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Information package is successfully sent..
+        ///   Looks up a localized string similar to Information package is successfully sent.
         /// </summary>
         public static string Troubleshooting_Old_InformationPackageIsSuccessfullySent {
             get {
@@ -1075,7 +1012,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occurred on version check. Please, check settings or try again later..
+        ///   Looks up a localized string similar to Error occurred on version check. Please, check settings or try again later.
         /// </summary>
         public static string Troubleshooting_Unknown_ErrorMessage {
             get {
