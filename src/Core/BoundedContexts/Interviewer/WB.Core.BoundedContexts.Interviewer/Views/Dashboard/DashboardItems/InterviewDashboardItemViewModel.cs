@@ -34,13 +34,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IMvxMessenger messenger;
         private readonly ISyncPackageRestoreService packageRestoreService;
+        private readonly IExternalAppLauncher externalAppLauncher;
 
-        public string QuestionariName { get; private set; }
+        public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
         public DashboardInterviewStatus Status { get; private set; }
         public List<PrefilledQuestion> PrefilledQuestions { get; private set; }
         public string DateComment { get; private set; }
         public string Comment { get; private set; }
+        public bool HasComment { get; private set; }
 
         public InterviewDashboardItemViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -51,7 +53,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IChangeLogManipulator changeLogManipulator,
             ICapiCleanUpService capiCleanUpService,
             IMvxMessenger messenger, 
-            ISyncPackageRestoreService packageRestoreService)
+            ISyncPackageRestoreService packageRestoreService,
+            IExternalAppLauncher externalAppLauncher)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
@@ -62,17 +65,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.capiCleanUpService = capiCleanUpService;
             this.messenger = messenger;
             this.packageRestoreService = packageRestoreService;
+            this.externalAppLauncher = externalAppLauncher;
         }
 
         public void Init(DashboardQuestionnaireItem item)
         {
             this.InterviewId = item.PublicKey;
             this.Status = item.Status;
-            this.QuestionariName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
             this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
             this.Comment = this.GetInterviewCommentByStatus(item);
-            this.PrefilledQuestions = this.GetPrefilledQuestions(item.Properties, 3);
+            this.PrefilledQuestions = this.GetTop3PrefilledQuestions(item.Properties);
+            this.GpsLocation = item.GpsLocation;
             this.IsSupportedRemove = item.CanBeDeleted;
+            this.HasComment = !string.IsNullOrEmpty(this.Comment);
+        }
+
+        public GpsCoordinatesViewModel GpsLocation { get; private set; }
+
+        public bool HasGpsLocation
+        {
+            get { return this.GpsLocation != null; }
+        }
+
+        public IMvxCommand NavigateToGpsLocationCommand
+        {
+            get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
+        }
+
+        private void NavigateToGpsLocation()
+        {
+            this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
         }
 
         private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
@@ -80,6 +103,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             switch (status)
             {
                 case DashboardInterviewStatus.New:
+                    if (item.InterviewerAssignedDateTime.HasValue)
+                        return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, item.InterviewerAssignedDateTime);
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_CreatedOn, item.CreatedDateTime);
                 case DashboardInterviewStatus.InProgress:
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_StartedOn, item.StartedDateTime);
@@ -118,13 +143,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private List<PrefilledQuestion> GetPrefilledQuestions(IEnumerable<FeaturedItem> featuredItems, int count)
+        private List<PrefilledQuestion> GetTop3PrefilledQuestions(IEnumerable<FeaturedItem> featuredItems)
         {
-            return featuredItems.Select(fi => new PrefilledQuestion()
-                {
-                    Answer = fi.Value,
-                    Question = fi.Title
-                }).Take(count).ToList();
+            return featuredItems.Select(fi => new PrefilledQuestion {
+                                    Answer = fi.Value,
+                                    Question = fi.Title
+                                }).Take(3).ToList();
         }
 
         public bool IsSupportedRemove { get; set; }
@@ -137,7 +161,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private async void RemoveInterview()
         {
             var isNeedDelete = await this.userInteractionService.ConfirmAsync(
-                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionariName),
+                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
 
@@ -172,7 +196,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 this.changeLogManipulator.CreateOrReopenDraftRecord(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
             }
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 RaiseStartingLongOperation();
                 this.packageRestoreService.CheckAndApplySyncPackage(this.InterviewId);
@@ -182,11 +206,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 if (interview.CreatedOnClient)
                 {
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
                 }
                 else
                 {
-                    this.viewModelNavigationService.NavigateToInterview(interviewIdString);
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
                 }
             });
         }

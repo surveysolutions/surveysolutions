@@ -77,13 +77,13 @@ namespace WB.UI.Interviewer.Ninject
                 interviewMetaInfoFactory, 
                 this.Kernel.Get<IArchiveUtils>(), 
                 this.Kernel.Get<IFileSystemAccessor>(),
-                this.Kernel.Get<IJsonUtils>(),
+                this.Kernel.Get<ISerializer>(),
                 this.basePath);
 
             var syncCacher = new FileCapiSynchronizationCacheService(this.Kernel.Get<IFileSystemAccessor>(), this.basePath);
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
-            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<IJsonUtils>());
-            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>(this.Kernel.Get<IJsonUtils>());
+            var templateStore = new FileReadSideRepositoryWriter<QuestionnaireDocumentVersioned>(this.Kernel.Get<ISerializer>());
+            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>(this.Kernel.Get<ISerializer>());
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);

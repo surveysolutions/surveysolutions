@@ -10,11 +10,10 @@
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
         <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-          <TableLayout android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+          <TableLayout style="@style/FullWidthWrappingLayout" 
+                       android:stretchColumns="0">
             <TableRow>
                 <TextView style="@style/Interview_Question_TextAnswer"
-                          android:layout_gravity="center_horizontal"
                           local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
                 <ImageButton style="@style/Interview_Question_RemoveAnswer"
                              android:layout_marginLeft="@dimen/Interview_Question_InputButton_padding"

@@ -168,6 +168,7 @@
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseMvxActivity.cs" />
     <Compile Include="Activities\EnumeratorInterviewActivity.cs" />
+    <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Bootstrap\FilePluginBootstrap.cs" />
@@ -226,7 +227,8 @@
     <Compile Include="CustomControls\MvxRecyclerViewAdapter.cs" />
     <Compile Include="CustomControls\MvxRecyclerViewViewHolder.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
-    <Compile Include="CustomServices\UserInteraction\UserInteractionService.cs" />
+    <Compile Include="CustomServices\ExternalAppLauncher.cs" />
+    <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
     <Compile Include="Ninject\NinjectMvxIoCProvider.cs" />
@@ -897,9 +899,6 @@
     <AndroidResource Include="Resources\values\fonts.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\styles-interview-group.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -955,9 +954,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\confirmation_edit_text.axml" />
-    <AndroidResource Include="Resources\layout\interview_summary_navigation.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

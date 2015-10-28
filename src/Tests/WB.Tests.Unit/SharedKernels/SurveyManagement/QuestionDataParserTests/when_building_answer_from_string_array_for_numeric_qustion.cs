@@ -23,12 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 result =
-                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName, answer) }, question, CreateQuestionnaireDocumentWithOneChapter(question));
+                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName, answer) }, question);
 
         private It should_result_be_equal_to_1 = () =>
-            result.Value.Value.ShouldEqual(1);
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            result.Value.Key.ShouldEqual(questionId);
+            result.ShouldEqual(1);
     }
 }

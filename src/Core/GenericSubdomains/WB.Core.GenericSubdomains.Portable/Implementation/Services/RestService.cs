@@ -20,19 +20,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         private readonly IRestServiceSettings restServiceSettings;
         private readonly INetworkService networkService;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IStringCompressor stringCompressor;
 
         public RestService(
             IRestServiceSettings restServiceSettings, 
             INetworkService networkService,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.stringCompressor = stringCompressor;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate && restServicePointManager != null)
@@ -160,7 +160,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private HttpContent CreateJsonContent(object data)
         {
-            return data == null ? null : new CapturedStringContent(this.jsonUtils.Serialize(data), Encoding.UTF8, "application/json");
+            return data == null ? null : new CapturedStringContent(this.serializer.Serialize(data), Encoding.UTF8, "application/json");
         }
 
         private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
@@ -263,7 +263,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
-                return this.jsonUtils.Deserialize<T>(responseContent);
+                return this.serializer.Deserialize<T>(responseContent);
             }
             catch (JsonDeserializationException ex)
             {

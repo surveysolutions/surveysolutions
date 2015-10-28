@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures = null,
             IReadSideKeyValueStorage<InterviewData> interviews = null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummarys = null,
-            IJsonUtils jsonUtils = null,
+            ISerializer serializer = null,
             IMetaInfoBuilder metaBuilder = null,
             IReadSideRepositoryWriter<InterviewSyncPackageMeta> interviewPackageStorageWriter = null,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory = null)
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 questionnriePropagationStructures ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 interviews ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 interviewSummarys ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(),
+                serializer ?? Mock.Of<ISerializer>(),
                 metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 interviewPackageStorageWriter ??
                 Mock.Of<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>(),

@@ -19,8 +19,33 @@
                 success: {
                     label: "Yes",
                     callback: function() {
-                        self.SendRequest(deleteUserBatchUploadProcessUrl + "/" + processItem.ProcessId(), {}, function () {
+                        var requestHeaders = {};
+                        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+                        $.ajax({
+                            url: deleteUserBatchUploadProcessUrl + "/" + processItem.ProcessId(),
+                            type: 'post',
+                            headers: requestHeaders,
+                            dataType: 'json'
+                        }).done(function (data) {
                             self.search();
+                        }).fail(function (jqXhr, textStatus, errorThrown) {
+                            if (jqXhr.status === 403) {
+                                if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                                    self.ShowError(input.settings.messages.forbiddenMessage);
+                                } else {
+                                    self.ShowError(jqXhr.responseText);
+                                }
+                            } else {
+                                var jsonException = $.parseJSON(jqXhr.responseText);
+                                if (!Supervisor.Framework.Objects.isUndefined(jsonException))
+                                    self.ShowError(jsonException.ExceptionMessage);
+                                else
+                                    self.ShowError(input.settings.messages.unhandledExceptionMessage);
+                            }
+                        }).always(function () {
+                            self.IsPageLoaded(true);
+                            self.IsAjaxComplete(true);
                         });
                     }
                 }

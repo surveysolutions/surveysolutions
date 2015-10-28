@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
                 .Setup(x => x.GetById(questionnaireId))
                 .Returns(CreateQuestionnaireInfoView(questionnaireId, questionnaireTitle));
 
-            var questionnaire = Create.CreateQuestionnaireDocumentWithOneChapter(
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 new NumericQuestion
                 {
                     QuestionType = QuestionType.Numeric

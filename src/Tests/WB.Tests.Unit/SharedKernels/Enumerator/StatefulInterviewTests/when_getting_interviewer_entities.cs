@@ -44,12 +44,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             statefulInterview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, new[] { rosterInstance1Id }));
-            statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, new[] { rosterInstance2Id }));
+            statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId, rosterInstanceId: rosterInstance2Id, sortIndex:1));
+            statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterGroupId: rosterId, rosterInstanceId: rosterInstance1Id, sortIndex:2));
         };
 
         Because of = () =>
-            identitiesOfEntitiesInSelectedGroup = statefulInterview.GetInterviewerEntities(selectedGroupIdentity);
+        {
+            identitiesOfEntitiesInSelectedGroup =
+                statefulInterview.GetInterviewerEntities(selectedGroupIdentity);
+
+            rosterInstance1Position = GetIndexOfRosterInstancesById(rosterInstance1Id);
+            rosterInstance2Position = GetIndexOfRosterInstancesById(rosterInstance2Id);
+        };
 
         It should_contains_5_identities = () =>
             identitiesOfEntitiesInSelectedGroup.Count().ShouldEqual(5);
@@ -63,6 +69,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_not_contains_prefilled_text_question = () =>
             identitiesOfEntitiesInSelectedGroup.ShouldNotContain(prefilledTextQuestionId);
 
+        It should_rosterInstance1_has_greater_index_then_rosterInstance2 = () =>
+            rosterInstance1Position.ShouldBeGreaterThan(rosterInstance2Position);
+
+        private static int GetIndexOfRosterInstancesById(decimal rosterInstanceId)
+        {
+            return identitiesOfEntitiesInSelectedGroup.Select((x, i) => new { id = x, index = i })
+                    .Where(x => x.id.Equals(new Identity(rosterId, new RosterVector(new[] { rosterInstanceId })))).Select(x => x.index)
+                    .FirstOrDefault();
+        }
+
         static StatefulInterview statefulInterview;
         static readonly Identity selectedGroupIdentity = new Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
         static IEnumerable<Identity> identitiesOfEntitiesInSelectedGroup;
@@ -74,5 +90,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         static readonly Guid groupId = Guid.Parse("11111111111111111111111111111117");
         const decimal rosterInstance1Id = 4444m;
         const decimal rosterInstance2Id = 555m;
+
+        private static int rosterInstance1Position;
+        private static int rosterInstance2Position;
     }
 }

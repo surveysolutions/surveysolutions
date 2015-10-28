@@ -7,11 +7,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
@@ -22,13 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         {
             document.ConnectChildrenWithParent();
             return new InterviewSynchronizationDtoFactory(Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
-                _ => _.GetById(It.IsAny<string>()) == new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
+                _ => _.GetById(It.IsAny<string>()) == new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>());
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
         {
             return new InterviewSynchronizationDtoFactory(Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
-                _ => _.GetById(It.IsAny<string>()) == questionnaireRosterStructure));
+                _ => _.GetById(It.IsAny<string>()) == questionnaireRosterStructure), Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>());
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)

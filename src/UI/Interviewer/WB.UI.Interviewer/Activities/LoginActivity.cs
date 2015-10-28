@@ -3,7 +3,9 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -31,6 +33,10 @@ namespace WB.UI.Interviewer.Activities
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.login, menu);
+
+            menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
+            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
+
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)

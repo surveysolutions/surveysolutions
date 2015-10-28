@@ -15,7 +15,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         {
             interviewStatusTimeSpansStorage = new TestInMemoryWriter<InterviewStatusTimeSpans>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
                 Create.InterviewStatuses(interviewid: interviewId, statuses:
                     new[]

@@ -1,6 +1,7 @@
 using Android.App;
 using Android.Content;
 using Android.Views;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -15,12 +16,24 @@ namespace WB.UI.Tester.Activities
 
         public override async void OnBackPressed()
         {
-            await this.ViewModel.NavigateToPreviousViewModel(() =>
+            await this.ViewModel.NavigateToPreviousViewModelAsync(() =>
             {
-                Application.SynchronizationContext.Post(_ => { this.ViewModel.NavigateBack(); }, null);
+                Application.SynchronizationContext.Post(async _ => { await this.ViewModel.NavigateBack(); }, null);
                 this.Finish();
             });
         }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(this.MenuResourceId, menu);
+
+            menu.LocalizeMenuItem(Resource.Id.interview_dashboard, TesterUIResources.MenuItem_Title_Dashboard);
+            menu.LocalizeMenuItem(Resource.Id.interview_settings, TesterUIResources.MenuItem_Title_Settings);
+            menu.LocalizeMenuItem(Resource.Id.interview_signout, TesterUIResources.MenuItem_Title_SignOut);
+
+            return base.OnCreateOptionsMenu(menu);
+        }
+
         protected override void OnMenuItemSelected(int resourceId)
         {
             switch (resourceId)

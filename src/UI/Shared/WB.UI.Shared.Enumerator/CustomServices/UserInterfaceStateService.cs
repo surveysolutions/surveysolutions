@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    public class UserInterfaceStateService : IUserInterfaceStateService
+    internal class UserInterfaceStateService : IUserInterfaceStateService
     {
         private static int count = 0;
 

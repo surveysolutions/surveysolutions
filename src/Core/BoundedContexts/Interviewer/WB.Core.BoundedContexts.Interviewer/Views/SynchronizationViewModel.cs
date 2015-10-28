@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
         private readonly IInterviewPackageIdsStorage interviewPackageIdsStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ICapiDataSynchronizationService capiDataSynchronizationService,
             IInterviewPackageIdsStorage interviewPackageIdsStorage,
             ICapiCleanUpService capiCleanUpService,
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ILogger logger,
             IUserInteractionService userInteractionService, 
@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.capiDataSynchronizationService = capiDataSynchronizationService;
             this.interviewPackageIdsStorage = interviewPackageIdsStorage;
             this.capiCleanUpService = capiCleanUpService;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.logger = logger;
             this.principal = principal;
@@ -214,7 +214,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         break;
                 }
 
-                this.Status = SynchronizationStatus.Fail;
+                this.Status = ex.Type == SynchronizationExceptionType.RequestCanceledByUser 
+                    ? SynchronizationStatus.Canceled
+                    : SynchronizationStatus.Fail;
                 this.SetProgressOperation(errorTitle, errorDescription);
             }
             catch (Exception ex)
@@ -229,8 +231,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.Statistics = statistics;
                 this.IsSynchronizationInProgress = false;
             }
-
-            if (this.shouldUpdatePasswordOfInterviewer)
+            
+            if (!this.Token.IsCancellationRequested && this.shouldUpdatePasswordOfInterviewer)
             {
                 var newPassword = await this.GetNewPasswordAsync();
                 if (newPassword == null)
@@ -473,7 +475,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             await Task.Run(() =>
             {
-                var questionnaireDocument = this.jsonUtils.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument);
+                var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument);
                 var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocument);
                 this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
                 this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);

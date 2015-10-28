@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Resources;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.TabletInformation
 {
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.ErrorReporting.Implementation.Tabl
                 }
                 catch (OperationCanceledException)
                 {
-                    this.OnProcessCanceled(TabletInformationSenderStrings.CanceledByUser);
+                    this.OnProcessCanceled(InterviewerUIResources.RequestCanceledByUser);
                 }
                 catch (Exception e)
                 {

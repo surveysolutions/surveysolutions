@@ -307,7 +307,7 @@
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
-    <Compile Include="Converters\IsSynchronizationFailConverter.cs" />
+    <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
@@ -324,7 +324,6 @@
     <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
     <Compile Include="InterviewerBoundedContextModule.cs" />
-    <Compile Include="Controls\Adapters\SmartAdapter.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
     <Compile Include="Extensions\ViewExtensions.cs" />
@@ -369,7 +368,6 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="InterviewerApplication.cs" />
     <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
-    <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\PlainStorage\PlainStorageRow.cs" />
@@ -384,11 +382,6 @@
     <Compile Include="Ninject\AndroidCoreRegistry.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ReadSideStore\FileReadSideRepositoryWriter.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
@@ -417,7 +410,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\ActionBar.axml">
       <SubType>AndroidResource</SubType>
@@ -470,11 +462,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Values\Strings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
+    <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -488,9 +476,6 @@
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
     <AndroidResource Include="Resources\Values\settings.xml" />
-    <AndroidResource Include="Resources\values-ru\strings.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
@@ -644,6 +629,18 @@
     <AndroidResource Include="Resources\menu\finish.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
+    <AndroidResource Include="Resources\Drawable\location_icon.png" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_default.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\dashboard_location_bg.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_location_pressed.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_location_bg.xml" />
+    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon_pressed.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon.xml" />
+    <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -692,19 +689,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\Adapters\" />
     <Folder Include="Infrastructure\Internals\Security\" />
-    <Folder Include="Resources\drawable-v21\" />
     <Folder Include="Services\" />
-    <Folder Include="Syncronization\Update\" />
-    <Folder Include="ViewModel\Dashboard\" />
-    <Folder Include="Views\Login\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

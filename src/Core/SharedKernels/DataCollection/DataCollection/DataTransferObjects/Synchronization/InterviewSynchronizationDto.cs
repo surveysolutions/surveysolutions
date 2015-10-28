@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             InterviewStatus status, 
             string comments,
             DateTime? rejectDateTime,
+            DateTime? interviewerAssignedDateTime,
             Guid userId, 
             Guid questionnaireId, 
             long questionnaireVersion, 
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Status = status;
             Comments = comments;
             RejectDateTime = rejectDateTime;
+            this.InterviewerAssignedDateTime = interviewerAssignedDateTime;
             UserId = userId;
             QuestionnaireId = questionnaireId;
             QuestionnaireVersion = questionnaireVersion;
@@ -51,6 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public InterviewStatus Status { get;  set; }
         public string Comments { get; set; }
         public DateTime? RejectDateTime { get; set; }
+        public DateTime? InterviewerAssignedDateTime { get; set; }
         public Guid UserId { get;  set; }
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }

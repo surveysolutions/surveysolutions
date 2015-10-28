@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Machine.Specifications;
+using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControllerTests
 {
@@ -13,7 +16,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControlle
     {
         Establish context = () =>
         {
-            tabletReportController = CreateTabletReportController();
+            var tabletInformationService = new Mock<ITabletInformationService>();
+            tabletInformationService.Setup(x => x.GetPackageNameWithoutRegistrationId(packageName)).Returns(packageName);
+            tabletInformationService.Setup(x => x.GetFullPathToContentFile(packageName)).Returns(packageName);
+
+            tabletReportController = CreateTabletReportController(tabletInformationService.Object);
         };
 
         Because of = () => result = tabletReportController.DownloadPackages(packageName) as FilePathResult;

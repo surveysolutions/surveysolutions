@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_record_complete_status =
            () => dataExportWriter.Verify(
                x =>
-                   x.AddExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.Completed), Times.Once);
+                   x.AddOrUpdateExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.Completed), Times.Once);
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static InterviewExportedDataDenormalizer interviewExportedDataDenormalizer;

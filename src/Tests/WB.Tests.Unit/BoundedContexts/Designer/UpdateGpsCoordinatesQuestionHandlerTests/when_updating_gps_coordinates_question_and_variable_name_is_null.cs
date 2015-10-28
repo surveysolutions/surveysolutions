@@ -33,6 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     title: title,
                     variableName: null,
                     variableLabel: null,
+                    isPreFilled: false,
                     scope: scope,
                     enablementCondition: enablementCondition,
                     validationExpression: string.Empty,

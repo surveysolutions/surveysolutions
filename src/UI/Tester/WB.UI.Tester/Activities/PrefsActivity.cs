@@ -1,9 +1,9 @@
-using System;
 using System.Threading;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Preferences;
+using WB.Core.BoundedContexts.Tester.Properties;
 
 namespace WB.UI.Tester.Activities
 {
@@ -25,9 +25,28 @@ namespace WB.UI.Tester.Activities
             Preference designerEndpointPreference = this.FindPreference(designerEndpointKey);
             designerEndpointPreference.PreferenceChange += DevSettingsCategoryOnPreferenceChange;
 
+            this.SetPreferenceTitleAndSummary("HttpResponseTimeout", TesterUIResources.Prefs_HttpResponseTimeoutTitle, TesterUIResources.Prefs_HttpResponseTimeoutSummary);
+            this.SetPreferenceTitleAndSummary("GpsReceiveTimeoutSec", TesterUIResources.Prefs_GpsReceiveTimeoutSecTitle, TesterUIResources.Prefs_GpsReceiveTimeoutSecSummary);
+            this.SetPreferenceTitleAndSummary("version", TesterUIResources.Prefs_VersionTitle, string.Empty);
+            this.SetPreferenceTitleAndSummary("dev_settings_category", TesterUIResources.Prefs_ConnectionSettings, string.Empty);
+            this.SetPreferenceTitleAndSummary("DesignerEndpointV10", TesterUIResources.Prefs_DesignerEndPointTitle, TesterUIResources.Prefs_DesignerEndPointSummary);
+            this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
+
+
             this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
-            
+          
             this.SetupVersionPreference();
+        }
+
+        private void SetPreferenceTitleAndSummary(string preferenceKey, string title, string summary)
+        {
+            var preference = this.FindPreference(preferenceKey);
+
+            if (preference != null)
+            {
+                preference.Title = title;
+                preference.Summary = summary;
+            }
         }
 
         void DevSettingsCategoryOnPreferenceChange(object sender, Preference.PreferenceChangeEventArgs preferenceChangeEventArgs)
@@ -54,7 +73,7 @@ namespace WB.UI.Tester.Activities
             };
 
             PackageInfo pInfo = this.PackageManager.GetPackageInfo(this.PackageName, 0);
-            string format = this.Resources.GetString(Resource.String.Prefs_VersionSummaryFormat);
+            string format = TesterUIResources.Prefs_VersionSummaryFormat;
             var summary = string.Format(format, pInfo.VersionName, System.Environment.NewLine);
             versionPreference.Summary = summary;
         }

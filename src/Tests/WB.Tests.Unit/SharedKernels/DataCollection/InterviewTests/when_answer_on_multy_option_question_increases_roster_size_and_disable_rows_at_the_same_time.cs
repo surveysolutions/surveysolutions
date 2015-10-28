@@ -96,7 +96,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.InterviewerAssigned, null, null, userId, questionnaireId,
+                new InterviewSynchronizationDto(
+                    interview.EventSourceId, 
+                    InterviewStatus.InterviewerAssigned, 
+                    null, 
+                    null, 
+                    null,
+                    userId, 
+                    questionnaireId,
                     questionnaire.Version,
                     new AnsweredQuestionSynchronizationDto[0],
                     new HashSet<InterviewItemId>(),

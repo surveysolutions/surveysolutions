@@ -372,4 +372,7 @@
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Sub-section can have no more than 10 parent sub-sections.</value>
   </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Only one GPS question could be marked as prefilled</value>
+  </data>
 </root>

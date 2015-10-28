@@ -1,5 +1,6 @@
 ﻿using Cirrious.MvvmCross.Plugins.Messenger;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -33,7 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
                 changeLogManipulator ?? Substitute.For<IChangeLogManipulator>(),
                 capiCleanUpService ?? Substitute.For<ICapiCleanUpService>(),
                 messenger ?? Substitute.For<IMvxMessenger>(),
-                packageRestoreService ?? Substitute.For<ISyncPackageRestoreService>());
+                packageRestoreService ?? Substitute.For<ISyncPackageRestoreService>(),
+                Substitute.For<IExternalAppLauncher>());
         }
     }
 }

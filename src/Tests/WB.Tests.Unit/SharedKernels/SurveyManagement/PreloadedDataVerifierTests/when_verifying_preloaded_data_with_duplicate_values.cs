@@ -36,34 +36,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             };
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(question);
-            questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1_1", "q1_2" },
+            questionnaire.VariableName = questionnaire.Title = "questionnaire";
+
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1_1", "q1_0" },
                 new string[][] { new string[] { "1", "3", "3" } },
                 "questionnaire.csv");
 
-            preloadedDataServiceMock = new Mock<IPreloadedDataService>();
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(Moq.It.IsAny<string>()))
-                .Returns(new HeaderStructureForLevel()
-                {
-                    HeaderItems =
-                        new Dictionary<Guid, ExportedHeaderItem>
-                        {
-                            { Guid.NewGuid(), new ExportedHeaderItem() { VariableName = "q1", ColumnNames = new[] { "q1_1", "q1_2" } } }
-                        }
-                });
-
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexesGoupedByQuestionVariableName(preloadedDataByFile))
-                .Returns(new Dictionary<string, Tuple<string, int>[]> { { "q1", new[] { new Tuple<string, int>("q1_1", 1), new Tuple<string, int>("q1_2", 2) } } });
-
-            KeyValuePair<Guid, object> outValue = new KeyValuePair<Guid, object>(questionId, (decimal)3);
-           
-            preloadedDataServiceMock.Setup(
-                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<IQuestion>(), out outValue))
-                .Returns(ValueParsingResult.OK);
-
-            preloadedDataServiceMock.Setup(x => x.GetQuestionByVariableName(Moq.It.IsAny<string>())).Returns(question);
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
+            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire);
         };
 
         private Because of =
@@ -85,7 +64,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static Guid questionnaireId;
         private static Guid questionId;
         private static PreloadedDataByFile preloadedDataByFile;
-
-        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
     }
 }

@@ -35,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
@@ -76,11 +77,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
@@ -107,6 +110,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Supervisor.Controllers;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
@@ -456,6 +460,31 @@ namespace WB.Tests.Unit
             public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
                 return new InterviewSynchronized(synchronizationDto);
+            }
+
+            public static InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
+            {
+                return new InterviewReceivedByInterviewer();
+            }
+
+            public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
+            {
+                return new InterviewReceivedBySupervisor();
+            }
+
+            public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
+            {
+                return new GeoLocationQuestionAnswered(
+                    Guid.NewGuid(), question.Id, question.RosterVector, DateTime.UtcNow, latitude, longitude, 1, 1, DateTimeOffset.Now);
+            }
+
+            public static InterviewOnClientCreated InterviewOnClientCreated(
+                Guid? questionnaireId = null, long? questionnaireVersion = null)
+            {
+                return new InterviewOnClientCreated(
+                    Guid.NewGuid(),
+                    questionnaireId ?? Guid.NewGuid(),
+                    questionnaireVersion ?? 1);
             }
         }
 
@@ -1060,12 +1089,12 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            return CreateQuestionnaireDocumentWithOneChapter(null, children);
+            return QuestionnaireDocumentWithOneChapter(null, children);
         }
 
-        public static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument();
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
@@ -1310,7 +1339,7 @@ namespace WB.Tests.Unit
             Func<HttpMessageHandler> httpMessageHandler = null,
             IEventStore eventStore = null,
             ILogger logger = null,
-            IJsonUtils jsonUtils = null,
+            ISerializer serializer = null,
             ICommandService commandService = null,
             HeadquartersPushContext headquartersPushContext = null,
             IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null, WB.Core.Infrastructure.PlainStorage.IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
@@ -1333,7 +1362,7 @@ namespace WB.Tests.Unit
                 HeadquartersPullContext(),
                 headquartersPushContext ?? HeadquartersPushContext(),
                 eventStore ?? Mock.Of<IEventStore>(),
-                jsonUtils ?? Mock.Of<IJsonUtils>(),
+                serializer ?? Mock.Of<ISerializer>(),
                 interviewSummaryRepositoryReader ?? Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(),
                 readyToSendInterviewsRepositoryReader ?? Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>(),
                 httpMessageHandler ?? Mock.Of<Func<HttpMessageHandler>>(),
@@ -1539,6 +1568,11 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new InterviewApprovedByHQ(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
         }
 
+        public static IPublishedEvent<UnapprovedByHeadquarters> UnapprovedByHeadquartersEvent(Guid? interviewId = null, string userId = null, string comment = null)
+        {
+            return ToPublishedEvent(new UnapprovedByHeadquarters(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
+        }
+
         public static IPublishedEvent<QuestionnaireDeleted> QuestionaireDeleted(Guid questionnaireId, long version)
         {
             return ToPublishedEvent(new QuestionnaireDeleted{QuestionnaireVersion = version}, eventSourceId: questionnaireId);
@@ -1571,7 +1605,7 @@ namespace WB.Tests.Unit
             return
                 ToPublishedEvent(new SynchronizationMetadataApplied(userId: GetGuidIdByStringId(userId), status: status,
                     questionnaireId: GetGuidIdByStringId(questionnaireId), questionnaireVersion: 1, featuredQuestionsMeta: featuredQuestionsMeta,
-                    createdOnClient: createdOnClient, comments: null, rejectedDateTime: null));
+                    createdOnClient: createdOnClient, comments: null, rejectedDateTime: null, interviewerAssignedDateTime: null));
         }
 
         private static Guid GetGuidIdByStringId(string stringId)
@@ -1614,13 +1648,18 @@ namespace WB.Tests.Unit
                 new Dictionary<string, Tuple<decimal, string>[]>(), new HashSet<string>(),
                 answerComments ?? new List<AnswerComment>(),
                 new HashSet<string>(),
-                new HashSet<string>(), new Dictionary<string, DistinctDecimalList>(),
+                new HashSet<string>(), new Dictionary<string, ConcurrentHashSet<decimal>>(),
                 new HashSet<string>(), new HashSet<string>(), true, Mock.Of<IInterviewExpressionStateV2>(), interviewerId?? Guid.NewGuid());
         }
 
-        public static WB.Core.SharedKernels.DataCollection.Identity Identity(Guid id, decimal[] rosterVector)
+        public static Identity Identity(string id, RosterVector rosterVector)
         {
-            return new WB.Core.SharedKernels.DataCollection.Identity(id, rosterVector);
+            return Create.Identity(Guid.Parse(id), rosterVector);
+        }
+
+        public static Identity Identity(Guid id, RosterVector rosterVector)
+        {
+            return new Identity(id, rosterVector);
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -2038,13 +2077,14 @@ namespace WB.Tests.Unit
             return new User();
         }
 
-        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1")
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1", bool isPrefilled=false)
         {
             return new GpsCoordinateQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variableName,
-                QuestionType = QuestionType.GpsCoordinates
+                QuestionType = QuestionType.GpsCoordinates,
+                Featured = isPrefilled
             };
         }
 
@@ -2083,13 +2123,14 @@ namespace WB.Tests.Unit
 
         }
 
-        public static InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null, long? questionnaireVersion = null, params TimeSpanBetweenStatuses[] timeSpans)
+        public static InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null, long? questionnaireVersion = null, string interviewId = null, params TimeSpanBetweenStatuses[] timeSpans)
         {
             return new InterviewStatusTimeSpans()
             {
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1,
-                TimeSpansBetweenStatuses = timeSpans.ToHashSet()
+                TimeSpansBetweenStatuses = timeSpans.ToHashSet(),
+                InterviewId = interviewId
             };
         }
 
@@ -2167,7 +2208,8 @@ namespace WB.Tests.Unit
         }
 
         public static InterviewSynchronizationDto InterviewSynchronizationDto(
-            Guid? questionnaireId = null, 
+            Guid? questionnaireId = null,
+            long? questionnaireVersion = null,
             Guid? userId = null, 
             AnsweredQuestionSynchronizationDto[] answers = null,
             HashSet<InterviewItemId> disabledGroups = null,
@@ -2179,10 +2221,12 @@ namespace WB.Tests.Unit
             return new InterviewSynchronizationDto(
                 Guid.NewGuid(),
                 status,
-                "", null,
+                "", 
+                null,
+                null,
                 userId ?? Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(), 
-                1, 
+                questionnaireVersion ?? 1, 
                 answers ?? new AnsweredQuestionSynchronizationDto[0],
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
@@ -2225,19 +2269,55 @@ namespace WB.Tests.Unit
             return new HeaderStructureForLevel() {LevelScopeVector = new ValueVector<Guid>()};
         }
 
-        public static InterviewCommentaries InterviewCommentaries(Guid? questionnaireId = null, long? questionnaireVersion = null,params InterviewComment[] comments)
+        public static InterviewCommentaries InterviewCommentaries(Guid? questionnaireId = null, long? questionnaireVersion = null, params InterviewComment[] comments)
         {
             return new InterviewCommentaries()
             {
                 QuestionnaireId = (questionnaireId ?? Guid.NewGuid()).FormatGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1,
-                Commentaries = comments
+                Commentaries = new List<InterviewComment>(comments)
             };
         }
 
         public static InterviewComment InterviewComment(string comment=null)
         {
             return new InterviewComment() {Comment = comment};
+        }
+
+        public static QuestionnaireDTO QuestionnaireDTO()
+        {
+            return new QuestionnaireDTO();
+        }
+
+        public static DashboardDenormalizer DashboardDenormalizer(
+            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage = null)
+        {
+            return new DashboardDenormalizer(
+                questionnaireDtoDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
+                Mock.Of<IReadSideRepositoryWriter<SurveyDto>>(),
+                questionnaireStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
+        }
+
+        public static QuestionnaireDocumentVersioned QuestionnaireDocumentVersioned(
+            QuestionnaireDocument questionnaireDocument, long? version = null)
+        {
+            return new QuestionnaireDocumentVersioned
+            {
+                Questionnaire = questionnaireDocument,
+                Version = version ?? 77,
+            };
+        }
+
+        public static AnsweredQuestionSynchronizationDto AnsweredQuestionSynchronizationDto(
+            Guid? questionId = null, decimal[] rosterVector = null, object answer = null)
+        {
+            return new AnsweredQuestionSynchronizationDto(
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? RosterVector.Empty,
+                answer ?? "42",
+                "no comment");
         }
     }
 }

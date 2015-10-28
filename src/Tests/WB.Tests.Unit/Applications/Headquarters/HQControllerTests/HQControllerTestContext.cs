@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
                 Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(),
                 Mock.Of<IPreloadedDataVerifier>(),
-                Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
+                Mock.Of<IViewFactory<SampleUploadViewInputModel, SampleUploadView>>(),
                 new InterviewDataExportSettings("", false,10000));
         }
     }

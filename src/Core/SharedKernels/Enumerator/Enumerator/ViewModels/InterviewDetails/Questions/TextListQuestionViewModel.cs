@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void AddNewItemAndSaveAnswers(string title)
         {
-            var maxValue = this.Answers.Count == 0 ? -1 : this.Answers.Max(x => x.Value) + 1;
+            var maxValue = this.Answers.Count == 0 ? 1 : this.Answers.Max(x => x.Value) + 1;
 
             this.Answers.Add(this.CreateListItemViewModel(maxValue, title));
 

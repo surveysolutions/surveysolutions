@@ -26,6 +26,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Apply(Create.Event.TextQuestionAnswered(questionId, new[] { 2m }, "2"));
         }
 
+        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
+        {
+            return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+        }
+
         protected static void FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(StatefulInterview interview, Guid roster1Id, Guid roster2Id, Guid questionId)
         {
             interview.Apply(Create.Event.RosterInstancesAdded(roster1Id,

@@ -24,7 +24,7 @@ namespace WB.UI.Designer.WebServices
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.WebServices
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
             IDesignerEngineVersionService engineVersionService, 
-            IJsonUtils jsonUtils)
+            ISerializer serializer)
         {
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
         }
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
@@ -104,7 +104,7 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
 
-            Stream stream = this.zipUtils.Compress(jsonUtils.Serialize(questionnaireView.Source));
+            Stream stream = this.zipUtils.Compress(this.serializer.Serialize(questionnaireView.Source));
 
             return new RemoteFileInfo
             {

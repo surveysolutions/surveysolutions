@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Main.Core.Entities.SubEntities
@@ -15,27 +16,6 @@ namespace Main.Core.Entities.SubEntities
 
         public GeoPosition(){}
 
-        public GeoPosition(dynamic propertyAnswerMap)
-        {
-            this.Latitude = propertyAnswerMap.Latitude;
-
-            this.Longitude = propertyAnswerMap.Longitude;
-
-            if (IsPropertyExist(propertyAnswerMap, "Accuracy"))
-                this.Accuracy = propertyAnswerMap.Accuracy;
-
-            if (IsPropertyExist(propertyAnswerMap, "Timestamp"))
-                this.Timestamp = propertyAnswerMap.Timestamp;
-
-            if (IsPropertyExist(propertyAnswerMap, "Altitude"))
-                this.Altitude = propertyAnswerMap.Altitude;
-        }
-
-        private bool IsPropertyExist(dynamic propertyAnswerMap, string name)
-        {
-            return ((IDictionary<String, object>)propertyAnswerMap).ContainsKey(name);
-        }
-
         public GeoPosition(double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp)
         {
             this.Latitude = latitude;
@@ -47,21 +27,33 @@ namespace Main.Core.Entities.SubEntities
 
         public override string ToString()
         {
-            return string.Format("{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
+            return string.Format(CultureInfo.InvariantCulture, "{0},{1}[{2}]{3}", Latitude, Longitude, Accuracy, Altitude);
+        }
+
+        public static GeoPosition FromString(string value)
+        {
+            string[] stringParts = value.Split(',', '[', ']');
+
+            return new GeoPosition(
+                double.Parse(stringParts[0], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[1], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[2], CultureInfo.InvariantCulture),
+                double.Parse(stringParts[3], CultureInfo.InvariantCulture),
+                default(DateTimeOffset));
         }
 
         public static object ParseProperty(string value, string propertyName)
         {
-            if (!PropertyNames.Contains(propertyName))
+            if (!PropertyNames.Any(p => p.Equals(propertyName, StringComparison.OrdinalIgnoreCase)))
                 throw new ArgumentException(
                     String.Format("{0} property is missing at GeoPosition object. Value {1} can't be parsed",
                         propertyName,
                         value));
 
-            if (propertyName == "Timestamp")
-                return DateTimeOffset.Parse(value);
+            if (propertyName.Equals("Timestamp", StringComparison.OrdinalIgnoreCase))
+                return DateTimeOffset.Parse(value, CultureInfo.InvariantCulture.DateTimeFormat);
 
-            return double.Parse(value);
+            return double.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
         }
 
         public static string[] PropertyNames { get { return propertyNames; } }
