@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             if (!this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+                await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
                 return;
             }
 
@@ -177,7 +177,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async Task RunSynchronizationAsync()
         {
             await this.Synchronization.SynchronizeAsync();
-            await this.RefreshDashboardAsync();
+            if (this.Synchronization.Status == SynchronizationStatus.Success
+                || this.Synchronization.Status == SynchronizationStatus.Canceled)
+            {
+                await this.RefreshDashboardAsync();
+            }
         }
 
         public string DashboardTitle
@@ -244,18 +248,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand SignOutCommand
         {
-            get { return new MvxCommand(this.SignOut); }
+            get { return new MvxCommand(async () => await this.SignOutAsync()); }
         }
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.NavigateToTroubleshootingAsync()); }
         }
 
-        void SignOut()
+        private async Task NavigateToTroubleshootingAsync()
         {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>();
+        }
+
+        private async Task SignOutAsync()
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+
             this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         public void Dispose()

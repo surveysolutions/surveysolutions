@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using Humanizer;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -220,7 +221,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return signOutCommand ?? (signOutCommand = new MvxCommand(this.SignOut)); }
+            get { return signOutCommand ?? (signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
         }
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -265,10 +266,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private bool isListEmpty;
 
-        private void SignOut()
+        private async Task SignOutAsync()
         {
             this.principal.SignOut();
-            this.viewModelNavigationService.NavigateTo<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         private void ShowPublicQuestionnaires()
@@ -299,7 +300,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.tokenSource = new CancellationTokenSource();
             this.IsInProgress = true;
 
-            this.ProgressIndicator = UIResources.ImportQuestionnaire_CheckConnectionToServer;
+            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CheckConnectionToServer;
 
             string errorMessage = null;
             try
@@ -308,14 +309,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     selectedQuestionnaire: selectedQuestionnaire,
                     onDownloadProgressChanged: (downloadProgress) =>
                     {
-                        this.ProgressIndicator = string.Format(UIResources.ImportQuestionnaire_DownloadProgress,
+                        this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress,
                             downloadProgress);
                     },
                     token: this.tokenSource.Token);
 
                 if (questionnairePackage != null)
                 {
-                    this.ProgressIndicator = UIResources.ImportQuestionnaire_StoreQuestionnaire;
+                    this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
                     var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
                     var questionnaireDocument = questionnairePackage.Document;
@@ -325,7 +326,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
 
-                    this.ProgressIndicator = UIResources.ImportQuestionnaire_CreateInterview;
+                    this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CreateInterview;
 
                     var interviewId = Guid.NewGuid();
 
@@ -337,7 +338,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
                 }
             }
             catch (RestException ex)
@@ -348,13 +349,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
-                        errorMessage = string.Format(UIResources.ImportQuestionnaire_Error_Forbidden, selectedQuestionnaire.Title);
+                        errorMessage = string.Format(TesterUIResources.ImportQuestionnaire_Error_Forbidden, selectedQuestionnaire.Title);
                         break;
                     case HttpStatusCode.PreconditionFailed:
-                        errorMessage = String.Format(UIResources.ImportQuestionnaire_Error_PreconditionFailed, selectedQuestionnaire.Title);
+                        errorMessage = String.Format(TesterUIResources.ImportQuestionnaire_Error_PreconditionFailed, selectedQuestionnaire.Title);
                         break;
                     case HttpStatusCode.NotFound:
-                        errorMessage = String.Format(UIResources.ImportQuestionnaire_Error_NotFound, selectedQuestionnaire.Title);
+                        errorMessage = String.Format(TesterUIResources.ImportQuestionnaire_Error_NotFound, selectedQuestionnaire.Title);
                         break;
                     default:
                         errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
@@ -438,9 +439,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void UpdateLastUpdateDate(DateTime? lastUpdate)
         {
-            this.HumanizedLastUpdateDate = lastUpdate.HasValue 
-                ? string.Format(UIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate:false))
-                : UIResources.Dashboard_HasNotBeenUpdated;
+            this.HumanizedLastUpdateDate = lastUpdate.HasValue
+                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: false))
+                : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 
         private List<QuestionnaireListItem> HightlightSearchTermInFilteredList(List<QuestionnaireListItem> questionnaireListItems, string searchTerm)

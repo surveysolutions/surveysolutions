@@ -12,6 +12,7 @@ namespace WB.UI.Interviewer.Converters
         {
             switch (status)
             {
+                case SynchronizationStatus.Canceled:
                 case SynchronizationStatus.Fail:
                     return Resource.Color.dashboard_synchronization_fail_title;
                 default:

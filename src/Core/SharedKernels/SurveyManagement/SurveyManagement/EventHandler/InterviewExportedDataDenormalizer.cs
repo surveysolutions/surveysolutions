@@ -26,7 +26,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewRejectedByHQ>,
-        IEventHandler<InterviewRestored>
+        IEventHandler<InterviewRestored>,
+        IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
         private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
@@ -59,56 +60,56 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.ApprovedByHeadquarter);
         }
 
         public void Handle(IPublishedEvent<SupervisorAssigned> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.SupervisorAssigned);
         }
 
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.Completed);
         }
 
         public void Handle(IPublishedEvent<InterviewApproved> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.ApprovedBySupervisor);
         }
 
         public void Handle(IPublishedEvent<InterviewRejected> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.RejectedBySupervisor);
         }
 
         public void Handle(IPublishedEvent<InterviewRestored> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.Restored);
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.InterviewerAssigned);
         }
 
         public void Handle(IPublishedEvent<InterviewRestarted> evnt)
         {
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.Restarted);
         }
 
         public void Handle(IPublishedEvent<InterviewRejectedByHQ> evnt)
         {
 
-            this.dataExportWriter.AddExportedDataByInterviewWithAction(evnt.EventSourceId,
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
                 InterviewExportedAction.RejectedByHeadquarter);
         }
 
@@ -120,6 +121,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
             this.dataExportWriter.DeleteInterview(evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<UnapprovedByHeadquarters> evnt)
+        {
+            this.dataExportWriter.AddOrUpdateExportedDataByInterviewWithAction(evnt.EventSourceId,
+                InterviewExportedAction.UnapprovedByHeadquarter);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -25,22 +26,27 @@ namespace WB.Core.Synchronization.MetaInfo
             if (doc == null)
                 return null;
 
-            var storedQuestionnarie = this.questionnarieStorage.AsVersioned().Get(doc.QuestionnaireId.FormatGuid(), doc.QuestionnaireVersion);
-            if (storedQuestionnarie == null)
+            var storedQuestionnaire = this.questionnarieStorage.AsVersioned().Get(doc.QuestionnaireId.FormatGuid(), doc.QuestionnaireVersion);
+            if (storedQuestionnaire == null)
                 return null;
-            var questionnarie = storedQuestionnarie.Questionnaire;
-            var metaInfo = new InterviewMetaInfo();
 
-            metaInfo.ResponsibleId = doc.UserId;
+            return new InterviewMetaInfo
+            {
+                ResponsibleId = doc.UserId,
+                PublicKey = doc.Id,
+                TemplateId = doc.QuestionnaireId,
+                TemplateVersion = doc.QuestionnaireVersion,
+                Status = (int) doc.Status,
+                CreatedOnClient = doc.CreatedOnClient,
+                Comments = doc.Comments,
+                RejectDateTime = doc.RejectDateTime,
+                InterviewerAssignedDateTime = doc.InterviewerAssignedDateTime,
+                FeaturedQuestionsMeta = GetFeaturedQuestionsMeta(doc, storedQuestionnaire.Questionnaire)
+            };
+        }
 
-            metaInfo.PublicKey = doc.Id;
-            metaInfo.TemplateId = doc.QuestionnaireId;
-            metaInfo.TemplateVersion = doc.QuestionnaireVersion;
-            metaInfo.Status = (int) doc.Status;
-            metaInfo.CreatedOnClient = doc.CreatedOnClient;
-            metaInfo.Comments = doc.Comments;
-            metaInfo.RejectDateTime = doc.RejectDateTime;
-
+        private static List<FeaturedQuestionMeta> GetFeaturedQuestionsMeta(InterviewSynchronizationDto doc, QuestionnaireDocument questionnarie)
+        {
             var featuredQuestionList = new List<FeaturedQuestionMeta>();
 
             foreach (var featuredQuestion in questionnarie.Find<IQuestion>(q => q.Featured))
@@ -53,10 +59,7 @@ namespace WB.Core.Synchronization.MetaInfo
                         GetAnswerOnPrefilledQuestion(answerOnFeaturedQuestion)));
                 }
             }
-
-            metaInfo.FeaturedQuestionsMeta = featuredQuestionList;
-
-            return metaInfo;
+            return featuredQuestionList;
         }
 
         private static string GetAnswerOnPrefilledQuestion(AnsweredQuestionSynchronizationDto answerOnFeaturedQuestion)

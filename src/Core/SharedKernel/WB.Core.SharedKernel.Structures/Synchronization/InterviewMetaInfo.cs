@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
         public int Status { get; set; }
 
         public DateTime? RejectDateTime { get; set; }
+        public DateTime? InterviewerAssignedDateTime { get; set; }
 
         public IEnumerable<FeaturedQuestionMeta> FeaturedQuestionsMeta { get; set; }
 

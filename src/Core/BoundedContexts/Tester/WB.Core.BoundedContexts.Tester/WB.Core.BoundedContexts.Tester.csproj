@@ -40,12 +40,39 @@
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
-    <Compile Include="Implementation\Services\TesterInterviewCompletionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
+    <Compile Include="Properties\TesterUIResources.es-ES.Designer.cs" />
+    <Compile Include="Properties\TesterUIResources.es-ES1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.es-ES.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\TesterUIResources.fr-FR.Designer.cs" />
+    <Compile Include="Properties\TesterUIResources.fr-FR1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\TesterUIResources.pt-PT.Designer.cs" />
+    <Compile Include="Properties\TesterUIResources.pt-PT1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\TesterUIResources.ru-RU.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.ru-RU.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ITesterExpressionsEngineVersionService.cs" />
+    <Compile Include="Properties\TesterUIResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -153,7 +180,29 @@
       <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\TesterUIResources.es-ES.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.es-ES1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.fr-FR1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.pt-PT.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.pt-PT1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.ru-RU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

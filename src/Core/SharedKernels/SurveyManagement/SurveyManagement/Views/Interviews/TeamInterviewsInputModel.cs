@@ -10,7 +10,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviews
         public string ResponsibleName { get; set; }
         public Guid? InterviewId { get; set; }
         public InterviewStatus? Status { get; set; }
-        public Guid ViewerId { get; set; }
+        public bool ReceivedByInterviewer { get; set; }
+        public Guid? ViewerId { get; set; }
         public string SearchBy { get; set; }
     }
 }

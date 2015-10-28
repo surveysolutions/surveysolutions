@@ -129,13 +129,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (levelExportStructure == null)
                 return null;
 
-            var answerOnRosterSizeQuestion = BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
+            var answerObject = BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
                 parentDataFile.Header, row);
 
-            if (!answerOnRosterSizeQuestion.HasValue)
+            if (answerObject == null)
                 return new decimal[0];
-
-            var answerObject = answerOnRosterSizeQuestion.Value.Value;
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
             {
@@ -154,9 +152,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return null;
         }
 
-        public ValueParsingResult ParseQuestion(string answer, string columnName, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult ParseQuestionInLevel(string answer, string columnName, HeaderStructureForLevel level,
+            out object parsedValue)
         {
-            return dataParser.TryParse(answer, columnName, question, questionnaireDocument, out parsedValue);
+            parsedValue = null;
+            var exportedQuestion =
+                level.HeaderItems.Values.FirstOrDefault(
+                    h => h.ColumnNames.Any(x => x.Equals(columnName.Trim(), StringComparison.InvariantCulture)));
+            if (exportedQuestion == null)
+                return ValueParsingResult.OK;
+
+            return dataParser.TryParse(answer, columnName, GetQuestionByVariableName(exportedQuestion.VariableName),
+                out parsedValue);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
@@ -278,26 +285,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return exportStructure.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0).LevelName;
         }
 
-        public Dictionary<string,Tuple<string,int>[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
+        public bool IsQuestionRosterSize(string variableName)
         {
-            var levelExportStructure = FindLevelInPreloadedData(parentDataFile.FileName);
-            if (levelExportStructure == null)
-                return null;
-            var presentQuestions = new Dictionary<string, Tuple<string, int>[]>();
-            foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
-            {
-                var headerIndexes = new List<Tuple<string, int>>();
-                for (int i = 0; i < parentDataFile.Header.Length; i++)
-                {
-                    if (exportedHeaderItem.ColumnNames.Contains(parentDataFile.Header[i]))
-                        headerIndexes.Add(new Tuple<string, int>(parentDataFile.Header[i], i));
-                }
-                if (!headerIndexes.Any())
-                    continue;
+            if (!QuestionsCache.ContainsKey(variableName))
+                return false;
+            var question = QuestionsCache[variableName];
 
-                presentQuestions.Add(exportedHeaderItem.VariableName, headerIndexes.ToArray());
-            }
-            return presentQuestions;
+            return GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
         }
 
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
@@ -367,13 +361,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 var parsedAnswer = BuildAnswerByVariableName(levelExportStructure, exportedHeaderItem.VariableName, header, row);
 
-                if (parsedAnswer.HasValue)
-                    result.Add(parsedAnswer.Value.Key, parsedAnswer.Value.Value);
+                if (parsedAnswer!=null)
+                    result.Add(exportedHeaderItem.PublicKey, parsedAnswer);
             }
             return result;
         }
 
-        private KeyValuePair<Guid,object>? BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
+        private object BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
         {
             var exportedHeaderItem =
                 levelExportStructure.HeaderItems.Values.FirstOrDefault(
@@ -393,7 +387,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
 
-            return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question, questionnaireDocument);
+            return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question);
         }
 
         private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -401,13 +395,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var levelExportStructure = FindLevelInPreloadedData(levelFileName);
             if (levelExportStructure == null)
                 return new PreloadedDataByFile[0];
-            IEnumerable<RosterScopeDescription> children = Enumerable.Empty<RosterScopeDescription>();
+            IEnumerable<RosterScopeDescription> children;
+
             if (levelExportStructure.LevelScopeVector.Length == 0)
-            {
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(
                         scope => scope.ScopeVector.Length == 1);
-            }
             else
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(

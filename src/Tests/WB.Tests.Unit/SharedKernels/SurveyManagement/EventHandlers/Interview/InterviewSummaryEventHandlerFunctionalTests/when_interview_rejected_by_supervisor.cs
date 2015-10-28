@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    internal class when_interview_rejected_by_supervisor : InterviewSummaryEventHandlerFunctionalTestsContext
+    internal class when_interview_rejected_by_supervisor : InterviewSummaryDenormalizerTestsContext
     {
         private Establish context = () =>
         {
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_mark_summary_rejected_by_supervisor = () => updatedModel.WasRejectedBySupervisor.ShouldBeTrue();
 
         static InterviewSummary viewModel;
-        static InterviewSummaryEventHandlerFunctional denormalizer;
+        static InterviewSummaryDenormalizer denormalizer;
         static InterviewSummary updatedModel;
     }
 }

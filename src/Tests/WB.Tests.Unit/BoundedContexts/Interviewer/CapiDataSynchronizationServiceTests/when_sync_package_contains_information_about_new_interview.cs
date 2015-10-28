@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServi
             syncItem = new InterviewSyncPackageDto { 
                 Content = "some content", MetaInfo = "some metadata"};
 
-            var jsonUtilsMock = new Mock<IJsonUtils>();
+            var jsonUtilsMock = new Mock<ISerializer>();
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo)).Returns(questionnaireMetadata);
 
             commandService = new Mock<ICommandService>();

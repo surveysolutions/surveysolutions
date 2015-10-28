@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
 
         Because of = () => viewModel.LoadInterview().WaitAndUnwrapException();
 
-        It should_open_prefilled_questions_section = () => navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestions(null);
+        It should_open_prefilled_questions_section = () => navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
         
         It should_restore_interview_from_sync_package = () => syncPackageRestoreService.ReceivedWithAnyArgs().CheckAndApplySyncPackage(Guid.Empty);
 

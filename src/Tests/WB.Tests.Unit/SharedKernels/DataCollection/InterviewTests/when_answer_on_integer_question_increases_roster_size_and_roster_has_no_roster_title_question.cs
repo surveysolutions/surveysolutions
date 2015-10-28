@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_raise_RosterInstancesTitleChanged_event_with_numeric_ordered_titles_starting_from_1 = () =>
             eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
-                .ChangedInstances.Select(instance => instance.Title).ShouldEqual(new[] { "1", "2", "3" });
+                .ChangedInstances.Select(instance => instance.Title).ShouldContainOnly(new[] { "1", "2", "3" });
 
         It should_not_raise_RosterInstancesRemoved_event = () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>();

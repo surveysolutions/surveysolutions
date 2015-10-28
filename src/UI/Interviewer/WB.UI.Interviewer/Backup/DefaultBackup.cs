@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PCLStorage;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Shared.Enumerator;
 
 namespace WB.UI.Interviewer.Backup
 {
@@ -59,12 +61,16 @@ namespace WB.UI.Interviewer.Backup
                 if ((!string.IsNullOrEmpty(path)) && (this.fileSystemAccessor.IsFileExists(path) || this.fileSystemAccessor.IsDirectoryExists(path)))
                     this.fileSystemAccessor.CopyFileOrDirectory(path, backupFolderPath);
             }
+
+            this.fileSystemAccessor.CopyFileOrDirectory(AndroidPathUtils.GetPathToSubfolderInLocalDirectory(DATABASEFILENAME), backupFolderPath);
+
             var backupArchiveName = this.fileSystemAccessor.CombinePath(this.backupPath, backupFolderName + zipExtension);
             this.archiveUtils.ZipDirectory(backupFolderPath, backupArchiveName);
             this.fileSystemAccessor.DeleteDirectory(backupFolderPath);
             return backupArchiveName;
         }
 
+        private const string DATABASEFILENAME = "database";
         public void Restore()
         {
             var files = this.fileSystemAccessor.GetFilesInDirectory(this.restorePath).Where(fileName => fileName.EndsWith(zipExtension)).ToArray();
@@ -79,6 +85,15 @@ namespace WB.UI.Interviewer.Backup
             {
                 backupable.RestoreFromBackupFolder(unziperFolder);
             }
+
+            string targetDatabasePath = AndroidPathUtils.GetPathToSubfolderInLocalDirectory(DATABASEFILENAME);
+            string sourceDatabasePath = this.fileSystemAccessor.CombinePath(unziperFolder, DATABASEFILENAME);
+
+            foreach (var databaseFile in this.fileSystemAccessor.GetFilesInDirectory(sourceDatabasePath))
+            {
+                this.fileSystemAccessor.CopyFileOrDirectory(databaseFile, targetDatabasePath);
+            }
+
             this.fileSystemAccessor.DeleteDirectory(unziperFolder);
         }
 

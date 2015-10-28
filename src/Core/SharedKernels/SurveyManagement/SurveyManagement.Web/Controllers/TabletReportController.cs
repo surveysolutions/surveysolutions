@@ -25,14 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult DownloadPackages(string fileName)
         {
-            return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip", fileName);
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult Device(string id)
-        {
-            TabletLogView model = this.tabletInformationService.GetTabletLog(id);
-            return this.View(model);
+            return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip",
+                this.tabletInformationService.GetPackageNameWithoutRegistrationId(fileName));
         }
     }
 }

@@ -62,146 +62,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        public static string AboutTitle {
-            get {
-                return ResourceManager.GetString("AboutTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your user account is locked. Please contact the support team at support@mysurvey.solutions..
-        /// </summary>
-        public static string AccountIsLockedOnServer {
-            get {
-                return ResourceManager.GetString("AccountIsLockedOnServer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your account doesn&apos;t have Interviewer role.
-        /// </summary>
-        public static string AccountIsNotAnInterviewer {
-            get {
-                return ResourceManager.GetString("AccountIsNotAnInterviewer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first..
-        /// </summary>
-        public static string AccountIsNotApprovedOnServer {
-            get {
-                return ResourceManager.GetString("AccountIsNotApprovedOnServer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Application name:.
-        /// </summary>
-        public static string ApplicationNameText {
-            get {
-                return ResourceManager.GetString("ApplicationNameText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Application version:.
-        /// </summary>
-        public static string ApplicationVersionText {
-            get {
-                return ResourceManager.GetString("ApplicationVersionText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Buffer size for receiving/transmitting data stream:.
-        /// </summary>
-        public static string BufferSizeText {
-            get {
-                return ResourceManager.GetString("BufferSizeText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to in bytes.
-        /// </summary>
-        public static string BufferSizeUnitsText {
-            get {
-                return ResourceManager.GetString("BufferSizeUnitsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Check for updates.
-        /// </summary>
-        public static string CheckForUpdatesText {
-            get {
-                return ResourceManager.GetString("CheckForUpdatesText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your account is associated with a different tablet. Do you want to sign off that tablet and make the current tablet your working device?.
-        /// </summary>
-        public static string Confirmation_Interviewer_ReassignUserToAnotherDevice {
-            get {
-                return ResourceManager.GetString("Confirmation_Interviewer_ReassignUserToAnotherDevice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All data collected by you on the other tablet will be deleted. You can save these data by canceling this registration and synchronizing that tablet. Do you want to proceed with deleting data on the other tablet?.
-        /// </summary>
-        public static string Confirmation_Interviewer_RemoveAllDataFromOldDevice {
-            get {
-                return ResourceManager.GetString("Confirmation_Interviewer_RemoveAllDataFromOldDevice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string ConfirmationCancelText {
+        public static string Cancel {
             get {
-                return ResourceManager.GetString("ConfirmationCancelText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No.
-        /// </summary>
-        public static string ConfirmationNoText {
-            get {
-                return ResourceManager.GetString("ConfirmationNoText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Confirmation.
-        /// </summary>
-        public static string ConfirmationText {
-            get {
-                return ResourceManager.GetString("ConfirmationText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Try again.
-        /// </summary>
-        public static string ConfirmationTryAgainText {
-            get {
-                return ResourceManager.GetString("ConfirmationTryAgainText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Yes.
-        /// </summary>
-        public static string ConfirmationYesText {
-            get {
-                return ResourceManager.GetString("ConfirmationYesText", resourceCulture);
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
@@ -226,29 +91,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to have not been updated.
-        /// </summary>
-        public static string Dashboard_HasNotBeenUpdated {
-            get {
-                return ResourceManager.GetString("Dashboard_HasNotBeenUpdated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0:dd MMM HH:mm}.
         /// </summary>
         public static string Dashboard_LastEntryDate_Format {
             get {
                 return ResourceManager.GetString("Dashboard_LastEntryDate_Format", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to were updated {0}.
-        /// </summary>
-        public static string Dashboard_LastUpdated {
-            get {
-                return ResourceManager.GetString("Dashboard_LastUpdated", resourceCulture);
             }
         }
         
@@ -267,15 +114,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Dashboard_PublicQuestionnairesLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_PublicQuestionnairesLinkText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Search (by name, author).
-        /// </summary>
-        public static string Dashboard_SearchText {
-            get {
-                return ResourceManager.GetString("Dashboard_SearchText", resourceCulture);
             }
         }
         
@@ -316,11 +154,83 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Engine version:.
+        ///   Looks up a localized string similar to Your user account is locked. Please contact the support team at support@mysurvey.solutions..
         /// </summary>
-        public static string EngineVersionText {
+        public static string ErrorMessage_AccountIsLockedOnServer {
             get {
-                return ResourceManager.GetString("EngineVersionText", resourceCulture);
+                return ResourceManager.GetString("ErrorMessage_AccountIsLockedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account is not approved. Please, confirm your account first..
+        /// </summary>
+        public static string ErrorMessage_AccountIsNotApprovedOnServer {
+            get {
+                return ResourceManager.GetString("ErrorMessage_AccountIsNotApprovedOnServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions..
+        /// </summary>
+        public static string ErrorMessage_InternalServerError {
+            get {
+                return ResourceManager.GetString("ErrorMessage_InternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided Survey Solutions Designer URL is invalid. Check settings..
+        /// </summary>
+        public static string ErrorMessage_InvalidEndpoint {
+            get {
+                return ResourceManager.GetString("ErrorMessage_InvalidEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience.
+        /// </summary>
+        public static string ErrorMessage_Maintenance {
+            get {
+                return ResourceManager.GetString("ErrorMessage_Maintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timeout when connecting to the Survey Solutions Designer website. Check your internet connection..
+        /// </summary>
+        public static string ErrorMessage_RequestTimeout {
+            get {
+                return ResourceManager.GetString("ErrorMessage_RequestTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No connection to the Survey Solutions Designer. Please make sure that the website is available..
+        /// </summary>
+        public static string ErrorMessage_ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ErrorMessage_ServiceUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your login or password is incorrect.
+        /// </summary>
+        public static string ErrorMessage_Unauthorized {
+            get {
+                return ResourceManager.GetString("ErrorMessage_Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version of application was released. Please, update the application.
+        /// </summary>
+        public static string ErrorMessage_UpgradeRequired {
+            get {
+                return ResourceManager.GetString("ErrorMessage_UpgradeRequired", resourceCulture);
             }
         }
         
@@ -343,128 +253,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No internet access to supervisor application. Check server adddress and(or) network settings.
-        /// </summary>
-        public static string HostUnreachable {
-            get {
-                return ResourceManager.GetString("HostUnreachable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Connecting to server.
-        /// </summary>
-        public static string ImportQuestionnaire_CheckConnectionToServer {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_CheckConnectionToServer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Creating interview.
-        /// </summary>
-        public static string ImportQuestionnaire_CreateInterview {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_CreateInterview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Downloading questionnaire -  {0}%.
-        /// </summary>
-        public static string ImportQuestionnaire_DownloadProgress {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_DownloadProgress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password..
-        /// </summary>
-        public static string ImportQuestionnaire_Error_Forbidden {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_Error_Forbidden", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. The questionnaire cannot be found. Please refresh the list of questionnaires..
-        /// </summary>
-        public static string ImportQuestionnaire_Error_NotFound {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_Error_NotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. The questionnaire has errors. Please fix this in Designer..
-        /// </summary>
-        public static string ImportQuestionnaire_Error_PreconditionFailed {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_Error_PreconditionFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No connection to the Survey Solutions designer. Open a local copy of questionnaire?.
-        /// </summary>
-        public static string ImportQuestionnaire_OpenLocalInterview {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_OpenLocalInterview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Preparing questionnaire to creating interview.
-        /// </summary>
-        public static string ImportQuestionnaire_PrepareQuestionnaire {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_PrepareQuestionnaire", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Saving interview dynamic link library to local storage.
-        /// </summary>
-        public static string ImportQuestionnaire_StoreAssembly {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_StoreAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Saving questionnaire to local storage.
-        /// </summary>
-        public static string ImportQuestionnaire_StoreQuestionnaire {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_StoreQuestionnaire", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Checking questionnaire for errors on the server.
-        /// </summary>
-        public static string ImportQuestionnaire_VerifyOnServer {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_VerifyOnServer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tap to enter number.
         /// </summary>
         public static string IntegerQuestion_Hint {
             get {
                 return ResourceManager.GetString("IntegerQuestion_Hint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions..
-        /// </summary>
-        public static string InternalServerError {
-            get {
-                return ResourceManager.GetString("InternalServerError", resourceCulture);
             }
         }
         
@@ -541,7 +334,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to complete&lt;br /&gt;this interview.
+        ///   Looks up a localized string similar to You are about to complete this interview.
         /// </summary>
         public static string Interview_Complete_Screen_Description {
             get {
@@ -568,11 +361,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not locate your position.
+        ///   Looks up a localized string similar to To complete screen.
         /// </summary>
-        public static string Interview_GeoLocation_Confirm_NoLocation {
+        public static string Interview_CompleteScreen_ButtonText {
             get {
-                return ResourceManager.GetString("Interview_GeoLocation_Confirm_NoLocation", resourceCulture);
+                return ResourceManager.GetString("Interview_CompleteScreen_ButtonText", resourceCulture);
             }
         }
         
@@ -685,15 +478,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To complete screen.
-        /// </summary>
-        public static string Interview_NextCompleteInterview_ButtonText {
-            get {
-                return ResourceManager.GetString("Interview_NextCompleteInterview_ButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
@@ -703,20 +487,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To parent .
+        /// </summary>
+        public static string Interview_ParentGroup_ButtonText {
+            get {
+                return ResourceManager.GetString("Interview_ParentGroup_ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
             get {
                 return ResourceManager.GetString("Interview_PreviousGroupNavigation_AnsweredQuestions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To parent .
-        /// </summary>
-        public static string Interview_PreviousGroupNavigation_ButtonText {
-            get {
-                return ResourceManager.GetString("Interview_PreviousGroupNavigation_ButtonText", resourceCulture);
             }
         }
         
@@ -919,96 +703,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Survey Solutions Designer URL is invalid. Check settings..
-        /// </summary>
-        public static string InvalidEndpoint {
-            get {
-                return ResourceManager.GetString("InvalidEndpoint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Modified on:.
-        /// </summary>
-        public static string LastModifiedDateTitle {
-            get {
-                return ResourceManager.GetString("LastModifiedDateTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to @ 2015 The World Bank Group, All Rights Reserved..
-        /// </summary>
-        public static string LegacyText {
-            get {
-                return ResourceManager.GetString("LegacyText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to new version available.
-        /// </summary>
-        public static string Login_App_NewVersionAvailable {
-            get {
-                return ResourceManager.GetString("Login_App_NewVersionAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to version {0}.
-        /// </summary>
-        public static string Login_App_Version {
-            get {
-                return ResourceManager.GetString("Login_App_Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Endpoint was not reached.
-        /// </summary>
-        public static string Login_EndpointWasNotReached {
-            get {
-                return ResourceManager.GetString("Login_EndpointWasNotReached", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Endpoint was reached.
-        /// </summary>
-        public static string Login_EndpointWasReached {
-            get {
-                return ResourceManager.GetString("Login_EndpointWasReached", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
-        /// </summary>
-        public static string Login_Error_NotFound {
-            get {
-                return ResourceManager.GetString("Login_Error_NotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Entered endpoint is unreachable. Check internet connection or enter correct url.
-        /// </summary>
-        public static string Login_Validation_EndpointIsUnreachable {
-            get {
-                return ResourceManager.GetString("Login_Validation_EndpointIsUnreachable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wrong password.
-        /// </summary>
-        public static string Login_WrondPassword {
-            get {
-                return ResourceManager.GetString("Login_WrondPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Your login.
         /// </summary>
         public static string LoginNameHint {
@@ -1036,47 +730,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The website of Survey Solutions Designer is on the maintenance mode now. Sorry for the inconvenience.
-        /// </summary>
-        public static string Maintenance {
-            get {
-                return ResourceManager.GetString("Maintenance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No network. Check your network settings.
-        /// </summary>
-        public static string NoNetwork {
-            get {
-                return ResourceManager.GetString("NoNetwork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Android version:.
-        /// </summary>
-        public static string OSVersionText {
-            get {
-                return ResourceManager.GetString("OSVersionText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Owner:.
-        /// </summary>
-        public static string OwnerNameTitle {
-            get {
-                return ResourceManager.GetString("OwnerNameTitle", resourceCulture);
             }
         }
         
@@ -1126,110 +784,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey initial information.
-        /// </summary>
-        public static string PrefilledQuestions_ToolbarTitle {
-            get {
-                return ResourceManager.GetString("PrefilledQuestions_ToolbarTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tap to enter decimal.
         /// </summary>
         public static string RealQuestion_Hint {
             get {
                 return ResourceManager.GetString("RealQuestion_Hint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Request cancelled by user.
-        /// </summary>
-        public static string RequestCanceledByUser {
-            get {
-                return ResourceManager.GetString("RequestCanceledByUser", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Timeout when connecting to the Survey Solutions Designer website. Check your internet connection..
-        /// </summary>
-        public static string RequestTimeout {
-            get {
-                return ResourceManager.GetString("RequestTimeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure to reset all settings to default parameters?.
-        /// </summary>
-        public static string ResetSettingsConfirmationText {
-            get {
-                return ResourceManager.GetString("ResetSettingsConfirmationText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All parameters were successfully reset to default state.
-        /// </summary>
-        public static string ResetSettingsSuccessText {
-            get {
-                return ResourceManager.GetString("ResetSettingsSuccessText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restore.
-        /// </summary>
-        public static string ResetSettingsText {
-            get {
-                return ResourceManager.GetString("ResetSettingsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your setting parameters successfully saved.
-        /// </summary>
-        public static string SaveSettingsSuccessText {
-            get {
-                return ResourceManager.GetString("SaveSettingsSuccessText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save.
-        /// </summary>
-        public static string SaveSettingsText {
-            get {
-                return ResourceManager.GetString("SaveSettingsText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No connection to the Survey Solutions Designer. Please make sure that the website is available..
-        /// </summary>
-        public static string ServiceUnavailable {
-            get {
-                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow to send an anonymous information about crashes of application.
-        /// </summary>
-        public static string Settings_AllowToSendInfoByCrashesText {
-            get {
-                return ResourceManager.GetString("Settings_AllowToSendInfoByCrashesText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sign out.
-        /// </summary>
-        public static string SignOutText {
-            get {
-                return ResourceManager.GetString("SignOutText", resourceCulture);
             }
         }
         
@@ -1248,15 +807,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_UserLinkedToAnotherDevice_Description {
             get {
                 return ResourceManager.GetString("Synchronization_UserLinkedToAnotherDevice_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Synchronization.
-        /// </summary>
-        public static string SynchronizationText {
-            get {
-                return ResourceManager.GetString("SynchronizationText", resourceCulture);
             }
         }
         
@@ -1284,186 +834,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string TextQuestion_MaskHint {
             get {
                 return ResourceManager.GetString("TextQuestion_MaskHint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Create backup.
-        /// </summary>
-        public static string Troubleshooting_Backup {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Backup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Something went wrong and backup failed to be created.
-        /// </summary>
-        public static string Troubleshooting_BackupErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_BackupErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Backup was saved to {0}.
-        /// </summary>
-        public static string Troubleshooting_BackupWasSaved {
-            get {
-                return ResourceManager.GetString("Troubleshooting_BackupWasSaved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Version: {0}. Check for a new version.
-        /// </summary>
-        public static string Troubleshooting_CurrentVersion_CheckForUpdates {
-            get {
-                return ResourceManager.GetString("Troubleshooting_CurrentVersion_CheckForUpdates", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Information package is successfully sent.
-        /// </summary>
-        public static string Troubleshooting_InformationPackageIsSuccessfullySent {
-            get {
-                return ResourceManager.GetString("Troubleshooting_InformationPackageIsSuccessfullySent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Information package of size {0} will be sent via network. Are you sure you want to send it?.
-        /// </summary>
-        public static string Troubleshooting_InformationPackageSizeWarningFormat {
-            get {
-                return ResourceManager.GetString("Troubleshooting_InformationPackageSizeWarningFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
-        /// </summary>
-        public static string Troubleshooting_NewVerisonExist {
-            get {
-                return ResourceManager.GetString("Troubleshooting_NewVerisonExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You have the latest version of application.
-        /// </summary>
-        public static string Troubleshooting_NoNewVersion {
-            get {
-                return ResourceManager.GetString("Troubleshooting_NoNewVersion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Something went wrong and tabled failed to be restored.
-        /// </summary>
-        public static string Troubleshooting_RestorationErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_RestorationErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restore from backup.
-        /// </summary>
-        public static string Troubleshooting_Restore {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Restore", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}.
-        /// </summary>
-        public static string Troubleshooting_RestoreConfirmation {
-            get {
-                return ResourceManager.GetString("Troubleshooting_RestoreConfirmation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tablet was successfully restored.
-        /// </summary>
-        public static string Troubleshooting_RestoredSuccessfully {
-            get {
-                return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sending of information package is failed.
-        /// </summary>
-        public static string Troubleshooting_SendingOfInformationPackageErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_SendingOfInformationPackageErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Send tablet&apos;s information.
-        /// </summary>
-        public static string Troubleshooting_SendTabletInformation {
-            get {
-                return ResourceManager.GetString("Troubleshooting_SendTabletInformation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
-        /// </summary>
-        public static string Troubleshooting_Title {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error occurred on version check. Please, check settings or try again later..
-        /// </summary>
-        public static string Troubleshooting_Unknown_ErrorMessage {
-            get {
-                return ResourceManager.GetString("Troubleshooting_Unknown_ErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Try again.
-        /// </summary>
-        public static string TryAgainLink {
-            get {
-                return ResourceManager.GetString("TryAgainLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your login or password is incorrect.
-        /// </summary>
-        public static string Unauthorized {
-            get {
-                return ResourceManager.GetString("Unauthorized", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unexpected error.
-        /// </summary>
-        public static string UnexpectedException {
-            get {
-                return ResourceManager.GetString("UnexpectedException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New version of application was released. Please, update the application.
-        /// </summary>
-        public static string UpgradeRequired {
-            get {
-                return ResourceManager.GetString("UpgradeRequired", resourceCulture);
             }
         }
         

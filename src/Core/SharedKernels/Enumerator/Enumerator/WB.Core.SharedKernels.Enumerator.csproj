@@ -90,6 +90,30 @@
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
+    <Compile Include="Properties\UIResources.es-ES.Designer.cs" />
+    <Compile Include="Properties\UIResources.es-ES1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.es-ES.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.fr-FR.Designer.cs" />
+    <Compile Include="Properties\UIResources.fr-FR1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.fr-FR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.pt-PT.Designer.cs" />
+    <Compile Include="Properties\UIResources.pt-PT1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.uk-UA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.uk-UA.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IQRBarcodeScanService.cs" />
@@ -97,7 +121,6 @@
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
-    <Compile Include="Services\InterviewCompletionService.cs" />
     <Compile Include="Services\IQuestionnaireModelBuilder.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
@@ -141,10 +164,10 @@
     <Compile Include="Services\MaskText\Range.cs" />
     <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\InterviewSummaryNavigationViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\ActiveStageViewModel.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />
     <Compile Include="ViewModels\GroupNavigationViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\ActiveGroupViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\EnumerationStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnsweringViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\AnswerNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\BeforeGroupChangedEventArgs.cs" />
@@ -249,12 +272,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\UIResources.es-ES.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.es-ES1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.fr-FR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.fr-FR1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.pt-PT.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.pt-PT1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\UIResources.uk-UA.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.uk-UA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

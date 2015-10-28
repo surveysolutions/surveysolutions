@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.TemporaryDataSto
     {
         static ConcurrentDictionary<string, object> lockedFiles = new ConcurrentDictionary<string, object>();
         private readonly string rootPath;
-        private readonly IJsonUtils jsonSerrializer;
+        private readonly ISerializer jsonSerrializer;
 
-        public FileTemporaryDataStorage(IJsonUtils jsonSerrializer, string rootPath)
+        public FileTemporaryDataStorage(ISerializer jsonSerrializer, string rootPath)
         {
             this.rootPath = rootPath;
             this.jsonSerrializer = jsonSerrializer;

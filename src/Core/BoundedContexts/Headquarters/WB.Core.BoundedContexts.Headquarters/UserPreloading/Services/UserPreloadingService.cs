@@ -204,6 +204,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public void DeletePreloadingProcess(string preloadingProcessId)
         {
+            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
+            var statesWhichNotAllowingDelete = new[] {UserPrelodingState.Validating, UserPrelodingState.CreatingUsers};
+            if (statesWhichNotAllowingDelete.Contains(preloadingProcess.State))
+            {
+                throw new InvalidOperationException(
+                    String.Format(
+                        UserPreloadingServiceMessages.UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat,
+                        preloadingProcess.FileName, preloadingProcess.State, string.Join(", ", statesWhichNotAllowingDelete.Select(s=>s.ToString()))));
+            }
+
             userPreloadingProcessStorage.Remove(preloadingProcessId);
         }
 

@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Survey;
@@ -37,7 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadingTemplateService preloadingTemplateService;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
-        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
+        private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
@@ -47,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadingTemplateService preloadingTemplateService,
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
+            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings)
             : base(commandService, provider, logger)
         {
@@ -56,8 +57,8 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadingTemplateService = preloadingTemplateService;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
-            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
 
@@ -85,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
-            var featuredQuestionItems = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).FeaturedQuestions;
+            var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
             var viewModel = new Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel()
             {
                 QuestionnaireId = id,
@@ -99,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult SampleBatchUpload(Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel model)
+        public ActionResult SampleBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
             
@@ -129,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult PanelBatchUpload(Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel model)
+        public ActionResult PanelBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 

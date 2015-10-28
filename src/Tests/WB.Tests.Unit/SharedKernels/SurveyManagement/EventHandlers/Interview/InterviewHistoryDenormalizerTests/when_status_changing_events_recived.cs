@@ -23,6 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             statusEvents.Add(new InterviewRestored(Guid.NewGuid()));
             statusEvents.Add(new InterviewRejectedByHQ(Guid.NewGuid(), "rej"));
             statusEvents.Add(new InterviewApprovedByHQ(Guid.NewGuid(), "comment"));
+            statusEvents.Add(new UnapprovedByHeadquarters(Guid.NewGuid(), "comment"));
+            statusEvents.Add(new InterviewApprovedByHQ(Guid.NewGuid(), "comment"));
             statusEvents.Add(new InterviewDeleted(interviewId));
 
             interviewHistoryView = CreateInterviewHistoryView(interviewId);
@@ -56,9 +58,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         It should_action_of_8_record_be_ApproveByHeadquarter = () =>
           interviewHistoryView.Records[7].Action.ShouldEqual(InterviewHistoricalAction.ApproveByHeadquarter);
+        
+        It should_action_of_9_record_be_ApproveByHeadquarter = () =>
+          interviewHistoryView.Records[8].Action.ShouldEqual(InterviewHistoricalAction.UnapproveByHeadquarters);
 
-        It should_action_of_9_record_be_Deleted = () =>
-          interviewHistoryView.Records[8].Action.ShouldEqual(InterviewHistoricalAction.Deleted);
+        It should_action_of_10_record_be_ApproveByHeadquarter = () =>
+          interviewHistoryView.Records[9].Action.ShouldEqual(InterviewHistoricalAction.ApproveByHeadquarter);
+
+        It should_action_of_11_record_be_Deleted = () =>
+          interviewHistoryView.Records[10].Action.ShouldEqual(InterviewHistoricalAction.Deleted);
 
 
         private static InterviewHistoryDenormalizer interviewExportedDataDenormalizer;

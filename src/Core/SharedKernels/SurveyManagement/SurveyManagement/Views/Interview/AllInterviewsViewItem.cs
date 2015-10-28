@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public bool CanDelete { get; set; }
         public bool CanApproveOrReject { get; set; }
+        public bool CanUnapprove { get; set; }
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { set; get; }
     }

@@ -6774,10 +6774,18 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   color: #2a81cb;
 }
 .enabling-group-marker {
-  color: #D89400;
+    display: inline-block;
+    background: #D89400;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
 }
 .validation-group-marker {
-  color: #2075bf;
+    display: inline-block;
+    background: #2075bf;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
 }
 .width100 {
   width: 100%;
@@ -7453,6 +7461,11 @@ input#edit-group-title {
   padding-left: 10px;
   width: 100%;
 }
+.edit-question-note{
+    font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
+    font-size: 14px;
+    color: #c1c7cb;
+}
 .roster-type-specific-block,
 .question-type-specific-block {
   background: #f1f2f3;
@@ -7966,10 +7979,11 @@ textarea#edit-group-description {
   vertical-align: middle;
   display: inline-block;
 }
-.highlighted-add .item .item-body .qname-block .condition-item {
-  height: 12px;
-  line-height: 17px;
-  font-size: 10px;
+.highlighted-add .item .item-body .qname-block .condition-item{
+  height:6px;
+  width:6px;
+  display:block;
+  margin:4px;             
 }
 .highlighted-add .item.selected .qname-block {
   background-color: #ffffff;
@@ -7985,10 +7999,11 @@ textarea#edit-group-description {
   vertical-align: middle;
   display: inline-block;
 }
-.highlighted-add .item.selected .qname-block .condition-item {
-  height: 12px;
-  line-height: 17px;
-  font-size: 10px;
+.highlighted-add .item.selected .qname-block .condition-item{
+  height:6px;
+  width:6px;
+  display:block;
+  margin:4px;                   
 }
 li.chapter-panel-item {
   position: relative;
@@ -8335,10 +8350,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   vertical-align: middle;
   display: inline-block;
 }
-.item .item-body .qname-block .condition-item {
-  height: 12px;
-  line-height: 17px;
-  font-size: 10px;
+.item .item-body .qname-block .condition-item{
+  height:6px;
+  width:6px;
+  display:block;
+  margin:4px;          
 }
 .item.group > .item-body {
   text-transform: uppercase;
@@ -8395,10 +8411,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   vertical-align: middle;
   display: inline-block;
 }
-.item.selected:hover .qname-block .condition-item {
-  height: 12px;
-  line-height: 17px;
-  font-size: 10px;
+.item.selected:hover .qname-block .condition-item{
+  height:6px;
+  width:6px;
+  display:block;
+  margin:4px;    
 }
 .item.selected .dropdown {
   z-index: 501;
@@ -8421,10 +8438,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   vertical-align: middle;
   display: inline-block;
 }
-.item.selected .qname-block .condition-item {
-  height: 12px;
-  line-height: 17px;
-  font-size: 10px;
+.item.selected .qname-block .condition-item{
+  height:6px;
+  width:6px;
+  display:block;
+  margin:4px;            
 }
 .item:hover {
   position: relative;
@@ -8461,10 +8479,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler {
   vertical-align: middle;
   display: inline-block;
 }
-.item:hover .qname-block .condition-item {
-  height: 12px;
-  line-height: 17px;
-  font-size: 10px;
+.item:hover .qname-block .condition-item{
+  height:6px;
+  width:6px;
+  display:block;
+  margin:4px;               
 }
 .item:hover.highlight .cursor {
   top: 0;

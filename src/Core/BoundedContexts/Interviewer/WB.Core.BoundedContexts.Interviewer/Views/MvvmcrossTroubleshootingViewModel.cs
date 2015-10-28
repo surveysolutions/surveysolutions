@@ -1,18 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Cirrious.MvvmCross.Plugins.Network.Droid;
 using Cirrious.MvvmCross.ViewModels;
-
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -131,11 +128,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
            
             if (string.IsNullOrWhiteSpace(path))
             {
-                await userInteractionService.AlertAsync(UIResources.Troubleshooting_BackupErrorMessage);
+                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_BackupErrorMessage);
             }
             else
             {
-                await userInteractionService.AlertAsync(string.Format(UIResources.Troubleshooting_BackupWasSaved, path));
+                await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.Troubleshooting_BackupWasSaved, path));
             }
 
             IsInProgress = false;
@@ -144,7 +141,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private async Task Restore()
         {
             var shouldWeProceedRestore = await userInteractionService.ConfirmAsync(
-                string.Format(UIResources.Troubleshooting_RestoreConfirmation, this.backupManager.RestorePath));
+                string.Format(InterviewerUIResources.Troubleshooting_RestoreConfirmation, this.backupManager.RestorePath));
 
             if (!shouldWeProceedRestore) return;
             var wasErrorHappened = false;
@@ -153,7 +150,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.backupManager.Restore();
 
-                await userInteractionService.AlertAsync(UIResources.Troubleshooting_RestoredSuccessfully);
+                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
             }
             catch (Exception exception)
             {
@@ -163,7 +160,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             if (wasErrorHappened)
             {
-                await userInteractionService.AlertAsync(UIResources.Troubleshooting_RestorationErrorMessage);
+                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestorationErrorMessage);
             }
 
             IsInProgress = false;
@@ -173,7 +170,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             if (!this.networkService.IsNetworkEnabled())
             {
-                await userInteractionService.AlertAsync(UIResources.NoNetwork);
+                await userInteractionService.AlertAsync(InterviewerUIResources.NoNetwork);
                 return;
             }
 
@@ -205,7 +202,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (isNewVersionAvailable)
             {
-                var shouldWeDownloadUpgrade = await userInteractionService.ConfirmAsync(UIResources.Troubleshooting_NewVerisonExist);
+                var shouldWeDownloadUpgrade = await userInteractionService.ConfirmAsync(InterviewerUIResources.Troubleshooting_NewVerisonExist);
 
                 if (shouldWeDownloadUpgrade)
                 {
@@ -216,13 +213,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     catch (Exception exception)
                     {
                         this.logger.Error("Check new version. Unexpected exception when downloading app", exception);
-                        errorMessageHappened = UIResources.Troubleshooting_Unknown_ErrorMessage;
+                        errorMessageHappened = InterviewerUIResources.Troubleshooting_Unknown_ErrorMessage;
                     }
                 }
             }
             else
             {
-                await userInteractionService.AlertAsync(UIResources.Troubleshooting_NoNewVersion);
+                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_NoNewVersion);
             }
 
             if (!string.IsNullOrEmpty(errorMessageHappened))
@@ -252,18 +249,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
 
                 var formattedFileSize = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(pathToInfoArchive));
-                var shouldWeSendTabletInformation = await userInteractionService.ConfirmAsync(string.Format(UIResources.Troubleshooting_InformationPackageSizeWarningFormat, formattedFileSize));
+                var shouldWeSendTabletInformation = await userInteractionService.ConfirmAsync(string.Format(InterviewerUIResources.Troubleshooting_InformationPackageSizeWarningFormat, formattedFileSize));
 
                 if (shouldWeSendTabletInformation)
                 {
                     await this.synchronizationService.SendTabletInformationAsync(Convert.ToBase64String(this.fileSystemAccessor.ReadAllBytes(pathToInfoArchive)), tokenSource.Token);
-                    await userInteractionService.AlertAsync(UIResources.Troubleshooting_InformationPackageIsSuccessfullySent);
+                    await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent);
                 }
             }
             catch (Exception exception)
             {
                 logger.Error("Error occured during Restore. ", exception);
-                errorMessageHappened = UIResources.Troubleshooting_SendingOfInformationPackageErrorMessage;
+                errorMessageHappened = InterviewerUIResources.Troubleshooting_SendingOfInformationPackageErrorMessage;
             }
             finally
             {
@@ -288,12 +285,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateTo<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
         }
 
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync()); }
         }
     }
 }

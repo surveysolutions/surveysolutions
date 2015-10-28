@@ -17,26 +17,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
             this.TextListAnswers = new ConcurrentDictionary<string, Tuple<decimal, string>[]>();
 
-            this.AnsweredQuestions = new HashSet<string>();
-            this.DisabledGroups = new HashSet<string>();
-            this.DisabledQuestions = new HashSet<string>();
-            this.RosterGroupInstanceIds = new ConcurrentDictionary<string, DistinctDecimalList>();
-            this.ValidAnsweredQuestions = new HashSet<string>();
-            this.InvalidAnsweredQuestions = new HashSet<string>();
-            this.AnswerComments = new List<AnswerComment>();
+            this.AnsweredQuestions = new ConcurrentHashSet<string>();
+            this.DisabledGroups = new ConcurrentHashSet<string>();
+            this.DisabledQuestions = new ConcurrentHashSet<string>();
+            this.RosterGroupInstanceIds = new ConcurrentDictionary<string, ConcurrentHashSet<decimal>>();
+            this.ValidAnsweredQuestions = new ConcurrentHashSet<string>();
+            this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
+            this.AnswerComments = new ConcurrentBag<AnswerComment>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
         public ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>> LinkedSingleOptionAnswersBuggy { set; get; }
         public ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>> LinkedMultipleOptionsAnswers { set; get; }
         public ConcurrentDictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
-        public HashSet<string> AnsweredQuestions { set; get; }
-        public HashSet<string> DisabledGroups { set; get; }
-        public HashSet<string> DisabledQuestions { set; get; }
-        public ConcurrentDictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
-        public HashSet<string> ValidAnsweredQuestions { set; get; }
-        public HashSet<string> InvalidAnsweredQuestions { set; get; }
-        public List<AnswerComment> AnswerComments { get; set; }
+        public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
+        public ConcurrentHashSet<string> DisabledGroups { set; get; }
+        public ConcurrentHashSet<string> DisabledQuestions { set; get; }
+        public ConcurrentDictionary<string, ConcurrentHashSet<decimal>> RosterGroupInstanceIds { set; get; }
+        public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
+        public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
+        public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
 
         public void ApplyInterviewChanges(InterviewChanges changes)
         {
@@ -102,9 +102,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in instances)
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
-                DistinctDecimalList rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? RosterGroupInstanceIds[rosterGroupKey]
-                    : new DistinctDecimalList();
+                    : new ConcurrentHashSet<decimal>();
 
                 rosterRowInstances.Add(instance.RosterInstanceId);
 
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
                     ? RosterGroupInstanceIds[rosterGroupKey]
-                    : new DistinctDecimalList();
+                    : new ConcurrentHashSet<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
 
                 RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;

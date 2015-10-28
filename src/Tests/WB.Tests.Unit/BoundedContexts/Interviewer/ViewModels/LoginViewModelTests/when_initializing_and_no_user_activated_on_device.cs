@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         Because of = () => viewModel.Init();
 
         It should_redirect_to_finish_installation_page = () => 
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateTo<FinishInstallationViewModel>(), Times.Once);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToAsync<FinishInstallationViewModel>(), Times.Once);
 
         static LoginViewModel viewModel;
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();

@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
         private readonly ConcurrentDictionary<string, InterviewGroup> groups;
-        private readonly ConcurrentDictionary<string, List<Identity>> rosterInstancesIds;
+        private readonly ConcurrentDictionary<Identity, int?> rosterInstancesIdsOnSortIndexMap;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
             this.groups = new ConcurrentDictionary<string, InterviewGroup>();
-            this.rosterInstancesIds = new ConcurrentDictionary<string, List<Identity>>();
+            this.rosterInstancesIdsOnSortIndexMap = new ConcurrentDictionary<Identity, int?>();
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
@@ -371,14 +371,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 var fullRosterVector = GetFullRosterVector(rosterInstance);
 
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, fullRosterVector);
-                var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, rosterInstance.OuterRosterVector);
-
-                var rosterIdentity = this.RosterInstancesIds[rosterParentKey].Find(roster => roster.Id == rosterInstance.GroupId &&
-                                                                                             roster.RosterVector.SequenceEqual(fullRosterVector));
-
                 InterviewGroup removedGroup;
                 this.groups.TryRemove(rosterKey, out removedGroup);
-                this.RosterInstancesIds[rosterParentKey].Remove(rosterIdentity);
+
+                int? removeSortIndex;
+                this.rosterInstancesIdsOnSortIndexMap.TryRemove(new Identity(rosterInstance.GroupId, fullRosterVector), out removeSortIndex);
             }
         }
 
@@ -441,14 +438,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             get
             {
                 return new ReadOnlyDictionary<string, BaseInterviewAnswer>(this.answers);
-            }
-        }
-
-        public IReadOnlyDictionary<string, List<Identity>> RosterInstancesIds
-        {
-            get
-            {
-                return new ReadOnlyDictionary<string, List<Identity>>(this.rosterInstancesIds);
             }
         }
 
@@ -723,12 +712,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 ParentRosterVector = rosterInstance.OuterRosterVector,
                 RowCode = rosterInstance.RosterInstanceId
             };
-            if (!this.rosterInstancesIds.ContainsKey(rosterParentKey))
-            {
-                this.rosterInstancesIds[rosterParentKey] = new List<Identity>();
-            }
-
-            this.rosterInstancesIds[rosterParentKey].Add(rosterIdentity);
+            this.rosterInstancesIdsOnSortIndexMap[rosterIdentity] = rosterInstance.SortIndex;
         }
 
         private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
@@ -796,7 +780,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                allQuestionsInGroup,
                groupIdentity.RosterVector,
                questionnaire,
-               GetRosterInstanceIds);
+               GetRosterInstanceIds).ToList();
 
             return questionInstances.Count(this.IsEnabled);
         }
@@ -813,7 +797,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             return this
                 .GetGroupsAndRostersInGroup(group)
-                .Count;
+                .Count();
         }
 
         public int CountAnsweredQuestionsInInterview()
@@ -849,7 +833,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds);
+                GetRosterInstanceIds).ToList();
 
             return questionInstances.Count(this.WasAnswered);
         }
@@ -870,7 +854,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 allQuestionsInGroup,
                 groupIdentity.RosterVector,
                 questionnaire,
-                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString);
+                GetRosterInstanceIds).Select(ConversionHelper.ConvertIdentityToString).ToList();
 
             return this.Answers.Where(x => questionInstances.Contains(x.Key)).Count(
                 x => x.Value != null 
@@ -934,8 +918,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 if (questionnaire.IsRosterGroup(entity))
                 {
-                    foreach (var rosterInstance in this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
-                            groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds))
+                    foreach (
+                        var rosterInstance in
+                            this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                                entity,
+                                groupIdentity.RosterVector, questionnaire, GetRosterInstanceIds)
+                                .OrderBy(x => this.rosterInstancesIdsOnSortIndexMap[x] ?? x.RosterVector.Last()))
                     {
                         yield return rosterInstance;
                     }
@@ -1048,22 +1036,42 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.InterviewerComment;
         }
 
-        private ReadOnlyCollection<Identity> GetGroupsAndRostersInGroup(Identity group)
+        private IEnumerable<Identity> GetGroupsAndRostersInGroup(Identity group)
         {
             return GetOrCalculate(
                 group,
-                this.GetGroupsAndRostersInGroupImpl,
+                (groupId) => this.GetGroupsAndRostersInGroupImpl(groupId).ToReadOnlyCollection(),
                 this.calculated.GroupsAndRostersInGroup);
         }
 
-        private ReadOnlyCollection<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
+        private IEnumerable<Identity> GetGroupsAndRostersInGroupImpl(Identity group)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             IEnumerable<Guid> groupsAndRosters = questionnaire.GetAllUnderlyingChildGroupsAndRosters(group.Id);
 
-            return this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
-                this.interviewState, groupsAndRosters, group.RosterVector, questionnaire, GetRosterInstanceIds).ToReadOnlyCollection();
+            foreach (var entity in groupsAndRosters)
+            {
+                if (questionnaire.IsRosterGroup(entity))
+                {
+                    foreach (var rosterInstance in
+                            this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
+                                entity,
+                                group.RosterVector, questionnaire, GetRosterInstanceIds)
+                                .OrderBy(x => this.rosterInstancesIdsOnSortIndexMap[x] ?? x.RosterVector.Last()))
+                    {
+                        yield return rosterInstance;
+                    }
+                }
+                else
+                {
+                    foreach (var entityInstance in this.GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity,
+                            group.RosterVector, questionnaire, GetRosterInstanceIds))
+                    {
+                        yield return entityInstance;
+                    }
+                }
+            }
         }
 
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestions(Identity group)

@@ -46,13 +46,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                         }
                 });
 
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexesGoupedByQuestionVariableName(preloadedDataByFile))
-                .Returns(new Dictionary<string, Tuple<string, int>[]> { { "q1", new[] { new Tuple<string, int>("q1", 1) } } });
-
-            KeyValuePair<Guid, object> outValue;
+            object outValue;
 
             preloadedDataServiceMock.Setup(
-                x => x.ParseQuestion(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<IQuestion>(), out outValue)).Returns(ValueParsingResult.AnswerAsDateTimeWasNotParsed);
+                x => x.ParseQuestionInLevel(Moq.It.IsAny<string>(), "q1", Moq.It.IsAny<HeaderStructureForLevel>(), out outValue)).Returns(ValueParsingResult.AnswerAsDateTimeWasNotParsed);
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };

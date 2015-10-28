@@ -25,12 +25,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
           () =>
               parseResult =
                   questionDataParser.TryParse("22",questionVarName,
-                      question, CreateQuestionnaireDocumentWithOneChapter(question), out parsedValue);
+                      question, out parsedValue);
 
         It should_return_OK = () => parseResult.ShouldEqual(ValueParsingResult.OK);
 
         private static ValueParsingResult parseResult;
-        private static KeyValuePair<Guid, object> parsedValue;
+        private static object parsedValue;
     }
 }
 

@@ -14,17 +14,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     public class UsersController : BaseApiServiceController
     {
         private readonly IInterviewersViewFactory interviewersFactory;
-        private readonly IUserListViewFactory supervisorsFactory;
+        private readonly IUserListViewFactory usersFactory;
         private readonly IUserViewFactory userViewFactory;
 
         public UsersController(ILogger logger,
             IInterviewersViewFactory interviewersFactory,
-            IUserListViewFactory supervisorsFactory,
+            IUserListViewFactory usersFactory,
             IUserViewFactory userViewFactory)
             :base(logger)
         {
             this.interviewersFactory = interviewersFactory;
-            this.supervisorsFactory = supervisorsFactory;
+            this.usersFactory = usersFactory;
             this.userViewFactory = userViewFactory;
         }
 
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Role = UserRoles.Supervisor
             };
 
-            var supervisors = this.supervisorsFactory.Load(input);
+            var supervisors = this.usersFactory.Load(input);
 
             return new UserApiView(supervisors);
         }

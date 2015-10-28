@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -24,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IInterviewInformationFactory interviewerInterviewsFactory;
@@ -33,12 +36,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IGlobalInfoProvider globalInfoProvider,
             IInterviewInformationFactory interviewerInterviewsFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.globalInfoProvider = globalInfoProvider;
             this.interviewerInterviewsFactory = interviewerInterviewsFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.commandService = commandService;
             this.syncPackagesMetaReader = syncPackagesMetaReader;
         }
 
@@ -117,6 +122,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.InterviewPackageProcessed)]
         public void LogPackageAsSuccessfullyHandled(string id)
         {
+            InterviewSyncPackageMeta syncPackage = syncPackagesMetaReader.GetById(id);
+            if (syncPackage != null && syncPackage.ItemType == SyncItemType.Interview)
+            {
+                commandService.Execute(new MarkInterviewAsReceivedByInterviewer(syncPackage.InterviewId, GlobalInfo.GetCurrentUser().Id));
+            }
         }
 
         private List<SynchronizationChunkMeta> GetInterviewPackages(Guid userId, string lastSyncedPackageId)

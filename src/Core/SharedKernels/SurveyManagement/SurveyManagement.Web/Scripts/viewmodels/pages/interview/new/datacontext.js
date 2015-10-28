@@ -59,6 +59,12 @@
                     };
                     break;
                 case "GpsCoordinates":
+                    answer = {
+                        id: question.id(),
+                        answer: question.latitude() + "$" + question.longitude(),
+                        type: question.type()
+                    };
+                    break;
                 case "SingleOption":
                     answer = {
                         id: question.id(),

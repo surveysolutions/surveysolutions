@@ -19,6 +19,16 @@ angular.module('designerApp')
             var openChaptersPane = 'left';
 
             hotkeys.add({
+                combo: 'ctrl+b',
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                description: 'Compile',
+                callback: function (event) {
+                    $scope.verify();
+                    event.preventDefault();
+                }
+            });
+
+            hotkeys.add({
                 combo: 'esc',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 callback: function() {

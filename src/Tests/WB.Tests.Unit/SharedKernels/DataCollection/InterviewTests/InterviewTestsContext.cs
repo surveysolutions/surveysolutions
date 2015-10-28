@@ -50,7 +50,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             return new InterviewSynchronizationDto(
                 interviewId ?? new Guid("A1A1A1A1B1B1B1B1A1A1A1A1B1B1B1B1"),
-                status ?? InterviewStatus.RejectedBySupervisor, null, null,
+                status ?? InterviewStatus.RejectedBySupervisor, 
+                null, 
+                null,
+                null,
                 userId ?? new Guid("F111F111F111F111F111F111F111F111"),
                 questionnaireId ?? new Guid("B111B111B111B111B111B111B111B111"),
                 questionnaireVersion ?? 1,

@@ -9,9 +9,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
     public class JsonCompressor : IStringCompressor
     {
-        private readonly IJsonUtils jsonSerrializer;
+        private readonly ISerializer jsonSerrializer;
 
-        public JsonCompressor(IJsonUtils jsonSerrializer)
+        public JsonCompressor(ISerializer jsonSerrializer)
         {
             this.jsonSerrializer = jsonSerrializer;
         }

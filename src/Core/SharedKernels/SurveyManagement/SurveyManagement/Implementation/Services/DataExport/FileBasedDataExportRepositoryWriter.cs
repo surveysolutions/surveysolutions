@@ -39,7 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.SupervisorAssigned,
             InterviewExportedAction.Completed, InterviewExportedAction.ApprovedBySupervisor,
-            InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restored
+            InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restored,
+            InterviewExportedAction.UnapprovedByHeadquarter
         };
 
         public FileBasedDataExportRepositoryWriter(
@@ -79,7 +80,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.CreateExportedFileStructure(questionnaireExportStructure);
         }
 
-        public void AddExportedDataByInterviewWithAction(Guid interviewId, InterviewExportedAction action)
+        public void AddOrUpdateExportedDataByInterviewWithAction(Guid interviewId, InterviewExportedAction action)
         {
             var interviewSummary = interviewSummaryWriter.GetById(interviewId);
             if (interviewSummary == null)
@@ -87,7 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             filebasedExportedDataAccessor.DeleteAllDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
-            if (action == InterviewExportedAction.ApprovedByHeadquarter)
+            if (action == InterviewExportedAction.ApprovedByHeadquarter || action == InterviewExportedAction.UnapprovedByHeadquarter)
                 filebasedExportedDataAccessor.DeleteApprovedDataFolder(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
             if (interviewActionsForDataUpdate.Contains(action))
@@ -173,10 +174,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             if (fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
                 fileSystemAccessor.DeleteDirectory(filesFolderForInterview);
 
-            fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+            var questionsWithAnswersOnMultimediaQuestions = this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
 
-            var questionsWithAnswersOnMultimediaQuestions =
-                this.GetAllMultimediaQuestionFileNames(interviewDataExportView);
+            if (questionsWithAnswersOnMultimediaQuestions.Any())
+            {
+                if (!fileSystemAccessor.IsDirectoryExists(filesFolderForInterview))
+                    fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+            }
 
             foreach (var questionWithAnswersOnMultimediaQuestions in questionsWithAnswersOnMultimediaQuestions)
             {
@@ -192,7 +196,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                             questionWithAnswersOnMultimediaQuestions, interviewDataExportView.InterviewId));
                     continue;
                 }
-
+                
                 this.fileSystemAccessor.WriteAllBytes(
                     this.fileSystemAccessor.CombinePath(filesFolderForInterview,
                         questionWithAnswersOnMultimediaQuestions), fileContent);

@@ -100,8 +100,8 @@
       <HintPath>..\..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="StatData">
       <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
@@ -222,12 +222,15 @@
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
+    <Compile Include="Models\InterviewersFilter.cs" />
+    <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
+    <Compile Include="Models\InterviewersListViewModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Properties\SyncLogMessages.Designer.cs">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
@@ -239,10 +242,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Archived.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
+    <Compile Include="Resources\TabletSyncMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerSyncStrings.resx</DependentUpon>
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Interviews.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -393,9 +396,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Archived.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerSyncStrings.resx">
+    <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerSyncStrings.Designer.cs</LastGenOutput>
+      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.resx">
@@ -547,7 +550,6 @@
     <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />

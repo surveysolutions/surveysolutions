@@ -23,18 +23,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta> syncPackageWriter;
 
         public QuestionnaireSynchronizationDenormalizer(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IJsonUtils jsonUtils,
+            ISerializer serializer,
             IReadSideRepositoryWriter<QuestionnaireSyncPackageMeta> syncPackageWriter)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.jsonUtils = jsonUtils;
+            this.serializer = serializer;
             this.syncPackageWriter = syncPackageWriter;
         }
 
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         protected string GetItemAsContent(object item)
         {
-            return this.jsonUtils.Serialize(item, TypeSerializationSettings.AllTypes);
+            return this.serializer.Serialize(item, TypeSerializationSettings.AllTypes);
         }
 
         public void StoreChunk(Guid questionnaireId, long questionnaireVersion, string itemType, string content, string metaInfo, DateTime timestamp, string packageId, long globalSequence)

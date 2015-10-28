@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     {
         Establish context = () =>
         {
-            var jsonUtilsMock = new Mock<IJsonUtils>();
+            var jsonUtilsMock = new Mock<ISerializer>();
             jsonUtilsMock.Setup(x => x.Deserialize<SyncItem>(Moq.It.IsAny<string>())).Returns(new SyncItem() { RootId = interviewId });
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>())).Returns(new InterviewMetaInfo());
             jsonUtilsMock.Setup(x => x.Deserialize<AggregateRootEvent[]>(Moq.It.IsAny<string>())).Returns(new[] { new AggregateRootEvent() });
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
                 .Returns<string, string>(Path.Combine);
 
             incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object,
-                jsonUtils: jsonUtilsMock.Object);
+                serializer: jsonUtilsMock.Object);
         };
 
         Because of = () =>

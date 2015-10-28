@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
 
-            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null);
+            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null, null);
 
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
@@ -149,7 +149,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return null;
         }
 
-        private InterviewSummary CallUpdateMethod(InterviewSummaryEventHandlerFunctional eventHandler, InterviewSummary currentState,
+        private InterviewSummary CallUpdateMethod(InterviewSummaryDenormalizer eventHandler, InterviewSummary currentState,
             object updateEvent)
         {
             MethodInfo method = this.GetType().GetMethod("CreatePublishableEvent", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -170,10 +170,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return publishableEventMock.Object;
         }
 
-        protected static InterviewSummaryEventHandlerFunctional CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire=null)
+        protected static InterviewSummaryDenormalizer CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire=null)
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            return new InterviewSummaryEventHandlerFunctional(mockOfInterviewSummary.Object,
+            return new InterviewSummaryDenormalizer(mockOfInterviewSummary.Object,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(_ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire }),
                 new Mock<IReadSideRepositoryWriter<UserDocument>>().Object);
         }

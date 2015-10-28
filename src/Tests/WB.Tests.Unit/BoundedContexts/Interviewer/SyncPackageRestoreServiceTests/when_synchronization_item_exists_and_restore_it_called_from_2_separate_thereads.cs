@@ -18,14 +18,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SyncPackageRestoreServiceTes
     {
         Establish context = () =>
         {
-            interviewSynchronizationDto = new InterviewSynchronizationDto(Guid.NewGuid(), InterviewStatus.InterviewerAssigned, null, null,
+            interviewSynchronizationDto = new InterviewSynchronizationDto(Guid.NewGuid(), InterviewStatus.InterviewerAssigned, null, null, null,
                 Guid.NewGuid(), Guid.NewGuid(), 1, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
                 new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
                 new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), false, false);
 
             capiSynchronizationCacheServiceMock = new CapiSynchronizationCacheServiceMock();
 
-            jsonUtilsMock = new Mock<IJsonUtils>();
+            jsonUtilsMock = new Mock<ISerializer>();
             jsonUtilsMock.Setup(x => x.Deserialize<InterviewSynchronizationDto>("some string")).Returns(interviewSynchronizationDto);
 
             commandServiceMock = new Mock<ICommandService>();
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SyncPackageRestoreServiceTes
         static SyncPackageRestoreService syncPackageRestoreService;
         static InterviewSynchronizationDto interviewSynchronizationDto;
         static CapiSynchronizationCacheServiceMock capiSynchronizationCacheServiceMock;
-        static Mock<IJsonUtils> jsonUtilsMock;
+        static Mock<ISerializer> jsonUtilsMock;
         static Mock<ICommandService> commandServiceMock;
     }
 

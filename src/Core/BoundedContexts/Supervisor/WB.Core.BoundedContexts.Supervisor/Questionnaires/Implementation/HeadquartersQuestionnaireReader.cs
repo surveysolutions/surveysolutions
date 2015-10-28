@@ -13,8 +13,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Questionnaires.Implementation
 {
     internal class HeadquartersQuestionnaireReader : HeadquartersEntityReader, IHeadquartersQuestionnaireReader
     {
-        public HeadquartersQuestionnaireReader(IJsonUtils jsonUtils, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
-            : base(jsonUtils, headquartersSettings, messageHandler) {}
+        public HeadquartersQuestionnaireReader(ISerializer serializer, IHeadquartersSettings headquartersSettings, Func<HttpMessageHandler> messageHandler)
+            : base(serializer, headquartersSettings, messageHandler) {}
 
         public async Task<QuestionnaireDocument> GetQuestionnaireByUri(Uri headquartersQuestionnaireUri)
         {

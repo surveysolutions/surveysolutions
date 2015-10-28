@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (string.IsNullOrEmpty(rosterVectorAsString))
                 return new decimal[0];
 
-            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector.Replace('-', '.'))).ToArray();
+            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector)).ToArray();
         }
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             try
             {
                 this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                this.dataExportRepositoryWriter.AddExportedDataByInterviewWithAction(input.InterviewId, InterviewExportedAction.ApprovedByHeadquarter);
+                this.dataExportRepositoryWriter.AddOrUpdateExportedDataByInterviewWithAction(input.InterviewId, InterviewExportedAction.ApprovedByHeadquarter);
                 this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
             }
             catch (Exception exception)
