@@ -22,7 +22,7 @@
             };
 
             $scope.itemTemplate = function (itemType) {
-                return 'views/tree' + itemType + '.html';
+                return 'views/tree' + itemType.toLowerCase() + '.html';//to use cache casted to lower
             };
 
             $scope.highlightedId = null;
