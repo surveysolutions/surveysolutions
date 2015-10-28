@@ -6,9 +6,9 @@ using WB.Core.Infrastructure.PlainStorage;
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Mapping
 {
     [PlainStorage]
-    public class ExportedDataReferenceMap : ClassMapping<ExportedDataReference>
+    public class ExportedDataReferenceDtoMap : ClassMapping<ExportedDataReferenceDto>
     {
-        public ExportedDataReferenceMap()
+        public ExportedDataReferenceDtoMap()
         {
             Id(x => x.ExportedDataReferenceId, idMap =>
             {
@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Mapping
 
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
+            Property(x => x.DataExportFormat);
             Property(x => x.DataExportType);
             Property(x => x.ExportedDataPath);
             Property(x => x.CreationDate);

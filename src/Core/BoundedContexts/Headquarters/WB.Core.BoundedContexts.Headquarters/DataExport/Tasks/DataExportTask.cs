@@ -8,34 +8,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Tasks
 {
     public class DataExportTask
     {
+        const string DataExportJobName = "data export";
+        const string DataExportJobGroup = "DataExport";
         private readonly IScheduler scheduler;
-        private readonly DataExportSettings dataExportSettings;
+        private IJobDetail job;
 
-        public DataExportTask(IScheduler scheduler, DataExportSettings dataExportSettings)
+        public DataExportTask(IScheduler scheduler)
         {
             if (scheduler == null) throw new ArgumentNullException("scheduler");
             this.scheduler = scheduler;
-            this.dataExportSettings = dataExportSettings;
         }
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<DataExportJob>()
-                .WithIdentity("data export", "Data export")
+            job = JobBuilder.Create<DataExportJob>()
+                .WithIdentity(DataExportJobName, DataExportJobGroup)
                 .StoreDurably(true)
                 .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("data export trigger", "Data export")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(dataExportSettings.DataExportIntervalInSeconds)
-                    .RepeatForever())
-                .Build();
-
-            this.scheduler.ScheduleJob(job, trigger);
-
+            
             this.scheduler.AddJob(job, true);
+        }
+
+        public void TriggerJob()
+        {
+            this.scheduler.TriggerJob(new JobKey(DataExportJobName, DataExportJobGroup));
         }
     }
 }

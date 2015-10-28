@@ -4,8 +4,12 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Microsoft.Practices.ServiceLocation;
+using Quartz;
+using Quartz.Impl.Matchers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
@@ -18,18 +22,20 @@ namespace WB.UI.Headquarters.API
         private readonly IFilebasedExportedDataAccessor exportDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
-        private readonly IDataExportService dataExportService;
+        private readonly IDataExportQueue dataExportQueue;
+
+        private DataExportTask DataExportTask => ServiceLocator.Current.GetInstance<DataExportTask>();
 
         public DataExportApiController(
             IFilebasedExportedDataAccessor exportDataAccessor, 
             IFileSystemAccessor fileSystemAccessor, 
             IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
-            IDataExportService dataExportService)
+            IDataExportQueue dataExportQueue)
         {
             this.exportDataAccessor = exportDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportedDataReferenceViewFactory = exportedDataReferenceViewFactory;
-            this.dataExportService = dataExportService;
+            this.dataExportQueue = dataExportQueue;
         }
 
         [HttpGet]
@@ -47,9 +53,10 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        public void RequestUpdateOfParadata(Guid id, long version)
+        public void RequestUpdateOfParadata()
         {
-            dataExportService.EnQueueDataExportProcess(id, version, DataExportType.Paradata);
+            this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.TabularData);
+            DataExportTask.TriggerJob();
         }
 
         public ExportedDataReferencesViewModel ExportedDataReferencesForQuestionnaire(ExportedDataReferenceInputModel request)

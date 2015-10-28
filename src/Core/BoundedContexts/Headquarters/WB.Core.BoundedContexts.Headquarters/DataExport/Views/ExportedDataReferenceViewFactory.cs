@@ -9,10 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class ExportedDataReferenceViewFactory: IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel>
     {
-        private readonly IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage;
+        private readonly IPlainStorageAccessor<ExportedDataReferenceDto> exportedDataReferenceStorage;
         private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
 
-        public ExportedDataReferenceViewFactory(IPlainStorageAccessor<ExportedDataReference> exportedDataReferenceStorage, IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
+        public ExportedDataReferenceViewFactory(IPlainStorageAccessor<ExportedDataReferenceDto> exportedDataReferenceStorage, IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
         {
             this.exportedDataReferenceStorage = exportedDataReferenceStorage;
             this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     _ =>
                         _.Where(
                             d =>
-                                d.DataExportType == DataExportType.Paradata &&
+                                d.DataExportType == DataExportType.ParaData &&
                                 d.QuestionnaireId == input.QuestionnaireId &&
                                 d.QuestionnaireVersion == input.QuestionnaireVersion &&
                                 d.DataExportProcessId != null)
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             {
                 exportedDataReferencesView = new ExportedDataReferencesView()
                 {
-                    DataExportType = paradataReference.DataExportType,
+                    DataExportFormat = paradataReference.DataExportFormat,
                     ExportedDataReferenceId = paradataReference.ExportedDataReferenceId,
                     LastUpdateDate = paradataReference.CreationDate
                 };
