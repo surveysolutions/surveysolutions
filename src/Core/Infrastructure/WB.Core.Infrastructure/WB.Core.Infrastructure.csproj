@@ -109,6 +109,7 @@
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IEventBus.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBus.cs" />
+    <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IUncommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\PublishedEvent.cs" />
