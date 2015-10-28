@@ -146,7 +146,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             try
             {
-                this.eventBus.PublishCommitedEvents(commitedEvents);
+                this.eventBus.PublishCommittedEvents(commitedEvents);
             }
             finally
             {

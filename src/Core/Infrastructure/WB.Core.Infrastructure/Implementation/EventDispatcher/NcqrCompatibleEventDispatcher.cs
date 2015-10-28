@@ -125,7 +125,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommitedEvents(CommittedEventStream committedEvents)
+        public void PublishCommittedEvents(CommittedEventStream committedEvents)
         {
             this.Publish(committedEvents);
         }

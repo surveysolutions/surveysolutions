@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return this.eventStore.Store(eventStream);
         }
 
-        public void PublishCommitedEvents(CommittedEventStream committedEvents)
+        public void PublishCommittedEvents(CommittedEventStream committedEvents)
         {
             foreach (var uncommittedChange in committedEvents)
             {

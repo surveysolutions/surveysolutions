@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishCommitedEvents(eventsToPublish);
+            eventBus.PublishCommittedEvents(eventsToPublish);
 
         It should_call_Handle_once_for_first_handler = () =>
             firstHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());
