@@ -7,7 +7,7 @@
             if (hotkeys.get(saveGroup) !== false) {
                 hotkeys.del(saveGroup);
             }
-            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) 
+            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) 
             {
                 hotkeys.bindTo($scope)
                     .add({

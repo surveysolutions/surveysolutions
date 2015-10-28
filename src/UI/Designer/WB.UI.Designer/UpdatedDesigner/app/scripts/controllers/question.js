@@ -14,7 +14,7 @@
            if (hotkeys.get(addOption) !== false) {
                 hotkeys.del(addOption);
             }
-            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
+            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                 hotkeys.bindTo($scope)
                     .add({
                         combo: saveQuestion,
@@ -112,18 +112,17 @@
                     });
             };
 
-            var hasQuestionEnablementConditions = function (question) {
+            var hasQuestionEnablementConditions = function(question) {
                 return $scope.doesQuestionSupportEnablementConditions() &&
                     question.enablementCondition !== null &&
                     /\S/.test(question.enablementCondition);
+            };
 
-            }
-
-            var hasQuestionValidations = function (question) {
+            var hasQuestionValidations = function(question) {
                 return $scope.doesQuestionSupportValidations() &&
                     question.validationExpression !== null &&
                     /\S/.test(question.validationExpression);
-            }
+            };
 
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {

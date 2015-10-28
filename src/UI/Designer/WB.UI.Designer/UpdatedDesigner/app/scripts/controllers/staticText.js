@@ -8,7 +8,7 @@
             if (hotkeys.get(saveStaticText) !== false) {
                 hotkeys.del(saveStaticText);
             }
-            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)
+            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser)
             {
                 hotkeys.bindTo($scope)
                     .add({

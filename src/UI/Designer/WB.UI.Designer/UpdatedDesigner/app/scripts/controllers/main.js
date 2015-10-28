@@ -138,23 +138,23 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.removeItemWithIdFromErrors = function (itemId) {
+            $scope.removeItemWithIdFromErrors = function(itemId) {
                 var errors = $scope.verificationStatus.errors;
 
-                $scope.verificationStatus.errors = _.filter(errors, function (item) {
+                $scope.verificationStatus.errors = _.filter(errors, function(item) {
                     return item.ItemId != itemId;
                 });
                 _.each(errors, function(error) {
                     if (error.isGroupOfErrors) {
-                        error.references = _.filter(error.references, function (reference) {
-                            
+                        error.references = _.filter(error.references, function(reference) {
+
                             return reference.itemId != itemId;
                         });
                     }
-                })
+                });
 
                 var errorsCount = 0;
-                _.each(errors, function (error) {
+                _.each(errors, function(error) {
                     if (error.isGroupOfErrors) {
                         _.each(error.references, function(reference) {
                             errorsCount++;
@@ -163,14 +163,14 @@ angular.module('designerApp')
                         errorsCount++;
                     }
                 });
-                    
+
                 errors = _.filter(errors, function(error) {
                     return !error.isGroupOfErrors || error.references.length;
                 });
 
                 $scope.verificationStatus.errors = errors;
                 $scope.verificationStatus.errorsCount = errorsCount;
-            }
+            };
 
             $scope.currentChapter = null;
 
