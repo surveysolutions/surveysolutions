@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             var interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatusesStorage.Store(history, history.InterviewId);
 
-            statusEventsToPublish = new List<IUncommittedEvent>();
+            statusEventsToPublish = new List<IPublishableEvent>();
             statusEventsToPublish.Add(Create.InterviewerAssignedEvent(interviewId: interviewId));
             statusEventsToPublish.Add(Create.InterviewCompletedEvent(interviewId: interviewId, comment: "comment Completed"));
             statusEventsToPublish.Add(Create.InterviewRejectedEvent(interviewId: interviewId, comment: "comment Rejected"));
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 
         private static StatusChangeHistoryDenormalizerFunctional denormalizer;
         private static InterviewStatuses history;
-        private static List<IUncommittedEvent> statusEventsToPublish;
+        private static List<IPublishableEvent> statusEventsToPublish;
         private static Guid interviewId=Guid.Parse("11111111111111111111111111111111");
     }
 }

@@ -52,7 +52,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                         });
 
             eventBusMock
-                .Setup(bus => bus.PublishCommitedEvents(Moq.It.IsAny<CommittedEventStream>()))
+                .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<CommittedEventStream>()))
                 .Callback<CommittedEventStream>(events =>
                 {
                     publishedEvents = events;

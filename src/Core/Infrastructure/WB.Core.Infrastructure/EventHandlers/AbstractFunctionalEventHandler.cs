@@ -30,12 +30,12 @@ namespace WB.Core.Infrastructure.EventHandlers
             this.readSideStorage = readSideStorage;
         }
 
-        protected void Handle(IUncommittedEvent evt)
+        protected void Handle(IPublishableEvent evt)
         {
             this.Handle(evt, this.readSideStorage);
         }
 
-        public void Handle(IEnumerable<IUncommittedEvent> publishableEvents, Guid eventSourceId)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
             using (var inMemoryStorage = new InMemoryViewWriter<TEntity>(this.readSideStorage, eventSourceId))
             {
@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             }
         }
 
-        private void Handle(IUncommittedEvent evt, IReadSideStorage<TEntity> storage)
+        private void Handle(IPublishableEvent evt, IReadSideStorage<TEntity> storage)
         {
             var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
