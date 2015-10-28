@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         DataExportProcessDto GetDataExportProcess(string processId);
 
-        void FinishDataExportProcess(string processId);
+        void FinishDataExportProcess(string processId, string exportedDataPath);
 
         void FinishDataExportProcessWithError(string processId, Exception e);
 

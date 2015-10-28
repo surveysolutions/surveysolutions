@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private const string approvedDataFolder = "ApprovedData";
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
-        private readonly string pathToHistoryFiles;
         
         private readonly ConcurrentDictionary<string, object> cancellationLockObjects = new ConcurrentDictionary<string, object>(); 
         private readonly HashSet<string> dataFoldersToDelete=new HashSet<string>(); 
@@ -40,7 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IEnvironmentContentService environmentContentService, 
             ILogger logger, 
             IArchiveUtils archiveUtils, 
-            InterviewDataExportSettings interviewDataExportSettings, 
             ITabularFormatExportService tabularFormatExportService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -59,15 +57,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
-
-            if (interviewDataExportSettings.EnableInterviewHistory)
-            {
-                this.pathToHistoryFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath,
-                    interviewDataExportSettings.ExportedDataFolderName);
-
-                if (!fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
-                    fileSystemAccessor.CreateDirectory(this.pathToHistoryFiles);
-            }
         }
 
         public string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
@@ -87,12 +76,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var result = this.GetFolderPathOfFilesByQuestionnaireImpl( questionnaireId, version);
 
             return result;
-        }
-
-        public string GetFolderPathOfHistoryByQuestionnaire(Guid questionnaireId, long version)
-        {
-            return fileSystemAccessor.CombinePath(pathToHistoryFiles,
-                string.Format("{0}-{1}", questionnaireId, version));
         }
 
         private string GetFolderPathOfFilesByQuestionnaireImpl(Guid questionnaireId, long version)
@@ -125,15 +108,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.PathToExportedFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
             Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.PathToExportedFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
-        }
-
-        public void CleanExportHistoryFolder()
-        {
-            if (fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
-            {
-                Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
-                Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
-            }
         }
 
         public void DeleteAllDataFolder(Guid questionnaireId, long version)
@@ -183,25 +157,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             return GetFilePathToExportedCompressedDataImpl(questionnaireId, version, exportDataType, "All",
                 GetAllDataFolder, this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync);
-        }
-
-        public string GetFilePathToExportedCompressedHistoryData(Guid questionnaireId, long version)
-        {
-            var dataDirectoryPath = this.GetFolderPathOfHistoryByQuestionnaire(questionnaireId, version);
-
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(pathToHistoryFiles, string.Format("exported_history_{0}_{1}.zip", questionnaireId, version));
-
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-
-            var filesToArchive = new List<string>();
-
-            if (fileSystemAccessor.IsDirectoryExists(dataDirectoryPath))
-                filesToArchive.AddRange(fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath));
-
-            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
-
-            return archiveFilePath;
         }
 
         public string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType)

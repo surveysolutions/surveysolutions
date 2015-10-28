@@ -107,6 +107,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataExport\Accessors\TabularParaDataWriter.cs" />
+    <Compile Include="DataExport\Accessors\IParaDataWriter.cs" />
     <Compile Include="DataExport\DataExportSettings.cs" />
     <Compile Include="DataExport\Dtos\DataExportProcessDto.cs" />
     <Compile Include="DataExport\Dtos\DataExportStatus.cs" />

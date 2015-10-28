@@ -29,7 +29,7 @@
                 }
             ];
 
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl);
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl);
             ko.applyBindings(model);
         });
 
@@ -132,15 +132,20 @@
             {
                 <td>
                     <div>
-                        Last updated on <i>04/18/2015</i>
-                        <a class="btn btn-default" data-bind="attr: { href: $UpdateHistoryUrl}">
+                        <span>
+                            Last updated on <i data-bind='text:lastParaDataUpdateDate()'></i>
+                        </span>
+                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <a class="btn btn-default" data-bind="visible: showParaDataDownloadButton(), attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
+                    </div>
+                    <div data-bind="visible: paraDatExportProgress()<100">
+                        Processed <i data-bind='text: paraDatExportProgress()'></i>%
                     </div>
                 </td>
             }

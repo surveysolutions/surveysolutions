@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -15,20 +13,17 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using It = Moq.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewHistoryWriterTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDataWriterTests
 {
-    [Subject(typeof(InterviewHistoryWriter))]
-    internal class InterviewHistoryWriterTestContext
+    [Subject(typeof(TabularParaDataWriter))]
+    internal class TabularParaDataWriterTestContext
     {
-        protected static InterviewHistoryWriter CreateInterviewHistoryWriter(ICsvWriterService csvWriterService = null,
+        protected static TabularParaDataWriter CreateTabularParaDataWriter(ICsvWriterService csvWriterService = null,
             IFileSystemAccessor fileSystemAccessor = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor=null)
         {
-            var filebasedExportedDataAccessorMock = new Mock<IFilebasedExportedDataAccessor>();
-            filebasedExportedDataAccessorMock.Setup(x => x.GetFolderPathOfHistoryByQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>()))
-                .Returns<Guid, long>((id, v) => string.Format("{0}-{1}", id, v));
-            return new InterviewHistoryWriter(Mock.Of<ICsvWriterFactory>(_=>_.OpenCsvWriter(It.IsAny<Stream>(),It.IsAny<string>())== Mock.Of<ICsvWriterService>()),
+            return new TabularParaDataWriter(Mock.Of<ICsvWriterFactory>(_=>_.OpenCsvWriter(It.IsAny<Stream>(),It.IsAny<string>())== Mock.Of<ICsvWriterService>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), new InterviewDataExportSettings("", true,1,1));
+                interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), new InterviewDataExportSettings("", true,1,1), Mock.Of<IArchiveUtils>());
         }
 
         protected static InterviewHistoryView CreateInterviewHistoryView(Guid? id=null)
