@@ -1,18 +1,19 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
+    self.HistoryUrl = $historyUrl;
     self.Templates = templates;
+    self.ParadataReference = ko.observableArray();
 
     self.selectedTemplate = ko.observable();
-    self.paraDataUpdateDate = ko.observable();
 
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
     });
     self.selectedTemplate.subscribe(function () {
-        self.search();
+        self.updateDataExportInfo();
     });
 
     self.selectedTemplateVersion = ko.computed(function () {
@@ -23,7 +24,7 @@
         return self.selectedTemplate() && self.selectedTemplate().title;
     });
 
-    self.search = function () {
+    self.updateDataExportInfo = function () {
         var filter = {
             questionnaireId: self.selectedTemplateId(),
             questionnaireVersion: self.selectedTemplate().version
@@ -32,5 +33,56 @@
             ko.mapping.fromJS(data, self.mappingOptions, self);
         }, true);
     };
+
+    self.requestParaDataUpdate = function () {
+
+        var requestHeaders = {};
+        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+        $.ajax({
+            url: self.HistoryUrl,
+            type: 'post',
+            headers: requestHeaders,
+            dataType: 'json'
+        }).done(function (data) {
+            self.updateDataExportInfo();
+        }).fail(function (jqXhr, textStatus, errorThrown) {
+            if (jqXhr.status === 403) {
+                if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                    self.ShowError(input.settings.messages.forbiddenMessage);
+                } else {
+                    self.ShowError(jqXhr.responseText);
+                }
+            } else {
+                var jsonException = $.parseJSON(jqXhr.responseText);
+                if (!Supervisor.Framework.Objects.isUndefined(jsonException))
+                    self.ShowError(jsonException.Message);
+                else
+                    self.ShowError(input.settings.messages.unhandledExceptionMessage);
+            }
+          
+        }).always(function () {
+            self.IsPageLoaded(true);
+            self.IsAjaxComplete(true);
+        });
+    }
+
+    self.lastParaDataUpdateDate = function () {
+        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().LastUpdateDate))
+            return "Never";
+        return self.ParadataReference().LastUpdateDate();
+    }
+
+    self.showParaDataDownloadButton = function () {
+        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().HasDataToExport))
+            return false;
+        return self.ParadataReference().HasDataToExport();
+    }
+
+    self.paraDatExportProgress = function () {
+        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().ProgressInPercents))
+            return 100;
+        return self.ParadataReference().ProgressInPercents();
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);

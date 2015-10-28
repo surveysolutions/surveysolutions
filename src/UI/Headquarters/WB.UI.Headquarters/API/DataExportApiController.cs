@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage Paradata(Guid id, long version)
         {
-            var path = this.exportDataAccessor.GetFilePathToExportedCompressedHistoryData(id, version);
+            var path = /*this.exportDataAccessor.GetFilePathToExportedCompressedHistoryData(id, version)*/"";
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(path, FileMode.Open);
             result.Content = new StreamContent(stream);
@@ -52,11 +52,18 @@ namespace WB.UI.Headquarters.API
             return result;
         }
 
-        [HttpGet]
-        public void RequestUpdateOfParadata()
+        public HttpResponseMessage RequestUpdateOfParadata()
         {
-            this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.TabularData);
+            try
+            {
+                this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.TabularData);
+            }
+            catch (Exception)
+            {
+            }
+
             DataExportTask.TriggerJob();
+            return Request.CreateResponse(true);
         }
 
         public ExportedDataReferencesViewModel ExportedDataReferencesForQuestionnaire(ExportedDataReferenceInputModel request)

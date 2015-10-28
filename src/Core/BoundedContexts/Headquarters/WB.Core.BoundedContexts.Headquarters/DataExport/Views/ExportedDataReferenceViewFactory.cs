@@ -26,8 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                         _.Where(
                             d =>
                                 d.DataExportType == DataExportType.ParaData &&
-                                d.QuestionnaireId == input.QuestionnaireId &&
-                                d.QuestionnaireVersion == input.QuestionnaireVersion &&
                                 d.DataExportProcessId != null)
                             .OrderByDescending(x => x.CreationDate)
                             .FirstOrDefault());
@@ -38,23 +36,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 {
                     DataExportFormat = paradataReference.DataExportFormat,
                     ExportedDataReferenceId = paradataReference.ExportedDataReferenceId,
-                    LastUpdateDate = paradataReference.CreationDate
+                    LastUpdateDate = paradataReference.CreationDate,
+                    HasDataToExport = false
                 };
-                if (string.IsNullOrEmpty(paradataReference.ExportedDataPath))
+                var paraDataExportProcess =
+                    dataExportProcessDtoStorage.GetById(paradataReference.DataExportProcessId);
+                if (paraDataExportProcess != null)
                 {
-                    var paraDataExportProcess =
-                        dataExportProcessDtoStorage.GetById(paradataReference.ExportedDataReferenceId);
-                    if (paraDataExportProcess != null)
-                    {
-                        exportedDataReferencesView.ExportedDataReferenceId = paradataReference.ExportedDataReferenceId;
-                        exportedDataReferencesView.LastUpdateDate = paraDataExportProcess.LastUpdateDate;
-                        exportedDataReferencesView.ProgressInPercents = paraDataExportProcess.ProgressInPercents;
-                    }
-                }
-                else
-                {
-                    exportedDataReferencesView.HasDataToExport = true;
-                    exportedDataReferencesView.LastUpdateDate = paradataReference.FinishDate;
+                    exportedDataReferencesView.ExportedDataReferenceId = paradataReference.ExportedDataReferenceId;
+                    exportedDataReferencesView.LastUpdateDate = paraDataExportProcess.LastUpdateDate;
+                    exportedDataReferencesView.ProgressInPercents = paraDataExportProcess.ProgressInPercents;
+                    exportedDataReferencesView.HasDataToExport =
+                        !string.IsNullOrEmpty(paraDataExportProcess.ExportedDataPath);
                 }
             }
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
