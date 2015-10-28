@@ -2,7 +2,7 @@
 {
     public enum DataExportType
     {
-        Paradata,
-        TabularData
+        Data,
+        ParaData
     }
 }

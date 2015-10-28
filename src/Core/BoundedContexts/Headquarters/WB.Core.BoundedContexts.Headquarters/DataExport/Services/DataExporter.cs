@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -8,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class DataExporter:IDataExporter
     {
-        private readonly IDataExportService dataExportService;
+        private readonly IDataExportQueue dataExportQueue;
 
         private readonly IQuestionnaireDataExportServiceFactory questionnaireDataExportServiceFactory;
 
@@ -22,13 +23,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         }
         private readonly ILogger logger;
 
-        public DataExporter(IDataExportService dataExportService, 
+        public DataExporter(IDataExportQueue dataExportQueue, 
             ITransactionManagerProvider transactionManagerProvider, 
             IPlainTransactionManager plainTransactionManager, 
             ILogger logger, 
             IQuestionnaireDataExportServiceFactory questionnaireDataExportServiceFactory)
         {
-            this.dataExportService = dataExportService;
+            this.dataExportQueue = dataExportQueue;
             this.transactionManagerProvider = transactionManagerProvider;
             this.plainTransactionManager = plainTransactionManager;
             this.logger = logger;
@@ -38,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void StartDataExport()
         {
             string dataExportProcessId =
-               this.plainTransactionManager.ExecuteInPlainTransaction(
-                   () => dataExportService.DeQueueDataExportProcessId());
+                this.plainTransactionManager.ExecuteInPlainTransaction(
+                    () => this.dataExportQueue.DeQueueDataExportProcessId());
 
             if (string.IsNullOrEmpty(dataExportProcessId))
                 return;
@@ -48,20 +49,37 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var dataExportProcess =
                 this.plainTransactionManager.ExecuteInPlainTransaction(
                     () =>
-                        dataExportService.GetDataExportProcess(dataExportProcessId));
+                        this.dataExportQueue.GetDataExportProcess(dataExportProcessId));
 
-            if(dataExportProcess==null)
+            if (dataExportProcess == null)
                 return;
 
             var questionnaireDataExportService =
                 questionnaireDataExportServiceFactory.CreateQuestionnaireDataExportService(
-                    dataExportProcess.DataExportType);
+                    dataExportProcess.DataExportFormat);
 
             if (questionnaireDataExportService == null)
                 return;
             try
             {
-                questionnaireDataExportService.Export(dataExportProcess.QuestionnaireId, dataExportProcess.QuestionnaireVersion, dataExportProcess.DataExportProcessId);
+                switch (dataExportProcess.DataExportType)
+                {
+                    case DataExportType.Data:
+                        if (dataExportProcess.QuestionnaireId.HasValue &&
+                            dataExportProcess.QuestionnaireVersion.HasValue)
+                            questionnaireDataExportService.ExportData(dataExportProcess.QuestionnaireId.Value,
+                                dataExportProcess.QuestionnaireVersion.Value, dataExportProcess.DataExportProcessId);
+                        else
+                            throw new ArgumentException(
+                                "QuestionnaireId and QuestionnaireVersion can't be empty for data export");
+                        break;
+                    case DataExportType.ParaData:
+                        questionnaireDataExportService.ExportParaData(dataExportProcess.DataExportProcessId);
+                        break;
+                }
+
+                this.plainTransactionManager.ExecuteInPlainTransaction(
+                    () => this.dataExportQueue.FinishDataExportProcess(dataExportProcessId));
             }
             catch (Exception e)
             {
@@ -71,11 +89,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
                     () =>
-                        dataExportService.FinishDataExportProcessWithError(dataExportProcessId,e));
-                return;
+                        this.dataExportQueue.FinishDataExportProcessWithError(dataExportProcessId, e));
             }
-            this.plainTransactionManager.ExecuteInPlainTransaction(
-                () => dataExportService.FinishDataExportProcess(dataExportProcessId));
+
+            StartDataExport();
         }
     }
 }

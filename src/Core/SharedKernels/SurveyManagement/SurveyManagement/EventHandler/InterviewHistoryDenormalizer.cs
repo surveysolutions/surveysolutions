@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    internal class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView, IReadSideRepositoryWriter<InterviewHistoryView>>,
+    public class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView, IReadSideRepositoryWriter<InterviewHistoryView>>,
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
@@ -390,7 +390,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 (key) => this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
             ReduceCacheIfNeeded(cacheQuestionnaireExportStructure);
-
             return cachedQuestionnaireExportStructure;
         }
 

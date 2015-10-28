@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
     internal interface IQuestionnaireDataExportServiceFactory
     {
-        IQuestionnaireDataExportService CreateQuestionnaireDataExportService(DataExportType dataExportType);
+        IDataExportService CreateQuestionnaireDataExportService(DataExportFormat dataExportFormat);
     }
 }
