@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class InterviewCompleteMessage : MvxMessage
+    public class InterviewCompletedMessage : MvxMessage
     {
-        public InterviewCompleteMessage(object sender) : base(sender)
+        public InterviewCompletedMessage(object sender) : base(sender)
         {
         }
     }
