@@ -38,6 +38,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -203,7 +204,6 @@ namespace WB.UI.Headquarters
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
-
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
@@ -248,6 +248,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
             {
+                if(handler.GetType()==typeof(InterviewHistoryDenormalizer))
+                    continue;
                 bus.Register((IEventHandler)handler);
             }
         }
