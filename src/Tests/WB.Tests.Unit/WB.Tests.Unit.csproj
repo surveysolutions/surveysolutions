@@ -527,6 +527,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_get_disable_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_initializing_sections_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_roster_instances_added.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_is_expanded_and_complete_screen_is_opening.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SectionsViewModelTests\when_section_is_expanded_while_other_section_is_expanded.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SideBarSectionViewModelTests\SideBarSectionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SideBarSectionViewModelTests\when_roster_title_changed.cs" />
