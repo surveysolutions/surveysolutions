@@ -50,10 +50,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             }
         }
 
-        public string CreateParaData()
+        public void CreateParaData()
         {
             this.DisableCache();
-            return this.pathToHistoryFiles;
         }
 
         public void Store(InterviewHistoryView view, string id)
@@ -188,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
         private void StoreAvoidingCache(InterviewHistoryView view, string id)
         {
-            var questionnairePath = this.GetPathToQuestionnaireFolder(view.QuestionnaireId, view.QuestionnaireVersion);
+            var questionnairePath = this.GetPathToFolderWithParaDataByQuestionnaire(view.QuestionnaireId, view.QuestionnaireVersion);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(questionnairePath))
                 this.fileSystemAccessor.CreateDirectory(questionnairePath);
@@ -223,8 +222,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
                 }
             }
         }
-
-        private string GetPathToQuestionnaireFolder(Guid questionnaireId, long version)
+        public  string GetPathToParaDataByQuestionnaire(Guid questionnaireId, long version)
+        {
+            return GetPathToFolderWithParaDataByQuestionnaire(questionnaireId, version) + ".zip";
+        }
+        private string GetPathToFolderWithParaDataByQuestionnaire(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.pathToHistoryFiles,
                 $"{questionnaireId}-{version}");
@@ -232,7 +234,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
         private string GetPathToInterviewHistoryFile(string interviewId, Guid questionnaireId, long version)
         {
-            return this.fileSystemAccessor.CombinePath(this.GetPathToQuestionnaireFolder(questionnaireId, version),
+            return this.fileSystemAccessor.CombinePath(this.GetPathToFolderWithParaDataByQuestionnaire(questionnaireId, version),
                 $"{interviewId}.tab");
         }
 

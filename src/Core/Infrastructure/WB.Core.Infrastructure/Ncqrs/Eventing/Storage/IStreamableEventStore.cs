@@ -9,6 +9,7 @@ namespace Ncqrs.Eventing.Storage
 
         IEnumerable<CommittedEvent> GetAllEvents();
 
-        long GetLastEventSequence(Guid id);
+        EventPosition? GetEventPosition(Guid eventStreamId, int eventSequence);
+        IEnumerable<CommittedEvent> GetEventsAfterPosition(EventPosition position);
     }
 }

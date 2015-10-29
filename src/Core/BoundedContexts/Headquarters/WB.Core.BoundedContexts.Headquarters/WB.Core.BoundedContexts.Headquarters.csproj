@@ -125,7 +125,6 @@
     <Compile Include="DataExport\Services\IDataExportService.cs" />
     <Compile Include="DataExport\Services\TabularFormatDataExportService.cs" />
     <Compile Include="DataExport\Tasks\DataExportTask.cs" />
-    <Compile Include="DataExport\Views\ExportedParaDataContentFactory.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceInputModel.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesView.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesViewModel.cs" />
