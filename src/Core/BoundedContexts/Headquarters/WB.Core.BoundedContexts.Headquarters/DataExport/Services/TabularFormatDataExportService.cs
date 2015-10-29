@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var events = eventStore.GetAllEvents();
 
             var interviewHistoryDenormalizer =
-                new InterviewHistoryDenormalizer(paraDataWriter, interviewSummaryReader, userReader, questionnaireReader,
+                new InterviewParaDataEventHandler(paraDataWriter, interviewSummaryReader, userReader, questionnaireReader,
                     interviewDataExportSettings);
 
             paraDataWriter.ClearParaData();
