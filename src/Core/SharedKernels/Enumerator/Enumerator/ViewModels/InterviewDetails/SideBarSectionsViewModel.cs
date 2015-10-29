@@ -103,6 +103,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             SideBarSectionViewModel selectedGroup = allTreeElements
                 .FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(eventArgs.TargetGroup));
 
+            if (eventArgs.TargetScreen == ScreenType.Complete)
+            {
+                this.Sections.Where(x => x.IsSelected).ForEach(x => x.IsSelected = false);
+                this.Sections.Where(x => x.Expanded).ForEach(x => x.Expanded = false);
+                this.UpdateSideBarTree();
+                return;
+            }
+
             var sideBarSectionToHighlight = selectedGroup;
             if (sideBarSectionToHighlight == null)
             {
