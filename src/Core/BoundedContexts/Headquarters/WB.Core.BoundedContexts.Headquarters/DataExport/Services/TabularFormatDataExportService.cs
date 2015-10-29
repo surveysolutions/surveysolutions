@@ -54,22 +54,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.paraDataWriter = paraDataWriter;
         }
 
-        public string ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
+        public void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
         {
             throw new NotImplementedException();
         }
 
-        public string ExportParaData(string dataExportProcessId)
+        public void ExportParaData(string dataExportProcessId)
         {
-            var eventCount = eventStore.CountOfAllEvents();
-            int numberOfEventsToBeHandledInOrderToUpdateExportProgress = eventCount/100;
-            var events = eventStore.GetAllEvents();
-
             var interviewHistoryDenormalizer =
                 new InterviewParaDataEventHandler(paraDataWriter, interviewSummaryReader, userReader, questionnaireReader,
                     interviewDataExportSettings);
 
             paraDataWriter.ClearParaData();
+
+            var eventCount = eventStore.CountOfAllEvents();
+            var events = eventStore.GetAllEvents();
+            int numberOfEventsToBeHandledInOrderToUpdateExportProgress = eventCount / 100;
 
             TransactionManager.ExecuteInQueryTransaction(
                 () =>
@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 });
 
-            return paraDataWriter.CreateParaData();
+            paraDataWriter.CreateParaData();
         }
     }
 }

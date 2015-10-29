@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return dataExportProcessDtoStorage.GetById(processId);
         }
 
-        public void FinishDataExportProcess(string processId, string exportedDataPath)
+        public void FinishDataExportProcess(string processId)
         {
             var dataExportProcess = GetDataExportProcess(processId);
             if(dataExportProcess== null || dataExportProcess.Status != DataExportStatus.Running)
@@ -125,7 +125,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.Status=DataExportStatus.Finished;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = 100;
-            dataExportProcess.ExportedDataPath = exportedDataPath;
 
             dataExportProcessDtoStorage.Store(dataExportProcess, dataExportProcess.DataExportProcessId);
         }

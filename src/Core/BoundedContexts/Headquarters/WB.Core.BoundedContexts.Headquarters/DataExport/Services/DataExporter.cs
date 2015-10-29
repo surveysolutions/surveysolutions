@@ -60,8 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             if (questionnaireDataExportService == null)
                 return;
-
-            var pathToExportedData = string.Empty;
+            
             try
             {
                 switch (dataExportProcess.DataExportType)
@@ -69,19 +68,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     case DataExportType.Data:
                         if (dataExportProcess.QuestionnaireId.HasValue &&
                             dataExportProcess.QuestionnaireVersion.HasValue)
-                            pathToExportedData = questionnaireDataExportService.ExportData(dataExportProcess.QuestionnaireId.Value,
+                            questionnaireDataExportService.ExportData(dataExportProcess.QuestionnaireId.Value,
                                 dataExportProcess.QuestionnaireVersion.Value, dataExportProcess.DataExportProcessId);
                         else
                             throw new ArgumentException(
                                 "QuestionnaireId and QuestionnaireVersion can't be empty for data export");
                         break;
                     case DataExportType.ParaData:
-                        pathToExportedData = questionnaireDataExportService.ExportParaData(dataExportProcess.DataExportProcessId);
+                         questionnaireDataExportService.ExportParaData(dataExportProcess.DataExportProcessId);
                         break;
                 }
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => this.dataExportQueue.FinishDataExportProcess(dataExportProcessId, pathToExportedData));
+                    () => this.dataExportQueue.FinishDataExportProcess(dataExportProcessId));
             }
             catch (Exception e)
             {
