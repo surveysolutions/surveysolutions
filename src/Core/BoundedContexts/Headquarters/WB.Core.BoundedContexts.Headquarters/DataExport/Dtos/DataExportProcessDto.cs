@@ -13,6 +13,5 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
         public virtual DataExportType DataExportType { get; set; }
         public virtual DataExportStatus Status { get; set; }
         public virtual int ProgressInPercents { get; set; }
-        public virtual string ExportedDataPath { get; set; }
     }
 }

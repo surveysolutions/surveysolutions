@@ -164,10 +164,37 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return value != null ? value.count : 0;
         }
 
-        public long GetLastEventSequence(Guid id)
+        public EventPosition? GetEventPosition(Guid eventStreamId, int eventSequence)
         {
-            var slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), 0, 1, false));
-            return slice.LastEventNumber + 1;
+            var evenReadResult =
+                this.RunWithDefaultTimeout(this.connection.ReadEventAsync(GetStreamName(eventStreamId), eventSequence,
+                    false));
+
+            if (evenReadResult == null || !evenReadResult.Event.HasValue ||
+                !evenReadResult.Event.Value.OriginalPosition.HasValue)
+                return null;
+
+            var eventPosition = evenReadResult.Event.Value.OriginalPosition.Value;
+            return new EventPosition(eventPosition.CommitPosition, eventPosition.PreparePosition);
+        }
+
+        public IEnumerable<CommittedEvent> GetEventsAfterPosition(EventPosition eventPosition)
+        {
+            Position position = new Position(eventPosition.CommitPosition, eventPosition.PreparePosition);
+            AllEventsSlice slice;
+
+            do
+            {
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, settings.MaxCountToRead, false));
+
+                position = slice.NextPosition;
+
+                foreach (var @event in slice.Events)
+                {
+                    if (!IsSystemEvent(@event))
+                        yield return this.ToCommittedEvent(@event);
+                }
+            } while (!slice.IsEndOfStream);
         }
 
         static bool IsSystemEvent(ResolvedEvent @event)

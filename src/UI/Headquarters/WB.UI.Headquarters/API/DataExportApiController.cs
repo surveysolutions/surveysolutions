@@ -3,10 +3,12 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using Microsoft.Practices.ServiceLocation;
 using Quartz;
 using Quartz.Impl.Matchers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
@@ -21,24 +23,27 @@ namespace WB.UI.Headquarters.API
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
-        private readonly IViewFactory<ExportedDataReferenceInputModel, string> exportedDataContentFactory;
+        private readonly IParaDataWriter paraDataWriter;
         private readonly IDataExportQueue dataExportQueue;
 
         public DataExportApiController( 
             IFileSystemAccessor fileSystemAccessor, 
             IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
-            IDataExportQueue dataExportQueue, IViewFactory<ExportedDataReferenceInputModel, string> exportedDataContentFactory)
+            IDataExportQueue dataExportQueue, IParaDataWriter paraDataWriter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportedDataReferenceViewFactory = exportedDataReferenceViewFactory;
             this.dataExportQueue = dataExportQueue;
-            this.exportedDataContentFactory = exportedDataContentFactory;
+            this.paraDataWriter = paraDataWriter;
         }
 
         [HttpGet]
         public HttpResponseMessage Paradata(Guid id, long version)
         {
-            var path = exportedDataContentFactory.Load(new ExportedDataReferenceInputModel(id, version));
+            var path = paraDataWriter.GetPathToParaDataByQuestionnaire(id, version);
+            if (!fileSystemAccessor.IsFileExists(path))
+                throw new HttpException(404, "para data is absent");
+
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new FileStream(path, FileMode.Open);
 
