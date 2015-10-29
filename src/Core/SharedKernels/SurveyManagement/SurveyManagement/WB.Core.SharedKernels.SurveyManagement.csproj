@@ -134,7 +134,7 @@
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
-    <Compile Include="EventHandler\InterviewHistoryDenormalizer.cs" />
+    <Compile Include="EventHandler\InterviewParaDataEventHandler.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
     <Compile Include="EventHandler\EventHandlerUtils.cs" />
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />

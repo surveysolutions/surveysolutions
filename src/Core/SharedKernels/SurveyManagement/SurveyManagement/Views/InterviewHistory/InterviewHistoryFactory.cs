@@ -51,39 +51,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         {
             var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
             var interviewHistoryDenormalizer =
-                new InterviewHistoryDenormalizer(interviewHistoryReader, interviewSummaryReader, userReader, questionnaireReader, interviewDataExportSettings);
+                new InterviewParaDataEventHandler(interviewHistoryReader, interviewSummaryReader, userReader, questionnaireReader, interviewDataExportSettings);
 
             var events = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue);
             foreach (var @event in events)
             {
-                this.PublishToHandlers(@event, interviewHistoryDenormalizer);
+                interviewHistoryDenormalizer.Handle(@event);
             }
             return interviewHistoryReader.GetById(interviewId);
-        }
-
-        private void PublishToHandlers(IPublishableEvent eventMessage, 
-            InterviewHistoryDenormalizer interviewHistoryDenormalizer)
-        {
-
-            var publishedEventClosedType = typeof(IPublishableEvent);
-            var handleMethod = typeof (InterviewHistoryDenormalizer).GetMethod("Handle",
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null,
-                new[] {publishedEventClosedType}, null);
-
-            if(handleMethod==null)
-                return;
-
-            var occurredExceptions = new List<Exception>();
-            
-            try
-            {
-                handleMethod.Invoke(interviewHistoryDenormalizer, new object[] { eventMessage });
-            }
-            catch (Exception exception)
-            {
-                logger.Error(exception.Message, exception);
-                occurredExceptions.Add(exception);
-            }
         }
     }
 }

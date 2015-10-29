@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
           interviewHistoryView.Records[10].Action.ShouldEqual(InterviewHistoricalAction.Deleted);
 
 
-        private static InterviewHistoryDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();
         private static InterviewHistoryView interviewHistoryView;
         private static List<object> statusEvents;
