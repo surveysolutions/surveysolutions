@@ -9,12 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class DataExportQueue: IDataExportQueue
     {
         private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
-        private readonly IPlainStorageAccessor<ExportedDataReferenceDto> exportedDataReferenceStorage;
 
-        public DataExportQueue(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage, IPlainStorageAccessor<ExportedDataReferenceDto> exportedDataReferenceStorage)
+        public DataExportQueue(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
         {
             this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
-            this.exportedDataReferenceStorage = exportedDataReferenceStorage;
         }
 
         public string DeQueueDataExportProcessId()
@@ -31,21 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             dataExportProcessDtoStorage.Store(exportProcess, exportProcess.DataExportProcessId);
             return exportProcess.DataExportProcessId;
-        }
-
-        private void CreateExportedDataReferene(DataExportProcessDto exportProcess)
-        {
-            var exportedDataReference = new ExportedDataReferenceDto()
-            {
-                CreationDate = DateTime.UtcNow,
-                DataExportProcessId = exportProcess.DataExportProcessId,
-                DataExportFormat = exportProcess.DataExportFormat,
-                DataExportType = exportProcess.DataExportType,
-                ExportedDataReferenceId = Guid.NewGuid().FormatGuid(),
-                QuestionnaireId = exportProcess.QuestionnaireId,
-                QuestionnaireVersion = exportProcess.QuestionnaireVersion
-            };
-            this.exportedDataReferenceStorage.Store(exportedDataReference, exportedDataReference.ExportedDataReferenceId);
         }
 
         public string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion,
@@ -78,7 +61,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             this.dataExportProcessDtoStorage.Store(exportProcess, processId);
-            this.CreateExportedDataReferene(exportProcess);
             return processId;
         }
 
@@ -107,7 +89,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 DataExportType = DataExportType.ParaData
             };
             this.dataExportProcessDtoStorage.Store(exportProcess, processId);
-            this.CreateExportedDataReferene(exportProcess);
             return processId;
         }
 

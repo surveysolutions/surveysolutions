@@ -22,9 +22,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         private readonly int maxCountOfCachedEntities = 1024;
         private readonly string pathToHistoryFiles;
 
-        public TabularParaDataWriter(ICsvWriterFactory csvWriterFactory, IFileSystemAccessor fileSystemAccessor,
+        public TabularParaDataWriter(
+            ICsvWriterFactory csvWriterFactory, 
+            IFileSystemAccessor fileSystemAccessor,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
-            InterviewDataExportSettings interviewDataExportSettings, IArchiveUtils archiveUtils)
+            InterviewDataExportSettings interviewDataExportSettings, 
+            IArchiveUtils archiveUtils)
         {
             this.csvWriterFactory = csvWriterFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -44,7 +47,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             if (this.fileSystemAccessor.IsDirectoryExists(this.pathToHistoryFiles))
             {
                 Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteDirectory(s));
-                Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.pathToHistoryFiles), (s) => this.fileSystemAccessor.DeleteFile(s));
             }
         }
 
@@ -186,10 +188,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
         private void StoreAvoidingCache(InterviewHistoryView view, string id)
         {
-            var questionnariePath = this.GetPathToQuestionnaireFolder(view.QuestionnaireId, view.QuestionnaireVersion);
+            var questionnairePath = this.GetPathToQuestionnaireFolder(view.QuestionnaireId, view.QuestionnaireVersion);
 
-            if (!this.fileSystemAccessor.IsDirectoryExists(questionnariePath))
-                this.fileSystemAccessor.CreateDirectory(questionnariePath);
+            if (!this.fileSystemAccessor.IsDirectoryExists(questionnairePath))
+                this.fileSystemAccessor.CreateDirectory(questionnairePath);
 
             using (var fileStream =
                     this.fileSystemAccessor.OpenOrCreateFile(this.GetPathToInterviewHistoryFile(id, view.QuestionnaireId, view.QuestionnaireVersion), true))
@@ -199,7 +201,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
                 foreach (var interviewHistoricalRecordView in view.Records)
                 {
                     writer.WriteField(interviewHistoricalRecordView.Action);
-                //    writer.WriteField(string.Join(",", interviewHistoricalRecordView.Parameters.Select(p => p.Key + ": " + p.Value)));
                     writer.WriteField(interviewHistoricalRecordView.OriginatorName);
                     writer.WriteField(interviewHistoricalRecordView.OriginatorRole);
                     if (interviewHistoricalRecordView.Timestamp.HasValue)
@@ -226,20 +227,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         private string GetPathToQuestionnaireFolder(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.pathToHistoryFiles,
-               string.Format("{0}-{1}", questionnaireId, version));
+                $"{questionnaireId}-{version}");
         }
 
         private string GetPathToInterviewHistoryFile(string interviewId, Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.GetPathToQuestionnaireFolder(questionnaireId, version),
-                string.Format("{0}.tab", interviewId));
+                $"{interviewId}.tab");
         }
 
         public Type ViewType { get { return typeof (InterviewHistoryView); } }
         public string GetReadableStatus()
         {
-            return string.Format("Interview history -_- | items: {0}",
-              this.cache.Count);
+            return $"Interview history -_- | items: {this.cache.Count}";
         }
     }
 }
