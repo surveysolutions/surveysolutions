@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -10,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
 
+        private DataExportTask DataExportTask => ServiceLocator.Current.GetInstance<DataExportTask>();
         public DataExportQueue(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
         {
             this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
@@ -34,16 +37,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion,
             DataExportFormat exportFormat)
         {
-            var hasRunningOrQueuedDataExportProcessesByTheQuestionnaire =
+            var runningOrQueuedDataExportProcessesByTheQuestionnaire =
                 dataExportProcessDtoStorage.Query(
                     _ =>
-                        _.Any(
+                        _.FirstOrDefault(
                             p =>
                                 p.QuestionnaireId == questionnaireId && p.QuestionnaireVersion == questionnaireVersion &&
                                 (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running)));
 
-            if (hasRunningOrQueuedDataExportProcessesByTheQuestionnaire)
+            if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
+            {
+                if (runningOrQueuedDataExportProcessesByTheQuestionnaire.Status == DataExportStatus.Queued)
+                    return runningOrQueuedDataExportProcessesByTheQuestionnaire.DataExportProcessId;
+
                 throw new InvalidOperationException();
+            }
 
             string processId = Guid.NewGuid().FormatGuid();
 
@@ -61,21 +69,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             this.dataExportProcessDtoStorage.Store(exportProcess, processId);
+            DataExportTask.TriggerJob();
             return processId;
         }
 
         public string EnQueueParaDataExportProcess(DataExportFormat exportFormat)
         {
-            var hasRunningOrQueuedDataExportProcessesByTheQuestionnaire =
+            var runningOrQueuedDataExportProcessesByTheQuestionnaire =
                 dataExportProcessDtoStorage.Query(
                     _ =>
-                        _.Any(
+                        _.FirstOrDefault(
                             p =>
                                 p.DataExportType == DataExportType.ParaData &&
                                 (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running)));
 
-            if (hasRunningOrQueuedDataExportProcessesByTheQuestionnaire)
+            if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
+            {
+                if (runningOrQueuedDataExportProcessesByTheQuestionnaire.Status == DataExportStatus.Queued)
+                {
+                    DataExportTask.TriggerJob();
+                    return runningOrQueuedDataExportProcessesByTheQuestionnaire.DataExportProcessId;
+                }
+
                 throw new InvalidOperationException();
+            }
 
             string processId = Guid.NewGuid().FormatGuid();
             var exportProcess = new DataExportProcessDto()
@@ -89,6 +106,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 DataExportType = DataExportType.ParaData
             };
             this.dataExportProcessDtoStorage.Store(exportProcess, processId);
+
+            DataExportTask.TriggerJob();
             return processId;
         }
 
