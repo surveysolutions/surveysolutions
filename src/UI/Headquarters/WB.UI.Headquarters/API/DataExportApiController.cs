@@ -24,8 +24,6 @@ namespace WB.UI.Headquarters.API
         private readonly IViewFactory<ExportedDataReferenceInputModel, string> exportedDataContentFactory;
         private readonly IDataExportQueue dataExportQueue;
 
-        private DataExportTask DataExportTask => ServiceLocator.Current.GetInstance<DataExportTask>();
-
         public DataExportApiController( 
             IFileSystemAccessor fileSystemAccessor, 
             IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
@@ -60,8 +58,7 @@ namespace WB.UI.Headquarters.API
             catch (Exception)
             {
             }
-
-            DataExportTask.TriggerJob();
+            
             return Request.CreateResponse(true);
         }
 
@@ -69,6 +66,5 @@ namespace WB.UI.Headquarters.API
         {
             return exportedDataReferenceViewFactory.Load(request);
         }
-
     }
 }
