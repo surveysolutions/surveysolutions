@@ -198,6 +198,8 @@ namespace WB.UI.Supervisor.App_Start
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))
             {
+                if (handler.GetType() == typeof(InterviewHistoryDenormalizer))
+                    continue;
                 bus.Register(handler as IEventHandler);
             }
         }
