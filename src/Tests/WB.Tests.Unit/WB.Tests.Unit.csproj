@@ -2098,7 +2098,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\WhenMethodGetByIdOfTabularParaDataWriterCalledAndCacheIsDisabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\WhenMethodGetByIdOfTabularParaDataWriterCalledAndCacheIsEnabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\WhenMethodRemoveOfTabularParaDataWriterCalledAndCacheIsEnabled.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\WhenMethodStoreOfTabularParaDataWriterCalledAndCacheIsDisabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\TabularParaDataWriterTests\WhenMethodStoreOfTabularParaDataWriterCalledAndCacheIsEnabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\InterviewSummaryViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryViewFactoryTests\when_load_interview_summary.cs" />
