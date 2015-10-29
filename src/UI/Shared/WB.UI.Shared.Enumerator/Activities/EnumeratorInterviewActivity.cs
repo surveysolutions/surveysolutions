@@ -71,11 +71,11 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
-            this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompleteMessage>(this.OnInterviewCompleteActivity);
+            this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
         }
 
-        private void OnInterviewCompleteActivity(InterviewCompleteMessage obj)
+        private void OnInterviewCompleteActivity(InterviewCompletedMessage obj)
         {
             this.Finish();
         }
@@ -114,7 +114,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
             messenger.Unsubscribe<ScrollToAnchorMessage>(this.scrollToAnchorSubscriptionToken);
-            messenger.Unsubscribe<InterviewCompleteMessage>(this.interviewCompleteActivityToken);
+            messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
             base.OnStop();
         }
 
