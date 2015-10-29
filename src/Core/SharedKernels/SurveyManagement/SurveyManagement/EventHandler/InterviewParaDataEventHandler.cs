@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class InterviewHistoryDenormalizer : AbstractFunctionalEventHandler<InterviewHistoryView, IReadSideRepositoryWriter<InterviewHistoryView>>,
+    public class InterviewParaDataEventHandler : 
         IUpdateHandler<InterviewHistoryView, SupervisorAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewHistoryView, InterviewerAssigned>,
@@ -54,28 +54,61 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
-
+        private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<string, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<string, QuestionnaireExportStructure>();
         private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
 
         private readonly InterviewDataExportSettings interviewDataExportSettings;
-        public InterviewHistoryDenormalizer(
+        public InterviewParaDataEventHandler(
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
             IReadSideRepositoryWriter<UserDocument> userReader,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
             InterviewDataExportSettings interviewDataExportSettings)
-            : base(readSideStorage)
         {
+            this.readSideStorage = readSideStorage;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.questionnaireReader = questionnaireReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public override object[] Readers
+
+        public void Handle(IPublishableEvent evt)
         {
-            get { return new object[] { interviewSummaryReader, userReader, questionnaireReader }; }
+            var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+
+            var updateMethod = this
+                .GetType()
+                .GetMethod("Update", new[] {typeof (InterviewHistoryView), eventType});
+
+            if (updateMethod==null)
+                return;
+
+            InterviewHistoryView currentState = readSideStorage.GetById(evt.EventSourceId);
+
+            var newState = (InterviewHistoryView)updateMethod
+                .Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+
+            if (newState != null)
+            {
+                readSideStorage.Store(newState, evt.EventSourceId);
+            }
+            else
+            {
+                readSideStorage.Remove(evt.EventSourceId);
+            }
+        }
+        private bool Handles(IUncommittedEvent evt)
+        {
+            Type genericUpgrader = typeof(IUpdateHandler<,>);
+            return genericUpgrader.MakeGenericType(typeof(InterviewHistoryView), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
+        }
+
+        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
+        {
+            var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+            return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
         public InterviewHistoryView Update(InterviewHistoryView currentState, IPublishedEvent<SupervisorAssigned> evnt)

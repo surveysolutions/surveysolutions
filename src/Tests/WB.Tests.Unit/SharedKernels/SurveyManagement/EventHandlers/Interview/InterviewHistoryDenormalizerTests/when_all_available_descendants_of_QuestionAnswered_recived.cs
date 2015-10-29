@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
-    [Subject(typeof(InterviewHistoryDenormalizer))]
+    [Subject(typeof(InterviewParaDataEventHandler))]
     internal class when_all_available_descendants_of_QuestionAnswered_recived
     {
         Establish context = () =>
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 foreach (var eventToPublish in availableDescendants)
                 {
                     var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventToPublish);
-                    var handleMethod = typeof(InterviewHistoryDenormalizer).GetMethod("Update", new[] { typeof(InterviewHistoryView), publishedEventClosedType });
+                    var handleMethod = typeof(InterviewParaDataEventHandler).GetMethod("Update", new[] { typeof(InterviewHistoryView), publishedEventClosedType });
 
                     if (handleMethod == null)
                         missingHandlers.Add(eventToPublish);

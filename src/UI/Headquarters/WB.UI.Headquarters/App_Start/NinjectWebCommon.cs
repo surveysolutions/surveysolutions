@@ -248,8 +248,6 @@ namespace WB.UI.Headquarters
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
             foreach (object handler in kernel.GetAll(typeof(IEventHandler)))
             {
-                if(handler.GetType()==typeof(InterviewHistoryDenormalizer))
-                    continue;
                 bus.Register((IEventHandler)handler);
             }
         }
