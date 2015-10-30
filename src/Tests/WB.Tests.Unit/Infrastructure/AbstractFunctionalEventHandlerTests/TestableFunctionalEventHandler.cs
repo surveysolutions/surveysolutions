@@ -13,10 +13,10 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
 
         public int CountOfUpdates { get; private set; }
 
-        public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity currentState, IPublishedEvent<object> evnt)
+        public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity state, IPublishedEvent<object> @event)
         {
             this.CountOfUpdates++;
-            return currentState;
+            return state;
         }
     }
 }
