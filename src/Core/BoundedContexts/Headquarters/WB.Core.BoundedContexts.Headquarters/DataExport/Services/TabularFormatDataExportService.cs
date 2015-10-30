@@ -90,60 +90,63 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 this.paraDataAccessor.ClearParaData();
             }
 
-            var events = eventStore.GetEventsAfterPosition(eventPosition);
+            var eventSlices = eventStore.GetEventsAfterPosition(eventPosition);
             long eventCount = eventStore.CountOfAllEvents();
 
             int countOfProcessedEvents = 0;
             bool firstSlice = true;
-            bool lastSuccessfullyHandledEventWasFoundAtTheFirstSlice = interviewDenormalizerProgress == null;
 
-            foreach (var eventSlice in events)
+            foreach (var eventSlice in eventSlices)
             {
                 if (!eventSlice.Any())
                     continue;
 
+                IEnumerable<CommittedEvent> events = eventSlice;
+
+                if (firstSlice && interviewDenormalizerProgress != null)
+                {
+                    events = GetUnpublishedEventsFromTheFirstSlice(eventSlice,
+                        interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent,
+                        interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent);
+                }
+
                 TransactionManager.ExecuteInQueryTransaction(
                     () =>
                     {
-                        foreach (var committedEvent in eventSlice)
+                        foreach (var committedEvent in events)
                         {
-                            if (firstSlice && !lastSuccessfullyHandledEventWasFoundAtTheFirstSlice)
-                            {
-                                if (committedEvent.EventSourceId ==
-                                    interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent &&
-                                    committedEvent.EventSequence ==
-                                    interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent)
-                                {
-                                    lastSuccessfullyHandledEventWasFoundAtTheFirstSlice = true;
-                                    eventCount = eventCount - committedEvent.GlobalSequence;
-                                }
-                                continue;
-                            }
                             interviewParaDataEventHandler.Handle(committedEvent);
                             countOfProcessedEvents++;
                         }
-
                     });
-
-                if (!lastSuccessfullyHandledEventWasFoundAtTheFirstSlice)
-                {
-                    throw new InvalidOperationException("Start position wasn't found");
-                }
 
                 firstSlice = false;
                 this.paraDataAccessor.PersistParaDataExport();
                 this.UpdateLastHandledEventPosition(eventSlice.Last(), eventSlice.Position);
-                var intermediatePercents = (int) ((countOfProcessedEvents/eventCount)*100);
                 this.plainTransactionManager.ExecuteInPlainTransaction(
                     () =>
                         dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
-                            Math.Min(intermediatePercents, 100)));
+                            Math.Min((int)(((double)countOfProcessedEvents / eventCount) * 100), 100)));
             }
 
             this.paraDataAccessor.ArchiveParaDataExport();
 
             this.plainTransactionManager.ExecuteInPlainTransaction(
                 () => dataExportQueue.UpdateDataExportProgress(dataExportProcessId, 100));
+        }
+
+        private IEnumerable<CommittedEvent> GetUnpublishedEventsFromTheFirstSlice(EventSlice eventSlice,
+            Guid eventSourceId, int eventSequence)
+        {
+            IEnumerable<CommittedEvent> events =
+                eventSlice.SkipWhile(x => x.EventSourceId != eventSourceId && x.EventSequence != eventSequence);
+
+            if (!events.Any())
+            {
+                throw new InvalidOperationException("Start position wasn't found");
+            }
+
+            return events.Skip(1);
         }
 
         private void UpdateLastHandledEventPosition(CommittedEvent lastHandledEvent, EventPosition eventPosition)
