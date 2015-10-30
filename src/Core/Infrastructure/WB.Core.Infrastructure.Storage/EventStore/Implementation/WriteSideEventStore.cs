@@ -138,7 +138,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 yield return
                     new EventSlice(slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent),
-                        new EventPosition(eventStorePosition.CommitPosition, eventStorePosition.PreparePosition));
+                        new EventPosition(eventStorePosition.CommitPosition, eventStorePosition.PreparePosition), slice.IsEndOfStream);
 
                 eventStorePosition = slice.NextPosition;
             } while (!slice.IsEndOfStream);
