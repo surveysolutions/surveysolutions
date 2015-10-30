@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             int countOfProcessedEvents = 0;
             bool firstSlice = true;
-
+            int persistCount = 0;
             foreach (var eventSlice in eventSlices)
             {
                 if (!eventSlice.Any())
@@ -108,6 +108,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     events = GetUnpublishedEventsFromTheFirstSlice(eventSlice,
                         interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent,
                         interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent);
+
+                    if(!events.Any())
+                        continue;
+
+                    eventCount = eventCount - events.First().GlobalSequence;
                 }
 
                 TransactionManager.ExecuteInQueryTransaction(
@@ -121,12 +126,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     });
 
                 firstSlice = false;
-                this.paraDataAccessor.PersistParaDataExport();
-                this.UpdateLastHandledEventPosition(eventSlice.Last(), eventSlice.Position);
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () =>
-                        dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
-                            Math.Min((int)(((double)countOfProcessedEvents / eventCount) * 100), 100)));
+
+                if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000*persistCount)
+                {
+                    this.paraDataAccessor.PersistParaDataExport();
+                    this.UpdateLastHandledEventPosition(eventSlice.Last(), eventSlice.Position);
+                    this.plainTransactionManager.ExecuteInPlainTransaction(
+                        () =>
+                            dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
+                                Math.Min((int) (((double) countOfProcessedEvents/eventCount)*100), 100)));
+
+                    persistCount++;
+                }
             }
 
             this.paraDataAccessor.ArchiveParaDataExport();
