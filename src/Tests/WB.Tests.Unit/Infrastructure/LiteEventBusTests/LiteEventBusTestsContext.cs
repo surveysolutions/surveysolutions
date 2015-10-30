@@ -1,13 +1,14 @@
 using System;
 using Ncqrs.Eventing;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
     public class LiteEventBusTestsContext
     {
-        public class DummyEvent  { }
+        public class DummyEvent : ILiteEvent  { }
 
-        public class DifferentDummyEvent { }
+        public class DifferentDummyEvent : ILiteEvent { }
 
         internal static DummyEvent CreateDummyEvent()
         {
