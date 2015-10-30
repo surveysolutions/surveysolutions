@@ -256,6 +256,7 @@
     <Content Include="Content\icons\spss.png" />
     <Content Include="Content\icons\stata.gif" />
     <Content Include="Content\icons\tabs.png" />
+    <Content Include="Content\identity\favicon-hq-114x114.png" />
     <Content Include="Content\identity\favicon-hq-120x120.png" />
     <Content Include="Content\identity\favicon-hq-144x144.png" />
     <Content Include="Content\identity\favicon-hq-152x152.png" />
