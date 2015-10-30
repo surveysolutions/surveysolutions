@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 {
@@ -143,8 +144,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)
         {
+            var UserPreloadingProcessIdQueue = new Queue<string>();
+            UserPreloadingProcessIdQueue.Enqueue(userPreloadingProcess.UserPreloadingProcessId);
+            UserPreloadingProcessIdQueue.Enqueue(null);
+
             var userPreloadingServiceMock = new Mock<IUserPreloadingService>();
-            userPreloadingServiceMock.Setup(x => x.DeQueuePreloadingProcessIdReadyToCreateUsers()).Returns(userPreloadingProcess.UserPreloadingProcessId);
+            userPreloadingServiceMock.Setup(x => x.DeQueuePreloadingProcessIdReadyToCreateUsers()).Returns(UserPreloadingProcessIdQueue.Dequeue);
             userPreloadingServiceMock.Setup(x => x.GetPreloadingProcesseDetails(userPreloadingProcess.UserPreloadingProcessId))
                 .Returns(userPreloadingProcess);
 
@@ -153,5 +158,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 
             return userPreloadingServiceMock;
         }
+
+
     }
 }
