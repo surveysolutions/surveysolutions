@@ -29,3 +29,12 @@
 .column-40 {
     width: 40%;
 }
+
+.headquarters-list-actions-column {
+    width: 60px;
+    text-align: center;
+}
+.interviewers-list-actions-column {
+    width: 60px;
+    text-align: center;
+}
