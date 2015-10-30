@@ -123,120 +123,120 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return interviewSummary;
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewCreated> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
-            return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
-                evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: false);
+            return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: false);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
-            return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
-                evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: false);
+            return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: false);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewOnClientCreated> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
-            return this.CreateInterviewSummary(evnt.Payload.UserId, evnt.Payload.QuestionnaireId,
-             evnt.Payload.QuestionnaireVersion, evnt.EventSourceId, evnt.EventTimeStamp, wasCreatedOnClient: true);
+            return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
+             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewStatusChanged> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                interview.Status = evnt.Payload.Status;
-                interview.WasRejectedBySupervisor = interview.WasRejectedBySupervisor || evnt.Payload.Status == InterviewStatus.RejectedBySupervisor;
-                interview.IsDeleted = evnt.Payload.Status == InterviewStatus.Deleted;
+                interview.Status = @event.Payload.Status;
+                interview.WasRejectedBySupervisor = interview.WasRejectedBySupervisor || @event.Payload.Status == InterviewStatus.RejectedBySupervisor;
+                interview.IsDeleted = @event.Payload.Status == InterviewStatus.Deleted;
 
-                if (interview.Status == evnt.Payload.Status)
+                if (interview.Status == @event.Payload.Status)
                 {
-                    interview.LastStatusChangeComment = evnt.Payload.Comment;
+                    interview.LastStatusChangeComment = @event.Payload.Comment;
                 }
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewHardDeleted> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewHardDeleted> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.IsDeleted = true;
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<SupervisorAssigned> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SupervisorAssigned> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                UserDocument userDocument = this.users.GetById(evnt.Payload.SupervisorId);
+                UserDocument userDocument = this.users.GetById(@event.Payload.SupervisorId);
                 var supervisorName = userDocument != null ? userDocument.UserName : "<UNKNOWN SUPERVISOR>";
 
-                interview.ResponsibleId = evnt.Payload.SupervisorId;
+                interview.ResponsibleId = @event.Payload.SupervisorId;
                 interview.ResponsibleName = supervisorName;
                 interview.ResponsibleRole = UserRoles.Supervisor;
-                interview.TeamLeadId = evnt.Payload.SupervisorId;
+                interview.TeamLeadId = @event.Payload.SupervisorId;
                 interview.TeamLeadName = supervisorName;
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<TextQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
         }
 
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswerRemoved> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswerRemoved> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == evnt.Payload.QuestionId))
+                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == @event.Payload.QuestionId))
                 {
-                    interview.AnswerFeaturedQuestion(evnt.Payload.QuestionId, "");
+                    interview.AnswerFeaturedQuestion(@event.Payload.QuestionId, "");
                 }
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
-            return this.AnswerFeaturedQuestionWithOptions(currentState, evnt.Payload.QuestionId, evnt.EventTimeStamp, evnt.Payload.SelectedValues);
+            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp, @event.Payload.SelectedValues);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            return this.AnswerFeaturedQuestionWithOptions(currentState, evnt.Payload.QuestionId, evnt.EventTimeStamp,evnt.Payload.SelectedValue);
+            return this.AnswerFeaturedQuestionWithOptions(state, @event.Payload.QuestionId, @event.EventTimeStamp,@event.Payload.SelectedValue);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer.ToString("u"), evnt.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer.ToString("u"), @event.EventTimeStamp);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
-            var answerByGeoQuestion = new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude, evnt.Payload.Timestamp);
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, answerByGeoQuestion, evnt.EventTimeStamp);
+            var answerByGeoQuestion = new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude, @event.Payload.Timestamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerByGeoQuestion, @event.EventTimeStamp);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(currentState, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.EventTimeStamp);
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<AnswersRemoved> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                foreach (var question in evnt.Payload.Questions)
+                foreach (var question in @event.Payload.Questions)
                 {
                     if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == question.Id))
                     {
@@ -246,13 +246,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewerAssigned> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewerAssigned> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                var interviewerName = GetResponsibleIdName(evnt.Payload.InterviewerId);
+                var interviewerName = GetResponsibleIdName(@event.Payload.InterviewerId);
 
-                interview.ResponsibleId = evnt.Payload.InterviewerId;
+                interview.ResponsibleId = @event.Payload.InterviewerId;
                 interview.ResponsibleName = interviewerName;
                 interview.ResponsibleRole = UserRoles.Operator;
 
@@ -260,31 +260,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewDeclaredInvalid> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeclaredInvalid> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.HasErrors = true;
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewDeclaredValid> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeclaredValid> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.HasErrors = false;
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<SynchronizationMetadataApplied> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SynchronizationMetadataApplied> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                if (currentState.WasCreatedOnClient)
+                if (state.WasCreatedOnClient)
                 {
-                    if (evnt.Payload.FeaturedQuestionsMeta != null)
+                    if (@event.Payload.FeaturedQuestionsMeta != null)
                     {
-                        foreach (var answeredQuestionSynchronizationDto in evnt.Payload.FeaturedQuestionsMeta)
+                        foreach (var answeredQuestionSynchronizationDto in @event.Payload.FeaturedQuestionsMeta)
                         {
                             if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == answeredQuestionSynchronizationDto.Id))
                             {
@@ -292,28 +292,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                             }
                         }
                     }
-                    var responsible = this.users.GetById(currentState.ResponsibleId);
+                    var responsible = this.users.GetById(state.ResponsibleId);
                     if (responsible != null && responsible.Supervisor != null)
                     {
-                        currentState.TeamLeadId = responsible.Supervisor.Id;
-                        currentState.TeamLeadName = responsible.Supervisor.Name;
+                        state.TeamLeadId = responsible.Supervisor.Id;
+                        state.TeamLeadName = responsible.Supervisor.Name;
                     }
-                    currentState.Status = evnt.Payload.Status;    
+                    state.Status = @event.Payload.Status;    
                 }
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewReceivedByInterviewer> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.ReceivedByInterviewer = true;
             });
         }
 
-        public InterviewSummary Update(InterviewSummary currentState, IPublishedEvent<InterviewReceivedBySupervisor> evnt)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
         {
-            return this.UpdateInterviewSummary(currentState, evnt.EventTimeStamp, interview =>
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
                 interview.ReceivedByInterviewer = false;
             });
