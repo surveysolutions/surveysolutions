@@ -403,6 +403,7 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\PrefilledQuestionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\when_opening_not_existed_interview.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_FeaturedItem_list_with_json_utils.cs" />
+    <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
