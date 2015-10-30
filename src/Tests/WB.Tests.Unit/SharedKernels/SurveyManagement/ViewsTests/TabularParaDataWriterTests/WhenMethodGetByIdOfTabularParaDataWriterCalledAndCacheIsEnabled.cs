@@ -10,18 +10,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
     {
         Establish context = () =>
         {
-            _tabularParaDataWriter = CreateTabularParaDataWriter();
+            _tabularParaDataAccessor = CreateTabularParaDataWriter();
             view = CreateInterviewHistoryView();
-            _tabularParaDataWriter.Store(view, view.InterviewId.FormatGuid());
+            _tabularParaDataAccessor.Store(view, view.InterviewId.FormatGuid());
         };
 
         Because of = () =>
-            result = _tabularParaDataWriter.GetById(view.InterviewId.FormatGuid());
+            result = _tabularParaDataAccessor.GetById(view.InterviewId.FormatGuid());
 
         It should_return_cached_view = () =>
             result.ShouldBeTheSameAs(view);
 
-        private static TabularParaDataWriter _tabularParaDataWriter;
+        private static TabularParaDataAccessor _tabularParaDataAccessor;
         private static InterviewHistoryView view;
         private static InterviewHistoryView result;
     }

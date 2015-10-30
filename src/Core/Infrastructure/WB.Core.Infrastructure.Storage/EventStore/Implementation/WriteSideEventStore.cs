@@ -128,6 +128,22 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             } while (!slice.IsEndOfStream);
         }
 
+        public IEnumerable<EventSlice> GetEventsAfterPosition(EventPosition? position)
+        {
+            AllEventsSlice slice;
+            Position eventStorePosition = position.HasValue?new Position(position.Value.CommitPosition,position.Value.PreparePosition): Position.Start;
+            do
+            {
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, settings.MaxCountToRead, false));
+
+                yield return
+                    new EventSlice(slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent),
+                        new EventPosition(eventStorePosition.CommitPosition, eventStorePosition.PreparePosition));
+
+                eventStorePosition = slice.NextPosition;
+            } while (!slice.IsEndOfStream);
+        }
+
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             if (eventStream.IsNotEmpty)
@@ -162,39 +178,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             });
 
             return value != null ? value.count : 0;
-        }
-
-        public EventPosition? GetEventPosition(Guid eventStreamId, int eventSequence)
-        {
-            var evenReadResult =
-                this.RunWithDefaultTimeout(this.connection.ReadEventAsync(GetStreamName(eventStreamId), eventSequence,
-                    false));
-
-            if (evenReadResult == null || !evenReadResult.Event.HasValue ||
-                !evenReadResult.Event.Value.OriginalPosition.HasValue)
-                return null;
-
-            var eventPosition = evenReadResult.Event.Value.OriginalPosition.Value;
-            return new EventPosition(eventPosition.CommitPosition, eventPosition.PreparePosition);
-        }
-
-        public IEnumerable<CommittedEvent> GetEventsAfterPosition(EventPosition eventPosition)
-        {
-            Position position = new Position(eventPosition.CommitPosition, eventPosition.PreparePosition);
-            AllEventsSlice slice;
-
-            do
-            {
-                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, settings.MaxCountToRead, false));
-
-                position = slice.NextPosition;
-
-                foreach (var @event in slice.Events)
-                {
-                    if (!IsSystemEvent(@event))
-                        yield return this.ToCommittedEvent(@event);
-                }
-            } while (!slice.IsEndOfStream);
         }
 
         static bool IsSystemEvent(ResolvedEvent @event)

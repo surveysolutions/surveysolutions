@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataExportQueue>().To<DataExportQueue>();
             this.Bind<IDataExporter>().To<DataExporter>();
             this.Bind<IQuestionnaireDataExportServiceFactory>().To<QuestionnaireDataExportServiceFactory>();
-            this.Bind<IParaDataWriter>().To<TabularParaDataWriter>();
+            this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
         }
     }
 }
