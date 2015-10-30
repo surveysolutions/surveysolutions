@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -11,18 +14,17 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
-    internal class TabularParaDataWriter : IParaDataWriter
+    internal class TabularParaDataAccessor : IParaDataAccessor
     {
         private readonly ICsvWriterFactory csvWriterFactory;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IFileSystemAccessor fileSystemAccessor;
-
         private readonly IArchiveUtils archiveUtils;
         private readonly Dictionary<string, InterviewHistoryView> cache = new Dictionary<string, InterviewHistoryView>();
-        private readonly int maxCountOfCachedEntities = 1024;
+
         private readonly string pathToHistoryFiles;
 
-        public TabularParaDataWriter(
+        public TabularParaDataAccessor(
             ICsvWriterFactory csvWriterFactory, 
             IFileSystemAccessor fileSystemAccessor,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
@@ -50,9 +52,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             }
         }
 
-        public void CreateParaData()
+        public void ArchiveParaDataExport()
         {
-            this.DisableCache();
+            var createdFolders = this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles);
+            foreach (var createdFolder in createdFolders)
+            {
+                var archiveFilePath = createdFolder + ".zip";
+
+                if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                    this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+                var filesToArchive = new List<string>();
+
+                filesToArchive.AddRange(this.fileSystemAccessor.GetFilesInDirectory(createdFolder));
+
+                this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+            }
+        }
+        public void PersistParaDataExport()
+        {
+            foreach (var viewId in this.cache.Keys.ToList())
+            {
+                var interviewHistoryView = this.cache[viewId];
+                this.StoreAvoidingCache(interviewHistoryView, viewId);
+                this.cache.Remove(viewId);
+            }
         }
 
         public void Store(InterviewHistoryView view, string id)
@@ -68,32 +92,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         public void Remove(string id)
         {
             this.RemoveUsingCache(id);
-        }
-
-        protected void DisableCache()
-        {
-            foreach (var viewId in this.cache.Keys.ToList())
-            {
-                var interviewHistoryView = this.cache[viewId];
-                this.StoreAvoidingCache(interviewHistoryView, viewId);
-                this.cache.Remove(viewId);
-            }
-
-
-            var createdFolders = this.fileSystemAccessor.GetDirectoriesInDirectory(this.pathToHistoryFiles);
-            foreach (var createdFolder in createdFolders)
-            {
-                var archiveFilePath = createdFolder + ".zip";
-
-                if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                    this.fileSystemAccessor.DeleteFile(archiveFilePath);
-
-                var filesToArchive = new List<string>();
-
-                filesToArchive.AddRange(this.fileSystemAccessor.GetFilesInDirectory(createdFolder));
-
-                this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
-            }
         }
 
         public void BulkStore(List<Tuple<InterviewHistoryView, string>> bulk)
@@ -118,41 +116,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
             this.cache[id] = entity;
 
-            this.ReduceCacheIfNeeded();
-
             return entity;
         }
 
         private void StoreUsingCache(InterviewHistoryView entity, string id)
         {
             this.cache[id] = entity;
-
-            this.ReduceCacheIfNeeded();
         }
 
         private void RemoveUsingCache(string id)
         {
             this.cache.Remove(id);
             this.RemoveAvoidingCache(id);
-        }
-
-        private void ReduceCacheIfNeeded()
-        {
-            if (this.IsCacheLimitReached())
-            {
-                this.ReduceCache();
-            }
-        }
-
-        private bool IsCacheLimitReached()
-        {
-            return this.cache.Count >= this.maxCountOfCachedEntities;
-        }
-
-        private void ReduceCache()
-        {
-            var bulk = this.cache.Keys.Take(this.maxCountOfCachedEntities/2).ToList();
-            this.StoreBulkEntitiesToRepository(bulk);
         }
 
         protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
@@ -222,10 +197,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
                 }
             }
         }
+
         public  string GetPathToParaDataByQuestionnaire(Guid questionnaireId, long version)
         {
             return GetPathToFolderWithParaDataByQuestionnaire(questionnaireId, version) + ".zip";
         }
+
         private string GetPathToFolderWithParaDataByQuestionnaire(Guid questionnaireId, long version)
         {
             return this.fileSystemAccessor.CombinePath(this.pathToHistoryFiles,

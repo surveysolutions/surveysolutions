@@ -26,16 +26,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
             var interviewSummaryWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             interviewSummaryWriterMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(new InterviewSummary() { QuestionnaireId = questionnaireId, QuestionnaireVersion = questionnaireVersion, InterviewId = interviewId });
-            _tabularParaDataWriter = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
+            _tabularParaDataAccessor = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            _tabularParaDataWriter.Remove(interviewId.FormatGuid());
+            _tabularParaDataAccessor.Remove(interviewId.FormatGuid());
 
         It should_delete_file_with_interview_history = () =>
             fileSystemAccessorMock.Verify(x => x.DeleteFile(Moq.It.Is<string>(_ => _.Contains(interviewId.FormatGuid()))), Times.Once);
 
-        private static TabularParaDataWriter _tabularParaDataWriter;
+        private static TabularParaDataAccessor _tabularParaDataAccessor;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
     }
