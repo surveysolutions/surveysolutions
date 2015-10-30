@@ -53,7 +53,6 @@
 
 @section grid
 {
-
     <table class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
@@ -66,25 +65,27 @@
         <tbody>
             <!-- ko foreach:Items -->
             <tr>
-                <td data-bind="text: UserName"></td>
+                <td>
+                    @if (User.IsInRole(UserRoles.Administrator.ToString()))
+                    {
+                        <a data-bind="attr: { href: $editUrl + '/' + UserId() }">
+                            <span data-bind="text: UserName"></span>
+                        </a>
+                    }
+                    else
+                    {
+                        <span data-bind="text: UserName"></span>
+                    }
+                </td>
                 <td data-bind="text: CreationDate"></td>
                 <td>
                     <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
                 </td>
 
-                <td>
-                    @if (User.IsInRole(UserRoles.Administrator.ToString()))
-                    {
-                        <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </a>
-                    }
-                    
-                    <div class="btn-group pull-right">
-                        <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
-                            <i class="glyphicon glyphicon-user"></i>
-                        </a>
-                    </div>
+                <td class="headquarters-list-actions-column">
+                    <a class="btn btn-info" data-bind="attr: { href: $putInShoesUrl + '?personName=' + UserName() }">
+                        <i class="glyphicon glyphicon-user"></i>
+                    </a>
                 </td>
             </tr>
             <!-- /ko -->
