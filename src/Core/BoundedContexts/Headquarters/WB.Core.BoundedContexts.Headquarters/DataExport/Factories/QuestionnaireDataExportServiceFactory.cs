@@ -22,9 +22,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
-        private readonly IParaDataWriter paraDataWriter;
+        private readonly IParaDataAccessor paraDataAccessor;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainTransactionManager plainTransactionManager;
+
+        private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
 
         private readonly IDataExportQueue dataExportQueue;
         public QuestionnaireDataExportServiceFactory(
@@ -35,7 +37,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManagerProvider transactionManagerProvider, 
             IDataExportQueue dataExportQueue,
-            IPlainTransactionManager plainTransactionManager, IParaDataWriter paraDataWriter)
+            IPlainTransactionManager plainTransactionManager, 
+            IParaDataAccessor paraDataAccessor, 
+            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -45,14 +49,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             this.transactionManagerProvider = transactionManagerProvider;
             this.dataExportQueue = dataExportQueue;
             this.plainTransactionManager = plainTransactionManager;
-            this.paraDataWriter = paraDataWriter;
+            this.paraDataAccessor = paraDataAccessor;
+            this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
         }
 
         public IDataExportService CreateQuestionnaireDataExportService(DataExportFormat dataExportFormat)
         {
             if (dataExportFormat == DataExportFormat.TabularData)
                 return new TabularFormatDataExportService(eventStore, interviewSummaryReader, userReader,
-                    questionnaireReader,interviewDataExportSettings, transactionManagerProvider, dataExportQueue, plainTransactionManager, paraDataWriter);
+                    questionnaireReader, interviewDataExportSettings, transactionManagerProvider, dataExportQueue,
+                    plainTransactionManager, this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage);
 
             throw new NotSupportedException();
         }

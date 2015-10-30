@@ -131,7 +131,7 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly};
+            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,

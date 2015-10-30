@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
                     InterviewId = interviewId
                 });
             
-            _tabularParaDataWriter = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object);
+            _tabularParaDataAccessor = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object);
         };
 
         Because of = () =>
-            result = _tabularParaDataWriter.GetById(interviewId.FormatGuid());
+            result = _tabularParaDataAccessor.GetById(interviewId.FormatGuid());
 
         It should_return_view_with_QuestionnaireId_equal_to_questionnaireId = () =>
             result.QuestionnaireId.ShouldEqual(questionnaireId);
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
         It should_return_view_with_empty_records_list = () =>
             result.Records.ShouldBeEmpty();
 
-        private static TabularParaDataWriter _tabularParaDataWriter;
+        private static TabularParaDataAccessor _tabularParaDataAccessor;
         private static InterviewHistoryView result;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");

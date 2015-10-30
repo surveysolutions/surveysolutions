@@ -23,24 +23,24 @@ namespace WB.UI.Headquarters.API
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
-        private readonly IParaDataWriter paraDataWriter;
+        private readonly IParaDataAccessor paraDataAccessor;
         private readonly IDataExportQueue dataExportQueue;
 
         public DataExportApiController( 
             IFileSystemAccessor fileSystemAccessor, 
             IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
-            IDataExportQueue dataExportQueue, IParaDataWriter paraDataWriter)
+            IDataExportQueue dataExportQueue, IParaDataAccessor paraDataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportedDataReferenceViewFactory = exportedDataReferenceViewFactory;
             this.dataExportQueue = dataExportQueue;
-            this.paraDataWriter = paraDataWriter;
+            this.paraDataAccessor = paraDataAccessor;
         }
 
         [HttpGet]
         public HttpResponseMessage Paradata(Guid id, long version)
         {
-            var path = paraDataWriter.GetPathToParaDataByQuestionnaire(id, version);
+            var path = this.paraDataAccessor.GetPathToParaDataByQuestionnaire(id, version);
             if (!fileSystemAccessor.IsFileExists(path))
                 throw new HttpException(404, "para data is absent");
 
