@@ -111,221 +111,221 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView currentState, IPublishedEvent<SupervisorAssigned> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<SupervisorAssigned> @event)
         {
-            var interviewSummary = interviewSummaryReader.GetById(evnt.EventSourceId);
+            var interviewSummary = interviewSummaryReader.GetById(@event.EventSourceId);
             if (interviewSummary == null)
                 return null;
 
-            var view = new InterviewHistoryView(evnt.EventSourceId, new List<InterviewHistoricalRecordView>(), interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+            var view = new InterviewHistoryView(@event.EventSourceId, new List<InterviewHistoricalRecordView>(), interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
 
-            AddHistoricalRecord(view, InterviewHistoricalAction.SupervisorAssigned, evnt.Payload.UserId, evnt.EventTimeStamp);
+            AddHistoricalRecord(view, InterviewHistoricalAction.SupervisorAssigned, @event.Payload.UserId, @event.EventTimeStamp);
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApprovedByHQ> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApprovedByHQ> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveByHeadquarter, evnt.Payload.UserId, evnt.EventTimeStamp,
-                CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveByHeadquarter, @event.Payload.UserId, @event.EventTimeStamp,
+                CreateCommentParameters(@event.Payload.Comment));
             
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, evnt.Payload.UserId, evnt.Payload.AssignTime ?? evnt.EventTimeStamp,
-                new Dictionary<string, string> { { "responsible", evnt.Payload.InterviewerId.FormatGuid() } });
+            AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, @event.Payload.UserId, @event.Payload.AssignTime ?? @event.EventTimeStamp,
+                new Dictionary<string, string> { { "responsible", @event.Payload.InterviewerId.FormatGuid() } });
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> evnt){
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> @event){
 
-            AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty, evnt.Payload.CompleteTime??evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty, @event.Payload.CompleteTime??@event.EventTimeStamp, CreateCommentParameters(@event.Payload.Comment));
 
             return view;
         }
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestarted> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestarted> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, Guid.Empty, evnt.Payload.RestartTime ?? evnt.EventTimeStamp, CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, Guid.Empty, @event.Payload.RestartTime ?? @event.EventTimeStamp, CreateCommentParameters(@event.Payload.Comment));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApproved> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApproved> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, evnt.Payload.UserId, evnt.Payload.ApproveTime ?? evnt.EventTimeStamp,
-              CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, @event.Payload.UserId, @event.Payload.ApproveTime ?? @event.EventTimeStamp,
+              CreateCommentParameters(@event.Payload.Comment));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejected> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejected> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, evnt.Payload.UserId, evnt.Payload.RejectTime ?? evnt.EventTimeStamp,
-              CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, @event.Payload.UserId, @event.Payload.RejectTime ?? @event.EventTimeStamp,
+              CreateCommentParameters(@event.Payload.Comment));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejectedByHQ> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejectedByHQ> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedByHeadquarter, evnt.Payload.UserId, evnt.EventTimeStamp,
-             CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.RejectedByHeadquarter, @event.Payload.UserId, @event.EventTimeStamp,
+             CreateCommentParameters(@event.Payload.Comment));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewDeleted> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewDeleted> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.Deleted, evnt.Payload.UserId, evnt.EventTimeStamp);
+            AddHistoricalRecord(view, InterviewHistoricalAction.Deleted, @event.Payload.UserId, @event.EventTimeStamp);
 
             return view;
         }
 
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestored> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestored> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.Restored, evnt.Payload.UserId, evnt.EventTimeStamp);
+            AddHistoricalRecord(view, InterviewHistoricalAction.Restored, @event.Payload.UserId, @event.EventTimeStamp);
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-            CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer), evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+            CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer), @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-                CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedValues),
-                    evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+                CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedValues),
+                    @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-                CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedValue),
-                    evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+                CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedValue),
+                    @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericRealQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-                CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
-                    evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+                CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+                    @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-             CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
-                 evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+             CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+                 @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<DateTimeQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-                CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
-                    evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+                CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+                    @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GeoLocationQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-          CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy, evnt.Payload.Altitude,
-                        evnt.Payload.Timestamp)),
-              evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+          CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude,
+                        @event.Payload.Timestamp)),
+              @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerRemoved> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerRemoved> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, evnt.Payload.UserId,
-                evnt.Payload.RemoveTimeUtc, CreateQuestionParameters(evnt.Payload.QuestionId, evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, @event.Payload.UserId,
+                @event.Payload.RemoveTimeUtc, CreateQuestionParameters(@event.Payload.QuestionId, @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-              CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedRosterVectors),
-                  evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+              CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedRosterVectors),
+                  @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-             CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.SelectedRosterVector),
-                 evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+             CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedRosterVector),
+                 @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextListQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextListQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-           CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(new InterviewTextListAnswers(evnt.Payload.Answers)),
-               evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+           CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new InterviewTextListAnswers(@event.Payload.Answers)),
+               @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-            CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.Answer),
-            evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+            CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+            @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<PictureQuestionAnswered> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<PictureQuestionAnswered> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, evnt.Payload.UserId, evnt.Payload.AnswerTimeUtc,
-           CreateAnswerParameters(evnt.Payload.QuestionId, AnswerUtils.AnswerToString(evnt.Payload.PictureFileName),
-           evnt.Payload.RosterVector));
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
+           CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.PictureFileName),
+           @event.Payload.RosterVector));
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerCommented> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerCommented> @event)
         {
             var parameters = new Dictionary<string, string>()
             {
-                { "questionId", evnt.Payload.QuestionId.FormatGuid() },
-                { "comment", evnt.Payload.Comment }
+                { "questionId", @event.Payload.QuestionId.FormatGuid() },
+                { "comment", @event.Payload.Comment }
             };
-            if (evnt.Payload.RosterVector.Length > 0)
+            if (@event.Payload.RosterVector.Length > 0)
             {
-                parameters.Add("roster", string.Join(",", evnt.Payload.RosterVector));
+                parameters.Add("roster", string.Join(",", @event.Payload.RosterVector));
             }
 
-            AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, evnt.Payload.UserId, evnt.Payload.CommentTime, parameters);
+            AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, @event.Payload.UserId, @event.Payload.CommentTime, parameters);
 
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewHardDeleted> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewHardDeleted> @event)
         {
             return null;
         }
@@ -519,9 +519,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return result;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredInvalid> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredInvalid> @event)
         {
-            foreach (var question in evnt.Payload.Questions)
+            foreach (var question in @event.Payload.Questions)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, null,
                 CreateQuestionParameters(question.Id, question.RosterVector));
@@ -529,9 +529,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredValid> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredValid> @event)
         {
-            foreach (var question in evnt.Payload.Questions)
+            foreach (var question in @event.Payload.Questions)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredValid, null, null,
                 CreateQuestionParameters(question.Id, question.RosterVector));
@@ -539,9 +539,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsDisabled> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsDisabled> @event)
         {
-            foreach (var question in evnt.Payload.Questions)
+            foreach (var question in @event.Payload.Questions)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null, null,
                 CreateQuestionParameters(question.Id, question.RosterVector));
@@ -549,9 +549,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsEnabled> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsEnabled> @event)
         {
-            foreach (var question in evnt.Payload.Questions)
+            foreach (var question in @event.Payload.Questions)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null, null,
                 CreateQuestionParameters(question.Id, question.RosterVector));
@@ -559,9 +559,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsDisabled> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsDisabled> @event)
         {
-            foreach (var group in evnt.Payload.Groups)
+            foreach (var group in @event.Payload.Groups)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null, null,
                 CreateGroupParameters(group.Id, group.RosterVector));
@@ -569,9 +569,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsEnabled> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsEnabled> @event)
         {
-            foreach (var group in evnt.Payload.Groups)
+            foreach (var group in @event.Payload.Groups)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null, null,
                 CreateGroupParameters(group.Id, group.RosterVector));
@@ -579,10 +579,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return view;
         }
 
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<UnapprovedByHeadquarters> evnt)
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<UnapprovedByHeadquarters> @event)
         {
-            AddHistoricalRecord(view, InterviewHistoricalAction.UnapproveByHeadquarters, evnt.Payload.UserId, evnt.EventTimeStamp,
-                CreateCommentParameters(evnt.Payload.Comment));
+            AddHistoricalRecord(view, InterviewHistoricalAction.UnapproveByHeadquarters, @event.Payload.UserId, @event.EventTimeStamp,
+                CreateCommentParameters(@event.Payload.Comment));
 
             return view;
         }
