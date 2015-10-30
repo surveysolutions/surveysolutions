@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
-    internal interface IUserPreloadingVerifier
+    public interface IUserPreloadingVerifier
     {
         void VerifyProcessFromReadyToBeVerifiedQueue();
     }

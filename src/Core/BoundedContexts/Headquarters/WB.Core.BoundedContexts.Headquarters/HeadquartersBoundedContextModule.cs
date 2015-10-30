@@ -51,8 +51,9 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
             this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
-            this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
-            this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>();
+
+            this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
+            this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
             this.Bind<DataExportSettings>().ToConstant(this.dataExportSettings);
             this.Bind<IDataExportQueue>().To<DataExportQueue>();
