@@ -40,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadedDataVerifier preloadedDataVerifier;
         private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
@@ -49,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataRepository preloadedDataRepository,
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
-            InterviewDataExportSettings interviewDataExportSettings)
+            InterviewDataExportSettings interviewDataExportSettings,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -58,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
@@ -87,10 +90,17 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
-            var viewModel = new Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel()
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
+            {
+                QuestionnaireId = id,
+                Version = version
+            }).Items.FirstOrDefault();
+
+            var viewModel = new BatchUploadModel()
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
+                QuestionnaireTitle = questionnaireInfo == null ? string.Empty : $"{questionnaireInfo.Title} v{version}",
                 FeaturedQuestions = featuredQuestionItems
             };
 
