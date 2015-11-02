@@ -83,7 +83,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             EventPosition? eventPosition = null;
             if (interviewDenormalizerProgress != null)
                 eventPosition = new EventPosition(interviewDenormalizerProgress.CommitPosition,
-                    interviewDenormalizerProgress.PreparePosition);
+                    interviewDenormalizerProgress.PreparePosition,
+                    interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent,
+                    interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent);
 
             if (!eventPosition.HasValue)
             {
@@ -91,37 +93,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
 
             var eventSlices = eventStore.GetEventsAfterPosition(eventPosition);
-            long eventCount = eventStore.CountOfAllEvents();
+            long eventCount = eventStore.GetEventsCountAfterPosition(eventPosition);
 
             int countOfProcessedEvents = 0;
-            bool firstSlice = true;
             int persistCount = 0;
-            CommittedEvent lastHandledEvent = null;
             foreach (var eventSlice in eventSlices)
             {
-                if (!eventSlice.Any())
-                {
-                    if (eventSlice.IsEndOfStream && lastHandledEvent != null)
-                    {
-                        PersistResults(dataExportProcessId, lastHandledEvent, eventSlice.Position, eventCount,
-                            countOfProcessedEvents);
-                    }
-                    continue;
-                }
-
                 IEnumerable<CommittedEvent> events = eventSlice;
-
-                if (firstSlice && interviewDenormalizerProgress != null)
-                {
-                    events = GetUnpublishedEventsFromTheFirstSlice(eventSlice,
-                        interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent,
-                        interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent);
-
-                    if(!events.Any())
-                        continue;
-
-                    eventCount = eventCount - events.First().GlobalSequence + 1;
-                }
 
                 TransactionManager.ExecuteInQueryTransaction(
                     () =>
@@ -129,17 +107,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                         foreach (var committedEvent in events)
                         {
                             interviewParaDataEventHandler.Handle(committedEvent);
-                            lastHandledEvent = committedEvent;
                             countOfProcessedEvents++;
                         }
                     });
 
-                firstSlice = false;
-
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000*persistCount)
                 {
-                    PersistResults(dataExportProcessId, lastHandledEvent, eventSlice.Position, eventCount,
-                        countOfProcessedEvents);
+                    PersistResults(dataExportProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
                     persistCount++;
                 }
             }
@@ -150,31 +124,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 () => dataExportQueue.UpdateDataExportProgress(dataExportProcessId, 100));
         }
 
-        private void PersistResults(string dataExportProcessId, CommittedEvent lastHandledEvent, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
+        private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
         {
             this.paraDataAccessor.PersistParaDataExport();
-            this.UpdateLastHandledEventPosition(lastHandledEvent, eventPosition);
+            this.UpdateLastHandledEventPosition(eventPosition);
             this.plainTransactionManager.ExecuteInPlainTransaction(
                 () =>
                     dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
                         Math.Min((int)(((double)countOfProcessedEvents / totatEventCount) * 100), 100)));
         }
 
-        private IEnumerable<CommittedEvent> GetUnpublishedEventsFromTheFirstSlice(EventSlice eventSlice,
-            Guid eventSourceId, int eventSequence)
-        {
-            IEnumerable<CommittedEvent> events =
-                eventSlice.SkipWhile(x => x.EventSourceId != eventSourceId && x.EventSequence != eventSequence);
-
-            if (!events.Any())
-            {
-                throw new InvalidOperationException("Start position wasn't found");
-            }
-
-            return events.Skip(1);
-        }
-
-        private void UpdateLastHandledEventPosition(CommittedEvent lastHandledEvent, EventPosition eventPosition)
+        private void UpdateLastHandledEventPosition(EventPosition eventPosition)
         {
             try
             {
@@ -182,8 +142,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 this.lastPublishedEventPositionForHandlerStorage.Store(
                     new LastPublishedEventPositionForHandler(this.interviewParaDataEventHandlerName,
-                        lastHandledEvent.EventSourceId,
-                        lastHandledEvent.EventSequence, eventPosition.CommitPosition, eventPosition.PreparePosition),
+                        eventPosition.EventSourceIdOfLastEvent,
+                        eventPosition.SequenceOfLastEvent, eventPosition.CommitPosition, eventPosition.PreparePosition),
                     this.interviewParaDataEventHandlerName);
 
                 TransactionManager.CommitCommandTransaction();

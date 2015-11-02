@@ -128,19 +128,80 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             } while (!slice.IsEndOfStream);
         }
 
+        public long GetEventsCountAfterPosition(EventPosition? position)
+        {
+            var totalCountOfEvents = this.CountOfAllEvents();
+            if (!position.HasValue)
+                return totalCountOfEvents;
+
+            var eventSlicesAfter = GetEventsAfterPosition(position);
+
+            foreach (var eventSlice in eventSlicesAfter)
+            {
+                var firstEventInSlice = eventSlice.FirstOrDefault();
+                if (firstEventInSlice != null)
+                    return totalCountOfEvents - firstEventInSlice.GlobalSequence + 1;
+            }
+
+            return 0;
+        }
+
         public IEnumerable<EventSlice> GetEventsAfterPosition(EventPosition? position)
         {
+            //if end of stream is empty slice
             AllEventsSlice slice;
-            Position eventStorePosition = position.HasValue?new Position(position.Value.CommitPosition,position.Value.PreparePosition): Position.Start;
+
+            Position eventStorePosition = position.HasValue
+                ? new Position(position.Value.CommitPosition, position.Value.PreparePosition)
+                : Position.Start;
+
+            var shouldLookForLastHandledEvent = position.HasValue;
+            EventPosition? previousSliceEventPosition = null;
             do
             {
                 slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, settings.MaxCountToRead, false));
 
+                var eventsInSlice = slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent).ToArray();
+
+                if (shouldLookForLastHandledEvent)
+                {
+                    IEnumerable<CommittedEvent> afterLastSuccessfullyHandledEvent =
+                        eventsInSlice.SkipWhile(
+                            x =>
+                                x.EventSourceId != position.Value.EventSourceIdOfLastEvent &&
+                                x.EventSequence != position.Value.SequenceOfLastEvent).ToArray();
+
+                    if (afterLastSuccessfullyHandledEvent.Any())
+                    {
+                        eventsInSlice = afterLastSuccessfullyHandledEvent.Skip(1).ToArray();
+                        shouldLookForLastHandledEvent = false;
+                    }
+                }
+
+                var lastHandledEvent = eventsInSlice.LastOrDefault();
+
+                if (lastHandledEvent == null)
+                {
+                    if (slice.IsEndOfStream)
+                    {
+                        if (!previousSliceEventPosition.HasValue)
+                            yield break;
+
+                        yield return
+                            new EventSlice(Enumerable.Empty<CommittedEvent>(), previousSliceEventPosition.Value, true);
+                    }
+                    continue;
+                }
+
+                previousSliceEventPosition = new EventPosition(eventStorePosition.CommitPosition,
+                    eventStorePosition.PreparePosition,
+                    lastHandledEvent.EventSourceId, lastHandledEvent.EventSequence);
+
                 yield return
-                    new EventSlice(slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent),
-                        new EventPosition(eventStorePosition.CommitPosition, eventStorePosition.PreparePosition), slice.IsEndOfStream);
+                    new EventSlice(eventsInSlice, previousSliceEventPosition.Value, slice.IsEndOfStream);
 
                 eventStorePosition = slice.NextPosition;
+
             } while (!slice.IsEndOfStream);
         }
 
