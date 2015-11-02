@@ -183,7 +183,7 @@ namespace WB.UI.Headquarters.Controllers
             try
             {
                 RunCreation();
-                return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
+                return this.RedirectToAction("UserCreationProcessDetails", new { id });
             }
             catch (Exception e)
             {
@@ -201,7 +201,7 @@ namespace WB.UI.Headquarters.Controllers
                         ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                         try
                         {
-                            ServiceLocator.Current.GetInstance<IUserPreloadingVerifier>().VerifyProcessFromReadyToBeVerifiedQueue();
+                            ServiceLocator.Current.GetInstance<IUserBatchCreator>().CreateUsersFromReadyToBeCreatedQueue();
                         }
                         catch (Exception exc)
                         {
