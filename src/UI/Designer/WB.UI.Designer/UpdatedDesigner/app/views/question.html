@@ -225,15 +225,15 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions">
-                            <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions track by $index">
+                            <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
                                ng-click="setLinkSource(breadCrumb.id)"
                                role="menuitem"
                                tabindex="-1"
                                href="javascript:void(0);">
-                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
                             </a>
                         </li>
                     </ul>
@@ -260,15 +260,15 @@
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfSingleQuestions">
-                            <span ng-if="breadCrumb.isSectionPlaceHolder">{{breadCrumb.title}}</span>
+                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfSingleQuestions track by $index">
+                            <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
                                ng-click="setCascadeSource(breadCrumb.id)"
                                role="menuitem"
                                tabindex="-1"
                                href="javascript:void(0);">
-                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{breadCrumb.title}}
+                                <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
                             </a>
                         </li>
                     </ul>
