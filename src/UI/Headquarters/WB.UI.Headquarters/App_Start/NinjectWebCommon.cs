@@ -20,7 +20,6 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -226,7 +225,6 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
 
             ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
-            ServiceLocator.Current.GetInstance<DataExportTask>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 

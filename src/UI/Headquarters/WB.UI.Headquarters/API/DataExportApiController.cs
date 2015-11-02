@@ -11,7 +11,6 @@ using Quartz.Impl.Matchers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
