@@ -184,12 +184,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                 {
                     if (slice.IsEndOfStream)
                     {
-                        if (!previousSliceEventPosition.HasValue)
-                            yield break;
-
-                        yield return
-                            new EventSlice(Enumerable.Empty<CommittedEvent>(), previousSliceEventPosition.Value, true);
+                        if (previousSliceEventPosition.HasValue)
+                            yield return
+                                new EventSlice(Enumerable.Empty<CommittedEvent>(), previousSliceEventPosition.Value,
+                                    true);
+                        yield break;
                     }
+                    eventStorePosition = slice.NextPosition;
                     continue;
                 }
 
@@ -199,6 +200,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 yield return
                     new EventSlice(eventsInSlice, previousSliceEventPosition.Value, slice.IsEndOfStream);
+
 
                 eventStorePosition = slice.NextPosition;
 

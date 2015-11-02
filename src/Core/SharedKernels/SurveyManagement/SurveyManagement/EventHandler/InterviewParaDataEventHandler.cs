@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
@@ -55,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
-        private readonly ConcurrentDictionary<string, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<string, QuestionnaireExportStructure>();
+        private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
         private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
 
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -402,14 +403,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return new InterviewHistoricalRecordView(0, action, userName, userRole, parameters, timestamp);
         }
 
-        private void ReduceCacheIfNeeded<T>(ConcurrentDictionary<string, T> cache)
+        private void ReduceCacheIfNeeded<TKey, TValue>(ConcurrentDictionary<TKey, TValue> cache)
         {
             if (cache.Count > interviewDataExportSettings.LimitOfCachedItemsByDenormalizer)
             {
                 var cachedItemKeysToRemove = cache.Keys.Take(cache.Count - interviewDataExportSettings.LimitOfCachedItemsByDenormalizer).ToList();
                 foreach (var cachedItemKeyToRemove in cachedItemKeysToRemove)
                 {
-                    T removedItem;
+                    TValue removedItem;
                     cache.TryRemove(cachedItemKeyToRemove, out removedItem);
                 }
             }
@@ -417,10 +418,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private QuestionnaireExportStructure GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
-            var combinedQuestionnaireId = string.Format("{0}${1}", questionnaireId.FormatGuid(), questionnaireVersion);
-
-            var cachedQuestionnaireExportStructure = this.cacheQuestionnaireExportStructure.GetOrAdd(combinedQuestionnaireId,
-                (key) => this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+            var cachedQuestionnaireExportStructure =
+                this.cacheQuestionnaireExportStructure.GetOrAdd(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
+                    (key) =>
+                        this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
             ReduceCacheIfNeeded(cacheQuestionnaireExportStructure);
             return cachedQuestionnaireExportStructure;

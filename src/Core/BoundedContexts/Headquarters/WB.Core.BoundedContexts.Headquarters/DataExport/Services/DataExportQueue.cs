@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Tasks;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class DataExportQueue: IDataExportQueue
     {
         private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
+        protected readonly ILogger Logger;
 
-        private DataExportTask DataExportTask => ServiceLocator.Current.GetInstance<DataExportTask>();
-        public DataExportQueue(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
+        public DataExportQueue(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage, ILogger logger)
         {
             this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
+            this.Logger = logger;
         }
 
         public string DeQueueDataExportProcessId()
@@ -48,7 +52,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
             {
                 if (runningOrQueuedDataExportProcessesByTheQuestionnaire.Status == DataExportStatus.Queued)
+                {
+                    StartBackgroundDataExport();
                     return runningOrQueuedDataExportProcessesByTheQuestionnaire.DataExportProcessId;
+                }
 
                 throw new InvalidOperationException();
             }
@@ -69,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             this.dataExportProcessDtoStorage.Store(exportProcess, processId);
-            DataExportTask.TriggerJob();
+            StartBackgroundDataExport();
             return processId;
         }
 
@@ -87,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 if (runningOrQueuedDataExportProcessesByTheQuestionnaire.Status == DataExportStatus.Queued)
                 {
-                    DataExportTask.TriggerJob();
+                    StartBackgroundDataExport();
                     return runningOrQueuedDataExportProcessesByTheQuestionnaire.DataExportProcessId;
                 }
 
@@ -107,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
             this.dataExportProcessDtoStorage.Store(exportProcess, processId);
 
-            DataExportTask.TriggerJob();
+            StartBackgroundDataExport();
             return processId;
         }
 
@@ -154,6 +161,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.ProgressInPercents = progressInPercents;
 
             dataExportProcessDtoStorage.Store(dataExportProcess, dataExportProcess.DataExportProcessId);
+        }
+
+        private void StartBackgroundDataExport()
+        {
+            new Thread(
+                () =>
+                {
+                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                    try
+                    {
+                        ServiceLocator.Current.GetInstance<IDataExporter>().StartDataExport();
+                    }
+                    catch (Exception exc)
+                    {
+                        Logger.Error("Start of data export error ", exc);
+                    }
+                    finally
+                    {
+                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                    }
+                }).Start();
         }
     }
 }
