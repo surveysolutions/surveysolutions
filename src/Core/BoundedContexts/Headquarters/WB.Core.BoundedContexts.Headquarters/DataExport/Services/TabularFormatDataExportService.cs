@@ -96,10 +96,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             int countOfProcessedEvents = 0;
             bool firstSlice = true;
             int persistCount = 0;
+            CommittedEvent lastHandledEvent = null;
             foreach (var eventSlice in eventSlices)
             {
                 if (!eventSlice.Any())
+                {
+                    if (eventSlice.IsEndOfStream && lastHandledEvent != null)
+                    {
+                        PersistResults(dataExportProcessId, lastHandledEvent, eventSlice.Position, eventCount,
+                            countOfProcessedEvents);
+                    }
                     continue;
+                }
 
                 IEnumerable<CommittedEvent> events = eventSlice;
 
@@ -112,7 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     if(!events.Any())
                         continue;
 
-                    eventCount = eventCount - events.First().GlobalSequence;
+                    eventCount = eventCount - events.First().GlobalSequence + 1;
                 }
 
                 TransactionManager.ExecuteInQueryTransaction(
@@ -121,6 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                         foreach (var committedEvent in events)
                         {
                             interviewParaDataEventHandler.Handle(committedEvent);
+                            lastHandledEvent = committedEvent;
                             countOfProcessedEvents++;
                         }
                     });
@@ -129,13 +138,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000*persistCount)
                 {
-                    this.paraDataAccessor.PersistParaDataExport();
-                    this.UpdateLastHandledEventPosition(eventSlice.Last(), eventSlice.Position);
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () =>
-                            dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
-                                Math.Min((int) (((double) countOfProcessedEvents/eventCount)*100), 100)));
-
+                    PersistResults(dataExportProcessId, lastHandledEvent, eventSlice.Position, eventCount,
+                        countOfProcessedEvents);
                     persistCount++;
                 }
             }
@@ -144,6 +148,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             this.plainTransactionManager.ExecuteInPlainTransaction(
                 () => dataExportQueue.UpdateDataExportProgress(dataExportProcessId, 100));
+        }
+
+        private void PersistResults(string dataExportProcessId, CommittedEvent lastHandledEvent, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
+        {
+            this.paraDataAccessor.PersistParaDataExport();
+            this.UpdateLastHandledEventPosition(lastHandledEvent, eventPosition);
+            this.plainTransactionManager.ExecuteInPlainTransaction(
+                () =>
+                    dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
+                        Math.Min((int)(((double)countOfProcessedEvents / totatEventCount) * 100), 100)));
         }
 
         private IEnumerable<CommittedEvent> GetUnpublishedEventsFromTheFirstSlice(EventSlice eventSlice,
