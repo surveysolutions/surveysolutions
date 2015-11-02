@@ -10,5 +10,6 @@ namespace Ncqrs.Eventing.Storage
         IEnumerable<CommittedEvent> GetAllEvents();
 
         IEnumerable<EventSlice> GetEventsAfterPosition(EventPosition? position);
+        long GetEventsCountAfterPosition(EventPosition? position);
     }
 }
