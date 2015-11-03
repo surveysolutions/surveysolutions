@@ -206,7 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 int answerValue;
                 if (int.TryParse(answer.AnswerValue, out answerValue))
                 {
-                    if (answerValue <= 0)
+                    if (answerValue < 0)
                         return true;
                 }
                 else
