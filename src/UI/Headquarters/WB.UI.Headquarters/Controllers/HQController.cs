@@ -100,7 +100,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
-                QuestionnaireTitle = questionnaireInfo == null ? string.Empty : $"{questionnaireInfo.Title} v{version}",
+                QuestionnaireTitle = questionnaireInfo?.Title,
                 FeaturedQuestions = featuredQuestionItems
             };
 
@@ -134,7 +134,13 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
             }
 
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
+            {
+                QuestionnaireId = model.QuestionnaireId,
+                Version = model.QuestionnaireVersion
+            }).Items.FirstOrDefault();
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title,  preloadedMetadata));
         }
 
         [HttpPost]
@@ -164,7 +170,13 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
             }
 
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, preloadedMetadata));
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
+            {
+                QuestionnaireId = model.QuestionnaireId,
+                Version = model.QuestionnaireVersion
+            }).Items.FirstOrDefault();
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
@@ -185,7 +197,13 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
             }
 
-            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
+            {
+                QuestionnaireId = questionnaireId,
+                Version = version
+            }).Items.FirstOrDefault();
+
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
             return this.View(model);
         }
@@ -201,7 +219,13 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
             }
 
-            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, verificationStatus.Errors.ToArray(), 
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
+            {
+                QuestionnaireId = questionnaireId,
+                Version = version
+            }).Items.FirstOrDefault();
+
+            var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
 
             return this.View("VerifySample", model);
