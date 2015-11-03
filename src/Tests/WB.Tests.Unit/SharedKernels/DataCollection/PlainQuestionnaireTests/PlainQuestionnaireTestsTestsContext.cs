@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     null,
                     null,
                     false,
+                    null,
                     null
             ));
         }
@@ -74,6 +75,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     null,
                     null,
                     false,
+                    null,
                     null
             ));
         }

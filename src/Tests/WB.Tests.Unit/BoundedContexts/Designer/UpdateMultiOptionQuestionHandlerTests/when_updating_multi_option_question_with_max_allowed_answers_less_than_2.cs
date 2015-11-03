@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     },
                     linkedToQuestionId: null,
                     areAnswersOrdered: false,
-                    maxAllowedAnswers: 1
+                    maxAllowedAnswers: 1,
+                    yesNoView: yesNoView
                     ));
 
 
@@ -63,5 +64,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid parentGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static bool yesNoView = false;
     }
 }

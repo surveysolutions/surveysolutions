@@ -46,7 +46,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     , options: options,
                     linkedToQuestionId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers
+                    maxAllowedAnswers: maxAllowedAnswers,
+                    yesNoView: yesNoView
                     ));
 
 
@@ -75,5 +76,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static bool areAnswersOrdered = false;
         private static int? maxAllowedAnswers = null;
         private static QuestionScope scope = QuestionScope.Interviewer;
+        private static bool yesNoView = false;
     }
 }
