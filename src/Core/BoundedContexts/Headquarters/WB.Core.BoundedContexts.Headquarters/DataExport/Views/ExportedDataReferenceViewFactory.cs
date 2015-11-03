@@ -51,8 +51,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     exportedParaDataReferencesView.HasDataToExport = true;
                 }
             }
+
+            var runningProcesses=
+                dataExportProcessDtoStorage.Query(
+                    _ =>
+                        _.Where(d => d.Status == DataExportStatus.Queued || d.Status == DataExportStatus.Running)
+                            .ToArray());
+
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                exportedParaDataReferencesView);
+                exportedParaDataReferencesView,
+                runningProcesses.Select(
+                    p =>
+                        new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate, "test",
+                            p.QuestionnaireVersion, p.ProgressInPercents, p.DataExportType, p.DataExportFormat)).ToArray());
         }
     }
 }
