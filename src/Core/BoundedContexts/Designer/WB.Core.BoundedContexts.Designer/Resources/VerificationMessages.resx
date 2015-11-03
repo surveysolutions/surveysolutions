@@ -375,4 +375,10 @@
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
     <value>Only one GPS question could be marked as prefilled</value>
   </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>Multi option yes/no question can't be linked</value>
+  </data>
+  <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Multi option question supports only integer positive values</value>
+  </data>
 </root>
