@@ -163,6 +163,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcessDtoStorage.Store(dataExportProcess, dataExportProcess.DataExportProcessId);
         }
 
+        public void DeleteDataExportProcess(string processId)
+        {
+            dataExportProcessDtoStorage.Remove(processId);
+        }
+
         private void StartBackgroundDataExport()
         {
             new Thread(

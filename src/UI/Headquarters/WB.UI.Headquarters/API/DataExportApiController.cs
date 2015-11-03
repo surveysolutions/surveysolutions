@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.API
             return result;
         }
 
+        [HttpPost]
         public HttpResponseMessage RequestUpdateOfParadata()
         {
             try
@@ -63,6 +64,21 @@ namespace WB.UI.Headquarters.API
             {
             }
             
+            return Request.CreateResponse(true);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage DeleteDataExportProcess(string id)
+        {
+            try
+            {
+                this.dataExportQueue.DeleteDataExportProcess(id);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(false);
+            }
+
             return Request.CreateResponse(true);
         }
 

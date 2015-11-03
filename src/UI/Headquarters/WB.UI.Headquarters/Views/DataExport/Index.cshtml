@@ -22,6 +22,7 @@
         var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata" })';
         var $DDIUrl = '@Url.Action("GetDDI", "ImportExport")';
         var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire" })';
+        var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess" })';
         $(function () {
             var templates = [
                 @foreach (var item in Model)
@@ -41,7 +42,7 @@
             {
               <text>exportTypes[@((int)typeValue)]='@typeValue.ToString()'</text>
         }
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, exportTypes);
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, exportTypes, $DeleteDataExportProcessUrl);
             ko.applyBindings(model);
         });
 
@@ -147,7 +148,7 @@
                         <span>
                             Last updated on <i data-bind='text:lastParaDataUpdateDate()'></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate">
+                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate, visible: showParaDataRefreshButton()">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
@@ -188,7 +189,7 @@
             <td> @if (User.IsInRole("Administrator"))
             {
                 <div class="btn-group pull-right">
-                    <a class="btn btn-danger" data-bind="click : $parent.stopExportProcess">
+                    <a class="btn btn-danger" data-bind="click : $root.stopExportProcess">
                         <i class="glyphicon glyphicon-remove"></i>
                     </a>
                 </div>
