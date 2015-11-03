@@ -27,6 +27,8 @@ namespace Main.Core.Documents
 
         public List<IComposite> Children { get; set; }
 
+        public Dictionary<string, Macros> Macroses { get; set; }
+
         public DateTime? CloseDate { get; set; }
 
         public string ConditionExpression { get; set; }
@@ -46,18 +48,6 @@ namespace Main.Core.Documents
         public bool UsesCSharp { get; set; }
 
         private IComposite parent;
-
-        public Propagate Propagated
-        {
-            get
-            {
-                return Propagate.None;
-            }
-
-            set 
-            {
-            }
-        }
 
         public IComposite GetParent()
         {
