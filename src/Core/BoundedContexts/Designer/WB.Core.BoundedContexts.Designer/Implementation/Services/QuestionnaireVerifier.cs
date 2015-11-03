@@ -145,6 +145,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
+                    Verifier<IMultyOptionsQuestion>(MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
+                    Verifier<IMultyOptionsQuestion>(MultiOptionQuestionSupportsOnlyIntegerPositiveValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
@@ -188,6 +190,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByConditionAndValidationExpressions
                 };
             }
+        }
+
+        private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question)
+        {
+            return question.YesNoView && question.LinkedToQuestionId.HasValue;
+        }
+
+        private bool MultiOptionQuestionSupportsOnlyIntegerPositiveValues(IMultyOptionsQuestion question)
+        {
+            if (question.Answers == null)
+                return false;
+            foreach (var answer in question.Answers)
+            {
+                int answerValue;
+                if (int.TryParse(answer.AnswerValue, out answerValue))
+                {
+                    if (answerValue <= 0)
+                        return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private IEnumerable<QuestionnaireVerificationError> VerifyGpsPrefilledQuestions(QuestionnaireDocument document, VerificationState state)

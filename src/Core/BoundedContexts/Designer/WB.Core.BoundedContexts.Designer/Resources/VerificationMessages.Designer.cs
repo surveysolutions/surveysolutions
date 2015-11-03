@@ -115,6 +115,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multi option yes/no question can&apos;t be linked.
+        /// </summary>
+        internal static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
+            get {
+                return ResourceManager.GetString("WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi option question supports only integer positive values.
+        /// </summary>
+        internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
+            get {
+                return ResourceManager.GetString("WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
         internal static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
