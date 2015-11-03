@@ -18,5 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         void FinishDataExportProcessWithError(string processId, Exception e);
 
         void UpdateDataExportProgress(string processId, int progressInPercents);
+
+        void DeleteDataExportProcess(string processId);
     }
 }

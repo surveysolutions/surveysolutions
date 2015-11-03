@@ -1,9 +1,10 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
     self.HistoryUrl = $historyUrl;
+    self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
     self.Templates = templates;
     self.ParadataReference = ko.observableArray();
     self.RunningProcesses = ko.observableArray([]);
@@ -37,16 +38,21 @@
             _.delay(self.updateDataExportInfo, 3000);
         }, true);
     };
-
+    self.stopExportProcess = function (runningExport) {
+        self.sendActionRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
+    }
     self.requestParaDataUpdate = function () {
-
+        self.sendActionRequest(self.HistoryUrl);
+    }
+    self.sendActionRequest = function (url, args) {
         var requestHeaders = {};
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
         $.ajax({
-            url: self.HistoryUrl,
+            url: url,
             type: 'post',
             headers: requestHeaders,
+            data: args,
             dataType: 'json'
         }).done(function (data) {
             self.updateDataExportInfo();
@@ -64,7 +70,7 @@
                 else
                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
-          
+
         }).always(function () {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);
@@ -81,6 +87,11 @@
         if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().HasDataToExport))
             return false;
         return self.ParadataReference().HasDataToExport();
+    }
+    self.showParaDataRefreshButton = function () {
+        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().CanRefreshBeRequested))
+            return false;
+        return self.ParadataReference().CanRefreshBeRequested();
     }
 
     self.paraDatExportProgress = function () {
