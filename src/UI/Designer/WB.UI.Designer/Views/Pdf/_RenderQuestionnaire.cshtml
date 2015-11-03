@@ -11,6 +11,26 @@
 
 <div class="page-break"></div>
 
+
+@if (this.Model.GetMacroses().Any())
+{
+    <h1>
+        Macroses
+    </h1>
+    <ol>
+        @foreach (var macros in this.Model.GetMacroses())
+        {
+        <li id="@("m" + macros.Name)">
+            <p><b>$@macros.Name</b>: @macros.Expression</p>
+            @if (!string.IsNullOrWhiteSpace(macros.Description))
+            {
+                <p>@macros.Description</p>
+            }
+        </li>
+        }
+    </ol>
+}
+
 @if (this.Model.GetQuestionsWithConditions().Any())
 {
     <h1>
