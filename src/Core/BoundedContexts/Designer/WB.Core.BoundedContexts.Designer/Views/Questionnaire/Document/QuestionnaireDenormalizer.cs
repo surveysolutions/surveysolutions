@@ -4,9 +4,11 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -53,7 +55,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>
+        IEventHandler<StaticTextDeleted>,
+
+        IEventHandler<MacrosAdded>,
+        IEventHandler<MacrosUpdated>,
+        IEventHandler<MacrosDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
@@ -506,6 +512,38 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         private void AddNewQuestionnaire(QuestionnaireDocument questionnaireDocument)
         {
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
+        }
+
+        public void Handle(IPublishedEvent<MacrosAdded> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            var macrosId = evnt.Payload.EntityId.FormatGuid();
+            document.Macroses.Add(macrosId, new Macros());
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<MacrosUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            var macrosId = evnt.Payload.EntityId.FormatGuid();
+            if (!document.Macroses.ContainsKey(macrosId))
+                return;
+
+            document.Macroses[macrosId].Name = evnt.Payload.Name;
+            document.Macroses[macrosId].Expression = evnt.Payload.Expression;
+            document.Macroses[macrosId].Description = evnt.Payload.Description;
+
+            this.UpdateQuestionnaire(evnt, document);
+
+        }
+
+        public void Handle(IPublishedEvent<MacrosDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Macroses.Remove(evnt.Payload.EntityId.FormatGuid());
+            this.UpdateQuestionnaire(evnt, document);
         }
     }
 }
