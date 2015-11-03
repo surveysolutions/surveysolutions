@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             rosterSizeQuestionId = Guid.Parse("13333333333333333333333333333333");
             questionnaire = CreateQuestionnaireDocument();
             var options = new List<Answer>();
-            for (int i = 1; i < 61; i++)
+            for (int i = 0; i < 60; i++)
             {
                 options.Add(Create.Option(text: i.ToString(), value: i.ToString()));
             }
