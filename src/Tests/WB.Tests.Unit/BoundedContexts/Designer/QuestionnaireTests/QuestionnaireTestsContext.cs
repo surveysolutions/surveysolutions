@@ -343,7 +343,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion",
                 "rosterSizeQuestion", null, QuestionScope.Interviewer, "", "", "", "", responsibleId,
                 new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, null,
-                false, null);
+                false, null, false);
             questionnaire.AddGroupAndMoveIfNeeded(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", variableName: null,
                 rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId, isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);

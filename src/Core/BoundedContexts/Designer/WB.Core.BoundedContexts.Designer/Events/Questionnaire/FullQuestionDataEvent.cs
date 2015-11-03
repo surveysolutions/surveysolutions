@@ -17,6 +17,7 @@ namespace Main.Core.Events.Questionnaire
 
         public bool? AreAnswersOrdered { get; set; }
 
+        public bool? YesNoView { get; set; }
         /// <summary>
         /// Gets or sets maximum count of answers for multioption question
         /// </summary>
