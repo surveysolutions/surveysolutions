@@ -174,7 +174,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         null,
                         e.IsFilteredCombobox,
-                        e.CascadeFromQuestionId
+                        e.CascadeFromQuestionId,
+                        null
                         ));
 
             if (question == null)
@@ -213,6 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null,
@@ -257,6 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.MaxAnswerCount,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -295,7 +298,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         e.MaxAnswerCount,
                         e.IsFilteredCombobox,
-                        e.CascadeFromQuestionId));
+                        e.CascadeFromQuestionId,
+                        e.YesNoView));
 
             if (question == null)
             {
@@ -331,6 +335,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null,
@@ -375,6 +380,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.MaxAnswerCount,
+                        null,
                         null,
                         null));
 
@@ -426,7 +432,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAllowedAnswers,
                         null,
                         e.IsFilteredCombobox,
-                        e.CascadeFromQuestionId));
+                        e.CascadeFromQuestionId,
+                        e.YesNoView));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -458,6 +465,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
+                        null,
                         null,
                         null,
                         null,
@@ -497,6 +505,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         e.MaxAnswerCount,
+                        null,
                         null,
                         null));
 
@@ -550,6 +559,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -579,6 +589,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -626,6 +637,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -654,6 +666,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -1119,6 +1132,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationMessage: categoricalMultiQuestion.ValidationMessage,
                             linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
                             areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
+                            yesNoView: categoricalMultiQuestion.YesNoView,
                             maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
                             options:
                                 categoricalMultiQuestion.Answers.Select(
@@ -1371,7 +1385,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 LinkedToQuestionId = question.LinkedToQuestionId,
 
                 AreAnswersOrdered = asMultioptions != null ? (bool?)asMultioptions.AreAnswersOrdered : null,
-              
+                YesNoView = asMultioptions != null ? (bool?)asMultioptions.YesNoView : null,
+
                 Mask = asTextQuestion != null ? asTextQuestion.Mask : null,
 
                 CascadeFromQuestionId = question.CascadeFromQuestionId,
@@ -1640,7 +1655,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Option[] options,
             Guid? linkedToQuestionId,
             bool areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers,
+            bool yesNoView)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
@@ -1668,7 +1684,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
+                MaxAllowedAnswers = maxAllowedAnswers,
+                YesNoView= yesNoView
             });
         }
 
@@ -3788,8 +3805,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<object> CreateCategoricalMultiAnswersQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId, int targetIndex, Guid responsibleId, Option[] options, Guid? linkedToQuestionId, bool areAnswersOrdered, int? maxAllowedAnswers)
+        private IEnumerable<object> CreateCategoricalMultiAnswersQuestionClonedEvents(
+            Guid questionId, 
+            string title, 
+            string variableName, 
+            string variableLabel, 
+            QuestionScope scope, 
+            string enablementCondition, 
+            string validationExpression, 
+            string validationMessage,
+            string instructions, 
+            Guid parentGroupId, 
+            Guid sourceQuestionId, 
+            int targetIndex, 
+            Guid responsibleId, 
+            Option[] options, 
+            Guid? linkedToQuestionId, 
+            bool areAnswersOrdered, 
+            int? maxAllowedAnswers,
+            bool yesNoView)
         {
             yield return new QuestionCloned
             {
@@ -3810,7 +3844,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ResponsibleId = responsibleId,
                 LinkedToQuestionId = linkedToQuestionId,
                 AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
+                MaxAllowedAnswers = maxAllowedAnswers,
+                YesNoView = yesNoView
             };
         }
 

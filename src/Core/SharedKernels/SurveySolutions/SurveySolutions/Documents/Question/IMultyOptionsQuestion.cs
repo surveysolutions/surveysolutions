@@ -5,5 +5,7 @@ namespace Main.Core.Entities.SubEntities.Question
         bool AreAnswersOrdered { get; set; }
 
         int? MaxAllowedAnswers { get; set; }
+
+        bool YesNoView { get; set; }
     }
 }

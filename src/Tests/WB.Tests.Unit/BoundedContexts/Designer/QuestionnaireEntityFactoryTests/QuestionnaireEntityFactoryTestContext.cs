@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 null, 
                 null,
                 null,
+                null,
                 null);
         }
     }
