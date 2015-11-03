@@ -23,6 +23,8 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -92,7 +94,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = new Group();
             group.Title = e.GroupText;
             group.VariableName = e.VariableName;
-            group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -118,7 +119,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = new Group();
             group.Title = e.GroupText;
             group.VariableName = e.VariableName;
-            group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -808,13 +808,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
-
             var document = source as QuestionnaireDocument;
             if (document == null)
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
             document.CreatedBy = createdBy;
             ApplyEvent(new TemplateImported() { Source = document });
-
         }
 
         public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
@@ -831,6 +829,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
+        #endregion
+
+        #region Macros command handlers
+
+        public void AddMacrosIfNeeded(AddMacrosCommand command)
+        {
+            this.ApplyEvent(new MacrosAdded(command.EntityId, command.ResponsibleId));
+        }
+
+        public void UpdateMacrosIfNeeded(UpdateMacrosCommand command)
+        {
+            this.ApplyEvent(new MacrosUpdated(command.EntityId, command.Name, command.Expression, command.Description, command.ResponsibleId));
+        }
+
+        public void DeleteMacrosIfNeeded(DeleteMacrosCommand command)
+        {
+            this.ApplyEvent(new MacrosDeleted(command.EntityId, command.ResponsibleId));
+        }
+      
         #endregion
 
         #region Group command handlers
