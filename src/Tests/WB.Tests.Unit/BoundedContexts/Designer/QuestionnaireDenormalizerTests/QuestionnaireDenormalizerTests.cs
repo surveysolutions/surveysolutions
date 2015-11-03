@@ -106,14 +106,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 };
         }
 
-        private static GroupUpdated CreateGroupUpdatedEvent(Guid groupId, Propagate propagationKind = Propagate.None)
-        {
-            return new GroupUpdated
-                {
-                    GroupPublicKey = groupId
-                };
-        }
-
         private static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
         {
             IPublishedEvent<T> e = new PublishedEvent<T>(
