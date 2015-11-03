@@ -32,7 +32,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Instructions = "Intructions",
                 LinkedToQuestionId = Guid.NewGuid(),
                 IsFilteredCombobox = true,
-                CascadeFromQuestionId = Guid.NewGuid()
+                CascadeFromQuestionId = Guid.NewGuid(),
+                YesNoView = false
             };
             questionnaire.Apply(newQuestionAdded);
 
