@@ -50,6 +50,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private bool wasExpressionsMigrationPerformed = false;
 
+        internal void Apply(MacrosAdded e)
+        {
+        }
+
+        internal void Apply(MacrosUpdated e)
+        {
+        }
+
+        internal void Apply(MacrosDeleted e)
+        {
+        }
+
         internal void Apply(SharedPersonToQuestionnaireAdded e)
         {
             this.innerDocument.SharedPersons.Add(e.PersonId);
@@ -187,7 +199,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
-
 
 
         internal void Apply(NumericQuestionAdded e)

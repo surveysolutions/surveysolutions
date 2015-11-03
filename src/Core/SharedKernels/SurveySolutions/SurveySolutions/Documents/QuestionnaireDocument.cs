@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -21,6 +20,7 @@ namespace Main.Core.Documents
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
             this.SharedPersons = new List<Guid>();
+            this.Macroses = new Dictionary<string, Macros>();
         }
 
         public string Id { get; set; }
