@@ -46,19 +46,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             return CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: questionId ?? Guid.NewGuid(), responsibleId: responsibleId ?? Guid.NewGuid());
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneQuestionInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options, Guid responsibleId, Guid? groupId = null)
-        {
-            groupId = groupId ?? Guid.NewGuid();
-
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroupAndQuestionInIt(questionId: Guid.NewGuid(),
-                groupId: groupId.Value, groupPropagationKind: Propagate.None, responsibleId: responsibleId);
-
-            AddQuestion(questionnaire, questionId, groupId.Value, responsibleId, questionType, "text1", options);
-
-            return questionnaire;
-            
-        }
-
         public static Questionnaire CreateQuestionnaire(Guid responsibleId, Guid? questionnaireId = null, string text = "text of questionnaire",
             IExpressionProcessor expressionProcessor = null)
         {
@@ -133,19 +120,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             return questionnaire;
         }
 
-        public static Questionnaire CreateQuestionnaireWithOneAutoGroupAndQuestionInIt(Guid questionId, Guid responsibleId)
-        {
-            return CreateQuestionnaireWithOneGroupAndQuestionInIt(
-                questionId: questionId, groupPropagationKind: Propagate.AutoPropagated, responsibleId: responsibleId);
-        }
-
-        public static Questionnaire CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid questionId, Guid responsibleId, Guid? groupId = null, 
-                                                                                   Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text, 
+        public static Questionnaire CreateQuestionnaireWithOneGroupAndQuestionInIt(Guid questionId, Guid responsibleId, Guid? groupId = null, QuestionType questionType = QuestionType.Text, 
                                                                                    bool? isInteger = null, string alias = "text")
         {
             groupId = groupId ?? Guid.NewGuid();
 
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, Guid.NewGuid(), groupId.Value, isRoster: groupPropagationKind == Propagate.AutoPropagated);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId, Guid.NewGuid(), groupId.Value, isRoster: false);
             
             AddQuestion(questionnaire, questionId, groupId.Value, responsibleId, questionType, alias,
                                                (questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption)?
@@ -170,10 +150,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             return questionnaire;
         }
 
-        public static Questionnaire CreateQuestionnaireWithTwoGroups(Guid firstGroup, Guid secondGroup, Guid responsibleId, Propagate propagationKind = Propagate.None)
+        public static Questionnaire CreateQuestionnaireWithTwoGroups(Guid firstGroup, Guid secondGroup, Guid responsibleId)
         {
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup,
-                responsibleId: responsibleId, isRoster: propagationKind == Propagate.AutoPropagated);
+            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup, responsibleId: responsibleId, isRoster: false);
 
             questionnaire.AddGroupAndMoveIfNeeded(secondGroup,
                 responsibleId: responsibleId, title: "Second group", variableName: null, rosterSizeQuestionId: null, description: null, condition: null,
@@ -244,7 +223,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithRosterGroupAndRegularGroup(rosterId,
                                                                                           secondGroup, responsibleId);
 
-            questionnaire.Apply(new NewQuestionAdded()
+            questionnaire.Apply(new NewQuestionAdded
                 {
                     PublicKey = autoQuestionId,
                     GroupPublicKey = rosterId,
