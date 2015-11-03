@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -6,6 +6,9 @@
     self.HistoryUrl = $historyUrl;
     self.Templates = templates;
     self.ParadataReference = ko.observableArray();
+    self.RunningProcesses = ko.observableArray([]);
+    self.exportFromats = $exportFromats;
+    self.exportTypes = $exportTypes;
 
     self.selectedTemplate = ko.observable();
 
@@ -31,6 +34,7 @@
         };
         self.SendRequest(self.Url, filter, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
+            _.delay(self.updateDataExportInfo, 3000);
         }, true);
     };
 
@@ -83,6 +87,16 @@
         if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().ProgressInPercents))
             return 100;
         return self.ParadataReference().ProgressInPercents();
+    }
+
+    self.exportFormatName = function (runningExport) {
+        return self.exportFromats[runningExport.Format()];
+    }
+
+    self.exportName = function (runningExport) {
+        if (runningExport.QuestionnaireTitle() && runningExport.QuestionnaireVersion())
+            return runningExport.QuestionnaireTitle() +'-'+ runningExport.QuestionnaireVersion();
+        return self.exportTypes[runningExport.Type()];
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);
