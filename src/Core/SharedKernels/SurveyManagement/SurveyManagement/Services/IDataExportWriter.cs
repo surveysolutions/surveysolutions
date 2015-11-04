@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     {
         void AddOrUpdateInterviewRecords(InterviewDataExportView items, Guid questionnaireId, long questionnaireVersion);
         void DeleteInterviewRecords(Guid interviewId);
+        InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion);
     }
 }
