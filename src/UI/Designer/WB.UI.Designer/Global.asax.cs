@@ -128,5 +128,10 @@ namespace WB.UI.Designer
             }
             ElmahDataFilter.Apply(e, ctx);
         }
+
+        protected void Application_PostAuthorizeRequest()
+        {
+            HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+        }
     }
 }
