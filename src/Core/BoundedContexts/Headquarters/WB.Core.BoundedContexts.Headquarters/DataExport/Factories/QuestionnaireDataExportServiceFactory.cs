@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainTransactionManager plainTransactionManager;
-        private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
 
@@ -41,7 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             IDataExportQueue dataExportQueue,
             IPlainTransactionManager plainTransactionManager, 
             IParaDataAccessor paraDataAccessor, 
-            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage, ITabularFormatExportService tabularFormatExportService, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -53,7 +53,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             this.plainTransactionManager = plainTransactionManager;
             this.paraDataAccessor = paraDataAccessor;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
-            this.tabularFormatExportService = tabularFormatExportService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
@@ -62,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             if (dataExportFormat == DataExportFormat.TabularData)
                 return new TabularFormatDataExportService(eventStore, interviewSummaryReader, userReader,
                     questionnaireReader, interviewDataExportSettings, transactionManagerProvider, dataExportQueue,
-                    plainTransactionManager, this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage, filebasedExportedDataAccessor, tabularFormatExportService);
+                    plainTransactionManager, this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage, filebasedExportedDataAccessor);
 
             throw new NotSupportedException();
         }
