@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Batch upload.
+        /// </summary>
+        internal static string BatchUpload_Title {
+            get {
+                return ResourceManager.GetString("BatchUpload_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse teams.
         /// </summary>
         internal static string BrowseTeams {

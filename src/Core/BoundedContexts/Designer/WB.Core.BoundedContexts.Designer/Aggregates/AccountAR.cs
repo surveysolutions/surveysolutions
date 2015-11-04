@@ -162,10 +162,5 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
             }
         }
-
-        public void Validate()
-        {
-            this.ApplyEvent(new UserLoggedIn { LastLoginAt = DateTime.UtcNow });
-        }
     }
 }

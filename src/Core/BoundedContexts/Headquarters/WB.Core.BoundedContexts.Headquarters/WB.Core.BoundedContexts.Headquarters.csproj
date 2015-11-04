@@ -129,6 +129,7 @@
     <Compile Include="DataExport\Views\ExportedDataReferencesView.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesViewModel.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceViewFactory.cs" />
+    <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
     <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

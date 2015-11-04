@@ -41,7 +41,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.MaxAllowedAnswers,
                 data.MaxAnswerCount,
                 data.IsFilteredCombobox,
-                data.CascadeFromQuestionId);
+                data.CascadeFromQuestionId,
+                data.YesNoView);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -138,7 +139,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             int? maxAllowedAnswers,
             int? masAnswerCount,
             bool? isFilteredCombobox,
-            Guid? cascadeFromQuestionId)
+            Guid? cascadeFromQuestionId,
+            bool? yesNoView)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -169,6 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             {
                 multioptionQuestion.AreAnswersOrdered = areAnswersOrdered ?? false;
                 multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
+                multioptionQuestion.YesNoView = yesNoView ?? false;
             }
 
             var listQuestion = question as ITextListQuestion;

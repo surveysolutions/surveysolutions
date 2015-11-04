@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public CategoricalOption[] Options { get; set; }
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
+        public bool YesNoView { get; set; }
     }
 }
