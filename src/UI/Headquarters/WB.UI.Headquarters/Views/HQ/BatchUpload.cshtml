@@ -13,7 +13,7 @@
 }
 
 <div class="row-fluid">
-    <h3>@BatchUpload.UploadSample: @Model.QuestionnaireTitle</h3>
+    <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.UploadSample, Model.QuestionnaireVersion, Model.QuestionnaireTitle)</h3>
     <div>
         @BatchUpload.UploadSampleDescription
     </div>

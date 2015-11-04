@@ -66,6 +66,7 @@
                 $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
                 $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
+                $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
                 var options = question.options || [];

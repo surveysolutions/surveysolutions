@@ -34,10 +34,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 exportedParaDataReferencesView = new ExportedDataReferencesView()
                 {
                     DataExportFormat = latestParaDataProcess.DataExportFormat,
-                    LastUpdateDate = latestParaDataProcess.LastUpdateDate,
                     ProgressInPercents = latestParaDataProcess.ProgressInPercents,
-                    StatusOfLatestExportprocess = latestParaDataProcess.Status
+                    StatusOfLatestExportprocess = latestParaDataProcess.Status,
+                    CanRefreshBeRequested =
+                        latestParaDataProcess.Status != DataExportStatus.Running
                 };
+
                 var latestCompletedParaDataProcess =
                     dataExportProcessDtoStorage.Query(
                         _ =>
@@ -48,11 +50,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                                 .FirstOrDefault());
                 if (latestCompletedParaDataProcess != null)
                 {
+                    exportedParaDataReferencesView.LastUpdateDate = latestCompletedParaDataProcess.LastUpdateDate;
                     exportedParaDataReferencesView.HasDataToExport = true;
                 }
             }
+
+            var runningProcesses=
+                dataExportProcessDtoStorage.Query(
+                    _ =>
+                        _.Where(d => d.Status == DataExportStatus.Queued || d.Status == DataExportStatus.Running)
+                            .ToArray());
+
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                exportedParaDataReferencesView);
+                exportedParaDataReferencesView,
+                runningProcesses.Select(
+                    p =>
+                        new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate, "test",
+                            p.QuestionnaireVersion, p.ProgressInPercents, p.DataExportType, p.DataExportFormat)).ToArray());
         }
     }
 }

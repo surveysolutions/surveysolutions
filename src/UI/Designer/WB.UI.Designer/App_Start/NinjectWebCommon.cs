@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
@@ -12,6 +13,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Native.Logging;
@@ -31,7 +33,10 @@ using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 
@@ -101,6 +106,9 @@ namespace WB.UI.Designer.App_Start
                 new FileInfrastructureModule()
                 );
 
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
+                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
+                .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
             kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
             kernel.Load(ModulesFactory.GetEventStoreModule());
@@ -111,6 +119,9 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<ReadSideService>().ToSelf().InSingletonScope();
             kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
+
+            kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
+            kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
 
             CreateAndRegisterEventBus(kernel);
             

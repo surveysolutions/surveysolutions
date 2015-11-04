@@ -96,6 +96,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.yesNoView = question.yesNoView;
                         command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null;
                         break;
                     case "Numeric":
