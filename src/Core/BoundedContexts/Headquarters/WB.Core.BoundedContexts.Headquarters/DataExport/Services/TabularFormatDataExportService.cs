@@ -6,6 +6,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -13,6 +14,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -32,6 +34,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IDataExportQueue dataExportQueue;
         private readonly IParaDataAccessor paraDataAccessor;
+
+        private readonly ITabularFormatExportService tabularFormatExportService;
+        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly string interviewParaDataEventHandlerName=typeof(InterviewParaDataEventHandler).Name;
 
         private ITransactionManager TransactionManager
@@ -49,7 +54,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IDataExportQueue dataExportQueue,
             IPlainTransactionManager plainTransactionManager,
             IParaDataAccessor paraDataAccessor, 
-            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage)
+            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
+            ITabularFormatExportService tabularFormatExportService)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -61,11 +68,28 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.plainTransactionManager = plainTransactionManager;
             this.paraDataAccessor = paraDataAccessor;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
+            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.tabularFormatExportService = tabularFormatExportService;
         }
 
         public void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
         {
-            throw new NotImplementedException();
+            filebasedExportedDataAccessor.CleanExportedTabularDataFolder(questionnaireId,
+                questionnaireVersion);
+
+            var pathToExportFolder = filebasedExportedDataAccessor.GetFolderPathToExportedTabularData(questionnaireId,
+                questionnaireVersion);
+
+            TransactionManager.ExecuteInQueryTransaction(
+                () =>
+                {
+                    tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId,
+                        questionnaireVersion,
+                        pathToExportFolder).WaitAndUnwrapException();
+                });
+
+            filebasedExportedDataAccessor.CreateArchiveOfExportedTabularData(questionnaireId,
+                questionnaireVersion);
         }
 
         public void ExportParaData(string dataExportProcessId)
