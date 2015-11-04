@@ -90,26 +90,6 @@
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
-    <Compile Include="Properties\UIResources.es-ES.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.es-ES.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\UIResources.fr-FR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\UIResources.pt-PT.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.pt-PT.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\UIResources.uk-UA.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UIResources.uk-UA.resx</DependentUpon>
-    </Compile>
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -269,28 +249,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\UIResources.es-ES.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.es-ES.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\UIResources.fr-FR.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.fr-FR.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\UIResources.pt-PT.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.pt-PT.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.es-ES.resx" />
+    <EmbeddedResource Include="Properties\UIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\UIResources.pt-PT.resx" />
     <EmbeddedResource Include="Properties\UIResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.ru-RU.resx" />
-    <EmbeddedResource Include="Properties\UIResources.uk-UA.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>UIResources.uk-UA.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\UIResources.uk-UA.resx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
