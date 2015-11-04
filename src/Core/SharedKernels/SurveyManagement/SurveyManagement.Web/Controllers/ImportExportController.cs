@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -83,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                     try
                     {
-                        this.AsyncManager.Parameters["result"] = ServiceLocator.Current.GetInstance<IFilebasedExportedDataAccessor>().GetFilePathToExportedCompressedData(id, version, type);
+                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedCompressedData(id, version, type);
                     }
                     catch (Exception exc)
                     {

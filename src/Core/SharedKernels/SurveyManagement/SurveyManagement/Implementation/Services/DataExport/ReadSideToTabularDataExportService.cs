@@ -11,11 +11,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -47,29 +44,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IExportViewFactory exportViewFactory;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly IDataExportWriter dataExportWriter;
-        private readonly ITransactionManager transactionManager;
-
         public ReadSideToTabularFormatExportService(
-            ITransactionManagerProvider transactionManagerProvider,
+            ITransactionManagerProvider transactionManagerProvider, 
             IFileSystemAccessor fileSystemAccessor,
-            ICsvWriterFactory csvWriterFactory,
-            ISerializer serializer,
+            ICsvWriterFactory csvWriterFactory, 
+            ISerializer serializer, 
             InterviewDataExportSettings interviewDataExportSettings,
-            IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews, 
-            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
-            IExportViewFactory exportViewFactory, 
-            IDataExportWriter dataExportWriter, 
-            ITransactionManager transactionManager, 
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage)
+            IQueryableReadSideRepositoryReader<InterviewExportedDataRecord> interviewExportedDataStorage, 
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage, 
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage, 
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -78,12 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewActionsDataStorage = interviewActionsDataStorage;
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.interviews = interviews;
-            this.interviewDatas = interviewDatas;
-            this.exportViewFactory = exportViewFactory;
-            this.dataExportWriter = dataExportWriter;
-            this.transactionManager = transactionManager;
-            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.serializer = serializer;
 
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
@@ -91,83 +69,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         }
 
-        public async Task ExportInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public async Task ExportInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion,
+            string basePath)
         {
-            QuestionnaireDocumentVersioned questionnaire =
-              this.transactionManager.ExecuteInQueryTransaction(() =>
-                      this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
-
-            var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.Questionnaire, questionnaireVersion);
-
-            this.ExportInterviews(basePath, questionnaireExportStructure);
-
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
                 interviewComments =>
                     interviewComments.QuestionnaireId == questionnaireId.FormatGuid() &&
                     interviewComments.QuestionnaireVersion == questionnaireVersion;
+
 
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewComments =>
                     interviewComments.QuestionnaireId == questionnaireId &&
                     interviewComments.QuestionnaireVersion == questionnaireVersion;
 
-            await Task.WhenAll(
-                this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath),
-                this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath));
-        }
 
-        private void ExportInterviews(string basePath,
-            QuestionnaireExportStructure questionnaireExportStructure)
-        {
-            List<Guid> interviewIdsToExport =
-                this.transactionManager.ExecuteInQueryTransaction(() =>
-                    this.interviews.Query(
-                        _ =>
-                            _.Where(x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId && x.QuestionnaireVersion == questionnaireExportStructure.Version)
-                                .OrderBy(x => x.InterviewId)
-                                .Select(x => x.InterviewId).ToList()));
+            Expression<Func<InterviewExportedDataRecord, bool>> whereClauseForInterviews =
+                (i) => i.QuestionnaireId == questionnaireId && i.QuestionnaireVersion == questionnaireVersion;
 
-            foreach (var interviewId in interviewIdsToExport)
-            {
-                var interviewData = this.transactionManager.ExecuteInQueryTransaction(() => this.interviewDatas.GetById(interviewId));
-
-                InterviewDataExportView interviewExportStructure =
-                    this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure,
-                        interviewData,
-                        InterviewExportedAction.InterviewerAssigned); // todo check what should be passed here
-
-                this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-
-                InterviewExportedDataRecord exportedData = this.dataExportWriter.CreateInterviewExportedData(
-                    interviewExportStructure, questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
-
-                var result = new Dictionary<string, List<string[]>>();
-                Dictionary<string, string[]> deserializedExportedData =
-                    this.serializer.Deserialize<Dictionary<string, string[]>>(exportedData.Data);
-                foreach (var levelName in deserializedExportedData.Keys)
-                {
-                    foreach (var dataByLevel in deserializedExportedData[levelName])
-                    {
-                        if (!result.ContainsKey(levelName))
-                        {
-                            result.Add(levelName, new List<string[]>());
-                        }
-
-                        result[levelName].Add(dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile));
-                    }
-                }
-
-                foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
-                {
-                    var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath,
-                        this.CreateFormatDataFileName(level.LevelName));
-
-                    if (result.ContainsKey(level.LevelName))
-                    {
-                        this.WriteData(dataByTheLevelFilePath, result[level.LevelName]);
-                    }
-                }
-            }
+            await
+                ExportInterviewsInTabularFormatImplAsync(whereClauseForComments, whereClauseForAction,
+                    whereClauseForInterviews, questionnaireId, questionnaireVersion, basePath);
         }
 
         public async Task ExportApprovedInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath)
@@ -188,8 +110,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
 
             Expression<Func<InterviewExportedDataRecord, bool>> whereClauseForInterviews =
-                (interviewExportedDataRecord) =>
-                    interviewExportedDataRecord.QuestionnaireId == questionnaireId &&
+                (interviewExportedDataRecord) => 
+                    interviewExportedDataRecord.QuestionnaireId == questionnaireId && 
                     interviewExportedDataRecord.QuestionnaireVersion == questionnaireVersion &&
                     interviewExportedDataRecord.LastAction == InterviewExportedAction.ApprovedByHeadquarter;
 
@@ -246,7 +168,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         private async Task ExportCommentsInTabularFormatAsync(
             QuestionnaireExportStructure questionnaireExportStructure,
-            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
+            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments, 
             string basePath)
         {
             string commentsFilePath =
@@ -258,7 +180,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             bool hasAtLeastOneRoster =
                 questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
 
-            var commentsHeader = new List<string>() { "Order", "Originator", "Role", "Date", "Time", "Variable" };
+            var commentsHeader = new List<string>(){"Order", "Originator", "Role", "Date", "Time", "Variable"};
 
             if (hasAtLeastOneRoster)
                 commentsHeader.Add("Roster");
@@ -286,7 +208,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             var actionFilePath =
              fileSystemAccessor.CombinePath(basePath, this.CreateFormatDataFileName(interviewActionsFileName));
 
-            WriteData(actionFilePath, new[] { actionFileColumns });
+            WriteData(actionFilePath, new[] {actionFileColumns});
 
             foreach (var queryActionsChunk in this.GetTasksForQueryActionsByChunks(whereClauseForAction))
             {
@@ -301,9 +223,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
 
-            foreach (Task<Dictionary<string, List<string[]>>> queryInterviewsChunk in this.GetTasksForQueryInterviewsByChunks(whereClauseForInterviews))
+            foreach (var queryInterviewsChunk in this.GetTasksForQueryInterviewsByChunks(whereClauseForInterviews))
             {
-                Dictionary<string, List<string[]>> actionsRecords = await queryInterviewsChunk;
+                var actionsRecords = await queryInterviewsChunk;
 
                 foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
                 {
@@ -342,7 +264,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         interviewLevelHeader.Add(columnName);
                     }
                 }
-
+                
                 if (level.LevelScopeVector.Length == 0)
                 {
                     foreach (var systemVariable in ServiceColumns.SystemVariables)
@@ -392,12 +314,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             List<InterviewExportedDataRecord> interviewDatas = interviewExportedDataStorage.Query(
                 _ =>
-                    _.Where(whereClauseForInterviews).OrderBy(i => i.InterviewId).Skip(skip).Take(returnRecordLimit) // todo: read interview from InterviewData -> Interview
+                    _.Where(whereClauseForInterviews).OrderBy(i=>i.InterviewId).Skip(skip).Take(returnRecordLimit)
                         .ToList());
 
             var result = new Dictionary<string, List<string[]>>();
 
-            foreach (InterviewExportedDataRecord interviewExportedDataRecord in interviewDatas)
+            foreach (var interviewExportedDataRecord in interviewDatas)
             {
                 var data = this.serializer.Deserialize<Dictionary<string, string[]>>(interviewExportedDataRecord.Data);
                 foreach (var levelName in data.Keys)
@@ -420,7 +342,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                                 _.Where(queryComments)
                                     .SelectMany(
                                         interviewComments => interviewComments.Commentaries,
-                                        (interview, comment) => new { interview.InterviewId, Comments = comment })
+                                        (interview, comment) => new {interview.InterviewId, Comments = comment})
                                     .Select(
                                         i =>
                                             new
@@ -434,7 +356,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                                                 i.Comments.Roster,
                                                 i.Comments.RosterVector,
                                                 i.Comments.Comment
-                                            }).OrderBy(i => i.Timestamp).Skip(skip).Take(returnRecordLimit).ToList());
+                                            }).OrderBy(i=>i.Timestamp).Skip(skip).Take(returnRecordLimit).ToList());
 
             var result = new List<string[]>();
 
