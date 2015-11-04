@@ -10,6 +10,9 @@ using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -31,6 +34,28 @@ namespace WB.Tests.Integration
 {
     internal static class Create
     {
+        public static CodeGenerator CodeGenerator(
+        IMacrosSubstitutionService macrosSubstitutionService = null,
+        IExpressionProcessor expressionProcessor = null)
+        {
+            return new CodeGenerator(
+                macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+        }
+
+        public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        {
+            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
+            macrosSubstitutionServiceMock.Setup(
+                x => x.SubstituteMacroses(It.IsAny<string>(), It.IsAny<QuestionnaireDocument>()))
+                .Returns((string e, QuestionnaireDocument questionnaire) =>
+                {
+                    return e;
+                });
+
+            return macrosSubstitutionServiceMock.Object;
+        }
+
         public class Event
         {
             private static class Default
@@ -38,6 +63,7 @@ namespace WB.Tests.Integration
                 public static readonly Guid UserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAABBB");
                 public static readonly DateTime AnswerTime = new DateTime(2014, 1, 1);
             }
+
 
             public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(
                 Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
@@ -462,5 +488,7 @@ namespace WB.Tests.Integration
                 ParentValue = parentValue.HasValue ? parentValue.ToString() : null
             };
         }
+
+       
     }
 }

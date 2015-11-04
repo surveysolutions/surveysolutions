@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 
@@ -51,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     })
                 });
 
-            generator = CreateCodeGenerator();
+            generator = Create.CodeGenerator();
         };
 
         Because of = () =>
