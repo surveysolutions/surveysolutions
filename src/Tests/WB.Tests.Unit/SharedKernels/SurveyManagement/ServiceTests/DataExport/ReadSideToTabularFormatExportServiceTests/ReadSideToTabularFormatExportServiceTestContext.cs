@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -40,7 +41,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
                 interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure)
+                    It.IsAny<string>()) == questionnaireExportStructure),
+                new TestInMemoryWriter<InterviewSummary>(), 
+                new TestInMemoryWriter<InterviewData>(),
+                Mock.Of<IExportViewFactory>(),
+                Mock.Of<IDataExportWriter>(),
+                Mock.Of<ITransactionManager>(),
+                new TestInMemoryWriter<QuestionnaireDocumentVersioned>()
                 );
         }
 
