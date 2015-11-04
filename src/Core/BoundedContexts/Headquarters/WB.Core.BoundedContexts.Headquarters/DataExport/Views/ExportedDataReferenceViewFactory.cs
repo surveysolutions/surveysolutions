@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                             .ToArray());
 
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.TabularData, null, null),
                 CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
                 runningProcesses.Select(
                     p =>
@@ -41,12 +42,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         {
             ExportedDataReferencesView exportedDataReferencesView = null;
 
+
+            Expression<Func<DataExportProcessDto, bool>> query;
+            if (questionnaireId.HasValue && questionnaireVersion.HasValue)
+                query = (d) =>
+                    d.DataExportType == dataType && d.DataExportFormat == dataFormat &&
+                    d.QuestionnaireId == questionnaireId && d.QuestionnaireVersion == questionnaireVersion;
+            else
+                query = (d) => d.DataExportType == dataType && d.DataExportFormat == dataFormat;
+
             var latestDataProcess =
                 dataExportProcessDtoStorage.Query(
                     _ =>
-                        _.Where(
-                            d =>
-                                d.DataExportType == dataType && d.DataExportFormat == dataFormat && d.QuestionnaireId==questionnaireId && d.QuestionnaireVersion== questionnaireVersion)
+                        _.Where(query)
                             .OrderByDescending(x => x.LastUpdateDate)
                             .FirstOrDefault());
 
@@ -65,11 +73,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 var latestCompletedDataProcess =
                     dataExportProcessDtoStorage.Query(
                         _ =>
-                            _.Where(
-                                d =>
-                                    d.DataExportType == dataType && d.DataExportFormat == dataFormat && d.Status == DataExportStatus.Finished && d.QuestionnaireId == questionnaireId && d.QuestionnaireVersion == questionnaireVersion)
+                            _.Where(query).Where(d => d.Status == DataExportStatus.Finished)
                                 .OrderByDescending(x => x.LastUpdateDate)
                                 .FirstOrDefault());
+
                 if (latestCompletedDataProcess != null)
                 {
                     exportedDataReferencesView.LastUpdateDate = latestCompletedDataProcess.LastUpdateDate;
