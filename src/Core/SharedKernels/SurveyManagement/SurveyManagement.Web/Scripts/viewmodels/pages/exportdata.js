@@ -1,12 +1,14 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl, $updateTabularDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
     self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
+    self.UpdateTabularDataUrl = $updateTabularDataUrl;
     self.Templates = templates;
     self.ParadataReference = ko.observableArray();
+    self.TabularDataReference = ko.observableArray();
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
     self.exportTypes = $exportTypes;
@@ -41,8 +43,11 @@
     self.stopExportProcess = function (runningExport) {
         self.sendActionRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
     }
-    self.requestParaDataUpdate = function () {
+    self.requestParaDataUpdate = function() {
         self.sendActionRequest(self.HistoryUrl);
+    };
+    self.requestTabularDataUpdate = function () {
+        self.sendActionRequest(self.UpdateTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
     }
     self.sendActionRequest = function (url, args) {
         var requestHeaders = {};
@@ -90,14 +95,25 @@
     }
     self.showParaDataRefreshButton = function () {
         if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().CanRefreshBeRequested))
-            return false;
+            return true;
         return self.ParadataReference().CanRefreshBeRequested();
     }
 
-    self.paraDatExportProgress = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().ProgressInPercents))
-            return 100;
-        return self.ParadataReference().ProgressInPercents();
+    self.lastTabularDataUpdateDate = function () {
+        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().LastUpdateDate))
+            return "Never";
+        return self.TabularDataReference().LastUpdateDate();
+    }
+
+    self.showTabularDataDownloadButton = function () {
+        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().HasDataToExport))
+            return false;
+        return self.TabularDataReference().HasDataToExport();
+    }
+    self.showTabularDataRefreshButton = function () {
+        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().CanRefreshBeRequested))
+            return true;
+        return self.TabularDataReference().CanRefreshBeRequested();
     }
 
     self.exportFormatName = function (runningExport) {

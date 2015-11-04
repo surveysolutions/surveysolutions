@@ -139,7 +139,6 @@
     <Compile Include="EventHandler\EventHandlerUtils.cs" />
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
-    <Compile Include="EventHandler\InterviewExportedDataDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
     <Compile Include="Implementation\Services\DataExport\DatasetWriterFactory.cs" />
@@ -212,7 +211,6 @@
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositoryWriter.cs" />
     <Compile Include="Implementation\Services\DataExport\FileType.cs" />
     <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\DataExport\StataEnvironmentContentService.cs" />
@@ -256,7 +254,6 @@
     <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
-    <Compile Include="Services\IDataExportRepositoryWriter.cs" />
     <Compile Include="Services\IDataExportWriter.cs" />
     <Compile Include="Services\IEnvironmentContentService.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
