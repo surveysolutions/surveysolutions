@@ -30,7 +30,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public QuestionnaireExportStructureDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter,
-            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository, IEnvironmentContentService environmentContentService, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, IFileSystemAccessor fileSystemAccessor)
+            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IEnvironmentContentService environmentContentService, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.exportViewFactory = exportViewFactory;
