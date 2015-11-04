@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             interviewExportedDataStorage.Remove(interviewId);
         }
 
-        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
+        public InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
         {
             var interviewData = new Dictionary<string, string[]>();
             
