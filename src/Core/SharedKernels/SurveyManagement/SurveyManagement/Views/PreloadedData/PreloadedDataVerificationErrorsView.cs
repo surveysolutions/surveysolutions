@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 {
     public class PreloadedDataVerificationErrorsView
     {
-        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, PreloadedDataVerificationError[] errors, 
+        public PreloadedDataVerificationErrorsView(Guid questionnaireId, long version, string questionnaireTitle, PreloadedDataVerificationError[] errors, 
             bool wasSupervsorProvided,
             string id, PreloadedContentType preloadedContentType)
         {
@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
             this.Version = version;
             this.Errors = errors;
             this.WasSupervsorProvided = wasSupervsorProvided;
+            this.QuestionnaireTitle = questionnaireTitle;
         }
 
         public string Id { get; private set; }
@@ -28,5 +29,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
         public PreloadedContentType PreloadedContentType { get; private set; }
 
         public bool WasSupervsorProvided { get; set; }
+        public string QuestionnaireTitle { get; set; }
     }
 }

@@ -54,7 +54,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     options: null,
                     linkedToQuestionId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers
+                    maxAllowedAnswers: maxAllowedAnswers,
+                    yesNoView: yesNoView
                     ));
 
 
@@ -80,6 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static string validationMessage = "";
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static bool areAnswersOrdered = false;
-        private static int? maxAllowedAnswers = null;    
+        private static int? maxAllowedAnswers = null;
+        private static bool yesNoView = false;
     }
 }

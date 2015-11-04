@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     , options: options,
                     linkedToQuestionId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers
+                    maxAllowedAnswers: maxAllowedAnswers,
+                    yesNoView: yesNoView
                     ));
 
         It should_throw_QuestionnaireException = () =>
@@ -71,5 +72,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool areAnswersOrdered = false;
         private static int? maxAllowedAnswers = null;
+        private static bool yesNoView = false;
     }
 }

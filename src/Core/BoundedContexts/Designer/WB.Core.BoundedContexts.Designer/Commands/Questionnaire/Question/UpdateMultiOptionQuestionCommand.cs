@@ -22,7 +22,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Option[] options,
             Guid? linkedToQuestionId,
             bool areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers,
+            bool yesNoView)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
                 variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
@@ -38,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.LinkedToQuestionId = linkedToQuestionId;
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
+            this.YesNoView = yesNoView;
         }
 
         public QuestionScope Scope { get; set; }
@@ -51,6 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public Guid? LinkedToQuestionId { get; set; }
 
         public int? MaxAllowedAnswers { get; set; }
+
+        public bool YesNoView { get; set; }
 
         public Option[] Options { get; set; }
     }

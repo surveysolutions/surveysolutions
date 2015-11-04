@@ -557,7 +557,7 @@ namespace WB.Tests.Unit
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null)
+            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView=false)
         {
             return new MultyOptionsQuestion
             {
@@ -565,7 +565,8 @@ namespace WB.Tests.Unit
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                YesNoView = yesNoView
             };
         }
 

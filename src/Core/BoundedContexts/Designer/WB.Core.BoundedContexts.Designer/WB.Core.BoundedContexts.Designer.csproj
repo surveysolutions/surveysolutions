@@ -145,7 +145,6 @@
     <Compile Include="Commands\Account\ResetPasswordAccountCommand.cs" />
     <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
-    <Compile Include="Commands\Account\ValidateAccountCommand.cs" />
     <Compile Include="Commands\CommandUtils.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
