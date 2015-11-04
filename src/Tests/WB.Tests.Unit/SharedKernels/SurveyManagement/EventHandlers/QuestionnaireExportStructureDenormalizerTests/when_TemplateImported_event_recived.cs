@@ -34,19 +34,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         {
             questionnaireId = Guid.NewGuid();
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
-            questionnaireExportStructureMock = new Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>>();
+            questionnaireExportStructureMock = new TestInMemoryWriter<QuestionnaireExportStructure>();
             exportViewFactory = new Mock<IExportViewFactory>();
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IEnvironmentContentService>(), Mock.Of<IFilebasedExportedDataAccessor>(), Mock.Of<IFileSystemAccessor>());
+                questionnaireExportStructureMock, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IEnvironmentContentService>(), Mock.Of<IFilebasedExportedDataAccessor>(), Mock.Of<IFileSystemAccessor>());
         };
 
         Because of = () =>
           questionnaireExportStructureDenormalizer.Handle(CreatePublishableEvent());
 
         It should_QuestionnaireExportStructure_be_stored_readside = () =>
-            questionnaireExportStructureMock.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireExportStructure>(), questionnaireId.FormatGuid() + "$" + QuestionnaireVersion.ToString()),
-                Times.Once());
+            questionnaireExportStructureMock.AsVersioned().Get(questionnaireId.FormatGuid(), QuestionnaireVersion).ShouldNotBeNull();
 
         It should_QuestionnaireExportStructure_be_created_by_IExportViewFactory = () =>
             exportViewFactory.Verify(x => x.CreateQuestionnaireExportStructure(questionnaireDocument, QuestionnaireVersion),
@@ -62,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         }
 
         private static QuestionnaireExportStructureDenormalizer questionnaireExportStructureDenormalizer;
-        private static Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>> questionnaireExportStructureMock;
+        private static IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureMock;
         private static Mock<IExportViewFactory> exportViewFactory;
         private static Guid questionnaireId;
         private const int QuestionnaireVersion = 2;

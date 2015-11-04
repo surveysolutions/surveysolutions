@@ -9,10 +9,12 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.Synchronization.MetaInfo;
 
@@ -90,7 +92,8 @@ namespace WB.Tests.Integration.EventHandler
             typeof (IPlainQuestionnaireRepository), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
             typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
-            typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings)
+            typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
+            typeof(IFileSystemAccessor), typeof(IFilebasedExportedDataAccessor), typeof(IEnvironmentContentService)
         };
       
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)
