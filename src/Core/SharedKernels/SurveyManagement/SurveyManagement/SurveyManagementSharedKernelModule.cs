@@ -99,7 +99,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
-            this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
@@ -153,7 +152,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             if (hqEnabled)
             {
-                this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
             this.Bind<IBrokenSyncPackagesStorage>()

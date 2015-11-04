@@ -7,15 +7,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version, Guid interviewId);
         string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version);
         string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version);
-        string GetFilePathToExportedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType);
         string GetFilePathToExportedApprovedCompressedData(Guid questionnaireId, long version, ExportDataType exportDataType);
         string GetFilePathToExportedBinaryData(Guid questionnaireId, long version);
         string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version);
-        string CreateExportDataFolder(Guid questionnaireId, long version);
         string CreateExportFileFolder(Guid questionnaireId, long version);
-        void CleanExportDataFolder();
         void CleanExportFileFolder();
-        void DeleteAllDataFolder(Guid questionnaireId, long version);
         void DeleteApprovedDataFolder(Guid questionnaireId, long version);
+
+
+        string GetFolderPathToExportedTabularData(Guid questionnaireId, long version);
+        void CleanExportedTabularDataFolder(Guid questionnaireId, long version);
+        void CreateArchiveOfExportedTabularData(Guid questionnaireId, long version);
+        string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version);
     }
 }

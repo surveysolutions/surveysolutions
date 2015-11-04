@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -25,7 +26,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainTransactionManager plainTransactionManager;
-
+        private readonly ITabularFormatExportService tabularFormatExportService;
+        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
 
         private readonly IDataExportQueue dataExportQueue;
@@ -39,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             IDataExportQueue dataExportQueue,
             IPlainTransactionManager plainTransactionManager, 
             IParaDataAccessor paraDataAccessor, 
-            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage)
+            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage, ITabularFormatExportService tabularFormatExportService, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -51,6 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             this.plainTransactionManager = plainTransactionManager;
             this.paraDataAccessor = paraDataAccessor;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
+            this.tabularFormatExportService = tabularFormatExportService;
+            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
         public IDataExportService CreateQuestionnaireDataExportService(DataExportFormat dataExportFormat)
@@ -58,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             if (dataExportFormat == DataExportFormat.TabularData)
                 return new TabularFormatDataExportService(eventStore, interviewSummaryReader, userReader,
                     questionnaireReader, interviewDataExportSettings, transactionManagerProvider, dataExportQueue,
-                    plainTransactionManager, this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage);
+                    plainTransactionManager, this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage, filebasedExportedDataAccessor, tabularFormatExportService);
 
             throw new NotSupportedException();
         }

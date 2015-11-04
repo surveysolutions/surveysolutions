@@ -28,8 +28,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
-        private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
-        private readonly ITransactionManagerProvider transactionManagerProvider;
 
         public InterviewController(
             ICommandService commandService, 
@@ -39,9 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
-            IInterviewDetailsViewFactory interviewDetailsViewFactory, 
-            IDataExportRepositoryWriter dataExportRepositoryWriter, 
-            ITransactionManagerProvider transactionManagerProvider)
+            IInterviewDetailsViewFactory interviewDetailsViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
@@ -49,8 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
-            this.dataExportRepositoryWriter = dataExportRepositoryWriter;
-            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         private decimal[] ParseRosterVector(string rosterVectorAsString)
@@ -150,32 +144,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.TempData["Revalidation.Error"] = "Revalidation was unsuccessful.";
                 this.TempData["Revalidation.ErrorDetails"] = exception.Message;
             }
-            var inputModel = new InterviewTroubleshootInputModel { InterviewId = input.InterviewId };
-
-            var newModel = this.troubleshootInterviewViewFactory.Load(inputModel);
-
-            return this.View("Troubleshooting", newModel);
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        [HttpPost]
-        [ObserverNotAllowed]
-        public ActionResult Reexport(TroubleshootModel input)
-        {
-            try
-            {
-                this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                this.dataExportRepositoryWriter.AddOrUpdateExportedDataByInterviewWithAction(input.InterviewId, InterviewExportedAction.ApprovedByHeadquarter);
-                this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
-            }
-            catch (Exception exception)
-            {
-                Logger.Error(exception.Message, exception);
-                this.TempData["Reexport.Error"] = "Re-export was unsuccessful.";
-                this.TempData["Reexport.ErrorDetails"] = exception.Message;
-                this.transactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-            }
-            
             var inputModel = new InterviewTroubleshootInputModel { InterviewId = input.InterviewId };
 
             var newModel = this.troubleshootInterviewViewFactory.Load(inputModel);
