@@ -34,8 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IDataExportQueue dataExportQueue;
         private readonly IParaDataAccessor paraDataAccessor;
-
-        private readonly ITabularFormatExportService tabularFormatExportService;
+        
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly string interviewParaDataEventHandlerName=typeof(InterviewParaDataEventHandler).Name;
 
@@ -55,8 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IPlainTransactionManager plainTransactionManager,
             IParaDataAccessor paraDataAccessor, 
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage, 
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            ITabularFormatExportService tabularFormatExportService)
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -69,27 +67,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.paraDataAccessor = paraDataAccessor;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.tabularFormatExportService = tabularFormatExportService;
         }
 
         public void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
         {
-            filebasedExportedDataAccessor.CleanExportedTabularDataFolder(questionnaireId,
-                questionnaireVersion);
-
-            var pathToExportFolder = filebasedExportedDataAccessor.GetFolderPathToExportedTabularData(questionnaireId,
-                questionnaireVersion);
-
             TransactionManager.ExecuteInQueryTransaction(
                 () =>
                 {
-                    tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId,
-                        questionnaireVersion,
-                        pathToExportFolder).WaitAndUnwrapException();
+                    filebasedExportedDataAccessor.ReexportTabularDataFolder(questionnaireId,
+                        questionnaireVersion);
                 });
-
-            filebasedExportedDataAccessor.CreateArchiveOfExportedTabularData(questionnaireId,
-                questionnaireVersion);
         }
 
         public void ExportParaData(string dataExportProcessId)

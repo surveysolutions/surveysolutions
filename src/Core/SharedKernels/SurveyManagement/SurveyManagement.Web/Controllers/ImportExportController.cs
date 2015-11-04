@@ -70,40 +70,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetApprovedDataAsync(Guid id, long version, ExportDataType type = ExportDataType.Tab)
-        {
-            if (id == Guid.Empty)
-            {
-                throw new HttpException(404, "Invalid query string parameters");
-            }
-            AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager,
-                () =>
-                {
-                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                    try
-                    {
-                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedApprovedCompressedData(id, version, type);
-                    }
-                    catch (Exception exc)
-                    {
-                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
-                        this.AsyncManager.Parameters["result"] = null;
-                    }
-                    finally
-                    {
-                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    }
-                });
-        }
-
-        public ActionResult GetApprovedDataCompleted(string result)
-        {
-            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
-        }
-
-
-        [Authorize(Roles = "Administrator, Headquarter")]
         public void GetFilesAsync(Guid id, long version)
         {
             AsyncQuestionnaireUpdater.Update(
