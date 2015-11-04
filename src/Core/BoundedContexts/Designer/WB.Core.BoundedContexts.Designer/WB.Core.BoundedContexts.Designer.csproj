@@ -244,7 +244,9 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
+    <Compile Include="Services\IMacrosSubstitutionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
+    <Compile Include="Implementation\Services\MacrosSubstitutionService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />

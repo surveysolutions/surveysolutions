@@ -14,6 +14,9 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
+
+using Microsoft.Practices.ServiceLocation;
+
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
@@ -1206,6 +1209,28 @@ namespace WB.Tests.Unit
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
                 Create.SubstitutionService(),
                 Create.KeywordsProvider());
+        }
+
+        public static  CodeGenerator CodeGenerator(
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            IExpressionProcessor expressionProcessor = null)
+        {
+            return new CodeGenerator(
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+        }
+
+        public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        {
+            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
+            macrosSubstitutionServiceMock.Setup(
+                x => x.SubstituteMacroses(It.IsAny<string>(), It.IsAny<QuestionnaireDocument>()))
+                .Returns((string e, QuestionnaireDocument questionnaire) =>
+                {
+                    return e;
+                });
+
+            return macrosSubstitutionServiceMock.Object;
         }
 
         public static KeywordsProvider KeywordsProvider()
