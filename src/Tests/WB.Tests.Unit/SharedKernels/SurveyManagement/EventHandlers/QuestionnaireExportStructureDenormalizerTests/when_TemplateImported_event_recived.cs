@@ -36,6 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
             questionnaireExportStructureMock = new TestInMemoryWriter<QuestionnaireExportStructure>();
             exportViewFactory = new Mock<IExportViewFactory>();
+            exportViewFactory.Setup(
+                x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()))
+                .Returns(new QuestionnaireExportStructure());
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
                 questionnaireExportStructureMock, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IEnvironmentContentService>(), Mock.Of<IFilebasedExportedDataAccessor>(), Mock.Of<IFileSystemAccessor>());
