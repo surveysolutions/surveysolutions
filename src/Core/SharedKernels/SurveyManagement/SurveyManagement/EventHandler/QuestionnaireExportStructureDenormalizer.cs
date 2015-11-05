@@ -23,24 +23,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IExportViewFactory exportViewFactory;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        private readonly IEnvironmentContentService environmentContentService;
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-
-        private readonly IFileSystemAccessor fileSystemAccessor;
-
         public QuestionnaireExportStructureDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter,
-            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IEnvironmentContentService environmentContentService, 
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IFileSystemAccessor fileSystemAccessor)
+            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.exportViewFactory = exportViewFactory;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.environmentContentService = environmentContentService;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public override object[] Writers
@@ -69,49 +58,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
             this.readsideRepositoryWriter.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
-            DeleteExportedDataForQuestionnaireVersion(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion);
         }
 
         private void StoreExportStructure(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, version);
-            CreateExportStructureByTemplate(questionnaireExportStructure);
             this.readsideRepositoryWriter.AsVersioned().Store(questionnaireExportStructure, id.FormatGuid(), version);
-        }
-
-
-        public void CreateExportStructureByTemplate(QuestionnaireExportStructure questionnaireExportStructure)
-        {
-            var dataFolderForTemplatePath =
-              this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireExportStructure.QuestionnaireId,
-                  questionnaireExportStructure.Version);
-
-            if (this.fileSystemAccessor.IsDirectoryExists(dataFolderForTemplatePath))
-            {
-                this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
-            }
-
-            this.fileSystemAccessor.CreateDirectory(dataFolderForTemplatePath);
-            foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
-            {
-                this.environmentContentService.CreateContentOfAdditionalFile(headerStructureForLevel,
-                    ExportFileSettings.GetContentFileName(headerStructureForLevel.LevelName), dataFolderForTemplatePath);
-            }
-        }
-
-        public void DeleteExportedDataForQuestionnaireVersion(Guid questionnaireId, long questionnaireVersion)
-        {
-            var dataFolderForTemplatePath =
-                this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                    questionnaireVersion);
-
-            this.fileSystemAccessor.DeleteDirectory(dataFolderForTemplatePath);
-
-            var filesFolderForTemplatePath =
-                this.filebasedExportedDataAccessor.GetFolderPathOfFilesByQuestionnaire(questionnaireId,
-                    questionnaireVersion);
-
-            this.fileSystemAccessor.DeleteDirectory(filesFolderForTemplatePath);
         }
     }
 }

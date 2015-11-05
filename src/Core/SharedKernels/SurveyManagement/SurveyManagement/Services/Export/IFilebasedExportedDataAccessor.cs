@@ -11,10 +11,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
         string CreateExportFileFolder(Guid questionnaireId, long version);
         void CleanExportFileFolder();
 
-        
-        void ReexportTabularDataFolder(Guid questionnaireId, long version);
-        void ReexportApprovedTabularDataFolder(Guid questionnaireId, long questionnaireVersion);
-
         string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version);
         string GetArchiveFilePathForExportedApprovedTabularData(Guid questionnaireId, long version);
 
