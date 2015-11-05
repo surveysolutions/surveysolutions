@@ -20,10 +20,11 @@ namespace WB.UI.Headquarters.API
 {
     public class DataExportApiController : ApiController
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-        private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
         private readonly IParaDataAccessor paraDataAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
         private readonly IDataExportQueue dataExportQueue;
 
         public DataExportApiController( 

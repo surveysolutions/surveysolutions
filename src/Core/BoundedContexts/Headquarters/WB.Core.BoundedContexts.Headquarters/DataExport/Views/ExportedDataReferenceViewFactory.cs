@@ -1,85 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class ExportedDataReferenceViewFactory :
         IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel>
     {
-        private readonly IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage;
+        private readonly IDataExportQueue dataExportQueue;
 
-        public ExportedDataReferenceViewFactory(IPlainStorageAccessor<DataExportProcessDto> dataExportProcessDtoStorage)
+        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        private readonly IParaDataAccessor paraDataAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        public ExportedDataReferenceViewFactory(
+            IDataExportQueue dataExportQueue, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
+            IParaDataAccessor paraDataAccessor, 
+            IFileSystemAccessor fileSystemAccessor)
         {
-            this.dataExportProcessDtoStorage = dataExportProcessDtoStorage;
+            this.dataExportQueue = dataExportQueue;
+            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.paraDataAccessor = paraDataAccessor;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public ExportedDataReferencesViewModel Load(ExportedDataReferenceInputModel input)
         {
-            var runningProcesses =
-                dataExportProcessDtoStorage.Query(
-                    _ =>
-                        _.Where(d => d.Status == DataExportStatus.Queued || d.Status == DataExportStatus.Running)
-                            .ToArray());
+            var runningProcesses = dataExportQueue.GetRunningProcess();
 
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.TabularData, null, null),
+                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
                 CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
                 runningProcesses.Select(
                     p =>
                         new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate, "test",
-                            p.QuestionnaireVersion, p.ProgressInPercents, p.DataExportType, p.DataExportFormat))
+                            1, p.ProgressInPercents, CreateDataExportType(p), p.DataExportFormat))
                     .ToArray());
         }
 
+        private DataExportType CreateDataExportType(IQueuedProcess exportProcess)
+        {
+            if (exportProcess is ParaDataQueuedProcess)
+                return DataExportType.ParaData;
+            return DataExportType.Data;
+        }
 
-        private ExportedDataReferencesView CreateExportedDataReferencesView(DataExportType dataType, DataExportFormat dataFormat, Guid? questionnaireId, long? questionnaireVersion)
+        private ExportedDataReferencesView CreateExportedDataReferencesView(DataExportType dataType,
+            DataExportFormat dataFormat, Guid questionnaireId, long questionnaireVersion)
         {
             ExportedDataReferencesView exportedDataReferencesView = null;
 
-
-            Expression<Func<DataExportProcessDto, bool>> query;
-            if (questionnaireId.HasValue && questionnaireVersion.HasValue)
-                query = (d) =>
-                    d.DataExportType == dataType && d.DataExportFormat == dataFormat &&
-                    d.QuestionnaireId == questionnaireId && d.QuestionnaireVersion == questionnaireVersion;
-            else
-                query = (d) => d.DataExportType == dataType && d.DataExportFormat == dataFormat;
-
-            var latestDataProcess =
-                dataExportProcessDtoStorage.Query(
-                    _ =>
-                        _.Where(query)
-                            .OrderByDescending(x => x.LastUpdateDate)
-                            .FirstOrDefault());
-
-            if (latestDataProcess
-                != null)
+            exportedDataReferencesView = new ExportedDataReferencesView()
             {
-                exportedDataReferencesView = new ExportedDataReferencesView()
-                {
-                    DataExportFormat = latestDataProcess.DataExportFormat,
-                    ProgressInPercents = latestDataProcess.ProgressInPercents,
-                    StatusOfLatestExportprocess = latestDataProcess.Status,
-                    CanRefreshBeRequested =
-                        latestDataProcess.Status != DataExportStatus.Running
-                };
+                DataExportFormat = dataFormat,
+                CanRefreshBeRequested = true//latestDataProcess.Status != DataExportStatus.Running
+            };
 
-                var latestCompletedDataProcess =
-                    dataExportProcessDtoStorage.Query(
-                        _ =>
-                            _.Where(query).Where(d => d.Status == DataExportStatus.Finished)
-                                .OrderByDescending(x => x.LastUpdateDate)
-                                .FirstOrDefault());
-
-                if (latestCompletedDataProcess != null)
+            if (dataType == DataExportType.ParaData)
+            {
+                var path = this.paraDataAccessor.GetPathToParaDataByQuestionnaire(questionnaireId, questionnaireVersion);
+                if (fileSystemAccessor.IsFileExists(path))
                 {
-                    exportedDataReferencesView.LastUpdateDate = latestCompletedDataProcess.LastUpdateDate;
+                    exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;
+                    exportedDataReferencesView.HasDataToExport = true;
+                }
+            }
+            if (dataType == DataExportType.Data)
+            {
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(questionnaireId,
+                    questionnaireVersion);
+                if (fileSystemAccessor.IsFileExists(path))
+                {
+                    exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;
                     exportedDataReferencesView.HasDataToExport = true;
                 }
             }

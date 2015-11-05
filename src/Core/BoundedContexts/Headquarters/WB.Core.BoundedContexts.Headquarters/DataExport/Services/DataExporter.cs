@@ -65,22 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                     try
                     {
-                        switch (dataExportProcess.DataExportType)
-                        {
-                            case DataExportType.Data:
-                                if (dataExportProcess.QuestionnaireId.HasValue &&
-                                    dataExportProcess.QuestionnaireVersion.HasValue)
-                                    questionnaireDataExportService.ExportData(dataExportProcess.QuestionnaireId.Value,
-                                        dataExportProcess.QuestionnaireVersion.Value,
-                                        dataExportProcess.DataExportProcessId);
-                                else
-                                    throw new ArgumentException(
-                                        "QuestionnaireId and QuestionnaireVersion can't be empty for data export");
-                                break;
-                            case DataExportType.ParaData:
-                                questionnaireDataExportService.ExportParaData(dataExportProcess.DataExportProcessId);
-                                break;
-                        }
+                        questionnaireDataExportService.ExportData(dataExportProcess);
 
                         this.plainTransactionManager.ExecuteInPlainTransaction(
                             () => this.dataExportQueue.FinishDataExportProcess(dataExportProcessId));

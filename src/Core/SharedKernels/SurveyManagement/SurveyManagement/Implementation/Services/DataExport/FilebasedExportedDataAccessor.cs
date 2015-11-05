@@ -193,8 +193,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version)
         {
             var directoryWithExportedDataPath = GetAllDataFolder(questionnaireId, version);
-            var archiveName = string.Format("{0}_{1}_{2}.zip",
-                this.fileSystemAccessor.GetFileName(directoryWithExportedDataPath), ExportDataType.Tab, "App");
+
+            var archiveName = string.Format("{0}_{1}_{2}_{3}_{4}.zip",
+              this.fileSystemAccessor.GetFileName(directoryWithExportedDataPath), questionnaireId, version,
+              ExportDataType.Tab, "All");
 
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
         }
@@ -202,8 +204,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public string GetArchiveFilePathForExportedApprovedTabularData(Guid questionnaireId, long version)
         {
             var directoryWithExportedDataPath = this.GetApprovedDataFolder(questionnaireId, version);
-            var archiveName = string.Format("{0}_{1}_{2}.zip",
-                this.fileSystemAccessor.GetFileName(directoryWithExportedDataPath), ExportDataType.Tab, "App");
+            var archiveName = string.Format("{0}_{1}_{2}_{3}_{4}.zip",
+                this.fileSystemAccessor.GetFileName(directoryWithExportedDataPath), questionnaireId, version,
+                ExportDataType.Tab, "App");
 
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
         }
