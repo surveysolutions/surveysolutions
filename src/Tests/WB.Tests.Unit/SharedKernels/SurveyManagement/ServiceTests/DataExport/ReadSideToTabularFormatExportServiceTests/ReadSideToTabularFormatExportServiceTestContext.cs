@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -31,6 +33,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
              QuestionnaireExportStructure questionnaireExportStructure = null,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
         {
+            var readSideKeyValueStorage = new TestInMemoryWriter<QuestionnaireDocumentVersioned>();
+
+            if (questionnaireExportStructure != null)
+            {
+                QuestionnaireDocumentVersioned questionnaireDocumentVersioned =
+                    Create.QuestionnaireDocumentVersioned(Create.QuestionnaireDocument(questionnaireExportStructure.QuestionnaireId), questionnaireExportStructure.Version);
+                readSideKeyValueStorage.Store(questionnaireDocumentVersioned, string.Format("{0}${1}", questionnaireExportStructure.QuestionnaireId.FormatGuid(), questionnaireExportStructure.Version));
+            }
             return new ReadSideToTabularFormatExportService(
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
@@ -43,10 +53,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                     It.IsAny<string>()) == questionnaireExportStructure),
                 new TestInMemoryWriter<InterviewSummary>(), 
                 new TestInMemoryWriter<InterviewData>(),
-                Mock.Of<IExportViewFactory>(),
+                Mock.Of<IExportViewFactory>(x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
                 Mock.Of<IDataExportWriter>(),
                 Mock.Of<ITransactionManager>(),
-                new TestInMemoryWriter<QuestionnaireDocumentVersioned>()
+                readSideKeyValueStorage
                 );
         }
 
