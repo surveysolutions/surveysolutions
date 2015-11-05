@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var allDataProcess = process as AllDataQueuedProcess;
             if (allDataProcess != null)
             {
-                ExportData(allDataProcess.QuestionnaireId, allDataProcess.QuestionnaireVersion,
+                ExportAllData(allDataProcess.QuestionnaireId, allDataProcess.QuestionnaireVersion,
                     process.DataExportProcessId);
                 return;
             }
@@ -107,53 +107,56 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private void ExportApprovedData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
         {
-            var dataFolder =
-                this.fileSystemAccessor.CombinePath(
-                    filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                        questionnaireVersion), approvedDataFolder);
+            var folderForDataExport =
+              this.fileSystemAccessor.CombinePath(
+                  filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                      questionnaireVersion), approvedDataFolder);
 
-            ClearFolder(dataFolder);
+            var archiveFilePath = filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(
+                questionnaireId,
+                questionnaireVersion);
 
-            TransactionManager.ExecuteInQueryTransaction(
-                () =>
-                {
-                    tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId,
-                        questionnaireVersion, dataFolder)
-                        .WaitAndUnwrapException();
-
-                    environmentContentService.CreateEnvironmentFiles(
-                        questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion),
-                        dataFolder);
-                });
-            CreateArchiveOfExportedTabularData(dataFolder,
-                filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(questionnaireId,
-                    questionnaireVersion));
+            CreateExportedDataArchive(folderForDataExport, archiveFilePath, questionnaireId, questionnaireVersion,
+                p => tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId,
+                    questionnaireVersion, p)
+                    .WaitAndUnwrapException());
         }
 
-        private void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
+        private void ExportAllData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
         {
-            var dataFolder =
+            var folderForDataExport =
               this.fileSystemAccessor.CombinePath(
                   filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
                       questionnaireVersion), allDataFolder);
 
-            ClearFolder(dataFolder);
+            var archiveFilePath = filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(
+                questionnaireId,
+                questionnaireVersion);
+
+            CreateExportedDataArchive(folderForDataExport, archiveFilePath, questionnaireId, questionnaireVersion,
+                p => tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId,
+                    questionnaireVersion, p)
+                    .WaitAndUnwrapException());
+        }
+
+        private void CreateExportedDataArchive(string folderForDataExport, string archiveFilePath, Guid questionnaireId, long questionnaireVersion, Action<string> exportDataIntoFolder)
+        {
+            ClearFolder(folderForDataExport);
 
             TransactionManager.ExecuteInQueryTransaction(
                 () =>
                 {
-                    tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId,
-                        questionnaireVersion, dataFolder)
-                        .WaitAndUnwrapException();
+                    exportDataIntoFolder(folderForDataExport);
 
                     environmentContentService.CreateEnvironmentFiles(
                       questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion),
-                      dataFolder);
+                      folderForDataExport);
                 });
 
-            CreateArchiveOfExportedTabularData(dataFolder,
-                filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(questionnaireId,
-                    questionnaireVersion));
+            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+
+            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath);
         }
 
         private void ExportParaData(string dataExportProcessId)
@@ -238,13 +241,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 TransactionManager.RollbackCommandTransaction();
                 throw;
             }
-        }
-
-        private void CreateArchiveOfExportedTabularData(string directoryWithExportedData, string archiveFilePath)
-        {
-            if (fileSystemAccessor.IsFileExists(archiveFilePath))
-                fileSystemAccessor.DeleteFile(archiveFilePath);
-            archiveUtils.ZipDirectory(directoryWithExportedData, archiveFilePath);
         }
 
         private void ClearFolder(string folderName)
