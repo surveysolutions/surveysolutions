@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
                result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
-                CreateInterviewDataWith2PropagatedLevels(), InterviewExportedAction.Completed);
+                CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterId, nestedRosterId }).Records.Length.ShouldEqual(4);

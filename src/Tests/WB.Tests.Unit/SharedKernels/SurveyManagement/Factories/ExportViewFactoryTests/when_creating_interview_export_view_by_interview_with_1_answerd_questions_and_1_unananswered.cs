@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1),
-                CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)), InterviewExportedAction.Completed);
+                CreateInterviewWithAnswers(variableNameAndQuestionId.Values.Take(1)));
 
         It should_records_count_equals_1 = () =>
             result.Levels[0].Records.Length.ShouldEqual(1);
