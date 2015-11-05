@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -11,7 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         string EnQueueParaDataExportProcess(DataExportFormat exportFormat);
 
-        DataExportProcessDto GetDataExportProcess(string processId);
+        IQueuedProcess GetDataExportProcess(string processId);
+        IQueuedProcess[] GetRunningProcess();
 
         void FinishDataExportProcess(string processId);
 
