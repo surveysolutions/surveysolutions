@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportQueue
     {
-        string DeQueueDataExportProcessId();
+        IQueuedProcess DeQueueDataExportProcess();
 
         string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
