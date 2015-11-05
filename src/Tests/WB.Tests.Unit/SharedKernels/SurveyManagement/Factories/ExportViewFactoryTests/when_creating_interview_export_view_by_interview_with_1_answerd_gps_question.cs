@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1),
-                interviewData, InterviewExportedAction.Completed);
+                interviewData);
 
         It should_create_record__with_one_gps_question_which_contains_composite_answer = () =>
           result.Levels[0].Records[0].Questions[0].Answers.ShouldEqual(new[] { "1", "2", "3", "4", new DateTime(1984,4,18).ToString()  });
