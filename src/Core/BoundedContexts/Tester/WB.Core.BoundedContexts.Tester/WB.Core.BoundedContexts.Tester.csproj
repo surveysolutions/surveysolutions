@@ -41,26 +41,6 @@
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
-    <Compile Include="Properties\TesterUIResources.es-ES.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TesterUIResources.es-ES.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\TesterUIResources.fr-FR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TesterUIResources.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\TesterUIResources.pt-PT.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TesterUIResources.pt-PT.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\TesterUIResources.ru-RU.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TesterUIResources.ru-RU.resx</DependentUpon>
-    </Compile>
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,27 +158,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\TesterUIResources.es-ES.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TesterUIResources.es-ES.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.fr-FR.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TesterUIResources.fr-FR.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.pt-PT.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TesterUIResources.pt-PT.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.es-ES.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.pt-PT.resx" />
     <EmbeddedResource Include="Properties\TesterUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>TesterUIResources.ru-RU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
