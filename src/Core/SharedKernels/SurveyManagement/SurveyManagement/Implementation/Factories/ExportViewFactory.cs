@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return result;
         }
 
-        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview, InterviewExportedAction action)
+        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview)
         {
             return new InterviewDataExportView(interview.InterviewId, interview.QuestionnaireId,
                 interview.QuestionnaireVersion,
@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
                             exportStructureForLevel.LevelName,
                             this.BuildRecordsForHeader(interview, exportStructureForLevel),
-                            interview.InterviewId.FormatGuid())).ToArray(), action);
+                            interview.InterviewId.FormatGuid())).ToArray());
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)

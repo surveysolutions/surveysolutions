@@ -1,6 +1,5 @@
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
@@ -17,7 +16,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Data);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
-            Property(x => x.LastAction);
         }
     }
 }

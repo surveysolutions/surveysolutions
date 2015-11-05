@@ -1772,7 +1772,7 @@ namespace WB.Tests.Unit
             params InterviewDataExportLevelView[] levels)
         {
             return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion, levels, InterviewExportedAction.Completed);
+                questionnaireVersion, levels);
         }
 
         public static InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)

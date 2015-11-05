@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
              result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie,1),
-                interview, InterviewExportedAction.Completed);
+                interview);
 
         It should_linked_question_have_one_answer = () =>
            GetLevel(result, new[] { rosterId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
