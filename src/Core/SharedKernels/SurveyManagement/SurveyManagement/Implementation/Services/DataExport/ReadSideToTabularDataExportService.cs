@@ -127,6 +127,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                                 .OrderBy(x => x.InterviewId)
                                 .Select(x => x.InterviewId).ToList()));
 
+            this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
+
             foreach (var interviewId in interviewIdsToExport)
             {
                 var interviewData = this.transactionManager.ExecuteInQueryTransaction(() => this.interviewDatas.GetById(interviewId));
@@ -136,7 +138,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         interviewData,
                         InterviewExportedAction.InterviewerAssigned); // todo check what should be passed here
 
-                this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
 
                 InterviewExportedDataRecord exportedData = this.dataExportWriter.CreateInterviewExportedData(
                     interviewExportStructure, questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
