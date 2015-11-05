@@ -99,8 +99,9 @@ namespace WB.UI.Headquarters.API
             {
                 this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.TabularData);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
             
             return Request.CreateResponse(true);
@@ -114,8 +115,9 @@ namespace WB.UI.Headquarters.API
                 this.dataExportQueue.EnQueueDataExportProcess(questionnaireId, questionnaireVersion,
                     DataExportFormat.TabularData);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
 
             return Request.CreateResponse(true);
@@ -129,8 +131,9 @@ namespace WB.UI.Headquarters.API
                 this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion,
                     DataExportFormat.TabularData);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
 
             return Request.CreateResponse(true);

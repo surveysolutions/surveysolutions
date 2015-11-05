@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
             questionnaireExportStructureMock = new Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>>();
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>(), Mock.Of<IEnvironmentContentService>(), Mock.Of<IFilebasedExportedDataAccessor>(), Mock.Of<IFileSystemAccessor>());
+                questionnaireExportStructureMock.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>());
         };
 
         Because of = () =>
