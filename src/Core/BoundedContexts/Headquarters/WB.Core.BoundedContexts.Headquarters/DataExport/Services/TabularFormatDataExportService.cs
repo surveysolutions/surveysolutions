@@ -78,6 +78,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 ExportParaData(process.DataExportProcessId);
                 return;
             }
+            var approvedDataProcess = process as ApprovedDataQueuedProcess;
+            if (approvedDataProcess != null)
+            {
+                ExportApprovedData(approvedDataProcess.QuestionnaireId, approvedDataProcess.QuestionnaireVersion,
+                    process.DataExportProcessId);
+                return;
+            }
             var allDataProcess = process as AllDataQueuedProcess;
             if (allDataProcess != null)
             {
@@ -85,6 +92,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     process.DataExportProcessId);
                 return;
             }
+        }
+
+        private void ExportApprovedData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
+        {
+            TransactionManager.ExecuteInQueryTransaction(
+                () =>
+                {
+                    filebasedExportedDataAccessor.ReexportApprovedTabularDataFolder(questionnaireId,
+                        questionnaireVersion);
+                });
         }
 
         private void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
