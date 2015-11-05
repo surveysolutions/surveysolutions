@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.Logger = logger;
         }
 
-        public string DeQueueDataExportProcessId()
+        public IQueuedProcess DeQueueDataExportProcess()
         {
             var exportProcess = dataExportProcessDtoStorage.Values.Where(p => p.Status == DataExportStatus.Queued)
                 .OrderBy(p => p.LastUpdateDate)
@@ -36,9 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             exportProcess.Status = DataExportStatus.Running;
             exportProcess.LastUpdateDate = DateTime.UtcNow;
-
-            dataExportProcessDtoStorage[exportProcess.DataExportProcessId] = exportProcess;
-            return exportProcess.DataExportProcessId;
+            
+            return exportProcess;
         }
 
         public string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion,
@@ -138,7 +137,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.Status=DataExportStatus.Finished;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = 100;
-            dataExportProcessDtoStorage[dataExportProcess.DataExportProcessId] = dataExportProcess;
         }
 
         public void FinishDataExportProcessWithError(string processId, Exception e)
@@ -149,8 +147,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             dataExportProcess.Status = DataExportStatus.FinishedWithError;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-
-            dataExportProcessDtoStorage[dataExportProcess.DataExportProcessId] = dataExportProcess;
         }
 
         public void UpdateDataExportProgress(string processId, int progressInPercents)
@@ -164,8 +160,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = progressInPercents;
-
-            dataExportProcessDtoStorage[dataExportProcess.DataExportProcessId] = dataExportProcess;
         }
 
         public void DeleteDataExportProcess(string processId)

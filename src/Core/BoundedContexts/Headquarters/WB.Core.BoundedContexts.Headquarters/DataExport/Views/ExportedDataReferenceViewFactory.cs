@@ -41,9 +41,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             var runningProcesses = dataExportQueue.GetRunningProcess();
 
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
-                CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
-                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.Tabular, input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.Tabular, input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.Tabular, input.QuestionnaireId, input.QuestionnaireVersion),
                 runningProcesses.Select(
                     p =>
                         new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate, "test",

@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.TabularData);
+                this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.Tabular);
             }
             catch (Exception e)
             {
@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.API
             try
             {
                 this.dataExportQueue.EnQueueDataExportProcess(questionnaireId, questionnaireVersion,
-                    DataExportFormat.TabularData);
+                    DataExportFormat.Tabular);
             }
             catch (Exception e)
             {
@@ -129,7 +129,7 @@ namespace WB.UI.Headquarters.API
             try
             {
                 this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion,
-                    DataExportFormat.TabularData);
+                    DataExportFormat.Tabular);
             }
             catch (Exception e)
             {
