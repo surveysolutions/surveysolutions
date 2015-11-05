@@ -381,4 +381,7 @@
   <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
     <value>Multi option question supports only integer positive values</value>
   </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
+  </data>
 </root>
