@@ -1,6 +1,7 @@
 ﻿@using Microsoft.Practices.ServiceLocation
 @using WB.UI.Designer.Services
 @using WB.UI.Shared.Web.Configuration
+@model WB.UI.Designer.Models.LoginModel
 
 @{
     ViewBag.Title = "Login";
@@ -39,7 +40,7 @@
         </label><br>
     </div>
     <p class="note has-error" data-bind="visible: invalidCaptcha">Please click the checkbox to prove that you are a human</p>
-    <div class="g-recaptcha" data-sitekey="@(ServiceLocator.Current.GetInstance<IConfigurationManager>().AppSettings["ReCaptchaPublicKey"])" data-bind="visible: shouldUseRecaptcha"></div>
+    <div class="g-recaptcha" data-sitekey="@Model.GoogleRecaptchaSiteKey" data-bind="visible: shouldUseRecaptcha"></div>
     <div class="form-actions">
         <input class="btn btn-success btn-lg" type="submit" value="Log in" data-bind="click: login, enable: IsAjaxComplete"/>
         <a class="btn btn-link" href="@Url.Action("PasswordReset")">Forgot Password?</a>
@@ -54,7 +55,7 @@
             var signInApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Users", action = "Login"})';
             var homePageUrl = '@Url.Action("Index", "Questionnaire")';
 
-            var shouldUseRecaptcha = @(ServiceLocator.Current.GetInstance<IAuthenticationService>().ShouldShowCaptcha().ToString().ToLower());
+            var shouldUseRecaptcha = @Model.ShouldShowCaptcha.ToString().ToLower();
             
             var viewModel = new Designer.VM.Login(signInApiUrl, homePageUrl, shouldUseRecaptcha);
             viewModel.load();

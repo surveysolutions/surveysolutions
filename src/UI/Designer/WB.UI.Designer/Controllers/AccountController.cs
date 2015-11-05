@@ -10,6 +10,8 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Membership;
 using WebMatrix.WebData;
 
@@ -22,11 +24,16 @@ namespace WB.UI.Designer.Controllers
     {
         private readonly ISystemMailer mailer;
         private readonly ILogger logger;
+        private readonly IConfigurationManager configurationManager;
+        private readonly IAuthenticationService authenticationService;
 
-        public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger) : base(userHelper)
+        public AccountController(IMembershipUserService userHelper, ISystemMailer mailer, ILogger logger,
+            IConfigurationManager configurationManager, IAuthenticationService authenticationService) : base(userHelper)
         {
             this.mailer = mailer;
             this.logger = logger;
+            this.configurationManager = configurationManager;
+            this.authenticationService = authenticationService;
         }
 
         [AllowAnonymous]
@@ -51,7 +58,11 @@ namespace WB.UI.Designer.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
         {
-            return this.View();
+            return this.View(new LoginModel()
+            {
+                ShouldShowCaptcha = this.authenticationService.ShouldShowCaptcha(),
+                GoogleRecaptchaSiteKey = this.configurationManager.AppSettings["ReCaptchaPublicKey"]
+            });
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
