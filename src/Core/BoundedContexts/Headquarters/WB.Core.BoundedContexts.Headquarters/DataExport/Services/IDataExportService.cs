@@ -1,10 +1,10 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal interface IDataExportService
     {
-        void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId);
-        void ExportParaData(string dataExportProcessId);
+        void ExportData(IQueuedProcess process);
     }
 }

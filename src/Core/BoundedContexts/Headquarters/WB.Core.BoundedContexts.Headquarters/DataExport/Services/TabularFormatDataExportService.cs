@@ -6,6 +6,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -69,7 +70,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
-        public void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
+        public void ExportData(IQueuedProcess process)
+        {
+            var paraDataProcess = process as ParaDataQueuedProcess;
+            if (paraDataProcess != null)
+            {
+                ExportParaData(process.DataExportProcessId);
+                return;
+            }
+            var allDataProcess = process as AllDataQueuedProcess;
+            if (allDataProcess != null)
+            {
+                ExportData(allDataProcess.QuestionnaireId, allDataProcess.QuestionnaireVersion,
+                    process.DataExportProcessId);
+                return;
+            }
+        }
+
+        private void ExportData(Guid questionnaireId, long questionnaireVersion, string dataExportProcessId)
         {
             TransactionManager.ExecuteInQueryTransaction(
                 () =>
@@ -79,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 });
         }
 
-        public void ExportParaData(string dataExportProcessId)
+        private void ExportParaData(string dataExportProcessId)
         {
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, interviewSummaryReader, userReader,
