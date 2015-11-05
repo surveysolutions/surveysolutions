@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl, $updateTabularDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl, $updateTabularDataUrl, $updateApprovedTabularDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -6,9 +6,11 @@
     self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
     self.UpdateTabularDataUrl = $updateTabularDataUrl;
+    self.UpdateApprovedTabularDataUrl = $updateApprovedTabularDataUrl;
     self.Templates = templates;
     self.ParadataReference = ko.observableArray();
     self.TabularDataReference = ko.observableArray();
+    self.TabularApprovedDataReference = ko.observableArray();
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
     self.exportTypes = $exportTypes;
@@ -48,6 +50,9 @@
     };
     self.requestTabularDataUpdate = function () {
         self.sendActionRequest(self.UpdateTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
+    }
+    self.requestApprovedTabularDataUpdate = function () {
+        self.sendActionRequest(self.UpdateApprovedTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
     }
     self.sendActionRequest = function (url, args) {
         var requestHeaders = {};
@@ -114,6 +119,23 @@
         if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().CanRefreshBeRequested))
             return true;
         return self.TabularDataReference().CanRefreshBeRequested();
+    }
+
+    self.lastApprovedTabularDataUpdateDate = function () {
+        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().LastUpdateDate))
+            return "Never";
+        return self.TabularApprovedDataReference().LastUpdateDate();
+    }
+
+    self.showApprovedTabularDataDownloadButton = function () {
+        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().HasDataToExport))
+            return false;
+        return self.TabularApprovedDataReference().HasDataToExport();
+    }
+    self.showApprovedTabularDataRefreshButton = function () {
+        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().CanRefreshBeRequested))
+            return true;
+        return self.TabularApprovedDataReference().CanRefreshBeRequested();
     }
 
     self.exportFormatName = function (runningExport) {

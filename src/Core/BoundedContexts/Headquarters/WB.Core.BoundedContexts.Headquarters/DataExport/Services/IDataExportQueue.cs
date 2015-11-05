@@ -10,9 +10,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
+        string EnQueueApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+
         string EnQueueParaDataExportProcess(DataExportFormat exportFormat);
 
         IQueuedProcess GetDataExportProcess(string processId);
+
         IQueuedProcess[] GetRunningProcess();
 
         void FinishDataExportProcess(string processId);

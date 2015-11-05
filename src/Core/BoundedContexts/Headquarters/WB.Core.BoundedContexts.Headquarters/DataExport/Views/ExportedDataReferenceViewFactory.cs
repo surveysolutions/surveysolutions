@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
                 CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
                 CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.TabularData, input.QuestionnaireId, input.QuestionnaireVersion),
                 runningProcesses.Select(
                     p =>
                         new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate, "test",
@@ -54,7 +55,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         {
             if (exportProcess is ParaDataQueuedProcess)
                 return DataExportType.ParaData;
-            return DataExportType.Data;
+            if (exportProcess is AllDataQueuedProcess)
+                return DataExportType.Data;
+            return DataExportType.ApprovedData;
         }
 
         private ExportedDataReferencesView CreateExportedDataReferencesView(DataExportType dataType,
@@ -87,7 +90,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     exportedDataReferencesView.HasDataToExport = true;
                 }
             }
-
+            if (dataType == DataExportType.ApprovedData)
+            {
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(questionnaireId,
+                    questionnaireVersion);
+                if (fileSystemAccessor.IsFileExists(path))
+                {
+                    exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;
+                    exportedDataReferencesView.HasDataToExport = true;
+                }
+            }
             return exportedDataReferencesView;
         }
     }
