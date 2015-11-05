@@ -309,7 +309,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
             QuestionnaireDocumentVersioned questionnaire =
-                this.transactionManager.ExecuteInQueryTransaction(() =>
+                this.transactionManager.ExecuteInQueryTransaction(() => 
                     this.questionnaireDocumentVersionedStorage.AsVersioned()
                         .Get(questionnaireId.FormatGuid(), questionnaireVersion));
             var questionnaireExportStructure =

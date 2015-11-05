@@ -30,8 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                     comments: new[] { Create.InterviewComment(comment:Environment.NewLine+comment) }),
                 "id");
 
-
-            var questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
             var headerStructureForLevel = Create.HeaderStructureForLevel();
             headerStructureForLevel.LevelName = "1";
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);

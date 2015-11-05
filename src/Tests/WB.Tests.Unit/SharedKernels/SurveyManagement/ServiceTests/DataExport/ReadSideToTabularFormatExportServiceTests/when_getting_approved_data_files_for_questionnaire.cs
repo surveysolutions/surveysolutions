@@ -46,12 +46,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                         }),
                 "id2");
 
-            var questionnaireExportStructure = Create.QuestionnaireExportStructure();
+            var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaireId, questionnaireVersion);
             var headerStructureForLevel = Create.HeaderStructureForLevel();
             headerStructureForLevel.LevelName = "1";
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(), headerStructureForLevel);
-            readSideToTabularFormatExportService = CreateReadSideToTabularFormatExportService(csvWriterService: csvWriterServiceMock.Object,
-                fileSystemAccessor: fileSystemAccessor.Object, interviewStatuses: interviewStatuses, questionnaireExportStructure: questionnaireExportStructure);
+
+            readSideToTabularFormatExportService = 
+                CreateReadSideToTabularFormatExportService(csvWriterService: csvWriterServiceMock.Object,
+                    fileSystemAccessor: fileSystemAccessor.Object, 
+                    interviewStatuses: interviewStatuses, 
+                    questionnaireExportStructure: questionnaireExportStructure);
         };
 
         Because of = () =>
@@ -70,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static string fileName = "1.tab";
-        private static Mock<ICsvWriterService> csvWriterServiceMock = new Mock<ICsvWriterService>();
+        private static readonly Mock<ICsvWriterService> csvWriterServiceMock = new Mock<ICsvWriterService>();
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
     }
 }
