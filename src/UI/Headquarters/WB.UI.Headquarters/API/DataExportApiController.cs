@@ -74,6 +74,24 @@ namespace WB.UI.Headquarters.API
             return result;
         }
 
+        [HttpGet]
+        public HttpResponseMessage ApprovedDataTabular(Guid id, long version)
+        {
+            var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(id, version);
+
+            if (!fileSystemAccessor.IsFileExists(path))
+                throw new HttpException(404, "para data is absent");
+
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(path, FileMode.Open);
+
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(path);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+            return result;
+        }
+
         [HttpPost]
         public HttpResponseMessage RequestUpdateOfParadata()
         {
@@ -102,7 +120,22 @@ namespace WB.UI.Headquarters.API
 
             return Request.CreateResponse(true);
         }
-        
+
+        [HttpPost]
+        public HttpResponseMessage RequestUpdateOfApprovedTabular(Guid questionnaireId, long questionnaireVersion)
+        {
+            try
+            {
+                this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion,
+                    DataExportFormat.TabularData);
+            }
+            catch (Exception)
+            {
+            }
+
+            return Request.CreateResponse(true);
+        }
+
         [HttpPost]
         public HttpResponseMessage DeleteDataExportProcess(string id)
         {

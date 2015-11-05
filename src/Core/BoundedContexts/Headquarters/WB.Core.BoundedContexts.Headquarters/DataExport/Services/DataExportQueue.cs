@@ -44,23 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion,
             DataExportFormat exportFormat)
         {
-            var runningOrQueuedDataExportProcessesByTheQuestionnaire =
-                dataExportProcessDtoStorage.Values.OfType<AllDataQueuedProcess>().FirstOrDefault(
-                            p =>
-                                p.QuestionnaireId == questionnaireId && p.QuestionnaireVersion == questionnaireVersion &&
-                                (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running));
-
-            if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
-            {
-                if (runningOrQueuedDataExportProcessesByTheQuestionnaire.Status == DataExportStatus.Queued)
-                {
-                    StartBackgroundDataExport();
-                    return runningOrQueuedDataExportProcessesByTheQuestionnaire.DataExportProcessId;
-                }
-
-                throw new InvalidOperationException();
-            }
-
             string processId = Guid.NewGuid().FormatGuid();
 
             var exportProcess = new AllDataQueuedProcess()
@@ -74,30 +57,34 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 QuestionnaireVersion = questionnaireVersion,
                 Status = DataExportStatus.Queued
             };
-            
-            dataExportProcessDtoStorage[processId] = exportProcess;
-            StartBackgroundDataExport();
+
+            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireId == questionnaireId && p.QuestionnaireVersion == questionnaireVersion);
+            return processId;
+        }
+
+        public string EnQueueApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion,
+         DataExportFormat exportFormat)
+        {
+            string processId = Guid.NewGuid().FormatGuid();
+
+            var exportProcess = new ApprovedDataQueuedProcess()
+            {
+                BeginDate = DateTime.UtcNow,
+                DataExportProcessId = processId,
+                DataExportFormat = exportFormat,
+                LastUpdateDate = DateTime.UtcNow,
+                ProgressInPercents = 0,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Status = DataExportStatus.Queued
+            };
+
+            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireId == questionnaireId && p.QuestionnaireVersion == questionnaireVersion);
             return processId;
         }
 
         public string EnQueueParaDataExportProcess(DataExportFormat exportFormat)
         {
-            var runningOrQueuedDataExportProcessesByTheQuestionnaire =
-                dataExportProcessDtoStorage.Values.OfType<ParaDataQueuedProcess>().FirstOrDefault(
-                            p =>
-                                (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running));
-
-            if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
-            {
-                if (runningOrQueuedDataExportProcessesByTheQuestionnaire.Status == DataExportStatus.Queued)
-                {
-                    StartBackgroundDataExport();
-                    return runningOrQueuedDataExportProcessesByTheQuestionnaire.DataExportProcessId;
-                }
-
-                throw new InvalidOperationException();
-            }
-
             string processId = Guid.NewGuid().FormatGuid();
             var exportProcess = new ParaDataQueuedProcess()
             {
@@ -108,10 +95,25 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 ProgressInPercents = 0,
                 Status = DataExportStatus.Queued
             };
-            dataExportProcessDtoStorage[processId] = exportProcess;
+            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => true);
+            return processId;
+        }
+
+        private void EnQueueDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IQueuedProcess
+        {
+            var runningOrQueuedDataExportProcessesByTheQuestionnaire =
+             dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
+                         p =>
+                             (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running) && additionalQuery(p));
+
+            if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            dataExportProcessDtoStorage[exportProcess.DataExportProcessId] = exportProcess;
 
             StartBackgroundDataExport();
-            return processId;
         }
 
         public IQueuedProcess GetDataExportProcess(string processId)
