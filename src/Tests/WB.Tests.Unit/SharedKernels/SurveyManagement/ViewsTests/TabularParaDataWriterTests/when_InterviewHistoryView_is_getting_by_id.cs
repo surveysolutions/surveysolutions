@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDataWriterTests
 {
-    internal class WhenMethodGetByIdOfTabularParaDataWriterCalledAndCacheIsDisabled : TabularParaDataWriterTestContext
+    internal class when_InterviewHistoryView_is_getting_by_id : TabularParaDataWriterTestContext
     {
         Establish context = () =>
         {
@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
                     InterviewId = interviewId
                 });
             
-            _tabularParaDataAccessor = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object);
+            tabularParaDataAccessor = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object);
         };
 
         Because of = () =>
-            result = _tabularParaDataAccessor.GetById(interviewId.FormatGuid());
+            result = tabularParaDataAccessor.GetById(interviewId.FormatGuid());
 
         It should_return_view_with_QuestionnaireId_equal_to_questionnaireId = () =>
             result.QuestionnaireId.ShouldEqual(questionnaireId);
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
         It should_return_view_with_empty_records_list = () =>
             result.Records.ShouldBeEmpty();
 
-        private static TabularParaDataAccessor _tabularParaDataAccessor;
+        private static TabularParaDataAccessor tabularParaDataAccessor;
         private static InterviewHistoryView result;
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
