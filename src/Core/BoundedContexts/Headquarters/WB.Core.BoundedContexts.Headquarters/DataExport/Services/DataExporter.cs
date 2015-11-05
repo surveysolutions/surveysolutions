@@ -15,17 +15,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IQuestionnaireDataExportServiceFactory questionnaireDataExportServiceFactory;
 
-        private readonly IPlainTransactionManager plainTransactionManager;
-
         private readonly ILogger logger;
 
         public DataExporter(IDataExportQueue dataExportQueue,
-            IPlainTransactionManager plainTransactionManager,
             ILogger logger,
             IQuestionnaireDataExportServiceFactory questionnaireDataExportServiceFactory)
         {
             this.dataExportQueue = dataExportQueue;
-            this.plainTransactionManager = plainTransactionManager;
             this.logger = logger;
             this.questionnaireDataExportServiceFactory = questionnaireDataExportServiceFactory;
         }
@@ -40,18 +36,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    string dataExportProcessId =
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => this.dataExportQueue.DeQueueDataExportProcessId());
+                    string dataExportProcessId = this.dataExportQueue.DeQueueDataExportProcessId();
 
                     if (string.IsNullOrEmpty(dataExportProcessId))
                         return;
 
 
-                    var dataExportProcess =
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () =>
-                                this.dataExportQueue.GetDataExportProcess(dataExportProcessId));
+                    var dataExportProcess = this.dataExportQueue.GetDataExportProcess(dataExportProcessId);
 
                     if (dataExportProcess == null)
                         return;
@@ -66,9 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     try
                     {
                         questionnaireDataExportService.ExportData(dataExportProcess);
-
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => this.dataExportQueue.FinishDataExportProcess(dataExportProcessId));
+                        this.dataExportQueue.FinishDataExportProcess(dataExportProcessId);
                     }
                     catch (Exception e)
                     {
@@ -76,9 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                             string.Format("data export process with id {0} finished with error", dataExportProcessId),
                             e);
 
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () =>
-                                this.dataExportQueue.FinishDataExportProcessWithError(dataExportProcessId, e));
+                        this.dataExportQueue.FinishDataExportProcessWithError(dataExportProcessId, e);
                     }
                 }
             }

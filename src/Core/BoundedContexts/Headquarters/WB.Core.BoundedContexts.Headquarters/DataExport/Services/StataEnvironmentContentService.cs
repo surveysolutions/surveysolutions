@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class StataEnvironmentContentService : IEnvironmentContentService
     {
@@ -17,6 +14,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         public StataEnvironmentContentService(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+        }
+
+
+        public void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath)
+        {
+            foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
+            {
+                this.CreateContentOfAdditionalFile(headerStructureForLevel,
+                    ExportFileSettings.GetContentFileName(headerStructureForLevel.LevelName), folderPath);
+            }
         }
 
         public void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName, string basePath)
@@ -28,21 +35,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.BuildLabelsForLevel(headerStructureForLevel, doContent);
 
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
-                GetEnvironmentContentFileName(headerStructureForLevel.LevelName));
+                this.GetEnvironmentContentFileName(headerStructureForLevel.LevelName));
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString().ToLower());
         }
 
-        public string[] GetContentFilesForQuestionnaire(Guid questionnaireId, long version, string basePath)
-        {
-            return
-                fileSystemAccessor.GetFilesInDirectory(basePath)
-                    .Where(fileName => fileName.EndsWith("." + ContentFileNameExtension)).ToArray();
-        }
-
         private string GetEnvironmentContentFileName(string levelName)
         {
-            return string.Format("{0}.{1}", levelName, ContentFileNameExtension);
+            return string.Format("{0}.{1}", levelName, this.ContentFileNameExtension);
         }
 
         private string ContentFileNameExtension { get { return "do"; } }

@@ -25,11 +25,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly ITransactionManagerProvider transactionManagerProvider;
-        private readonly IPlainTransactionManager plainTransactionManager;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
 
         private readonly IDataExportQueue dataExportQueue;
+
+
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IArchiveUtils archiveUtils;
+        private readonly ITabularFormatExportService tabularFormatExportService;
+        private readonly IEnvironmentContentService environmentContentService;
         public QuestionnaireDataExportServiceFactory(
             IStreamableEventStore eventStore, 
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
@@ -38,10 +43,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManagerProvider transactionManagerProvider, 
             IDataExportQueue dataExportQueue,
-            IPlainTransactionManager plainTransactionManager, 
             IParaDataAccessor paraDataAccessor, 
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage, 
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
+            IFileSystemAccessor fileSystemAccessor, 
+            IArchiveUtils archiveUtils, 
+            ITabularFormatExportService tabularFormatExportService, 
+            IEnvironmentContentService environmentContentService)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -50,10 +58,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.transactionManagerProvider = transactionManagerProvider;
             this.dataExportQueue = dataExportQueue;
-            this.plainTransactionManager = plainTransactionManager;
             this.paraDataAccessor = paraDataAccessor;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.archiveUtils = archiveUtils;
+            this.tabularFormatExportService = tabularFormatExportService;
+            this.environmentContentService = environmentContentService;
         }
 
         public IDataExportService CreateQuestionnaireDataExportService(DataExportFormat dataExportFormat)
@@ -61,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             if (dataExportFormat == DataExportFormat.TabularData)
                 return new TabularFormatDataExportService(eventStore, interviewSummaryReader, userReader,
                     questionnaireReader, interviewDataExportSettings, transactionManagerProvider, dataExportQueue,
-                    plainTransactionManager, this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage, filebasedExportedDataAccessor);
+                    this.paraDataAccessor, lastPublishedEventPositionForHandlerStorage, filebasedExportedDataAccessor, fileSystemAccessor, archiveUtils, tabularFormatExportService, environmentContentService);
 
             throw new NotSupportedException();
         }

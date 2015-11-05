@@ -16,36 +16,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
-        private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
-        private readonly ITabularFormatExportService tabularFormatExportService;
-        private readonly IEnvironmentContentService environmentContentService;
         private readonly ILogger logger;
         private IMetadataExportService metadataExportService;
 
         private const string ExportedDataFolderName = "ExportedData";
         private const string ExportedFilesFolderName = "ExportedFiles";
-        private const string allDataFolder = "AllData";
-        private const string approvedDataFolder = "ApprovedData";
         private readonly string pathToExportedData;
         private readonly string pathToExportedFiles;
 
         public FilebasedExportedDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
             string folderPath,
-            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
             IMetadataExportService metadataExportService,
-            IEnvironmentContentService environmentContentService,
             ILogger logger,
-            IArchiveUtils archiveUtils,
-            ITabularFormatExportService tabularFormatExportService)
+            IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
             this.metadataExportService = metadataExportService;
-            this.environmentContentService = environmentContentService;
             this.logger = logger;
             this.archiveUtils = archiveUtils;
-            this.tabularFormatExportService = tabularFormatExportService;
             this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
@@ -98,18 +87,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 (s) => this.fileSystemAccessor.DeleteDirectory(s));
             Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.PathToExportedFiles),
                 (s) => this.fileSystemAccessor.DeleteFile(s));
-        }
-
-        private string GetAllDataFolder(Guid questionnaireId, long version)
-        {
-            return this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(
-                questionnaireId, version), allDataFolder);
-        }
-
-        private string GetApprovedDataFolder(Guid questionnaireId, long version)
-        {
-            return this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(
-                questionnaireId, version), approvedDataFolder);
         }
 
         public string GetFilePathToExportedBinaryData(Guid questionnaireId, long version)
@@ -175,36 +152,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public void ReexportTabularDataFolder(Guid questionnaireId, long version)
-        {
-            var dataFolder = GetAllDataFolder(questionnaireId, version);
-            if (fileSystemAccessor.IsDirectoryExists(dataFolder))
-                fileSystemAccessor.DeleteDirectory(dataFolder);
-
-            fileSystemAccessor.CreateDirectory(dataFolder);
-
-            tabularFormatExportService.ExportInterviewsInTabularFormatAsync(questionnaireId, version, dataFolder)
-                .WaitAndUnwrapException();
-
-            CreateArchiveOfExportedTabularData(questionnaireId, version, dataFolder,
-                GetArchiveFilePathForExportedTabularData(questionnaireId, version));
-        }
-
-        public void ReexportApprovedTabularDataFolder(Guid questionnaireId, long questionnaireVersion)
-        {
-            var dataFolder = this.GetApprovedDataFolder(questionnaireId, questionnaireVersion);
-            if (fileSystemAccessor.IsDirectoryExists(dataFolder))
-                fileSystemAccessor.DeleteDirectory(dataFolder);
-
-            fileSystemAccessor.CreateDirectory(dataFolder);
-
-            tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, dataFolder)
-                .WaitAndUnwrapException();
-
-            CreateArchiveOfExportedTabularData(questionnaireId, questionnaireVersion, dataFolder,
-                GetArchiveFilePathForExportedApprovedTabularData(questionnaireId, questionnaireVersion));
-        }
-
         public string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version)
         {
             var archiveName = string.Format("{0}_{1}_{2}_{3}.zip",questionnaireId, version,
@@ -219,30 +166,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 ExportDataType.Tab, "App");
 
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
-        }
-
-
-
-        private void CreateArchiveOfExportedTabularData(Guid questionnaireId, long version, string directoryWithExportedData, string archiveFilePath)
-        {
-            if (!fileSystemAccessor.IsDirectoryExists(directoryWithExportedData))
-            {
-                throw new ArgumentException("folder with tabular data is absent");
-            }
-
-            var filesToArchive = new List<string>();
-
-            var exportedTabularDataFiles =
-                tabularFormatExportService.GetTabularDataFilesFromFolder(directoryWithExportedData);
-
-            filesToArchive.AddRange(exportedTabularDataFiles);
-            filesToArchive.AddRange(
-                this.environmentContentService.GetContentFilesForQuestionnaire(questionnaireId, version,
-                    GetFolderPathOfDataByQuestionnaire(questionnaireId, version)));
-
-            if (fileSystemAccessor.IsFileExists(archiveFilePath))
-                fileSystemAccessor.DeleteFile(archiveFilePath);
-            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
         }
     }
 }
