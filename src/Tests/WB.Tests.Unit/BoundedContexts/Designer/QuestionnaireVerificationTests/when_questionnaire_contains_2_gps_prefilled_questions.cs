@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_1_error = () =>
             verificationErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code_WB0067 = () =>
+        It should_return_error_with_code_WB0006 = () =>
             verificationErrors.First().Code.ShouldEqual("WB0006");
 
         It should_return_error_with_two_references = () =>
