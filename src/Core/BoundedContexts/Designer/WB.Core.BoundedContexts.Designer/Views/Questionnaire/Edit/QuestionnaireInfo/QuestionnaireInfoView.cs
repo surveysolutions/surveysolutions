@@ -10,11 +10,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
             this.SharedPersons = new List<SharedPerson>();
             this.Chapters = new List<ChapterInfoView>();
+            this.Macroses = new List<MacrosView>();
         }
         public string QuestionnaireId { get; set; }
         public string Title { get; set; }
         public bool IsPublic { get; set; }
         public List<ChapterInfoView> Chapters { get; set; }
+        public List<MacrosView> Macroses { get; set; }
+
         public List<SharedPerson> SharedPersons { get; set; }
         public int QuestionsCount { get; set; }
         public int GroupsCount { get; set; }

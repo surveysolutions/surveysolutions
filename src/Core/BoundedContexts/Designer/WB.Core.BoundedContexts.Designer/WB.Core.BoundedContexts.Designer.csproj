@@ -433,6 +433,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacrosView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\IQuestionnaireInfoViewFactory.cs" />
