@@ -130,8 +130,8 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateStaticText(command.EntityId, command.Text, command.ResponsibleId))
                 .Handles<UpdateTextListQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextListQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.ResponsibleId, command.MaxAnswerCount, command.Scope))
                 .Handles<UpdateTextQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Mask, command.ResponsibleId))                
-                .Handles<PasteItemAfterCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemAfter(command.EntityId, command.ItemToPasteAfterId, command.ResponsibleId, command.SourceItemId, command.SourceDocument))
-                .Handles<PasteItemIntoCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemInto(command.ParentId, command.ResponsibleId, command.SourceItemId, command.SourceDocument))                ;
+                .Handles<PasteAfterCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemAfter(command.EntityId, command.ItemToPasteAfterId, command.ResponsibleId, command.SourceItemId, command.SourceDocument))
+                .Handles<PasteIntoCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemInto(command.EntityId, command.ParentId, command.ResponsibleId, command.SourceItemId, command.SourceDocument))                ;
         }
     }
 }
