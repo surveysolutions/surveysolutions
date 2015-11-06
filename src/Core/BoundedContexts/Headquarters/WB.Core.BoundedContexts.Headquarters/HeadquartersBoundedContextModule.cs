@@ -2,7 +2,7 @@
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
@@ -56,10 +56,14 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
             this.Bind<DataExportSettings>().ToConstant(this.dataExportSettings);
-            this.Bind<IDataExportQueue>().To<DataExportQueue>();
+            this.Bind<IDataExportQueue>().To<DataExportQueue>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
-            this.Bind<IQuestionnaireDataExportServiceFactory>().To<QuestionnaireDataExportServiceFactory>();
+            
+            this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
+
+            this.Bind<TabularFormatDataExportProcessHandler>().ToSelf();
+            this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
         }
     }
 }

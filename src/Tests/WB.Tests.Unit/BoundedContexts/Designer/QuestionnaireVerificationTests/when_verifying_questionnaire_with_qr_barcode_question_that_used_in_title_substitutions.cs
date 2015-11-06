@@ -57,6 +57,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         private static Guid qrBarcodeQuestionId = Guid.Parse("10000000000000000000000000000000");
         private static string qrBarcodeQuestionVariableName = "qrBarcodeQuestion";
-        private static Guid questionWithSubstitutionToQRBarcodeId = Guid.Parse("10000000000000000000000000000000");
+        private static Guid questionWithSubstitutionToQRBarcodeId = Guid.Parse("11000000000000000000000000000000");
     }
 }
