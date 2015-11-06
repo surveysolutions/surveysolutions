@@ -48,8 +48,8 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "MoveStaticText", typeof (MoveStaticTextCommand) },
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
 
-                    {"PasteItemAfter", typeof(PasteItemAfterCommand) },
-                    {"PasteItemInto", typeof(PasteItemIntoCommand) }
+                    {"PasteAfter", typeof(PasteAfterCommand) },
+                    {"PasteInto", typeof(PasteIntoCommand) }
                 };
             }
         }
