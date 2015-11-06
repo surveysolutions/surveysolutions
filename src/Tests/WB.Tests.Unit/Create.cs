@@ -574,7 +574,7 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string variable = "roster", string enablementCondition = null,
+        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string variable = "roster_var", string enablementCondition = null,
             string[] fixedTitles = null, IEnumerable<IComposite> children = null,
             RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
@@ -612,7 +612,7 @@ namespace WB.Tests.Unit
             return group;
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false)
         {
             return new NumericQuestion
@@ -1284,17 +1284,36 @@ namespace WB.Tests.Unit
             };
         }
 
+        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null)
+        {
+            return new SingleQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = "single_option_question",
+                QuestionText = "SO Question",
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                QuestionType = QuestionType.SingleOption,
+                LinkedToQuestionId = linkedToQuestionId,
+                CascadeFromQuestionId = cascadeFromQuestionId,
+                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList()
+            };
+        }
+
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, params decimal[] answers)
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = "multiple_options_question",
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
                 QuestionType = QuestionType.MultyOption,
+                LinkedToQuestionId = linkedToQuestionId,
                 Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
         }
