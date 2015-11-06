@@ -88,8 +88,8 @@
 
                                 questionnaireService.getQuestionnaireById($state.params.questionnaireId).success(function (questionnaire) {
                                     _.remove($scope.questionnaire.chapters);
-                                    _.forEach(questionnaire.chapters, function(c) {
-                                         $scope.questionnaire.chapters.push(c);
+                                    _.forEach(questionnaire.chapters, function (c) {
+                                        $scope.questionnaire.chapters.push(c);
                                     });
                                     if (questionnaire.chapters.length > 0) {
                                         var defaultChapter = _.first(questionnaire.chapters);
@@ -103,6 +103,47 @@
                 });
             };
 
+            $scope.copyChapter = function (item) {
+                var itemIdToCopy = item.itemId || $state.params.itemId;
+
+                var itemToCopy = {
+                    questionnaireId: $state.params.questionnaireId,
+                    itemId: itemIdToCopy,
+                    itemType: 'group'
+                };
+
+                $.cookie('itemToCopy', itemToCopy, { expires: 30 });
+            };
+
+            $scope.pasteAfterChapter = function (chapter) {
+
+                var itemToCopy = $.cookie('itemToCopy');
+                if (itemToCopy == null)
+                    return;
+
+                /*if (itemToCopy.itemType !== 'group')
+                    return;*/
+
+                var idToPasteAfter = chapter.chapterId || $state.params.itemId;
+                var newId = utilityService.guid();
+
+                commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId)
+                    .success(function () {
+
+                    var newChapter = {
+                        title: "pasting...",
+                        itemId: newId
+                    };
+
+                    var chapter = _.find($scope.questionnaire.chapters, { itemId: idToPasteAfter });
+                    var targetIndex = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
+
+                    $scope.questionnaire.chapters.splice(targetIndex, 0, newChapter);
+                    $rootScope.$emit('chapterPasted');
+
+                    $state.go('questionnaire.chapter.group', { chapterId: newId, itemId: newId });
+                });
+            };
 
             $rootScope.$on('$stateChangeSuccess', function () {
                 $scope.foldback();
@@ -121,5 +162,13 @@
 
             $scope.$on('openChaptersList', function (event, data) {
                 $scope.unfold();
+            });
+
+            $rootScope.$on('copyChapter', function (event, data) {
+                $scope.copyChapter(data.chapter);
+            });
+
+            $rootScope.$on('pasteAfterChapter', function (event, data) {
+                $scope.pasteAfterChapter(data.chapter);
             });
         });

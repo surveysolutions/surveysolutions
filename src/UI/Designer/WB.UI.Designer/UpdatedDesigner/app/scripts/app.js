@@ -26,6 +26,7 @@
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         var questionnaireId = $.cookie('questionnaireId');
+        $.cookie.json = true;
         var url = '/' + questionnaireId;
         $urlRouterProvider.otherwise(url);
 

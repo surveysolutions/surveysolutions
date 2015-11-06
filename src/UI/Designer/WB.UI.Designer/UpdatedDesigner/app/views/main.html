@@ -67,6 +67,8 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
                                     <li><a ng-click="cloneChapter(chapter.itemId);$event.stopPropagation();">Clone</a></li>
+                                    <li><a ng-click="copyChapter(chapter);">Copy</a></li>
+                                    <li><a ng-click="pasteAfterChapter(chapter);$event.stopPropagation();">Paste after</a></li>
                                     <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
                                 </ul>
                             </div>

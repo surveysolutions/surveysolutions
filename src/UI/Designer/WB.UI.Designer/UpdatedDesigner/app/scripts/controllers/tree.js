@@ -616,6 +616,65 @@
                     });
             };
 
+            $scope.pasteItemInto = function (parent) {
+
+                var itemToCopy = $.cookie('itemToCopy');
+                if (itemToCopy == null)
+                    return;
+                
+                var newId = utilityService.guid();
+
+                commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, itemToCopy.questionnaireId, itemToCopy.itemId, newId).success(function () {
+
+                    $scope.refreshTree();
+
+                    //todo:
+                    //emit changes 
+                    //navigate to new item
+
+                    //$scope.resetSelection();
+                    $rootScope.$emit('itemPasted');
+                    $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+                    
+                });
+            };
+
+            $scope.pasteItemAfter = function (item) {
+
+                var itemToCopy = $.cookie('itemToCopy');
+                if (itemToCopy == null)
+                    return;
+
+                var idToPasteAfter = item.itemId || $state.params.itemId;
+                var newId = utilityService.guid();
+
+                commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId).success(function () {
+
+                    $scope.refreshTree();
+
+                    //todo:
+                    //emit changes 
+                    //navigate to new item
+
+                    //$scope.resetSelection();
+                    $rootScope.$emit('itemPasted');
+                    $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+
+                });
+            };
+
+            $scope.copy = function(item) {
+                var itemIdToCopy = item.itemId || $state.params.itemId;
+
+                var itemToCopy = {
+                    questionnaireId: $state.params.questionnaireId,
+                    itemId: itemIdToCopy,
+                    itemType: getItemType(item)
+                };
+
+                $.cookie('itemToCopy', itemToCopy, { expires: 30 });
+            };
+
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                     .success(function (result) {
