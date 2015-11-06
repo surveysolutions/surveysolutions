@@ -384,4 +384,13 @@
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
   </data>
+  <data name="WB0010_MacrosHasInvalidName" xml:space="preserve">
+    <value>Macros has invalid name.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Another macros with the same name already exists.</value>
+  </data>
+  <data name="WB0014_MacrosHasEmptyName" xml:space="preserve">
+    <value>Macros cannot have empty name.</value>
+  </data>
 </root>

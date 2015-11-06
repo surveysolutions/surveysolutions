@@ -142,6 +142,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Macros has invalid name..
+        /// </summary>
+        internal static string WB0010_MacrosHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0010_MacrosHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Linked question references nonexistent question..
         /// </summary>
         internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
@@ -165,6 +174,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
                 return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Macros cannot have empty name..
+        /// </summary>
+        internal static string WB0014_MacrosHasEmptyName {
+            get {
+                return ResourceManager.GetString("WB0014_MacrosHasEmptyName", resourceCulture);
             }
         }
         
@@ -211,6 +229,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             get {
                 return ResourceManager.GetString("WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLe" +
                         "vel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another macros with the same name already exists..
+        /// </summary>
+        internal static string WB0020_NameForMacrosIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0020_NameForMacrosIsNotUnique", resourceCulture);
             }
         }
         
