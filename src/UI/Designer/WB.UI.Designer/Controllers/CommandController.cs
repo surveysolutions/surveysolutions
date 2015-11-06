@@ -18,9 +18,9 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
-        private readonly ICommandPreprocessor commandPreprocessor;
+        private readonly ICommandInflater commandPreprocessor;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandPreprocessor commandPreprocessor)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandInflater commandPreprocessor)
         {
             this.logger = logger;
             this.commandPreprocessor = commandPreprocessor;

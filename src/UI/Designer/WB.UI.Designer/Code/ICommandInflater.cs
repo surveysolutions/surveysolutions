@@ -1,9 +1,8 @@
-using Ncqrs.Commanding;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.UI.Designer.Code
 {
-    public interface ICommandPreprocessor
+    public interface ICommandInflater
     {
         void PrepareDeserializedCommandForExecution(ICommand command);
     }
