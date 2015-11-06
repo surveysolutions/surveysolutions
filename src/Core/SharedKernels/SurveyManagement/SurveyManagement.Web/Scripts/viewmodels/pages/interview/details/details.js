@@ -247,7 +247,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             });
         });
         _.forEach(self.filteredComboboxes, function (filteredCombobox) {
-            var filteredComboboxElement = $("#" + filteredCombobox.id);
+            var filteredComboboxElement = $('[id="' + filteredCombobox.id + '"]');
 
             filteredCombobox.selectedValue = ko.observable({ id: ko.observable(), value: ko.observable() });
             var selectedOptionId = filteredComboboxElement.val();
