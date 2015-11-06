@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros
     [Serializable]
     public class AddMacrosCommand : QuestionnaireEntityCommand
     {
-        public AddMacrosCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId)
+        public AddMacrosCommand(Guid questionnaireId, Guid entityId, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
         }
