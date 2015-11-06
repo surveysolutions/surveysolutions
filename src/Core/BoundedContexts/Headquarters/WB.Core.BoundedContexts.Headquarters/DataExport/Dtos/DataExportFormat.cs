@@ -2,7 +2,7 @@
 {
     public enum DataExportFormat
     {
-        TabularData,
+        Tabular,
         STATA,
         SPPS
     }

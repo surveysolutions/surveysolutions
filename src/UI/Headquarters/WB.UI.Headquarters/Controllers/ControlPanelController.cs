@@ -30,11 +30,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPasswordHasher passwordHasher;
-        private static string lastReexportMessage = "no reexport performed";
-        private readonly IDataExportRepositoryWriter dataExportRepositoryWriter;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
-
-        private readonly ITransactionManagerProvider transactionManagerProvider;
+        
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -45,103 +41,12 @@ namespace WB.UI.Headquarters.Controllers
             IUserViewFactory userViewFactory,
             IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
-            IDataExportRepositoryWriter dataExportRepositoryWriter,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             ITransactionManagerProvider transactionManagerProvider,
             IEventStoreApiService eventStoreApiService)
             : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
-            this.dataExportRepositoryWriter = dataExportRepositoryWriter;
-            this.interviewSummaries = interviewSummaries;
-            this.transactionManagerProvider = transactionManagerProvider;
-        }
-
-        public ActionResult ReexportInterviews()
-        {
-            return this.View();
-        }
-
-        public ActionResult StartReexportApprovedInterviews(int? skip)
-        {
-            new Task(() => this.ReexportApprovedInterviewsImpl(skip ?? 0)).Start();
-
-            return this.RedirectToAction("ReexportInterviews");
-        }
-
-        private void ReexportApprovedInterviewsImpl(int skip)
-        {
-            int pageSize = 20;
-            int count = 0;
-            try
-            {
-                this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-                count = this.GetInterviewIdsInCertainStatuses().Count();
-            }
-            finally
-            {
-                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
-            }
-
-            int errorsCount = 0;
-            int processed = skip;
-            List<Guid> notExportedInterviews = new List<Guid>();
-
-            
-            lastReexportMessage = string.Format("found {0} interviews", count);
-            while (processed < count)
-            {
-                List<Guid> interviewIds;
-                try
-                {
-                    this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-                    interviewIds = this.GetInterviewIdsInCertainStatuses().Skip(processed).Take(pageSize).ToList();
-                }
-                finally
-                {
-                    this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
-                }
-
-                foreach (var interviewId in interviewIds)
-                {
-                    try
-                    {
-                        this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                        this.dataExportRepositoryWriter.AddOrUpdateExportedDataByInterviewWithAction(interviewId, InterviewExportedAction.ApprovedByHeadquarter);
-                        this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorsCount++;
-                        notExportedInterviews.Add(interviewId);
-                        this.Logger.Error(ex.Message, ex);
-                        this.transactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-                    }
-
-                    processed++;
-                    lastReexportMessage = string.Format("last processed interview index: {0} / {1}. Errors: {2}", processed, count, errorsCount);
-                }
-            }
-            lastReexportMessage += Environment.NewLine;
-            lastReexportMessage += string.Join(Environment.NewLine, notExportedInterviews);
-        }
-
-        private IQueryable<Guid> GetInterviewIdsInCertainStatuses()
-        {
-            return this.interviewSummaries.Query(_ =>
-                _.Where(x 
-                    => x.Status == InterviewStatus.ApprovedByHeadquarters 
-                    || x.Status == InterviewStatus.ApprovedBySupervisor
-                    || x.Status == InterviewStatus.RejectedByHeadquarters
-                    || x.Status == InterviewStatus.RejectedBySupervisor)
-                .OrderBy(x => x.SummaryId)
-                .Select(x => x.InterviewId)).AsQueryable();
-        }
-
-        public string GetReexportStatus()
-        {
-            return lastReexportMessage;
         }
 
         public ActionResult CreateHeadquarters()

@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -30,17 +33,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
              QuestionnaireExportStructure questionnaireExportStructure = null,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
         {
+            var readSideKeyValueStorage = new TestInMemoryWriter<QuestionnaireDocumentVersioned>();
+
+            if (questionnaireExportStructure != null)
+            {
+                QuestionnaireDocumentVersioned questionnaireDocumentVersioned =
+                    Create.QuestionnaireDocumentVersioned(Create.QuestionnaireDocument(questionnaireExportStructure.QuestionnaireId), questionnaireExportStructure.Version);
+                readSideKeyValueStorage.Store(questionnaireDocumentVersioned, string.Format("{0}${1}", questionnaireExportStructure.QuestionnaireId.FormatGuid(), questionnaireExportStructure.Version));
+            }
             return new ReadSideToTabularFormatExportService(
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICsvWriterFactory>(_ => _.OpenCsvWriter(
                     It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
-                Mock.Of<ISerializer>(),new InterviewDataExportSettings("",false,10000, 100), 
-                new TestInMemoryWriter<InterviewExportedDataRecord>(),
+                Mock.Of<ISerializer>(),new InterviewDataExportSettings("",false,10000, 100),
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
                 interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure)
+                    It.IsAny<string>()) == questionnaireExportStructure),
+                new TestInMemoryWriter<InterviewSummary>(), 
+                new TestInMemoryWriter<InterviewData>(),
+                Mock.Of<IExportViewFactory>(x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
+                Mock.Of<IDataExportWriter>(),
+                Mock.Of<ITransactionManager>(),
+                readSideKeyValueStorage
                 );
         }
 

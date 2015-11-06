@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             rosterGroupId1 = Guid.Parse("13333333333333333333333333333333");
             rosterGroupId2 = Guid.Parse("10000000000000000000000000000000");
             questionWithSubstitutionsIdFromLevel1 = Guid.Parse("12222222222222222222222222222222");
-            questionFromLevel2 = Guid.Parse("13333333333333333333333333333333");
+            questionFromLevel2 = Guid.Parse("11133333333333333333333333333333");
 
             var rosterQuestionId1 = Guid.Parse("11000000000000000000000000000000");
             var rosterQuestionId2 = Guid.Parse("11100000000000000000000000000000");

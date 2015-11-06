@@ -15,11 +15,14 @@
 
     <script type="text/javascript">
 
-        var $AllDataUrl = '@Url.Action("GetAllData", "ImportExport")';
-        var $ApprovedDataUrl = '@Url.Action("GetApprovedData", "ImportExport")';
+        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "AllDataTabular" })';
+        var $ApprovedDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ApprovedDataTabular" })';
         var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
         var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "Paradata" })';
         var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata" })';
+        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfTabular" })';
+
+        var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApprovedTabular" })';
         var $DDIUrl = '@Url.Action("GetDDI", "ImportExport")';
         var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire" })';
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess" })';
@@ -42,7 +45,7 @@
             {
               <text>exportTypes[@((int)typeValue)]='@typeValue.ToString()'</text>
         }
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, exportTypes, $DeleteDataExportProcessUrl);
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, exportTypes, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl,$UpdateApprovedTabularDataUrl);
             ko.applyBindings(model);
         });
 
@@ -91,11 +94,19 @@
         <tr>
             <td>
                 <div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                       <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
-                        Data.tab
-                    </a>
-
+                    <div><img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
+                        <span>
+                            Last updated on <i data-bind='text:lastTabularDataUpdateDate()'></i>
+                        </span>
+                        <a class="btn btn-default" data-bind="click: requestTabularDataUpdate, visible: showTabularDataRefreshButton()">
+                            <i class="glyphicon glyphicon-refresh">
+                            </i>
+                        </a>
+                        <a class="btn btn-default" data-bind="visible: showTabularDataDownloadButton(), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                            <i class="glyphicon glyphicon-download">
+                            </i>
+                        </a>
+                    </div>
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
                         <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
                         Stata.dta
@@ -109,11 +120,24 @@
             </td>
             <td>
                 <div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                    @*<a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                         <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
                         Data.tab
-                    </a>
-
+                    </a>*@
+                    <div>
+                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
+                        <span>
+                            Last updated on <i data-bind='text:lastApprovedTabularDataUpdateDate()'></i>
+                        </span>
+                        <a class="btn btn-default" data-bind="click: requestApprovedTabularDataUpdate, visible: showApprovedTabularDataRefreshButton()">
+                            <i class="glyphicon glyphicon-refresh">
+                            </i>
+                        </a>
+                        <a class="btn btn-default" data-bind="visible: showApprovedTabularDataDownloadButton(), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                            <i class="glyphicon glyphicon-download">
+                            </i>
+                        </a>
+                    </div>
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
                         <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
                         Stata.dta

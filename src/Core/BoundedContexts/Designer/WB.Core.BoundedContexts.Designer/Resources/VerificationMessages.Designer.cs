@@ -855,5 +855,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0101_GroupHasLevelDepthMoreThan10", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them..
+        /// </summary>
+        internal static string WB0102_QuestionnaireEntitiesShareSameInternalId {
+            get {
+                return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
+            }
+        }
     }
 }

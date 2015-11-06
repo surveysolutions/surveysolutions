@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -13,21 +16,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IDataExportQueue dataExportQueue;
 
-        private readonly IQuestionnaireDataExportServiceFactory questionnaireDataExportServiceFactory;
-
-        private readonly IPlainTransactionManager plainTransactionManager;
-
         private readonly ILogger logger;
 
+        private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IQueuedProcess>>> registeredExporters =
+            new Dictionary<DataExportFormat, Dictionary<Type, Action<IQueuedProcess>>>();
+
         public DataExporter(IDataExportQueue dataExportQueue,
-            IPlainTransactionManager plainTransactionManager,
-            ILogger logger,
-            IQuestionnaireDataExportServiceFactory questionnaireDataExportServiceFactory)
+            ILogger logger)
         {
             this.dataExportQueue = dataExportQueue;
-            this.plainTransactionManager = plainTransactionManager;
             this.logger = logger;
-            this.questionnaireDataExportServiceFactory = questionnaireDataExportServiceFactory;
+            
+            this.RegisterExportHandlerForFormat<ParaDataQueuedProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
         }
 
         public void StartDataExport()
@@ -40,60 +42,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    string dataExportProcessId =
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => this.dataExportQueue.DeQueueDataExportProcessId());
-
-                    if (string.IsNullOrEmpty(dataExportProcessId))
-                        return;
-
-
-                    var dataExportProcess =
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () =>
-                                this.dataExportQueue.GetDataExportProcess(dataExportProcessId));
+                    IQueuedProcess dataExportProcess = this.dataExportQueue.DeQueueDataExportProcess();
 
                     if (dataExportProcess == null)
                         return;
-
-                    var questionnaireDataExportService =
-                        questionnaireDataExportServiceFactory.CreateQuestionnaireDataExportService(
-                            dataExportProcess.DataExportFormat);
-
-                    if (questionnaireDataExportService == null)
-                        return;
-
+                    
                     try
                     {
-                        switch (dataExportProcess.DataExportType)
-                        {
-                            case DataExportType.Data:
-                                if (dataExportProcess.QuestionnaireId.HasValue &&
-                                    dataExportProcess.QuestionnaireVersion.HasValue)
-                                    questionnaireDataExportService.ExportData(dataExportProcess.QuestionnaireId.Value,
-                                        dataExportProcess.QuestionnaireVersion.Value,
-                                        dataExportProcess.DataExportProcessId);
-                                else
-                                    throw new ArgumentException(
-                                        "QuestionnaireId and QuestionnaireVersion can't be empty for data export");
-                                break;
-                            case DataExportType.ParaData:
-                                questionnaireDataExportService.ExportParaData(dataExportProcess.DataExportProcessId);
-                                break;
-                        }
+                        HandleExportProcess(dataExportProcess);
 
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => this.dataExportQueue.FinishDataExportProcess(dataExportProcessId));
+                        this.dataExportQueue.FinishDataExportProcess(dataExportProcess.DataExportProcessId);
                     }
                     catch (Exception e)
                     {
                         logger.Error(
-                            string.Format("data export process with id {0} finished with error", dataExportProcessId),
+                            string.Format("data export process with id {0} finished with error", dataExportProcess.DataExportProcessId),
                             e);
 
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () =>
-                                this.dataExportQueue.FinishDataExportProcessWithError(dataExportProcessId, e));
+                        this.dataExportQueue.FinishDataExportProcessWithError(dataExportProcess.DataExportProcessId, e);
                     }
                 }
             }
@@ -101,6 +67,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 IsWorking = false;
             }
+        }
+
+        private void HandleExportProcess(IQueuedProcess dataExportProcess)
+        {
+            registeredExporters[dataExportProcess.DataExportFormat][dataExportProcess.GetType()](dataExportProcess);
+        }
+
+        private void RegisterExportHandlerForFormat<T, THandler>(DataExportFormat format)
+            where T : class, IQueuedProcess
+            where THandler : IExportProcessHandler<T>
+
+        {
+            if (!registeredExporters.ContainsKey(format))
+                registeredExporters[format] = new Dictionary<Type, Action<IQueuedProcess>>();
+
+            registeredExporters[format][typeof (T)] =
+                (p) => { ServiceLocator.Current.GetInstance<THandler>().ExportData(p as T); };
         }
     }
 }

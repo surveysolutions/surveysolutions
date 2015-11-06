@@ -20,20 +20,23 @@ namespace WB.UI.Headquarters.API
 {
     public class DataExportApiController : ApiController
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
+        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IParaDataAccessor paraDataAccessor;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
         private readonly IDataExportQueue dataExportQueue;
 
         public DataExportApiController( 
             IFileSystemAccessor fileSystemAccessor, 
             IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
-            IDataExportQueue dataExportQueue, IParaDataAccessor paraDataAccessor)
+            IDataExportQueue dataExportQueue, IParaDataAccessor paraDataAccessor, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportedDataReferenceViewFactory = exportedDataReferenceViewFactory;
             this.dataExportQueue = dataExportQueue;
             this.paraDataAccessor = paraDataAccessor;
+            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
         [HttpGet]
@@ -53,17 +56,86 @@ namespace WB.UI.Headquarters.API
             return result;
         }
 
+        [HttpGet]
+        public HttpResponseMessage AllDataTabular(Guid id, long version)
+        {
+            var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(id, version);
+
+            if (!fileSystemAccessor.IsFileExists(path))
+                throw new HttpException(404, "para data is absent");
+
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(path, FileMode.Open);
+
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(path);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+            return result;
+        }
+
+        [HttpGet]
+        public HttpResponseMessage ApprovedDataTabular(Guid id, long version)
+        {
+            var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(id, version);
+
+            if (!fileSystemAccessor.IsFileExists(path))
+                throw new HttpException(404, "para data is absent");
+
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(path, FileMode.Open);
+
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(path);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+            return result;
+        }
+
         [HttpPost]
         public HttpResponseMessage RequestUpdateOfParadata()
         {
             try
             {
-                this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.TabularData);
+                this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.Tabular);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
             
+            return Request.CreateResponse(true);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage RequestUpdateOfTabular(Guid questionnaireId, long questionnaireVersion)
+        {
+            try
+            {
+                this.dataExportQueue.EnQueueDataExportProcess(questionnaireId, questionnaireVersion,
+                    DataExportFormat.Tabular);
+            }
+            catch (Exception e)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+            return Request.CreateResponse(true);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage RequestUpdateOfApprovedTabular(Guid questionnaireId, long questionnaireVersion)
+        {
+            try
+            {
+                this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion,
+                    DataExportFormat.Tabular);
+            }
+            catch (Exception e)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
             return Request.CreateResponse(true);
         }
 
