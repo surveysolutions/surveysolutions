@@ -28,7 +28,7 @@ namespace WB.UI.Designer.Code
             this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
                  .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
 
-            this.Bind<ICommandPreprocessor>().To<CommandPreprocessor>();
+            this.Bind<ICommandInflater>().To<CommandInflater>();
             this.Bind<ICommandPostprocessor>().To<CommandPostprocessor>();
             this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();
             this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
