@@ -19,7 +19,9 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Open(Guid id)
         {
-            var httpCookie = new HttpCookie("questionnaireId", id.FormatGuid());
+            var questionnaireId = id.FormatGuid();
+
+            var httpCookie = new HttpCookie("questionnaireId", questionnaireId);
             Response.AppendCookie(httpCookie);
 
             return Redirect("~/UpdatedDesigner/app");

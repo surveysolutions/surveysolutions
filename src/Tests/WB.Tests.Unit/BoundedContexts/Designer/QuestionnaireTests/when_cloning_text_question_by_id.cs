@@ -58,11 +58,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             e.ResponsibleId == responsibleId &&
             e.IsFilteredCombobox == newQuestionAdded.IsFilteredCombobox &&
             e.Mask == newQuestionAdded.Mask &&
+            e.SourceQuestionnaireId == questionnaire.EventSourceId &&
             e.YesNoView == newQuestionAdded.YesNoView
         );
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
-        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(28);
+        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(29);
 
         static Questionnaire questionnaire;
         static Guid questionId = Guid.Parse("11111111111111111111111111111111");
