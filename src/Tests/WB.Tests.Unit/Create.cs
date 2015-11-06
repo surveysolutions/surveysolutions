@@ -522,9 +522,16 @@ namespace WB.Tests.Unit
             };
         }
 
+        public static StaticText StaticText(
+            Guid? staticTextId = null,
+            string text = "Static Text X")
+        {
+            return new StaticText(staticTextId ?? Guid.NewGuid(), text);
+        }
+
         public static IQuestion Question(
             Guid? questionId = null,
-            string variable = null,
+            string variable = "question",
             string enablementCondition = null,
             string validationExpression = null,
             string validationMessage = null,
@@ -567,7 +574,7 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string variable = null, string enablementCondition = null,
+        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string variable = "roster", string enablementCondition = null,
             string[] fixedTitles = null, IEnumerable<IComposite> children = null,
             RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
