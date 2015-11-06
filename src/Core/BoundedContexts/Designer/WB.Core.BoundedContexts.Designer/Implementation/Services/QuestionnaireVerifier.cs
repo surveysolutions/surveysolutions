@@ -181,11 +181,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
                     Verifier<IComposite, IComposite>(QuestionnaireEntitiesShareSameInternalId, "WB0102", VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId),
 
+                    MacrosVerifier(MacrosHasEmptyName, "WB0014", VerificationMessages.WB0014_MacrosHasEmptyName),
+                    MacrosVerifier(MacrosHasInvalidName, "WB0010", VerificationMessages.WB0010_MacrosHasInvalidName),
                     VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
+                    ErrorsByMacrosesWithDuplicateName,
                     ErrorsByConditionAndValidationExpressions
                 };
             }
@@ -215,6 +218,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
             return false;
         }
+
 
         private IEnumerable<QuestionnaireVerificationError> VerifyGpsPrefilledQuestions(QuestionnaireDocument document, VerificationState state)
         {
@@ -497,6 +501,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select error;
         }
 
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> MacrosVerifier(
+            Func<Macros, QuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) =>
+                questionnaire
+                    .Macroses
+                    .Where(entity => hasError(entity.Value, questionnaire))
+                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateMacrosReference(entity.Key)));
+        }
+
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
             Func<QuestionnaireDocument, bool> hasError, string code, string message)
         {
@@ -558,6 +572,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
                 select new QuestionnaireVerificationError(code, message, verificationResult.ReferencedEntities.Select(CreateReference));
+        }
+
+        private static bool MacrosHasEmptyName(Macros macros, QuestionnaireDocument questionnaire)
+        {
+            return string.IsNullOrWhiteSpace(macros.Name);
+        }
+
+        private static bool MacrosHasInvalidName(Macros macros, QuestionnaireDocument questionnaire)
+        {
+            return !IsVariableNameValid(macros.Name);
         }
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)
@@ -1090,6 +1114,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
         }
 
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByMacrosesWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
+        {
+            var macrosDuplicates = questionnaire
+                .Macroses
+                .Where(x => !string.IsNullOrEmpty(x.Value.Name))
+                .GroupBy(x => x.Value.Name, StringComparer.InvariantCultureIgnoreCase)
+                .SelectMany(group => group.Skip(1));
+
+            foreach (var macrosDuplicate in macrosDuplicates)
+            {
+                yield return new QuestionnaireVerificationError("WB0020", VerificationMessages.WB0020_NameForMacrosIsNotUnique, CreateMacrosReference(macrosDuplicate.Key));
+            }
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -1160,6 +1198,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Where(referencedQuestion => referencedQuestion != null)
                 .ToList();
             return incorrectReferencedQuestions;
+        }
+
+        private static QuestionnaireVerificationReference CreateMacrosReference(Guid macrosId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macros, macrosId);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)

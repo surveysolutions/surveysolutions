@@ -20,14 +20,14 @@ namespace Main.Core.Documents
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
             this.SharedPersons = new List<Guid>();
-            this.Macroses = new Dictionary<string, Macros>();
+            this.Macroses = new Dictionary<Guid, Macros>();
         }
 
         public string Id { get; set; }
 
         public List<IComposite> Children { get; set; }
 
-        public Dictionary<string, Macros> Macroses { get; set; }
+        public Dictionary<Guid, Macros> Macroses { get; set; }
 
         public DateTime? CloseDate { get; set; }
 
