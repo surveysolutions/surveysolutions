@@ -48,6 +48,9 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
                     { "MoveStaticText", typeof (MoveStaticTextCommand) },
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
+
+                    {"PasteItemAfter", typeof(PasteItemAfterCommand) },
+                    {"PasteItemInto", typeof(PasteItemIntoCommand) }
                     //Macros commands
                     { "AddMacros", typeof (AddMacrosCommand) },
                     { "UpdateMacros", typeof (UpdateMacrosCommand) },
