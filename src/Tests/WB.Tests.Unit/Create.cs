@@ -1797,7 +1797,7 @@ namespace WB.Tests.Unit
             params InterviewDataExportLevelView[] levels)
         {
             return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion, levels, InterviewExportedAction.Completed);
+                questionnaireVersion, levels);
         }
 
         public static InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
@@ -2264,9 +2264,13 @@ namespace WB.Tests.Unit
                 false);
         }
 
-        public static QuestionnaireExportStructure QuestionnaireExportStructure()
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
         {
-            return new QuestionnaireExportStructure();
+            return new QuestionnaireExportStructure
+            {
+                QuestionnaireId = questionnaireId ?? Guid.Empty,
+                Version = version ?? 0
+            };
         }
         public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)

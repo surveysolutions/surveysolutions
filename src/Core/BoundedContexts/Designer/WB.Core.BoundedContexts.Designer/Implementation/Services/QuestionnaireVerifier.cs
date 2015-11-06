@@ -178,7 +178,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
-                    Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),                 
+                    Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
+                    Verifier<IComposite, IComposite>(QuestionnaireEntitiesShareSameInternalId, "WB0102", VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId),
+
                     VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
@@ -912,6 +914,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool MultimediaShouldNotHaveValidationExpression(IMultimediaQuestion question)
         {
             return !string.IsNullOrEmpty(question.ValidationExpression);
+        }
+
+        private static EntityVerificationResult<IComposite> QuestionnaireEntitiesShareSameInternalId(IComposite entity, QuestionnaireDocument questionnaire)
+        {
+            List<IComposite> entitiesWithSameId = questionnaire.Find<IComposite>(e => e.PublicKey == entity.PublicKey).ToList();
+
+            bool isTheOnlyEntityWithSuchId = entitiesWithSameId.Count == 1;
+            bool isFirstEntityWithSuchId = entitiesWithSameId.First() == entity;
+
+            if (isTheOnlyEntityWithSuchId)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            if (isFirstEntityWithSuchId)
+                return new EntityVerificationResult<IComposite> { HasErrors = true, ReferencedEntities = entitiesWithSameId };
+            else
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)

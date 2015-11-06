@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -39,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             interviewExportedDataStorage.Remove(interviewId);
         }
 
-        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
+        public InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
         {
             var interviewData = new Dictionary<string, string[]>();
             
@@ -72,7 +69,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 Data = this.serializer.SerializeToByteArray(interviewData),
-                LastAction = interviewDataExportView.Action
             };
 
             return interviewExportedData;

@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
-            this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<IMetadataExportService>().To<MetadataExportService>();
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
@@ -99,7 +99,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
-            this.Bind<IDataExportRepositoryWriter>().To<FileBasedDataExportRepositoryWriter>().InSingletonScope();
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
@@ -129,8 +128,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
             this.Bind<IDataExportWriter>().To<ReadSideRepositoryDataExportWriter>();
-
-            this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
@@ -153,7 +150,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             if (hqEnabled)
             {
-                this.Kernel.RegisterDenormalizer<InterviewExportedDataDenormalizer>();
                 this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
             }
             this.Bind<IBrokenSyncPackagesStorage>()

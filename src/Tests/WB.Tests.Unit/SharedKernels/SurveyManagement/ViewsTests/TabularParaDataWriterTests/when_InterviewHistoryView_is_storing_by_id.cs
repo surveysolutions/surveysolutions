@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDataWriterTests
 {
-    internal class WhenMethodStoreOfTabularParaDataWriterCalledAndCacheIsEnabled : TabularParaDataWriterTestContext
+    internal class when_InterviewHistoryView_is_storing_by_id : TabularParaDataWriterTestContext
     {
         Establish context = () =>
         {
@@ -25,19 +25,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
             interviewSummaryWriterMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(new InterviewSummary() { QuestionnaireId = questionnaireId, QuestionnaireVersion = questionnaireVersion, InterviewId = interviewId });
           
-            _tabularParaDataAccessor = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
+            tabularParaDataAccessor = CreateTabularParaDataWriter(interviewSummaryWriter: interviewSummaryWriterMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            _tabularParaDataAccessor.Store(interviewHistoryView, interviewHistoryView.InterviewId.FormatGuid());
+            tabularParaDataAccessor.Store(interviewHistoryView, interviewHistoryView.InterviewId.FormatGuid());
 
         It should_not_create_any_files = () =>
             fileSystemAccessorMock.Verify(x => x.OpenOrCreateFile(Moq.It.IsAny<string>(),Moq.It.IsAny<bool>()), Times.Never);
 
         It should_store_view_in_cache = () =>
-            _tabularParaDataAccessor.GetById(interviewHistoryView.InterviewId.FormatGuid()).ShouldEqual(interviewHistoryView);
+            tabularParaDataAccessor.GetById(interviewHistoryView.InterviewId.FormatGuid()).ShouldEqual(interviewHistoryView);
 
-        private static TabularParaDataAccessor _tabularParaDataAccessor;
+        private static TabularParaDataAccessor tabularParaDataAccessor;
         private static Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryWriterMock;
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
         private static InterviewHistoryView interviewHistoryView;
