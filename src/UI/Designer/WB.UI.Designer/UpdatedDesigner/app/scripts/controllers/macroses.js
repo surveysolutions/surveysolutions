@@ -126,8 +126,11 @@
                 $rootScope.$broadcast("closeMacrosesList", {});
             };
 
-            $scope.$on('openMacrosesList', function () {
+            $scope.$on('openMacrosesList', function (scope, params) {
                 $scope.unfold();
+                if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {
+                    utilityService.focus("focusMacros" + params.focusOn);
+                }
             });
 
             $scope.$on('closeMacrosesListRequested', function () {

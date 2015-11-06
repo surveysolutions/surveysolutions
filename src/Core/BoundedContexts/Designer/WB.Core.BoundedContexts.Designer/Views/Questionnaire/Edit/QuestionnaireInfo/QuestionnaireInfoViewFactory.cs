@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.Macroses = questionnaireDocument
                 .Macroses
-                .Select(x => new MacrosView { ItemId = x.Key, Name = x.Value.Name, Description = x.Value.Description, Expression = x.Value.Expression })
+                .Select(x => new MacrosView { ItemId = x.Key.FormatGuid(), Name = x.Value.Name, Description = x.Value.Description, Expression = x.Value.Expression })
                 .OrderBy(x => x.Name)
                 .ToList();
 

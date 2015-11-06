@@ -132,10 +132,15 @@ angular.module('designerApp')
             };
 
             $scope.navigateTo = function (reference) {
-                $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                    chapterId: reference.chapterId,
-                    itemId: reference.itemId
-                });
+                if (reference.type.toLowerCase() === "macros") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openMacrosesList", { focusOn : reference.itemId });
+                } else {
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId
+                    });
+                }
             };
 
             $scope.removeItemWithIdFromErrors = function(itemId) {

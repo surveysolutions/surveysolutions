@@ -99,7 +99,7 @@
                                     <a href ng-click="deleteMacros($index)" class="btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
-                                        <input placeholder="macros name" ng-model="macros.name" name="name" class="form-control" type="text" />
+                                        <input focus-on-out="focusMacros{{macros.itemId}}"  placeholder="macros name" ng-model="macros.name" name="name" class="form-control" type="text" />
                                         <span class="input-group-btn" ng-show="isDescriptionBtnVisible(macros)">
                                             <button class="btn btn-default" type="button" ng-click="toggleDescription(macros)">{{ getDescriptionBtnName(macros) }} description</button>
                                         </span>
@@ -156,7 +156,7 @@
                                         <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
                                         <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                         <span class="title">{{reference.title}}</span>
-                                        <span ng-if="reference.type == 'Question' || reference.type == 'Roster'" class="variable" ng-bind="reference.variable">aaaa</span>
+                                        <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macros'" class="variable" ng-bind="reference.variable">aaaa</span>
                                     </a>
                                 </li>
                             </ul>
