@@ -30,6 +30,35 @@
                     return commandCall(type, command);
                 };
 
+                commandService.addMacros = function (questionnaireId, macros) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": macros.itemId
+                    };
+                    return commandCall("AddMacros", command);
+                };
+
+                commandService.updateMacros = function (questionnaireId, macros) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": macros.itemId,
+                        "name": macros.name,
+                        "expression": macros.expression,
+                        "description": macros.description
+                    };
+
+                    return commandCall("UpdateMacros", command);
+                };
+
+                commandService.deleteMacros = function(questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": itemId
+                    };
+                    return commandCall("DeleteMacros", command);
+                }
+
+
                 commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
                     return commandCall('CloneQuestionById', {
                         questionId: itemIdToClone,

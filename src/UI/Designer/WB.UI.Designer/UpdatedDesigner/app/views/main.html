@@ -28,7 +28,7 @@
                         </a>
                     </span>
                     <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
-                    
+
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser">Read Only</span>
 
                 </div>
@@ -44,7 +44,7 @@
 </section>
 
 <section id="main" class="row">
-    <div class="chapter-panel" ng-click="unfold();" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
+    <div class="chapter-panel" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
         <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="ul-holder">
             <div class="chapters">
@@ -79,6 +79,52 @@
             </div>
         </div>
     </div>
+    <div class="macros-panel" ng-class="{unfolded: isFolded }" ng-controller="MacrosesCtrl" data-empty-place-holder-enabled="false">
+        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="macroses">
+            <perfect-scrollbar class="scroller">
+                <h3>Macroses:</h3>
+                <form role="form" name="macrosesForm" novalidate>
+                    <ul ng-model="macroses">
+                        <li class="macros-panel-item"
+                            ng-repeat="macros in macroses">
+                            <ng-form name="macrosForm">
+                                <a href ng-click="removeMacros($index)" class="btn" tabindex="-1"></a>
+                                <div class="input-group macros-name">
+                                    <span class="input-group-addon">$</span>
+                                    <input placeholder="macros name" ng-model="macros.name" name="name" class="form-control" type="text"/>
+                                    <span class="input-group-btn" ng-show="isDescriptionBtnVisible(macros)">
+                                        <button class="btn btn-default" type="button" ng-click="toggleDescription(macros)">{{ getDescriptionBtnName(macros) }} description</button>
+                                    </span>
+                                </div>
+                                <div class="input-group macros-description" ng-show="macros.isDescriptionVisible">
+                                    <span class="input-group-addon">//</span>
+                                    <input placeholder="description" ng-model="macros.description" class="form-control" type="text"/>
+                                </div>
+                                <input placeholder="expression" ng-model="macros.expression" ui-ace="{ onLoad : aceLoaded }" class="form-control" type="text" />
+                                <div class="actions" ng-show="macrosForm.$dirty">
+                                    <button type="submit" ng-disabled="macrosForm.$invalid" class="btn lighter-hover" ng-click="saveMacros(macros, macrosForm)">Save</button>
+                                    <button type="button" class="btn lighter-hover" ng-click="cancel(macros, macrosForm)">Cancel</button>
+                                </div>
+                            </ng-form>
+                        </li>
+                    </ul>
+
+                </form>
+                <div class="button-holder">
+                    <input type="button" class="btn lighter-hover" value="ADD NEW Macros" ng-click="addNewMacros()">
+                </div>
+            </perfect-scrollbar>
+        </div>
+
+    </div>
+    <div id="left-menu" ng-controller="LeftMenuCtrl">
+        <ul>
+            <li><a class="left-menu-chapters" ng-class="{unfolded: isFoldedChapters }" ng-click="unfoldChapters();"></a></li>
+            <li><a class="left-menu-macroses" ng-class="{unfolded: isFoldedMacroses }" ng-click="unfoldMacroses();">$mcr</a></li>
+        </ul>
+    </div>
+
     <div class="questionnaire-tree" ui-view></div>
 </section>
 
@@ -87,7 +133,7 @@
         <div class="modal-header">
             <h3 class="modal-title">
                 Compilation: <span ng-pluralize count="verificationStatus.errorsCount"
-                                    when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
+                                   when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
             </h3>
             <button type="button" class="close" ng-click="verificationStatus.visible = false" aria-hidden="true"> <!--&times;--> </button>
         </div>
