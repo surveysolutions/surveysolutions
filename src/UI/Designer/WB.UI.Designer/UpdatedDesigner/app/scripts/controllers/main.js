@@ -217,6 +217,14 @@ angular.module('designerApp')
             $rootScope.$on('statictextAdded', function () {
             });
 
+            $rootScope.$on('chapterPasted', function () {
+                getQuestionnaire();
+            });
+
+            $rootScope.$on('itemPasted', function () {
+                getQuestionnaire();
+            });
+
             $scope.getPersonsSharedWith = function(questionnaire) {
                 if (!questionnaire)
                     return [];

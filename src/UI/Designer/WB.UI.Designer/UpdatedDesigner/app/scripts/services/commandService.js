@@ -330,6 +330,26 @@
                     return commandCall("DeleteStaticText", command);
                 };
 
+                commandService.pasteItemAfter = function (questionnaireId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, newId) {
+                    return commandCall('PasteItemAfter', {
+                        sourceQuestionnaireId: sourceQuestionnaireId,
+                        sourceItemId : sourceItemId,
+                        itemToPasteAfterId: itemToPasteAfterId,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
+                };
+
+                commandService.pasteItemInto = function (questionnaireId, parentGroupId, sourceQuestionnaireId, sourceItemId, newId) {
+                    return commandCall('PasteItemInto', {
+                        sourceQuestionnaireId: sourceQuestionnaireId,
+                        sourceItemId: sourceItemId,
+                        parentGroupId: parentGroupId,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
+                };
+
                 return commandService;
             }
         ]);

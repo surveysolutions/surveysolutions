@@ -34,12 +34,10 @@
             <li>
                 <a ng-click="addStaticText(item)">Add static text</a>
             </li>
-            <li>
-                <a ng-click="deleteGroup(item)">Delete</a>
-            </li>
-            <li>
-                <a ng-click="cloneGroup(item.itemId)">Clone</a>
-            </li>
+            <li><a ng-click="cloneGroup(item.itemId)">Clone</a></li>
+            <li><a ng-click="copy(item)">Copy</a></li>
+            <li><a ng-click="pasteItemAfter(item)">Paste after</a></li>
+            <li><a ng-click="deleteGroup(item)">Delete</a></li>
         </ul>
     </div>
 </div>
