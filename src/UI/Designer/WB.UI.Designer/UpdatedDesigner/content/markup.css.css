@@ -7758,7 +7758,7 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main #left-menu ul li a.unfolded {
   color: #7e898f;
-  background-color: #f1f2f3;
+  background-color: #edeff0;
 }
 #designer-editor.container section#main .left-side-panel {
   position: absolute;
@@ -7796,7 +7796,7 @@ textarea#edit-group-description {
   z-index: 15;
   width: 50px;
   height: 50px;
-  background: #f1f2f3 url(i/arrow-left.png) center 0 no-repeat;
+  background: #edeff0 url(i/arrow-left.png) center 0 no-repeat;
   border-left: 1px solid #dbdfe2;
 }
 #designer-editor.container section#main .left-side-panel .foldback-button:hover {
@@ -7814,7 +7814,7 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel .macros-panel,
 #designer-editor.container section#main .left-side-panel .chapter-panel {
   height: 100%;
-  background: #f1f2f3;
+  background: #edeff0;
   position: relative;
 }
 #designer-editor.container section#main .left-side-panel .macros-panel h3,
@@ -7835,7 +7835,7 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel .chapter-panel .button-holder button,
 #designer-editor.container section#main .left-side-panel .macros-panel .button-holder .btn,
 #designer-editor.container section#main .left-side-panel .chapter-panel .button-holder .btn {
-  background: #f1f2f3;
+  background: #edeff0;
 }
 #designer-editor.container section#main .macros-panel {
   width: 85%;
@@ -7866,8 +7866,8 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .macros-panel .macroses ul li {
   background: #fff;
-  margin-bottom: 10px;
-  padding: 15px 30px 5px 10px;
+  margin-bottom: 7px;
+  padding: 5px 30px 5px 10px;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -7928,7 +7928,7 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .ace_editor {
   border: none;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   border-radius: 0;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li a {

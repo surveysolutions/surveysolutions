@@ -260,6 +260,14 @@ angular.module('designerApp')
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
+
+                editor.commands.addCommand({
+                    name: "replace",
+                    bindKey: { win: "Tab|Shift-Tab", mac: "Tab" },
+                    exec: function (editor) {
+                        editor.blur();
+                    }
+                });
             };
 
             $rootScope.$on('$stateChangeSuccess',
