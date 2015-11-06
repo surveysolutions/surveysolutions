@@ -50,7 +50,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
 
                     {"PasteItemAfter", typeof(PasteItemAfterCommand) },
-                    {"PasteItemInto", typeof(PasteItemIntoCommand) }
+                    {"PasteItemInto", typeof(PasteItemIntoCommand) },
                     //Macros commands
                     { "AddMacros", typeof (AddMacrosCommand) },
                     { "UpdateMacros", typeof (UpdateMacrosCommand) },
