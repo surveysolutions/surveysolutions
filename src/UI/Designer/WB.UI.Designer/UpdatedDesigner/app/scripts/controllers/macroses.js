@@ -69,8 +69,11 @@
                 form.$setPristine();
             }
 
-            $scope.removeMacros = function (index) {
-                $scope.macroses.splice(index, 1);
+            $scope.deleteMacros = function (index) {
+                var macros = $scope.macroses[index];
+                commandService.deleteMacros($state.params.questionnaireId, macros.itemId).success(function () {
+                    $scope.macroses.splice(index, 1);
+                });
             }
             
             $scope.getDescriptionBtnName = function (macros) {

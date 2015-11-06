@@ -50,7 +50,7 @@
                     return commandCall("UpdateMacros", command);
                 };
 
-                commandService.deleteMacros = function(questionnaireId, itemId) {
+                commandService.deleteMacros = function (questionnaireId, itemId) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "entityId": itemId

@@ -44,79 +44,86 @@
 </section>
 
 <section id="main" class="row">
-    <div class="chapter-panel" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" ui-tree="chaptersTree" data-empty-place-holder-enabled="false">
-        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
-        <div class="ul-holder">
-            <div class="chapters">
-                <perfect-scrollbar class="scroller">
-                    <h3>Sections:</h3>
-                    <ul ui-tree-nodes ng-model="questionnaire.chapters">
-                        <li class="chapter-panel-item"
-                            ng-repeat="chapter in questionnaire.chapters"
-                            ui-tree-node
-                            ng-class="{ current: isCurrentChapter(chapter) }"
-                            context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
-                            context-menu-hide-on-mouse-leave="true">
-                            <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
-                                <div class="inner">
-                                    <a class="handler" ui-tree-handle></a>
-                                    <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">{{chapter.title}}</a>
+    <div class="left-side-panel chapters" ng-class="{unfolded: isFolded }" ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="chapter-panel" ui-tree="chaptersTree">
+            <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
+            <div class="ul-holder">
+                <div class="chapters">
+                    <perfect-scrollbar class="scroller">
+                        <h3>Sections:</h3>
+                        <ul ui-tree-nodes ng-model="questionnaire.chapters">
+                            <li class="chapter-panel-item"
+                                ng-repeat="chapter in questionnaire.chapters"
+                                ui-tree-node
+                                ng-class="{ current: isCurrentChapter(chapter) }"
+                                context-menu data-target="chapter-context-menu-{{ chapter.itemId }}"
+                                context-menu-hide-on-mouse-leave="true">
+                                <div class="holder" ng-click="editChapter(chapter);$event.stopPropagation();">
+                                    <div class="inner">
+                                        <a class="handler" ui-tree-handle></a>
+                                        <a class="chapter-panel-item-body" ui-sref="questionnaire.chapter.group({ chapterId: chapter.itemId, itemId: chapter.itemId})">{{chapter.title}}</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
-                                    <li><a ng-click="cloneChapter(chapter.itemId);$event.stopPropagation();">Clone</a></li>
-                                    <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
+                                <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
+                                        <li><a ng-click="cloneChapter(chapter.itemId);$event.stopPropagation();">Clone</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="button-holder">
+                            <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()">
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="left-side-panel macroses" ng-class="{unfolded: isFolded }" ng-controller="MacrosesCtrl" data-empty-place-holder-enabled="false">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="macros-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+            <div class="macroses">
+                <perfect-scrollbar class="scroller">
+                    <h3>Macroses:</h3>
+                    <form role="form" name="macrosesForm" novalidate>
+                        <ul ng-model="macroses">
+                            <li class="macros-panel-item"
+                                ng-repeat="macros in macroses">
+                                <ng-form name="macrosForm">
+                                    <a href ng-click="deleteMacros($index)" class="btn" tabindex="-1"></a>
+                                    <div class="input-group macros-name">
+                                        <span class="input-group-addon">$</span>
+                                        <input placeholder="macros name" ng-model="macros.name" name="name" class="form-control" type="text" />
+                                        <span class="input-group-btn" ng-show="isDescriptionBtnVisible(macros)">
+                                            <button class="btn btn-default" type="button" ng-click="toggleDescription(macros)">{{ getDescriptionBtnName(macros) }} description</button>
+                                        </span>
+                                    </div>
+                                    <div class="input-group macros-description" ng-show="macros.isDescriptionVisible">
+                                        <span class="input-group-addon">//</span>
+                                        <input placeholder="description" ng-model="macros.description" class="form-control" type="text" />
+                                    </div>
+                                    <input placeholder="expression" ng-model="macros.expression" ui-ace="{ onLoad : aceLoaded }" class="form-control" type="text" />
+                                    <div class="actions" ng-show="macrosForm.$dirty">
+                                        <button type="submit" ng-disabled="macrosForm.$invalid" class="btn lighter-hover" ng-click="saveMacros(macros, macrosForm)">Save</button>
+                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macros, macrosForm)">Cancel</button>
+                                    </div>
+                                </ng-form>
+                            </li>
+                        </ul>
+
+                    </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()">
+                        <input type="button" class="btn lighter-hover" value="ADD NEW Macros" ng-click="addNewMacros()">
                     </div>
                 </perfect-scrollbar>
             </div>
         </div>
-    </div>
-    <div class="macros-panel" ng-class="{unfolded: isFolded }" ng-controller="MacrosesCtrl" data-empty-place-holder-enabled="false">
-        <div class="foldback-button" ng-click="foldback();$event.stopPropagation()"></div>
-        <div class="macroses">
-            <perfect-scrollbar class="scroller">
-                <h3>Macroses:</h3>
-                <form role="form" name="macrosesForm" novalidate>
-                    <ul ng-model="macroses">
-                        <li class="macros-panel-item"
-                            ng-repeat="macros in macroses">
-                            <ng-form name="macrosForm">
-                                <a href ng-click="removeMacros($index)" class="btn" tabindex="-1"></a>
-                                <div class="input-group macros-name">
-                                    <span class="input-group-addon">$</span>
-                                    <input placeholder="macros name" ng-model="macros.name" name="name" class="form-control" type="text"/>
-                                    <span class="input-group-btn" ng-show="isDescriptionBtnVisible(macros)">
-                                        <button class="btn btn-default" type="button" ng-click="toggleDescription(macros)">{{ getDescriptionBtnName(macros) }} description</button>
-                                    </span>
-                                </div>
-                                <div class="input-group macros-description" ng-show="macros.isDescriptionVisible">
-                                    <span class="input-group-addon">//</span>
-                                    <input placeholder="description" ng-model="macros.description" class="form-control" type="text"/>
-                                </div>
-                                <input placeholder="expression" ng-model="macros.expression" ui-ace="{ onLoad : aceLoaded }" class="form-control" type="text" />
-                                <div class="actions" ng-show="macrosForm.$dirty">
-                                    <button type="submit" ng-disabled="macrosForm.$invalid" class="btn lighter-hover" ng-click="saveMacros(macros, macrosForm)">Save</button>
-                                    <button type="button" class="btn lighter-hover" ng-click="cancel(macros, macrosForm)">Cancel</button>
-                                </div>
-                            </ng-form>
-                        </li>
-                    </ul>
-
-                </form>
-                <div class="button-holder">
-                    <input type="button" class="btn lighter-hover" value="ADD NEW Macros" ng-click="addNewMacros()">
-                </div>
-            </perfect-scrollbar>
-        </div>
-
     </div>
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>

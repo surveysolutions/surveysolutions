@@ -14,7 +14,7 @@
 }
 
 #loading-logo {
-    width: @chapter-menu-panel-width;
+    width: @left-menu-width;
     height: @header-height;
     position: absolute;
     top: -1px;
@@ -62,13 +62,13 @@
     section#header {
         position: relative;
         height: @header-height;
-        padding-left: @chapter-menu-panel-width + 18px;
+        padding-left: @left-menu-width + 18px;
 
         > .designer-logo {
             position: absolute;
             left: 0;
             top: 0;
-            width: @chapter-menu-panel-width;
+            width: @left-menu-width;
             height: 100%;
             background: @designer-editor-lightblue-bg-color url(../i/d-normal.gif) left top no-repeat;
         }
@@ -154,7 +154,7 @@
 
         > .left {
             float: left;
-            width: @chapter-menu-panel-width;
+            width: @left-menu-width;
             height: 100%;
             border-top: #a4aaaf 1px solid;
             border-bottom: #999fa4 1px solid;
@@ -162,7 +162,7 @@
 
         > .right {
             float: left;
-            width: calc(~"100%" - @chapter-menu-panel-width);
+            width: calc(~"100%" - @left-menu-width);
             height: 100%;
             border-top: #c5c8ca 1px solid;
             border-bottom: #a7acaf 1px solid;
@@ -175,13 +175,15 @@
         //overflow: hidden;
 
         @selected-panel-bg-color: #f1f2f3;
+        @selected-panel-border-color: #dbdfe2;
+        @selected-panel-grey-color: #7e898f;
 
         #left-menu {
             position: absolute;
             left: 0;
             top: 0;
             z-index: 900;
-            width: @chapter-menu-panel-width;
+            width: @left-menu-width;
             height: 100%;
             background: @designer-editor-mediumblue-bg-color;
             .transition(width 0.4s ease);
@@ -192,10 +194,10 @@
                 list-style: none;
 
                 li a {
-                    height: @chapter-menu-panel-width;
+                    height: @left-menu-width;
                     display: block;
                     cursor: pointer;
-                    line-height: @chapter-menu-panel-width;
+                    line-height: @left-menu-width;
                     word-break: keep-all;
                     white-space: nowrap;
                     text-align: center;
@@ -205,10 +207,6 @@
 
                     &.left-menu-chapters {
                         background: url(../i/chapter-panel-btn.png) 0 19px no-repeat;
-
-                        &.unfolded {
-                            background-color: @designer-editor-mediumblue-bg-color;
-                        }
                     }
 
                     &.left-menu-macroses {
@@ -227,31 +225,49 @@
             }
         }
 
-        .macros-panel {
-            @unfolded_width: 354px;
+        @macroses-panel-width: 85%;
+        @chapters-panel-width: 354px;
+
+        .left-side-panel {
             position: absolute;
-            left: @chapter-menu-panel-width;
+            left: @left-menu-width;
             top: 0;
             z-index: 800;
             width: 0;
             height: 100%;
-            background: @selected-panel-bg-color;
-            cursor: pointer;
             display: none;
             .transition(width 0.4s ease);
-            .box-shadow(10px 2px 25px 0 rgba(0, 0, 0, 0.3));
 
-            > .foldback-button {
+            .foldback-region {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url(../i/left-panel-shadow.png) repeat-y;
+            }
+
+            &.macroses .foldback-region {
+                left: @macroses-panel-width;
+                background: url(../i/left-panel-shadow-small.png) repeat-y;
+            }
+
+            &.chapters .foldback-region {
+                left: @chapters-panel-width;
+            }
+
+            .foldback-button {
                 @side: 50px;
                 display: none;
                 position: absolute;
                 cursor: pointer;
                 top: 0;
-                right: 0;
+                right: -@side;
                 z-index: 15;
                 width: @side;
                 height: @side;
-                background: url(../i/arrow-left.png) center 0 no-repeat;
+                background: @selected-panel-bg-color url(../i/arrow-left.png) center 0 no-repeat;
+                border-left: 1px solid @selected-panel-border-color;
 
                 &:hover {
                     background-position: -3px -55px;
@@ -259,21 +275,43 @@
             }
 
             &.unfolded {
-                display: block;
-                width: 40%;
+                width: calc(~"50%" - (@left-menu-width));
                 cursor: default;
                 background-image: none;
+                display: block;
 
-                > .foldback-button {
+                .foldback-button {
                     display: block;
                 }
             }
 
+            .macros-panel, .chapter-panel {
+                height: 100%;
+                background: @selected-panel-bg-color;
+                position: relative;
+
+                h3 {
+                    .chapters-title-fontstyle();
+                    margin: 29px 24px 0 18px;
+                    color: @selected-panel-grey-color;
+                }
+
+                .button-holder {
+                    input, button, .btn {
+                        background: @selected-panel-bg-color;
+                    }
+                }
+            }
+        }
+
+        .macros-panel {
+            width: @macroses-panel-width;
+
             @macroses-panel-padding-left: 20px;
             @macroses-panel-macros-bg: #fff;
             @macroses-accent-color: #e004c9;
-            @macroses-grey-color:#7e898f;
-            
+
+
             h3 {
                 padding-left: @macroses-panel-padding-left;
             }
@@ -302,11 +340,11 @@
                         .border-right-radius(8px);
                         position: relative;
                         z-index: 10;
-                        
+
                         &:hover {
                             .box-shadow(0 0 10px 0 rgba(0, 0, 0, 0.2));
 
-                            .input-group.macros-name .input-group-btn{
+                            .input-group.macros-name .input-group-btn {
                                 visibility: visible;
                             }
                         }
@@ -329,7 +367,6 @@
                                 border-radius: 0;
                                 background: @macroses-panel-macros-bg;
                                 padding: 0;
-                               
                             }
 
                             &.macros-name {
@@ -343,25 +380,28 @@
                                     border-bottom: 2px solid #e0e3e6;
                                     color: @macroses-accent-color;
                                 }
-                                .input-group-btn{
+
+                                .input-group-btn {
                                     width: 100%;
                                     visibility: hidden;
                                     border-radius: 4px;
-                                    button{
-                                        color: @macroses-grey-color;
+
+                                    button {
+                                        color: @selected-panel-grey-color;
                                         border-radius: 4px;
                                         text-transform: lowercase;
                                     }
                                 }
                             }
 
-                            &.macros-description{
+                            &.macros-description {
                                 .input-group-addon {
-                                    color: @macroses-grey-color;
+                                    color: @selected-panel-grey-color;
                                 }
+
                                 input {
                                     padding: 0;
-                                    color: @macroses-grey-color;
+                                    color: @selected-panel-grey-color;
                                     height: 24px;
                                 }
                             }
@@ -390,102 +430,44 @@
                             }
                         }
 
-                        .actions{
+                        .actions {
                             margin-left: -6px;
                         }
-                        button{
+
+                        button {
                             background: @macroses-panel-macros-bg;
-                            
-                            &:hover{
+
+                            &:hover {
                                 background: #e6e6e6;
                             }
                         }
                     }
                 }
             }
+
+            .button-holder {
+                padding-left: @macroses-panel-padding-left;
+            }
         }
 
         .chapter-panel {
-            @unfolded_width: 354px;
-            position: absolute;
-            left: @chapter-menu-panel-width;
-            top: 0;
-            z-index: 800;
-            width: 0;
-            height: 100%;
-            background: @designer-editor-mediumblue-bg-color;
-            cursor: pointer;
-            .transition(width 0.4s ease);
+            width: @chapters-panel-width;
 
-            > .foldback-button {
-                @side: 50px;
-                display: none;
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                right: -@side;
-                z-index: 15;
-                width: @side;
-                height: @side;
-                background: #dbdfe2 url(../i/arrow-left.png) center 0 no-repeat;
-
-                &:hover {
-                    background-position: -3px -55px;
-                }
-            }
-
-            &.unfolded {
-                width: @unfolded_width;
-                cursor: default;
-                background-image: none;
-
-                &:after {
-                    @shadow-width: 219px;
-                    position: absolute;
-                    content: '';
-                    width: @shadow-width;
-                    height: 100%;
-                    top: 0;
-                    right: -@shadow-width;
-                    background: url(../i/left-panel-shadow.png) repeat-y;
-                }
-
-                > .foldback-button {
-                    display: block;
-                }
-
-                > .ul-holder {
-                    .chapters {
-                        display: block;
-                    }
-
-                    .button-holder {
-                        display: block;
-                    }
-                }
-            }
-
-            > .ul-holder {
+            .ul-holder {
                 width: 100%;
                 height: 100%;
 
                 .chapters {
                     width: 100%;
                     height: 100%;
-                    display: none;
                     list-style: none;
                     margin: 0;
                     padding: 0;
                     padding-left: 8px;
                     //overflow: hidden;
                     h3 {
-                        margin-left: 18px;
-                        margin-right: 24px;
-                        margin-bottom: 0;
-                        margin-top: 29px;
-                        .chapters-title-fontstyle();
                         padding-bottom: 8px;
-                        border-bottom: 2px solid @tree-item-border-color;
+                        border-bottom: 2px solid @selected-panel-border-color;
                     }
 
                     .btn-group ul.dropdown-menu {
@@ -498,7 +480,7 @@
                     margin-top: 2px;
                     margin-left: 18px;
                     margin-right: 24px;
-                    border-top: 2px solid @tree-item-border-color;
+                    border-top: 2px solid @selected-panel-border-color;
                     padding: 8px 0 20px 0;
                     overflow: hidden;
                 }
@@ -510,7 +492,7 @@
 
             > .questionnaire-tree-holder {
                 height: 100%;
-                padding-left: @chapter-menu-panel-width;
+                padding-left: @left-menu-width;
                 padding-right: 0;
                 padding-top: @chapter-title-height;
                 background: @designer-editor-lightblue-bg-color;
@@ -790,7 +772,7 @@ li.chapter-panel-item {
 }
 
 .chapter-title {
-    padding-left: @chapter-menu-panel-width + 22px;
+    padding-left: @left-menu-width + 22px;
     padding-right: 24px;
     position: absolute;
     left: 0;
@@ -881,13 +863,13 @@ li.chapter-panel-item {
         @h: 40px;
         position: absolute;
         top: 0;
-        left: @chapter-menu-panel-width;
+        left: @left-menu-width;
         right: 0;
         height: @chapter-title-height;
         .clearfix();
 
         > .input-group {
-            margin-top: (@chapter-menu-panel-width - @h)/2;
+            margin-top: (@left-menu-width - @h)/2;
             line-height: @h;
             //width: ~"calc(100% - 50px)";
             padding-right: 50px;

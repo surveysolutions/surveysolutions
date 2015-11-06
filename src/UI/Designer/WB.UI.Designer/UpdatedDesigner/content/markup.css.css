@@ -7753,9 +7753,6 @@ textarea#edit-group-description {
 #designer-editor.container section#main #left-menu ul li a.left-menu-chapters {
   background: url(i/chapter-panel-btn.png) 0 19px no-repeat;
 }
-#designer-editor.container section#main #left-menu ul li a.left-menu-chapters.unfolded {
-  background-color: #bcc3c8;
-}
 #designer-editor.container section#main #left-menu ul li a:hover {
   background-color: #dbdfe2;
 }
@@ -7763,44 +7760,85 @@ textarea#edit-group-description {
   color: #7e898f;
   background-color: #f1f2f3;
 }
-#designer-editor.container section#main .macros-panel {
+#designer-editor.container section#main .left-side-panel {
   position: absolute;
   left: 52px;
   top: 0;
   z-index: 800;
   width: 0;
   height: 100%;
-  background: #f1f2f3;
-  cursor: pointer;
   display: none;
   -webkit-transition: width 0.4s ease;
   -o-transition: width 0.4s ease;
   transition: width 0.4s ease;
-  -webkit-box-shadow: 10px 2px 25px 0 rgba(0, 0, 0, 0.3);
-  box-shadow: 10px 2px 25px 0 rgba(0, 0, 0, 0.3);
 }
-#designer-editor.container section#main .macros-panel > .foldback-button {
+#designer-editor.container section#main .left-side-panel .foldback-region {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url(i/left-panel-shadow.png) repeat-y;
+}
+#designer-editor.container section#main .left-side-panel.macroses .foldback-region {
+  left: 85%;
+  background: url(i/left-panel-shadow-small.png) repeat-y;
+}
+#designer-editor.container section#main .left-side-panel.chapters .foldback-region {
+  left: 354px;
+}
+#designer-editor.container section#main .left-side-panel .foldback-button {
   display: none;
   position: absolute;
   cursor: pointer;
   top: 0;
-  right: 0;
+  right: -50px;
   z-index: 15;
   width: 50px;
   height: 50px;
-  background: url(i/arrow-left.png) center 0 no-repeat;
+  background: #f1f2f3 url(i/arrow-left.png) center 0 no-repeat;
+  border-left: 1px solid #dbdfe2;
 }
-#designer-editor.container section#main .macros-panel > .foldback-button:hover {
+#designer-editor.container section#main .left-side-panel .foldback-button:hover {
   background-position: -3px -55px;
 }
-#designer-editor.container section#main .macros-panel.unfolded {
-  display: block;
-  width: 40%;
+#designer-editor.container section#main .left-side-panel.unfolded {
+  width: calc(50% - 52px);
   cursor: default;
   background-image: none;
-}
-#designer-editor.container section#main .macros-panel.unfolded > .foldback-button {
   display: block;
+}
+#designer-editor.container section#main .left-side-panel.unfolded .foldback-button {
+  display: block;
+}
+#designer-editor.container section#main .left-side-panel .macros-panel,
+#designer-editor.container section#main .left-side-panel .chapter-panel {
+  height: 100%;
+  background: #f1f2f3;
+  position: relative;
+}
+#designer-editor.container section#main .left-side-panel .macros-panel h3,
+#designer-editor.container section#main .left-side-panel .chapter-panel h3 {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 1px;
+  margin: 29px 24px 0 18px;
+  color: #7e898f;
+}
+#designer-editor.container section#main .left-side-panel .macros-panel .button-holder input,
+#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder input,
+#designer-editor.container section#main .left-side-panel .macros-panel .button-holder button,
+#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder button,
+#designer-editor.container section#main .left-side-panel .macros-panel .button-holder .btn,
+#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder .btn {
+  background: #f1f2f3;
+}
+#designer-editor.container section#main .macros-panel {
+  width: 85%;
 }
 #designer-editor.container section#main .macros-panel h3 {
   padding-left: 20px;
@@ -7921,93 +7959,37 @@ textarea#edit-group-description {
 #designer-editor.container section#main .macros-panel .macroses ul li button:hover {
   background: #e6e6e6;
 }
+#designer-editor.container section#main .macros-panel .button-holder {
+  padding-left: 20px;
+}
 #designer-editor.container section#main .chapter-panel {
-  position: absolute;
-  left: 52px;
-  top: 0;
-  z-index: 800;
-  width: 0;
-  height: 100%;
-  background: #bcc3c8;
-  cursor: pointer;
-  -webkit-transition: width 0.4s ease;
-  -o-transition: width 0.4s ease;
-  transition: width 0.4s ease;
-}
-#designer-editor.container section#main .chapter-panel > .foldback-button {
-  display: none;
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  right: -50px;
-  z-index: 15;
-  width: 50px;
-  height: 50px;
-  background: #dbdfe2 url(i/arrow-left.png) center 0 no-repeat;
-}
-#designer-editor.container section#main .chapter-panel > .foldback-button:hover {
-  background-position: -3px -55px;
-}
-#designer-editor.container section#main .chapter-panel.unfolded {
   width: 354px;
-  cursor: default;
-  background-image: none;
 }
-#designer-editor.container section#main .chapter-panel.unfolded:after {
-  position: absolute;
-  content: '';
-  width: 219px;
-  height: 100%;
-  top: 0;
-  right: -219px;
-  background: url(i/left-panel-shadow.png) repeat-y;
-}
-#designer-editor.container section#main .chapter-panel.unfolded > .foldback-button {
-  display: block;
-}
-#designer-editor.container section#main .chapter-panel.unfolded > .ul-holder .chapters {
-  display: block;
-}
-#designer-editor.container section#main .chapter-panel.unfolded > .ul-holder .button-holder {
-  display: block;
-}
-#designer-editor.container section#main .chapter-panel > .ul-holder {
+#designer-editor.container section#main .chapter-panel .ul-holder {
   width: 100%;
   height: 100%;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder .chapters {
+#designer-editor.container section#main .chapter-panel .ul-holder .chapters {
   width: 100%;
   height: 100%;
-  display: none;
   list-style: none;
   margin: 0;
   padding: 0;
   padding-left: 8px;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder .chapters h3 {
-  margin-left: 18px;
-  margin-right: 24px;
-  margin-bottom: 0;
-  margin-top: 29px;
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 12px;
-  letter-spacing: 1px;
+#designer-editor.container section#main .chapter-panel .ul-holder .chapters h3 {
   padding-bottom: 8px;
-  border-bottom: 2px solid #edeff1;
+  border-bottom: 2px solid #dbdfe2;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder .chapters .btn-group ul.dropdown-menu {
+#designer-editor.container section#main .chapter-panel .ul-holder .chapters .btn-group ul.dropdown-menu {
   left: inherit;
   right: 0;
 }
-#designer-editor.container section#main .chapter-panel > .ul-holder .button-holder {
+#designer-editor.container section#main .chapter-panel .ul-holder .button-holder {
   margin-top: 2px;
   margin-left: 18px;
   margin-right: 24px;
-  border-top: 2px solid #edeff1;
+  border-top: 2px solid #dbdfe2;
   padding: 8px 0 20px 0;
   overflow: hidden;
 }
