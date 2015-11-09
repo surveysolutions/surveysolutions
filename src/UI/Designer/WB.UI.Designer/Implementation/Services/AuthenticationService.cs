@@ -3,16 +3,23 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Configuration;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Implementation.Services
 {
     internal class AuthenticationService : IAuthenticationService
     {
+        private readonly IConfigurationManager configurationManager;
+        public AuthenticationService(IConfigurationManager configurationManager)
+        {
+            this.configurationManager = configurationManager;
+        }
+
         private string ShouldShowCaptchaCookiesKey = "ShouldShowCaptcha";
         private void StoreInvalidAttempt(string userName)
         {
-            if (!AppSettings.Instance.IsReCaptchaEnabled) return;
+            if (this.IsCaptchaDisabled) return;
 
             var appSettings = AppSettings.Instance;
             Queue<DateTime> existingLoginAttempts = HttpContext.Current.Cache.Get(userName) as Queue<DateTime>;
@@ -41,9 +48,13 @@ namespace WB.UI.Designer.Implementation.Services
                 Cache.NoSlidingExpiration);
         }
 
+        private bool IsCaptchaDisabled => !AppSettings.Instance.IsReCaptchaEnabled ||
+                                          string.IsNullOrEmpty(this.configurationManager.AppSettings["ReCaptchaPrivateKey"]) ||
+                                          string.IsNullOrEmpty(this.configurationManager.AppSettings["ReCaptchaPublicKey"]);
+
         private void ResetInvalidAttemptsCount(string userName)
         {
-            if (!AppSettings.Instance.IsReCaptchaEnabled) return;
+            if (this.IsCaptchaDisabled) return;
 
             HttpContext.Current.Cache.Remove(userName);
             if (HttpContext.Current.Request.Cookies[this.ShouldShowCaptchaCookiesKey] != null)

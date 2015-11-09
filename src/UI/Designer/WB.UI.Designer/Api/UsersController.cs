@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Api
             var shouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
 
             var isCaptchaInvalid = string.IsNullOrEmpty(model.Recaptcha) ||
-                                   this.recaptchaService.IsValid(model.Recaptcha);
+                                   !this.recaptchaService.IsValid(model.Recaptcha);
 
             if (shouldShowCaptcha && isCaptchaInvalid)
                 return new LoginResponseModel() { Status = LoginStatus.InvalidCaptcha };
