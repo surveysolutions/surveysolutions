@@ -66,12 +66,17 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDataExportQueue>().To<DataExportQueue>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
-            
+
+            this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
+            this.Bind<ITabFileReader>().To<TabFileReader>();
+            this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
+
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
 
             this.Bind<TabularFormatDataExportProcessHandler>().ToSelf();
             this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
+            this.Bind<StataFormatExportProcessHandler>().ToSelf();
         }
     }
 }

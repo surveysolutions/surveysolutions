@@ -47,15 +47,15 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
-        public HttpResponseMessage AllDataTabular(Guid id, long version)
+        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format)
         {
-            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(new QuestionnaireIdentity(id,version),DataExportFormat.Tabular));
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(new QuestionnaireIdentity(id,version), format));
         }
 
         [HttpGet]
-        public HttpResponseMessage ApprovedDataTabular(Guid id, long version)
+        public HttpResponseMessage ApprovedData(Guid id, long version, DataExportFormat format)
         {
-            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(new QuestionnaireIdentity(id, version), DataExportFormat.Tabular));
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(new QuestionnaireIdentity(id, version), format));
         }
 
         [HttpGet]
@@ -80,12 +80,11 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public HttpResponseMessage RequestUpdateOfTabular(Guid questionnaireId, long questionnaireVersion)
+        public HttpResponseMessage RequestUpdate(Guid questionnaireId, long questionnaireVersion, DataExportFormat format)
         {
             try
             {
-                this.dataExportQueue.EnQueueDataExportProcess(questionnaireId, questionnaireVersion,
-                    DataExportFormat.Tabular);
+                this.dataExportQueue.EnQueueDataExportProcess(questionnaireId, questionnaireVersion, format);
             }
             catch (Exception e)
             {
@@ -96,12 +95,11 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public HttpResponseMessage RequestUpdateOfApprovedTabular(Guid questionnaireId, long questionnaireVersion)
+        public HttpResponseMessage RequestUpdateOfApproved(Guid questionnaireId, long questionnaireVersion, DataExportFormat format)
         {
             try
             {
-                this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion,
-                    DataExportFormat.Tabular);
+                this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion, format);
             }
             catch (Exception e)
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal interface ITabularDataToExternalStatPackageExportService 
     {

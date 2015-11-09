@@ -30,6 +30,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.RegisterExportHandlerForFormat<ParaDataQueuedProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
             this.RegisterExportHandlerForFormat<AllDataQueuedProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
             this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
+
+            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
         }
 
         public void StartDataExport()
