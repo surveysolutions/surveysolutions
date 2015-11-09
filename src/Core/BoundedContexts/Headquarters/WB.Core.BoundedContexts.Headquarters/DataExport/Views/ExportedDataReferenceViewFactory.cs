@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
@@ -85,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             }
             if (dataType == DataExportType.Data)
             {
-                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(questionnaireId,
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireId,
                     questionnaireVersion);
                 if (fileSystemAccessor.IsFileExists(path))
                 {

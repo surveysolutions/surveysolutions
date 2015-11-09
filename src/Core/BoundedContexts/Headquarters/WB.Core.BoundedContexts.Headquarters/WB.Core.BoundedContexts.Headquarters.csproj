@@ -46,6 +46,10 @@
       <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ddidotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
@@ -107,6 +111,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataExport\Accessors\FilebasedExportedDataAccessor.cs" />
+    <Compile Include="DataExport\Accessors\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="DataExport\Accessors\IParaDataAccessor.cs" />
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
     <Compile Include="DataExport\DataExportSettings.cs" />
@@ -114,8 +120,11 @@
     <Compile Include="DataExport\Dtos\DataExportFormat.cs" />
     <Compile Include="DataExport\Dtos\DataExportType.cs" />
     <Compile Include="DataExport\Dtos\LastPublishedEventPositionForHandler.cs" />
+    <Compile Include="DataExport\ExportProcessHandlers\StataFormatExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatDataExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatParaDataExportProcessHandler.cs" />
+    <Compile Include="DataExport\Factories\IMetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
     <Compile Include="DataExport\QueuedProcess\AllDataQueuedProcess.cs" />
@@ -127,6 +136,8 @@
     <Compile Include="DataExport\Services\IDataExporter.cs" />
     <Compile Include="DataExport\Services\IDataExportQueue.cs" />
     <Compile Include="DataExport\Services\IEnvironmentContentService.cs" />
+    <Compile Include="DataExport\Services\IMetadataExportService.cs" />
+    <Compile Include="DataExport\Services\MetadataExportService.cs" />
     <Compile Include="DataExport\Services\StataEnvironmentContentService.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceInputModel.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesView.cs" />

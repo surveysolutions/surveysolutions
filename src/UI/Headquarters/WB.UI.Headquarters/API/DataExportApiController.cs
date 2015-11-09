@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage AllDataTabular(Guid id, long version)
         {
-            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(id, version));
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(id, version));
         }
 
         [HttpGet]
