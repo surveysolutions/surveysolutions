@@ -337,6 +337,9 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_6_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_duplicated_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
