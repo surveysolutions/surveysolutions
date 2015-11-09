@@ -1,4 +1,4 @@
-﻿Designer.VM.Login = function (loginApiUrl, homePageUrl, shouldUseRecaptcha) {
+﻿Designer.VM.Login = function (loginApiUrl, homePageUrl, shouldUseRecaptcha, googleRecaptchaSiteKey) {
     Designer.VM.Login.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -6,6 +6,8 @@
     self.loginApiUrl = loginApiUrl;
     self.homePageUrl = homePageUrl;
 
+    self.recaptchaClientResponse = '';
+    self.googleRecaptchaSiteKey = googleRecaptchaSiteKey;
     self.shouldUseRecaptcha = ko.observable(shouldUseRecaptcha);
     self.userName = ko.observable('');
     self.password = ko.observable('');
@@ -30,7 +32,7 @@
             return;
         }
 
-        if (self.shouldUseRecaptcha() && _.isUndefined(grecaptcha.getResponse())) {
+        if (self.shouldUseRecaptcha() && self.recaptchaClientResponse === '') {
             self.loginStatus(Designer.VM.Login.LoginStatus.InvalidCaptcha);
             return;
         }
@@ -42,20 +44,26 @@
         };
 
         if (self.shouldUseRecaptcha()) {
-            loginRequest.recaptcha = grecaptcha.getResponse();
+            loginRequest.recaptcha = self.recaptchaClientResponse;
         }
 
         self.SendRequest(self.loginApiUrl, loginRequest, function(response) {
             self.loginStatus(response.Status);
 
             switch (response.Status) {
+                case Designer.VM.Login.LoginStatus.InvalidLoginOrPassword:
+                case Designer.VM.Login.LoginStatus.InvalidCaptcha:
+                    if (self.shouldUseRecaptcha()) {
+                        grecaptcha.reset();
+                    }
+                    break;
             case Designer.VM.Login.LoginStatus.CaptchaRequired:
                 self.shouldUseRecaptcha(true);
+                self.renderCaptcha();
                 break;
             case Designer.VM.Login.LoginStatus.Success:
-                var returnUrl = self.QueryString['ReturnUrl'];
-                if (!_.isUndefined(returnUrl))
-                    window.location.href = decodeURIComponent(returnUrl);
+                if (!_.isUndefined(self.QueryString) && !_.isUndefined(self.QueryString['ReturnUrl']))
+                    window.location.href = decodeURIComponent(self.QueryString['ReturnUrl']);
                 else
                     window.location.href = self.homePageUrl;
                 break;
@@ -65,6 +73,19 @@
             window.location.href = self.homePageUrl;
         });
     }
+
+    self.renderCaptcha = function () {
+        if (!self.shouldUseRecaptcha()) return;
+
+        grecaptcha.render('recaptcha', {
+            'sitekey': self.googleRecaptchaSiteKey,
+            'callback': self.onRecaptchaVerified
+        });
+    }
+
+    self.onRecaptchaVerified = function (response) {
+        self.recaptchaClientResponse = response;
+    };
 };
 
 Designer.VM.Login.LoginStatus = {
