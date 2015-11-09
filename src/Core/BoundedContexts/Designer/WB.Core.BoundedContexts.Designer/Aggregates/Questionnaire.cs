@@ -21,7 +21,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
