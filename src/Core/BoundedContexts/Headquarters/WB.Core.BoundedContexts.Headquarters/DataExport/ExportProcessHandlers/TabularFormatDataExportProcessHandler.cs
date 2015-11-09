@@ -80,9 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                  this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
                  folderForDataExport));
 
-            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                questionnaireId,
-                questionnaireVersion);
+            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(process.QuestionnaireIdentity, DataExportFormat.Tabular);
 
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
@@ -107,9 +105,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
                     folderForDataExport));
 
-            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(
-                process.QuestionnaireIdentity.QuestionnaireId,
-                process.QuestionnaireIdentity.Version);
+            var archiveFilePath =
+                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
+                    process.QuestionnaireIdentity, DataExportFormat.Tabular);
 
             this.RecreateExportArchive(folderForDataExport, archiveFilePath);
         }

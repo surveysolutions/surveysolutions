@@ -1,4 +1,5 @@
 ﻿using Microsoft;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -43,8 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
             
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                questionnaireId,
-                questionnaireVersion);
+                process.QuestionnaireIdentity,
+                DataExportFormat.STATA);
 
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
