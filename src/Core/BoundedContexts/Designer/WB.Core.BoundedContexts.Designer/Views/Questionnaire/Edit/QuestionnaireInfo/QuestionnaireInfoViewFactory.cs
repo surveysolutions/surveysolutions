@@ -87,9 +87,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 questionnaireInfoView.IsReadOnlyForUser = true;
             }
 
-            questionnaireInfoView.Macroses = questionnaireDocument
-                .Macroses
-                .Select(x => new MacrosView { ItemId = x.Key.FormatGuid(), Name = x.Value.Name, Description = x.Value.Description, Expression = x.Value.Expression })
+            questionnaireInfoView.Macros = questionnaireDocument
+                .Macros
+                .Select(x => new MacroView { ItemId = x.Key.FormatGuid(), Name = x.Value.Name, Description = x.Value.Description, Content = x.Value.Content })
                 .OrderBy(x => x.Name)
                 .ToList();
 

@@ -142,11 +142,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macros has invalid name..
+        ///   Looks up a localized string similar to Macro has invalid name..
         /// </summary>
-        internal static string WB0010_MacrosHasInvalidName {
+        internal static string WB0010_MacroHasInvalidName {
             get {
-                return ResourceManager.GetString("WB0010_MacrosHasInvalidName", resourceCulture);
+                return ResourceManager.GetString("WB0010_MacroHasInvalidName", resourceCulture);
             }
         }
         
@@ -178,11 +178,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macros cannot have empty name..
+        ///   Looks up a localized string similar to Macro cannot have empty name..
         /// </summary>
-        internal static string WB0014_MacrosHasEmptyName {
+        internal static string WB0014_MacroHasEmptyName {
             get {
-                return ResourceManager.GetString("WB0014_MacrosHasEmptyName", resourceCulture);
+                return ResourceManager.GetString("WB0014_MacroHasEmptyName", resourceCulture);
             }
         }
         
@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another macros with the same name already exists..
+        ///   Looks up a localized string similar to Another Macro with the same name already exists..
         /// </summary>
         internal static string WB0020_NameForMacrosIsNotUnique {
             get {

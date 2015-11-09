@@ -45,9 +45,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>,
-        IEventHandler<MacrosAdded>,
-        IEventHandler<MacrosUpdated>,
-        IEventHandler<MacrosDeleted>
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroUpdated>,
+        IEventHandler<MacroDeleted>
     {
         private readonly IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
@@ -600,36 +600,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
         #endregion
 
-        public void Handle(IPublishedEvent<MacrosAdded> evnt)
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                questionnaire.AddMacros(@event.EntityId.FormatGuid());
+                questionnaire.AddMacro(@event.EntityId.FormatGuid());
                 return questionnaire;
             });
         }
 
-        public void Handle(IPublishedEvent<MacrosUpdated> evnt)
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var updatedMacros = new Macros
+                var updatedMacro = new Macro
                 {
                     Name = evnt.Payload.Name,
-                    Expression = evnt.Payload.Expression,
+                    Content = evnt.Payload.Content,
                     Description = evnt.Payload.Description
                 };
 
-                questionnaire.UpdateMacros(@event.EntityId.FormatGuid(), updatedMacros);
+                questionnaire.UpdateMacro(@event.EntityId.FormatGuid(), updatedMacro);
                 return questionnaire;
             });
         }
 
-        public void Handle(IPublishedEvent<MacrosDeleted> evnt)
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                questionnaire.RemoveMacros(@event.EntityId.FormatGuid());
+                questionnaire.RemoveMacro(@event.EntityId.FormatGuid());
                 return questionnaire;
             });
         }
