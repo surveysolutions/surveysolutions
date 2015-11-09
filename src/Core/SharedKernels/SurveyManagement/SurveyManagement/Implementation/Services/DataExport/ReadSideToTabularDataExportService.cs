@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -89,14 +90,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         }
 
-        public async Task ExportInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public async Task ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
-                            _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                            _.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId && x.QuestionnaireVersion == questionnaireIdentity.Version)
                                 .OrderBy(x => x.InterviewId)
                                 .Select(x => x.InterviewId).ToList()));
 
@@ -105,13 +106,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
                 interviewComments =>
-                    interviewComments.QuestionnaireId == questionnaireId.FormatGuid() &&
-                    interviewComments.QuestionnaireVersion == questionnaireVersion;
+                    interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId.FormatGuid() &&
+                    interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewComments =>
-                    interviewComments.QuestionnaireId == questionnaireId &&
-                    interviewComments.QuestionnaireVersion == questionnaireVersion;
+                    interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
             await Task.WhenAll(
                 this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath),
@@ -159,12 +160,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        public async Task ExportApprovedInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public async Task ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
-                    this.interviewSummaries.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                    this.interviewSummaries.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId && x.QuestionnaireVersion == questionnaireIdentity.Version)
                                                 .Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters)
                                                 .OrderBy(x => x.InterviewId)
                                                 .Select(x => x.InterviewId).ToList()));
@@ -174,14 +175,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
              interviewCommentaries =>
-                 interviewCommentaries.QuestionnaireId == questionnaireId.FormatGuid() &&
-                 interviewCommentaries.QuestionnaireVersion == questionnaireVersion &&
+                 interviewCommentaries.QuestionnaireId == questionnaireIdentity.QuestionnaireId.FormatGuid() &&
+                 interviewCommentaries.QuestionnaireVersion == questionnaireIdentity.Version &&
                  interviewCommentaries.IsApprovedByHQ;
 
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewWithStatusHistory =>
-                    interviewWithStatusHistory.QuestionnaireId == questionnaireId &&
-                    interviewWithStatusHistory.QuestionnaireVersion == questionnaireVersion &&
+                    interviewWithStatusHistory.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    interviewWithStatusHistory.QuestionnaireVersion == questionnaireIdentity.Version &&
                     interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status)
                         .Any(s => s == InterviewExportedAction.ApprovedByHeadquarter);
 
@@ -190,14 +191,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath));
         }
 
-        public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
               this.transactionManagerProvider.GetTransactionManager()
                   .ExecuteInQueryTransaction(
                       () =>
                           questionnaireExportStructureStorage.AsVersioned()
-                              .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                              .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
 
             if (questionnaireExportStructure == null)
                 return;

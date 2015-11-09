@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, questionnaireVersion,"");
+            readSideToTabularFormatExportService.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, questionnaireVersion),"");
 
         It should_craete_2_headers = () =>
             csvWriterServiceTestable.Rows.Count.ShouldEqual(2);
