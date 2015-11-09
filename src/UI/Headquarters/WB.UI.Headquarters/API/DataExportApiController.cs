@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
 namespace WB.UI.Headquarters.API
@@ -48,13 +49,13 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage AllDataTabular(Guid id, long version)
         {
-            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(id, version));
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(new QuestionnaireIdentity(id,version),DataExportFormat.Tabular));
         }
 
         [HttpGet]
         public HttpResponseMessage ApprovedDataTabular(Guid id, long version)
         {
-            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(id, version));
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(new QuestionnaireIdentity(id, version), DataExportFormat.Tabular));
         }
 
         [HttpGet]

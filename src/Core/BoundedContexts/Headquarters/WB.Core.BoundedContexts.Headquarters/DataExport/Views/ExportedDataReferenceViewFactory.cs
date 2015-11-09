@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
@@ -86,8 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             }
             if (dataType == DataExportType.Data)
             {
-                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireId,
-                    questionnaireVersion);
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(new QuestionnaireIdentity(questionnaireId,
+                    questionnaireVersion), dataFormat);
                 if (fileSystemAccessor.IsFileExists(path))
                 {
                     exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;
@@ -96,8 +97,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             }
             if (dataType == DataExportType.ApprovedData)
             {
-                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(questionnaireId,
-                    questionnaireVersion);
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(new QuestionnaireIdentity(questionnaireId,
+                    questionnaireVersion), dataFormat);
                 if (fileSystemAccessor.IsFileExists(path))
                 {
                     exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
@@ -88,17 +90,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             get { return this.pathToExportedFiles; }
         }
 
-        public string GetArchiveFilePathForExportedData(Guid questionnaireId, long version)
+        public string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format)
         {
-            var archiveName = $"{questionnaireId}_{version}_Tab_All.zip";
+            var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_All.zip";
 
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
         }
 
-        public string GetArchiveFilePathForExportedApprovedTabularData(Guid questionnaireId, long version)
+        public string GetArchiveFilePathForExportedApprovedData(QuestionnaireIdentity questionnaireId, DataExportFormat format)
         {
-            var archiveName = $"{questionnaireId}_{version}_Tab_App.zip";
-
+            var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_App.zip";
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
         }
     }
