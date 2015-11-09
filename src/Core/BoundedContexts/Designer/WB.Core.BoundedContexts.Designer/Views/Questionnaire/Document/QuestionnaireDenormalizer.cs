@@ -518,7 +518,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.Macros.Add(evnt.Payload.EntityId, new Macro());
+            document.Macros[evnt.Payload.EntityId] = new Macro();
 
             this.UpdateQuestionnaire(evnt, document);
         }
