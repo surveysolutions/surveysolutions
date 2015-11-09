@@ -36,7 +36,9 @@
             </li>
             <li><a ng-click="cloneGroup(item.itemId)">Clone</a></li>
             <li><a ng-click="copy(item)">Copy</a></li>
-            <li><a ng-click="pasteItemAfter(item)">Paste after</a></li>
+            <li >
+                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)">Paste after</a>
+            </li>
             <li><a ng-click="deleteGroup(item)">Delete</a></li>
         </ul>
     </div>

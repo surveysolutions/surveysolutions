@@ -32,6 +32,9 @@
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
 
+            
+            $scope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
+
             var scrollDown = 'down';
             var scrollUp = 'up';
             var focusSearchField = 'ctrl+f';
@@ -619,7 +622,7 @@
             $scope.pasteItemInto = function (parent) {
 
                 var itemToCopy = $.cookie('itemToCopy');
-                if (itemToCopy == null)
+                if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
                 
                 var newId = utilityService.guid();
@@ -628,11 +631,6 @@
 
                     $scope.refreshTree();
 
-                    //todo:
-                    //emit changes 
-                    //navigate to new item
-
-                    //$scope.resetSelection();
                     $rootScope.$emit('itemPasted');
                     $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
                     
@@ -642,7 +640,7 @@
             $scope.pasteItemAfter = function (item) {
 
                 var itemToCopy = $.cookie('itemToCopy');
-                if (itemToCopy == null)
+                if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
 
                 var idToPasteAfter = item.itemId || $state.params.itemId;
@@ -652,11 +650,6 @@
 
                     $scope.refreshTree();
 
-                    //todo:
-                    //emit changes 
-                    //navigate to new item
-
-                    //$scope.resetSelection();
                     $rootScope.$emit('itemPasted');
                     $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
 

@@ -14,6 +14,7 @@
                 $scope.foldback();
             });
             
+            $scope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
 
             $scope.chapters = [];
 
@@ -118,7 +119,7 @@
             $scope.pasteAfterChapter = function (chapter) {
 
                 var itemToCopy = $.cookie('itemToCopy');
-                if (itemToCopy == null)
+                if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
 
                 /*if (itemToCopy.itemType !== 'group')
