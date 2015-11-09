@@ -8,30 +8,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public ExportedDataReferencesViewModel(
             Guid questionnaireId, 
             long questionnaireVersion, 
-            ExportedDataReferencesView paradataReference,
-            ExportedDataReferencesView tabularDataReference,
-            ExportedDataReferencesView tabularApprovedDataReference, 
-            ExportedDataReferencesView stataDataReference, 
-            ExportedDataReferencesView stataApprovedDataReference,
+            ExportedDataReferencesView paraDataTabularReference,
+            ExportedDataReferencesView dataTabularReference,
+            ExportedDataReferencesView approvedDataTabularReference, 
+            ExportedDataReferencesView dataStataReference, 
+            ExportedDataReferencesView approvedDataStataReference,
             RunningDataExportProcessView[] runningProcesses)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
-            this.ParadataReference = paradataReference;
-            this.TabularDataReference = tabularDataReference;
-            this.TabularApprovedDataReference = tabularApprovedDataReference;
+            this.ParaDataTabularReference = paraDataTabularReference;
+            this.DataTabularReference = dataTabularReference;
+            this.ApprovedDataTabularReference = approvedDataTabularReference;
             this.RunningProcesses = runningProcesses;
-            this.StataDataReference = stataDataReference;
-            this.StataApprovedDataReference = stataApprovedDataReference;
+            this.DataSTATAReference = dataStataReference;
+            this.ApprovedDataSTATAReference = approvedDataStataReference;
         }
 
         public Guid QuestionnaireId { get; private set; }
         public long QuestionnaireVersion { get; private set; }
-        public ExportedDataReferencesView ParadataReference { get; private set; }
-        public ExportedDataReferencesView TabularDataReference { get; private set; }
-        public ExportedDataReferencesView TabularApprovedDataReference { get; private set; }
-        public ExportedDataReferencesView StataDataReference { get; private set; }
-        public ExportedDataReferencesView StataApprovedDataReference { get; private set; }
+        public ExportedDataReferencesView ParaDataTabularReference { get; private set; }
+        public ExportedDataReferencesView DataTabularReference { get; private set; }
+        public ExportedDataReferencesView ApprovedDataTabularReference { get; private set; }
+        public ExportedDataReferencesView DataSTATAReference { get; private set; }
+        public ExportedDataReferencesView ApprovedDataSTATAReference { get; private set; }
         public RunningDataExportProcessView[] RunningProcesses { get; private set; }
     }
 }

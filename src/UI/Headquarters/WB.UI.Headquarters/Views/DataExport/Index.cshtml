@@ -88,29 +88,31 @@
             <td>
                 <div>
                     <div class="well-sm">
+                        @{ var exportTabularDataParameters = "'" + DataExportType.Data + "','" + DataExportFormat.Tabular + "'"; }
                         <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs"/>
                         <span>
-                            Last updated on <i data-bind='text:lastTabularDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportTabularDataParameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestDataUpdate(@((int)DataExportFormat.Tabular)), visible: showTabularDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestDataUpdate(@((int) DataExportFormat.Tabular)), visible: showRefreshButton(@exportTabularDataParameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showTabularDataDownloadButton(), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@((int)DataExportFormat.Tabular)' }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportTabularDataParameters), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@((int) DataExportFormat.Tabular)' }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
                     </div>
                     <div class="well-sm">
-                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
+                        @{ var exportStataDataParameters = "'" + DataExportType.Data + "','" + DataExportFormat.STATA + "'"; }
+                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata"/>
                         <span>
-                            Last updated on <i data-bind='text:lastStataDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportStataDataParameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestDataUpdate(@((int)DataExportFormat.STATA)), visible: showStataDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestDataUpdate(@((int) DataExportFormat.STATA)), visible: showRefreshButton(@exportStataDataParameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showStataDataDownloadButton(), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@((int)DataExportFormat.STATA)' }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportStataDataParameters), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@((int) DataExportFormat.STATA)' }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
@@ -125,23 +127,35 @@
             <td>
                 <div>
                     <div class="well-sm">
-                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
+                        @{ var exportApprovedTabularDataParameters = "'" + DataExportType.ApprovedData + "','" + DataExportFormat.Tabular + "'"; }
+                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs"/>
                         <span>
-                            Last updated on <i data-bind='text:lastApprovedTabularDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportApprovedTabularDataParameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestApprovedDataUpdate, visible: showApprovedTabularDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestApprovedDataUpdate(@((int) DataExportFormat.Tabular)), visible: showRefreshButton(@exportApprovedTabularDataParameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showApprovedTabularDataDownloadButton(), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@DataExportFormat.Tabular' }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportApprovedTabularDataParameters), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@DataExportFormat.Tabular' }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
                     </div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
-                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
-                        Stata.dta
-                    </a>
+                    <div class="well-sm">
+                        @{ var exportApprovedStataDataParameters = "'" + DataExportType.ApprovedData + "','" + DataExportFormat.STATA + "'"; }
+                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata"/>
+                        <span>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportApprovedStataDataParameters)"></i>
+                        </span>
+                        <a class="btn btn-default" data-bind="click: requestApprovedDataUpdate(@((int) DataExportFormat.STATA)), visible: showRefreshButton(@exportApprovedStataDataParameters)">
+                            <i class="glyphicon glyphicon-refresh">
+                            </i>
+                        </a>
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportApprovedStataDataParameters), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@DataExportFormat.STATA' }">
+                            <i class="glyphicon glyphicon-download">
+                            </i>
+                        </a>
+                    </div>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2' }">
                         <img src="@Url.Content("~/Content/icons/spss.png")" alt="spss" />
@@ -168,15 +182,16 @@
             @if (this.ViewBag.EnableInterviewHistory)
             {
                 <td>
+                    @{ var exportParadataarameters = "'" + DataExportType.ParaData + "','" + DataExportFormat.Tabular + "'"; }
                     <div>
                         <span>
-                            Last updated on <i data-bind='text:lastParaDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportParadataarameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate, visible: showParaDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate, visible: showRefreshButton(@exportParadataarameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showParaDataDownloadButton(), attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParadataarameters), attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
@@ -207,8 +222,8 @@
         <tr>
             <td><span data-bind="text: DataExportProcessName"></span></td>
             <td><span data-bind="text: $root.exportFormatName($data)"></span></td>
-            <td><span data-bind="text: BeginDate"></span></td>
-            <td><span data-bind="text: LastUpdateDate"></span></td>
+            <td><span data-bind="text: $root.formatDate($data.BeginDate())"></span></td>
+            <td><span data-bind="text: $root.formatDate($data.LastUpdateDate())"></span></td>
             <td><span data-bind="text: Progress"></span>%</td>
             <td> @if (User.IsInRole("Administrator"))
             {

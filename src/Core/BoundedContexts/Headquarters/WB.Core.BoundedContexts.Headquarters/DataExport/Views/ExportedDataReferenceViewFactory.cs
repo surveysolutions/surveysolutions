@@ -77,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             exportedDataReferencesView = new ExportedDataReferencesView()
             {
                 DataExportFormat = dataFormat,
+                DataExportType= dataType,
                 CanRefreshBeRequested = true//latestDataProcess.Status != DataExportStatus.Running
             };
 
