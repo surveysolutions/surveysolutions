@@ -41,10 +41,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         public TabularFormatDataExportProcessHandler(
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader,
             ITransactionManagerProvider transactionManagerProvider,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IFileSystemAccessor fileSystemAccessor, 
-            IArchiveUtils archiveUtils, 
-            ITabularFormatExportService tabularFormatExportService, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileSystemAccessor fileSystemAccessor,
+            IArchiveUtils archiveUtils,
+            ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService)
         {
             this.questionnaireReader = questionnaireReader;
@@ -58,54 +58,67 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(AllDataQueuedProcess process)
         {
-            var folderForDataExport =
+            var questionnaireId = process.QuestionnaireIdentity.QuestionnaireId;
+            var questionnaireVersion = process.QuestionnaireIdentity.Version;
+
+            string folderForDataExport =
               this.fileSystemAccessor.CombinePath(
-                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(process.QuestionnaireId,
-                      process.QuestionnaireVersion), allDataFolder );
+                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                      questionnaireVersion), allDataFolder);
+
+            this.ClearFolder(folderForDataExport);
+
+            var exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+
+            this.tabularFormatExportService
+                .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
+
+            this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
+             this.environmentContentService.CreateEnvironmentFiles(
+                 this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
+                 folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(
-                process.QuestionnaireId,
-                process.QuestionnaireVersion);
+                questionnaireId,
+                questionnaireVersion);
 
-            this.CreateExportedDataArchive(folderForDataExport, archiveFilePath, process.QuestionnaireId, process.QuestionnaireVersion,
-                p => this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(process.QuestionnaireId,
-                    process.QuestionnaireVersion, p)
-                    .WaitAndUnwrapException());
+            RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
 
         public void ExportData(ApprovedDataQueuedProcess process)
         {
-            var folderForDataExport =
+            string folderForDataExport =
               this.fileSystemAccessor.CombinePath(
-                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(process.QuestionnaireId,
-                      process.QuestionnaireVersion), approvedDataFolder);
+                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
+                      process.QuestionnaireIdentity.Version), approvedDataFolder);
 
-            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(
-                process.QuestionnaireId,
-                process.QuestionnaireVersion);
-
-            this.CreateExportedDataArchive(folderForDataExport, archiveFilePath, process.QuestionnaireId, process.QuestionnaireVersion,
-                p => this.tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireId,
-                    process.QuestionnaireVersion, p)
-                    .WaitAndUnwrapException());
-        }
-
-        private void CreateExportedDataArchive(string folderForDataExport, string archiveFilePath, Guid questionnaireId, long questionnaireVersion, Action<string> exportDataIntoFolder)
-        {
             this.ClearFolder(folderForDataExport);
 
-            this.TransactionManager.ExecuteInQueryTransaction(
-                () =>
-                {
-                    exportDataIntoFolder(folderForDataExport);
+            var exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
 
-                    this.environmentContentService.CreateEnvironmentFiles(
-                      this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion),
-                      folderForDataExport);
-                });
+            this.tabularFormatExportService
+                .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
+            this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                this.environmentContentService.CreateEnvironmentFiles(
+                    this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
+                    folderForDataExport));
+
+            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(
+                process.QuestionnaireIdentity.QuestionnaireId,
+                process.QuestionnaireIdentity.Version);
+
+            this.RecreateExportArchive(folderForDataExport, archiveFilePath);
+        }
+
+        private void RecreateExportArchive(string folderForDataExport, string archiveFilePath)
+        {
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
+            {
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
+            }
 
             this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath);
         }
