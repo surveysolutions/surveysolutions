@@ -2442,5 +2442,15 @@ namespace WB.Tests.Unit
         {
             return new ReadSideSettings(readSideVersion: 0);
         }
+
+        public static Macro Macro(string name, string content, string description)
+        {
+            return new Macro
+            {
+                Name = name,
+                Content = content,
+                Description = description
+            };
+        }
     }
 }
