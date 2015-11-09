@@ -344,6 +344,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_with_macros.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro.cs" />
