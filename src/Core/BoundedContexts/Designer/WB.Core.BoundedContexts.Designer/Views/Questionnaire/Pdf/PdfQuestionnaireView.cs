@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         internal void AddMacro(string macroId)
         {
-            this.Macros.Add(macroId, new Macro());
+            this.Macros[macroId] = new Macro();
         }
 
         internal void UpdateMacro(string macroId, Macro macro)
