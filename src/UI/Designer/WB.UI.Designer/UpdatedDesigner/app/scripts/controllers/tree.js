@@ -33,7 +33,7 @@
             $scope.items = [];
 
             
-            $scope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
+            $rootScope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
 
             var scrollDown = 'down';
             var scrollUp = 'up';
@@ -218,6 +218,7 @@
                     case 'Question': return itemTypes.question;
                     case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
                     case 'StaticText': return itemTypes.staticText;
+                    case 'Chapter': return itemTypes.group;
                 }
                 throw 'unknown item type: ' + item;
             };
@@ -656,7 +657,7 @@
                 });
             };
 
-            $scope.copy = function(item) {
+            $rootScope.copyRef = function (item) {
                 var itemIdToCopy = item.itemId || $state.params.itemId;
 
                 var itemToCopy = {
