@@ -23,7 +23,7 @@
         var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfTabular" })';
 
         var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApprovedTabular" })';
-        var $DDIUrl = '@Url.Action("GetDDI", "ImportExport")';
+        var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DDIMetadata" })';
         var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire" })';
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess" })';
         $(function () {
