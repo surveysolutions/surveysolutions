@@ -6,8 +6,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {
     public interface ITabularFormatExportService
     {
-        Task ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath);
-        Task ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath);
+        void ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress);
+        void ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress);
         void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath);
         string[] GetTabularDataFilesFromFolder(string basePath);
     }
