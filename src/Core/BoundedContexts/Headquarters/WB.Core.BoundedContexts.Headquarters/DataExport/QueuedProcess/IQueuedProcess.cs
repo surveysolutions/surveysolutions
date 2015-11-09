@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess
     public interface IQueuedProcess
     {
         string DataExportProcessId { get; set; }
+        string DataExportProcessName { get; set; }
         DateTime BeginDate { get; set; }
         DateTime LastUpdateDate { get; set; }
         DataExportFormat DataExportFormat { get; set; }

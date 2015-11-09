@@ -38,14 +38,7 @@
             {
               <text>exportFromats[@((int)formatValue)]='@formatValue.ToString()'</text>
             }
-
-            var exportTypes = [];
-
-              @foreach (DataExportType typeValue in Enum.GetValues(typeof (DataExportType)))
-            {
-              <text>exportTypes[@((int)typeValue)]='@typeValue.ToString()'</text>
-        }
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, exportTypes, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl,$UpdateApprovedTabularDataUrl);
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl,$UpdateApprovedTabularDataUrl);
             ko.applyBindings(model);
         });
 
@@ -206,7 +199,7 @@
         <tbody>
         <!-- ko foreach:RunningProcesses -->
         <tr>
-            <td><span data-bind="text: $root.exportName($data)"></span></td>
+            <td><span data-bind="text: DataExportProcessName"></span></td>
             <td><span data-bind="text: $root.exportFormatName($data)"></span></td>
             <td><span data-bind="text: BeginDate"></span></td>
             <td><span data-bind="text: LastUpdateDate"></span></td>
