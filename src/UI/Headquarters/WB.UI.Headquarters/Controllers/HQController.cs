@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -90,11 +91,7 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
-            {
-                QuestionnaireId = id,
-                Version = version
-            }).Items.FirstOrDefault();
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
 
             var viewModel = new BatchUploadModel()
             {
@@ -134,11 +131,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
             }
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
-            {
-                QuestionnaireId = model.QuestionnaireId,
-                Version = model.QuestionnaireVersion
-            }).Items.FirstOrDefault();
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title,  preloadedMetadata));
         }
@@ -170,11 +163,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
             }
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
-            {
-                QuestionnaireId = model.QuestionnaireId,
-                Version = model.QuestionnaireVersion
-            }).Items.FirstOrDefault();
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
         }
@@ -197,11 +186,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
             }
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
-            {
-                QuestionnaireId = questionnaireId,
-                Version = version
-            }).Items.FirstOrDefault();
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
@@ -219,11 +204,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.preloadedDataRepository.DeletePreloadedDataOfPanel(id);
             }
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
-            {
-                QuestionnaireId = questionnaireId,
-                Version = version
-            }).Items.FirstOrDefault();
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
