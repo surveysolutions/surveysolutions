@@ -1,8 +1,8 @@
 using ddidotnet;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
-    public class MetaDescriptionFactory : IMetaDescriptionFactory
+    internal class MetaDescriptionFactory : IMetaDescriptionFactory
     {
         public IMetaDescription CreateMetaDescription()
         {

@@ -49,9 +49,6 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="ddidotnet">
-      <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -115,16 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
-    <Compile Include="Implementation\Services\DataExport\IMetaDescriptionFactory.cs" />
-    <Compile Include="Implementation\Services\DataExport\MetaDescriptionFactory.cs" />
     <Compile Include="Implementation\Services\DataExport\ReadSideToTabularDataExportService.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
-    <Compile Include="Services\Export\IMetadataExportService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
-    <Compile Include="Services\Export\MetadataExportService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
@@ -203,7 +196,6 @@
     <Compile Include="Implementation\IRecordsAccessor.cs" />
     <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
     <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
-    <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Services\DataExport\TabularDataToExternalStatPackageExportService.cs" />
@@ -238,7 +230,6 @@
       <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Export\ITabularDataToExternalStatPackageExportService.cs" />
-    <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />

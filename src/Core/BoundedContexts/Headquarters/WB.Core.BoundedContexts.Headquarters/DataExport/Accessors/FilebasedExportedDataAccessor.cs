@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
     internal class FilebasedExportedDataAccessor : IFilebasedExportedDataAccessor
     {
@@ -26,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public FilebasedExportedDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
-            string folderPath,
+            InterviewDataExportSettings interviewDataExportSettings,
             IMetadataExportService metadataExportService,
             ILogger logger,
             IArchiveUtils archiveUtils)
@@ -35,12 +31,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.metadataExportService = metadataExportService;
             this.logger = logger;
             this.archiveUtils = archiveUtils;
-            this.pathToExportedData = fileSystemAccessor.CombinePath(folderPath, ExportedDataFolderName);
+            this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, ExportedDataFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
 
-            this.pathToExportedFiles = fileSystemAccessor.CombinePath(folderPath, ExportedFilesFolderName);
+            this.pathToExportedFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, ExportedFilesFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
@@ -77,22 +73,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     dataDirectoryPath)
             };
 
-            archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+            this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
 
             return archiveFilePath;
         }
 
         protected string PathToExportedData
         {
-            get { return pathToExportedData; }
+            get { return this.pathToExportedData; }
         }
 
         protected string PathToExportedFiles
         {
-            get { return pathToExportedFiles; }
+            get { return this.pathToExportedFiles; }
         }
 
-        public string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version)
+        public string GetArchiveFilePathForExportedData(Guid questionnaireId, long version)
         {
             var archiveName = $"{questionnaireId}_{version}_Tab_All.zip";
 

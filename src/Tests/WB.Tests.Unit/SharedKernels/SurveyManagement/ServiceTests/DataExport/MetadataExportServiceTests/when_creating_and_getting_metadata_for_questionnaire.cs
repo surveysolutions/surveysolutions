@@ -8,6 +8,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using StatData.Core;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;

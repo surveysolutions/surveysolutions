@@ -19,13 +19,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class ImportExportController : AsyncController
     {
         private readonly IBackupManager backupManager;
-        private readonly IFilebasedExportedDataAccessor exportDataAccessor;
         private readonly ILogger logger;
 
         public ImportExportController(
-            ILogger logger, IFilebasedExportedDataAccessor exportDataAccessor, IBackupManager backupManager)
+            ILogger logger, IBackupManager backupManager)
         {
-            this.exportDataAccessor = exportDataAccessor;
             this.logger = logger;
             this.backupManager = backupManager;
         }
@@ -67,29 +65,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult ImportCompleted()
         {
             return this.RedirectToAction("Index", "Survey");
-        }
-
-        public void GetDDIAsync(Guid id, long version)
-        {
-            AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager,
-                () =>
-                {
-                    try
-                    {
-                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedDDIMetadata(id, version);
-                    }
-                    catch (Exception exc)
-                    {
-                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
-                        this.AsyncManager.Parameters["result"] = null;
-                    }
-                });
-        }
-
-        public ActionResult GetDDICompleted(string result)
-        {
-            return result != null ? this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result)) : null;
         }
     }
 }
