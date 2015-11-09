@@ -74,9 +74,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
-            this.environmentContentService.CreateEnvironmentFiles(
-                this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion),
-                folderForDataExport);
+            this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
+             this.environmentContentService.CreateEnvironmentFiles(
+                 this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
+                 folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(
                 questionnaireId,
