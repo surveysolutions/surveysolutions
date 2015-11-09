@@ -337,6 +337,13 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_6_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_duplicated_MacroAdded_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_yes_no_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
