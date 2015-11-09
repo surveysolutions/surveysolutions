@@ -8,11 +8,14 @@
     self.UpdateDataUrl = $updateDataUrl;
     self.UpdateApprovedDataUrl = $updateApprovedDataUrl;
     self.Templates = templates;
-    self.ParadataReference = ko.observableArray();
-    self.TabularDataReference = ko.observableArray();
-    self.TabularApprovedDataReference = ko.observableArray();
-    self.StataDataReference = ko.observableArray();
-    self.StataApprovedDataReference = ko.observableArray();
+
+
+    self.ParaDataTabularReference = ko.observableArray();
+    self.DataTabularReference = ko.observableArray();
+    self.ApprovedDataTabularReference = ko.observableArray();
+    self.DataSTATAReference = ko.observableArray();
+    self.ApprovedDataSTATAReference = ko.observableArray();
+
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
 
@@ -96,75 +99,40 @@
         });
     }
 
-    self.lastParaDataUpdateDate = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().LastUpdateDate))
+    self.lastUpdateDate = function(type, format) {
+        var dataReference = self.getDataReference(type, format);
+
+        if (dataReference == null || _.isUndefined(dataReference().LastUpdateDate))
             return "Never";
-        return self.ParadataReference().LastUpdateDate();
+        return self.formatDate(dataReference().LastUpdateDate());
     }
 
-    self.showParaDataDownloadButton = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().HasDataToExport))
+    self.showDownloadButton = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference().HasDataToExport))
             return false;
-        return self.ParadataReference().HasDataToExport();
+        return dataReference().HasDataToExport();
     }
-    self.showParaDataRefreshButton = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().CanRefreshBeRequested))
+    self.showRefreshButton = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference().CanRefreshBeRequested))
             return true;
-        return self.ParadataReference().CanRefreshBeRequested();
+        return dataReference().CanRefreshBeRequested();
     }
 
-    self.lastTabularDataUpdateDate = function () {
-        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().LastUpdateDate))
-            return "Never";
-        return self.TabularDataReference().LastUpdateDate();
-    }
-
-    self.showTabularDataDownloadButton = function () {
-        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().HasDataToExport))
-            return false;
-        return self.TabularDataReference().HasDataToExport();
-    }
-    self.showTabularDataRefreshButton = function () {
-        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().CanRefreshBeRequested))
-            return true;
-        return self.TabularDataReference().CanRefreshBeRequested();
-    }
-    self.lastStataDataUpdateDate = function () {
-        if (self.StataDataReference() == null || _.isUndefined(self.StataDataReference().LastUpdateDate))
-            return "Never";
-        return self.StataDataReference().LastUpdateDate();
-    }
-
-    self.showStataDataDownloadButton = function () {
-        if (self.StataDataReference() == null || _.isUndefined(self.StataDataReference().HasDataToExport))
-            return false;
-        return self.StataDataReference().HasDataToExport();
-    }
-    self.showStataDataRefreshButton = function () {
-        if (self.StataDataReference() == null || _.isUndefined(self.StataDataReference().CanRefreshBeRequested))
-            return true;
-        return self.StataDataReference().CanRefreshBeRequested();
-    }
-
-    self.lastApprovedTabularDataUpdateDate = function () {
-        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().LastUpdateDate))
-            return "Never";
-        return self.TabularApprovedDataReference().LastUpdateDate();
-    }
-
-    self.showApprovedTabularDataDownloadButton = function () {
-        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().HasDataToExport))
-            return false;
-        return self.TabularApprovedDataReference().HasDataToExport();
-    }
-    self.showApprovedTabularDataRefreshButton = function () {
-        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().CanRefreshBeRequested))
-            return true;
-        return self.TabularApprovedDataReference().CanRefreshBeRequested();
+    self.getDataReference = function (type, format)
+    {
+        var referenceName = type + format + "Reference";
+        if (_.isUndefined(self[referenceName]))
+            return null;
+        return self[referenceName];
     }
 
     self.exportFormatName = function (runningExport) {
         return self.exportFromats[runningExport.Format()];
+    }
+    self.formatDate=function(date) {
+        return moment(date).format("MM/DD/YYYY HH:mm:ss");
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);

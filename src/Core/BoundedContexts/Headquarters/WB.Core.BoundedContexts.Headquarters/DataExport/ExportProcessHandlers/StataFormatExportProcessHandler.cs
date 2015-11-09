@@ -58,7 +58,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(ApprovedDataQueuedProcess process)
         {
-            throw new System.NotImplementedException();
+            var questionnaireId = process.QuestionnaireIdentity.QuestionnaireId;
+            var questionnaireVersion = process.QuestionnaireIdentity.Version;
+
+            string folderForDataExport =
+              this.fileSystemAccessor.CombinePath(
+                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
+                      questionnaireVersion), approvedDataFolder);
+
+            this.ClearFolder(folderForDataExport);
+
+            var exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+
+            this.tabularFormatExportService
+                .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
+
+            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId,
+                questionnaireVersion, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
+
+            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
+                process.QuestionnaireIdentity,
+                DataExportFormat.STATA);
+
+            RecreateExportArchive(statsFiles, archiveFilePath);
         }
 
         private void RecreateExportArchive(string[] stataFiles, string archiveFilePath)
