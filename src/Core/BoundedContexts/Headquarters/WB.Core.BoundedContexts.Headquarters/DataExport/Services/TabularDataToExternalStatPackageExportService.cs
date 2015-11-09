@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using StatData.Core;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
-
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
     {
@@ -44,12 +46,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, tabularDataFiles);
         }
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            return CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, tabularDataFiles);
         }
        
 
@@ -59,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             try
             {
                 var questionnaireExportStructure = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                    questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                    this.questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
                 if (questionnaireExportStructure == null)
                     return new string[0];
@@ -71,16 +73,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 var result = new List<string>();
                 string fileExtention = exportType == ExportDataType.Stata
-                    ? StataFileNameExtension
-                    : SpssFileNameExtension;
-                var writer = datasetWriterFactory.CreateDatasetWriter(exportType);
+                    ? this.StataFileNameExtension
+                    : this.SpssFileNameExtension;
+                var writer = this.datasetWriterFactory.CreateDatasetWriter(exportType);
                 foreach (var tabFile in dataFiles)
                 {
                     currentDataInfo = string.Format("filename: {0}", tabFile);
-                    string dataFile = fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
-                    var meta = tabReader.GetMetaFromTabFile(tabFile);
+                    string dataFile = this.fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
+                    var meta = this.tabReader.GetMetaFromTabFile(tabFile);
                     UpdateMetaWithLabels(meta, varLabels, varValueLabels);
-                    var data = tabReader.GetDataFromTabFile(tabFile);
+                    var data = this.tabReader.GetDataFromTabFile(tabFile);
                     writer.WriteToFile(dataFile, meta, data);
                     result.Add(dataFile);
                 }
@@ -90,8 +92,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
             catch (Exception exc)
             {
-                logger.Error(string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
-                logger.Error(currentDataInfo);
+                this.logger.Error(string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
+                this.logger.Error(currentDataInfo);
             }
 
             return new string[0];

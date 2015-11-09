@@ -1,7 +1,7 @@
 ﻿using StatData.Core;
 using StatData.Readers;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
     internal class TabFileReader : ITabFileReader
     {

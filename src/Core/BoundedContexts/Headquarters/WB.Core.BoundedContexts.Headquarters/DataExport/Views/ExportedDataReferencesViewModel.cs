@@ -10,7 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             long questionnaireVersion, 
             ExportedDataReferencesView paradataReference,
             ExportedDataReferencesView tabularDataReference,
-            ExportedDataReferencesView tabularApprovedDataReference,
+            ExportedDataReferencesView tabularApprovedDataReference, 
+            ExportedDataReferencesView stataDataReference, 
+            ExportedDataReferencesView stataApprovedDataReference,
             RunningDataExportProcessView[] runningProcesses)
         {
             this.QuestionnaireId = questionnaireId;
@@ -19,6 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             this.TabularDataReference = tabularDataReference;
             this.TabularApprovedDataReference = tabularApprovedDataReference;
             this.RunningProcesses = runningProcesses;
+            this.StataDataReference = stataDataReference;
+            this.StataApprovedDataReference = stataApprovedDataReference;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -26,6 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public ExportedDataReferencesView ParadataReference { get; private set; }
         public ExportedDataReferencesView TabularDataReference { get; private set; }
         public ExportedDataReferencesView TabularApprovedDataReference { get; private set; }
+        public ExportedDataReferencesView StataDataReference { get; private set; }
+        public ExportedDataReferencesView StataApprovedDataReference { get; private set; }
         public RunningDataExportProcessView[] RunningProcesses { get; private set; }
     }
 }

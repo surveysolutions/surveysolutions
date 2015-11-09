@@ -1,16 +1,18 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateTabularDataUrl, $updateApprovedTabularDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl, $updateApprovedDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
     self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
-    self.UpdateTabularDataUrl = $updateTabularDataUrl;
-    self.UpdateApprovedTabularDataUrl = $updateApprovedTabularDataUrl;
+    self.UpdateDataUrl = $updateDataUrl;
+    self.UpdateApprovedDataUrl = $updateApprovedDataUrl;
     self.Templates = templates;
     self.ParadataReference = ko.observableArray();
     self.TabularDataReference = ko.observableArray();
     self.TabularApprovedDataReference = ko.observableArray();
+    self.StataDataReference = ko.observableArray();
+    self.StataApprovedDataReference = ko.observableArray();
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
 
@@ -47,11 +49,19 @@
     self.requestParaDataUpdate = function() {
         self.sendActionRequest(self.HistoryUrl);
     };
-    self.requestTabularDataUpdate = function () {
-        self.sendActionRequest(self.UpdateTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
+    self.requestDataUpdate = function (format) {
+        var questionnaireId = self.selectedTemplateId();
+        var questionnaireVersion = self.selectedTemplate().version;
+        return function() {
+            self.sendActionRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format);
+        }
     }
-    self.requestApprovedTabularDataUpdate = function () {
-        self.sendActionRequest(self.UpdateApprovedTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
+    self.requestApprovedDataUpdate = function (format) {
+        var questionnaireId = self.selectedTemplateId();
+        var questionnaireVersion = self.selectedTemplate().version;
+        return function() {
+            self.sendActionRequest(self.UpdateApprovedDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format);
+        }
     }
     self.sendActionRequest = function (url, args) {
         var requestHeaders = {};
@@ -118,6 +128,22 @@
         if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().CanRefreshBeRequested))
             return true;
         return self.TabularDataReference().CanRefreshBeRequested();
+    }
+    self.lastStataDataUpdateDate = function () {
+        if (self.StataDataReference() == null || _.isUndefined(self.StataDataReference().LastUpdateDate))
+            return "Never";
+        return self.StataDataReference().LastUpdateDate();
+    }
+
+    self.showStataDataDownloadButton = function () {
+        if (self.StataDataReference() == null || _.isUndefined(self.StataDataReference().HasDataToExport))
+            return false;
+        return self.StataDataReference().HasDataToExport();
+    }
+    self.showStataDataRefreshButton = function () {
+        if (self.StataDataReference() == null || _.isUndefined(self.StataDataReference().CanRefreshBeRequested))
+            return true;
+        return self.StataDataReference().CanRefreshBeRequested();
     }
 
     self.lastApprovedTabularDataUpdateDate = function () {

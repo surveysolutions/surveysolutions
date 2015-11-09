@@ -1,9 +1,9 @@
 ﻿using StatData.Writers;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
-    public interface IDatasetWriterFactory
+    internal interface IDatasetWriterFactory
     {
         IDatasetWriter CreateDatasetWriter(ExportDataType writerType);
     }

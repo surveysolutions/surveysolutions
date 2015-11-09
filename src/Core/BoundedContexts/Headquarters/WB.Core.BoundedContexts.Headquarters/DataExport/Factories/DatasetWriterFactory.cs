@@ -1,7 +1,7 @@
 using StatData.Writers;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
     internal class DatasetWriterFactory : IDatasetWriterFactory
     {

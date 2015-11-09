@@ -1,8 +1,8 @@
 ﻿using StatData.Core;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
-    public interface ITabFileReader
+    internal interface ITabFileReader
     {
         IDatasetMeta GetMetaFromTabFile(string path);
         string[,] GetDataFromTabFile(string path);
