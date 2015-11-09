@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(questionnaireId, questionnaireVersion, "").WaitAndUnwrapException();
+            readSideToTabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Progress<int>());
 
         It should_return_correct_file_name = () =>
            fileSystemAccessor.Verify(x => x.OpenOrCreateFile(fileName, true), Times.Once);

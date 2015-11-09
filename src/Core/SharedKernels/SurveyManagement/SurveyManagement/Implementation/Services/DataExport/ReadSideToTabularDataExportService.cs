@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -89,37 +90,40 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         }
 
-        public async Task ExportInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public void ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
-                            _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                            _.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId && x.QuestionnaireVersion == questionnaireIdentity.Version)
                                 .OrderBy(x => x.InterviewId)
                                 .Select(x => x.InterviewId).ToList()));
 
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure);
+            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress);
 
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
                 interviewComments =>
-                    interviewComments.QuestionnaireId == questionnaireId.FormatGuid() &&
-                    interviewComments.QuestionnaireVersion == questionnaireVersion;
+                    interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId.FormatGuid() &&
+                    interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewComments =>
-                    interviewComments.QuestionnaireId == questionnaireId &&
-                    interviewComments.QuestionnaireVersion == questionnaireVersion;
+                    interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
-            await Task.WhenAll(
-                this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath),
-                this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath));
+            this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath, progress);
+            this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
-        private void ExportInterviews(List<Guid> interviewIdsToExport, string basePath, QuestionnaireExportStructure questionnaireExportStructure)
+        private void ExportInterviews(List<Guid> interviewIdsToExport, 
+            string basePath, 
+            QuestionnaireExportStructure questionnaireExportStructure, 
+            IProgress<int> progress)
         {
+            int totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
             {
                 var interviewData = this.transactionManager.ExecuteInQueryTransaction(() => this.interviewDatas.GetById(interviewId));
@@ -156,48 +160,50 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                         this.WriteData(dataByTheLevelFilePath, result[level.LevelName]);
                     }
                 }
+
+                totalInterviewsProcessed++;
+                progress.Report((int)((double)totalInterviewsProcessed / interviewIdsToExport.Count * 100 * 0.8));
             }
         }
 
-        public async Task ExportApprovedInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public void ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
-                    this.interviewSummaries.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                    this.interviewSummaries.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId && x.QuestionnaireVersion == questionnaireIdentity.Version)
                                                 .Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters)
                                                 .OrderBy(x => x.InterviewId)
                                                 .Select(x => x.InterviewId).ToList()));
 
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure);
+            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress);
 
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
              interviewCommentaries =>
-                 interviewCommentaries.QuestionnaireId == questionnaireId.FormatGuid() &&
-                 interviewCommentaries.QuestionnaireVersion == questionnaireVersion &&
+                 interviewCommentaries.QuestionnaireId == questionnaireIdentity.QuestionnaireId.FormatGuid() &&
+                 interviewCommentaries.QuestionnaireVersion == questionnaireIdentity.Version &&
                  interviewCommentaries.IsApprovedByHQ;
 
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewWithStatusHistory =>
-                    interviewWithStatusHistory.QuestionnaireId == questionnaireId &&
-                    interviewWithStatusHistory.QuestionnaireVersion == questionnaireVersion &&
+                    interviewWithStatusHistory.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    interviewWithStatusHistory.QuestionnaireVersion == questionnaireIdentity.Version &&
                     interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status)
                         .Any(s => s == InterviewExportedAction.ApprovedByHeadquarter);
 
-            await Task.WhenAll(
-                this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath),
-                this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath));
+            this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath, progress);
+            this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
-        public void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
               this.transactionManagerProvider.GetTransactionManager()
                   .ExecuteInQueryTransaction(
                       () =>
                           questionnaireExportStructureStorage.AsVersioned()
-                              .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                              .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
 
             if (questionnaireExportStructure == null)
                 return;
@@ -211,10 +217,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return filesInDirectory;
         }
 
-        private async Task ExportCommentsInTabularFormatAsync(
-            QuestionnaireExportStructure questionnaireExportStructure,
-            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
-            string basePath)
+        private void ExportCommentsInTabularFormatAsync(QuestionnaireExportStructure questionnaireExportStructure, Expression<Func<InterviewCommentaries, bool>> whereClauseForComments, string basePath, IProgress<int> progress)
         {
             string commentsFilePath =
                 this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
@@ -240,27 +243,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             WriteData(commentsFilePath, new[] { commentsHeader.ToArray() });
 
-            foreach (var queryCommentsChunk in this.GetTasksForQueryCommentsByChunks(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster))
+            foreach (var queryCommentsChunk in 
+                this.GetTasksForQueryCommentsByChunks(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster))
             {
-                var commentRecords = await queryCommentsChunk;
-
-                WriteData(commentsFilePath, commentRecords);
+                WriteData(commentsFilePath, queryCommentsChunk);
             }
+
+            progress.Report(90);
         }
 
-        private async Task ExportActionsInTabularFormatAsync(Expression<Func<InterviewStatuses, bool>> whereClauseForAction, string basePath)
+        private void ExportActionsInTabularFormatAsync(Expression<Func<InterviewStatuses, bool>> whereClauseForAction, 
+            string basePath, 
+            IProgress<int> progress)
         {
-            var actionFilePath =
-             this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
+            var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
 
             WriteData(actionFilePath, new[] { actionFileColumns });
 
             foreach (var queryActionsChunk in this.GetTasksForQueryActionsByChunks(whereClauseForAction))
             {
-                var actionsRecords = await queryActionsChunk;
-
-                WriteData(actionFilePath, actionsRecords);
+                WriteData(actionFilePath, queryActionsChunk);
             }
+            progress.Report(100);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -297,11 +301,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
         }
 
-        private IEnumerable<Task<string[][]>> GetTasksForQueryCommentsByChunks(Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
+        private IEnumerable<string[][]> GetTasksForQueryCommentsByChunks(Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
             int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
         {
-            return this.GetTasksForQueryByChunks(
-                skip =>
+            return this.QueryByChunks(
+                    skip =>
                     this.QueryCommentsChunkFromReadSide(whereClauseForComments, skip, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster),
                     () => interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
         }
@@ -317,9 +321,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return questionnaireExportStructure;
         }
 
-        private IEnumerable<Task<string[][]>> GetTasksForQueryActionsByChunks(Expression<Func<InterviewStatuses, bool>> whereClauseForAction)
+        private IEnumerable<string[][]> GetTasksForQueryActionsByChunks(Expression<Func<InterviewStatuses, bool>> whereClauseForAction)
         {
-            return this.GetTasksForQueryByChunks(
+            return this.QueryByChunks(
                 skip => this.QueryActionsChunkFromReadSide(whereClauseForAction, skip),
                         () => interviewActionsDataStorage.Query(
                             _ => _.Where(whereClauseForAction).SelectMany(x => x.InterviewCommentedStatuses).Count()));
@@ -418,7 +422,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return result.ToArray();
         }
 
-        private IEnumerable<Task<T>> GetTasksForQueryByChunks<T>(Func<int, T> dataQuery, Func<int> countQuery)
+        private IEnumerable<T> QueryByChunks<T>(Func<int, T> dataQuery, Func<int> countQuery)
         {
             var countOfAllRecords =
                 this.transactionManagerProvider.GetTransactionManager()
@@ -430,8 +434,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             {
                 var skipAtCurrentIteration = skip;
 
-                yield return Task.Run(() => this.transactionManagerProvider.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => dataQuery(skipAtCurrentIteration)));
+                yield return this.transactionManagerProvider.GetTransactionManager()
+                                                            .ExecuteInQueryTransaction(() => dataQuery(skipAtCurrentIteration));
 
                 skip = skip + returnRecordLimit;
             }

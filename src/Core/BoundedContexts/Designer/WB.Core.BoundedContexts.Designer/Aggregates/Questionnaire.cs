@@ -972,7 +972,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterTitleQuestionId, 
                 rosterDepthFunc: () => this.GetQuestionnaireItemDepthAsVector(parentGroupId));
 
-            var events = this.CreateCloneGroupWithoutChildrenEvents(groupId, responsibleId, title, variableName, rosterSizeQuestionId, description, 
+            string groupVariableName = null;//variableName; 
+            var events = this.CreateCloneGroupWithoutChildrenEvents(groupId, responsibleId, title, groupVariableName, rosterSizeQuestionId, description, 
                 condition, parentGroupId, sourceGroupId, targetIndex, isRoster, rosterSizeSource, fixedTitles, rosterTitleQuestionId);
 
             events.ForEach(this.ApplyEvent);
@@ -1009,12 +1010,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 sourceGroup: sourceGroup, 
                 sourceQuestionnaireId: this.EventSourceId,
                 targetIndex: targetIndex,
+                preserveVariableName: false,
                 events: events);
 
             events.ForEach(this.ApplyEvent);
         }
 
-        private void FillGroup(Guid groupId, Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, List<object> events)
+        private void FillGroup(Guid groupId, Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, bool preserveVariableName, List<object> events)
         {
             events.AddRange(this.CreateCloneGroupWithoutChildrenEvents(groupId: groupId, 
                 responsibleId: responsibleId, 
@@ -1029,7 +1031,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId,
                 rosterTitleQuestionId: null,
                 rosterFixedTitles: sourceGroup.FixedRosterTitles,
-                variableName: sourceGroup.VariableName));
+                variableName: preserveVariableName ? sourceGroup.VariableName : null));
 
             foreach (var questionnaireItem in sourceGroup.Children)
             {
@@ -1046,6 +1048,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         sourceGroup: @group,
                         sourceQuestionnaireId: sourceQuestionnaireId,
                         targetIndex: itemTargetIndex,
+                        preserveVariableName : preserveVariableName,
                         events: events);
                     continue;
                 }
@@ -1053,7 +1056,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var question = questionnaireItem as IQuestion;
                 if (question != null)
                 {
-                    var variableName = string.Empty;
+                    var variableName = preserveVariableName ? question.StataExportCaption: string.Empty;
                     var variableLabel = question.VariableLabel;
                     var title = question.QuestionText;
                     var enablementCondition = question.ConditionExpression;
@@ -1354,7 +1357,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
 
                 var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetGroupId.Value)).Count();
-                var sourceGroupMaxChildNestingDepth = this.GetMaxChildGroupNestingDepth(sourceGroup);
+                var sourceGroupMaxChildNestingDepth = GetMaxChildGroupNestingDepth(sourceGroup);
 
                 if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
                 {
@@ -1401,12 +1404,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IComposite parentGroup = question.GetParent();
             this.ThrowIfChapterHasMoreThanAllowedLimit(question.PublicKey);
             
-            var questionCloned = GetQuestionClonedEvent(question, targetId, this.EventSourceId, parentGroup.PublicKey, parentGroup.Children.IndexOf(question) + 1, responsibleId);
+            var questionCloned = GetQuestionClonedEvent(question, targetId, this.EventSourceId, parentGroup.PublicKey, parentGroup.Children.IndexOf(question) + 1, false, responsibleId);
 
             this.ApplyEvent(questionCloned);
         }
 
-        private QuestionCloned GetQuestionClonedEvent(IQuestion question, Guid targetId, Guid sourceQuestionnaireId, Guid parentGroupId, int targetIndex, Guid responsibleId)
+        private QuestionCloned GetQuestionClonedEvent(IQuestion question, Guid targetId, Guid sourceQuestionnaireId, Guid parentGroupId, int targetIndex, bool preserveVariableName, Guid responsibleId)
         {
             var asTextQuestion = question as TextQuestion;
             var asMultioptions = question as IMultyOptionsQuestion;
@@ -1421,7 +1424,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionText = question.QuestionText,
                 QuestionType = question.QuestionType,
                 VariableLabel = question.VariableLabel,
-
+                StataExportCaption = preserveVariableName ? question.StataExportCaption : null,
                 Featured = question.Featured,
                 Capital = question.Capital,
 
@@ -2143,28 +2146,117 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfterItemId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteItemId);
             ThrowDomainExceptionIfEntityDoesNotExists(sourceDocument, sourceItemId);
-            
-            //todo
-            //check chapter size limitation
 
             this.innerDocument.ConnectChildrenWithParent();
             sourceDocument.ConnectChildrenWithParent();
 
-            var entityToInsert = sourceDocument.Find<IComposite>(sourceItemId);
-
             var itemToInsertAfter = this.innerDocument.Find<IComposite>(pasteAfterItemId);
+            var targetToPasteIn = itemToInsertAfter.GetParent();
+            var entityToInsert = sourceDocument.Find<IComposite>(sourceItemId);
+            var targetIndex = targetToPasteIn.Children.IndexOf(itemToInsertAfter) + 1;
 
-            var parentOfTarget = itemToInsertAfter.GetParent();
-            var targetIndex = parentOfTarget.Children.IndexOf(itemToInsertAfter) + 1;
+            if (targetToPasteIn.PublicKey != this.EventSourceId)
+            {
+                var targetChapter = this.innerDocument.GetChapterOfItemById(targetToPasteIn.PublicKey);
+                
+                var numberOfMovedItems = entityToInsert.Children
+                        .TreeToEnumerable(x => x.Children)
+                        .Count();
 
+                var numberOfItemsInChapter = targetChapter.Children
+                        .TreeToEnumerable(x => x.Children)
+                        .Count();
+
+                if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
+                {
+                    throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
+                }
+
+                var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetToPasteIn.PublicKey)).Count();
+
+                var entityToInsertAsGroup = entityToInsert as IGroup;
+                if (entityToInsertAsGroup != null)
+                {
+                    var sourceGroupMaxChildNestingDepth = GetMaxChildGroupNestingDepth(entityToInsertAsGroup);
+
+                    if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth - 1)
+                    {
+                        throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                    }
+                }
+            }
+
+            this.GeneratePasteEvents(pasteItemId, responsibleId, sourceItemId, sourceDocument, entityToInsert,
+                targetToPasteIn, targetIndex);
+        }
+
+        public void PasteItemInto(Guid pasteItemId, Guid? targetGroupId, Guid responsibleId, Guid sourceItemId, QuestionnaireDocument sourceDocument)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(pasteItemId);
+            ThrowDomainExceptionIfEntityDoesNotExists(sourceDocument, sourceItemId);
+
+            this.innerDocument.ConnectChildrenWithParent();
+            sourceDocument.ConnectChildrenWithParent();
+
+            if (targetGroupId.HasValue)
+            {
+                this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
+            }
+            
+            var entityToInsert = sourceDocument.Find<IComposite>(sourceItemId);
+            var targetToPasteIn = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
+
+            if (targetToPasteIn.PublicKey != this.EventSourceId)
+            {
+                var targetChapter = this.innerDocument.GetChapterOfItemById(targetToPasteIn.PublicKey);
+
+                var numberOfMovedItems = entityToInsert.Children
+                        .TreeToEnumerable(x => x.Children)
+                        .Count();
+
+                var numberOfItemsInChapter = targetChapter.Children
+                        .TreeToEnumerable(x => x.Children)
+                        .Count();
+
+                if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount - 1)
+                {
+                    throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
+                }
+
+                var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetToPasteIn.PublicKey)).Count();
+
+                var entityToInsertAsGroup = entityToInsert as IGroup;
+                if (entityToInsertAsGroup != null)
+                {
+                    var sourceGroupMaxChildNestingDepth = GetMaxChildGroupNestingDepth(entityToInsertAsGroup);
+
+                    if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
+                    {
+                        throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                    }
+                }
+            }
+
+            var targetIndex = targetToPasteIn.Children.Count();
+
+            this.GeneratePasteEvents(pasteItemId, responsibleId, sourceItemId, sourceDocument, entityToInsert,
+                targetToPasteIn, targetIndex);
+
+        }
+
+        private void GeneratePasteEvents(Guid pasteItemId, Guid responsibleId, Guid sourceItemId,
+            QuestionnaireDocument sourceDocument, IComposite entityToInsert, IComposite targetToPasteIn, int targetIndex)
+        {
             var entityToInsertAsQuestion = entityToInsert as IQuestion;
             if (entityToInsertAsQuestion != null)
             {
-                if(parentOfTarget.PublicKey == this.EventSourceId)
+                if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Question cannot be pasted here."));
 
-                var questionCloned = GetQuestionClonedEvent(entityToInsertAsQuestion, pasteItemId, sourceDocument.PublicKey, parentOfTarget.PublicKey,
-                    targetIndex, responsibleId);
+                var questionCloned = this.GetQuestionClonedEvent(entityToInsertAsQuestion, pasteItemId, sourceDocument.PublicKey,
+                    targetToPasteIn.PublicKey,
+                    targetIndex, true, responsibleId);
 
                 this.ApplyEvent(questionCloned);
 
@@ -2174,13 +2266,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var entityToInsertAsStaticText = entityToInsert as IStaticText;
             if (entityToInsertAsStaticText != null)
             {
-                if (parentOfTarget.PublicKey == this.EventSourceId)
+                if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
 
                 this.ApplyEvent(new StaticTextCloned()
                 {
                     EntityId = pasteItemId,
-                    ParentId = parentOfTarget.PublicKey,
+                    ParentId = targetToPasteIn.PublicKey,
                     SourceEntityId = sourceItemId,
                     SourceQuestionnaireId = sourceDocument.PublicKey,
                     TargetIndex = targetIndex,
@@ -2195,63 +2287,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (entityToInsertAsGroup != null)
             {
                 //roster as chapter is forbidden
-                if (entityToInsertAsGroup.IsRoster && (parentOfTarget.PublicKey == this.EventSourceId))
+                if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.EventSourceId))
                     throw new QuestionnaireException(string.Format("Roster cannot be pasted here."));
 
                 //roster, group, chapter
                 var events = new List<object>();
 
                 this.FillGroup(groupId: pasteItemId,
-                    parentGroupId: parentOfTarget == null ? (Guid?)null : parentOfTarget.PublicKey,
+                    parentGroupId: targetToPasteIn == null ? (Guid?) null : targetToPasteIn.PublicKey,
                     responsibleId: responsibleId,
                     sourceGroup: entityToInsertAsGroup,
                     sourceQuestionnaireId: sourceDocument.PublicKey,
                     targetIndex: targetIndex,
+                    preserveVariableName: true,
                     events: events);
 
                 events.ForEach(this.ApplyEvent);
 
                 return;
             }
-            
+
             throw new QuestionnaireException(string.Format("Unknown item type. Paste failed."));
-        }
-
-        public void PasteItemInto(Guid parentId, Guid responsibleId, Guid sourceItemId, QuestionnaireDocument sourceDocument)
-        {
-            throw new QuestionnaireException(string.Format("Operation currently is not supported."));
-
-            /*this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
-            this.ThrowDomainExceptionIfGroupDoesNotExist(sourceGroupId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-
-            var sourceGroup = this.innerDocument.FirstOrDefault<IGroup>(group => group.PublicKey == sourceGroupId);
-
-            var numberOfCopiedItems = sourceGroup.Children.TreeToEnumerable(x => x.Children).Count();
-            var numberOfItemsInChapter = this.innerDocument.GetChapterOfItemById(sourceGroupId)
-                                                           .Children
-                                                           .TreeToEnumerable(x => x.Children)
-                                                           .Count();
-
-            if ((numberOfCopiedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
-            {
-                throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
-            }
-
-            var parentGroupId = sourceGroup.GetParent() == null ? (Guid?)null : sourceGroup.GetParent().PublicKey;
-
-            var events = new List<object>();
-
-            this.FillGroup(groupId: groupId,
-                parentGroupId: parentGroupId,
-                responsibleId: responsibleId,
-                sourceGroup: sourceGroup,
-                targetIndex: targetIndex,
-                events: events);
-
-            events.ForEach(this.ApplyEvent);*/
         }
 
         #endregion
@@ -3890,7 +3946,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 
         }
 
-        int GetMaxChildGroupNestingDepth(IGroup group)
+        private static int GetMaxChildGroupNestingDepth(IGroup group)
         {
             int maxDepth = 1;
             Queue<Tuple<IGroup, int>> queue = new Queue<Tuple<IGroup, int>>();
@@ -4180,7 +4236,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     PublicKey = groupId,
                     GroupText = title,
-                    VariableName = null,
+                    VariableName = variableName,
                     ParentGroupPublicKey = parentGroupId,
                     Description = description,
                     ConditionExpression = condition,

@@ -21,7 +21,7 @@ namespace WB.UI.Shared.Web.Modules
                 eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
                 eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
                 eventStoreConnectionSettings.MaxCountToRead = int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]);
-                eventStoreConnectionSettings.UseJson = TryParseBool(WebConfigurationManager.AppSettings["EventStore.UseJson"]).GetValueOrDefault();
+                eventStoreConnectionSettings.UseBson = TryParseBool(WebConfigurationManager.AppSettings["EventStore.UseBson"]).GetValueOrDefault();
 
                 return new EventStoreWriteSideModule(eventStoreConnectionSettings);
             }

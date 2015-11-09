@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         private void InflateCopyPasteProperties(ICommand command)
         {
-            var currentPasteItemAfterCommand = command as PasteItemAfterCommand;
+            var currentPasteItemAfterCommand = command as PasteAfterCommand;
             if (currentPasteItemAfterCommand != null)
             {
                 currentPasteItemAfterCommand.SourceDocument =
@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Code.Implementation
                     1);
             }
 
-            var currentPasteItemIntoCommand = command as PasteItemIntoCommand;
+            var currentPasteItemIntoCommand = command as PasteIntoCommand;
             if (currentPasteItemIntoCommand != null)
             {
                 currentPasteItemIntoCommand.SourceDocument =

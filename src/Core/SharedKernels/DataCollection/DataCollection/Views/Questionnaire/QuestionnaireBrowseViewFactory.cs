@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
@@ -68,6 +69,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
                 return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), pagedResults.ToList(), input.Order);
             });
+        }
+
+        public QuestionnaireBrowseItem GetById(QuestionnaireIdentity identity)
+        {
+            return this.reader.GetById(identity.ToString());
         }
     }
 }
