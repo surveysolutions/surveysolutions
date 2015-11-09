@@ -1,6 +1,7 @@
 ﻿using Microsoft;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -16,13 +17,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
-        public StataFormatExportProcessHandler(IFileSystemAccessor fileSystemAccessor, ITabularFormatExportService tabularFormatExportService, IArchiveUtils archiveUtils, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+        public StataFormatExportProcessHandler(IFileSystemAccessor fileSystemAccessor, ITabularFormatExportService tabularFormatExportService, IArchiveUtils archiveUtils, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabularFormatExportService = tabularFormatExportService;
             this.archiveUtils = archiveUtils;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
 
         public void ExportData(AllDataQueuedProcess process)
@@ -42,12 +45,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
-            
+
+            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId,
+                questionnaireVersion, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
+
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 process.QuestionnaireIdentity,
                 DataExportFormat.STATA);
 
-            RecreateExportArchive(folderForDataExport, archiveFilePath);
+            RecreateExportArchive(statsFiles, archiveFilePath);
         }
 
         public void ExportData(ApprovedDataQueuedProcess process)
@@ -55,14 +61,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             throw new System.NotImplementedException();
         }
 
-        private void RecreateExportArchive(string folderForDataExport, string archiveFilePath)
+        private void RecreateExportArchive(string[] stataFiles, string archiveFilePath)
         {
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
             {
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
-
-            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath);
+            this.archiveUtils.ZipFiles(stataFiles, archiveFilePath);
         }
 
 

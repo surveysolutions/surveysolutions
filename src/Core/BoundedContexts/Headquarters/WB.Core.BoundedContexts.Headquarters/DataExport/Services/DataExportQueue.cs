@@ -118,9 +118,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private void EnQueueDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IQueuedProcess
         {
             var runningOrQueuedDataExportProcessesByTheQuestionnaire =
-             dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
-                         p =>
-                             (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running) && additionalQuery(p));
+                dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
+                    p =>
+                        (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running) &&
+                        p.DataExportFormat == exportProcess.DataExportFormat && additionalQuery(p));
 
             if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
             {

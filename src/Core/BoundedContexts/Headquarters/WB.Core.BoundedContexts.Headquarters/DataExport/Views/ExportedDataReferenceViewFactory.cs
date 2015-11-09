@@ -49,6 +49,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     input.QuestionnaireVersion),
                 CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.Tabular,
                     input.QuestionnaireId, input.QuestionnaireVersion),
+                 CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.STATA, input.QuestionnaireId,
+                    input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.STATA,
+                    input.QuestionnaireId, input.QuestionnaireVersion),
                 runningProcesses.Select(
                     p =>
                         new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate,
