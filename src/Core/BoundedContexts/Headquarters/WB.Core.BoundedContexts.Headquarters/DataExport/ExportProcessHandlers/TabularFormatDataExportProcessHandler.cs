@@ -100,9 +100,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService
                 .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
-            this.environmentContentService.CreateEnvironmentFiles(
-                this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
-                folderForDataExport);
+            this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                this.environmentContentService.CreateEnvironmentFiles(
+                    this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
+                    folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(
                 process.QuestionnaireIdentity.QuestionnaireId,
