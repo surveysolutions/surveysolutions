@@ -1,12 +1,12 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess
 {
     public class ApprovedDataQueuedProcess : IQueuedProcess
     {
-        public Guid QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string DataExportProcessId { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
