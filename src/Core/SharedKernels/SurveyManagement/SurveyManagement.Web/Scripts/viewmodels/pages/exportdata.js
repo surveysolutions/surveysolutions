@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl, $updateTabularDataUrl, $updateApprovedTabularDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateTabularDataUrl, $updateApprovedTabularDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -13,7 +13,6 @@
     self.TabularApprovedDataReference = ko.observableArray();
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
-    self.exportTypes = $exportTypes;
 
     self.selectedTemplate = ko.observable();
 
@@ -140,12 +139,6 @@
 
     self.exportFormatName = function (runningExport) {
         return self.exportFromats[runningExport.Format()];
-    }
-
-    self.exportName = function (runningExport) {
-        if (runningExport.QuestionnaireTitle() && runningExport.QuestionnaireVersion())
-            return runningExport.QuestionnaireTitle() +'-'+ runningExport.QuestionnaireVersion();
-        return self.exportTypes[runningExport.Type()];
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);
