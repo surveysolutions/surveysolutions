@@ -61,21 +61,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return result;
         }
 
-        public string GetFilePathToExportedBinaryData(Guid questionnaireId, long version)
-        {
-            var fileDirectoryPath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
-
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData,
-                string.Format("{0}.zip", this.fileSystemAccessor.GetFileName(fileDirectoryPath)));
-
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-
-            archiveUtils.ZipDirectory(fileDirectoryPath, archiveFilePath);
-
-            return archiveFilePath;
-        }
-
         public string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version)
         {
             var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
@@ -97,14 +82,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return archiveFilePath;
         }
 
-        public string GetFolderPathOfFilesByQuestionnaireForInterview(Guid questionnaireId, long version,
-            Guid interviewId)
-        {
-            return
-                this.fileSystemAccessor.CombinePath(this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version),
-                    string.Format("interview_{0}", interviewId.FormatGuid()));
-        }
-
         protected string PathToExportedData
         {
             get { return pathToExportedData; }
@@ -113,15 +90,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         protected string PathToExportedFiles
         {
             get { return pathToExportedFiles; }
-        }
-
-        protected string PreviousCopiesOfFilesFolderPath
-        {
-            get
-            {
-                return this.fileSystemAccessor.CombinePath(this.pathToExportedFiles,
-                    string.Format("_prv_{0}", DateTime.Now.Ticks));
-            }
         }
 
         public string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version)

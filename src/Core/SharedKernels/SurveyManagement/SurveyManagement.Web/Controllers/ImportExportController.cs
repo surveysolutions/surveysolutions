@@ -69,30 +69,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.RedirectToAction("Index", "Survey");
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public void GetFilesAsync(Guid id, long version)
-        {
-            AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager,
-                () =>
-                {
-                    try
-                    {
-                        this.AsyncManager.Parameters["result"] = this.exportDataAccessor.GetFilePathToExportedBinaryData(id, version);
-                    }
-                    catch (Exception exc)
-                    {
-                        this.logger.Error("Error occurred during export. " + exc.Message, exc);
-                        this.AsyncManager.Parameters["result"] = null;
-                    }
-                });
-        }
-
-        public ActionResult GetFilesCompleted(string result)
-        {
-            return this.File(result, "application/zip", fileDownloadName: Path.GetFileName(result));
-        }
-
         public void GetDDIAsync(Guid id, long version)
         {
             AsyncQuestionnaireUpdater.Update(

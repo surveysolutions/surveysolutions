@@ -51,8 +51,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
             {
                 QuestionnaireDocumentVersioned bigTemplateObject;
                 QuestionnaireExportStructure questionnaireExportStructure;
-
-                this.transactionManager.GetTransactionManager().BeginQueryTransaction();
+                var shouldTransactionBeStarted = !transactionManager.GetTransactionManager().IsQueryTransactionStarted;
+                if(shouldTransactionBeStarted)
+                    this.transactionManager.GetTransactionManager().BeginQueryTransaction();
                 try
                 {
                     bigTemplateObject = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
@@ -60,7 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
                 }
                 finally
                 {
-                    this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
+                    if (shouldTransactionBeStarted)
+                        this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
                 }
 
                 if (questionnaireExportStructure == null)

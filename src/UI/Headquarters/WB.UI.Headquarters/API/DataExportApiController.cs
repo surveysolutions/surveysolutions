@@ -42,54 +42,25 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage Paradata(Guid id, long version)
         {
-            var path = this.paraDataAccessor.GetPathToParaDataByQuestionnaire(id, version);
-            if (!fileSystemAccessor.IsFileExists(path))
-                throw new HttpException(404, "para data is absent");
-
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            var stream = new FileStream(path, FileMode.Open);
-
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(path);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
-            return result;
+            return CreateHttpResponseMessageWithFileContent(this.paraDataAccessor.GetPathToParaDataByQuestionnaire(id, version));
         }
 
         [HttpGet]
         public HttpResponseMessage AllDataTabular(Guid id, long version)
         {
-            var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(id, version);
-
-            if (!fileSystemAccessor.IsFileExists(path))
-                throw new HttpException(404, "para data is absent");
-
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            var stream = new FileStream(path, FileMode.Open);
-
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(path);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
-            return result;
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(id, version));
         }
 
         [HttpGet]
         public HttpResponseMessage ApprovedDataTabular(Guid id, long version)
         {
-            var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(id, version);
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(id, version));
+        }
 
-            if (!fileSystemAccessor.IsFileExists(path))
-                throw new HttpException(404, "para data is absent");
-
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            var stream = new FileStream(path, FileMode.Open);
-
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(path);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
-            return result;
+        [HttpGet]
+        public HttpResponseMessage DDIMetadata(Guid id, long version)
+        {
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetFilePathToExportedDDIMetadata(id, version));
         }
 
         [HttpPost]
@@ -157,6 +128,21 @@ namespace WB.UI.Headquarters.API
         public ExportedDataReferencesViewModel ExportedDataReferencesForQuestionnaire(ExportedDataReferenceInputModel request)
         {
             return exportedDataReferenceViewFactory.Load(request);
+        }
+
+        private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)
+        {
+            if (!fileSystemAccessor.IsFileExists(filePath))
+                throw new HttpException(404, "file is absent");
+
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new FileStream(filePath, FileMode.Open);
+
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(filePath);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+            return result;
         }
     }
 }
