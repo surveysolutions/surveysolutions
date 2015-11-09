@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         Group = 10,
         Roster = 20,
         StaticText = 30,
-        Macros = 40
+        Macro = 40
     }
 }

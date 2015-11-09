@@ -132,9 +132,9 @@ angular.module('designerApp')
             };
 
             $scope.navigateTo = function (reference) {
-                if (reference.type.toLowerCase() === "macros") {
+                if (reference.type.toLowerCase() === "macro") {
                     $scope.verificationStatus.visible = false;
-                    $rootScope.$broadcast("openMacrosesList", { focusOn : reference.itemId });
+                    $rootScope.$broadcast("openMacrosList", { focusOn : reference.itemId });
                 } else {
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,

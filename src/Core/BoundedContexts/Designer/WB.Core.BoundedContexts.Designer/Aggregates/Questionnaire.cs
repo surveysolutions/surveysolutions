@@ -50,15 +50,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private bool wasExpressionsMigrationPerformed = false;
 
-        internal void Apply(MacrosAdded e)
+        internal void Apply(MacroAdded e)
         {
         }
 
-        internal void Apply(MacrosUpdated e)
+        internal void Apply(MacroUpdated e)
         {
         }
 
-        internal void Apply(MacrosDeleted e)
+        internal void Apply(MacroDeleted e)
         {
         }
 
@@ -855,21 +855,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        #region Macros command handlers
+        #region Macro command handlers
 
-        public void AddMacrosIfNeeded(AddMacrosCommand command)
+        public void AddMacro(AddMacroCommand command)
         {
-            this.ApplyEvent(new MacrosAdded(command.EntityId, command.ResponsibleId));
+            this.ApplyEvent(new MacroAdded(command.EntityId, command.ResponsibleId));
         }
 
-        public void UpdateMacrosIfNeeded(UpdateMacrosCommand command)
+        public void UpdateMacro(UpdateMacroCommand command)
         {
-            this.ApplyEvent(new MacrosUpdated(command.EntityId, command.Name, command.Expression, command.Description, command.ResponsibleId));
+            this.ApplyEvent(new MacroUpdated(command.EntityId, command.Name, command.Content, command.Description, command.ResponsibleId));
         }
 
-        public void DeleteMacrosIfNeeded(DeleteMacrosCommand command)
+        public void DeleteMacro(DeleteMacroCommand command)
         {
-            this.ApplyEvent(new MacrosDeleted(command.EntityId, command.ResponsibleId));
+            this.ApplyEvent(new MacroDeleted(command.EntityId, command.ResponsibleId));
         }
       
         #endregion

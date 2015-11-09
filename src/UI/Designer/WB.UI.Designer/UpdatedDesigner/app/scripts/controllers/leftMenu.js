@@ -4,18 +4,18 @@
             'use strict';
 
             $scope.isFoldedChapters = false;
-            $scope.isFoldedMacroses = false;
+            $scope.isFoldedMacros = false;
 
             var closeOpenPanelIfAny = function () {
-                if (!($scope.isFoldedChapters || $scope.isFoldedMacroses))
+                if (!($scope.isFoldedChapters || $scope.isFoldedMacros))
                     return;
 
                 if ($scope.isFoldedChapters) {
                     $rootScope.$broadcast("closeChaptersListRequested", {});
                 }
 
-                if ($scope.isFoldedMacroses) {
-                    $rootScope.$broadcast("closeMacrosesListRequested", {});
+                if ($scope.isFoldedMacros) {
+                    $rootScope.$broadcast("closeMacrosListRequested", {});
                 }
             }
 
@@ -27,21 +27,21 @@
                 $rootScope.$broadcast("openChaptersList", {});
             };
 
-            $scope.unfoldMacroses = function () {
-                if ($scope.isFoldedMacroses)
+            $scope.unfoldMacros = function () {
+                if ($scope.isFoldedMacros)
                     return;
 
                 closeOpenPanelIfAny();
-                $scope.isFoldedMacroses = true;
-                $rootScope.$broadcast("openMacrosesList", {});
+                $scope.isFoldedMacros = true;
+                $rootScope.$broadcast("openMacrosList", {});
             };
 
             $scope.$on('closeChaptersList', function () {
                 $scope.isFoldedChapters = false;
             });
 
-            $scope.$on('closeMacrosesList', function () {
-                $scope.isFoldedMacroses = false;
+            $scope.$on('closeMacrosList', function () {
+                $scope.isFoldedMacros = false;
             });
 
         });

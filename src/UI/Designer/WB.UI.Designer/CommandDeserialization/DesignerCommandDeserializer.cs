@@ -51,10 +51,10 @@ namespace WB.UI.Designer.CommandDeserialization
 
                     {"PasteItemAfter", typeof(PasteItemAfterCommand) },
                     {"PasteItemInto", typeof(PasteItemIntoCommand) },
-                    //Macros commands
-                    { "AddMacros", typeof (AddMacrosCommand) },
-                    { "UpdateMacros", typeof (UpdateMacrosCommand) },
-                    { "DeleteMacros", typeof (DeleteMacrosCommand) }
+                    //Macro commands
+                    { "AddMacros", typeof (AddMacroCommand) },
+                    { "UpdateMacros", typeof (UpdateMacroCommand) },
+                    { "DeleteMacros", typeof (DeleteMacroCommand) }
                 };
             }
         }

@@ -30,21 +30,21 @@
                     return commandCall(type, command);
                 };
 
-                commandService.addMacros = function (questionnaireId, macros) {
+                commandService.addMacro = function (questionnaireId, macro) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "entityId": macros.itemId
+                        "entityId": macro.itemId
                     };
                     return commandCall("AddMacros", command);
                 };
 
-                commandService.updateMacros = function (questionnaireId, macros) {
+                commandService.updateMacro = function (questionnaireId, macro) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "entityId": macros.itemId,
-                        "name": macros.name,
-                        "expression": macros.expression,
-                        "description": macros.description
+                        "entityId": macro.itemId,
+                        "name": macro.name,
+                        "content": macro.content,
+                        "description": macro.description
                     };
 
                     return commandCall("UpdateMacros", command);

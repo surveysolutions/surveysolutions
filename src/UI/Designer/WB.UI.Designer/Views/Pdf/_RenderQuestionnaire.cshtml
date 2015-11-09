@@ -12,19 +12,19 @@
 <div class="page-break"></div>
 
 
-@if (this.Model.GetMacroses().Any())
+@if (this.Model.GetMacros().Any())
 {
     <h1>
-        Macroses
+        Macros
     </h1>
     <ol>
-        @foreach (var macros in this.Model.GetMacroses())
+        @foreach (var macro in this.Model.GetMacros())
         {
-        <li id="@("m" + macros.Name)">
-            <p><b>$@macros.Name</b>: @macros.Expression</p>
-            @if (!string.IsNullOrWhiteSpace(macros.Description))
+        <li id="@("m" + macro.Name)">
+            <p><b>$@macro.Name</b>: @macro.Content</p>
+            @if (!string.IsNullOrWhiteSpace(macro.Description))
             {
-                <p>@macros.Description</p>
+                <p>@macro.Description</p>
             }
         </li>
         }

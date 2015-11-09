@@ -47,15 +47,15 @@ namespace WB.UI.Designer.Code
         {
             foreach (var reference in references)
             {
-                if (reference.Type == QuestionnaireVerificationReferenceType.Macros)
+                if (reference.Type == QuestionnaireVerificationReferenceType.Macro)
                 {
-                    var macros = questionnaireDocument.Macroses.First(x => x.Key == reference.Id);
+                    var macro = questionnaireDocument.Macros.First(x => x.Key == reference.Id);
                     yield return new VerificationReference
                     {
                         ItemId = reference.Id.FormatGuid(),
-                        Type = QuestionnaireVerificationReferenceType.Macros,
-                        Variable = macros.Value.Name,
-                        Title = macros.Value.Expression
+                        Type = QuestionnaireVerificationReferenceType.Macro,
+                        Variable = macro.Value.Name,
+                        Title = macro.Value.Content
                     };
                     continue;
                 }

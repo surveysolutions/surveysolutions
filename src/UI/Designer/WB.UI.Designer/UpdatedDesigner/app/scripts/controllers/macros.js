@@ -1,39 +1,39 @@
 ﻿angular.module('designerApp')
-    .controller('MacrosesCtrl',
+    .controller('MacrosCtrl',
         function ($rootScope, $scope, $state, hotkeys, commandService, utilityService) {
             'use strict';
 
-            var hideMacrosesPane = 'ctrl+m';
+            var hideMacrosPane = 'ctrl+m';
 
-            if (hotkeys.get(hideMacrosesPane) !== false) {
-                hotkeys.del(hideMacrosesPane);
+            if (hotkeys.get(hideMacrosPane) !== false) {
+                hotkeys.del(hideMacrosPane);
             }
 
-            hotkeys.add(hideMacrosesPane, 'Close macroses panel', function (event) {
+            hotkeys.add(hideMacrosPane, 'Close macros panel', function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
 
-            $scope.macroses = [];
+            $scope.macros = [];
 
-            var dataBind = function (macros, macrosDto) {
-                macros.initialMacros = angular.copy(macrosDto);
+            var dataBind = function (macro, macroDto) {
+                macro.initialMacro = angular.copy(macroDto);
 
-                macros.itemId = macrosDto.itemId;
-                macros.name = macrosDto.name;
-                macros.description = macrosDto.description;
-                macros.expression = macrosDto.expression;
-                macros.isDescriptionVisible = !_.isEmpty(macros.description);
+                macro.itemId = macroDto.itemId;
+                macro.name = macroDto.name;
+                macro.description = macroDto.description;
+                macro.content = macroDto.content;
+                macro.isDescriptionVisible = !_.isEmpty(macro.description);
             };
 
-            $scope.loadMacroses = function () {
-                if ($scope.questionnaire == null || $scope.questionnaire.macroses == null)
+            $scope.loadMacros = function () {
+                if ($scope.questionnaire == null || $scope.questionnaire.macros == null)
                     return;
 
-                _.each($scope.questionnaire.macroses, function (macrosDto) {
-                    var macros = {};
-                    dataBind(macros, macrosDto);
-                    $scope.macroses.push(macros);
+                _.each($scope.questionnaire.macros, function (macroDto) {
+                    var macro = {};
+                    dataBind(macro, macroDto);
+                    $scope.macros.push(macro);
                 });
             };
 
@@ -43,51 +43,51 @@
                 $scope.isFolded = true;
             };
 
-            $scope.addNewMacros = function () {
+            $scope.addNewMacro = function () {
                 var newId = utilityService.guid();
 
                 var newMacros = {
                     itemId: newId
                 };
 
-                commandService.addMacros($state.params.questionnaireId, newMacros).success(function () {
+                commandService.addMacro($state.params.questionnaireId, newMacros).success(function () {
                     var macros = {};
                     dataBind(macros, newMacros);
-                    $scope.macroses.push(macros);
+                    $scope.macros.push(macros);
                 });
             };
 
-            $scope.saveMacros = function (macros, form) {
-                commandService.updateMacros($state.params.questionnaireId, macros).success(function () {
+            $scope.saveMacro = function (macros, form) {
+                commandService.updateMacro($state.params.questionnaireId, macros).success(function () {
                     form.$setPristine();
                 });
             }
 
-            $scope.cancel = function (macros, form) {
-                var temp = angular.copy(macros.initialMacros);
-                dataBind(macros, temp);
+            $scope.cancel = function (macro, form) {
+                var temp = angular.copy(macro.initialMacro);
+                dataBind(macro, temp);
                 form.$setPristine();
             }
 
             $scope.deleteMacros = function (index) {
-                var macros = $scope.macroses[index];
-                commandService.deleteMacros($state.params.questionnaireId, macros.itemId).success(function () {
-                    $scope.macroses.splice(index, 1);
+                var macro = $scope.macros[index];
+                commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
+                    $scope.macros.splice(index, 1);
                 });
             }
             
-            $scope.getDescriptionBtnName = function (macros) {
-                return macros.isDescriptionVisible? "hide" : "add";
+            $scope.getDescriptionBtnName = function (macro) {
+                return macro.isDescriptionVisible? "hide" : "add";
             }
-            $scope.isDescriptionBtnVisible = function (macros) {
-                return _.isEmpty(macros.description);
+            $scope.isDescriptionBtnVisible = function (macro) {
+                return _.isEmpty(macro.description);
             }
-            $scope.toggleDescription = function (macros) {
-                macros.isDescriptionVisible = !macros.isDescriptionVisible;
+            $scope.toggleDescription = function (macro) {
+                macro.isDescriptionVisible = !macro.isDescriptionVisible;
             }
 
             $scope.aceLoaded = function (editor) {
-                var expressionEditorPlaceholder = "expression";
+                var expressionEditorPlaceholder = "content";
 
                 // Editor part
                 var renderer = editor.renderer;
@@ -132,21 +132,21 @@
 
             $scope.foldback = function () {
                 $scope.isFolded = false;
-                $rootScope.$broadcast("closeMacrosesList", {});
+                $rootScope.$broadcast("closeMacrosList", {});
             };
 
-            $scope.$on('openMacrosesList', function (scope, params) {
+            $scope.$on('openMacrosList', function (scope, params) {
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {
-                    utilityService.focus("focusMacros" + params.focusOn);
+                    utilityService.focus("focusMacro" + params.focusOn);
                 }
             });
 
-            $scope.$on('closeMacrosesListRequested', function () {
+            $scope.$on('closeMacrosListRequested', function () {
                 $scope.foldback();
             });
 
             $rootScope.$on('questionnaireLoaded', function () {
-                $scope.loadMacroses();
+                $scope.loadMacros();
             });
         });

@@ -101,10 +101,10 @@ namespace WB.Core.BoundedContexts.Designer
                 .InitializesWith<CloneQuestionnaireCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.CreatedBy, command.PublicKey, command.Source))
                 .InitializesWith<CreateQuestionnaireCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateQuestionnaire(command.PublicKey, command.Title, command.CreatedBy, command.IsPublic))
                 .InitializesWith<ImportQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.CreatedBy, command.Source))
-                // Macros
-                .Handles<AddMacrosCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddMacrosIfNeeded(command))
-                .Handles<DeleteMacrosCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteMacrosIfNeeded(command))
-                .Handles<UpdateMacrosCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateMacrosIfNeeded(command))
+                // Macro
+                .Handles<AddMacroCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddMacro(command))
+                .Handles<DeleteMacroCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteMacro(command))
+                .Handles<UpdateMacroCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateMacro(command))
 
                 .Handles<AddGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index))
                 .Handles<AddSharedPersonToQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId))
