@@ -68,7 +68,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.ClearFolder(folderForDataExport);
 
-            this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport).WaitAndUnwrapException();
+            var exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+
+            this.tabularFormatExportService
+                .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
             this.environmentContentService.CreateEnvironmentFiles(
                 this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion),
@@ -90,7 +94,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.ClearFolder(folderForDataExport);
 
-            this.tabularFormatExportService.ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport).WaitAndUnwrapException();
+            var exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+
+            this.tabularFormatExportService
+                .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
             this.environmentContentService.CreateEnvironmentFiles(
                 this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
