@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
-    public class PasteItemIntoCommand : QuestionnaireEntityAddCommand
+    public class PasteIntoCommand : QuestionnaireEntityAddCommand
     {
-        public PasteItemIntoCommand(Guid questionnaireId, Guid entityId, Guid sourceQuestionnaireId, Guid sourceItemId, Guid parentId, Guid responsibleId)
+        public PasteIntoCommand(Guid questionnaireId, Guid entityId, Guid sourceQuestionnaireId, Guid sourceItemId, Guid parentId, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId, parentId: parentId)
         {
             this.SourceQuestionnaireId = sourceQuestionnaireId;

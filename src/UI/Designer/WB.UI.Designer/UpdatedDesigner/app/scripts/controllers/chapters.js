@@ -99,27 +99,12 @@
                     }
                 });
             };
-
-            $scope.copyChapter = function (item) {
-                var itemIdToCopy = item.itemId || $state.params.itemId;
-
-                var itemToCopy = {
-                    questionnaireId: $state.params.questionnaireId,
-                    itemId: itemIdToCopy,
-                    itemType: 'group'
-                };
-
-                $.cookie('itemToCopy', itemToCopy, { expires: 30 });
-            };
-
+            
             $scope.pasteAfterChapter = function (chapter) {
 
                 var itemToCopy = $.cookie('itemToCopy');
-                if (itemToCopy == null)
+                if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
-
-                /*if (itemToCopy.itemType !== 'group')
-                    return;*/
 
                 var idToPasteAfter = chapter.chapterId || $state.params.itemId;
                 var newId = utilityService.guid();

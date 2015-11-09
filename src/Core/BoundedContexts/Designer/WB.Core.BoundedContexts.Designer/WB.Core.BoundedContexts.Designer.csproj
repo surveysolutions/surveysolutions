@@ -158,9 +158,9 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
     <Compile Include="Commands\Questionnaire\Macros\AddMacroCommand.cs" />
     <Compile Include="Commands\Questionnaire\Macros\DeleteMacroCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PasteIntoCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PasteAfterCommand.cs" />
     <Compile Include="Commands\Questionnaire\Macros\UpdateMacroCommand.cs" />
-    <Compile Include="Commands\Questionnaire\PasteItemIntoCommand.cs" />
-    <Compile Include="Commands\Questionnaire\PasteItemAfterCommand.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />

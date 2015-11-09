@@ -331,7 +331,7 @@
                 };
 
                 commandService.pasteItemAfter = function (questionnaireId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, newId) {
-                    return commandCall('PasteItemAfter', {
+                    return commandCall('PasteAfter', {
                         sourceQuestionnaireId: sourceQuestionnaireId,
                         sourceItemId : sourceItemId,
                         itemToPasteAfterId: itemToPasteAfterId,
@@ -341,10 +341,10 @@
                 };
 
                 commandService.pasteItemInto = function (questionnaireId, parentGroupId, sourceQuestionnaireId, sourceItemId, newId) {
-                    return commandCall('PasteItemInto', {
+                    return commandCall('PasteInto', {
                         sourceQuestionnaireId: sourceQuestionnaireId,
                         sourceItemId: sourceItemId,
-                        parentGroupId: parentGroupId,
+                        parentId: parentGroupId,
                         entityId: newId,
                         questionnaireId: questionnaireId
                     });

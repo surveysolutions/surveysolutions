@@ -6776,6 +6776,11 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   left: 10px;
   position: absolute;
 }
+
+ul.dropdown-menu > li > a[disabled] {
+    color: #bbb;
+    cursor: default;
+}
 .instructions-cross {
   margin-top: 20px;
 }

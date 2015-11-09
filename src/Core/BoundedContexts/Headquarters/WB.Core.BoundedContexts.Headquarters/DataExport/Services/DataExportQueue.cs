@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -52,12 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 DataExportFormat = exportFormat,
                 LastUpdateDate = DateTime.UtcNow,
                 ProgressInPercents = 0,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion,
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
                 Status = DataExportStatus.Queued
             };
 
-            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireId == questionnaireId && p.QuestionnaireVersion == questionnaireVersion);
+            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
             return processId;
         }
 
@@ -73,12 +73,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 DataExportFormat = exportFormat,
                 LastUpdateDate = DateTime.UtcNow,
                 ProgressInPercents = 0,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion,
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
                 Status = DataExportStatus.Queued
             };
 
-            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireId == questionnaireId && p.QuestionnaireVersion == questionnaireVersion);
+            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
             return processId;
         }
 

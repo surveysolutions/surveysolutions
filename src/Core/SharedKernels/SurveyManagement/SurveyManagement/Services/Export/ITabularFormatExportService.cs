@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
 {
     public interface ITabularFormatExportService
     {
-        Task ExportInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath);
-        Task ExportApprovedInterviewsInTabularFormatAsync(Guid questionnaireId, long questionnaireVersion, string basePath);
-        void CreateHeaderStructureForPreloadingForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath);
+        void ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress);
+        void ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress);
+        void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath);
         string[] GetTabularDataFilesFromFolder(string basePath);
     }
 }

@@ -33,10 +33,10 @@
                 <a ng-click="cloneQuestion(item.itemId)">Clone</a>
             </li>
             <li>
-                <a ng-click="copy(item)">Copy</a>
+                <a ng-click="copyRef(item)">Copy</a>
             </li>
             <li>
-                <a ng-click="pasteItemAfter(item)">Paste after</a>
+                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)">Paste after</a>
             </li>
             <li>
                 <a ng-click="deleteQuestion(item)">Delete</a>
