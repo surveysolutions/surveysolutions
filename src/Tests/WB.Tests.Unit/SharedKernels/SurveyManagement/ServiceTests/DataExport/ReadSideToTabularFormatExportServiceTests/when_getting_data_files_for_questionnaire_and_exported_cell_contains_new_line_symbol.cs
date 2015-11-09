@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.ExportInterviewsInTabularFormatAsync(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "").WaitAndUnwrapException();
+            readSideToTabularFormatExportService.ExportInterviewsInTabularFormatAsync(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Microsoft.Progress<int>());
 
 
         It should_return_correct_file_name = () =>
