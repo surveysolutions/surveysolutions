@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return expression;
 
             var resultExpression = expression;
-            foreach (var macros in questionnaire.Macroses.Values)
+            foreach (var macro in questionnaire.Macros.Values)
             {
-                resultExpression = resultExpression.Replace("$" + macros.Name, macros.Expression);
+                resultExpression = resultExpression.Replace("$" + macro.Name, macro.Content);
             }
 
             return resultExpression;

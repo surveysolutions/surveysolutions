@@ -14,13 +14,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         public PdfQuestionnaireView()
         {
-            Macroses = new Dictionary<string, Macros>();
+            this.Macros = new Dictionary<string, Macro>();
         }
         public string CreatedBy { get; set; }
 
         public DateTime CreationDate { get; set; }
 
-        public Dictionary<string, Macros> Macroses { get; set; }
+        public Dictionary<string, Macro> Macros { get; set; }
 
         public int GetChaptersCount()
         {
@@ -43,22 +43,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().Count(x => x.GetHasCondition());
         }
 
-        internal void AddMacros(string macrosId)
+        internal void AddMacro(string macroId)
         {
-            this.Macroses.Add(macrosId, new Macros());
+            this.Macros.Add(macroId, new Macro());
         }
 
-        internal void UpdateMacros(string macrosId, Macros macros)
+        internal void UpdateMacro(string macroId, Macro macro)
         {
-            if (!this.Macroses.ContainsKey(macrosId))
+            if (!this.Macros.ContainsKey(macroId))
                 return;
 
-            this.Macroses[macrosId] = macros;
+            this.Macros[macroId] = macro;
         }
 
-        internal void RemoveMacros(string macrosId)
+        internal void RemoveMacro(string macroId)
         {
-            this.Macroses.Remove(macrosId);
+            this.Macros.Remove(macroId);
         }
 
         internal void RemoveGroup(Guid groupId)
@@ -229,9 +229,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.GetReadableValidationExpression())).OrderBy(x => x.GetStringItemNumber());
         }
 
-        public IEnumerable<Macros> GetMacroses()
+        public IEnumerable<Macro> GetMacros()
         {
-            return this.Macroses.Values.OrderBy(x => x.Name);
+            return this.Macros.Values.OrderBy(x => x.Name);
         }
     }
 }

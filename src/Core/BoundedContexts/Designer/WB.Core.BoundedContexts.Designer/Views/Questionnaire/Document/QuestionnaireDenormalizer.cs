@@ -57,9 +57,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<StaticTextCloned>,
         IEventHandler<StaticTextDeleted>,
 
-        IEventHandler<MacrosAdded>,
-        IEventHandler<MacrosUpdated>,
-        IEventHandler<MacrosDeleted>
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroUpdated>,
+        IEventHandler<MacroDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
@@ -514,34 +514,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             this.documentStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey);
         }
 
-        public void Handle(IPublishedEvent<MacrosAdded> evnt)
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.Macroses.Add(evnt.Payload.EntityId, new Macros());
+            document.Macros.Add(evnt.Payload.EntityId, new Macro());
 
             this.UpdateQuestionnaire(evnt, document);
         }
 
-        public void Handle(IPublishedEvent<MacrosUpdated> evnt)
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            var macrosId = evnt.Payload.EntityId;
-            if (!document.Macroses.ContainsKey(macrosId))
+            var macroId = evnt.Payload.EntityId;
+            if (!document.Macros.ContainsKey(macroId))
                 return;
 
-            document.Macroses[macrosId].Name = evnt.Payload.Name;
-            document.Macroses[macrosId].Expression = evnt.Payload.Expression;
-            document.Macroses[macrosId].Description = evnt.Payload.Description;
+            document.Macros[macroId].Name = evnt.Payload.Name;
+            document.Macros[macroId].Content = evnt.Payload.Content;
+            document.Macros[macroId].Description = evnt.Payload.Description;
 
             this.UpdateQuestionnaire(evnt, document);
 
         }
 
-        public void Handle(IPublishedEvent<MacrosDeleted> evnt)
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            document.Macroses.Remove(evnt.Payload.EntityId);
+            document.Macros.Remove(evnt.Payload.EntityId);
             this.UpdateQuestionnaire(evnt, document);
         }
     }

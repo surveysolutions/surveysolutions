@@ -181,14 +181,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
                     Verifier<IComposite, IComposite>(QuestionnaireEntitiesShareSameInternalId, "WB0102", VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId),
 
-                    MacrosVerifier(MacrosHasEmptyName, "WB0014", VerificationMessages.WB0014_MacrosHasEmptyName),
-                    MacrosVerifier(MacrosHasInvalidName, "WB0010", VerificationMessages.WB0010_MacrosHasInvalidName),
+                    MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
+                    MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
                     VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByMacrosesWithDuplicateName,
+                    ErrorsByMacrosWithDuplicateName,
                     ErrorsByConditionAndValidationExpressions
                 };
             }
@@ -502,11 +502,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> MacrosVerifier(
-            Func<Macros, QuestionnaireDocument, bool> hasError, string code, string message)
+            Func<Macro, QuestionnaireDocument, bool> hasError, string code, string message)
         {
             return (questionnaire, state) =>
                 questionnaire
-                    .Macroses
+                    .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, CreateMacrosReference(entity.Key)));
         }
@@ -574,14 +574,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select new QuestionnaireVerificationError(code, message, verificationResult.ReferencedEntities.Select(CreateReference));
         }
 
-        private static bool MacrosHasEmptyName(Macros macros, QuestionnaireDocument questionnaire)
+        private static bool MacroHasEmptyName(Macro macro, QuestionnaireDocument questionnaire)
         {
-            return string.IsNullOrWhiteSpace(macros.Name);
+            return string.IsNullOrWhiteSpace(macro.Name);
         }
 
-        private static bool MacrosHasInvalidName(Macros macros, QuestionnaireDocument questionnaire)
+        private static bool MacroHasInvalidName(Macro macro, QuestionnaireDocument questionnaire)
         {
-            return !IsVariableNameValid(macros.Name);
+            return !IsVariableNameValid(macro.Name);
         }
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)
@@ -1114,10 +1114,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
         }
 
-        private static IEnumerable<QuestionnaireVerificationError> ErrorsByMacrosesWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByMacrosWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
         {
             var macrosDuplicates = questionnaire
-                .Macroses
+                .Macros
                 .Where(x => !string.IsNullOrEmpty(x.Value.Name))
                 .GroupBy(x => x.Value.Name, StringComparer.InvariantCultureIgnoreCase)
                 .SelectMany(group => group.Skip(1));
@@ -1202,7 +1202,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationReference CreateMacrosReference(Guid macrosId)
         {
-            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macros, macrosId);
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macrosId);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
