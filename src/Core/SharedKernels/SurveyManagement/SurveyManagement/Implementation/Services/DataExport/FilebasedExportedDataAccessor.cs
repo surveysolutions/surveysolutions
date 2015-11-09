@@ -61,34 +61,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return result;
         }
 
-        public string CreateExportFileFolder(Guid questionnaireId, long version)
-        {
-            var folderPath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
-
-            if (this.fileSystemAccessor.IsDirectoryExists(folderPath))
-            {
-                string copyPath = this.PreviousCopiesOfFilesFolderPath;
-
-                this.logger.Error(
-                    string.Format("Directory for export structure already exists: {0}. Will be moved to {1}.",
-                        folderPath, copyPath));
-
-                this.fileSystemAccessor.CopyFileOrDirectory(folderPath, copyPath);
-                this.fileSystemAccessor.DeleteDirectory(folderPath);
-            }
-
-            this.fileSystemAccessor.CreateDirectory(folderPath);
-            return folderPath;
-        }
-
-        public void CleanExportFileFolder()
-        {
-            Array.ForEach(this.fileSystemAccessor.GetDirectoriesInDirectory(this.PathToExportedFiles),
-                (s) => this.fileSystemAccessor.DeleteDirectory(s));
-            Array.ForEach(this.fileSystemAccessor.GetFilesInDirectory(this.PathToExportedFiles),
-                (s) => this.fileSystemAccessor.DeleteFile(s));
-        }
-
         public string GetFilePathToExportedBinaryData(Guid questionnaireId, long version)
         {
             var fileDirectoryPath = this.GetFolderPathOfFilesByQuestionnaire(questionnaireId, version);
@@ -154,16 +126,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string GetArchiveFilePathForExportedTabularData(Guid questionnaireId, long version)
         {
-            var archiveName = string.Format("{0}_{1}_{2}_{3}.zip",questionnaireId, version,
-              ExportDataType.Tab, "All");
+            var archiveName = $"{questionnaireId}_{version}_Tab_All.zip";
 
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
         }
 
         public string GetArchiveFilePathForExportedApprovedTabularData(Guid questionnaireId, long version)
         {
-            var archiveName = string.Format("{0}_{1}_{2}_{3}.zip",questionnaireId, version,
-                ExportDataType.Tab, "App");
+            var archiveName = $"{questionnaireId}_{version}_Tab_App.zip";
 
             return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
         }
