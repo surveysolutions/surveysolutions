@@ -313,19 +313,19 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             var metaData = JsonConvert.SerializeObject(eventMetada);
             var eventMetadataBytes = Encoding.GetBytes(metaData);
-            if (this.settings.UseJson)
+            if (this.settings.UseBson)
+            {
+                eventDataBytes = SerializeToBson(@event.Payload);
+            }
+            else
             {
                 var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
                 eventDataBytes = Encoding.GetBytes(eventString);
             }
-            else
-            {
-                eventDataBytes = SerializeToBson(@event.Payload);
-            }
 
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
-                this.settings.UseJson,
+                !this.settings.UseBson,
                 eventDataBytes,
                 eventMetadataBytes);
 
