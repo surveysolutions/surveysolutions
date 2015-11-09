@@ -155,9 +155,6 @@ namespace WB.UI.Supervisor.App_Start
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewDataExportSettings(basePath, false,
-                        WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000),
-                        WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToInt(100)),
                     readSideSettings,
                     isSupervisorFunctionsEnabled: true,
                     interviewLimitCount: interviewCountLimit));

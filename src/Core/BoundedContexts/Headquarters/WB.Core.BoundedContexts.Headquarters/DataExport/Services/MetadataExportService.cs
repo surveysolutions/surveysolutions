@@ -2,23 +2,22 @@ using System;
 using System.Collections.Generic;
 using ddidotnet;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    public class MetadataExportService : IMetadataExportService
+    internal class MetadataExportService : IMetadataExportService
     {
-
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -51,13 +50,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
             {
                 QuestionnaireDocumentVersioned bigTemplateObject;
                 QuestionnaireExportStructure questionnaireExportStructure;
-                var shouldTransactionBeStarted = !transactionManager.GetTransactionManager().IsQueryTransactionStarted;
+                var shouldTransactionBeStarted = !this.transactionManager.GetTransactionManager().IsQueryTransactionStarted;
                 if(shouldTransactionBeStarted)
                     this.transactionManager.GetTransactionManager().BeginQueryTransaction();
                 try
                 {
                     bigTemplateObject = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
-                    questionnaireExportStructure = questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+                    questionnaireExportStructure = this.questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
                 }
                 finally
                 {
@@ -72,7 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
                 Dictionary<string, Dictionary<double, string>> varValueLabels;
                 questionnaireExportStructure.CollectLabels(out varLabels, out varValueLabels);
 
-                IMetaDescription metaDescription = metaDescriptionFactory.CreateMetaDescription();
+                IMetaDescription metaDescription = this.metaDescriptionFactory.CreateMetaDescription();
 
                 metaDescription.Document.Title = bigTemplateObject.Questionnaire.Title;
                 metaDescription.Study.Title = bigTemplateObject.Questionnaire.Title;
@@ -127,14 +126,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Export
                     }
                 }
 
-                var pathToWrite = fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(string.Format("{0}_{1}_ddi", questionnaireId, questionnaireVersion)));
+                var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(string.Format("{0}_{1}_ddi", questionnaireId, questionnaireVersion)));
                 metaDescription.WriteXml(pathToWrite);
                 return pathToWrite;
             }
 
             catch (Exception exc)
             {
-                logger.Error(string.Format("Error on DDI metadata creation (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
+                this.logger.Error(string.Format("Error on DDI metadata creation (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
             }
 
             return string.Empty;

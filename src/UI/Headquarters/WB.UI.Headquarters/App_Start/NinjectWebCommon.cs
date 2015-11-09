@@ -192,11 +192,11 @@ namespace WB.UI.Headquarters
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
                     applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
                     int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    interviewDataExportSettings,
                     readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, dataExportSettings));
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, dataExportSettings,
+                    interviewDataExportSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();

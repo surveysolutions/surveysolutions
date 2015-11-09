@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
                     .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
-            return new FilebasedExportedDataAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
+            return new FilebasedExportedDataAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new InterviewDataExportSettings(), 
                 Mock.Of<IMetadataExportService>(),
                 Mock.Of<ILogger>(), archiveUtilsMock.Object);
         }

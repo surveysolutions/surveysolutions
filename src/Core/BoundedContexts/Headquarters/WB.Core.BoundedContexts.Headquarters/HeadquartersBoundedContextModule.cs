@@ -3,6 +3,7 @@ using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
@@ -18,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -26,12 +28,13 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly bool supervisorFunctionsEnabled;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly DataExportSettings dataExportSettings;
-
-        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, DataExportSettings dataExportSettings)
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, DataExportSettings dataExportSettings, InterviewDataExportSettings interviewDataExportSettings)
         {
             this.supervisorFunctionsEnabled = supervisorFunctionsEnabled;
             this.userPreloadingSettings = userPreloadingSettings;
             this.dataExportSettings = dataExportSettings;
+            this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
         public override void Load()
@@ -55,7 +58,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
+
+            this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
             this.Bind<DataExportSettings>().ToConstant(this.dataExportSettings);
+            this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
+            this.Bind<IMetadataExportService>().To<MetadataExportService>();
+            this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDataExportQueue>().To<DataExportQueue>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
             
