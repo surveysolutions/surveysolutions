@@ -6,12 +6,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
     public interface IFilebasedExportedDataAccessor
     {
-        string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version);
-        string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version);
+        string GetFolderPathOfFilesByQuestionnaire(QuestionnaireIdentity questionnaireId);
+        string GetFilePathToExportedDDIMetadata(QuestionnaireIdentity questionnaireId);
 
         string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format);
         string GetArchiveFilePathForExportedApprovedData(QuestionnaireIdentity questionnaireId, DataExportFormat format);
-
-        string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version);
     }
 }
