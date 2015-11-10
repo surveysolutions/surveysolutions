@@ -69,7 +69,7 @@
                 form.$setPristine();
             }
 
-            $scope.deleteMacros = function (index) {
+            $scope.deleteMacro = function (index) {
                 var macro = $scope.macros[index];
                 commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
                     $scope.macros.splice(index, 1);

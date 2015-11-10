@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         StaticText,
         Question,
         Person,
+        Macro
     }
 }

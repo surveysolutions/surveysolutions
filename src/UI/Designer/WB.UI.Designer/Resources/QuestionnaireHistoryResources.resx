@@ -195,4 +195,16 @@
   <data name="to" xml:space="preserve">
     <value> to</value>
   </data>
+  <data name="Macro" xml:space="preserve">
+    <value>Macro</value>
+  </data>
+  <data name="EmptyMacroAdded" xml:space="preserve">
+    <value>Empty macro with no name added</value>
+  </data>
+  <data name="MacroDeleted" xml:space="preserve">
+    <value>Macro "{0}" deleted</value>
+  </data>
+  <data name="MacroUpdated" xml:space="preserve">
+    <value>Macro "{0}" updated</value>
+  </data>
 </root>
