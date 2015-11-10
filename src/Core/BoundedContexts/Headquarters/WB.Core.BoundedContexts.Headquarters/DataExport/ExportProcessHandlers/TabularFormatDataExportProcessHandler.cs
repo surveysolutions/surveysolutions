@@ -68,9 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(AllDataQueuedProcess process)
         {
-            var questionnaireId = process.QuestionnaireIdentity.QuestionnaireId;
-            var questionnaireVersion = process.QuestionnaireIdentity.Version;
-
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), allDataFolder);
 
