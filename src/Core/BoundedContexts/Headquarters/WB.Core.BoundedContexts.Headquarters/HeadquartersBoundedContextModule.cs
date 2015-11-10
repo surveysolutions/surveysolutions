@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
-            this.Bind<ICsvWriterFactory>().To<CsvWriterFactory>();
+            this.Bind<ICsvWriter>().To<CsvWriter>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
         }
