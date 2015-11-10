@@ -44,6 +44,7 @@
     <Compile Include="ActionUtils.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EventHandlerUtils.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="GlobalStopwatcher.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
     <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
+    <Compile Include="Int32Extensions.cs" />
     <Compile Include="IPasswordHasher.cs" />
     <Compile Include="ITopologicalSorter.cs" />
     <Compile Include="JsonDeserializationException.cs" />
