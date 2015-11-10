@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using StatData.Core;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -45,16 +46,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Stata, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles);
         }
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, ExportDataType.Spss, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPPS, tabularDataFiles);
         }
        
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, ExportDataType exportType, string[] dataFiles)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles)
         {
             string currentDataInfo = string.Empty;
             try
@@ -71,10 +72,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 questionnaireExportStructure.CollectLabels(out varLabels, out varValueLabels);
 
                 var result = new List<string>();
-                string fileExtention = exportType == ExportDataType.Stata
+                string fileExtention = format == DataExportFormat.STATA
                     ? this.StataFileNameExtension
                     : this.SpssFileNameExtension;
-                var writer = this.datasetWriterFactory.CreateDatasetWriter(exportType);
+                var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
                 foreach (var tabFile in dataFiles)
                 {
                     currentDataInfo = string.Format("filename: {0}", tabFile);
