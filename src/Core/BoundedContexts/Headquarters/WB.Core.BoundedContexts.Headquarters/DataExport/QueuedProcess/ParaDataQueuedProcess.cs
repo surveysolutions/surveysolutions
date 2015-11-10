@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess
     public class ParaDataQueuedProcess: IQueuedProcess
     {
         public string DataExportProcessId { get; set; }
+        public string DataExportProcessName { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
         public DataExportFormat DataExportFormat { get; set; }

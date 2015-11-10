@@ -15,15 +15,15 @@
 
     <script type="text/javascript">
 
-        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "AllDataTabular" })';
-        var $ApprovedDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ApprovedDataTabular" })';
+        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "AllData" })';
+        var $ApprovedDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ApprovedData" })';
         var $FilesUrl = '@Url.Action("GetFiles", "ImportExport")';
         var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "Paradata" })';
         var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata" })';
-        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfTabular" })';
+        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdate" })';
 
-        var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApprovedTabular" })';
-        var $DDIUrl = '@Url.Action("GetDDI", "ImportExport")';
+        var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApproved" })';
+        var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DDIMetadata" })';
         var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire" })';
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess" })';
         $(function () {
@@ -38,14 +38,7 @@
             {
               <text>exportFromats[@((int)formatValue)]='@formatValue.ToString()'</text>
             }
-
-            var exportTypes = [];
-
-              @foreach (DataExportType typeValue in Enum.GetValues(typeof (DataExportType)))
-            {
-              <text>exportTypes[@((int)typeValue)]='@typeValue.ToString()'</text>
-        }
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, exportTypes, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl,$UpdateApprovedTabularDataUrl);
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl,$UpdateApprovedTabularDataUrl);
             ko.applyBindings(model);
         });
 
@@ -95,23 +88,35 @@
             <td>
                 <div>
                     <div class="well-sm">
+                        @{ var exportTabularDataParameters = "'" + DataExportType.Data + "','" + DataExportFormat.Tabular + "'"; }
                         <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs"/>
                         <span>
-                            Last updated on <i data-bind='text:lastTabularDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportTabularDataParameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestTabularDataUpdate, visible: showTabularDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestDataUpdate(@((int) DataExportFormat.Tabular)), visible: showRefreshButton(@exportTabularDataParameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showTabularDataDownloadButton(), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportTabularDataParameters), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@((int) DataExportFormat.Tabular)' }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
                     </div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
-                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
-                        Stata.dta
-                    </a>
+                    <div class="well-sm">
+                        @{ var exportStataDataParameters = "'" + DataExportType.Data + "','" + DataExportFormat.STATA + "'"; }
+                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata"/>
+                        <span>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportStataDataParameters)"></i>
+                        </span>
+                        <a class="btn btn-default" data-bind="click: requestDataUpdate(@((int) DataExportFormat.STATA)), visible: showRefreshButton(@exportStataDataParameters)">
+                            <i class="glyphicon glyphicon-refresh">
+                            </i>
+                        </a>
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportStataDataParameters), attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@((int) DataExportFormat.STATA)' }">
+                            <i class="glyphicon glyphicon-download">
+                            </i>
+                        </a>
+                    </div>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $AllDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2'}">
                         <img src="@Url.Content("~/Content/icons/spss.png")" alt="spss" />
@@ -121,28 +126,36 @@
             </td>
             <td>
                 <div>
-                    @*<a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
-                        Data.tab
-                    </a>*@
                     <div class="well-sm">
-                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs" />
+                        @{ var exportApprovedTabularDataParameters = "'" + DataExportType.ApprovedData + "','" + DataExportFormat.Tabular + "'"; }
+                        <img src="@Url.Content("~/Content/icons/tabs.png")" alt="tabs"/>
                         <span>
-                            Last updated on <i data-bind='text:lastApprovedTabularDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportApprovedTabularDataParameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestApprovedTabularDataUpdate, visible: showApprovedTabularDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestApprovedDataUpdate(@((int) DataExportFormat.Tabular)), visible: showRefreshButton(@exportApprovedTabularDataParameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showApprovedTabularDataDownloadButton(), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportApprovedTabularDataParameters), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@DataExportFormat.Tabular' }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
                     </div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=1' }">
-                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata" />
-                        Stata.dta
-                    </a>
+                    <div class="well-sm">
+                        @{ var exportApprovedStataDataParameters = "'" + DataExportType.ApprovedData + "','" + DataExportFormat.STATA + "'"; }
+                        <img src="@Url.Content("~/Content/icons/stata.gif")" alt="stata"/>
+                        <span>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportApprovedStataDataParameters)"></i>
+                        </span>
+                        <a class="btn btn-default" data-bind="click: requestApprovedDataUpdate(@((int) DataExportFormat.STATA)), visible: showRefreshButton(@exportApprovedStataDataParameters)">
+                            <i class="glyphicon glyphicon-refresh">
+                            </i>
+                        </a>
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportApprovedStataDataParameters), attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion()+ '&format=@DataExportFormat.STATA' }">
+                            <i class="glyphicon glyphicon-download">
+                            </i>
+                        </a>
+                    </div>
 
                     <a class="btn btn-default btn-block" data-bind="attr: { href: $ApprovedDataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() + '&type=2' }">
                         <img src="@Url.Content("~/Content/icons/spss.png")" alt="spss" />
@@ -169,15 +182,16 @@
             @if (this.ViewBag.EnableInterviewHistory)
             {
                 <td>
+                    @{ var exportParadataarameters = "'" + DataExportType.ParaData + "','" + DataExportFormat.Tabular + "'"; }
                     <div>
                         <span>
-                            Last updated on <i data-bind='text:lastParaDataUpdateDate()'></i>
+                            Last updated on <i data-bind="text:lastUpdateDate(@exportParadataarameters)"></i>
                         </span>
-                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate, visible: showParaDataRefreshButton()">
+                        <a class="btn btn-default" data-bind="click: requestParaDataUpdate, visible: showRefreshButton(@exportParadataarameters)">
                             <i class="glyphicon glyphicon-refresh">
                             </i>
                         </a>
-                        <a class="btn btn-default" data-bind="visible: showParaDataDownloadButton(), attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                        <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParadataarameters), attr: { href: $HistoryUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
                             <i class="glyphicon glyphicon-download">
                             </i>
                         </a>
@@ -206,10 +220,10 @@
         <tbody>
         <!-- ko foreach:RunningProcesses -->
         <tr>
-            <td><span data-bind="text: $root.exportName($data)"></span></td>
+            <td><span data-bind="text: DataExportProcessName"></span></td>
             <td><span data-bind="text: $root.exportFormatName($data)"></span></td>
-            <td><span data-bind="text: BeginDate"></span></td>
-            <td><span data-bind="text: LastUpdateDate"></span></td>
+            <td><span data-bind="text: $root.formatDate($data.BeginDate())"></span></td>
+            <td><span data-bind="text: $root.formatDate($data.LastUpdateDate())"></span></td>
             <td><span data-bind="text: Progress"></span>%</td>
             <td> @if (User.IsInRole("Administrator"))
             {

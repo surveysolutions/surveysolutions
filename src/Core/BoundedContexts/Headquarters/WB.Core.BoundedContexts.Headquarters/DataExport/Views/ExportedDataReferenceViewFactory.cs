@@ -11,7 +11,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
@@ -41,13 +43,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             var runningProcesses = dataExportQueue.GetRunningProcess();
 
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
-                CreateExportedDataReferencesView(DataExportType.ParaData,DataExportFormat.Tabular, input.QuestionnaireId, input.QuestionnaireVersion),
-                CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.Tabular, input.QuestionnaireId, input.QuestionnaireVersion),
-                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.Tabular, input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ParaData, DataExportFormat.Tabular,
+                    input.QuestionnaireId, input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.Tabular, input.QuestionnaireId,
+                    input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.Tabular,
+                    input.QuestionnaireId, input.QuestionnaireVersion),
+                 CreateExportedDataReferencesView(DataExportType.Data, DataExportFormat.STATA, input.QuestionnaireId,
+                    input.QuestionnaireVersion),
+                CreateExportedDataReferencesView(DataExportType.ApprovedData, DataExportFormat.STATA,
+                    input.QuestionnaireId, input.QuestionnaireVersion),
                 runningProcesses.Select(
                     p =>
-                        new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate, "test",
-                            1, p.ProgressInPercents, CreateDataExportType(p), p.DataExportFormat))
+                        new RunningDataExportProcessView(p.DataExportProcessId, p.BeginDate, p.LastUpdateDate,
+                            p.DataExportProcessName, p.ProgressInPercents, CreateDataExportType(p), p.DataExportFormat))
                     .ToArray());
         }
 
@@ -68,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             exportedDataReferencesView = new ExportedDataReferencesView()
             {
                 DataExportFormat = dataFormat,
+                DataExportType= dataType,
                 CanRefreshBeRequested = true//latestDataProcess.Status != DataExportStatus.Running
             };
 
@@ -82,8 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             }
             if (dataType == DataExportType.Data)
             {
-                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(questionnaireId,
-                    questionnaireVersion);
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(new QuestionnaireIdentity(questionnaireId,
+                    questionnaireVersion), dataFormat);
                 if (fileSystemAccessor.IsFileExists(path))
                 {
                     exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;
@@ -92,8 +102,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             }
             if (dataType == DataExportType.ApprovedData)
             {
-                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(questionnaireId,
-                    questionnaireVersion);
+                var path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(new QuestionnaireIdentity(questionnaireId,
+                    questionnaireVersion), dataFormat);
                 if (fileSystemAccessor.IsFileExists(path))
                 {
                     exportedDataReferencesView.LastUpdateDate = new FileInfo(path).LastWriteTime;

@@ -11,12 +11,14 @@ using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -26,6 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
+        private const string temporaryTabularExportFolder = "TemporaryTabularExport";
+        private readonly string pathToExportedData;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly ITabularFormatExportService tabularFormatExportService;
@@ -45,7 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IFileSystemAccessor fileSystemAccessor,
             IArchiveUtils archiveUtils,
             ITabularFormatExportService tabularFormatExportService,
-            IEnvironmentContentService environmentContentService)
+            IEnvironmentContentService environmentContentService,
+            InterviewDataExportSettings interviewDataExportSettings)
         {
             this.questionnaireReader = questionnaireReader;
             this.transactionManagerProvider = transactionManagerProvider;
@@ -54,6 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.archiveUtils = archiveUtils;
             this.tabularFormatExportService = tabularFormatExportService;
             this.environmentContentService = environmentContentService;
+
+            this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
+
+            if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
+                fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
         public void ExportData(AllDataQueuedProcess process)
@@ -62,9 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var questionnaireVersion = process.QuestionnaireIdentity.Version;
 
             string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(
-                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(questionnaireId,
-                      questionnaireVersion), allDataFolder);
+              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), allDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
@@ -79,9 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                  this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
                  folderForDataExport));
 
-            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedTabularData(
-                questionnaireId,
-                questionnaireVersion);
+            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(process.QuestionnaireIdentity, DataExportFormat.Tabular);
 
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
@@ -89,9 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         public void ExportData(ApprovedDataQueuedProcess process)
         {
             string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(
-                  this.filebasedExportedDataAccessor.GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
-                      process.QuestionnaireIdentity.Version), approvedDataFolder);
+              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), approvedDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
@@ -106,9 +110,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     this.questionnaireReader.AsVersioned().Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version),
                     folderForDataExport));
 
-            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedTabularData(
-                process.QuestionnaireIdentity.QuestionnaireId,
-                process.QuestionnaireIdentity.Version);
+            var archiveFilePath =
+                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
+                    process.QuestionnaireIdentity, DataExportFormat.Tabular);
 
             this.RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
@@ -131,5 +135,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.fileSystemAccessor.CreateDirectory(folderName);
         }
+
+        private string GetFolderPathOfDataByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.fileSystemAccessor.CombinePath(this.pathToExportedData,
+                $"{questionnaireIdentity.QuestionnaireId}_{questionnaireIdentity.Version}");
+        }
+
     }
 }

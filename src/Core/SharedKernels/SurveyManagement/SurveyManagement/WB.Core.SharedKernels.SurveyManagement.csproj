@@ -49,9 +49,6 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="ddidotnet">
-      <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -89,9 +86,6 @@
       <HintPath>..\..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="StatData">
-      <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -115,16 +109,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
-    <Compile Include="Implementation\Services\DataExport\IMetaDescriptionFactory.cs" />
-    <Compile Include="Implementation\Services\DataExport\MetaDescriptionFactory.cs" />
-    <Compile Include="Implementation\Services\DataExport\ReadSideToTabularDataExportService.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
-    <Compile Include="Services\Export\IMetadataExportService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
-    <Compile Include="Services\Export\MetadataExportService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
@@ -136,16 +125,10 @@
     <Compile Include="EventHandler\ClientDeviceDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewParaDataEventHandler.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
-    <Compile Include="EventHandler\EventHandlerUtils.cs" />
     <Compile Include="EventHandler\HardDeletedInterviewEventHandler.cs" />
     <Compile Include="EventHandler\InterviewEventHandlerFunctional.cs" />
     <Compile Include="EventHandler\InterviewsChartDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewSummaryDenormalizer.cs" />
-    <Compile Include="Implementation\Services\DataExport\DatasetWriterFactory.cs" />
-    <Compile Include="Implementation\Services\DataExport\IDatasetWriterFactory.cs" />
-    <Compile Include="Implementation\Services\DataExport\ITabFileReader.cs" />
-    <Compile Include="Implementation\Services\DataExport\ReadSideRepositoryDataExportWriter.cs" />
-    <Compile Include="Implementation\Services\DataExport\TabFileReader.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\DeleteQuestionnaireService.cs" />
     <Compile Include="Implementation\Services\DeleteQuestionnaireTemplate\InterviewsToDeleteFactory.cs" />
     <Compile Include="Implementation\Services\DeleteSupervisor\DeleteSupervisorService.cs" />
@@ -181,38 +164,27 @@
     <Compile Include="EventHandler\QuestionnaireStatisticsForChart.cs" />
     <Compile Include="EventHandler\StatisticsGroupedByDateAndTemplate.cs" />
     <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
-    <Compile Include="Factories\ICsvWriterFactory.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
-    <Compile Include="Implementation\Factories\CsvWriterFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireExportStructureDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
-    <Compile Include="Factories\IExportViewFactory.cs" />
     <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
     <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\CsvRecordsAccessorFactory.cs" />
-    <Compile Include="Implementation\Factories\ExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\ReferenceInfoForLinkedQuestionsFactory.cs" />
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\FolderPermissionChecker.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
-    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
-    <Compile Include="Implementation\Services\DataExport\FilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
-    <Compile Include="Implementation\Services\DataExport\TabularDataToExternalStatPackageExportService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\FileType.cs" />
-    <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
@@ -232,13 +204,6 @@
     </Compile>
     <Compile Include="QuestionnaireUpgraderModule.cs" />
     <Compile Include="Repositories\IPreloadedDataRepository.cs" />
-    <Compile Include="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\Export\ITabularDataToExternalStatPackageExportService.cs" />
-    <Compile Include="Services\Export\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\EventStoreHealthChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfUnhandledPackagesChecker.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\NumberOfSyncPackagesWithBigSizeChecker.cs" />
@@ -253,7 +218,6 @@
     <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
-    <Compile Include="Services\IDataExportWriter.cs" />
     <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
@@ -517,11 +481,6 @@
     <EmbeddedResource Include="Properties\PreloadingVerificationMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PreloadingVerificationMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SurveyManagementInterviewCommandValidatorMessages.resx">

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ImportExportControlle
     {
         protected static ImportExportController CreateImportExportController(IFilebasedExportedDataAccessor dataExportRepositoryWriter = null)
         {
-            return new ImportExportController(Mock.Of<ILogger>(), dataExportRepositoryWriter ?? Mock.Of<IFilebasedExportedDataAccessor>(), Mock.Of<IBackupManager>());
+            return new ImportExportController(Mock.Of<ILogger>(), Mock.Of<IBackupManager>());
         }
 
         public static void ExecuteAsync(AsyncController asyncController,

@@ -1,19 +1,23 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $exportTypes, $deleteDataExportProcessUrl, $updateTabularDataUrl, $updateApprovedTabularDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl, $updateApprovedDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
     self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
-    self.UpdateTabularDataUrl = $updateTabularDataUrl;
-    self.UpdateApprovedTabularDataUrl = $updateApprovedTabularDataUrl;
+    self.UpdateDataUrl = $updateDataUrl;
+    self.UpdateApprovedDataUrl = $updateApprovedDataUrl;
     self.Templates = templates;
-    self.ParadataReference = ko.observableArray();
-    self.TabularDataReference = ko.observableArray();
-    self.TabularApprovedDataReference = ko.observableArray();
+
+
+    self.ParaDataTabularReference = ko.observableArray();
+    self.DataTabularReference = ko.observableArray();
+    self.ApprovedDataTabularReference = ko.observableArray();
+    self.DataSTATAReference = ko.observableArray();
+    self.ApprovedDataSTATAReference = ko.observableArray();
+
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
-    self.exportTypes = $exportTypes;
 
     self.selectedTemplate = ko.observable();
 
@@ -48,11 +52,19 @@
     self.requestParaDataUpdate = function() {
         self.sendActionRequest(self.HistoryUrl);
     };
-    self.requestTabularDataUpdate = function () {
-        self.sendActionRequest(self.UpdateTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
+    self.requestDataUpdate = function (format) {
+        var questionnaireId = self.selectedTemplateId();
+        var questionnaireVersion = self.selectedTemplate().version;
+        return function() {
+            self.sendActionRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format);
+        }
     }
-    self.requestApprovedTabularDataUpdate = function () {
-        self.sendActionRequest(self.UpdateApprovedTabularDataUrl + "?questionnaireId=" + self.selectedTemplateId() + "&questionnaireVersion=" + self.selectedTemplate().version);
+    self.requestApprovedDataUpdate = function (format) {
+        var questionnaireId = self.selectedTemplateId();
+        var questionnaireVersion = self.selectedTemplate().version;
+        return function() {
+            self.sendActionRequest(self.UpdateApprovedDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format);
+        }
     }
     self.sendActionRequest = function (url, args) {
         var requestHeaders = {};
@@ -87,65 +99,40 @@
         });
     }
 
-    self.lastParaDataUpdateDate = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().LastUpdateDate))
+    self.lastUpdateDate = function(type, format) {
+        var dataReference = self.getDataReference(type, format);
+
+        if (dataReference == null || _.isUndefined(dataReference().LastUpdateDate))
             return "Never";
-        return self.ParadataReference().LastUpdateDate();
+        return self.formatDate(dataReference().LastUpdateDate());
     }
 
-    self.showParaDataDownloadButton = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().HasDataToExport))
+    self.showDownloadButton = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference().HasDataToExport))
             return false;
-        return self.ParadataReference().HasDataToExport();
+        return dataReference().HasDataToExport();
     }
-    self.showParaDataRefreshButton = function () {
-        if (self.ParadataReference() == null || _.isUndefined(self.ParadataReference().CanRefreshBeRequested))
+    self.showRefreshButton = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference().CanRefreshBeRequested))
             return true;
-        return self.ParadataReference().CanRefreshBeRequested();
+        return dataReference().CanRefreshBeRequested();
     }
 
-    self.lastTabularDataUpdateDate = function () {
-        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().LastUpdateDate))
-            return "Never";
-        return self.TabularDataReference().LastUpdateDate();
-    }
-
-    self.showTabularDataDownloadButton = function () {
-        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().HasDataToExport))
-            return false;
-        return self.TabularDataReference().HasDataToExport();
-    }
-    self.showTabularDataRefreshButton = function () {
-        if (self.TabularDataReference() == null || _.isUndefined(self.TabularDataReference().CanRefreshBeRequested))
-            return true;
-        return self.TabularDataReference().CanRefreshBeRequested();
-    }
-
-    self.lastApprovedTabularDataUpdateDate = function () {
-        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().LastUpdateDate))
-            return "Never";
-        return self.TabularApprovedDataReference().LastUpdateDate();
-    }
-
-    self.showApprovedTabularDataDownloadButton = function () {
-        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().HasDataToExport))
-            return false;
-        return self.TabularApprovedDataReference().HasDataToExport();
-    }
-    self.showApprovedTabularDataRefreshButton = function () {
-        if (self.TabularApprovedDataReference() == null || _.isUndefined(self.TabularApprovedDataReference().CanRefreshBeRequested))
-            return true;
-        return self.TabularApprovedDataReference().CanRefreshBeRequested();
+    self.getDataReference = function (type, format)
+    {
+        var referenceName = type + format + "Reference";
+        if (_.isUndefined(self[referenceName]))
+            return null;
+        return self[referenceName];
     }
 
     self.exportFormatName = function (runningExport) {
         return self.exportFromats[runningExport.Format()];
     }
-
-    self.exportName = function (runningExport) {
-        if (runningExport.QuestionnaireTitle() && runningExport.QuestionnaireVersion())
-            return runningExport.QuestionnaireTitle() +'-'+ runningExport.QuestionnaireVersion();
-        return self.exportTypes[runningExport.Type()];
+    self.formatDate=function(date) {
+        return moment(date).format("MM/DD/YYYY HH:mm:ss");
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);

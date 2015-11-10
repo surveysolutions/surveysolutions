@@ -3,10 +3,8 @@ using System;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Extensions;
 using WB.UI.Shared.Web.Membership;
 
@@ -15,13 +13,13 @@ namespace WB.UI.Designer.Code.Implementation
     public class CommandInflater : ICommandInflater
     {
         private readonly IMembershipUserService userHelper;
-        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
 
-        public CommandInflater(IMembershipUserService userHelper, 
-            IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory)
+        public CommandInflater(IMembershipUserService userHelper,
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader)
         {
             this.userHelper = userHelper;
-            this.questionnaireViewFactory = questionnaireViewFactory;
+            this.questionnaireDocumentReader = questionnaireDocumentReader;
         }
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
@@ -40,14 +38,6 @@ namespace WB.UI.Designer.Code.Implementation
             {
                 currentPasteItemAfterCommand.SourceDocument =
                     GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireId);
-
-                //remove after test
-                command = new CloneGroupCommand(
-                    currentPasteItemAfterCommand.QuestionnaireId,
-                    currentPasteItemAfterCommand.EntityId,
-                    currentPasteItemAfterCommand.ResponsibleId,
-                    currentPasteItemAfterCommand.SourceItemId,
-                    1);
             }
 
             var currentPasteItemIntoCommand = command as PasteIntoCommand;
@@ -55,32 +45,24 @@ namespace WB.UI.Designer.Code.Implementation
             {
                 currentPasteItemIntoCommand.SourceDocument =
                     GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireId);
-
-                //remove after test
-                command = new CloneGroupCommand(
-                    currentPasteItemIntoCommand.QuestionnaireId,
-                    currentPasteItemIntoCommand.EntityId,
-                    currentPasteItemIntoCommand.ResponsibleId,
-                    currentPasteItemIntoCommand.SourceItemId,
-                    1);
             }
         }
 
         private QuestionnaireDocument GetQuestionnaire(Guid id)
         {
-            var questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var questionnaire = this.questionnaireDocumentReader.GetById(id);
 
             if (questionnaire == null)
             {
-                throw new CommandInflaitingException("Source questionnaire was not found and might be deleted.");
+                throw new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "Source questionnaire was not found and might be deleted.");
             }
 
-            if (!questionnaire.Source.IsPublic && (questionnaire.Source.CreatedBy != this.userHelper.WebUser.UserId && !questionnaire.Source.SharedPersons.Contains(this.userHelper.WebUser.UserId)))
+            if (!questionnaire.IsPublic && (questionnaire.CreatedBy != this.userHelper.WebUser.UserId && !questionnaire.SharedPersons.Contains(this.userHelper.WebUser.UserId)))
             {
-                throw new CommandInflaitingException("You don't have permissions to access the source questionnaire");
+                throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
             }
 
-            return questionnaire.Source;
+            return questionnaire;
         }
 
         private void SetResponsible(ICommand command)

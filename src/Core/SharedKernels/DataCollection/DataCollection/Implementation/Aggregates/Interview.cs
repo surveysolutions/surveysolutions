@@ -1276,6 +1276,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
+        public void AnswerYesNoQuestion(AnswerYesNoQuestion command)
+        {
+            ThrowIfInterviewHardDeleted();
+        }
+
         public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
         {
             ThrowIfInterviewHardDeleted();

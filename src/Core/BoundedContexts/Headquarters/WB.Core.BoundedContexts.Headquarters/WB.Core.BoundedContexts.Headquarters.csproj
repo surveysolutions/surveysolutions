@@ -46,6 +46,14 @@
       <HintPath>..\..\..\..\..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="ddidotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
@@ -82,6 +90,10 @@
       <HintPath>..\..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StatData, Version=1.3.5714.25241, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -107,32 +119,56 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataExport\Accessors\FilebasedExportedDataAccessor.cs" />
+    <Compile Include="DataExport\Accessors\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="DataExport\Accessors\IParaDataAccessor.cs" />
+    <Compile Include="DataExport\Accessors\ITabFileReader.cs" />
+    <Compile Include="DataExport\Accessors\TabFileReader.cs" />
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
     <Compile Include="DataExport\DataExportSettings.cs" />
+    <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
+    <Compile Include="DataExport\Denormalizers\IExportViewFactory.cs" />
     <Compile Include="DataExport\Dtos\DataExportStatus.cs" />
     <Compile Include="DataExport\Dtos\DataExportFormat.cs" />
     <Compile Include="DataExport\Dtos\DataExportType.cs" />
     <Compile Include="DataExport\Dtos\LastPublishedEventPositionForHandler.cs" />
+    <Compile Include="DataExport\ExportProcessHandlers\StataFormatExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatDataExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatParaDataExportProcessHandler.cs" />
+    <Compile Include="DataExport\Factories\CsvWriter.cs" />
+    <Compile Include="DataExport\Factories\DatasetWriterFactory.cs" />
+    <Compile Include="DataExport\Factories\ICsvWriter.cs" />
+    <Compile Include="DataExport\Factories\IDatasetWriterFactory.cs" />
+    <Compile Include="DataExport\Factories\IMetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
     <Compile Include="DataExport\QueuedProcess\AllDataQueuedProcess.cs" />
     <Compile Include="DataExport\QueuedProcess\ApprovedDataQueuedProcess.cs" />
     <Compile Include="DataExport\QueuedProcess\IQueuedProcess.cs" />
     <Compile Include="DataExport\QueuedProcess\ParaDataQueuedProcess.cs" />
+    <Compile Include="DataExport\Services\Exporters\CommentsExporter.cs" />
+    <Compile Include="DataExport\Services\CsvWriterService.cs" />
     <Compile Include="DataExport\Services\DataExporter.cs" />
     <Compile Include="DataExport\Services\DataExportQueue.cs" />
+    <Compile Include="DataExport\Services\Exporters\InterviewsExporter.cs" />
     <Compile Include="DataExport\Services\IDataExporter.cs" />
     <Compile Include="DataExport\Services\IDataExportQueue.cs" />
     <Compile Include="DataExport\Services\IEnvironmentContentService.cs" />
+    <Compile Include="DataExport\Services\IMetadataExportService.cs" />
+    <Compile Include="DataExport\Services\Exporters\InterviewActionsExporter.cs" />
+    <Compile Include="DataExport\Services\InterviewExportConstants.cs" />
+    <Compile Include="DataExport\Services\ITabularDataToExternalStatPackageExportService.cs" />
+    <Compile Include="DataExport\Services\MetadataExportService.cs" />
+    <Compile Include="DataExport\Services\ReadSideToTabularFormatExportService.cs" />
     <Compile Include="DataExport\Services\StataEnvironmentContentService.cs" />
+    <Compile Include="DataExport\Services\TabularDataToExternalStatPackageExportService.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceInputModel.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesView.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferencesViewModel.cs" />
     <Compile Include="DataExport\Views\ExportedDataReferenceViewFactory.cs" />
     <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
+    <Compile Include="DataExport\Denormalizers\QuestionnaireExportStructureDenormalizer.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
     <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,6 +177,11 @@
     <Compile Include="Questionnaires\Denormalizers\VersionedQustionnaireDocumentDenormalizer.cs" />
     <Compile Include="Questionnaires\Implementation\VersionedQustionnaireDocumentViewFactory.cs" />
     <Compile Include="Questionnaires\IVersionedQuestionnaireReader.cs" />
+    <Compile Include="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -212,6 +253,11 @@
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\FileBasedDataExportRepositoryWriterMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FileBasedDataExportRepositoryWriterMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\HeadquarterUserCommandValidatorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HeadquarterUserCommandValidatorMessages.Designer.cs</LastGenOutput>
