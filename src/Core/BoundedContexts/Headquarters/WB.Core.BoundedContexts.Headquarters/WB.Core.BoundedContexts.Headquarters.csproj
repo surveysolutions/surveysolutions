@@ -155,6 +155,7 @@
     <Compile Include="DataExport\Services\IDataExportQueue.cs" />
     <Compile Include="DataExport\Services\IEnvironmentContentService.cs" />
     <Compile Include="DataExport\Services\IMetadataExportService.cs" />
+    <Compile Include="DataExport\Services\InterviewActionsExporter.cs" />
     <Compile Include="DataExport\Services\InterviewExportConstants.cs" />
     <Compile Include="DataExport\Services\ITabularDataToExternalStatPackageExportService.cs" />
     <Compile Include="DataExport\Services\MetadataExportService.cs" />
