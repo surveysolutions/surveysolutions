@@ -109,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
-    <Compile Include="Implementation\Services\DataExport\ReadSideToTabularFormatExportService.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
@@ -186,15 +185,12 @@
     <Compile Include="Implementation\Factories\PreloadedDataServiceFactory.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\FolderPermissionChecker.cs" />
     <Compile Include="Implementation\IRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\CsvWriterService.cs" />
-    <Compile Include="Implementation\Services\DataExport\FileBasedDataExportRepositorySettings.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\IAtomicHealthCheck.cs" />
     <Compile Include="Implementation\Services\QuestionnaireUpgradeService.cs" />
     <Compile Include="Implementation\Synchronization\Constants.cs" />
     <Compile Include="Implementation\Synchronization\IncomingSyncPackagesQueue.cs" />
     <Compile Include="Implementation\Repositories\FilebasedPreloadedDataRepository.cs" />
     <Compile Include="Implementation\SampleRecordsAccessors\CsvRecordsAccessor.cs" />
-    <Compile Include="Implementation\Services\DataExport\InterviewExportConstants.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadingTemplateService.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />

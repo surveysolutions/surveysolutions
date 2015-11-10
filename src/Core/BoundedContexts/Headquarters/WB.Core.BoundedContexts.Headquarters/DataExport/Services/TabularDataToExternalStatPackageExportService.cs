@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
