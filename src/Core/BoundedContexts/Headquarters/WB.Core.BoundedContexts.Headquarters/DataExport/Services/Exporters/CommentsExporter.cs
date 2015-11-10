@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
     internal class CommentsExporter
     {
@@ -45,14 +45,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             string basePath,
             IProgress<int> progress)
         {
-            DoExport(questionnaireExportStructure, false, basePath, progress);
+            this.DoExport(questionnaireExportStructure, false, basePath, progress);
         }
 
         public void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure,
             string basePath,
             IProgress<int> progress)
         {
-            DoExport(questionnaireExportStructure, true, basePath, progress);
+            this.DoExport(questionnaireExportStructure, true, basePath, progress);
         }
 
         private void DoExport(QuestionnaireExportStructure questionnaireExportStructure,
