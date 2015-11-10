@@ -47,15 +47,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
-        private readonly bool hqEnabled;
         private readonly bool isSupervisorFunctionsEnabled;
-        private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly int? interviewLimitCount;
         private readonly ReadSideSettings readSideSettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
             ReadSideSettings readSideSettings,
             bool isSupervisorFunctionsEnabled,
             int? interviewLimitCount = null)
@@ -64,8 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
-            this.hqEnabled = hqEnabled;
-            this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
             this.readSideSettings = readSideSettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
@@ -113,7 +109,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
-            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
@@ -133,10 +128,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
 
-            if (hqEnabled)
-            {
-                this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
-            }
             this.Bind<IBrokenSyncPackagesStorage>()
                 .To<BrokenSyncPackagesStorage>();
 

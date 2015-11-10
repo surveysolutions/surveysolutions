@@ -4,17 +4,13 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
-using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
-namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
     internal class QuestionnaireExportStructureDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
     {
@@ -25,7 +21,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public QuestionnaireExportStructureDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireExportStructure> readsideRepositoryWriter,
-            IExportViewFactory exportViewFactory, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IExportViewFactory exportViewFactory, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.readsideRepositoryWriter = readsideRepositoryWriter;
             this.exportViewFactory = exportViewFactory;
@@ -34,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Writers
         {
-            get { return new object[] { readsideRepositoryWriter}; }
+            get { return new object[] { this.readsideRepositoryWriter}; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

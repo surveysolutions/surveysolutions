@@ -14,13 +14,12 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
     internal class ExportViewFactory : IExportViewFactory
     {
@@ -94,7 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
                 string[] systemVariableValues = new string[0];
                 if (vectorLength == 0)
-                    systemVariableValues = GetSystemValues(interview, ServiceColumns.SystemVariables);
+                    systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables);
 
                 var parentRecordIds = new string[dataByLevel.RosterVector.Length];
                 if (parentRecordIds.Length > 0)
@@ -114,7 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 {
                     referenceValues = new string[]
                     {
-                        GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())
+                        this.GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())
                     };
                 }
 
@@ -127,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
-            return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
+            return vector.Length == 0 ? "#" : vector.CreateLeveKeyFromPropagationVector();
         }
 
         private string[] GetSystemValues(InterviewData interview, ServiceVariable[] variables)
@@ -161,7 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             {
                 var levelForVector =
                     interview.Levels.SingleOrDefault(
-                        l => l.Key == CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
+                        l => l.Key == this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
 
                 var questionToCheck = levelForVector.Value.QuestionsSearchCahche.ContainsKey(id) ? levelForVector.Value.QuestionsSearchCahche[id] : null;
 
@@ -344,7 +343,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 throw new InvalidOperationException("level is absent in template");
 
             var firstRootGroup = rootGroups.First();
-            var levelTitle = firstRootGroup.VariableName ?? fileSystemAccessor.MakeValidFileName(firstRootGroup.Title);
+            var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeValidFileName(firstRootGroup.Title);
 
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
                 maxValuesForRosterSizeQuestions, levelVector);
@@ -416,7 +415,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     else
                     {
                         if (question is GpsCoordinateQuestion)
-                            AddHeadersForGpsQuestion(headerStructureForLevel.HeaderItems, question,
+                            this.AddHeadersForGpsQuestion(headerStructureForLevel.HeaderItems, question,
                                 referenceInfoForLinkedQuestions);
                         else
                             this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel.HeaderItems, question,
@@ -451,7 +450,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             headerItems.Add(question.PublicKey,
-                CreateExportedHeaderItem(question,
+                this.CreateExportedHeaderItem(question,
                     this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions),
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
@@ -460,7 +459,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
             headerItems.Add(question.PublicKey,
-                CreateExportedHeaderItem(question,
+                this.CreateExportedHeaderItem(question,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
@@ -470,7 +469,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var multiOptionQuestion = question as IMultyOptionsQuestion;
             var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
             headerItems.Add(question.PublicKey,
-                CreateExportedHeaderItem(question, maxCount,
+                this.CreateExportedHeaderItem(question, maxCount,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
@@ -480,7 +479,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var textListQuestion = question as ITextListQuestion;
             var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
             headerItems.Add(question.PublicKey,
-                CreateExportedHeaderItem(question, maxCount,
+                this.CreateExportedHeaderItem(question, maxCount,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 
@@ -522,7 +521,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             if (!referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions.ContainsKey(question.PublicKey))
                 return null;
             return
-                GetLengthOfRosterVectorWhichNeedToBeExported(
+                this.GetLengthOfRosterVectorWhichNeedToBeExported(
                     referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].LinkedQuestionRosterScope,
                     referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope);
         }
