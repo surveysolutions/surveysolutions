@@ -2,6 +2,7 @@
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -84,6 +85,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
             this.Bind<ICsvWriterFactory>().To<CsvWriterFactory>();
+            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+            this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
         }
     }
 }

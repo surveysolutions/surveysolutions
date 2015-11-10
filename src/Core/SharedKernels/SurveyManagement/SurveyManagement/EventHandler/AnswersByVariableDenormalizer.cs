@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -121,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
-            return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
+            return vector.Length == 0 ? "#" : vector.CreateLeveKeyFromPropagationVector();
         }
     }
 }

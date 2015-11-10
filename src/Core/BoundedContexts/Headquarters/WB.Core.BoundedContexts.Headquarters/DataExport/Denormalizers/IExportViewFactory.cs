@@ -2,7 +2,7 @@
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Factories
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
     public interface IExportViewFactory
     {
