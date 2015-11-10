@@ -15,6 +15,8 @@
     self.ApprovedDataTabularReference = ko.observableArray();
     self.DataSTATAReference = ko.observableArray();
     self.ApprovedDataSTATAReference = ko.observableArray();
+    self.DataSPPSReference = ko.observableArray();
+    self.ApprovedDataSPPSReference = ko.observableArray();
 
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
@@ -49,8 +51,9 @@
     self.stopExportProcess = function (runningExport) {
         self.sendActionRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
     }
-    self.requestParaDataUpdate = function() {
-        self.sendActionRequest(self.HistoryUrl);
+    self.requestParaDataUpdate = function (format) {  return function() {
+            self.sendActionRequest(self.HistoryUrl);
+        }
     };
     self.requestDataUpdate = function (format) {
         var questionnaireId = self.selectedTemplateId();
