@@ -29,9 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
     internal class ReadSideToTabularFormatExportServiceTestContext
     {
         protected static ReadSideToTabularFormatExportService CreateReadSideToTabularFormatExportService(
-            IFileSystemAccessor fileSystemAccessor=null,
+            IFileSystemAccessor fileSystemAccessor = null,
             ICsvWriterService csvWriterService = null,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses=null,
+            ICsvWriter csvWriter = null,
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
              QuestionnaireExportStructure questionnaireExportStructure = null,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
         {
@@ -46,8 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             return new ReadSideToTabularFormatExportService(
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICsvWriter>(_ => _.OpenCsvWriter(
-                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+                csvWriter ?? Mock.Of<ICsvWriter>(_ => _.OpenCsvWriter(
+                                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
                 Mock.Of<ISerializer>(),new InterviewDataExportSettings("",false,10000, 100),
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
                 interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),
