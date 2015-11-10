@@ -264,6 +264,10 @@
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_correct_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_incorrect_credentials.cs" />
     <Compile Include="Applications\Designer\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
+    <Compile Include="Applications\Designer\CommandApiControllerTests\CommandApiControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\CommandApiControllerTests\when_command_preparation_throws_exception.cs" />
+    <Compile Include="Applications\Designer\CommandApiControllerTests\when_questionnaire_not_available.cs" />
+    <Compile Include="Applications\Designer\CommandApiControllerTests\when_user_has_no_access_rights.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type_UpdateSingleOptionQuestion_with_options.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id.cs" />
@@ -274,6 +278,9 @@
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateQuestionnaire__with_title.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_type__UpdateQuestion__with_title.cs" />
     <Compile Include="Applications\Designer\CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
+    <Compile Include="Applications\Designer\CommandInflaterTests\CommandInflaterTestsContext.cs" />
+    <Compile Include="Applications\Designer\CommandInflaterTests\when_PasteIntoCommand_is_inflating.cs" />
+    <Compile Include="Applications\Designer\CommandInflaterTests\when_PasteAfterCommand_is_inflating.cs" />
     <Compile Include="Applications\Designer\CommandPostProcessorTests\CommandPostProcessorTestsContext.cs" />
     <Compile Include="Applications\Designer\CommandPostProcessorTests\when_command_prostprocessor_handles_RemoveSharedPersonFromQuestionnaireCommand.cs" />
     <Compile Include="Applications\Designer\CommandPostProcessorTests\when_command_prostprocessor_handles_AddSharedPersonToQuestionnaireCommand.cs" />
@@ -742,9 +749,6 @@
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_hq_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_supervisor_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_supervisors.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\ReadSideRepositoryDataExportWriterTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_DataExportWriter_adds_interview_data_records.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ReadSideRepositoryDataExportWriterTests\when_dataExportWriter_removes_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\TabularDataToExternalStatPackageExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\TabularDataToExternalStatPackageExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_data_files_for_questionnaire.cs" />

@@ -270,6 +270,7 @@
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
+    <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
     <Compile Include="Code\Implementation\ShareChangeType.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />

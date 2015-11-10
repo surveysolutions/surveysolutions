@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             if (vector.Length == 0)
                 return "#";
-            return EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
+            return vector.CreateLeveKeyFromPropagationVector();
         }
 
         private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId, QuestionnaireRosterStructure questionnarie)

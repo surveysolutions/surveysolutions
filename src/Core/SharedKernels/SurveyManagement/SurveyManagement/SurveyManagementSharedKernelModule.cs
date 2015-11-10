@@ -7,7 +7,6 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -16,7 +15,6 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteSupervisor;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck;
@@ -30,7 +28,6 @@ using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteSupervisor;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
@@ -50,17 +47,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
         private readonly Version applicationBuildVersion;
-        private readonly bool hqEnabled;
         private readonly bool isSupervisorFunctionsEnabled;
-        private readonly int maxCountOfCachedEntitiesForSqliteDb;
         private readonly int? interviewLimitCount;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ReadSideSettings readSideSettings;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
             Func<bool> isDebug, Version applicationBuildVersion,
-            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings, bool hqEnabled, int maxCountOfCachedEntitiesForSqliteDb,
-            InterviewDataExportSettings interviewDataExportSettings,
+            InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
             ReadSideSettings readSideSettings,
             bool isSupervisorFunctionsEnabled,
             int? interviewLimitCount = null)
@@ -69,9 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
             this.applicationBuildVersion = applicationBuildVersion;
-            this.hqEnabled = hqEnabled;
-            this.maxCountOfCachedEntitiesForSqliteDb = maxCountOfCachedEntitiesForSqliteDb;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.readSideSettings = readSideSettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
@@ -90,21 +80,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
-            this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
-            this.Bind<IMetadataExportService>().To<MetadataExportService>();
-            this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
-            this.Bind<ITabFileReader>().To<TabFileReader>();
-            this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
+           
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            this.Bind<FileBasedDataExportRepositorySettings>().ToConstant(new FileBasedDataExportRepositorySettings(maxCountOfCachedEntitiesForSqliteDb));
             this.Bind<IPreloadingTemplateService>().To<PreloadingTemplateService>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().WithConstructorArgument("folderPath", this.currentFolderPath);
             this.Bind<IPreloadedDataVerifier>().To<PreloadedDataVerifier>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
-            this.Bind<ICsvWriterService>().To<CsvWriterService>();
-            this.Bind<ICsvWriterFactory>().To<CsvWriterFactory>();
             this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
@@ -127,8 +109,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
             this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
-            this.Bind<IDataExportWriter>().To<ReadSideRepositoryDataExportWriter>();
-            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IReferenceInfoForLinkedQuestionsFactory>().To<ReferenceInfoForLinkedQuestionsFactory>();
 
             this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
@@ -148,10 +128,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
 
-            if (hqEnabled)
-            {
-                this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
-            }
             this.Bind<IBrokenSyncPackagesStorage>()
                 .To<BrokenSyncPackagesStorage>();
 
@@ -172,9 +148,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
             this.Bind<IDeleteSupervisorService>().To<DeleteSupervisorService>().InSingletonScope();
-
-            this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
-
             this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
 
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
