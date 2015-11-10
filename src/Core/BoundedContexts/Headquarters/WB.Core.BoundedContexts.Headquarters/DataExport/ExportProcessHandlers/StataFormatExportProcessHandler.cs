@@ -45,9 +45,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(AllDataQueuedProcess process)
         {
-            var questionnaireId = process.QuestionnaireIdentity.QuestionnaireId;
-            var questionnaireVersion = process.QuestionnaireIdentity.Version;
-
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), allDataFolder);
 
@@ -59,8 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
-            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId,
-                questionnaireVersion, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
+            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
+                process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 process.QuestionnaireIdentity,
@@ -71,9 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(ApprovedDataQueuedProcess process)
         {
-            var questionnaireId = process.QuestionnaireIdentity.QuestionnaireId;
-            var questionnaireVersion = process.QuestionnaireIdentity.Version;
-
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), approvedDataFolder);
 
@@ -85,8 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService
                 .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
-            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId,
-                questionnaireVersion, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
+            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
+                process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
                 process.QuestionnaireIdentity,
