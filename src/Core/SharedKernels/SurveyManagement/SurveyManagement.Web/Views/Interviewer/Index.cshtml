@@ -70,7 +70,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName"></a>
+                    <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName"></a>
                 </td>
                 <td data-bind="text: CreationDate"></td>
                 <td>
