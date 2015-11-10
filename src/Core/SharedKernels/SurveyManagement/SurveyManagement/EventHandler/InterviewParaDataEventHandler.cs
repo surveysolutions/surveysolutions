@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, SingleOptionLinkedQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, TextListQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, QRBarcodeQuestionAnswered>,
+        IUpdateHandler<InterviewHistoryView, YesNoQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, PictureQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, AnswerCommented>,
         IUpdateHandler<InterviewHistoryView, InterviewDeleted>,
@@ -305,6 +306,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
            CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.PictureFileName),
            @event.Payload.RosterVector));
+
+            return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<YesNoQuestionAnswered> @event)
+        {
+            AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
+                @event.Payload.AnswerTimeUtc,
+                CreateAnswerParameters(@event.Payload.QuestionId,
+                    AnswerUtils.AnswerToString(@event.Payload.AnsweredOptions),
+                    @event.Payload.RosterVector));
 
             return view;
         }
