@@ -4,6 +4,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
 
@@ -18,11 +19,11 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class ADomainEvent
+        public class ADomainEvent : ILiteEvent
         {
         }
 
-        public class AEvent
+        public class AEvent : ILiteEvent
         {
         }
 
@@ -61,7 +62,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_a_catch_all_handler_is_register_it_should_be_called_for_all_events()
         {
-            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<object>>();
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
 
             var bus = new InProcessEventBus(Mock.Of<IEventStore>());
             bus.RegisterHandler(catchAllEventHandler);
@@ -96,9 +97,9 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_a_multiple_catch_all_handler_are_registered_for_they_should_all_been_called()
         {
-            var catchAllEventHandler1 = MockRepository.GenerateMock<IEventHandler<object>>();
-            var catchAllEventHandler2 = MockRepository.GenerateMock<IEventHandler<object>>();
-            var catchAllEventHandler3 = MockRepository.GenerateMock<IEventHandler<object>>();
+            var catchAllEventHandler1 = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
+            var catchAllEventHandler2 = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
+            var catchAllEventHandler3 = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
 
             var bus = new InProcessEventBus(Mock.Of<IEventStore>());
             bus.RegisterHandler(catchAllEventHandler1);
@@ -175,7 +176,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_multiple_messages_are_published_at_once_they_all_should_be_published()
         {
-            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<object>>();
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
             var bus = new InProcessEventBus(Mock.Of<IEventStore>());
             bus.RegisterHandler(catchAllEventHandler);
 

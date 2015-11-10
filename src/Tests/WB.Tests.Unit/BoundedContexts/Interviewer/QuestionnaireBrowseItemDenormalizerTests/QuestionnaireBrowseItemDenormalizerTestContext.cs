@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.EventHandler;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -24,6 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.QuestionnaireBrowseItemDenor
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
+            where T: ILiteEvent
         {
             return new PublishedEvent<T>(Create.PublishableEvent(eventSourceId: questionnaireId, payload: evnt));
         }
