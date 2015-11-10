@@ -12,6 +12,7 @@
 
     self.ParaDataTabularReference = ko.observableArray();
     self.DataTabularReference = ko.observableArray();
+    self.DataBinaryReference = ko.observableArray();
     self.ApprovedDataTabularReference = ko.observableArray();
     self.DataSTATAReference = ko.observableArray();
     self.ApprovedDataSTATAReference = ko.observableArray();

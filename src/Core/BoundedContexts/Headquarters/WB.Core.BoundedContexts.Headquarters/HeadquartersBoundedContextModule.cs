@@ -82,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
             this.Bind<StataFormatExportProcessHandler>().ToSelf();
             this.Bind<SpssFormatExportProcessHandler>().ToSelf();
+            this.Bind<BinaryFormatDataExportProcessHandler>().ToSelf();
 
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
