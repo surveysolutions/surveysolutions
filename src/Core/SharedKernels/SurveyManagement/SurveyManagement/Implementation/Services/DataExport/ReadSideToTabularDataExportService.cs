@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -87,7 +86,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.returnRecordLimit = interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
-
         }
 
         public void ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
@@ -114,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
-            this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath, progress);
+            this.ExportComments(questionnaireExportStructure, whereClauseForComments, basePath, progress);
             this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
@@ -192,7 +190,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status)
                         .Any(s => s == InterviewExportedAction.ApprovedByHeadquarter);
 
-            this.ExportCommentsInTabularFormatAsync(questionnaireExportStructure, whereClauseForComments, basePath, progress);
+            this.ExportComments(questionnaireExportStructure, whereClauseForComments, basePath, progress);
             this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
@@ -217,7 +215,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             return filesInDirectory;
         }
 
-        private void ExportCommentsInTabularFormatAsync(QuestionnaireExportStructure questionnaireExportStructure, Expression<Func<InterviewCommentaries, bool>> whereClauseForComments, string basePath, IProgress<int> progress)
+        private void ExportComments(QuestionnaireExportStructure questionnaireExportStructure, 
+            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments, 
+            string basePath, 
+            IProgress<int> progress)
         {
             string commentsFilePath =
                 this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
@@ -228,7 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             bool hasAtLeastOneRoster =
                 questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
 
-            var commentsHeader = new List<string>() { "Order", "Originator", "Role", "Date", "Time", "Variable" };
+            var commentsHeader = new List<string> { "Order", "Originator", "Role", "Date", "Time", "Variable" };
 
             if (hasAtLeastOneRoster)
                 commentsHeader.Add("Roster");
@@ -243,10 +244,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             WriteData(commentsFilePath, new[] { commentsHeader.ToArray() });
 
-            foreach (var queryCommentsChunk in 
-                this.GetTasksForQueryCommentsByChunks(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster))
+            var queryCommentsChunks = this.QueryByChunks(
+                skip => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skip, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster),
+                () => this.interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
+
+            foreach (var queryCommentsChunk in queryCommentsChunks)
             {
-                WriteData(commentsFilePath, queryCommentsChunk);
+                this.WriteData(commentsFilePath, queryCommentsChunk);
             }
 
             progress.Report(90);
@@ -299,15 +303,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
                 this.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() });
             }
-        }
-
-        private IEnumerable<string[][]> GetTasksForQueryCommentsByChunks(Expression<Func<InterviewCommentaries, bool>> whereClauseForComments,
-            int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
-        {
-            return this.QueryByChunks(
-                    skip =>
-                    this.QueryCommentsChunkFromReadSide(whereClauseForComments, skip, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster),
-                    () => interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
         }
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
