@@ -30,11 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class ReadSideToTabularFormatExportService : ITabularFormatExportService
     {
         private const double InterviewsExportProgressModifier = 0.8;
-        private const double CommentsExportProgressModifier = 0.8;
-        private readonly string commentsFileName = "interview_comments";
         private readonly string interviewActionsFileName = "interview_actions";
         private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
-        private readonly Regex removeNewLineRegEx = new Regex(@"\t|\n|\r");
 
         private readonly string dataFileExtension = "tab";
 
@@ -43,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ICsvWriterFactory csvWriterFactory;
+        private readonly ICsvWriter csvWriter;
         private readonly ISerializer serializer;
 
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
@@ -55,11 +52,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IExportViewFactory exportViewFactory;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
         private readonly ITransactionManager transactionManager;
+        private readonly CommentsExporter commentsExporter;
 
         public ReadSideToTabularFormatExportService(
             ITransactionManagerProvider transactionManagerProvider,
             IFileSystemAccessor fileSystemAccessor,
-            ICsvWriterFactory csvWriterFactory,
+            ICsvWriter csvWriter,
             ISerializer serializer,
             InterviewDataExportSettings interviewDataExportSettings,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
@@ -73,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.csvWriterFactory = csvWriterFactory;
+            this.csvWriter = csvWriter;
             this.interviewActionsDataStorage = interviewActionsDataStorage;
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
@@ -86,6 +84,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             this.returnRecordLimit = interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
+
+            this.commentsExporter = new CommentsExporter(interviewDataExportSettings, 
+                fileSystemAccessor, 
+                csvWriter, 
+                this.interviewCommentariesStorage,
+                transactionManager);
         }
 
         public void ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
@@ -107,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
-            this.ExportComments(questionnaireExportStructure, false, basePath, progress);
+            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, progress);
             this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
@@ -150,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                     if (result.ContainsKey(level.LevelName))
                     {
-                        this.WriteData(dataByTheLevelFilePath, result[level.LevelName]);
+                        this.csvWriter.WriteData(dataByTheLevelFilePath, result[level.LevelName], this.separator);
                     }
                 }
 
@@ -179,7 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status)
                         .Any(s => s == InterviewExportedAction.ApprovedByHeadquarter);
 
-            this.ExportComments(questionnaireExportStructure, true, basePath, progress);
+            this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, progress);
             this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
@@ -204,87 +208,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return filesInDirectory;
         }
 
-        private void ExportComments(QuestionnaireExportStructure questionnaireExportStructure, 
-            bool exportApprovedOnly, 
-            string basePath, 
-            IProgress<int> progress)
-        {
-            string commentsFilePath =
-                this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
-
-            int maxRosterDepthInQuestionnaire =
-                questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
-
-            bool hasAtLeastOneRoster =
-                questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
-
-            var commentsHeader = new List<string> { "Order", "Originator", "Role", "Date", "Time", "Variable" };
-
-            if (hasAtLeastOneRoster)
-                commentsHeader.Add("Roster");
-
-            commentsHeader.Add("InterviewId");
-
-            for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
-            {
-                commentsHeader.Add($"Id{i}");
-            }
-            commentsHeader.Add("Comment");
-
-            this.WriteData(commentsFilePath, new[] { commentsHeader.ToArray() });
-
-            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments;
-            if (exportApprovedOnly)
-            {
-                whereClauseForComments =
-                    interviewComments =>
-                        interviewComments.QuestionnaireId == questionnaireExportStructure.QuestionnaireId.FormatGuid() &&
-                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version;
-            }
-            else
-            {
-                whereClauseForComments =
-                    interviewComments =>
-                        interviewComments.QuestionnaireId == questionnaireExportStructure.QuestionnaireId.FormatGuid() &&
-                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version &&
-                        interviewComments.IsApprovedByHQ;
-            }
-
-
-            var countOfAllRecords =
-              this.transactionManagerProvider.GetTransactionManager()
-                  .ExecuteInQueryTransaction(() => this.interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
-
-            int skip = 0;
-
-            while (skip < countOfAllRecords)
-            {
-                var skipAtCurrentIteration = skip;
-
-                string[][] exportComments = this.transactionManagerProvider.GetTransactionManager()
-                                                            .ExecuteInQueryTransaction(
-                                                                () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skipAtCurrentIteration, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
-
-                this.WriteData(commentsFilePath, exportComments);
-                skip = skip + this.returnRecordLimit;
-
-                progress.Report((int)(0.8 + skip.PercentOf(countOfAllRecords) * CommentsExportProgressModifier));
-            }
-
-            progress.Report(90);
-        }
-
         private void ExportActionsInTabularFormatAsync(Expression<Func<InterviewStatuses, bool>> whereClauseForAction, 
             string basePath, 
             IProgress<int> progress)
         {
             var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
 
-            this.WriteData(actionFilePath, new[] { this.actionFileColumns });
+            this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, this.separator);
 
             foreach (var queryActionsChunk in this.GetTasksForQueryActionsByChunks(whereClauseForAction))
             {
-                this.WriteData(actionFilePath, queryActionsChunk);
+                this.csvWriter.WriteData(actionFilePath, queryActionsChunk, this.separator);
             }
             progress.Report(100);
         }
@@ -319,7 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() });
+                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, this.separator);
             }
         }
 
@@ -340,60 +274,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 skip => this.QueryActionsChunkFromReadSide(whereClauseForAction, skip),
                         () => this.interviewActionsDataStorage.Query(
                             _ => _.Where(whereClauseForAction).SelectMany(x => x.InterviewCommentedStatuses).Count()));
-        }
-
-        private string[][] QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, int skip, int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
-        {
-            var comments = this.interviewCommentariesStorage.Query(
-                            _ =>
-                                _.Where(queryComments)
-                                    .SelectMany(
-                                        interviewComments => interviewComments.Commentaries,
-                                        (interview, comment) => new { interview.InterviewId, Comments = comment })
-                                    .Select(
-                                        i =>
-                                            new
-                                            {
-                                                i.InterviewId,
-                                                i.Comments.CommentSequence,
-                                                i.Comments.OriginatorName,
-                                                i.Comments.OriginatorRole,
-                                                i.Comments.Timestamp,
-                                                i.Comments.Variable,
-                                                i.Comments.Roster,
-                                                i.Comments.RosterVector,
-                                                i.Comments.Comment
-                                            }).OrderBy(i => i.Timestamp).Skip(skip).Take(this.returnRecordLimit).ToList());
-
-            var result = new List<string[]>();
-
-            foreach (var interview in comments)
-            {
-                var resultRow = new List<string>
-                {
-                    interview.CommentSequence.ToString(),
-                    interview.OriginatorName,
-                    this.GetUserRole(interview.OriginatorRole),
-                    interview.Timestamp.ToString("d", CultureInfo.InvariantCulture),
-                    interview.Timestamp.ToString("T", CultureInfo.InvariantCulture),
-                    interview.Variable
-                };
-
-                if (hasAtLeastOneRoster)
-                    resultRow.Add(interview.Roster);
-
-                resultRow.Add(interview.InterviewId);
-
-                for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
-                {
-                    resultRow.Add(interview.RosterVector.Length > i ? interview.RosterVector[i].ToString(CultureInfo.InvariantCulture) : "");
-                }
-
-                resultRow.Add(interview.Comment);
-
-                result.Add(resultRow.ToArray());
-            }
-            return result.ToArray();
         }
 
         private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewStatuses, bool>> queryActions, int skip)
@@ -468,24 +348,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     return FileBasedDataExportRepositoryWriterMessages.Administrator;
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
-        }
-
-        private void WriteData(string filePath, IEnumerable<string[]> records)
-        {
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(filePath, true))
-            using (var tabWriter = this.csvWriterFactory.OpenCsvWriter(fileStream, this.separator))
-            {
-                foreach (var dataRow in records)
-                {
-                    foreach (var cell in dataRow)
-                    {
-                        var valueToWrite = string.IsNullOrEmpty(cell) ? "" : this.removeNewLineRegEx.Replace(cell, "");
-                        tabWriter.WriteField(valueToWrite);
-                    }
-
-                    tabWriter.NextRecord();
-                }
-            }
         }
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
