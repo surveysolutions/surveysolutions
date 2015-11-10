@@ -69,7 +69,7 @@
     </ul>
 }
 
-<table class="table table-striped table-bordered table-condensed table-hover">
+<table class="table table-bordered table-condensed">
     <thead>
         <tr>
             <th>All Data</th>
@@ -86,30 +86,10 @@
         <!-- ko if:selectedTemplateTitle() != null -->
         <tr>
             <td>
-                <div>
-                    <div class="well-sm">
-                        @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
-                    </div>
-                    <div class="well-sm">
-                        @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)
-                    </div><div class="well-sm">
-                        @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPPS, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)
-                    </div>
-                </div>
+                @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
             </td>
             <td>
-                <div>
-                    <div class="well-sm">
-                        @DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.Tabular, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
-                    </div>
-                    <div class="well-sm">
-
-                        @DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.STATA, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)
-                    </div>
-                    <div class="well-sm">
-                        @DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.SPPS, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)
-                    </div>
-                </div>
+                @DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.Tabular, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
             </td>
             <td>
                 <div>
@@ -130,11 +110,23 @@
             @if (this.ViewBag.EnableInterviewHistory)
             {
                 <td>
-                    <div>
-                        @DataExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl")
-                    </div>
+                    @DataExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl")
                 </td>
             }
+        </tr>
+        <tr>
+            <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
+            <td>@DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.STATA, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPPS, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
+            <td>@DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.SPPS, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <!-- /ko  -->
     </tbody>
@@ -182,19 +174,28 @@
 @helper DataExportTemplate(DataExportType type, DataExportFormat format, string dataUrl, string iconUrl = null, bool addFromat = false)
 {
 var exportParameters = "'" + type + "','" + format + "'";
-if (!string.IsNullOrEmpty(iconUrl))
-{
-        <img src="@Url.Content(iconUrl)" />
-}
-    <span>
-        Last updated on <i data-bind="text:lastUpdateDate(@exportParameters)"></i>
-    </span>
-    <a class="btn btn-default" data-bind="click: request@(type)Update(@((int)format)), visible: showRefreshButton(@exportParameters)">
-        <i class="glyphicon glyphicon-refresh">
-        </i>
-    </a>
-    <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat?"+ '&format="+format+"'":"") }">
-        <i class="glyphicon glyphicon-download">
-        </i>
-    </a>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                @if (!string.IsNullOrEmpty(iconUrl))
+                {
+                    <td><img src="@Url.Content(iconUrl)" /></td>
+                }
+                <td> Last updated on <i data-bind="text:lastUpdateDate(@exportParameters)"></i></td>
+                <td>
+                    <a class="btn btn-default" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">
+                        <i class="glyphicon glyphicon-refresh">
+                        </i>
+                    </a>
+                </td>
+                <td>
+
+                    <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") }">
+                        <i class="glyphicon glyphicon-download">
+                        </i>
+                    </a>
+                </td>
+            </tr>
+        </thead>
+    </table>
 }
