@@ -44,6 +44,7 @@
     <Compile Include="ActionUtils.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EventHandlerUtils.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="FileSizeUtils.cs" />
     <Compile Include="GlobalStopwatcher.cs" />

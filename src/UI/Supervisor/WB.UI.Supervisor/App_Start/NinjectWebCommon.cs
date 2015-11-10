@@ -153,8 +153,7 @@ namespace WB.UI.Supervisor.App_Start
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
-                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings,
                     readSideSettings,
                     isSupervisorFunctionsEnabled: true,
                     interviewLimitCount: interviewCountLimit));
