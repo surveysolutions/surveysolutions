@@ -132,6 +132,7 @@
     <Compile Include="DataExport\Dtos\DataExportFormat.cs" />
     <Compile Include="DataExport\Dtos\DataExportType.cs" />
     <Compile Include="DataExport\Dtos\LastPublishedEventPositionForHandler.cs" />
+    <Compile Include="DataExport\ExportProcessHandlers\BinaryFormatDataExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\SpssFormatExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\StataFormatExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatDataExportProcessHandler.cs" />
