@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class ReadSideToTabularFormatExportService : ITabularFormatExportService
     {
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
               this.transactionManagerProvider.GetTransactionManager()
                   .ExecuteInQueryTransaction(
                       () =>
-                          questionnaireExportStructureStorage.AsVersioned()
+                          this.questionnaireExportStructureStorage.AsVersioned()
                               .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
 
             if (questionnaireExportStructure == null)
@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
         public string[] GetTabularDataFilesFromFolder(string basePath)
         {
-            var filesInDirectory = fileSystemAccessor.GetFilesInDirectory(basePath).Where(fileName => fileName.EndsWith("." + dataFileExtension)).ToArray();
+            var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(basePath).Where(fileName => fileName.EndsWith("." + this.dataFileExtension)).ToArray();
             return filesInDirectory;
         }
 
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             }
             commentsHeader.Add("Comment");
 
-            WriteData(commentsFilePath, new[] { commentsHeader.ToArray() });
+            this.WriteData(commentsFilePath, new[] { commentsHeader.ToArray() });
 
             Expression<Func<InterviewCommentaries, bool>> whereClauseForComments;
             if (exportApprovedOnly)
@@ -264,7 +264,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                                                                 () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skipAtCurrentIteration, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
 
                 this.WriteData(commentsFilePath, exportComments);
-                skip = skip + returnRecordLimit;
+                skip = skip + this.returnRecordLimit;
 
                 progress.Report((int)(0.8 + skip.PercentOf(countOfAllRecords) * CommentsExportProgressModifier));
             }
@@ -278,11 +278,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
 
-            WriteData(actionFilePath, new[] { actionFileColumns });
+            this.WriteData(actionFilePath, new[] { this.actionFileColumns });
 
             foreach (var queryActionsChunk in this.GetTasksForQueryActionsByChunks(whereClauseForAction))
             {
-                WriteData(actionFilePath, queryActionsChunk);
+                this.WriteData(actionFilePath, queryActionsChunk);
             }
             progress.Report(100);
         }
@@ -336,13 +336,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             return this.QueryByChunks(
                 skip => this.QueryActionsChunkFromReadSide(whereClauseForAction, skip),
-                        () => interviewActionsDataStorage.Query(
+                        () => this.interviewActionsDataStorage.Query(
                             _ => _.Where(whereClauseForAction).SelectMany(x => x.InterviewCommentedStatuses).Count()));
         }
 
         private string[][] QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, int skip, int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
         {
-            var comments = interviewCommentariesStorage.Query(
+            var comments = this.interviewCommentariesStorage.Query(
                             _ =>
                                 _.Where(queryComments)
                                     .SelectMany(
@@ -361,7 +361,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                                                 i.Comments.Roster,
                                                 i.Comments.RosterVector,
                                                 i.Comments.Comment
-                                            }).OrderBy(i => i.Timestamp).Skip(skip).Take(returnRecordLimit).ToList());
+                                            }).OrderBy(i => i.Timestamp).Skip(skip).Take(this.returnRecordLimit).ToList());
 
             var result = new List<string[]>();
 
@@ -397,7 +397,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewStatuses, bool>> queryActions, int skip)
         {
             var interviews =
-              interviewActionsDataStorage.Query(
+              this.interviewActionsDataStorage.Query(
                   _ =>
                       _.Where(queryActions)
                           .SelectMany(
@@ -413,7 +413,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                                       i.StatusHistory.StatusChangeOriginatorRole,
                                       i.StatusHistory.Timestamp
 
-                                  }).OrderBy(i => i.Timestamp).Skip(skip).Take(returnRecordLimit).ToList());
+                                  }).OrderBy(i => i.Timestamp).Skip(skip).Take(this.returnRecordLimit).ToList());
 
             var result = new List<string[]>();
 
@@ -448,7 +448,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 yield return this.transactionManagerProvider.GetTransactionManager()
                                                             .ExecuteInQueryTransaction(() => dataQuery(skipAtCurrentIteration));
 
-                skip = skip + returnRecordLimit;
+                skip = skip + this.returnRecordLimit;
             }
         }
 
@@ -477,7 +477,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 {
                     foreach (var cell in dataRow)
                     {
-                        var valueToWrite = string.IsNullOrEmpty(cell) ? "" : removeNewLineRegEx.Replace(cell, "");
+                        var valueToWrite = string.IsNullOrEmpty(cell) ? "" : this.removeNewLineRegEx.Replace(cell, "");
                         tabWriter.WriteField(valueToWrite);
                     }
 

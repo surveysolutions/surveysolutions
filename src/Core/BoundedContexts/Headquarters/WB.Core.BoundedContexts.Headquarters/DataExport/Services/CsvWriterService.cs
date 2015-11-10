@@ -4,7 +4,7 @@ using System.Text;
 using CsvHelper;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class CsvWriterService : ICsvWriterService
     {
@@ -16,13 +16,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             this.delimiter = delimiter;
             this.streamWriter = new StreamWriter(stream, Encoding.UTF8);
-            this.csvWriter = new CsvWriter(streamWriter);
+            this.csvWriter = new CsvWriter(this.streamWriter);
             this.csvWriter.Configuration.Delimiter = this.delimiter;
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -30,19 +30,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         {
             if (disposing)
             {
-                streamWriter.Flush();
-                csvWriter.Dispose();
-                streamWriter.Dispose();
+                this.streamWriter.Flush();
+                this.csvWriter.Dispose();
+                this.streamWriter.Dispose();
             }
         }
         public void WriteField<T>(T cellValue)
         {
-            csvWriter.WriteField(cellValue);
+            this.csvWriter.WriteField(cellValue);
         }
 
         public void NextRecord()
         {
-            csvWriter.NextRecord();
+            this.csvWriter.NextRecord();
         }
     }
 }
