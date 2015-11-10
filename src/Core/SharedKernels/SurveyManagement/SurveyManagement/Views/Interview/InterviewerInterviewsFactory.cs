@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             });
         }
 
-        public InterviewSynchronizationDto GetInterview(Guid interviewId)
+        public InterviewSynchronizationDto GetInterviewDetails(Guid interviewId)
         {
             var interviewData = this.interviewDataRepository.GetById(interviewId);
 
@@ -86,18 +86,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             var lastInterviewerAssignedStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
             var lastRejectedBySupervisorStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
 
-            var lastRejectedBySupervisorDate = lastRejectedBySupervisorStatus == null
-                ? (DateTime?) null
-                : lastRejectedBySupervisorStatus.Date;
-
-            var lastInterviewerAssignedDate = lastInterviewerAssignedStatus == null
-                ? (DateTime?) null
-                : lastInterviewerAssignedStatus.Date;
-
-
             return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
-                lastInterviewStatus.Status, lastInterviewStatus.Comment, lastRejectedBySupervisorDate,
-                lastInterviewerAssignedDate);
+                lastInterviewStatus.Status, lastInterviewStatus.Comment, lastRejectedBySupervisorStatus?.Date,
+                lastInterviewerAssignedStatus?.Date);
         }
     }
 }
