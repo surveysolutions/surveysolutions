@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -50,6 +51,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         }
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
+            where TEvent: ILiteEvent
         {
             var eventDataType = typeof(TEvent);
 

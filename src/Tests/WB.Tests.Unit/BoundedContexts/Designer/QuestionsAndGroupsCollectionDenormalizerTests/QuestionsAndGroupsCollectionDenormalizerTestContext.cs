@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event)
-           where T : class
+           where T : class, ILiteEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event);

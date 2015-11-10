@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             return new DummyEvent();
         }
 
-        protected static CommittedEventStream BuildReadyToBePublishedStream(Guid eventSourceId, object @event)
+        protected static CommittedEventStream BuildReadyToBePublishedStream(Guid eventSourceId, ILiteEvent @event)
         {
             return new CommittedEventStream(eventSourceId,
                 Create.CommittedEvent(eventSourceId: eventSourceId, payload: @event));

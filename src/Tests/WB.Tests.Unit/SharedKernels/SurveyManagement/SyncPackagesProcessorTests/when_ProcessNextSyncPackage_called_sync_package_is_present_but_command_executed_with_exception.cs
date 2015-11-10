@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
             incomingSyncPackagesQueueMock=new Mock<IIncomingSyncPackagesQueue>();
             incomingSyncPackagesQueueMock.Setup(x => x.DeQueue())
                 .Returns(new IncomingSyncPackage(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1,
-                    InterviewStatus.Completed, new object[0], true, "", "path"));
+                    InterviewStatus.Completed, new ILiteEvent[0], true, "", "path"));
 
             commandServiceMock = new Mock<ICommandService>();
             commandServiceMock.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))

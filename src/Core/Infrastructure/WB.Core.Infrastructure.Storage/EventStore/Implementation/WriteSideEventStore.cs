@@ -22,6 +22,7 @@ using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
@@ -212,7 +213,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             try
             {
                 EventMetada metadata;
-                object eventData;
+                ILiteEvent eventData;
 
                 var resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
                 var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
@@ -222,7 +223,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     var value = Encoding.GetString(resolvedEvent.Event.Data);
                     eventData = JsonConvert.DeserializeObject(value,
                         resolvedEventType,
-                        JsonSerializerSettings);
+                        JsonSerializerSettings) as ILiteEvent;
                 }
                 else
                 {
@@ -231,7 +232,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     BsonReader dataReader = new BsonReader(dataStream);
                     
                     JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
-                    eventData = serializer.Deserialize(dataReader, resolvedEventType);
+                    eventData = serializer.Deserialize(dataReader, resolvedEventType) as ILiteEvent;
                 }
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),

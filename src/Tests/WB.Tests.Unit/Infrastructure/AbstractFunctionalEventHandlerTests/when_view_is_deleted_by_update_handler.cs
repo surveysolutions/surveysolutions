@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -32,14 +33,14 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
         private static Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>> readSideRepositoryWriterMock;
         private static Guid eventSourceId;
 
-        public class TestableFunctionalEventHandlerWhichDeletesUpdatedView : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IUpdateHandler<IReadSideRepositoryEntity, object>
+        public class TestableFunctionalEventHandlerWhichDeletesUpdatedView : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IUpdateHandler<IReadSideRepositoryEntity, ILiteEvent>
         {
             public TestableFunctionalEventHandlerWhichDeletesUpdatedView(IReadSideRepositoryWriter<IReadSideRepositoryEntity> readSideStorage)
                 : base(readSideStorage) { }
 
             public int CountOfUpdates { get; private set; }
 
-            public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity currentState, IPublishedEvent<object> evnt)
+            public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity currentState, IPublishedEvent<ILiteEvent> evnt)
             {
                 this.CountOfUpdates++;
                 return null;
