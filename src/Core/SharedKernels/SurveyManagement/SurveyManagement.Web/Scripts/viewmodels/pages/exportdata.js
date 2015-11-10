@@ -102,7 +102,7 @@
     self.lastUpdateDate = function(type, format) {
         var dataReference = self.getDataReference(type, format);
 
-        if (dataReference == null || _.isUndefined(dataReference().LastUpdateDate))
+        if (dataReference == null || _.isUndefined(dataReference().LastUpdateDate) || dataReference().LastUpdateDate() === null)
             return "Never";
         return self.formatDate(dataReference().LastUpdateDate());
     }
