@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
-             QuestionnaireExportStructure questionnaireExportStructure = null,
+            QuestionnaireExportStructure questionnaireExportStructure = null,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
         {
             var readSideKeyValueStorage = new TestInMemoryWriter<QuestionnaireDocumentVersioned>();
