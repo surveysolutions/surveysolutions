@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Resources;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -28,6 +27,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 {
     internal class ReadSideToTabularFormatExportService : ITabularFormatExportService
     {
+        private const double InterviewsExportProgressModifier = 0.8;
+        private const double CommentsExportProgressModifier = 0.8;
         private readonly string commentsFileName = "interview_comments";
         private readonly string interviewActionsFileName = "interview_actions";
         private readonly string[] actionFileColumns = new[] { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
@@ -51,7 +52,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly IExportViewFactory exportViewFactory;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly IDataExportWriter dataExportWriter;
         private readonly ITransactionManager transactionManager;
 
         public ReadSideToTabularFormatExportService(
@@ -66,7 +66,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IExportViewFactory exportViewFactory, 
-            IDataExportWriter dataExportWriter, 
             ITransactionManager transactionManager, 
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage)
         {
@@ -79,7 +78,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.interviewSummaries = interviewSummaries;
             this.interviewDatas = interviewDatas;
             this.exportViewFactory = exportViewFactory;
-            this.dataExportWriter = dataExportWriter;
             this.transactionManager = transactionManager;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.serializer = serializer;
@@ -102,17 +100,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
             this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress);
 
-            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
-                interviewComments =>
-                    interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId.FormatGuid() &&
-                    interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
-
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewComments =>
                     interviewComments.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     interviewComments.QuestionnaireVersion == questionnaireIdentity.Version;
 
-            this.ExportComments(questionnaireExportStructure, whereClauseForComments, basePath, progress);
+            this.ExportComments(questionnaireExportStructure, false, basePath, progress);
             this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
@@ -130,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure,
                         interviewData); 
 
-                InterviewExportedDataRecord exportedData = this.dataExportWriter.CreateInterviewExportedData(
+                InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(
                     interviewExportStructure, questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
 
                 var result = new Dictionary<string, List<string[]>>();
@@ -160,7 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                 }
 
                 totalInterviewsProcessed++;
-                progress.Report((int)((double)totalInterviewsProcessed / interviewIdsToExport.Count * 100 * 0.8));
+                progress.Report((int) (totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count) * InterviewsExportProgressModifier));
             }
         }
 
@@ -177,12 +170,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
             this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress);
 
-            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments =
-             interviewCommentaries =>
-                 interviewCommentaries.QuestionnaireId == questionnaireIdentity.QuestionnaireId.FormatGuid() &&
-                 interviewCommentaries.QuestionnaireVersion == questionnaireIdentity.Version &&
-                 interviewCommentaries.IsApprovedByHQ;
-
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
                 interviewWithStatusHistory =>
                     interviewWithStatusHistory.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
@@ -190,7 +177,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     interviewWithStatusHistory.InterviewCommentedStatuses.Select(s => s.Status)
                         .Any(s => s == InterviewExportedAction.ApprovedByHeadquarter);
 
-            this.ExportComments(questionnaireExportStructure, whereClauseForComments, basePath, progress);
+            this.ExportComments(questionnaireExportStructure, true, basePath, progress);
             this.ExportActionsInTabularFormatAsync(whereClauseForAction, basePath, progress);
         }
 
@@ -216,7 +203,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
         }
 
         private void ExportComments(QuestionnaireExportStructure questionnaireExportStructure, 
-            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments, 
+            bool exportApprovedOnly, 
             string basePath, 
             IProgress<int> progress)
         {
@@ -244,13 +231,42 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
 
             WriteData(commentsFilePath, new[] { commentsHeader.ToArray() });
 
-            var queryCommentsChunks = this.QueryByChunks(
-                skip => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skip, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster),
-                () => this.interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
-
-            foreach (var queryCommentsChunk in queryCommentsChunks)
+            Expression<Func<InterviewCommentaries, bool>> whereClauseForComments;
+            if (exportApprovedOnly)
             {
-                this.WriteData(commentsFilePath, queryCommentsChunk);
+                whereClauseForComments =
+                    interviewComments =>
+                        interviewComments.QuestionnaireId == questionnaireExportStructure.QuestionnaireId.FormatGuid() &&
+                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version;
+            }
+            else
+            {
+                whereClauseForComments =
+                    interviewComments =>
+                        interviewComments.QuestionnaireId == questionnaireExportStructure.QuestionnaireId.FormatGuid() &&
+                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                        interviewComments.IsApprovedByHQ;
+            }
+
+
+            var countOfAllRecords =
+              this.transactionManagerProvider.GetTransactionManager()
+                  .ExecuteInQueryTransaction(() => this.interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
+
+            int skip = 0;
+
+            while (skip < countOfAllRecords)
+            {
+                var skipAtCurrentIteration = skip;
+
+                string[][] exportComments = this.transactionManagerProvider.GetTransactionManager()
+                                                            .ExecuteInQueryTransaction(
+                                                                () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skipAtCurrentIteration, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
+
+                this.WriteData(commentsFilePath, exportComments);
+                skip = skip + returnRecordLimit;
+
+                progress.Report((int)(0.8 + skip.PercentOf(countOfAllRecords) * CommentsExportProgressModifier));
             }
 
             progress.Report(90);
@@ -468,6 +484,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExp
                     tabWriter.NextRecord();
                 }
             }
+        }
+
+        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
+        {
+            var interviewData = new Dictionary<string, string[]>();
+
+            var stringSeparator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
+            foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
+            {
+                var recordsByLevel = new List<string>();
+                foreach (var interviewDataExportRecord in interviewDataExportLevelView.Records)
+                {
+                    var parametersToConcatenate = new List<string> { interviewDataExportRecord.RecordId };
+
+                    parametersToConcatenate.AddRange(interviewDataExportRecord.ReferenceValues);
+
+                    foreach (var exportedQuestion in interviewDataExportRecord.Questions)
+                    {
+                        parametersToConcatenate.AddRange(exportedQuestion.Answers.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
+                    }
+
+                    parametersToConcatenate.AddRange(interviewDataExportRecord.SystemVariableValues);
+                    parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
+
+                    recordsByLevel.Add(string.Join(stringSeparator,
+                            parametersToConcatenate.Select(v => v.Replace(stringSeparator, ""))));
+                }
+                interviewData.Add(interviewDataExportLevelView.LevelName, recordsByLevel.ToArray());
+            }
+            var interviewExportedData = new InterviewExportedDataRecord
+            {
+                InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Data = this.serializer.SerializeToByteArray(interviewData),
+            };
+
+            return interviewExportedData;
         }
     }
 }
