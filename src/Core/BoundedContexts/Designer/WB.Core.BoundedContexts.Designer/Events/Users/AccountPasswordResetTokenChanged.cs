@@ -1,11 +1,13 @@
-﻿namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
+﻿using WB.Core.Infrastructure.EventBus.Lite;
+
+namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
 {
     using System;
 
     /// <summary>
     /// The account password reset token changed.
     /// </summary>
-    public class AccountPasswordResetTokenChanged
+    public class AccountPasswordResetTokenChanged : ILiteEvent
     {
         #region Public Properties
 

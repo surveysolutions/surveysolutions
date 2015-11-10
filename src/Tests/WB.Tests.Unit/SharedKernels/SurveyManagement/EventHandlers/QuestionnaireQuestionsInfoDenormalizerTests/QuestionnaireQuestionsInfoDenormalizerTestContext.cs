@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
 {
     internal class QuestionnaireQuestionsInfoDenormalizerTestContext
     {
-        protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid? eventSourceId = null) where T : class
+        protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid? eventSourceId = null) where T : class, ILiteEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent => publishedEvent.Payload == @event 
                 && publishedEvent.EventSourceId == (eventSourceId ?? Guid.Parse("33333333333333333333333333333333"))

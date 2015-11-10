@@ -8,6 +8,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
     {
         Establish context = () =>
         {
-            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == new IncomingSyncPackage(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1, InterviewStatus.Completed, new object[0], false, "", "path"));
+            var incomingPackagesQueue = Mock.Of<IIncomingSyncPackagesQueue>(_ => _.DeQueue() == new IncomingSyncPackage(interviewId, Guid.NewGuid(), Guid.NewGuid(), 1, InterviewStatus.Completed, new ILiteEvent[0], false, "", "path"));
 
             commandServiceMock = new Mock<ICommandService>();
 

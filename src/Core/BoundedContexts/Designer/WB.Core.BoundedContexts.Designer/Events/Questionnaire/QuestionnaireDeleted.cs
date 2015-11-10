@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Events.Questionnaire
+﻿using WB.Core.Infrastructure.EventBus.Lite;
+
+namespace Main.Core.Events.Questionnaire
 {
     using System;
 
@@ -7,7 +9,7 @@
     /// <summary>
     /// TODO: Delete summary.
     /// </summary>
-    public class QuestionnaireDeleted
+    public class QuestionnaireDeleted : ILiteEvent
     {
     }
 }
