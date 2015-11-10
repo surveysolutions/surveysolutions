@@ -41,12 +41,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             return fileSystemAccessorMock;
         }
 
-        protected static Mock<IDataExportWriter> CreateIDataFileExportServiceMock()
-        {
-            var dataFileExportServiceMock = new Mock<IDataExportWriter>();
-            return dataFileExportServiceMock;
-        }
-
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(int levelCount = 1)
         {
             var questionnaireExportStructure = new QuestionnaireExportStructure();

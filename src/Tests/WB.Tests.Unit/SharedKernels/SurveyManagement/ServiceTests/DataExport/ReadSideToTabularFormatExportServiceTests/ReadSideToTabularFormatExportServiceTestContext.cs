@@ -54,7 +54,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 new TestInMemoryWriter<InterviewSummary>(), 
                 new TestInMemoryWriter<InterviewData>(),
                 Mock.Of<IExportViewFactory>(x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
-                Mock.Of<IDataExportWriter>(),
                 Mock.Of<ITransactionManager>(),
                 readSideKeyValueStorage
                 );
