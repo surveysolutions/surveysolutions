@@ -19,6 +19,9 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters
@@ -77,6 +80,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<TabularFormatDataExportProcessHandler>().ToSelf();
             this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
             this.Bind<StataFormatExportProcessHandler>().ToSelf();
+
+            this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
+            this.Bind<ICsvWriterService>().To<CsvWriterService>();
+            this.Bind<ICsvWriterFactory>().To<CsvWriterFactory>();
         }
     }
 }
