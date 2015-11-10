@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Utils;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
@@ -19,11 +14,21 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
-            var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType),
-                BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
-                    record.TargetTitle, true, record.TargetType),
-                GetActionStringRepresentations(record.ActionType, record.TargetType,
-                    record.HistoricalRecordReferences.Any()));
+            if (record.TargetType == QuestionnaireItemType.Macro)
+            {
+                var macrosRecord = GetFormattedHistoricalRecordForMacros(record);
+                if (!string.IsNullOrWhiteSpace(macrosRecord))
+                    return MvcHtmlString.Create(macrosRecord);
+            }
+
+            var localizedNameOfItemBeingInAction = GetStringRepresentation(record.TargetType);
+
+            var questionnaireItemLinkWithTitle = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
+                record.TargetTitle, true, record.TargetType);
+
+            var localizedActionRepresentation = GetActionStringRepresentation(record.ActionType, record.TargetType, record.HistoricalRecordReferences.Any());
+
+            var mainRecord = $"{localizedNameOfItemBeingInAction} {questionnaireItemLinkWithTitle} {localizedActionRepresentation}";
 
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
@@ -36,6 +41,20 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
 
             return MvcHtmlString.Create(mainRecord);
+        }
+
+        private static string GetFormattedHistoricalRecordForMacros(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Add:
+                    return QuestionnaireHistoryResources.EmptyMacroAdded;
+                case QuestionnaireActionType.Delete:
+                    return string.Format(QuestionnaireHistoryResources.MacroDeleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    return string.Format(QuestionnaireHistoryResources.MacroUpdated, record.TargetTitle);
+            }
+            return null;
         }
 
         private static MvcHtmlString BuildQuestionnaireItemLink(
@@ -65,7 +84,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, helper.Encode(quatedTitle)));
         }
 
-        private static string GetActionStringRepresentations(QuestionnaireActionType actionType,
+        private static string GetActionStringRepresentation(QuestionnaireActionType actionType,
             QuestionnaireItemType itemType, bool hasReference)
         {
             var itemsToAdd = new[]
