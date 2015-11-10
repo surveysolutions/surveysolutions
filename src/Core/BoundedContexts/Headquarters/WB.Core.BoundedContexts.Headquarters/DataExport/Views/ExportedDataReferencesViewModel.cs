@@ -12,7 +12,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             ExportedDataReferencesView dataTabularReference,
             ExportedDataReferencesView approvedDataTabularReference, 
             ExportedDataReferencesView dataStataReference, 
-            ExportedDataReferencesView approvedDataStataReference,
+            ExportedDataReferencesView approvedDataStataReference, 
+            ExportedDataReferencesView dataSppsReference, 
+            ExportedDataReferencesView approvedDataSppsReference,
             RunningDataExportProcessView[] runningProcesses)
         {
             this.QuestionnaireId = questionnaireId;
@@ -21,6 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             this.DataTabularReference = dataTabularReference;
             this.ApprovedDataTabularReference = approvedDataTabularReference;
             this.RunningProcesses = runningProcesses;
+            this.DataSPPSReference = dataSppsReference;
+            this.ApprovedDataSPPSReference = approvedDataSppsReference;
             this.DataSTATAReference = dataStataReference;
             this.ApprovedDataSTATAReference = approvedDataStataReference;
         }
@@ -32,6 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public ExportedDataReferencesView ApprovedDataTabularReference { get; private set; }
         public ExportedDataReferencesView DataSTATAReference { get; private set; }
         public ExportedDataReferencesView ApprovedDataSTATAReference { get; private set; }
+        public ExportedDataReferencesView DataSPPSReference { get; private set; }
+        public ExportedDataReferencesView ApprovedDataSPPSReference { get; private set; }
         public RunningDataExportProcessView[] RunningProcesses { get; private set; }
     }
 }
