@@ -353,9 +353,12 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_in_which_3_static_texts_have_same_id_and_2_rosters_have_same_other_id.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_in_which_particular_question_and_group_have_same_id.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_two_macro_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_cascading_single_option_question_referencing_not_existing_cascade_from_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_multiple_options_question_referencing_not_existing_linked_to_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_single_option_question_referencing_not_existing_linked_to_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_macro_that_has_empty_name.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_macro_with_invalid_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_title_question.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
