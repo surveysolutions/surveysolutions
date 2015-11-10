@@ -92,20 +92,25 @@
                 @DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.Tabular, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
             </td>
             <td>
-                <div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $FilesUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <img src="@Url.Content("~/Content/icons/binary.png")" alt="binary" />
-                        Binary
-                    </a>
-                </div>
+                @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/binary.png", addFromat: true)
             </td>
             <td>
-                <div>
-                    <a class="btn btn-default btn-block" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
-                        <img src="@Url.Content("~/Content/icons/ddi.ico")" alt="ddi" />
-                        Metadata
-                    </a>
-                </div>
+
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <td><img src="@Url.Content("~/Content/icons/ddi.ico")" alt="ddi" /></td>
+                            <td> Metadata</td>
+                            <td>
+
+                                <a class="btn btn-default" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">
+                                    <i class="glyphicon glyphicon-download">
+                                    </i>
+                                </a>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
             </td>
             @if (this.ViewBag.EnableInterviewHistory)
             {
@@ -119,14 +124,20 @@
             <td>@DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.STATA, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
             <td></td>
             <td></td>
-            <td></td>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <td></td>
+            }
         </tr>
         <tr>
             <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPPS, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
             <td>@DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.SPPS, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
             <td></td>
             <td></td>
-            <td></td>
+            @if (this.ViewBag.EnableInterviewHistory)
+            {
+                <td></td>
+            }
         </tr>
         <!-- /ko  -->
     </tbody>

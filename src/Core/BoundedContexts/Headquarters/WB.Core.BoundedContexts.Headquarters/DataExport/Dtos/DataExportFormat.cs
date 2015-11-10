@@ -4,6 +4,7 @@
     {
         Tabular,
         STATA,
-        SPPS
+        SPPS,
+        Binary
     }
 }

@@ -18,9 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         private IMetadataExportService metadataExportService;
 
         private const string ExportedDataFolderName = "ExportedData";
-        private const string ExportedFilesFolderName = "ExportedFiles";
         private readonly string pathToExportedData;
-        private readonly string pathToExportedFiles;
 
         public FilebasedExportedDataAccessor(
             IFileSystemAccessor fileSystemAccessor,
@@ -37,19 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
-
-            this.pathToExportedFiles = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, ExportedFilesFolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedFiles))
-                fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
-        }
-
-        public string GetFolderPathOfFilesByQuestionnaire(QuestionnaireIdentity questionnaireId)
-        {
-            var result = this.fileSystemAccessor.CombinePath(this.pathToExportedFiles,
-                $"exported_files_{questionnaireId.QuestionnaireId}_{questionnaireId.Version}");
-
-            return result;
         }
 
         public string GetFilePathToExportedDDIMetadata(QuestionnaireIdentity questionnaireId)
