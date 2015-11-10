@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
     internal class CsvWriterFactory : ICsvWriterFactory
     {
