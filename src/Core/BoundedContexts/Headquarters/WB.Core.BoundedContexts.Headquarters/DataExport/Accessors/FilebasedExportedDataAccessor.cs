@@ -44,35 +44,25 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
                 fileSystemAccessor.CreateDirectory(this.pathToExportedFiles);
         }
 
-        public string GetFolderPathOfDataByQuestionnaire(Guid questionnaireId, long version)
-        {
-            var result = this.fileSystemAccessor.CombinePath(this.pathToExportedData,
-                string.Format("exported_data_{0}_{1}", questionnaireId, version));
-            return result;
-        }
-
-        public string GetFolderPathOfFilesByQuestionnaire(Guid questionnaireId, long version)
+        public string GetFolderPathOfFilesByQuestionnaire(QuestionnaireIdentity questionnaireId)
         {
             var result = this.fileSystemAccessor.CombinePath(this.pathToExportedFiles,
-                string.Format("exported_files_{0}_{1}", questionnaireId, version));
+                $"exported_files_{questionnaireId.QuestionnaireId}_{questionnaireId.Version}");
 
             return result;
         }
 
-        public string GetFilePathToExportedDDIMetadata(Guid questionnaireId, long version)
+        public string GetFilePathToExportedDDIMetadata(QuestionnaireIdentity questionnaireId)
         {
-            var dataDirectoryPath = this.GetFolderPathOfDataByQuestionnaire(questionnaireId, version);
-
-            var fileName = string.Format("{0}_ddi.zip", this.fileSystemAccessor.GetFileName(dataDirectoryPath));
-            var archiveFilePath = this.fileSystemAccessor.CombinePath(this.PathToExportedData, fileName);
+            var archiveFilePath = GetArchiveFilePathForDDIMetadata(questionnaireId);
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
+                return archiveFilePath;
 
             var filesToArchive = new List<string>
             {
-                this.metadataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId, version,
-                    dataDirectoryPath)
+                this.metadataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId.QuestionnaireId, questionnaireId.Version,
+                    pathToExportedData)
             };
 
             this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
@@ -80,27 +70,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             return archiveFilePath;
         }
 
-        protected string PathToExportedData
-        {
-            get { return this.pathToExportedData; }
-        }
-
-        protected string PathToExportedFiles
-        {
-            get { return this.pathToExportedFiles; }
-        }
-
         public string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format)
         {
             var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_All.zip";
 
-            return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
+            return this.fileSystemAccessor.CombinePath(this.pathToExportedData, archiveName);
         }
 
         public string GetArchiveFilePathForExportedApprovedData(QuestionnaireIdentity questionnaireId, DataExportFormat format)
         {
             var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_App.zip";
-            return this.fileSystemAccessor.CombinePath(this.PathToExportedData, archiveName);
+            return this.fileSystemAccessor.CombinePath(this.pathToExportedData, archiveName);
+        }
+
+        protected string GetArchiveFilePathForDDIMetadata(QuestionnaireIdentity questionnaireId)
+        {
+            var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_ddi.zip";
+            return this.fileSystemAccessor.CombinePath(this.pathToExportedData, archiveName);
         }
     }
 }

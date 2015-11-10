@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage DDIMetadata(Guid id, long version)
         {
-            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetFilePathToExportedDDIMetadata(id, version));
+            return CreateHttpResponseMessageWithFileContent(this.filebasedExportedDataAccessor.GetFilePathToExportedDDIMetadata(new QuestionnaireIdentity(id, version)));
         }
 
         [HttpPost]
