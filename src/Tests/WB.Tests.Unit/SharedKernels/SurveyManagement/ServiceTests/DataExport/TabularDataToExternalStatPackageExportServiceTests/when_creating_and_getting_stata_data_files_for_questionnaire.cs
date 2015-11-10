@@ -4,6 +4,7 @@ using Moq;
 using StatData.Core;
 using StatData.Writers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             datasetWriter = new Mock<IDatasetWriter>();
 
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
-            datasetWriterFactory.Setup(x => x.CreateDatasetWriter(ExportDataType.Stata)).Returns(datasetWriter.Object);
+            datasetWriterFactory.Setup(x => x.CreateDatasetWriter(DataExportFormat.STATA)).Returns(datasetWriter.Object);
 
             _tabularDataToExternalStatPackagesTabDataExportService = CreateSqlToTabDataExportService(
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
