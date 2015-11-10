@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.TabularParaDat
         protected static TabularParaDataAccessor CreateTabularParaDataWriter(ICsvWriterService csvWriterService = null,
             IFileSystemAccessor fileSystemAccessor = null, IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IFilebasedExportedDataAccessor filebasedExportedDataAccessor=null)
         {
-            return new TabularParaDataAccessor(Mock.Of<ICsvWriterFactory>(_=>_.OpenCsvWriter(It.IsAny<Stream>(),It.IsAny<string>())== Mock.Of<ICsvWriterService>()),
+            return new TabularParaDataAccessor(Mock.Of<ICsvWriter>(_=>_.OpenCsvWriter(It.IsAny<Stream>(),It.IsAny<string>())== Mock.Of<ICsvWriterService>()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 interviewSummaryWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(), new InterviewDataExportSettings("", true,1,1), Mock.Of<IArchiveUtils>());
         }

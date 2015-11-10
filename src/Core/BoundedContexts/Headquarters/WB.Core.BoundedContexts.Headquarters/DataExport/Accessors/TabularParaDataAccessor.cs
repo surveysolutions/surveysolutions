@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 {
     internal class TabularParaDataAccessor : IParaDataAccessor
     {
-        private readonly ICsvWriterFactory csvWriterFactory;
+        private readonly ICsvWriter csvWriter;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
@@ -26,13 +26,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         private readonly string pathToHistoryFiles;
 
         public TabularParaDataAccessor(
-            ICsvWriterFactory csvWriterFactory, 
+            ICsvWriter csvWriter, 
             IFileSystemAccessor fileSystemAccessor,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             InterviewDataExportSettings interviewDataExportSettings, 
             IArchiveUtils archiveUtils)
         {
-            this.csvWriterFactory = csvWriterFactory;
+            this.csvWriter = csvWriter;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewSummaryReader = interviewSummaryReader;
             this.archiveUtils = archiveUtils;
@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             using (var fileStream =
                     this.fileSystemAccessor.OpenOrCreateFile(this.GetPathToInterviewHistoryFile(id, view.QuestionnaireId, view.QuestionnaireVersion), true))
 
-            using (var writer = this.csvWriterFactory.OpenCsvWriter(fileStream, ExportFileSettings.SeparatorOfExportedDataFile.ToString()))
+            using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.SeparatorOfExportedDataFile.ToString()))
             {
                 foreach (var interviewHistoricalRecordView in view.Records)
                 {
