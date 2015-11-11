@@ -802,7 +802,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static IEnumerable<decimal[]> GetOuterVectorForParentRoster(InterviewStateDependentOnAnswers state,
             Guid[] rosterGroupsStartingFromTop, RosterVector rosterVector)
         {
-            if (rosterGroupsStartingFromTop.Count() <= 1 || rosterGroupsStartingFromTop.Length - 1 == rosterVector.Length)
+            if (rosterGroupsStartingFromTop.Length <= 1 || rosterGroupsStartingFromTop.Length - 1 == rosterVector.Length)
             {
                 yield return rosterVector;
                 yield break;
