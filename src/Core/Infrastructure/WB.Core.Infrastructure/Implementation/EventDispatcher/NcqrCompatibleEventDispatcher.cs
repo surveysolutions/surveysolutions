@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
+using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
@@ -25,11 +27,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public ITransactionManagerProvider TransactionManager { get; set; }
 
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger)
         {
             this.eventStore = eventStore;
-            this.handlersToIgnore = handlersToIgnore.ToArray();
-            this.getInProcessEventBus = () => new InProcessEventBus(eventStore);
+            this.handlersToIgnore = eventBusSettings.IgnoredEventHandlerTypes;
+            this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
         }
 
         internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
@@ -39,7 +41,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             this.handlersToIgnore = handlersToIgnore.ToArray();
         }
 
-        public void Publish(IPublishableEvent eventMessage)
+        public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
         {
             var occurredExceptions = new List<Exception>();
 
@@ -131,7 +133,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         }
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,
-            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
+            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
         {
             var occurredExceptions = new List<Exception>();
 
@@ -151,7 +153,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 try
                 {
                     this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
-                    bus.Publish(eventMessage);
+                    bus.Publish(eventMessage, onCatchingNonCriticalEventHandlerException);
                     this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                 }
                 catch (Exception exception)
