@@ -978,6 +978,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             events.ForEach(this.ApplyEvent);
         }
 
+        private Guid? GetIdOrReturnSameId(Dictionary<Guid, Guid> replacementIdDictionary, Guid? id)
+        {
+            if (!id.HasValue)
+                return null;
+
+            return replacementIdDictionary.ContainsKey(id.Value) ? replacementIdDictionary[id.Value] : id;
+        }
+
         public void CloneGroup(Guid groupId, Guid responsibleId, Guid sourceGroupId, int targetIndex)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -1000,24 +1008,31 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             var parentGroupId = sourceGroup.GetParent() == null ? (Guid?)null : sourceGroup.GetParent().PublicKey;
+            Dictionary<Guid, Guid> replacementIdDictionary = ((IComposite)sourceGroup).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
+
+            replacementIdDictionary[sourceGroup.PublicKey] = groupId;
 
             var events = new List<object>();
 
-            this.FillGroup(groupId: groupId,
+            this.FillGroup(
                 parentGroupId: parentGroupId, 
                 responsibleId: responsibleId,
                 sourceGroup: sourceGroup, 
                 sourceQuestionnaireId: this.EventSourceId,
                 targetIndex: targetIndex,
                 preserveVariableName: false,
+                replacementIdDictionary: replacementIdDictionary,
                 events: events);
 
             events.ForEach(this.ApplyEvent);
         }
 
-        private void FillGroup(Guid groupId, Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, bool preserveVariableName, List<object> events)
+        private void FillGroup(Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, bool preserveVariableName, Dictionary<Guid, Guid> replacementIdDictionary, List<object> events)
         {
-            events.AddRange(this.CreateCloneGroupWithoutChildrenEvents(groupId: groupId, 
+           var groupId = replacementIdDictionary.ContainsKey(sourceGroup.PublicKey) ? replacementIdDictionary[sourceGroup.PublicKey] : Guid.NewGuid();
+
+           events.AddRange(this.CreateCloneGroupWithoutChildrenEvents(
+                groupId: groupId, 
                 responsibleId: responsibleId, 
                 parentGroupId: parentGroupId,
                 sourceGroupId: sourceGroup.PublicKey, 
@@ -1027,27 +1042,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 condition: sourceGroup.ConditionExpression,
                 isRoster: sourceGroup.IsRoster, 
                 rosterSizeSource: sourceGroup.RosterSizeSource,
-                rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId,
+                rosterSizeQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterSizeQuestionId),
                 rosterTitleQuestionId: null,
                 rosterFixedTitles: sourceGroup.FixedRosterTitles,
                 variableName: preserveVariableName ? sourceGroup.VariableName : null));
 
             foreach (var questionnaireItem in sourceGroup.Children)
             {
-                var itemId = Guid.NewGuid();
+                var itemId = replacementIdDictionary.ContainsKey(questionnaireItem.PublicKey) ? replacementIdDictionary[questionnaireItem.PublicKey] : Guid.NewGuid(); 
                 var sourceItemId = questionnaireItem.PublicKey;
                 var itemTargetIndex = sourceGroup.Children.IndexOf(questionnaireItem);
 
                 var @group = questionnaireItem as IGroup;
                 if (@group != null)
                 {
-                    this.FillGroup(groupId: itemId, 
+                    this.FillGroup( 
                         parentGroupId: groupId, 
                         responsibleId: responsibleId,
                         sourceGroup: @group,
                         sourceQuestionnaireId: sourceQuestionnaireId,
                         targetIndex: itemTargetIndex,
                         preserveVariableName : preserveVariableName,
+                        replacementIdDictionary: replacementIdDictionary,
                         events: events);
                     continue;
                 }
@@ -1064,7 +1080,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     var numericQuestion = question as INumericQuestion;
                     if (numericQuestion != null)
                     {
-                        events.AddRange(this.CreateNumericQuestionCloneEvents(questionId: itemId, targetIndex: itemTargetIndex,
+                        events.AddRange(this.CreateNumericQuestionCloneEvents(questionId: itemId, 
+                            targetIndex: itemTargetIndex,
                             variableName: variableName, 
                             variableLabel: variableLabel, 
                             parentGroupId: groupId,
@@ -1138,7 +1155,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateGeoLocationQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
                             enablementCondition: enablementCondition, instructions: instructions,
-                            parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                            parentGroupId: groupId, 
+                            sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
                             responsibleId: responsibleId, validationExpression: geoLocationQuestion.ValidationExpression,
                             validationMessage: geoLocationQuestion.ValidationMessage));
@@ -1151,7 +1169,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateDateTimeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
                             enablementCondition: enablementCondition, instructions: instructions,
-                            parentGroupId: groupId, sourceQuestionId: sourceItemId,
+                            parentGroupId: groupId, 
+                            sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
                             responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
                             isPreFilled: dateTitmeQuestion.Featured,
@@ -1164,7 +1183,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     if (categoricalMultiQuestion != null)
                     {
                         events.AddRange(this.CreateCategoricalMultiAnswersQuestionClonedEvents(questionId: itemId,
-                            targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
+                            targetIndex: itemTargetIndex, variableName: variableName, 
+                            variableLabel: variableLabel,
                             title: title, 
                             enablementCondition: enablementCondition, parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
@@ -1173,7 +1193,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             scope: categoricalMultiQuestion.QuestionScope,
                             validationExpression: categoricalMultiQuestion.ValidationExpression,
                             validationMessage: categoricalMultiQuestion.ValidationMessage,
-                            linkedToQuestionId: categoricalMultiQuestion.LinkedToQuestionId,
+                            linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToQuestionId),
                             areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
                             yesNoView: categoricalMultiQuestion.YesNoView,
                             maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
@@ -1197,10 +1217,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             scope: categoricalSingleQuestion.QuestionScope,
                             validationExpression: categoricalSingleQuestion.ValidationExpression,
                             validationMessage: categoricalSingleQuestion.ValidationMessage,
-                            linkedToQuestionId: categoricalSingleQuestion.LinkedToQuestionId,
+                            linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.LinkedToQuestionId),
                             isPreFilled: categoricalSingleQuestion.Featured,
                             isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
-                            cascadeFromQuestionId: categoricalSingleQuestion.CascadeFromQuestionId,
+                            cascadeFromQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.CascadeFromQuestionId),
                             options:
                                 categoricalSingleQuestion.Answers.Select(
                                     answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText, answer.ParentValue))
@@ -2265,15 +2285,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     throw new QuestionnaireException(string.Format("Roster cannot be pasted here."));
 
                 //roster, group, chapter
+                Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
+                replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
+
                 var events = new List<object>();
 
-                this.FillGroup(groupId: pasteItemId,
+                this.FillGroup(
                     parentGroupId: targetToPasteIn == null ? (Guid?) null : targetToPasteIn.PublicKey,
                     responsibleId: responsibleId,
                     sourceGroup: entityToInsertAsGroup,
                     sourceQuestionnaireId: sourceDocument.PublicKey,
                     targetIndex: targetIndex,
                     preserveVariableName: true,
+                    replacementIdDictionary: replacementIdDictionary,
                     events: events);
 
                 events.ForEach(this.ApplyEvent);
