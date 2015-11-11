@@ -44,18 +44,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
+        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles, progress);
         }
 
-        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
+        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress);
         }
        
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress)
         {
             string currentDataInfo = string.Empty;
             try
@@ -76,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     ? this.StataFileNameExtension
                     : this.SpssFileNameExtension;
                 var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
+                int processdFiles = 0;
                 foreach (var tabFile in dataFiles)
                 {
                     currentDataInfo = string.Format("filename: {0}", tabFile);
@@ -85,6 +86,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     var data = this.tabReader.GetDataFromTabFile(tabFile);
                     writer.WriteToFile(dataFile, meta, data);
                     result.Add(dataFile);
+
+                    processdFiles++;
+                    progress.Report(processdFiles.PercentOf(dataFiles.Length));
                 }
 
                 return result.ToArray();
