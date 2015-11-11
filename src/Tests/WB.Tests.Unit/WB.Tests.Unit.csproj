@@ -1914,6 +1914,9 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewHardDeleted_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event_and_interview_was_created_on_capi.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_QuestionnaireDeleted_event_recived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived_and_version_is_set.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
