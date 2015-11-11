@@ -17,19 +17,19 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    internal class DataExportQueue: IDataExportQueue
+    internal class DataExportProcessesService: IDataExportProcessesService
     {
         private readonly ConcurrentDictionary<string, IQueuedProcess> dataExportProcessDtoStorage=new ConcurrentDictionary<string, IQueuedProcess>();
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
         protected readonly ILogger Logger;
 
-        public DataExportQueue(ILogger logger, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
+        public DataExportProcessesService(ILogger logger, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
         {
             this.Logger = logger;
             this.questionnaires = questionnaires;
         }
 
-        public IQueuedProcess DeQueueDataExportProcess()
+        public IQueuedProcess GetOldestUnprocessedDataExportProcess()
         {
             var exportProcess = dataExportProcessDtoStorage.Values.Where(p => p.Status == DataExportStatus.Queued)
                 .OrderBy(p => p.LastUpdateDate)
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess;
         }
 
-        public string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion,
+        public string AddDataExportProcess(Guid questionnaireId, long questionnaireVersion,
             DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return processId;
         }
 
-        public string EnQueueApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion,
+        public string AddApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion,
          DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return processId;
         }
 
-        public string EnQueueParaDataExportProcess(DataExportFormat exportFormat)
+        public string AddParaDataExportProcess(DataExportFormat exportFormat)
         {
             string processId = Guid.NewGuid().FormatGuid();
             var exportProcess = new ParaDataQueuedProcess()

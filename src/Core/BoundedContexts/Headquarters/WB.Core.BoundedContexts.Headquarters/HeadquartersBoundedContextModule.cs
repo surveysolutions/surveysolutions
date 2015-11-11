@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
             this.Bind<IMetadataExportService>().To<MetadataExportService>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            this.Bind<IDataExportQueue>().To<DataExportQueue>().InSingletonScope();
+            this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
 
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
@@ -81,6 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<TabularFormatDataExportProcessHandler>().ToSelf();
             this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
             this.Bind<StataFormatExportProcessHandler>().ToSelf();
+            this.Bind<SpssFormatExportProcessHandler>().ToSelf();
+            this.Bind<BinaryFormatDataExportProcessHandler>().ToSelf();
 
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();

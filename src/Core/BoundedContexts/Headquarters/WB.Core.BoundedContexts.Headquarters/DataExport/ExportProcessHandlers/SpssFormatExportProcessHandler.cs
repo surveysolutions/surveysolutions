@@ -1,17 +1,16 @@
 ﻿using Microsoft;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class StataFormatExportProcessHandler : IExportProcessHandler<AllDataQueuedProcess>, IExportProcessHandler<ApprovedDataQueuedProcess>
+    internal class SpssFormatExportProcessHandler : IExportProcessHandler<AllDataQueuedProcess>, IExportProcessHandler<ApprovedDataQueuedProcess>
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabularFormatExportService tabularFormatExportService;
@@ -24,10 +23,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
-        public StataFormatExportProcessHandler(
-            IFileSystemAccessor fileSystemAccessor, 
-            ITabularFormatExportService tabularFormatExportService, 
-            IArchiveUtils archiveUtils, 
+        public SpssFormatExportProcessHandler(
+            IFileSystemAccessor fileSystemAccessor,
+            ITabularFormatExportService tabularFormatExportService,
+            IArchiveUtils archiveUtils,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
             InterviewDataExportSettings interviewDataExportSettings, IDataExportProcessesService dataExportProcessesService)
@@ -58,14 +57,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
-            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
+            var spssFiles = tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
                 process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 process.QuestionnaireIdentity,
-                DataExportFormat.STATA);
+                DataExportFormat.SPPS);
 
-            RecreateExportArchive(statsFiles, archiveFilePath);
+            RecreateExportArchive(spssFiles, archiveFilePath);
         }
 
         public void ExportData(ApprovedDataQueuedProcess process)
@@ -81,14 +80,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularFormatExportService
                 .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
-            var statsFiles = tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
+            var spssFiles = tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
                 process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
                 process.QuestionnaireIdentity,
-                DataExportFormat.STATA);
+                DataExportFormat.SPPS);
 
-            RecreateExportArchive(statsFiles, archiveFilePath);
+            RecreateExportArchive(spssFiles, archiveFilePath);
         }
 
         private string GetFolderPathOfDataByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
@@ -97,13 +96,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 $"{questionnaireIdentity.QuestionnaireId}_{questionnaireIdentity.Version}");
         }
 
-        private void RecreateExportArchive(string[] stataFiles, string archiveFilePath)
+        private void RecreateExportArchive(string[] spssFiles, string archiveFilePath)
         {
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
             {
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
-            this.archiveUtils.ZipFiles(stataFiles, archiveFilePath);
+            this.archiveUtils.ZipFiles(spssFiles, archiveFilePath);
         }
 
 

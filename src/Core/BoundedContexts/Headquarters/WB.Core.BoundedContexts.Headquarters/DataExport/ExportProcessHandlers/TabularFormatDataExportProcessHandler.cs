@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IArchiveUtils archiveUtils;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
-
+        private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
 
         private ITransactionManager TransactionManager
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IArchiveUtils archiveUtils,
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService,
-            InterviewDataExportSettings interviewDataExportSettings)
+            InterviewDataExportSettings interviewDataExportSettings, IDataExportProcessesService dataExportProcessesService)
         {
             this.questionnaireReader = questionnaireReader;
             this.transactionManagerProvider = transactionManagerProvider;
@@ -59,6 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.archiveUtils = archiveUtils;
             this.tabularFormatExportService = tabularFormatExportService;
             this.environmentContentService = environmentContentService;
+            this.dataExportProcessesService = dataExportProcessesService;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -68,16 +69,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(AllDataQueuedProcess process)
         {
-            var questionnaireId = process.QuestionnaireIdentity.QuestionnaireId;
-            var questionnaireVersion = process.QuestionnaireIdentity.Version;
-
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), allDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
             var exportProggress = new Progress<int>();
-            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId,donePercent);
 
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
@@ -100,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.ClearFolder(folderForDataExport);
 
             var exportProggress = new Progress<int>();
-            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent);
 
             this.tabularFormatExportService
                 .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);

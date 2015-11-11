@@ -132,6 +132,8 @@
     <Compile Include="DataExport\Dtos\DataExportFormat.cs" />
     <Compile Include="DataExport\Dtos\DataExportType.cs" />
     <Compile Include="DataExport\Dtos\LastPublishedEventPositionForHandler.cs" />
+    <Compile Include="DataExport\ExportProcessHandlers\BinaryFormatDataExportProcessHandler.cs" />
+    <Compile Include="DataExport\ExportProcessHandlers\SpssFormatExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\StataFormatExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatDataExportProcessHandler.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabularFormatParaDataExportProcessHandler.cs" />
@@ -150,10 +152,10 @@
     <Compile Include="DataExport\Services\Exporters\CommentsExporter.cs" />
     <Compile Include="DataExport\Services\CsvWriterService.cs" />
     <Compile Include="DataExport\Services\DataExporter.cs" />
-    <Compile Include="DataExport\Services\DataExportQueue.cs" />
+    <Compile Include="DataExport\Services\DataExportProcessesService.cs" />
     <Compile Include="DataExport\Services\Exporters\InterviewsExporter.cs" />
     <Compile Include="DataExport\Services\IDataExporter.cs" />
-    <Compile Include="DataExport\Services\IDataExportQueue.cs" />
+    <Compile Include="DataExport\Services\IDataExportProcessesService.cs" />
     <Compile Include="DataExport\Services\IEnvironmentContentService.cs" />
     <Compile Include="DataExport\Services\IMetadataExportService.cs" />
     <Compile Include="DataExport\Services\Exporters\InterviewActionsExporter.cs" />

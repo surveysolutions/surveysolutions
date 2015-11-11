@@ -26,16 +26,16 @@ namespace WB.UI.Headquarters.API
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
-        private readonly IDataExportQueue dataExportQueue;
+        private readonly IDataExportProcessesService dataExportProcessesService;
 
         public DataExportApiController( 
             IFileSystemAccessor fileSystemAccessor, 
             IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
-            IDataExportQueue dataExportQueue, IParaDataAccessor paraDataAccessor, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
+            IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportedDataReferenceViewFactory = exportedDataReferenceViewFactory;
-            this.dataExportQueue = dataExportQueue;
+            this.dataExportProcessesService = dataExportProcessesService;
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportQueue.EnQueueParaDataExportProcess(DataExportFormat.Tabular);
+                this.dataExportProcessesService.AddParaDataExportProcess(DataExportFormat.Tabular);
             }
             catch (Exception e)
             {
@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportQueue.EnQueueDataExportProcess(questionnaireId, questionnaireVersion, format);
+                this.dataExportProcessesService.AddDataExportProcess(questionnaireId, questionnaireVersion, format);
             }
             catch (Exception e)
             {
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportQueue.EnQueueApprovedDataExportProcess(questionnaireId, questionnaireVersion, format);
+                this.dataExportProcessesService.AddApprovedDataExportProcess(questionnaireId, questionnaireVersion, format);
             }
             catch (Exception e)
             {
@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportQueue.DeleteDataExportProcess(id);
+                this.dataExportProcessesService.DeleteDataExportProcess(id);
             }
             catch (Exception)
             {
