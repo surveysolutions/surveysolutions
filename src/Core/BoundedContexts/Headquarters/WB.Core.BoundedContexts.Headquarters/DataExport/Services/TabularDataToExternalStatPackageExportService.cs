@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StatData.Converters;
 using StatData.Core;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
+        private readonly IDataQueryFactory dataQueryFactory;
 
         public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
@@ -30,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             ITabFileReader tabReader,
+            IDataQueryFactory dataQueryFactory,
             IDatasetWriterFactory datasetWriterFactory)
         {
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
@@ -39,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
+            this.dataQueryFactory = dataQueryFactory;
         }
 
         private string StataFileNameExtension { get { return ".dta"; } }
@@ -80,15 +84,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 foreach (var tabFile in dataFiles)
                 {
                     currentDataInfo = string.Format("filename: {0}", tabFile);
-                    string dataFile = this.fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
+                    string dataFilePath = this.fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
+
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
                     UpdateMetaWithLabels(meta, varLabels, varValueLabels);
-                    var data = this.tabReader.GetDataFromTabFile(tabFile);
-                    writer.WriteToFile(dataFile, meta, data);
-                    result.Add(dataFile);
+
+                    IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile);
+                    writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
+                    result.Add(dataFilePath);
 
                     processdFiles++;
                     progress.Report(processdFiles.PercentOf(dataFiles.Length));
+
                 }
 
                 return result.ToArray();

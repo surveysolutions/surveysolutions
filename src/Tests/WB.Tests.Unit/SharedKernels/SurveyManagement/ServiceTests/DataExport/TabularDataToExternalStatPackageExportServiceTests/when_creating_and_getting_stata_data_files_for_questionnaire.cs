@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>());
 
         private It should_call_write_to_file = () =>
-            datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<string[,]>()), Times.Once());
+            datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<IDataQuery>()), Times.Once());
 
         private static TabularDataToExternalStatPackageExportService _tabularDataToExternalStatPackagesTabDataExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

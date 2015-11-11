@@ -123,7 +123,9 @@
     <Compile Include="DataExport\Accessors\IFilebasedExportedDataAccessor.cs" />
     <Compile Include="DataExport\Accessors\IParaDataAccessor.cs" />
     <Compile Include="DataExport\Accessors\ITabFileReader.cs" />
+    <Compile Include="DataExport\Accessors\ITabFileReaderFactory.cs" />
     <Compile Include="DataExport\Accessors\TabFileReader.cs" />
+    <Compile Include="DataExport\Accessors\TabFileReaderFactory.cs" />
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
     <Compile Include="DataExport\DataExportSettings.cs" />
     <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
