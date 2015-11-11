@@ -66,11 +66,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
             var arrayOfDecimal = value as IEnumerable<decimal>;
             if (arrayOfDecimal != null)
-                return arrayOfDecimal.Select(d => (object) d);
+                return arrayOfDecimal.Select(d => (object)d);
 
             var arrayOfInteger = value as IEnumerable<int>;
             if (arrayOfInteger != null)
-                return arrayOfInteger.Select(i => (object) i);
+                return arrayOfInteger.Select(i => (object)i);
 
             var interviewTextListAnswer = value as InterviewTextListAnswers;
             if (interviewTextListAnswer != null)
@@ -117,9 +117,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
             var result = new string[header.ColumnNames.Length];
 
-            for (int i = 0; i < result.Length; i++)
+            if (this.QuestionType == QuestionType.MultyOption)
             {
-                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
+                for (int i = 0; i < result.Length; i++)
+                {
+                    int isOptionChecked = Array.IndexOf(answers, header.ColumnValues[i]);
+                    result[i] = isOptionChecked > -1 ? (isOptionChecked + 1).ToString() : "0";
+                }
+            }
+            else
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
+                }
             }
 
             return result;

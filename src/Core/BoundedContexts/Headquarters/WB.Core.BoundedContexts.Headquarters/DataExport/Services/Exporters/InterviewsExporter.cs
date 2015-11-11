@@ -86,11 +86,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                var dataByTheLevelFilePath =
+                string dataByTheLevelFilePath =
                     this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(level.LevelName, this.dataFileExtension));
 
-                var interviewLevelHeader = new List<string> { level.LevelIdColumnName };
-
+                List<string> interviewLevelHeader = new List<string> { level.LevelIdColumnName };
 
                 if (level.IsTextListScope)
                 {
@@ -164,6 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             progress.Report(100);
         }
+
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
         {
             var interviewData = new Dictionary<string, string[]>();
