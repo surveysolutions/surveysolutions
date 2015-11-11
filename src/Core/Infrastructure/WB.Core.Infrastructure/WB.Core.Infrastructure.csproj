@@ -51,6 +51,7 @@
     <Compile Include="CommandBus\ICommandValidator.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
+    <Compile Include="EventBus\EventBusSettings.cs" />
     <Compile Include="EventBus\Hybrid\Implementation\HybridEventBus.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Ncqrs\Eventing\CommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEventStream.cs" />
     <Compile Include="Ncqrs\Eventing\EventMergeUtils.cs" />
+    <Compile Include="Ncqrs\Eventing\EventHandlerException.cs" />
     <Compile Include="Ncqrs\Eventing\EventNotHandledException.cs" />
     <Compile Include="Ncqrs\Eventing\EventSourceInformation.cs" />
     <Compile Include="Ncqrs\Eventing\IEvent.cs" />
