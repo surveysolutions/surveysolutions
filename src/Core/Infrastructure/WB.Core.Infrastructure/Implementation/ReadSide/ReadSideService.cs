@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 
@@ -198,6 +199,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
 
 
+            var criticalErrors = errors.Where(error => IsCriticalEventHandlerException(error.Item3)).ToList();
+            var warningEventHandlerErrors = errors.Except(criticalErrors).ToList();
+
             return new ReadSideStatus()
             {
                 IsRebuildRunning = this.AreViewsBeingRebuiltNow(),
@@ -228,15 +232,29 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                                 WriterName = GetStorageEntityName(writer),
                                 Status = writer.GetReadableStatus()
                             }),
-                RebuildErrors = ReverseList(errors)
+                WarningEventHandlerErrors = ReverseList(warningEventHandlerErrors)
                     .Select(error => new ReadSideRepositoryWriterError()
                     {
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
-                        InnerException = GetFullUnwrappedExceptionText(error.Item3)
+                        InnerException = GetFullUnwrappedExceptionText(error.Item3.InnerException)
                     }),
-                ReadSideDenormalizerStatistics=GetRebuildDenormalizerStatistics()
+                RebuildErrors = ReverseList(criticalErrors)
+                    .Select(error => new ReadSideRepositoryWriterError()
+                    {
+                        ErrorTime = error.Item1,
+                        ErrorMessage = error.Item2,
+                        InnerException = GetFullUnwrappedExceptionText(error.Item3.InnerException)
+                    }),
+                ReadSideDenormalizerStatistics = GetRebuildDenormalizerStatistics()
             };
+        }
+
+        private static bool IsCriticalEventHandlerException(Exception exception)
+        {
+            var eventHandlerException =  exception.GetSelfOrInnerAs<EventHandlerException>();
+
+            return eventHandlerException == null || eventHandlerException.IsCritical;
         }
 
         private string CreateViewName(object storage)
@@ -652,11 +670,17 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 try
                 {
-                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
+                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches,
+                        (nonCriticalEventHandlerException) =>
+                        {
+                            string message = $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                            this.SaveErrorForStatusReport($"{nonCriticalEventHandlerException.EventHandlerType.Name}.{nonCriticalEventHandlerException.EventType.Name}: {message}",
+                                nonCriticalEventHandlerException);
+                        });
                 }
                 catch (Exception exception)
                 {
-                    string message = string.Format("Failed to publish event {0} of {1} ({2})", this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier);
+                    string message = $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
                     this.SaveErrorForStatusReport(message, exception);
                     this.logger.Error(message, exception);
 
