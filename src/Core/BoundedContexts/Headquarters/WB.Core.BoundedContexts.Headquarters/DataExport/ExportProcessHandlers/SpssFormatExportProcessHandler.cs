@@ -1,7 +1,7 @@
 ﻿using Microsoft;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class SpssFormatExportProcessHandler : IExportProcessHandler<AllDataQueuedProcess>, IExportProcessHandler<ApprovedDataQueuedProcess>
+    internal class SpssFormatExportProcessHandler : IExportProcessHandler<AllDataExportProcess>, IExportProcessHandler<ApprovedDataExportProcess>
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabularFormatExportService tabularFormatExportService;
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
-        public void ExportData(AllDataQueuedProcess process)
+        public void ExportData(AllDataExportProcess process)
         {
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), allDataFolder);
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             RecreateExportArchive(spssFiles, archiveFilePath);
         }
 
-        public void ExportData(ApprovedDataQueuedProcess process)
+        public void ExportData(ApprovedDataExportProcess process)
         {
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), approvedDataFolder);

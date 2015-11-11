@@ -1,12 +1,12 @@
 ﻿using System;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportProcessesService
     {
-        IQueuedProcess GetOldestUnprocessedDataExportProcess();
+        IDataExportProcess GetOldestUnprocessedDataExportProcess();
 
         string AddDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
@@ -14,9 +14,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         string AddParaDataExportProcess(DataExportFormat exportFormat);
 
-        IQueuedProcess GetDataExportProcess(string processId);
+        IDataExportProcess GetDataExportProcess(string processId);
 
-        IQueuedProcess[] GetRunningProcess();
+        IDataExportProcess[] GetRunningProcess();
 
         void FinishDataExportProcess(string processId);
 

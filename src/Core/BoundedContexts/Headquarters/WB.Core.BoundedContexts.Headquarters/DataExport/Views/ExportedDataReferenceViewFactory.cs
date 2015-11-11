@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -66,11 +66,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     .ToArray());
         }
 
-        private DataExportType CreateDataExportType(IQueuedProcess exportProcess)
+        private DataExportType CreateDataExportType(IDataExportProcess exportProcess)
         {
-            if (exportProcess is ParaDataQueuedProcess)
+            if (exportProcess is ParaDataExportProcess)
                 return DataExportType.ParaData;
-            if (exportProcess is AllDataQueuedProcess)
+            if (exportProcess is AllDataExportProcess)
                 return DataExportType.Data;
             return DataExportType.ApprovedData;
         }
