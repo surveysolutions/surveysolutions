@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
 
-            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath);
+            this.archiveUtils.ZipFiles(this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport), archiveFilePath);
         }
 
 
