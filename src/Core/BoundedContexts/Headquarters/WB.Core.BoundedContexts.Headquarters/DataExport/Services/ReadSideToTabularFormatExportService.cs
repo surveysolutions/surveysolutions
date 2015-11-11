@@ -27,13 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private readonly string dataFileExtension = "tab";
 
-        private readonly string separator;
-
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
-
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
         private readonly IExportViewFactory exportViewFactory;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
@@ -42,30 +37,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
 
-        public ReadSideToTabularFormatExportService(
-            ITransactionManagerProvider transactionManagerProvider,
-            IFileSystemAccessor fileSystemAccessor,
+        public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             ISerializer serializer,
             InterviewDataExportSettings interviewDataExportSettings,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IExportViewFactory exportViewFactory, 
             ITransactionManager transactionManager, 
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage)
         {
-            this.transactionManagerProvider = transactionManagerProvider;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.exportViewFactory = exportViewFactory;
             this.transactionManager = transactionManager;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-
-            this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
 
             this.interviewsExporter = new InterviewsExporter(transactionManager, 
                 interviewSummaries, 
@@ -171,7 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, this.separator);
+                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
             }
         }
 
