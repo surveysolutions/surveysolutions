@@ -12,7 +12,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -111,7 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             if (packageMetaInformation.ItemType == SyncItemType.Interview)
             {
-                var interviewSynchronizationDto = this.interviewerInterviewsFactory.GetInterview(packageMetaInformation.InterviewId);
+                var interviewSynchronizationDto = this.interviewerInterviewsFactory.GetInterviewDetails(packageMetaInformation.InterviewId);
 
                 interviewSynchronizationPackage.Content = this.serializer.Serialize(interviewSynchronizationDto);
                 interviewSynchronizationPackage.MetaInfo =

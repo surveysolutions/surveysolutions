@@ -6,13 +6,12 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -26,52 +25,35 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private readonly string dataFileExtension = "tab";
 
-        private readonly string separator;
-
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
 
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-
-        private readonly IExportViewFactory exportViewFactory;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
         private readonly ITransactionManager transactionManager;
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
-
-        public ReadSideToTabularFormatExportService(
-            ITransactionManagerProvider transactionManagerProvider,
-            IFileSystemAccessor fileSystemAccessor,
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
-            ISerializer serializer,
             InterviewDataExportSettings interviewDataExportSettings,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
+            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IExportViewFactory exportViewFactory, 
             ITransactionManager transactionManager, 
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage)
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
-            this.transactionManagerProvider = transactionManagerProvider;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.exportViewFactory = exportViewFactory;
             this.transactionManager = transactionManager;
-            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-
-            this.separator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
             this.interviewsExporter = new InterviewsExporter(transactionManager, 
                 interviewSummaries, 
                 fileSystemAccessor, 
                 interviewDatas, 
                 exportViewFactory, 
-                serializer, 
                 csvWriter);
 
             this.commentsExporter = new CommentsExporter(interviewDataExportSettings, 
@@ -87,24 +69,46 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
-            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, progress);
-            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, progress);
-            this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, progress);
+            var exportInterviewsProgress = new Progress<int>();
+            var exportCommentsProgress = new Progress<int>();
+            var exportInterviewActionsProgress = new Progress<int>();
+
+            ProggressAggregator proggressAggregator = new ProggressAggregator();
+            proggressAggregator.Add(exportInterviewsProgress, 0.8);
+            proggressAggregator.Add(exportCommentsProgress, 0.1);
+            proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
+
+            proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
+
+            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress);
+            this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
         public void ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
-            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, progress);
-            this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, progress);
-            this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, progress);
+            var exportInterviewsProgress = new Progress<int>();
+            var exportCommentsProgress = new Progress<int>();
+            var exportInterviewActionsProgress = new Progress<int>();
+
+            ProggressAggregator proggressAggregator = new ProggressAggregator();
+            proggressAggregator.Add(exportInterviewsProgress, 0.8);
+            proggressAggregator.Add(exportCommentsProgress, 0.1);
+            proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
+
+            proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
+
+            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, exportCommentsProgress);
+            this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-              this.transactionManagerProvider.GetTransactionManager()
+              this.transactionManager
                   .ExecuteInQueryTransaction(
                       () =>
                           this.questionnaireExportStructureStorage.AsVersioned()
@@ -152,18 +156,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
                 }
 
-                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, this.separator);
+                this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
             }
         }
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            QuestionnaireDocumentVersioned questionnaire =
-                this.transactionManager.ExecuteInQueryTransaction(() => 
-                    this.questionnaireDocumentVersionedStorage.AsVersioned()
-                        .Get(questionnaireId.FormatGuid(), questionnaireVersion));
-            var questionnaireExportStructure =
-                this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.Questionnaire, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure =
+             this.transactionManager
+                 .ExecuteInQueryTransaction(() =>
+                         this.questionnaireExportStructureStorage.AsVersioned()
+                             .Get(questionnaireId.FormatGuid(), questionnaireVersion));
             return questionnaireExportStructure;
         }
     }

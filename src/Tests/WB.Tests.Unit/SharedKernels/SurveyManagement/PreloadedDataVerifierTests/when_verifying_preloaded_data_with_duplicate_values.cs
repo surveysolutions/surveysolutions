@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(question);
             questionnaire.VariableName = questionnaire.Title = "questionnaire";
 
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1_1", "q1_0" },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1_3", "q1_4" },
                 new string[][] { new string[] { "1", "3", "3" } },
                 "questionnaire.csv");
 

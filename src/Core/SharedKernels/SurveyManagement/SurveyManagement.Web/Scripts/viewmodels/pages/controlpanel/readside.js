@@ -35,10 +35,10 @@
     self.readSideRepositoryWriters = ko.observableArray([]);
     self.rebuildDenormalizerStatistic = ko.observableArray([]);
     self.rebuildErrors = ko.observableArray([]);
+    self.warningEventHandlerErrors = ko.observableArray([]);
     self.hasErrors = ko.computed(function () {
-        return self.rebuildErrors().length > 0;
+        return self.rebuildErrors().length > 0 || self.warningEventHandlerErrors().length > 0;
     });
-
     self.lastStatusUpdateTime = ko.observable('-');
     self.lastRebuildDate = ko.observable('-');
     self.currentRebuildStatus = ko.observable('');
@@ -96,7 +96,8 @@
 
             self.reloadRepositoryWritersList(data.StatusByRepositoryWriters);
             self.reloadDenormalizerStatistics(data.ReadSideDenormalizerStatistics);
-            self.reloadErrorsList(data.RebuildErrors);
+            self.reloadErrorsList(self.rebuildErrors, data.RebuildErrors);
+            self.reloadErrorsList(self.warningEventHandlerErrors, data.WarningEventHandlerErrors);
 
             _.delay(self.updateStatus, 3000);
         }, true, true);
@@ -143,28 +144,28 @@
         });
     };
 
-    self.reloadErrorsList = function (newList) {
+    self.reloadErrorsList = function (oldList, newList) {
         //remove old errors
-        _.each(self.rebuildErrors(), function (oldError) {
+        _.each(oldList(), function (oldError) {
             var error = _.find(newList, function (newError) {
                 return newError.ErrorTime == oldError.ErrorTime && newError.ErrorMessage == oldError.ErrorMessage;
             });
 
             if (_.isUndefined(error)) {
-                self.rebuildErrors.pop(oldError);
+                oldList.pop(oldError);
             }
         });
 
         //add new errors
         _.each(newList, function (error) {
-            var existingError = _.find(self.rebuildErrors(), function (newError) {
+            var existingError = _.find(oldList(), function (newError) {
                 return newError.ErrorTime == error.ErrorTime && newError.ErrorMessage == error.ErrorMessage;
             });
 
             if (_.isUndefined(existingError)) {
-                var maxKey = self.rebuildErrors().length == 0 ? 0 : _.max(self.rebuildErrors(), function(e) { return e.ErrorKey(); }).ErrorKey();
+                var maxKey = oldList().length == 0 ? 0 : _.max(oldList(), function (e) { return e.ErrorKey(); }).ErrorKey();
                 error.ErrorKey = ko.observable(maxKey + 1);
-                self.rebuildErrors.push(error);
+                oldList.push(error);
             }
         });
     };

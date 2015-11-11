@@ -32,8 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     Answers =
                         new List<Answer>()
                         {
-                            new Answer() { AnswerText = "option 1", AnswerValue = "op1" },
-                            new Answer() { AnswerText = "option 2", AnswerValue = "opt2" }
+                            new Answer() { AnswerText = "option 1", AnswerValue = "1" },
+                            new Answer() { AnswerText = "option 2", AnswerValue = "2" }
                         }
                 },
                 new Group("roster group")

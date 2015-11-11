@@ -2154,39 +2154,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var entityToInsert = sourceDocument.Find<IComposite>(sourceItemId);
             var targetIndex = targetToPasteIn.Children.IndexOf(itemToInsertAfter) + 1;
 
-            if (targetToPasteIn.PublicKey != this.EventSourceId)
-            {
-                var targetChapter = this.innerDocument.GetChapterOfItemById(targetToPasteIn.PublicKey);
-                
-                var numberOfMovedItems = entityToInsert.Children
-                        .TreeToEnumerable(x => x.Children)
-                        .Count();
+            this.CheckDepthInvariantsAndGenerateEvents(pasteItemId, responsibleId, sourceItemId, sourceDocument, targetToPasteIn, entityToInsert, targetIndex);
 
-                var numberOfItemsInChapter = targetChapter.Children
-                        .TreeToEnumerable(x => x.Children)
-                        .Count();
-
-                if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
-                {
-                    throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
-                }
-
-                var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetToPasteIn.PublicKey)).Count();
-
-                var entityToInsertAsGroup = entityToInsert as IGroup;
-                if (entityToInsertAsGroup != null)
-                {
-                    var sourceGroupMaxChildNestingDepth = GetMaxChildGroupNestingDepth(entityToInsertAsGroup);
-
-                    if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth - 1)
-                    {
-                        throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
-                    }
-                }
-            }
-
-            this.GeneratePasteEvents(pasteItemId, responsibleId, sourceItemId, sourceDocument, entityToInsert,
-                targetToPasteIn, targetIndex);
         }
 
         public void PasteItemInto(Guid pasteItemId, Guid? targetGroupId, Guid responsibleId, Guid sourceItemId, QuestionnaireDocument sourceDocument)
@@ -2202,25 +2171,33 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
             }
-            
+
             var entityToInsert = sourceDocument.Find<IComposite>(sourceItemId);
             var targetToPasteIn = targetGroupId.HasValue ? this.GetGroupById(targetGroupId.Value) : this.innerDocument;
+            var targetIndex = targetToPasteIn.Children.Count();
 
+            this.CheckDepthInvariantsAndGenerateEvents(pasteItemId, responsibleId, sourceItemId, sourceDocument, targetToPasteIn, entityToInsert, targetIndex);
+        }
+
+        private void CheckDepthInvariantsAndGenerateEvents(Guid pasteItemId, Guid responsibleId, Guid sourceItemId,
+            QuestionnaireDocument sourceDocument, IComposite targetToPasteIn, IComposite entityToInsert, int targetIndex)
+        {
             if (targetToPasteIn.PublicKey != this.EventSourceId)
             {
                 var targetChapter = this.innerDocument.GetChapterOfItemById(targetToPasteIn.PublicKey);
 
                 var numberOfMovedItems = entityToInsert.Children
-                        .TreeToEnumerable(x => x.Children)
-                        .Count();
+                    .TreeToEnumerable(x => x.Children)
+                    .Count();
 
                 var numberOfItemsInChapter = targetChapter.Children
-                        .TreeToEnumerable(x => x.Children)
-                        .Count();
+                    .TreeToEnumerable(x => x.Children)
+                    .Count();
 
                 if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount - 1)
                 {
-                    throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
+                    throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements",
+                        MaxChapterItemsCount));
                 }
 
                 var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetToPasteIn.PublicKey)).Count();
@@ -2232,16 +2209,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
                     {
-                        throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}", MaxGroupDepth));
+                        throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}",
+                            MaxGroupDepth));
                     }
                 }
             }
 
-            var targetIndex = targetToPasteIn.Children.Count();
-
             this.GeneratePasteEvents(pasteItemId, responsibleId, sourceItemId, sourceDocument, entityToInsert,
                 targetToPasteIn, targetIndex);
-
         }
 
         private void GeneratePasteEvents(Guid pasteItemId, Guid responsibleId, Guid sourceItemId,
@@ -2558,8 +2533,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowDomainExceptionIfEntityDoesNotExists(QuestionnaireDocument doc, Guid entityId)
         {
-            var staticText = doc.Find<IComposite>(entityId);
-            if (staticText == null)
+            var entity = doc.Find<IComposite>(entityId);
+            if (entity == null)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.EntityNotFound,

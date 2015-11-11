@@ -56,6 +56,7 @@ using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -1773,7 +1774,10 @@ namespace WB.Tests.Unit
 
         public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
         {
-            var ncqrCompatibleEventDispatcher = new NcqrCompatibleEventDispatcher(Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[]{});
+            var ncqrCompatibleEventDispatcher =
+                new NcqrCompatibleEventDispatcher(
+                    () => new InProcessEventBus(Mock.Of<IEventStore>(), new EventBusSettings(), Mock.Of<ILogger>()),
+                    Mock.Of<IEventStore>(), handlersToIgnore ?? new Type[] {});
             ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
         }

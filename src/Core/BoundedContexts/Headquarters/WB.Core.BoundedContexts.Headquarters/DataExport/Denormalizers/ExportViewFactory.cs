@@ -67,14 +67,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview)
         {
-            return new InterviewDataExportView(interview.InterviewId, interview.QuestionnaireId,
+            var interviewDataExportLevelViews = exportStructure.HeaderToLevelMap.Values.Select(
+                exportStructureForLevel =>
+                    new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
+                        exportStructureForLevel.LevelName,
+                        this.BuildRecordsForHeader(interview, exportStructureForLevel),
+                        interview.InterviewId.FormatGuid())).ToArray();
+
+            return new InterviewDataExportView(interview.InterviewId, 
+                interview.QuestionnaireId,
                 interview.QuestionnaireVersion,
-                exportStructure.HeaderToLevelMap.Values.Select(
-                    exportStructureForLevel =>
-                        new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
-                            exportStructureForLevel.LevelName,
-                            this.BuildRecordsForHeader(interview, exportStructureForLevel),
-                            interview.InterviewId.FormatGuid())).ToArray());
+                interviewDataExportLevelViews);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
@@ -189,12 +192,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 ExportedQuestion exportedQuestion = null;
                 if (question == null)
                 {
-                    var ansnwers = new List<string>();
+                    var answers = new List<string>();
                     for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
                     {
-                        ansnwers.Add(string.Empty);
+                        answers.Add(string.Empty);
                     }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, ansnwers.ToArray());
+                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, answers.ToArray());
                 }
                 else
                 {
@@ -267,11 +270,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
+            exportedHeaderItem.ColumnValues = new object[columnCount];
             exportedHeaderItem.Titles = new string[columnCount];
 
             for (int i = 0; i < columnCount; i++)
             {
-                exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
+                if (!IsQuestionLinked(question) && question is IMultyOptionsQuestion)
+                {
+                    exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, question.Answers[i].AnswerValue);
+                    exportedHeaderItem.ColumnValues[i] = decimal.Parse(question.Answers[i].AnswerValue);
+                }
+                else
+                {
+                    exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
+                }
 
                 if (!IsQuestionLinked(question))
                 {
@@ -466,10 +478,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         protected void AddHeadersForMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
             ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
         {
-            var multiOptionQuestion = question as IMultyOptionsQuestion;
-            var maxCount = (multiOptionQuestion == null ? null : multiOptionQuestion.MaxAllowedAnswers) ?? question.Answers.Count;
             headerItems.Add(question.PublicKey,
-                this.CreateExportedHeaderItem(question, maxCount,
+                this.CreateExportedHeaderItem(question, question.Answers.Count,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
         }
 

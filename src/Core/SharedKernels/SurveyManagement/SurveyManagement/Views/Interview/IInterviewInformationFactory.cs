@@ -8,6 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId);
         IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds);
-        InterviewSynchronizationDto GetInterview(Guid interviewId);
+        InterviewSynchronizationDto GetInterviewDetails(Guid interviewId);
     }
 }
