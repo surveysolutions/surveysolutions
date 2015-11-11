@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Native.Logging;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -227,9 +228,22 @@ namespace WB.UI.Headquarters
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             var ignoredDenormalizersConfigSection =
-                (IgnoredDenormalizersConfigSection) WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
+                (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+
+            var catchExceptionsByDenormalizersConfigSection =
+                (CatchExceptionsByDenormalizersConfigSection)WebConfigurationManager.GetSection("CatchExceptionsByDenormalizersSection");
+            Type[] catchExceptionsByDenormalizers = catchExceptionsByDenormalizersConfigSection == null ? new Type[0] : catchExceptionsByDenormalizersConfigSection.GetTypesOfDenormalizers();
+
+
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                new EventBusSettings()
+                {
+                    IgnoredEventHandlerTypes = handlersToIgnore,
+                    CatchExceptionsByEventHandlerTypes = catchExceptionsByDenormalizers
+                },
+                kernel.Get<ILogger>());
+
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);

@@ -10,13 +10,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -33,32 +31,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             ICsvWriterService csvWriterService = null,
             ICsvWriter csvWriter = null,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
-             QuestionnaireExportStructure questionnaireExportStructure = null,
+            QuestionnaireExportStructure questionnaireExportStructure = null,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries=null)
         {
-            var readSideKeyValueStorage = new TestInMemoryWriter<QuestionnaireDocumentVersioned>();
-
-            if (questionnaireExportStructure != null)
-            {
-                QuestionnaireDocumentVersioned questionnaireDocumentVersioned =
-                    Create.QuestionnaireDocumentVersioned(Create.QuestionnaireDocument(questionnaireExportStructure.QuestionnaireId), questionnaireExportStructure.Version);
-                readSideKeyValueStorage.Store(questionnaireDocumentVersioned, string.Format("{0}${1}", questionnaireExportStructure.QuestionnaireId.FormatGuid(), questionnaireExportStructure.Version));
-            }
-            return new ReadSideToTabularFormatExportService(
-                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+            return new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(_ => _.OpenCsvWriter(
-                                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
-                Mock.Of<ISerializer>(),new InterviewDataExportSettings("",false,10000, 100),
+                                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),new InterviewDataExportSettings("",false,10000, 100),
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
                 interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure),
                 new TestInMemoryWriter<InterviewSummary>(), 
                 new TestInMemoryWriter<InterviewData>(),
                 Mock.Of<IExportViewFactory>(x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
                 Mock.Of<ITransactionManager>(),
-                readSideKeyValueStorage
+                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
+                    It.IsAny<string>()) == questionnaireExportStructure)
                 );
         }
 
@@ -85,14 +71,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type };
         }
 
-        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
+        protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid questionnaireId, long version, params HeaderStructureForLevel[] levels)
         {
             var header = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
             if (levels != null && levels.Length > 0)
             {
                 header = levels.ToDictionary((i) => i.LevelScopeVector, (i) => i);
             }
-            return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
+            return new QuestionnaireExportStructure()
+            {
+                HeaderToLevelMap = header,
+                QuestionnaireId = questionnaireId,
+                Version = version
+            };
         }
 
         protected class CsvWriterServiceTestable : ICsvWriterService

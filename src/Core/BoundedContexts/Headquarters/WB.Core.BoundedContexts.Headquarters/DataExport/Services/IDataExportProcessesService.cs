@@ -4,15 +4,15 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    public interface IDataExportQueue
+    public interface IDataExportProcessesService
     {
-        IQueuedProcess DeQueueDataExportProcess();
+        IQueuedProcess GetOldestUnprocessedDataExportProcess();
 
-        string EnQueueDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+        string AddDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
-        string EnQueueApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+        string AddApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
-        string EnQueueParaDataExportProcess(DataExportFormat exportFormat);
+        string AddParaDataExportProcess(DataExportFormat exportFormat);
 
         IQueuedProcess GetDataExportProcess(string processId);
 

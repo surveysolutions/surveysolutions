@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
@@ -31,7 +32,7 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
                 () => this.cqrsEventBus.PublishCommittedEvents(committedEvents));
         }
 
-        public void Publish(IPublishableEvent eventMessage)
+        public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
         {
             this.cqrsEventBus.Publish(eventMessage);
         }

@@ -4,6 +4,6 @@
     {
         ApprovedData,
         Data,
-        ParaData,
+        ParaData
     }
 }

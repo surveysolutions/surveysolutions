@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+using Ncqrs.Domain;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -13,19 +15,23 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     {
         private readonly Dictionary<Type, List<Action<IPublishableEvent>>> handlerRegistry = new Dictionary<Type, List<Action<IPublishableEvent>>>();
         private readonly IEventStore eventStore;
+        private readonly EventBusSettings eventBusSettings;
+        private readonly ILogger logger;
 
-        public InProcessEventBus(IEventStore eventStore)
+        public InProcessEventBus(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger)
         {
             this.eventStore = eventStore;
+            this.eventBusSettings = eventBusSettings;
+            this.logger = logger;
         }
 
-        public void Publish(IPublishableEvent eventMessage)
+        public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
         {
             List<Action<IPublishableEvent>> handlers = GetHandlersForEvent(eventMessage);
 
             if (handlers.Any())
             {
-                PublishToHandlers(eventMessage, handlers);
+                PublishToHandlers(eventMessage, handlers, onCatchingNonCriticalEventHandlerException);
             }
         }
 
@@ -33,7 +39,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             foreach (var eventMessage in eventMessages)
             {
-                this.Publish(eventMessage);
+                this.Publish(eventMessage, null);
             }
         }
 
@@ -53,8 +59,12 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             var eventDataType = typeof(TEvent);
 
+            this.handlerByEventType.Add(eventDataType, handler as IEventHandler);
+
             RegisterHandler(eventDataType, evnt => handler.Handle((IPublishedEvent<TEvent>)evnt));
         }
+
+        private readonly Dictionary<Type, IEventHandler> handlerByEventType = new Dictionary<Type, IEventHandler>();    
 
         public void RegisterHandler(Type eventDataType, Action<IPublishableEvent> handler)
         {
@@ -89,7 +99,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             return result;
         }
 
-        private static void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<Action<IPublishableEvent>> handlers)
+        private void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<Action<IPublishableEvent>> handlers, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
             IPublishableEvent publishedEvent = (IPublishableEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
@@ -104,14 +114,30 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
                 }
                 catch (Exception exception)
                 {
-                    occurredExceptions.Add(exception);
+                    var eventHandler = this.handlerByEventType[eventMessage.Payload.GetType()];
+
+                    var catchEventHandlerException = eventHandler != null && this.eventBusSettings.CatchExceptionsByEventHandlerTypes.Contains(eventHandler.GetType());
+
+                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandler?.GetType(),
+                        eventType: eventMessage.Payload.GetType(), isCritical: !catchEventHandlerException,
+                        innerException: exception);
+
+                    if (catchEventHandlerException)
+                    {
+                        this.logger.Error($"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} for event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.", eventHandlerException);
+                        onCatchingNonCriticalEventHandlerException?.Invoke(eventHandlerException);
+                    }
+                    else
+                    {
+                        occurredExceptions.Add(eventHandlerException);
+                    }
                 }
             }
-           
+
             if (occurredExceptions.Count > 0)
-                throw new AggregateException(
-                   string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
-                    occurredExceptions);
+            {
+                throw new AggregateException($"{occurredExceptions.Count} handler(s) failed to handle published event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.", occurredExceptions);
+            }
         }
     }
 }
