@@ -503,7 +503,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RemoveAnswerFromExpressionProcessorState(this.ExpressionProcessorStatePrototype, @event.QuestionId, @event.RosterVector);
         }
 
-        private void RemoveAnswerFromExpressionProcessorState(IInterviewExpressionStateV4 state, Guid questionId, decimal[] rosterVector)
+        private void RemoveAnswerFromExpressionProcessorState(IInterviewExpressionStateV4 state, Guid questionId, RosterVector rosterVector)
         {
             state.UpdateNumericIntegerAnswer(questionId, rosterVector, null);
             state.UpdateNumericRealAnswer(questionId, rosterVector, null);
@@ -748,82 +748,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return AnswerUtils.AnswerToString(answer);
         }
 
-        private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, Func<Identity, bool> isGroupDisabled, Func<Identity, bool> isQuestionDisabled)
+        private bool IsQuestionOrParentGroupDisabled(Identity question, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
-            if (isQuestionDisabled(question))
+            if (state.IsQuestionDisabled(question))
                 return true;
 
             IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
             IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(parentGroupIds,
                 question.RosterVector, questionnaire).ToList();
 
-            var result = parentGroups.Any(isGroupDisabled);
+            var result = parentGroups.Any(state.IsGroupDisabled);
             return result;
-        }
-
-        private static bool IsGroupDisabled(InterviewStateDependentOnAnswers state, Identity group)
-        {
-            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(group.Id, group.RosterVector);
-
-            return state.DisabledGroups.Contains(groupKey);
-        }
-
-        private static bool IsQuestionDisabled(InterviewStateDependentOnAnswers state, Identity question)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
-            return state.DisabledQuestions.Contains(questionKey);
-        }
-
-        private static bool WasQuestionAnswered(InterviewStateDependentOnAnswers state, Identity question)
-        {
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
-            return state.AnsweredQuestions.Contains(questionKey);
         }
 
         private object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
         {
-            return GetEnabledQuestionAnswerSupportedInExpressions(state, question, IsQuestionDisabled, IsGroupDisabled, questionnaire);
-        }
-
-        private object GetEnabledQuestionAnswerSupportedInExpressions(InterviewStateDependentOnAnswers state,
-            Identity question,
-            Func<InterviewStateDependentOnAnswers, Identity, bool> isQuestionDisabled,
-            Func<InterviewStateDependentOnAnswers, Identity, bool> isGroupDisabled,
-            IQuestionnaire questionnaire,
-            Identity questionBeingAnswered = null,
-            object answerBeingApplied = null)
-        {
-            if (IsQuestionOrParentGroupDisabled(question,
-                questionnaire,
-                isGroupDisabled: (g) => isGroupDisabled(state, g),
-                isQuestionDisabled: (q) => isQuestionDisabled(state, q)))
-                return null;
-
-            if (questionBeingAnswered != null && AreEqual(question, questionBeingAnswered))
-                return answerBeingApplied;
-
-            string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector);
-
-            return state.AnswersSupportedInExpressions.ContainsKey(questionKey)
-                ? state.AnswersSupportedInExpressions[questionKey]
-                : null;
-        }
-
-        protected decimal[] ShrinkRosterVector(decimal[] rosterVector, int length)
-        {
-            if (length == 0)
-                return EmptyRosterVector;
-
-            if (length == rosterVector.Length)
-                return rosterVector;
-
-            if (length > rosterVector.Length)
-                throw new ArgumentException(string.Format("Cannot shrink vector with length {0} to bigger length {1}. InterviewId: {2}.", rosterVector.Length,
-                    length, EventSourceId));
-
-            return rosterVector.Take(length).ToArray();
+            return this.IsQuestionOrParentGroupDisabled(question, questionnaire, state)
+                ? null
+                : state.GetAnswerSupportedInExpressions(question);
         }
 
         /// <remarks>
@@ -845,22 +787,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 yield break;
             }
 
-            var outerVectorsForExtend =
-                GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop,
-                    rosterVector);
+            var outerVectorsForExtend = GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, rosterVector);
 
             foreach (var outerVectorForExtend in outerVectorsForExtend)
             {
                 ConcurrentHashSet<decimal> rosterInstanceIds = getRosterInstanceIds(state, rosterGroupsStartingFromTop.Last(), outerVectorForExtend);
                 foreach (decimal rosterInstanceId in rosterInstanceIds)
                 {
-                    yield return ExtendRosterVectorWithOneValue(outerVectorForExtend, rosterInstanceId);
+                    yield return ((RosterVector) outerVectorForExtend).ExtendWithOneCoordinate(rosterInstanceId);
                 }
             }
         }
 
         private static IEnumerable<decimal[]> GetOuterVectorForParentRoster(InterviewStateDependentOnAnswers state,
-            Guid[] rosterGroupsStartingFromTop, decimal[] rosterVector)
+            Guid[] rosterGroupsStartingFromTop, RosterVector rosterVector)
         {
             if (rosterGroupsStartingFromTop.Count() <= 1 || rosterGroupsStartingFromTop.Length - 1 == rosterVector.Length)
             {
@@ -871,10 +811,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var indexOfPreviousRoster = rosterGroupsStartingFromTop.Length - 2;
 
             var previousRoster = rosterGroupsStartingFromTop[rosterVector.Length];
-            var previousRosterInstances = GetRosterInstanceIds(state, previousRoster, rosterVector);
+            var previousRosterInstances = state.GetRosterInstanceIds(previousRoster, rosterVector);
             foreach (var previousRosterInstance in previousRosterInstances)
             {
-                var extendedRoster = ExtendRosterVectorWithOneValue(rosterVector, previousRosterInstance);
+                var extendedRoster = rosterVector.ExtendWithOneCoordinate(previousRosterInstance);
                 if (indexOfPreviousRoster == rosterVector.Length)
                 {
                     yield return extendedRoster;
@@ -887,23 +827,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private static decimal[] ExtendRosterVectorWithOneValue(decimal[] rosterVector, decimal value)
-        {
-            return new List<decimal>(rosterVector) { value }.ToArray();
-        }
-
-        private static bool AreEqual(Identity identityA, Identity identityB)
-        {
-            return identityA.Id == identityB.Id
-                && AreEqualRosterVectors(identityA.RosterVector, identityB.RosterVector);
-        }
-
-        private static bool AreEqualRosterVectors(decimal[] rosterVectorA, decimal[] rosterVectorB)
+        private static bool AreEqualRosterVectors(RosterVector rosterVectorA, RosterVector rosterVectorB)
         {
             return rosterVectorA.SequenceEqual(rosterVectorB);
         }
 
-        private static Tuple<decimal[], decimal> SplitRosterVectorOntoOuterVectorAndRosterInstanceId(decimal[] rosterVector)
+        private static Tuple<decimal[], decimal> SplitRosterVectorOntoOuterVectorAndRosterInstanceId(RosterVector rosterVector)
         {
             return Tuple.Create(
                 rosterVector.Take(rosterVector.Length - 1).ToArray(),
@@ -985,7 +914,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private Identity GetInstanceOfQuestionWithSameAndUpperRosterLevelOrThrow(Guid questionId,
-            decimal[] rosterVector, IQuestionnaire questionnare)
+            RosterVector rosterVector, IQuestionnaire questionnare)
         {
             int vectorRosterLevel = rosterVector.Length;
             int questionRosterLevel = questionnare.GetRosterLevelForQuestion(questionId);
@@ -995,34 +924,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Question {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
                     FormatQuestionForException(questionId, questionnare), vectorRosterLevel, questionRosterLevel, EventSourceId));
 
-            decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
+            decimal[] questionRosterVector = rosterVector.Shrink(questionRosterLevel);
 
             return new Identity(questionId, questionRosterVector);
         }
 
         protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
-            InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> questionIds, decimal[] rosterVector, IQuestionnaire questionnare,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
+            InterviewStateDependentOnAnswers state, IEnumerable<Guid> questionIds, RosterVector rosterVector, IQuestionnaire questionnare)
         {
-            return questionIds.SelectMany(questionId =>
-                GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, questionId, rosterVector, questionnare,
-                    getRosterInstanceIds));
-        }
-
-        protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
-            InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> entityIds, decimal[] rosterVector, IQuestionnaire questionnare,
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
-        {
-            return entityIds.SelectMany(entityId =>
-                GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, entityId, rosterVector, questionnare,
-                    getRosterInstanceIds));
+            return this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, questionIds, rosterVector, questionnare,
+                (actualState, groupId, outerRosterVector) => actualState.GetRosterInstanceIds(groupId, outerRosterVector));
         }
 
         protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
-            Guid questionId, decimal[] rosterVector, IQuestionnaire questionnare,
+            IEnumerable<Guid> questionIds, RosterVector rosterVector, IQuestionnaire questionnare,
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
+        {
+            return questionIds.SelectMany(questionId =>
+                GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, questionId, rosterVector, questionnare, getRosterInstanceIds));
+        }
+
+        protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
+            InterviewStateDependentOnAnswers state,
+            IEnumerable<Guid> entityIds, RosterVector rosterVector, IQuestionnaire questionnare,
+            Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
+        {
+            return entityIds.SelectMany(entityId =>
+                GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, entityId, rosterVector, questionnare, getRosterInstanceIds));
+        }
+
+        protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+            InterviewStateDependentOnAnswers state,
+            Guid questionId, RosterVector rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1047,7 +981,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
             InterviewStateDependentOnAnswers state,
-            Guid entityId, decimal[] rosterVector, IQuestionnaire questionnare,
+            Guid entityId, RosterVector rosterVector, IQuestionnaire questionnare,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1068,8 +1002,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         protected IEnumerable<Identity> GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> groupIds, 
-            decimal[] rosterVector, 
+            IEnumerable<Guid> groupIds,
+            RosterVector rosterVector, 
             IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
         {
@@ -1078,7 +1012,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         protected IEnumerable<Identity> GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(InterviewStateDependentOnAnswers state,
-            Guid groupId, decimal[] rosterVector, IQuestionnaire questionnaire,
+            Guid groupId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1099,7 +1033,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
             InterviewStateDependentOnAnswers state,
-            Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+            Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
         {
             int vectorRosterLevel = rosterVector.Length;
@@ -1110,7 +1044,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid[] parentRosterGroupsStartingFromTop =
                     questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
 
-                IEnumerable<RosterVector> questionRosterVectors = ExtendRosterVector(state,
+                IEnumerable<RosterVector> questionRosterVectors = this.ExtendRosterVector(state,
                     rosterVector, questionRosterLevel, parentRosterGroupsStartingFromTop, getRosterInstanceIds);
 
                 foreach (decimal[] questionRosterVector in questionRosterVectors)
@@ -1121,19 +1055,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             else if (questionRosterLevel <= vectorRosterLevel)
             {
-                decimal[] questionRosterVector = ShrinkRosterVector(rosterVector, questionRosterLevel);
+                decimal[] questionRosterVector = rosterVector.Shrink(questionRosterLevel);
 
                 yield return new Identity(questionId, questionRosterVector);
             }
         }
 
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
-            IEnumerable<Guid> groupIds, decimal[] rosterVector, IQuestionnaire questionnaire)
+            IEnumerable<Guid> groupIds, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
             return groupIds.Select(groupId => this.GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(groupId, rosterVector, questionnaire));
         }
 
-        protected Identity GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(Guid groupId, decimal[] rosterVector, IQuestionnaire questionnaire)
+        protected Identity GetInstanceOfGroupWithSameAndUpperRosterLevelOrThrow(Guid groupId, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
             int vectorRosterLevel = rosterVector.Length;
 
@@ -1144,7 +1078,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     "Group {0} expected to have roster level not deeper than {1} but it is {2}. InterviewId: {3}",
                     FormatGroupForException(groupId, questionnaire), vectorRosterLevel, groupRosterLevel, this.EventSourceId));
 
-            decimal[] groupRosterVector = this.ShrinkRosterVector(rosterVector, groupRosterLevel);
+            decimal[] groupRosterVector = rosterVector.Shrink(groupRosterLevel);
 
             return new Identity(groupId, groupRosterVector);
         }
@@ -1160,7 +1094,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region AnsweringQuestions
 
-        public void AnswerTextQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
+        public void AnswerTextQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
@@ -1176,7 +1110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerNumericRealQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal answer)
+        public void AnswerNumericRealQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal answer)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1194,7 +1128,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer)
+        public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1214,7 +1148,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerPictureQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string pictureFileName)
+        public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1231,7 +1165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CalculateInterviewChangesOnAnswerPictureQuestion(expressionProcessorState, userId, questionId, rosterVector, answerTime, pictureFileName, questionnaire);
         }
 
-        public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer)
+        public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1241,9 +1175,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState);
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => AreEqual(question, answeredQuestion)
+                (currentState, question) => question == answeredQuestion
                     ? answer
-                    : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+                    : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -1253,7 +1187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedValues)
+        public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedValues)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1264,9 +1198,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState);
 
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => AreEqual(question, answeredQuestion)
+                (currentState, question) => question == answeredQuestion
                     ? selectedValues
-                    : GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+                    : this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -1281,7 +1215,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfInterviewHardDeleted();
         }
 
-        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
+        public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1306,7 +1240,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
+        public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer)
         {
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
@@ -1322,7 +1256,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal selectedValue)
+        public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
         {
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
@@ -1339,7 +1273,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerTextListQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
+        public void AnswerTextListQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime,
             Tuple<decimal, string>[] answers)
         {
             ThrowIfInterviewHardDeleted();
@@ -1349,9 +1283,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, answers);
 
-            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => AreEqual(question, answeredQuestion) ?
+            Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => question == answeredQuestion ?
                 answers :
-                GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
+                this.GetEnabledQuestionAnswerSupportedInExpressions(this.interviewState, question, questionnaire);
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -1361,7 +1295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude,
+        public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
             ThrowIfInterviewHardDeleted();
@@ -1378,7 +1312,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        private void CalculateInterviewChangesOnAnswerPictureQuestion(IInterviewExpressionStateV4 expressionProcessorState, Guid userId, Guid questionId, decimal[] rosterVector,
+        private void CalculateInterviewChangesOnAnswerPictureQuestion(IInterviewExpressionStateV4 expressionProcessorState, Guid userId, Guid questionId, RosterVector rosterVector,
             DateTime answerTime, string pictureFileName, IQuestionnaire questionnaire)
         {
             expressionProcessorState.UpdateMediaAnswer(questionId, rosterVector, pictureFileName);
@@ -1390,7 +1324,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyInterviewChanges(interviewChanges);
         }
 
-        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
+        public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
         {
             ThrowIfInterviewHardDeleted();
             var answeredQuestion = new Identity(questionId, rosterVector);
@@ -1417,7 +1351,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #endregion
 
-        public void RemoveAnswer(Guid questionId, decimal[] rosterVector, Guid userId, DateTime removeTime)
+        public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
             ThrowIfInterviewHardDeleted();
 
@@ -1463,7 +1397,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(this.status, command.Comment));
         }
 
-        public void CommentAnswer(Guid userId, Guid questionId, decimal[] rosterVector, DateTime commentTime, string comment)
+        public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
         {
             ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1473,7 +1407,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
-        public void SetFlagToAnswer(Guid userId, Guid questionId, decimal[] rosterVector)
+        public void SetFlagToAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
             ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1483,7 +1417,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
 
-        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, decimal[] rosterVector)
+        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
         {
             ThrowIfInterviewHardDeleted();
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1738,7 +1672,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 Guid questionId = answerDto.Id;
                 QuestionType questionType = questionnaire.GetQuestionType(questionId);
-                decimal[] rosterVector = answerDto.QuestionRosterVector;
+                RosterVector rosterVector = answerDto.QuestionRosterVector;
                 object answer = answerDto.Answer;
 
                 switch (questionType)
@@ -2192,7 +2126,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region CheckInvariants
 
-        private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[][] selectedRosterVectors, IQuestionnaire questionnaire,
+        private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[][] selectedRosterVectors, IQuestionnaire questionnaire,
     Identity answeredQuestion)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2213,7 +2147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedRosterVectors.Length, questionnaire);
         }
 
-        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[] selectedRosterVector, IQuestionnaire questionnaire,
+        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedRosterVector, IQuestionnaire questionnaire,
     Identity answeredQuestion)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2230,7 +2164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
         }
 
-        private void CheckNumericRealQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal answer,
+        private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal answer,
            IQuestionnaire questionnaire,
            Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
@@ -2245,7 +2179,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckDateTimeQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+        private void CheckDateTimeQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2255,7 +2189,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
-        private void CheckSingleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal selectedValue,
+        private void CheckSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal selectedValue,
             IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
@@ -2268,7 +2202,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
-        private void CheckMultipleOptionQuestionInvariants(Guid questionId, decimal[] rosterVector, decimal[] selectedValues,
+        private void CheckMultipleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedValues,
             IQuestionnaire questionnaire, Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState,
             bool applyStrongChecks = true)
         {
@@ -2289,7 +2223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckTextQuestionInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+        private void CheckTextQuestionInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
             Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2299,7 +2233,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
-        private void CheckNumericIntegerQuestionInvariants(Guid questionId, decimal[] rosterVector, int answer, IQuestionnaire questionnaire,
+        private void CheckNumericIntegerQuestionInvariants(Guid questionId, RosterVector rosterVector, int answer, IQuestionnaire questionnaire,
             Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2318,7 +2252,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckTextListInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
+        private void CheckTextListInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             InterviewStateDependentOnAnswers currentInterviewState, Tuple<decimal, string>[] answers, bool applyStrongChecks = true)
         {
             this.ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2340,7 +2274,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckGpsCoordinatesInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
+        private void CheckGpsCoordinatesInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, Identity answeredQuestion,
             InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2350,7 +2284,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfQuestionOrParentGroupIsDisabled(currentInterviewState, answeredQuestion, questionnaire);
         }
 
-        private void CheckQRBarcodeInvariants(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire,
+        private void CheckQRBarcodeInvariants(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire,
          Identity answeredQuestion, InterviewStateDependentOnAnswers currentInterviewState, bool applyStrongChecks = true)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
@@ -2366,7 +2300,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         // triggers roster
         private InterviewChanges CalculateInterviewChangesOnAnswerNumericIntegerQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, int answer,
+            Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
@@ -2382,7 +2316,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (currentstate, groupId, groupOuterRosterVector)
                     => isRoster(groupId, groupOuterRosterVector)
                         ? rosterInstanceIds
-                        : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
+                        : state.GetRosterInstanceIds(groupId, groupOuterRosterVector);
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector, rosterInstanceIds, null, questionnaire, getAnswer);
 
@@ -2464,7 +2398,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state,
-            Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime,
+            Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime,
             decimal[] selectedValues, Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer,
             IQuestionnaire questionnaire)
         {
@@ -2485,7 +2419,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (currentState, groupId, groupOuterRosterVector)
                     => isRoster(groupId, groupOuterRosterVector)
                         ? rosterInstanceIds
-                        : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
+                        : state.GetRosterInstanceIds(groupId, groupOuterRosterVector);
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(state,
                 questionId, rosterVector, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, getAnswer);
@@ -2554,7 +2488,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerTextListQuestion(IInterviewExpressionStateV4 expressionProcessorState, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers,
+            Guid questionId, RosterVector rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer, IQuestionnaire questionnaire)
         {
             var selectedValues = answers.Select(x => x.Item1).ToArray();
@@ -2573,7 +2507,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (currentState, groupId, groupOuterRosterVector)
                     => isRoster(groupId, groupOuterRosterVector)
                         ? rosterInstanceIds
-                        : GetRosterInstanceIds(this.interviewState, groupId, groupOuterRosterVector);
+                        : this.interviewState.GetRosterInstanceIds(groupId, groupOuterRosterVector);
 
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
 
@@ -2640,7 +2574,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         // do not triggers roster
         private InterviewChanges CalculateInterviewChangesOnAnswerTextQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
+            Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
         {
             expressionProcessorState.UpdateTextAnswer(questionId, rosterVector, answer);
 
@@ -2648,7 +2582,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerDateTimeQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
+            Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer, IQuestionnaire questionnaire)
         {
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
 
@@ -2658,7 +2592,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerNumericRealQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector,
+            Guid questionId, RosterVector rosterVector,
             DateTime answerTime, decimal answer, IQuestionnaire questionnaire)
         {
             string answerFormattedAsRosterTitle = AnswerUtils.AnswerToString(answer);
@@ -2671,7 +2605,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private InterviewChanges CalculateInterviewChangesOnAnswerSingleOptionQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state,
             Guid userId,
             Guid questionId,
-            decimal[] rosterVector,
+            RosterVector rosterVector,
             DateTime answerTime,
             decimal selectedValue,
             IQuestionnaire questionnaire)
@@ -2680,15 +2614,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var questionIdentity = new Identity(questionId, rosterVector);
             var previsousAnswer = GetEnabledQuestionAnswerSupportedInExpressions(state, questionIdentity, questionnaire);
-            bool answerChanged = WasQuestionAnswered(state, questionIdentity) && (decimal?)previsousAnswer != (decimal?)selectedValue;
+            bool answerChanged = state.WasQuestionAnswered(questionIdentity) && (decimal?)previsousAnswer != (decimal?)selectedValue;
 
             var answersToRemoveByCascading = answerChanged ? this.GetQuestionsToRemoveAnswersFromDependingOnCascading(questionId, rosterVector, questionnaire, state) : Enumerable.Empty<Identity>();
 
             var cascadingQuestionsToDisable = questionnaire.GetCascadingQuestionsThatDirectlyDependUponQuestion(questionId)
                 .Where(question => !questionnaire.DoesCascadingQuestionHaveOptionsForParentValue(question, selectedValue)).ToList();
 
-            var cascadingQuestionsToDisableIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                cascadingQuestionsToDisable, rosterVector, questionnaire, GetRosterInstanceIds);
+            var cascadingQuestionsToDisableIdentities = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                cascadingQuestionsToDisable, rosterVector, questionnaire);
 
             expressionProcessorState.UpdateSingleOptionAnswer(questionId, rosterVector, selectedValue);
             answersToRemoveByCascading.ToList().ForEach(x => expressionProcessorState.UpdateSingleOptionAnswer(x.Id, x.RosterVector, (decimal?)null));
@@ -2702,7 +2636,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerQRBarcodeQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state,
-            Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
+            Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer, IQuestionnaire questionnaire)
         {
             expressionProcessorState.UpdateQrBarcodeAnswer(questionId, rosterVector, answer);
 
@@ -2710,7 +2644,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewChanges CalculateInterviewChangesOnAnswerGeoLocationQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewStateDependentOnAnswers state, Guid userId,
-            Guid questionId, decimal[] rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
+            Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp, Identity answeredQuestion,
             IQuestionnaire questionnaire)
         {
             string answerFormattedAsRosterTitle = string.Format(CultureInfo.InvariantCulture, "[{0};{1}]", latitude, longitude);
@@ -2726,7 +2660,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private InterviewChanges CalculateInterviewChangesOnAnswerRemove(
             InterviewStateDependentOnAnswers state, Guid userId, Guid questionId,
-            decimal[] rosterVector, DateTime removeTime, IQuestionnaire questionnaire,
+            RosterVector rosterVector, DateTime removeTime, IQuestionnaire questionnaire,
             IInterviewExpressionStateV4 expressionProcessorState)
         {
             List<Guid> rosterIds = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToList();
@@ -2740,7 +2674,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 (currentstate, groupId, groupOuterRosterVector)
                     => isRoster(groupId, groupOuterRosterVector)
                         ? rosterInstanceIds
-                        : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
+                        : state.GetRosterInstanceIds(groupId, groupOuterRosterVector);
 
             RosterCalculationData rosterCalculationData = this.CalculateRosterData(state, rosterIds, rosterVector,
                 rosterInstanceIds, null, questionnaire, (s, i) => null);
@@ -2785,7 +2719,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     state,
                     new Identity(questionId, rosterVector).ToEnumerable(),
                     questionnaire,
-                    GetRosterInstanceIds);
+                    (state1, groupId1, outerRosterVector) => state1.GetRosterInstanceIds(groupId1, outerRosterVector));
 
 
             List<Identity> answersForLinkedQuestionsToRemove = Enumerable
@@ -2822,7 +2756,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return expressionProcessorState;
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(InterviewStateDependentOnAnswers state, Guid userId, Guid questionId, decimal[] rosterVector,
+        private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(InterviewStateDependentOnAnswers state, Guid userId, Guid questionId, RosterVector rosterVector,
             object answer, string answerFormattedAsRosterTitle, AnswerChangeType answerChangeType, DateTime answerTime, IQuestionnaire questionnaire,
             IInterviewExpressionStateV4 expressionProcessorState)
         {
@@ -2830,7 +2764,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 state, userId, questionId, rosterVector, answer, answerFormattedAsRosterTitle, answer == null, answerChangeType, answerTime, questionnaire, expressionProcessorState);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(InterviewStateDependentOnAnswers state, Guid userId, Guid questionId, decimal[] rosterVector,
+        private InterviewChanges CalculateInterviewChangesOnAnswerQuestion(InterviewStateDependentOnAnswers state, Guid userId, Guid questionId, RosterVector rosterVector,
             object answer, string answerFormattedAsRosterTitle, bool isNewAnswerEmpty, AnswerChangeType answerChangeType, DateTime answerTime, IQuestionnaire questionnaire,
             IInterviewExpressionStateV4 expressionProcessorState)
         {
@@ -2852,7 +2786,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         state,
                         new Identity(questionId, rosterVector).ToEnumerable(), 
                         questionnaire,
-                        GetRosterInstanceIds)
+                        (state1, groupId, outerRosterVector) => state1.GetRosterInstanceIds(groupId, outerRosterVector))
                     : Enumerable.Empty<Identity>();
 
             List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
@@ -2861,7 +2795,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     enablementChanges.GroupsToBeDisabled,
                     enablementChanges.QuestionsToBeDisabled,
                     questionnaire,
-                    GetRosterInstanceIds);
+                    (state2, groupId1, outerRosterVector1) => state2.GetRosterInstanceIds(groupId1, outerRosterVector1));
 
             List<Identity> answersForLinkedQuestionsToRemove = Enumerable
                 .Union(answersForLinkedQuestionsToRemoveByEmptyAnswer, answersForLinkedQuestionsToRemoveByDisabling)
@@ -2872,7 +2806,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
             };
 
-            var substitutedQuestions = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, GetRosterInstanceIds));
+            var substitutedQuestions = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, (state3, groupId2, outerRosterVector2) => state3.GetRosterInstanceIds(groupId2, outerRosterVector2)));
 
             return new InterviewChanges(
                 interviewByAnswerChange,
@@ -2885,8 +2819,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 substitutedQuestions);
         }
 
-        private IEnumerable<Identity> CalculateChangesInSubstitutedQuestions(Guid questionId, 
-            decimal[] rosterVector, 
+        private IEnumerable<Identity> CalculateChangesInSubstitutedQuestions(Guid questionId,
+            RosterVector rosterVector, 
             IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds)
         {
@@ -2901,10 +2835,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return instances;
         }
 
-        private IEnumerable<Identity> GetQuestionsToRemoveAnswersFromDependingOnCascading(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
+        private IEnumerable<Identity> GetQuestionsToRemoveAnswersFromDependingOnCascading(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire, InterviewStateDependentOnAnswers state)
         {
             IEnumerable<Guid> dependentQuesions = questionnaire.GetCascadingQuestionsThatDependUponQuestion(questionId);
-            var result = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire, GetRosterInstanceIds);
+            var result = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, dependentQuesions, rosterVector, questionnaire);
 
             foreach (var identity in result)
             {
@@ -2918,13 +2852,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void CalculateChangesByFeaturedQuestion(IInterviewExpressionStateV4 expressionProcessorState, InterviewChangeStructures changeStructures, Guid userId,
             IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
-            DateTime answersTime, Dictionary<Identity, object> newAnswers, decimal[] rosterVector = null)
+            DateTime answersTime, Dictionary<Identity, object> newAnswers, RosterVector rosterVector = null)
         {
             var currentQuestionRosterVector = rosterVector ?? EmptyRosterVector;
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer =
-                (currentState, question) => newAnswers.Any(x => AreEqual(question, x.Key))
-                    ? newAnswers.SingleOrDefault(x => AreEqual(question, x.Key)).Value
-                    : GetEnabledQuestionAnswerSupportedInExpressions(changeStructures.State, question, questionnaire);
+                (currentState, question) => newAnswers.Any(x => question == x.Key)
+                    ? newAnswers.SingleOrDefault(x => question == x.Key).Value
+                    : this.GetEnabledQuestionAnswerSupportedInExpressions(changeStructures.State, question, questionnaire);
 
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
             {
@@ -3014,21 +2948,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<Guid> fixedRosterIds = questionnaire.GetFixedRosterGroups().ToList();
 
-            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds,
-                questionnaire);
-
-            Func<Guid, decimal[], bool> isFixedRoster =
-                (groupId, groupOuterScopeRosterVector) =>
-                    fixedRosterIds.Contains(groupId) && AreEqualRosterVectors(groupOuterScopeRosterVector, outerRosterVector);
+            Dictionary<Guid, Dictionary<decimal, string>> rosterTitlesGroupedByRosterId = CalculateFixedRosterData(fixedRosterIds,                 questionnaire);
 
             Func<Guid, ConcurrentHashSet<decimal>> getFixedRosterInstanceIds =
                 fixedRosterId => new ConcurrentHashSet<decimal>(rosterTitlesGroupedByRosterId[fixedRosterId].Keys.ToList());
-
-            Func<InterviewStateDependentOnAnswers, Guid, decimal[], ConcurrentHashSet<decimal>> getRosterInstanceIds =
-                (currentState, groupId, groupOuterRosterVector)
-                    => isFixedRoster(groupId, groupOuterRosterVector)
-                        ? getFixedRosterInstanceIds(groupId)
-                        : GetRosterInstanceIds(state, groupId, groupOuterRosterVector);
 
             return fixedRosterIds
                 .Select(fixedRosterId => this.CalculateRosterData(state,
@@ -3114,7 +3037,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private RosterCalculationData CalculateRosterDataWithRosterTitlesFromMultipleOptionsQuestions(
             InterviewStateDependentOnAnswers state,
-            Guid questionId, decimal[] rosterVector, List<Guid> rosterIds,
+            Guid questionId, RosterVector rosterVector, List<Guid> rosterIds,
             Dictionary<decimal, int?> rosterInstanceIdsWithSortIndexes, IQuestionnaire questionnaire,
             Func<InterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
@@ -3243,25 +3166,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var outerVectorForExtend in outerVectorsForExtend)
                 {
                     var rosterInstanceIdsBeingAdded = GetRosterInstanceIdsBeingAdded(
-                        existingRosterInstanceIds: GetRosterInstanceIds(state, rosterId, outerVectorForExtend),
+                        existingRosterInstanceIds: state.GetRosterInstanceIds(rosterId, outerVectorForExtend),
                         newRosterInstanceIds: rosterInstanceIds).Select(rosterInstanceId =>
                             new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId,
                                 sortIndex: rosterInstanceIdsWithSortIndexes[rosterInstanceId])).ToList();
 
-                    rosterInstancesToAdd.AddRange(
-                        rosterInstanceIdsBeingAdded);
+                    rosterInstancesToAdd.AddRange(rosterInstanceIdsBeingAdded);
 
                     var listOfRosterInstanceIdsForRemove =
                         GetRosterInstanceIdsBeingRemoved(
-                            GetRosterInstanceIds(state, rosterId, outerVectorForExtend), rosterInstanceIds).Select(rosterInstanceId =>
+                            state.GetRosterInstanceIds(rosterId, outerVectorForExtend), rosterInstanceIds).Select(rosterInstanceId =>
                                 new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId)).ToList();
 
                     rosterInstancesToRemove.AddRange(listOfRosterInstanceIdsForRemove);
 
                     foreach (var rosterInstanceIdBeingAdded in rosterInstanceIdsBeingAdded)
                     {
-                        var outerRosterVector = ExtendRosterVectorWithOneValue(rosterInstanceIdBeingAdded.OuterRosterVector,
-                            rosterInstanceIdBeingAdded.RosterInstanceId);
+                        var outerRosterVector = ((RosterVector) rosterInstanceIdBeingAdded.OuterRosterVector).ExtendWithOneCoordinate(rosterInstanceIdBeingAdded.RosterInstanceId);
                         var calculateDynamicRostersData = this.CalculateDynamicRostersData(state, questionnaire, outerRosterVector, rosterId, getAnswer);
                         rosterInstantiatesFromNestedLevels.AddRange(calculateDynamicRostersData);
                     }
@@ -3288,7 +3209,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var nestedRosterId in nestedRosterIds)
             {
                 Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(nestedRosterId).ToArray();
-                IEnumerable<RosterVector> outerVectorsForExtend = ExtendRosterVector(state, nearestToOuterRosterVector, rosterGroupsStartingFromTop.Length, rosterGroupsStartingFromTop, GetRosterInstanceIds);
+                IEnumerable<RosterVector> outerVectorsForExtend = this.ExtendRosterVector(state, nearestToOuterRosterVector, rosterGroupsStartingFromTop.Length, rosterGroupsStartingFromTop, (state1, groupId, outerRosterVector) => state1.GetRosterInstanceIds(groupId, outerRosterVector));
 
                 foreach (RosterVector outerVectorForExtend in outerVectorsForExtend)
                 {
@@ -3308,7 +3229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             rosterIdForDelete.OuterRosterVector,
                             questionnaire));
 
-                    rosterInstantiatesFromNestedLevels.Add(CalculateNestedRostersDataForDelete(state, questionnaire, nestedRosterId,
+                    rosterInstantiatesFromNestedLevels.Add(this.CalculateNestedRostersDataForDelete(state, questionnaire, nestedRosterId,
                         new List<decimal> { rosterIdForDelete.RosterInstanceId }, outerVectorForExtend));
                 }
             }
@@ -3330,7 +3251,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstantiatesFromNestedLevels);
         }
       
-        private static List<RosterIdentity> CalculateRosterInstancesWhichTitlesAreAffected(Guid questionId, decimal[] rosterVector,
+        private static List<RosterIdentity> CalculateRosterInstancesWhichTitlesAreAffected(Guid questionId, RosterVector rosterVector,
             IQuestionnaire questionnaire)
         {
             if (!questionnaire.DoesQuestionSpecifyRosterTitle(questionId))
@@ -3360,7 +3281,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 throw new InterviewException(string.Format("Question with id '{0}' is not found. InterviewId: {1}", questionId, EventSourceId));
         }
 
-        private void ThrowIfRosterVectorIsIncorrect(InterviewStateDependentOnAnswers state, Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
+        private void ThrowIfRosterVectorIsIncorrect(InterviewStateDependentOnAnswers state, Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
             ThrowIfRosterVectorIsNull(questionId, rosterVector, questionnaire);
 
@@ -3402,7 +3323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ThrowIfRosterVectorIsNull(Guid questionId, decimal[] rosterVector, IQuestionnaire questionnaire)
+        private void ThrowIfRosterVectorIsNull(Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
             if (rosterVector == null)
                 throw new InterviewException(string.Format(
@@ -3411,7 +3332,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void ThrowIfRosterVectorLengthDoesNotCorrespondToParentRosterGroupsCount(
-            Guid questionId, decimal[] rosterVector, Guid[] parentRosterGroups, IQuestionnaire questionnaire)
+            Guid questionId, RosterVector rosterVector, Guid[] parentRosterGroups, IQuestionnaire questionnaire)
         {
             if (!DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(rosterVector, parentRosterGroups))
                 throw new InterviewException(string.Format(
@@ -3421,7 +3342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private void ThrowIfSomeOfRosterVectorValuesAreInvalid(InterviewStateDependentOnAnswers state,
-            Guid questionId, decimal[] rosterVector, Guid[] parentRosterGroupIdsStartingFromTop, IQuestionnaire questionnaire)
+            Guid questionId, RosterVector rosterVector, Guid[] parentRosterGroupIdsStartingFromTop, IQuestionnaire questionnaire)
         {
             for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
             {
@@ -3429,10 +3350,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid rosterGroupId = parentRosterGroupIdsStartingFromTop[indexOfRosterVectorElement];
 
                 int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
-                decimal[] rosterGroupOuterScopeRosterVector = this.ShrinkRosterVector(rosterVector, rosterGroupOuterScopeRosterLevel);
-                ConcurrentHashSet<decimal> rosterInstanceIds = GetRosterInstanceIds(state,
-                    groupId: rosterGroupId,
-                    outerRosterVector: rosterGroupOuterScopeRosterVector);
+                decimal[] rosterGroupOuterScopeRosterVector = rosterVector.Shrink(rosterGroupOuterScopeRosterLevel);
+                ConcurrentHashSet<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupId, rosterGroupOuterScopeRosterVector);
 
                 if (!rosterInstanceIds.Contains(rosterInstanceId))
                     throw new InterviewException(string.Format(
@@ -3445,7 +3364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected bool DoesRosterInstanceExist(InterviewStateDependentOnAnswers state, decimal[] rosterVector, Guid[] parentRosterIdsStartingFromTop)
+        protected bool DoesRosterInstanceExist(InterviewStateDependentOnAnswers state, RosterVector rosterVector, Guid[] parentRosterIdsStartingFromTop)
         {
             for (int indexOfRosterVectorElement = 0; indexOfRosterVectorElement < rosterVector.Length; indexOfRosterVectorElement++)
             {
@@ -3453,10 +3372,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid rosterGroupId = parentRosterIdsStartingFromTop[indexOfRosterVectorElement];
 
                 int rosterGroupOuterScopeRosterLevel = indexOfRosterVectorElement;
-                decimal[] rosterGroupOuterScopeRosterVector = this.ShrinkRosterVector(rosterVector, rosterGroupOuterScopeRosterLevel);
-                ConcurrentHashSet<decimal> rosterInstanceIds = GetRosterInstanceIds(state,
-                    groupId: rosterGroupId,
-                    outerRosterVector: rosterGroupOuterScopeRosterVector);
+                decimal[] rosterGroupOuterScopeRosterVector = rosterVector.Shrink(rosterGroupOuterScopeRosterLevel);
+                ConcurrentHashSet<decimal> rosterInstanceIds = state.GetRosterInstanceIds(rosterGroupId, rosterGroupOuterScopeRosterVector);
 
                 var rosterInstanceExists = rosterInstanceIds.Contains(rosterInstanceId);
                 if (!rosterInstanceExists)
@@ -3466,7 +3383,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return true;
         }
 
-        protected static bool DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(decimal[] rosterVector, Guid[] parentRosterGroups)
+        protected static bool DoesRosterVectorLengthCorrespondToParentRosterGroupsCount(RosterVector rosterVector, Guid[] parentRosterGroups)
         {
             return rosterVector.Length == parentRosterGroups.Length;
         }
@@ -3506,13 +3423,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private void ThrowIfLinkedQuestionDoesNotHaveAnswer(InterviewStateDependentOnAnswers state, Identity answeredQuestion,
             Identity answeredLinkedQuestion, IQuestionnaire questionnaire)
         {
-            if (!WasQuestionAnswered(state, answeredLinkedQuestion))
+            if (!state.WasQuestionAnswered(answeredLinkedQuestion))
             {
                 throw new InterviewException(string.Format(
                     "Could not set answer for question {0} because his dependent linked question {1} does not have answer. InterviewId: {2}",
                     FormatQuestionForException(answeredQuestion, questionnaire),
                     FormatQuestionForException(answeredLinkedQuestion, questionnaire),
-                    EventSourceId));
+                    this.EventSourceId));
             }
         }
 
@@ -3527,7 +3444,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     FormatQuestionForException(questionId, questionnaire), value, JoinDecimalsWithComma(availableValues), EventSourceId));
         }
 
-        private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(InterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, decimal[] rosterVector, decimal value, IQuestionnaire questionnaire)
+        private void ThrowIfCascadingQuestionValueIsNotOneOfParentAvailableOptions(InterviewStateDependentOnAnswers interviewState, Identity answeredQuestion, RosterVector rosterVector, decimal value, IQuestionnaire questionnaire)
         {
             var questionId = answeredQuestion.Id;
             Guid? cascadingId = questionnaire.GetCascadingQuestionParentId(questionId);
@@ -3577,13 +3494,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ThrowIfQuestionOrParentGroupIsDisabled(InterviewStateDependentOnAnswers state, Identity question, IQuestionnaire questionnaire)
         {
-            if (IsQuestionDisabled(state, question))
+            if (state.IsQuestionDisabled(question))
                 throw new InterviewException(string.Format(
                     "Question {1} is disabled by it's following enablement condition:{0}{2}{0}InterviewId: {3}",
                     Environment.NewLine,
                     FormatQuestionForException(question, questionnaire),
                     questionnaire.GetCustomEnablementConditionForQuestion(question.Id),
-                    EventSourceId));
+                    this.EventSourceId));
 
             IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
             IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(parentGroupIds,
@@ -3591,14 +3508,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             foreach (Identity parentGroup in parentGroups)
             {
-                if (IsGroupDisabled(state, parentGroup))
+                if (state.IsGroupDisabled(parentGroup))
                     throw new InterviewException(string.Format(
                         "Question {1} is disabled because parent group {2} is disabled by it's following enablement condition:{0}{3}{0}InterviewId: {4}",
                         Environment.NewLine,
                         FormatQuestionForException(question, questionnaire),
                         FormatGroupForException(parentGroup, questionnaire),
                         questionnaire.GetCustomEnablementConditionForGroup(parentGroup.Id),
-                        EventSourceId));
+                        this.EventSourceId));
             }
         }
 
@@ -3791,7 +3708,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         private void ValidatePrefilledQuestions(IQuestionnaire questionnaire, Dictionary<Guid, object> answersToFeaturedQuestions,
-            decimal[] rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
+            RosterVector rosterVector = null, InterviewStateDependentOnAnswers currentInterviewState = null, bool applyStrongChecks = true)
         {
             var currentRosterVector = rosterVector ?? EmptyRosterVector;
             foreach (KeyValuePair<Guid, object> answerToFeaturedQuestion in answersToFeaturedQuestions)
@@ -3885,8 +3802,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     var underlyingChildGroupIds = questionnaire.GetAllUnderlyingChildGroups(rosterIdentity.GroupId).ToList();
 
-                    var underlyingGroupInstances = GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state,
-                        underlyingChildGroupIds, rosterAsGroupIdentity.RosterVector, questionnaire, GetRosterInstanceIds)
+                    var underlyingGroupInstances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(state,
+                        underlyingChildGroupIds, rosterAsGroupIdentity.RosterVector, questionnaire, (state1, groupId, outerRosterVector) => state1.GetRosterInstanceIds(groupId, outerRosterVector))
                         .ToList();
 
                     var underlyingDisabledQuestionsByRemovedRosterInstances = (
@@ -3919,13 +3836,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                      IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
 
-                     IEnumerable<Identity> underlyingQuestionInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                         underlyingQuestionIds, nearestToOuterRosterVector, questionnaire, GetRosterInstanceIds);
+                     IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                         underlyingQuestionIds, nearestToOuterRosterVector, questionnaire);
 
                      var underlyingDisabledQuestionsByRemovedRosterInstances = (
                          from question in underlyingQuestionInstances
                          where rosterInstanceIdsBeingRemoved.Contains(question.RosterVector[indexOfRosterInRosterVector])
-                         where state.DisabledQuestions.Contains(ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.RosterVector))
+                         where state.DisabledQuestions.Contains(ConversionHelper.ConvertIdentityToString(question))
                          select question
                          ).ToList();
 
@@ -3942,19 +3859,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
 
-            IEnumerable<Identity> underlyingQuestionInstances = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                underlyingQuestionIds, nearestToOuterRosterVector, questionnaire, GetRosterInstanceIds);
+            IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                underlyingQuestionIds, nearestToOuterRosterVector, questionnaire);
 
             IEnumerable<Identity> underlyingQuestionsBeingRemovedByRemovedRosterInstances = (
                 from question in underlyingQuestionInstances
-                where WasQuestionAnswered(state, question)
+                where state.WasQuestionAnswered(question)
                 where rosterInstanceIdsBeingRemoved.Contains(question.RosterVector[indexOfRosterInRosterVector])
                 select question
                 ).ToList();
 
             IEnumerable<Identity> linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(state,
-                    underlyingQuestionsBeingRemovedByRemovedRosterInstances, questionnaire, GetRosterInstanceIds);
+                    underlyingQuestionsBeingRemovedByRemovedRosterInstances, questionnaire, (state2, groupId1, outerRosterVector1) => state2.GetRosterInstanceIds(groupId1, outerRosterVector1));
 
             return Enumerable.Concat(
                 underlyingQuestionsBeingRemovedByRemovedRosterInstances,
@@ -3990,7 +3907,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(state, questionnaire,
                 getRosterInstanceIds,
                 isQuestionAnswerGoingToDisappear:
-                    question => questionsToRemove.Any(questionToRemove => AreEqual(question, questionToRemove)));
+                    question => questionsToRemove.Any(questionToRemove => question == questionToRemove));
         }
 
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
@@ -4079,14 +3996,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire)
         {
             bool questionIsListedToBeDisabled =
-                questionsToBeDisabled.Any(questionToBeDisabled => AreEqual(question, questionToBeDisabled));
+                questionsToBeDisabled.Any(questionToBeDisabled => question == questionToBeDisabled);
 
             IEnumerable<Guid> parentGroupIds = questionnaire.GetAllParentGroupsForQuestion(question.Id);
             IEnumerable<Identity> parentGroups = GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(parentGroupIds,
                 question.RosterVector, questionnaire);
 
             bool someOfQuestionParentGroupsAreListedToBeDisabled = parentGroups.Any(parentGroup =>
-                groupsToBeDisabled.Any(groupToBeDisabled => AreEqual(parentGroup, groupToBeDisabled)));
+                groupsToBeDisabled.Any(groupToBeDisabled => parentGroup == groupToBeDisabled));
 
             return questionIsListedToBeDisabled || someOfQuestionParentGroupsAreListedToBeDisabled;
         }
@@ -4097,16 +4014,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .GetRostersFromTopToSpecifiedGroup(rosterId)
                 .ToList()
                 .IndexOf(rosterId);
-        }
-
-        protected static ConcurrentHashSet<decimal> GetRosterInstanceIds(InterviewStateDependentOnAnswers state, Guid groupId,
-            decimal[] outerRosterVector)
-        {
-            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
-
-            return state.RosterGroupInstanceIds.ContainsKey(groupKey)
-                ? state.RosterGroupInstanceIds[groupKey]
-                : new ConcurrentHashSet<decimal>();
         }
 
 

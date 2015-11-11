@@ -29,6 +29,25 @@ namespace WB.Core.SharedKernels.DataCollection
             return string.Format("<{0}>", string.Join("-", this.Coordinates));
         }
 
+        public RosterVector Shrink(int targetLength)
+        {
+            if (targetLength == 0)
+                return Empty;
+
+            if (targetLength == this.Length)
+                return this;
+
+            if (targetLength > this.Length)
+                throw new ArgumentException($"Cannot shrink roster vector {this} with length {this.Length} to bigger length {targetLength}.");
+
+            return this.Coordinates.Take(targetLength).ToArray();
+        }
+
+        public RosterVector ExtendWithOneCoordinate(decimal coordinate)
+        {
+            return new List<decimal>(this.Coordinates) { coordinate }.ToArray();
+        }
+
         #region Backward compatibility with decimal[]
 
         private decimal[] array;
