@@ -127,11 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-              this.transactionManagerProvider.GetTransactionManager()
-                  .ExecuteInQueryTransaction(
-                      () =>
-                          this.questionnaireExportStructureStorage.AsVersioned()
-                              .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+                BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
             if (questionnaireExportStructure == null)
                 return;
