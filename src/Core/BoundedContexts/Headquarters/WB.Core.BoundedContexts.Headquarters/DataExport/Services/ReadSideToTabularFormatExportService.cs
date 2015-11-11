@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -39,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
-            ISerializer serializer,
             InterviewDataExportSettings interviewDataExportSettings,
             IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage, 
@@ -60,7 +58,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 fileSystemAccessor, 
                 interviewDatas, 
                 exportViewFactory, 
-                serializer, 
                 csvWriter);
 
             this.commentsExporter = new CommentsExporter(interviewDataExportSettings, 

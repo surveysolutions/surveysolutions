@@ -5,7 +5,6 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -26,7 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly IExportViewFactory exportViewFactory;
-        private readonly ISerializer serializer;
         private readonly ICsvWriter csvWriter;
 
         public InterviewsExporter(ITransactionManager transactionManager, 
@@ -34,7 +32,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IFileSystemAccessor fileSystemAccessor, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IExportViewFactory exportViewFactory, 
-            ISerializer serializer, 
             ICsvWriter csvWriter)
         {
             this.transactionManager = transactionManager;
@@ -42,10 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewDatas = interviewDatas;
             this.exportViewFactory = exportViewFactory;
-            this.serializer = serializer;
             this.csvWriter = csvWriter;
         }
-
 
         public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure,
             string basePath, IProgress<int> progress)
@@ -139,11 +134,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interviewExportStructure, questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
 
                 var result = new Dictionary<string, List<string[]>>();
-                Dictionary<string, string[]> deserializedExportedData =
-                    this.serializer.Deserialize<Dictionary<string, string[]>>(exportedData.Data);
-                foreach (var levelName in deserializedExportedData.Keys)
+
+                foreach (var levelName in exportedData.Data.Keys)
                 {
-                    foreach (var dataByLevel in deserializedExportedData[levelName])
+                    foreach (var dataByLevel in exportedData.Data[levelName])
                     {
                         if (!result.ContainsKey(levelName))
                         {
@@ -202,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
-                Data = this.serializer.SerializeToByteArray(interviewData),
+                Data = interviewData,
             };
 
             return interviewExportedData;
