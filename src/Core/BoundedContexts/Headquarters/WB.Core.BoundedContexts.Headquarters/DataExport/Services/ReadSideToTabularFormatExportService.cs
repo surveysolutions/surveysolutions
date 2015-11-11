@@ -12,7 +12,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -29,12 +28,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
 
-        private readonly IExportViewFactory exportViewFactory;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
         private readonly ITransactionManager transactionManager;
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
@@ -45,13 +43,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IExportViewFactory exportViewFactory, 
             ITransactionManager transactionManager, 
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage)
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
-            this.exportViewFactory = exportViewFactory;
             this.transactionManager = transactionManager;
-            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
             this.interviewsExporter = new InterviewsExporter(transactionManager, 
                 interviewSummaries, 
@@ -112,7 +109,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-                BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+              this.transactionManager
+                  .ExecuteInQueryTransaction(
+                      () =>
+                          this.questionnaireExportStructureStorage.AsVersioned()
+                              .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
 
             if (questionnaireExportStructure == null)
                 return;
@@ -162,12 +163,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            QuestionnaireDocumentVersioned questionnaire =
-                this.transactionManager.ExecuteInQueryTransaction(() => 
-                    this.questionnaireDocumentVersionedStorage.AsVersioned()
-                        .Get(questionnaireId.FormatGuid(), questionnaireVersion));
-            var questionnaireExportStructure =
-                this.exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.Questionnaire, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure =
+             this.transactionManager
+                 .ExecuteInQueryTransaction(() =>
+                         this.questionnaireExportStructureStorage.AsVersioned()
+                             .Get(questionnaireId.FormatGuid(), questionnaireVersion));
             return questionnaireExportStructure;
         }
     }
