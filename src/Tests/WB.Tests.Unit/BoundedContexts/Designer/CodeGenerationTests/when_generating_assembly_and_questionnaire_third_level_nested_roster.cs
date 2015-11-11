@@ -34,8 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 var roster5 = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 QuestionnaireDocument questionnaireDocument =
-                    Create.QuestionnaireDocument(
-                        Guid.Parse("31111111111111111111111111111113"),
+                    Create.QuestionnaireDocument(Guid.Parse("31111111111111111111111111111113"),
                         Create.Chapter(children: new List<IComposite>
                                 {
                                     Create.NumericIntegerQuestion(id: level1QuestionId, variable: "num1"),

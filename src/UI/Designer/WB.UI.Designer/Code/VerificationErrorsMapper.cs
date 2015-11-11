@@ -47,6 +47,18 @@ namespace WB.UI.Designer.Code
         {
             foreach (var reference in references)
             {
+                if (reference.Type == QuestionnaireVerificationReferenceType.Macro)
+                {
+                    var macro = questionnaireDocument.Macros.First(x => x.Key == reference.Id);
+                    yield return new VerificationReference
+                    {
+                        ItemId = reference.Id.FormatGuid(),
+                        Type = QuestionnaireVerificationReferenceType.Macro,
+                        Variable = macro.Value.Name,
+                        Title = macro.Value.Content
+                    };
+                    continue;
+                }
                 var item = questionnaireDocument.Find<IComposite>(reference.Id);
                 var parent = item;
                 while (parent != null)

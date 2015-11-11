@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -49,7 +50,11 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
 
                     {"PasteAfter", typeof(PasteAfterCommand) },
-                    {"PasteInto", typeof(PasteIntoCommand) }
+                    {"PasteInto", typeof(PasteIntoCommand) },
+                    //Macro commands
+                    { "AddMacros", typeof (AddMacroCommand) },
+                    { "UpdateMacros", typeof (UpdateMacroCommand) },
+                    { "DeleteMacros", typeof (DeleteMacroCommand) }
                 };
             }
         }

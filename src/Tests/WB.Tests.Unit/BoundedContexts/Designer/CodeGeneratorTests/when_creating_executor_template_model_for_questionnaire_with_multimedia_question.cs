@@ -8,7 +8,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
 {
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     },
                 });
 
-            generator = CreateCodeGenerator();
+            generator = Create.CodeGenerator();
         };
 
         Because of = () =>

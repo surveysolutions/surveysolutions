@@ -428,6 +428,10 @@
     <Content Include="Scripts\components\moment-duration-format.js" />
     <EmbeddedResource Include="Scripts\components\query-string.js" />
     <Content Include="Scripts\editForm.js" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -449,6 +453,8 @@
     <Content Include="Scripts\viewmodels\pages\login.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
@@ -464,6 +470,8 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
+    <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
