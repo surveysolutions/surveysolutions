@@ -167,6 +167,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 totalInterviewsProcessed++;
                 progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
+
+            progress.Report(100);
         }
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
         {

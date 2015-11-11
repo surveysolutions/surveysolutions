@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -87,18 +88,40 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
-            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, progress);
-            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, progress);
-            this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, progress);
+            var exportInterviewsProgress = new Progress<int>();
+            var exportCommentsProgress = new Progress<int>();
+            var exportInterviewActionsProgress = new Progress<int>();
+
+            ProggressAggregator proggressAggregator = new ProggressAggregator();
+            proggressAggregator.Add(exportInterviewsProgress, 0.8);
+            proggressAggregator.Add(exportCommentsProgress, 0.1);
+            proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
+
+            proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
+
+            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress);
+            this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
         public void ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
-            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, progress);
-            this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, progress);
-            this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, progress);
+            var exportInterviewsProgress = new Progress<int>();
+            var exportCommentsProgress = new Progress<int>();
+            var exportInterviewActionsProgress = new Progress<int>();
+
+            ProggressAggregator proggressAggregator = new ProggressAggregator();
+            proggressAggregator.Add(exportInterviewsProgress, 0.8);
+            proggressAggregator.Add(exportCommentsProgress, 0.1);
+            proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
+
+            proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
+
+            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, exportCommentsProgress);
+            this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
