@@ -7,6 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public interface IReadOnlyInterviewStateDependentOnAnswers
     {
+        IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds);
+
         bool IsGroupDisabled(Identity group);
         bool IsQuestionDisabled(Identity question);
         bool WasQuestionAnswered(Identity question);
