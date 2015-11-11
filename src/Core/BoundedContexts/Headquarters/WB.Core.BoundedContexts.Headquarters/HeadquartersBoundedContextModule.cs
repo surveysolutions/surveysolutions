@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
             this.Bind<IMetadataExportService>().To<MetadataExportService>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            this.Bind<IDataExportQueue>().To<DataExportQueue>().InSingletonScope();
+            this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
 
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();

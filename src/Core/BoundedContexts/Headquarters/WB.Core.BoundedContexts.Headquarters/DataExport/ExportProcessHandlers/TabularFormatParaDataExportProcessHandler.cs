@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
 
-        private readonly IDataExportQueue dataExportQueue;
+        private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IParaDataAccessor paraDataAccessor;
 
         private readonly string interviewParaDataEventHandlerName = typeof(InterviewParaDataEventHandler).Name;
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             InterviewDataExportSettings interviewDataExportSettings,
             ITransactionManagerProvider transactionManagerProvider,
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,
-            IDataExportQueue dataExportQueue, IParaDataAccessor paraDataAccessor)
+            IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.transactionManagerProvider = transactionManagerProvider;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
-            this.dataExportQueue = dataExportQueue;
+            this.dataExportProcessesService = dataExportProcessesService;
             this.paraDataAccessor = paraDataAccessor;
         }
 
@@ -108,14 +108,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.paraDataAccessor.ArchiveParaDataExport();
 
-            this.dataExportQueue.UpdateDataExportProgress(process.DataExportProcessId, 100);
+            this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, 100);
         }
 
         private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
         {
             this.paraDataAccessor.PersistParaDataExport();
             this.UpdateLastHandledEventPosition(eventPosition);
-            this.dataExportQueue.UpdateDataExportProgress(dataExportProcessId,
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessId,
                 Math.Min((int)(((double)countOfProcessedEvents / totatEventCount) * 100), 100));
         }
 

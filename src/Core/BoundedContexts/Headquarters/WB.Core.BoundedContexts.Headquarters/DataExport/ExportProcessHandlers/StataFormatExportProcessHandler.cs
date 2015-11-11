@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly string pathToExportedData;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
+        private readonly IDataExportProcessesService dataExportProcessesService;
 
         public StataFormatExportProcessHandler(
             IFileSystemAccessor fileSystemAccessor, 
@@ -29,13 +30,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IArchiveUtils archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
-            InterviewDataExportSettings interviewDataExportSettings)
+            InterviewDataExportSettings interviewDataExportSettings, IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabularFormatExportService = tabularFormatExportService;
             this.archiveUtils = archiveUtils;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
+            this.dataExportProcessesService = dataExportProcessesService;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -51,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.ClearFolder(folderForDataExport);
 
             var exportProggress = new Progress<int>();
-            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent);
 
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
@@ -74,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.ClearFolder(folderForDataExport);
 
             var exportProggress = new Progress<int>();
-            exportProggress.ProgressChanged += (sender, donePercent) => process.ProgressInPercents = donePercent;
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent);
 
             this.tabularFormatExportService
                 .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
