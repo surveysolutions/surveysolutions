@@ -14,13 +14,19 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
+
+using Microsoft.Practices.ServiceLocation;
+
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
 using NHibernate;
 using NSubstitute;
 using Quartz;
+
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -153,6 +159,21 @@ namespace WB.Tests.Unit
             public static ImportFromSupervisor ImportFromSupervisor(IQuestionnaireDocument source)
             {
                 return new ImportFromSupervisor(source);
+            }
+
+            public static AddMacroCommand AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
+            {
+                return new AddMacroCommand(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            }
+
+            public static DeleteMacroCommand DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
+            {
+                return new DeleteMacroCommand(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            }
+
+            internal static UpdateMacroCommand UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
+            {
+                return new UpdateMacroCommand(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
         }
 
@@ -488,6 +509,26 @@ namespace WB.Tests.Unit
                     Guid.NewGuid(),
                     questionnaireId ?? Guid.NewGuid(),
                     questionnaireVersion ?? 1);
+            }
+
+            public static IPublishedEvent<MacroAdded> MacroAdded(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
+            {
+                return new MacroAdded(entityId, responsibleId ?? Guid.NewGuid())
+                    .ToPublishedEvent(eventSourceId: questionnaireId);
+            }
+
+            public static IPublishedEvent<MacroDeleted> MacroDeleted(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
+            {
+                return new MacroDeleted(entityId, responsibleId ?? Guid.NewGuid())
+                    .ToPublishedEvent(eventSourceId: questionnaireId);
+            }
+
+            public static IPublishedEvent<MacroUpdated> MacroUpdated(Guid questionnaireId, Guid entityId, 
+                string name, string content, string description,
+                Guid? responsibleId = null)
+            {
+                return new MacroUpdated(entityId, name, content, description, responsibleId ?? Guid.NewGuid())
+                    .ToPublishedEvent(eventSourceId: questionnaireId);
             }
         }
 
@@ -1216,6 +1257,28 @@ namespace WB.Tests.Unit
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
                 Create.SubstitutionService(),
                 Create.KeywordsProvider());
+        }
+
+        public static  CodeGenerator CodeGenerator(
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            IExpressionProcessor expressionProcessor = null)
+        {
+            return new CodeGenerator(
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+        }
+
+        public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        {
+            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
+            macrosSubstitutionServiceMock.Setup(
+                x => x.SubstituteMacroses(It.IsAny<string>(), It.IsAny<QuestionnaireDocument>()))
+                .Returns((string e, QuestionnaireDocument questionnaire) =>
+                {
+                    return e;
+                });
+
+            return macrosSubstitutionServiceMock.Object;
         }
 
         public static KeywordsProvider KeywordsProvider()
@@ -2383,6 +2446,16 @@ namespace WB.Tests.Unit
         public static ReadSideSettings ReadSideSettings()
         {
             return new ReadSideSettings(readSideVersion: 0);
+        }
+
+        public static Macro Macro(string name, string content = null, string description = null)
+        {
+            return new Macro
+            {
+                Name = name,
+                Content = content,
+                Description = description
+            };
         }
     }
 }

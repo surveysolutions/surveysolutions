@@ -41,17 +41,6 @@ namespace WB.Tests.Unit
             return group;
         }
 
-        public static Group AddGroup(this Group document, Guid groupId, Propagate propagationKind = Propagate.None)
-        {
-            var group = new Group(string.Format("Group {0}", groupId))
-            {
-                PublicKey = groupId,
-                Propagated = propagationKind
-            };
-            document.Children.Add(@group);
-            return group;
-        }
-
         public static AbstractQuestion AddQuestion(this Group @group,
             Guid questionId,
             QuestionType type = QuestionType.Text,

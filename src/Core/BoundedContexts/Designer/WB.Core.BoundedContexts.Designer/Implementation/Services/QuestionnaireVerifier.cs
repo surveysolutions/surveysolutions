@@ -64,16 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.Text
         };
 
-        private static readonly IEnumerable<QuestionType> QuestionTypesValidToHaveValidationExpressions = new[]
-        {
-            QuestionType.DateTime,
-            QuestionType.Numeric,
-            QuestionType.SingleOption,
-            QuestionType.Text,
-            QuestionType.GpsCoordinates, 
-            QuestionType.MultyOption
-        };
-
         private class VerificationState
         {
             public bool HasExceededLimitByValidationExpresssionCharactersLength { get; set; }
@@ -93,13 +83,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IDesignerEngineVersionService engineVersionService;
+        private readonly IMacrosSubstitutionService macrosSubstitutionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
-        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
-            ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerEngineVersionService engineVersionService)
+        public QuestionnaireVerifier(
+            IExpressionProcessor expressionProcessor, 
+            IFileSystemAccessor fileSystemAccessor,
+            ISubstitutionService substitutionService, 
+            IKeywordsProvider keywordsProvider,
+            IExpressionProcessorGenerator expressionProcessorGenerator, 
+            IDesignerEngineVersionService engineVersionService,
+            IMacrosSubstitutionService macrosSubstitutionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -107,6 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
+            this.macrosSubstitutionService = macrosSubstitutionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -184,11 +181,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
                     Verifier<IComposite, IComposite>(QuestionnaireEntitiesShareSameInternalId, "WB0102", VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId),
 
+                    MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
+                    MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
                     VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
+                    ErrorsByMacrosWithDuplicateName,
                     ErrorsByConditionAndValidationExpressions
                 };
             }
@@ -219,6 +219,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return false;
         }
 
+
         private IEnumerable<QuestionnaireVerificationError> VerifyGpsPrefilledQuestions(QuestionnaireDocument document, VerificationState state)
         {
             var gpsPrefilledQuestions= document.Find<GpsCoordinateQuestion>(q => q.Featured).ToArray();
@@ -235,26 +236,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private static bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state)
+        private bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, QuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrEmpty(question.ValidationExpression))
                 return false;
 
-            var exceeded = question.ValidationExpression.Length > MaxExpressionLength;
+            var exceeded = macrosSubstitutionService.SubstituteMacroses(question.ValidationExpression, questionnaire).Length > MaxExpressionLength;
 
             state.HasExceededLimitByValidationExpresssionCharactersLength |= exceeded;
 
             return exceeded;
         }
 
-        private static bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state)
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state, QuestionnaireDocument questionnaire)
         {
             var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
             
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
 
-            var exceeded = customEnablementCondition.Length > MaxExpressionLength;
+            var substituteMacroses = this.macrosSubstitutionService.SubstituteMacroses(customEnablementCondition, questionnaire);
+
+            var exceeded = substituteMacroses.Length > MaxExpressionLength;
 
             state.HasExceededLimitByConditionExpresssionCharactersLength |= exceeded;
 
@@ -498,6 +501,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 select error;
         }
 
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> MacrosVerifier(
+            Func<Macro, QuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) =>
+                questionnaire
+                    .Macros
+                    .Where(entity => hasError(entity.Value, questionnaire))
+                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateMacrosReference(entity.Key)));
+        }
+
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
             Func<QuestionnaireDocument, bool> hasError, string code, string message)
         {
@@ -530,12 +543,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
-            Func<TEntity, VerificationState, bool> hasError, string code, string message)
+            Func<TEntity, VerificationState, QuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return (questionnaire, state) =>
                 questionnaire
-                    .Find<TEntity>(entity => hasError(entity, state))
+                    .Find<TEntity>(entity => hasError(entity, state, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
         }
 
@@ -559,6 +572,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
                 select new QuestionnaireVerificationError(code, message, verificationResult.ReferencedEntities.Select(CreateReference));
+        }
+
+        private static bool MacroHasEmptyName(Macro macro, QuestionnaireDocument questionnaire)
+        {
+            return string.IsNullOrWhiteSpace(macro.Name);
+        }
+
+        private static bool MacroHasInvalidName(Macro macro, QuestionnaireDocument questionnaire)
+        {
+            return !IsVariableNameValid(macro.Name);
         }
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)
@@ -1001,7 +1024,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             IEnumerable<IQuestion> incorrectReferencedQuestions = this.expressionProcessor
-                .GetIdentifiersUsedInExpression(expression)
+                .GetIdentifiersUsedInExpression(macrosSubstitutionService.SubstituteMacroses(expression, questionnaire))
                 .Select(identifier => GetQuestionByIdentifier(identifier, questionnaire))
                 .Where(referencedQuestion => referencedQuestion != null)
                 .Where(isReferencedQuestionIncorrect)
@@ -1091,6 +1114,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
         }
 
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByMacrosWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
+        {
+            var macrosDuplicates = questionnaire
+                .Macros
+                .Where(x => !string.IsNullOrEmpty(x.Value.Name))
+                .GroupBy(x => x.Value.Name, StringComparer.InvariantCultureIgnoreCase)
+                .SelectMany(group => group.Skip(1));
+
+            foreach (var macrosDuplicate in macrosDuplicates)
+            {
+                yield return new QuestionnaireVerificationError("WB0020", VerificationMessages.WB0020_NameForMacrosIsNotUnique, CreateMacrosReference(macrosDuplicate.Key));
+            }
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -1163,6 +1200,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return incorrectReferencedQuestions;
         }
 
+        private static QuestionnaireVerificationReference CreateMacrosReference(Guid macrosId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macrosId);
+        }
+
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
             return new QuestionnaireVerificationReference(
@@ -1195,41 +1237,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return ((IQuestion)entity).ConditionExpression;
             else
                 return null;
-        }
-
-        private static QuestionnaireVerificationError GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
-            IComposite itemWithExpression, string identifier, QuestionnaireDocument questionnaire)
-        {
-            if (itemWithExpression is IQuestion)
-            {
-                return null;
-            }
-
-            if (IsSpecialThisIdentifier(identifier))
-            {
-                return null;
-            }
-
-            IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
-
-            if (questionsReferencedInExpression == null)
-            {
-                return null;
-            }
-
-            var parentIds = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)questionsReferencedInExpression.GetParent(), questionnaire)
-                .Select(x => x.PublicKey)
-                .ToList();
-
-            if (parentIds.Contains(itemWithExpression.PublicKey))
-            {
-                return new QuestionnaireVerificationError("WB0051",
-                    VerificationMessages.WB0051_GroupsCustomConditionExpressionReferencesChildQuestion,
-                    CreateReference(itemWithExpression),
-                    CreateReference(questionsReferencedInExpression));
-            }
-
-            return null;
         }
 
         private static IQuestion GetQuestionByIdentifier(string identifier, QuestionnaireDocument questionnaire)
@@ -1498,11 +1505,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return true;
             }
 
-        }
-
-        private static bool IsSpecialThisIdentifier(string identifier)
-        {
-            return identifier.ToLower() == "this";
         }
 
         private static bool IsSupervisorQuestion(IQuestion question)

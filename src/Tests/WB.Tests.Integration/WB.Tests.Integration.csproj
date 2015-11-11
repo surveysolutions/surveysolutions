@@ -255,7 +255,7 @@
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\packages\EventStore.Client.Embedded.3.0.2\native\x64\js1.dll" />
+    <None Include="..\..\..\packages\EventStore.Client.Embedded.3.3.1\native\x64\win\js1.dll" />
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

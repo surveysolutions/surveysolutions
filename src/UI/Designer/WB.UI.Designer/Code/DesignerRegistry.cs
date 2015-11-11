@@ -35,6 +35,7 @@ namespace WB.UI.Designer.Code
             this.Bind<ISystemMailer>().To<SystemMailer>();
             this.Bind<IDynamicCompiler>().To<RoslynCompiler>();
             this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
+            this.Bind<IMacrosSubstitutionService>().To<MacrosSubstitutionService>();
             this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();

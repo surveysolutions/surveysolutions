@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -60,7 +61,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<StaticTextDeleted>,
 
         IEventHandler<SharedPersonToQuestionnaireAdded>,
-        IEventHandler<SharedPersonFromQuestionnaireRemoved>
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>,
+
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroUpdated>,
+        IEventHandler<MacroDeleted>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
@@ -455,6 +460,52 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
+        {
+            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.EntityId, string.Empty);
+
+            AddQuestionnaireChangeItem(
+                evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Add, 
+                QuestionnaireItemType.Macro, 
+                evnt.Payload.EntityId,
+                "Empty macro added", 
+                evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
+        {
+            var macroName = evnt.Payload.Name;
+            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.EntityId, macroName);
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.Macro,
+               evnt.Payload.EntityId,
+               macroName,
+               evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+        {
+            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+            var macroName = questionnaire.MacroState.ContainsKey(evnt.Payload.EntityId) 
+                ? questionnaire.MacroState[evnt.Payload.EntityId]
+                : "";
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Delete,
+               QuestionnaireItemType.Macro,
+               evnt.Payload.EntityId,
+               macroName,
+               evnt.EventSequence);
+
+            questionnaire.MacroState.Remove(evnt.Payload.EntityId);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
@@ -577,6 +628,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                         s.GroupsState[id] = title;
                 });
         }
+        
+        private void AddOrUpdateMacroState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.MacroState[id] = title);
+        }
 
         private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string itemTitle)
         {
@@ -654,6 +711,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
         }
-
     }
 }
