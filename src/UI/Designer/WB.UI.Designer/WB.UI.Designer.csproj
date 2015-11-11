@@ -471,6 +471,7 @@
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
+    <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
