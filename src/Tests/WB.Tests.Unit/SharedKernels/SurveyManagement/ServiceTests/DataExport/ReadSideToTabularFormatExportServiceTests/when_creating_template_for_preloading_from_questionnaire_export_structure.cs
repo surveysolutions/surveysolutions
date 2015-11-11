@@ -16,7 +16,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
     {
         Establish context = () =>
         {
-            questionnaireExportStructure = CreateQuestionnaireExportStructure(CreateHeaderStructureForLevel("main level"),
+            questionnaireExportStructure = CreateQuestionnaireExportStructure(
+                questionnaireId,
+                questionnaireVersion,
+                CreateHeaderStructureForLevel("main level"),
                 CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] { "r1", "r2" },
                     levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() })));
 
@@ -24,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 x => x.WriteData(Moq.It.IsAny<string>(), Moq.It.IsAny<IEnumerable<string[]>>(), Moq.It.IsAny<string>()))
                 .Callback<string, IEnumerable<string[]>, string>((filePath, data, delimiter) => { rows.Add(data); });
 
-            readSideToTabularFormatExportService = CreateReadSideToTabularFormatExportService(csvWriter: csvWriterMock.Object, questionnaireExportStructure: questionnaireExportStructure);
+            readSideToTabularFormatExportService = CreateReadSideToTabularFormatExportService(csvWriter: csvWriterMock.Object, 
+                questionnaireExportStructure: questionnaireExportStructure);
         };
 
         Because of = () =>
