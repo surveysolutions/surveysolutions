@@ -102,13 +102,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in instances)
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
-                var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                    ? RosterGroupInstanceIds[rosterGroupKey]
+                var rosterRowInstances = this.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.RosterGroupInstanceIds[rosterGroupKey]
                     : new ConcurrentHashSet<decimal>();
 
                 rosterRowInstances.Add(instance.RosterInstanceId);
 
-                RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+                this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
         }
 
@@ -118,12 +118,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
 
-                var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                    ? RosterGroupInstanceIds[rosterGroupKey]
+                var rosterRowInstances = this.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.RosterGroupInstanceIds[rosterGroupKey]
                     : new ConcurrentHashSet<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
 
-                RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+                this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
         }
 
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
             {
-                DisabledQuestions.Remove(questionKey);
+                this.DisabledQuestions.Remove(questionKey);
             }
         }
 
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
             {
-                DisabledQuestions.Add(questionKey);
+                this.DisabledQuestions.Add(questionKey);
             }
         }
 
@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
             {
-                DisabledGroups.Remove(groupKey);
+                this.DisabledGroups.Remove(groupKey);
             }
         }
 
@@ -191,6 +191,47 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.InvalidAnsweredQuestions.Remove(questionKey);
             }
         }
+
+
+        public bool IsGroupDisabled(Identity group)
+        {
+            string groupKey = ConversionHelper.ConvertIdentityToString(group);
+
+            return this.DisabledGroups.Contains(groupKey);
+        }
+
+        public bool IsQuestionDisabled(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.DisabledQuestions.Contains(questionKey);
+        }
+
+        public bool WasQuestionAnswered(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.AnsweredQuestions.Contains(questionKey);
+        }
+
+        public object GetAnswerSupportedInExpressions(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.AnswersSupportedInExpressions.ContainsKey(questionKey)
+                ? this.AnswersSupportedInExpressions[questionKey]
+                : null;
+        }
+
+        public ConcurrentHashSet<decimal> GetRosterInstanceIds(Guid groupId, decimal[] outerRosterVector)
+        {
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
+
+            return this.RosterGroupInstanceIds.ContainsKey(groupKey)
+                ? this.RosterGroupInstanceIds[groupKey]
+                : new ConcurrentHashSet<decimal>();
+        }
+
 
         /// <remarks>
         /// The opposite operation (get id or vector from string) should never be performed!

@@ -153,22 +153,5 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
         }
-
-        private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, IServiceLocator serviceLocator)
-        {
-            return (aggregate, command) =>
-            {
-                var validatorInstance = serviceLocator.GetInstance(validatorType);
-                var validateMethod = validatorType.GetMethod("Validate", new[] { aggregateType, command.GetType() });
-                try
-                {
-                    validateMethod.Invoke(validatorInstance, new object[] { aggregate, command });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                }
-            };
-        }
     }
 }
