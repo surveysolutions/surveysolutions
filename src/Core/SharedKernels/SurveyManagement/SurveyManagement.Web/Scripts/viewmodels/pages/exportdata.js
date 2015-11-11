@@ -16,8 +16,8 @@
     self.ApprovedDataTabularReference = ko.observableArray();
     self.DataSTATAReference = ko.observableArray();
     self.ApprovedDataSTATAReference = ko.observableArray();
-    self.DataSPPSReference = ko.observableArray();
-    self.ApprovedDataSPPSReference = ko.observableArray();
+    self.DataSPSSReference = ko.observableArray();
+    self.ApprovedDataSPSSReference = ko.observableArray();
 
     self.RunningProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;

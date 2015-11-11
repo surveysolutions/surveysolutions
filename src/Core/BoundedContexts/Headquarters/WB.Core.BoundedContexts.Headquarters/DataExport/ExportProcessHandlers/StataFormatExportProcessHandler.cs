@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IArchiveUtils archiveUtils;
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
-        private const string temporaryTabularExportFolder = "TemporaryTabularExport";
+        private const string temporaryTabularDataForStataExportFolder = "TemporaryTabularDataForStataExport";
         private readonly string pathToExportedData;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
             this.dataExportProcessesService = dataExportProcessesService;
 
-            this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
+            this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularDataForStataExportFolder);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
