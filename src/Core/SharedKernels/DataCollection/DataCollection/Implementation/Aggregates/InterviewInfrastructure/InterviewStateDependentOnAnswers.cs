@@ -12,6 +12,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers
     {
+        private class AmendingWrapper : IReadOnlyInterviewStateDependentOnAnswers
+        {
+            private readonly IReadOnlyInterviewStateDependentOnAnswers actualState;
+            private readonly Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds;
+
+            public AmendingWrapper(IReadOnlyInterviewStateDependentOnAnswers actualState, Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds)
+            {
+                this.actualState = actualState;
+                this.getRosterInstanceIds = getRosterInstanceIds;
+            }
+
+            public IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds)
+            {
+                return this.actualState.Amend(getRosterInstanceIds);
+            }
+
+            public bool IsGroupDisabled(Identity @group)
+            {
+                return this.actualState.IsGroupDisabled(@group);
+            }
+
+            public bool IsQuestionDisabled(Identity question)
+            {
+                return this.actualState.IsQuestionDisabled(question);
+            }
+
+            public bool WasQuestionAnswered(Identity question)
+            {
+                return this.actualState.WasQuestionAnswered(question);
+            }
+
+            public object GetAnswerSupportedInExpressions(Identity question)
+            {
+                return this.actualState.GetAnswerSupportedInExpressions(question);
+            }
+
+            public Tuple<decimal, string>[] GetTextListAnswer(Identity question)
+            {
+                return this.actualState.GetTextListAnswer(question);
+            }
+
+            public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
+            {
+                return this.getRosterInstanceIds != null
+                    ? this.getRosterInstanceIds(groupId, outerRosterVector).ToReadOnlyCollection()
+                    : this.actualState.GetRosterInstanceIds(groupId, outerRosterVector);
+            }
+
+            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire)
+            {
+                return this.actualState.GetAllLinkedSingleOptionAnswers(questionnaire);
+            }
+
+            public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers()
+            {
+                return this.actualState.GetAllLinkedMultipleOptionsAnswers();
+            }
+        }
+
+
         public InterviewStateDependentOnAnswers()
         {
             this.AnswersSupportedInExpressions = new ConcurrentDictionary<string, object>();
@@ -192,6 +252,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ValidAnsweredQuestions.Remove(questionKey);
                 this.InvalidAnsweredQuestions.Remove(questionKey);
             }
+        }
+
+
+        public IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds)
+        {
+            return new AmendingWrapper(this, getRosterInstanceIds);
         }
 
 
