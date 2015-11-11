@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 this.csvWriter.WriteData(actionFilePath, chunk, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
                 skip = skip + this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
-                progress.Report(skip.PercentOf(totalActionsToExportCount));
+                progress.Report((skipAtCurrentIteration+chunk.Length).PercentOf(totalActionsToExportCount));
             }
 
             progress.Report(100);

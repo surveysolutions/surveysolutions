@@ -14,17 +14,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private bool IsWorking = false; //please use singleton injection
 
-        private readonly IDataExportQueue dataExportQueue;
+        private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly ILogger logger;
 
         private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IQueuedProcess>>> registeredExporters =
             new Dictionary<DataExportFormat, Dictionary<Type, Action<IQueuedProcess>>>();
 
-        public DataExporter(IDataExportQueue dataExportQueue,
+        public DataExporter(IDataExportProcessesService dataExportProcessesService,
             ILogger logger)
         {
-            this.dataExportQueue = dataExportQueue;
+            this.dataExportProcessesService = dataExportProcessesService;
             this.logger = logger;
             
             this.RegisterExportHandlerForFormat<ParaDataQueuedProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    IQueuedProcess dataExportProcess = this.dataExportQueue.DeQueueDataExportProcess();
+                    IQueuedProcess dataExportProcess = this.dataExportProcessesService.GetOldestUnprocessedDataExportProcess();
 
                     if (dataExportProcess == null)
                         return;
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     {
                         HandleExportProcess(dataExportProcess);
 
-                        this.dataExportQueue.FinishDataExportProcess(dataExportProcess.DataExportProcessId);
+                        this.dataExportProcessesService.FinishDataExportProcess(dataExportProcess.DataExportProcessId);
                     }
                     catch (Exception e)
                     {
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                             string.Format("data export process with id {0} finished with error", dataExportProcess.DataExportProcessId),
                             e);
 
-                        this.dataExportQueue.FinishDataExportProcessWithError(dataExportProcess.DataExportProcessId, e);
+                        this.dataExportProcessesService.FinishDataExportProcessWithError(dataExportProcess.DataExportProcessId, e);
                     }
                 }
             }

@@ -27,9 +27,6 @@
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
     });
-    self.selectedTemplate.subscribe(function () {
-        self.updateDataExportInfo();
-    });
 
     self.selectedTemplateVersion = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().version;
@@ -39,38 +36,64 @@
         return self.selectedTemplate() && self.selectedTemplate().title;
     });
 
-    self.updateDataExportInfo = function () {
+    self.updateDataExportInfo = function (runRecursively) {
+        if (self.selectedTemplate() == null) {
+            _.delay(function () {
+                self.updateDataExportInfo(true);
+            }, 3000);
+            return;
+        }
         var filter = {
             questionnaireId: self.selectedTemplateId(),
             questionnaireVersion: self.selectedTemplate().version
         };
-        self.SendRequest(self.Url, filter, function (data) {
+        self.sendWebRequest(self.Url, filter, function(data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
-            _.delay(self.updateDataExportInfo, 3000);
-        }, true);
+            if (runRecursively===true) {
+                _.delay(function () {
+                    self.updateDataExportInfo(true);
+                }, 3000);
+            }
+        });
     };
     self.stopExportProcess = function (runningExport) {
-        self.sendActionRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
+        self.sendWebRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
     }
-    self.requestParaDataUpdate = function (format) {  return function() {
-            self.sendActionRequest(self.HistoryUrl);
+    self.requestParaDataUpdate = function(format) {
+        return function() {
+            self.sendWebRequest(self.HistoryUrl,
+                [],
+                function (data) {
+                    self.updateDataExportInfo();
+                });
         }
     };
-    self.requestDataUpdate = function (format) {
+
+    self.requestDataUpdate = function(format) {
         var questionnaireId = self.selectedTemplateId();
         var questionnaireVersion = self.selectedTemplate().version;
         return function() {
-            self.sendActionRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format);
+            self.sendWebRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format,
+                [],
+                function (data) {
+                    self.updateDataExportInfo();
+                });
         }
-    }
-    self.requestApprovedDataUpdate = function (format) {
+    };
+
+    self.requestApprovedDataUpdate = function(format) {
         var questionnaireId = self.selectedTemplateId();
         var questionnaireVersion = self.selectedTemplate().version;
         return function() {
-            self.sendActionRequest(self.UpdateApprovedDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format);
+            self.sendWebRequest(self.UpdateApprovedDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format,
+                [],
+                function(data) {
+                    self.updateDataExportInfo();
+                });
         }
-    }
-    self.sendActionRequest = function (url, args) {
+    };
+
+    self.sendWebRequest = function (url, args, onSuccess) {
         var requestHeaders = {};
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
@@ -81,7 +104,9 @@
             data: args,
             dataType: 'json'
         }).done(function (data) {
-            self.updateDataExportInfo();
+            if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                onSuccess(data);
+            }
         }).fail(function (jqXhr, textStatus, errorThrown) {
             if (jqXhr.status === 403) {
                 if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
@@ -97,9 +122,6 @@
                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
 
-        }).always(function () {
-            self.IsPageLoaded(true);
-            self.IsAjaxComplete(true);
         });
     }
 
@@ -138,5 +160,7 @@
     self.formatDate=function(date) {
         return moment(date).format("MM/DD/YYYY HH:mm:ss");
     }
+
+    self.updateDataExportInfo(true);
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);

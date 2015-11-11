@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             InterviewDataExportSettings interviewDataExportSettings,

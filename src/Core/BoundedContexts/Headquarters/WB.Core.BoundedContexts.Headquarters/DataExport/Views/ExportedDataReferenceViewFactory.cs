@@ -20,19 +20,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     public class ExportedDataReferenceViewFactory :
         IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel>
     {
-        private readonly IDataExportQueue dataExportQueue;
+        private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ExportedDataReferenceViewFactory(
-            IDataExportQueue dataExportQueue, 
+            IDataExportProcessesService dataExportProcessesService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IParaDataAccessor paraDataAccessor, 
             IFileSystemAccessor fileSystemAccessor)
         {
-            this.dataExportQueue = dataExportQueue;
+            this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.paraDataAccessor = paraDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         public ExportedDataReferencesViewModel Load(ExportedDataReferenceInputModel input)
         {
-            var runningProcesses = dataExportQueue.GetRunningProcess();
+            var runningProcesses = this.dataExportProcessesService.GetRunningProcess();
 
             return new ExportedDataReferencesViewModel(input.QuestionnaireId, input.QuestionnaireVersion,
                 CreateExportedDataReferencesView(DataExportType.ParaData, DataExportFormat.Tabular,
