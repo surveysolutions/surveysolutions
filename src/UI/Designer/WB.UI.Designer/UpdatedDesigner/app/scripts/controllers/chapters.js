@@ -108,7 +108,7 @@
                 if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
                     return;
 
-                var idToPasteAfter = chapter.chapterId || $state.params.itemId;
+                var idToPasteAfter = chapter.itemId || $state.params.itemId;
                 var newId = utilityService.guid();
 
                 commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId)
