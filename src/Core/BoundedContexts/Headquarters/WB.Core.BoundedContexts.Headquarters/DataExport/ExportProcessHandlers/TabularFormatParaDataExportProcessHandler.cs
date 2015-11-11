@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataQueuedProcess>
+    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataExportProcess>
     {
         private readonly IStreamableEventStore eventStore;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.paraDataAccessor = paraDataAccessor;
         }
 
-        public void ExportData(ParaDataQueuedProcess process)
+        public void ExportData(ParaDataExportProcess process)
         {
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,

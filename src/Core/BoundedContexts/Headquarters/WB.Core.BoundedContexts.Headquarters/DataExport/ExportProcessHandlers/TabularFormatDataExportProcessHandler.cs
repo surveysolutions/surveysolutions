@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -22,7 +22,7 @@ using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.Data
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class TabularFormatDataExportProcessHandler : IExportProcessHandler<AllDataQueuedProcess>, IExportProcessHandler<ApprovedDataQueuedProcess>
+    internal class TabularFormatDataExportProcessHandler : IExportProcessHandler<AllDataExportProcess>, IExportProcessHandler<ApprovedDataExportProcess>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
         private readonly ITransactionManagerProvider transactionManagerProvider;
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
-        public void ExportData(AllDataQueuedProcess process)
+        public void ExportData(AllDataExportProcess process)
         {
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), allDataFolder);
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
 
-        public void ExportData(ApprovedDataQueuedProcess process)
+        public void ExportData(ApprovedDataExportProcess process)
         {
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity), approvedDataFolder);
