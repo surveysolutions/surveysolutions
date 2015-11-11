@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    public class BinaryFormatDataExportProcessHandler : IExportProcessHandler<AllDataQueuedProcess>
+    public class BinaryFormatDataExportProcessHandler : IExportProcessHandler<AllDataExportProcess>
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainInterviewFileStorage plainFileRepository;
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
-        public void ExportData(AllDataQueuedProcess process)
+        public void ExportData(AllDataExportProcess process)
         {
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>

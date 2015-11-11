@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
-using WB.Core.BoundedContexts.Headquarters.DataExport.QueuedProcess;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly ILogger logger;
 
-        private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IQueuedProcess>>> registeredExporters =
-            new Dictionary<DataExportFormat, Dictionary<Type, Action<IQueuedProcess>>>();
+        private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportProcess>>> registeredExporters =
+            new Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportProcess>>>();
 
         public DataExporter(IDataExportProcessesService dataExportProcessesService,
             ILogger logger)
@@ -27,17 +27,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.dataExportProcessesService = dataExportProcessesService;
             this.logger = logger;
             
-            this.RegisterExportHandlerForFormat<ParaDataQueuedProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
-            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
-            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<ParaDataExportProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
 
-            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
-            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
 
-            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
-            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
 
-            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, BinaryFormatDataExportProcessHandler>(DataExportFormat.Binary);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, BinaryFormatDataExportProcessHandler>(DataExportFormat.Binary);
         }
 
         public void StartDataExport()
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    IQueuedProcess dataExportProcess = this.dataExportProcessesService.GetOldestUnprocessedDataExportProcess();
+                    IDataExportProcess dataExportProcess = this.dataExportProcessesService.GetOldestUnprocessedDataExportProcess();
 
                     if (dataExportProcess == null)
                         return;
@@ -77,18 +77,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
         }
 
-        private void HandleExportProcess(IQueuedProcess dataExportProcess)
+        private void HandleExportProcess(IDataExportProcess dataExportProcess)
         {
             registeredExporters[dataExportProcess.DataExportFormat][dataExportProcess.GetType()](dataExportProcess);
         }
 
         private void RegisterExportHandlerForFormat<T, THandler>(DataExportFormat format)
-            where T : class, IQueuedProcess
+            where T : class, IDataExportProcess
             where THandler : IExportProcessHandler<T>
 
         {
             if (!registeredExporters.ContainsKey(format))
-                registeredExporters[format] = new Dictionary<Type, Action<IQueuedProcess>>();
+                registeredExporters[format] = new Dictionary<Type, Action<IDataExportProcess>>();
 
             registeredExporters[format][typeof (T)] =
                 (p) => { ServiceLocator.Current.GetInstance<THandler>().ExportData(p as T); };
