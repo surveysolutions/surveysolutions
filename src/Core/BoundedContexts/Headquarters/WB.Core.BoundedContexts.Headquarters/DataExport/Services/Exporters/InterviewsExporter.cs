@@ -54,7 +54,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
              this.transactionManager.ExecuteInQueryTransaction(() =>
                  this.interviewSummaries.Query(_ =>
                          _.Where(x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
-                                      x.QuestionnaireVersion == questionnaireExportStructure.Version)
+                                      x.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                                      !x.IsDeleted)
                              .OrderBy(x => x.InterviewId)
                              .Select(x => x.InterviewId).ToList()));
             DoExport(questionnaireExportStructure, basePath, progress, interviewIdsToExport);
@@ -67,7 +68,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             List<Guid> interviewIdsToExport =
                this.transactionManager.ExecuteInQueryTransaction(() =>
                    this.interviewSummaries.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId && 
-                                                                   x.QuestionnaireVersion == questionnaireExportStructure.Version)
+                                                                   x.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                                                                   !x.IsDeleted)
                                                .Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters)
                                                .OrderBy(x => x.InterviewId)
                                                .Select(x => x.InterviewId).ToList()));
