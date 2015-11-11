@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
@@ -23,16 +24,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-
+        private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly IArchiveUtils archiveUtils;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
         private readonly string pathToExportedData;
 
         public BinaryFormatDataExportProcessHandler(IFileSystemAccessor fileSystemAccessor, IPlainInterviewFileStorage plainFileRepository, IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            InterviewDataExportSettings interviewDataExportSettings, ITransactionManager transactionManager, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, IArchiveUtils archiveUtils)
+            InterviewDataExportSettings interviewDataExportSettings, ITransactionManager transactionManager, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, IArchiveUtils archiveUtils, IReadSideKeyValueStorage<InterviewData> interviewDatas, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;
@@ -40,6 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.archiveUtils = archiveUtils;
+            this.interviewDatas = interviewDatas;
+            this.questionnaireReader = questionnaireReader;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -53,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
                         _.Where(x => x.QuestionnaireId == process.QuestionnaireIdentity.QuestionnaireId &&
-                                     x.QuestionnaireVersion == process.QuestionnaireIdentity.Version)
+                                     x.QuestionnaireVersion == process.QuestionnaireIdentity.Version && !x.IsDeleted)
                             .OrderBy(x => x.InterviewId)
                             .Select(x => x.InterviewId).ToList()));
 
@@ -61,24 +65,54 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             this.ClearFolder(folderForDataExport);
 
+            QuestionnaireExportStructure questionnaire =
+                this.transactionManager.ExecuteInQueryTransaction(() =>
+                    this.questionnaireReader.AsVersioned()
+                        .Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version));
+
+            var multimediaQuestionIds =
+                questionnaire.HeaderToLevelMap.Values.SelectMany(
+                    x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x=>x.PublicKey).ToArray();
+
             foreach (var interviewId in interviewIdsToExport)
             {
                 var interviewBinaryFiles = plainFileRepository.GetBinaryFilesForInterview(interviewId);
                 var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport,
                     interviewId.FormatGuid());
 
-                if(interviewBinaryFiles.Count>0)
-                    this.fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+                if (interviewBinaryFiles.Count == 0)
+                    continue;
 
-                foreach (var interviewBinaryFile in interviewBinaryFiles)
+                var interviewDetails = this.transactionManager.ExecuteInQueryTransaction(() => interviewDatas.GetById(interviewId));
+                if (interviewDetails == null || interviewDetails.IsDeleted)
+                    continue;
+
+                var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
+                    level =>
+                        level.QuestionsSearchCahche.Values.Where(
+                            question =>
+                                question.IsAnswered() && !question.IsDisabled() &&
+                                multimediaQuestionIds.Any(multimediaQuestionId => question.Id == multimediaQuestionId))
+                            .Select(q => q.Answer.ToString())).ToArray();
+
+                if(!questionsWithAnswersOnMultimediaQuestions.Any())
+                    continue;
+
+                this.fileSystemAccessor.CreateDirectory(filesFolderForInterview);
+
+                foreach (var questionsWithAnswersOnMultimediaQuestion in questionsWithAnswersOnMultimediaQuestions)
                 {
+                    var fileContent = plainFileRepository.GetInterviewBinaryData(interviewId,
+                        questionsWithAnswersOnMultimediaQuestion);
                     this.fileSystemAccessor.WriteAllBytes(
-                     this.fileSystemAccessor.CombinePath(filesFolderForInterview,
-                         interviewBinaryFile.FileName), interviewBinaryFile.GetData());
+                        this.fileSystemAccessor.CombinePath(filesFolderForInterview,
+                            questionsWithAnswersOnMultimediaQuestion), fileContent);
                 }
             }
 
-            var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(process.QuestionnaireIdentity, DataExportFormat.Binary);
+            var archiveFilePath =
+                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(process.QuestionnaireIdentity,
+                    DataExportFormat.Binary);
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }
 
