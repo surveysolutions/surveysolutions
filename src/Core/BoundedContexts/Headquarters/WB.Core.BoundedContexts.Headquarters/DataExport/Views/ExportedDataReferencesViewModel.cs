@@ -13,8 +13,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             ExportedDataReferencesView approvedDataTabularReference, 
             ExportedDataReferencesView dataStataReference, 
             ExportedDataReferencesView approvedDataStataReference, 
-            ExportedDataReferencesView dataSppsReference, 
-            ExportedDataReferencesView approvedDataSppsReference, 
+            ExportedDataReferencesView dataSpssReference, 
+            ExportedDataReferencesView approvedDataSpssReference, 
             ExportedDataReferencesView dataBinaryReference,
             RunningDataExportProcessView[] runningProcesses)
         {
@@ -25,8 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             this.ApprovedDataTabularReference = approvedDataTabularReference;
             this.RunningProcesses = runningProcesses;
             this.DataBinaryReference = dataBinaryReference;
-            this.DataSPPSReference = dataSppsReference;
-            this.ApprovedDataSPPSReference = approvedDataSppsReference;
+            this.DataSPSSReference = dataSpssReference;
+            this.ApprovedDataSPSSReference = approvedDataSpssReference;
             this.DataSTATAReference = dataStataReference;
             this.ApprovedDataSTATAReference = approvedDataStataReference;
         }
@@ -39,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public ExportedDataReferencesView ApprovedDataTabularReference { get; private set; }
         public ExportedDataReferencesView DataSTATAReference { get; private set; }
         public ExportedDataReferencesView ApprovedDataSTATAReference { get; private set; }
-        public ExportedDataReferencesView DataSPPSReference { get; private set; }
-        public ExportedDataReferencesView ApprovedDataSPPSReference { get; private set; }
+        public ExportedDataReferencesView DataSPSSReference { get; private set; }
+        public ExportedDataReferencesView ApprovedDataSPSSReference { get; private set; }
         public RunningDataExportProcessView[] RunningProcesses { get; private set; }
     }
 }

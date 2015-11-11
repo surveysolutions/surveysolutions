@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             datasetWriter = new Mock<IDatasetWriter>();
 
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
-            datasetWriterFactory.Setup(x => x.CreateDatasetWriter(DataExportFormat.SPPS)).Returns(datasetWriter.Object);
+            datasetWriterFactory.Setup(x => x.CreateDatasetWriter(DataExportFormat.SPSS)).Returns(datasetWriter.Object);
 
             _tabularDataToExternalStatPackagesTabDataExportService = CreateSqlToTabDataExportService(
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
