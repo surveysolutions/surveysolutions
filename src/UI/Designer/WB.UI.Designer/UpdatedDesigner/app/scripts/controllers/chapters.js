@@ -1,6 +1,5 @@
 ﻿angular.module('designerApp')
     .controller('ChaptersCtrl', 
-       // '$rootScope', '$scope', '$state', 'commandService', 'utilityService', '$log', 'confirmService', 'questionnaireService',
         function ($rootScope, $scope, $state, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
             'use strict';
 
@@ -14,8 +13,6 @@
                 $scope.foldback();
             });
             
-            $scope.chapters = [];
-
             $scope.isFolded = false;
 
             $scope.unfold = function () {
@@ -27,6 +24,7 @@
                     return;
                 }
                 $scope.isFolded = false;
+                $rootScope.$broadcast("closeChaptersList", {});
             };
 
             $scope.editChapter = function (chapter) {
@@ -144,8 +142,12 @@
                 $scope.deleteChapter(data.chapter);
             });
 
-            $scope.$on('openChaptersList', function (event, data) {
+            $scope.$on('openChaptersList', function () {
                 $scope.unfold();
+            });
+
+            $scope.$on('closeChaptersListRequested', function () {
+                $scope.foldback();
             });
 
             $rootScope.$on('copyChapter', function (event, data) {

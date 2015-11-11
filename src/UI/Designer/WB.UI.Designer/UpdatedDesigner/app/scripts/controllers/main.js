@@ -132,10 +132,15 @@ angular.module('designerApp')
             };
 
             $scope.navigateTo = function (reference) {
-                $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                    chapterId: reference.chapterId,
-                    itemId: reference.itemId
-                });
+                if (reference.type.toLowerCase() === "macro") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openMacrosList", { focusOn : reference.itemId });
+                } else {
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId
+                    });
+                }
             };
 
             $scope.removeItemWithIdFromErrors = function(itemId) {
@@ -255,6 +260,14 @@ angular.module('designerApp')
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
+
+                editor.commands.addCommand({
+                    name: "replace",
+                    bindKey: { win: "Tab|Shift-Tab", mac: "Tab" },
+                    exec: function (editor) {
+                        editor.blur();
+                    }
+                });
             };
 
             $rootScope.$on('$stateChangeSuccess',

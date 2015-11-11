@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                             })
                     });
 
-            generator = CreateCodeGenerator();
+            generator = Create.CodeGenerator();
         };
 
         Because of = () =>

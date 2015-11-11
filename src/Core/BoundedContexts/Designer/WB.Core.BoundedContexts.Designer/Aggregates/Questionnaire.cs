@@ -21,8 +21,9 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -47,6 +48,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private bool wasExpressionsMigrationPerformed = false;
+
+        internal void Apply(MacroAdded e)
+        {
+        }
+
+        internal void Apply(MacroUpdated e)
+        {
+        }
+
+        internal void Apply(MacroDeleted e)
+        {
+        }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
         {
@@ -92,7 +105,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = new Group();
             group.Title = e.GroupText;
             group.VariableName = e.VariableName;
-            group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -118,7 +130,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var group = new Group();
             group.Title = e.GroupText;
             group.VariableName = e.VariableName;
-            group.Propagated = Propagate.None;
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
@@ -188,7 +199,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (e.Capital)
                 this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
         }
-
 
 
         internal void Apply(NumericQuestionAdded e)
@@ -821,13 +831,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
         {
-
             var document = source as QuestionnaireDocument;
             if (document == null)
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
             document.CreatedBy = createdBy;
             ApplyEvent(new TemplateImported() { Source = document });
-
         }
 
         public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
@@ -844,6 +852,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
+        #endregion
+
+        #region Macro command handlers
+
+        public void AddMacro(AddMacroCommand command)
+        {
+            this.ApplyEvent(new MacroAdded(command.EntityId, command.ResponsibleId));
+        }
+
+        public void UpdateMacro(UpdateMacroCommand command)
+        {
+            this.ApplyEvent(new MacroUpdated(command.EntityId, command.Name, command.Content, command.Description, command.ResponsibleId));
+        }
+
+        public void DeleteMacro(DeleteMacroCommand command)
+        {
+            this.ApplyEvent(new MacroDeleted(command.EntityId, command.ResponsibleId));
+        }
+      
         #endregion
 
         #region Group command handlers
