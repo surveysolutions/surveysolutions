@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
                 skip = skip + this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
-                progress.Report(skip.PercentOf(countOfAllRecords));
+                progress.Report((skipAtCurrentIteration+ exportComments.Length).PercentOf(countOfAllRecords));
             }
 
             progress.Report(100);
