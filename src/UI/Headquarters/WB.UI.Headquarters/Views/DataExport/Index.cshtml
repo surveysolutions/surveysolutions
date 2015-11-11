@@ -192,7 +192,7 @@ var exportParameters = "'" + type + "','" + format + "'";
                 {
                     <td><img src="@Url.Content(iconUrl)" /></td>
                 }
-                <td> Last updated on <i data-bind="text:lastUpdateDate(@exportParameters)"></i></td>
+                <td> Last updated at <i data-bind="text:lastUpdateDate(@exportParameters)"></i></td>
                 <td>
                     <a class="btn btn-default" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">
                         <i class="glyphicon glyphicon-refresh">
