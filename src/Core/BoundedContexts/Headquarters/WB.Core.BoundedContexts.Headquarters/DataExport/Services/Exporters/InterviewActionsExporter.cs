@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -73,19 +74,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
 
-            foreach (var queryActionsChunk in this.GetTasksForQueryActionsByChunks(whereClauseForAction))
-            {
-                this.csvWriter.WriteData(actionFilePath, queryActionsChunk, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
-            }
-            progress.Report(100);
-        }
+            var totalActionsToExportCount = this.transactionManager
+                                                .ExecuteInQueryTransaction(() => 
+                                                    this.interviewActionsDataStorage.Query(_ => _.Where(whereClauseForAction)
+                                                                                                 .SelectMany(x => x.InterviewCommentedStatuses)
+                                                                                                 .Count()));
 
-        private IEnumerable<string[][]> GetTasksForQueryActionsByChunks(Expression<Func<InterviewStatuses, bool>> whereClauseForAction)
-        {
-            return this.QueryByChunks(
-                skip => this.QueryActionsChunkFromReadSide(whereClauseForAction, skip),
-                        () => this.interviewActionsDataStorage.Query(
-                            _ => _.Where(whereClauseForAction).SelectMany(x => x.InterviewCommentedStatuses).Count()));
+            int skip = 0;
+
+            while (skip < totalActionsToExportCount)
+            {
+                var skipAtCurrentIteration = skip;
+
+                var chunk = this.transactionManager.ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction, skipAtCurrentIteration));
+
+                this.csvWriter.WriteData(actionFilePath, chunk, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
+                skip = skip + this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
+
+                progress.Report(skip.PercentOf(totalActionsToExportCount));
+            }
+
+            progress.Report(100);
         }
 
         private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewStatuses, bool>> queryActions, int skip)
@@ -142,24 +151,5 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }
-
-
-        private IEnumerable<T> QueryByChunks<T>(Func<int, T> dataQuery, Func<int> countQuery)
-        {
-            var countOfAllRecords =
-                this.transactionManager.ExecuteInQueryTransaction(countQuery);
-
-            int skip = 0;
-
-            while (skip < countOfAllRecords)
-            {
-                var skipAtCurrentIteration = skip;
-
-                yield return this.transactionManager.ExecuteInQueryTransaction(() => dataQuery(skipAtCurrentIteration));
-
-                skip = skip + this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
-            }
-        }
-
     }
 }

@@ -113,8 +113,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var skipAtCurrentIteration = skip;
 
                 string[][] exportComments = this.transactionManager
-                    .ExecuteInQueryTransaction(
-                        () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skipAtCurrentIteration, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
+                                                .ExecuteInQueryTransaction(
+                                                     () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skipAtCurrentIteration, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
 
                 this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
                 skip = skip + this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
