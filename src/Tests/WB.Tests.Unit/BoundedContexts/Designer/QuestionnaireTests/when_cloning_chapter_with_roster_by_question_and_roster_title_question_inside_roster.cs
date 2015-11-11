@@ -91,9 +91,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_RosterChanged_event_roster_size_source_be_equal_to_question = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterSizeSource.ShouldEqual(RosterSizeSourceType.Question);
 
-        It should_RosterChanged_event_roster_size_qiestion_id_be_equal_to_rosterSizeQuestionId = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterSizeQuestionId.ShouldEqual(rosterSizeQuestionId);
-
         It should_RosterChanged_event_roster_title_qiestion_id_be_null = () =>
             eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
 
