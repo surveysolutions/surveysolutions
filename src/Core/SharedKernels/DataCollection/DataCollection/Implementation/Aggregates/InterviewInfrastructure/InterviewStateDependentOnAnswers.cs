@@ -4,18 +4,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewStateDependentOnAnswers
+    public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers
     {
         public InterviewStateDependentOnAnswers()
         {
             this.AnswersSupportedInExpressions = new ConcurrentDictionary<string, object>();
-            this.LinkedSingleOptionAnswersBuggy = new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>>();
-            this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
+            this.LinkedSingleOptionAnswersBuggy = new ConcurrentDictionary<string, Tuple<Identity, RosterVector>>();
+            this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>>();
             this.TextListAnswers = new ConcurrentDictionary<string, Tuple<decimal, string>[]>();
 
             this.AnsweredQuestions = new ConcurrentHashSet<string>();
@@ -28,8 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
-        public ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[]>> LinkedSingleOptionAnswersBuggy { set; get; }
-        public ConcurrentDictionary<string, Tuple<Guid, decimal[], decimal[][]>> LinkedMultipleOptionsAnswers { set; get; }
+        public ConcurrentDictionary<string, Tuple<Identity, RosterVector>> LinkedSingleOptionAnswersBuggy { set; get; }
+        public ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>> LinkedMultipleOptionsAnswers { set; get; }
         public ConcurrentDictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
         public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
@@ -224,6 +225,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
+        public Tuple<decimal, string>[] GetTextListAnswer(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.TextListAnswers.ContainsKey(questionKey)
+                ? this.TextListAnswers[questionKey]
+                : null;
+        }
+
         public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
         {
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
@@ -231,6 +241,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.RosterGroupInstanceIds.ContainsKey(groupKey)
                 ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
                 : Enumerable.Empty<decimal>().ToReadOnlyCollection();
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire)
+        {
+            // we currently have a bug that after restore linked single option answers list is filled with not linked answers after sync
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers()
+        {
+            return this.LinkedMultipleOptionsAnswers.Values;
         }
     }
 }
