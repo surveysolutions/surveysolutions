@@ -6759,6 +6759,10 @@ ul.dropdown-menu li > a {
   line-height: 20px;
   text-transform: none;
 }
+ul.dropdown-menu li > a[disabled] {
+  color: #bbb;
+  cursor: default;
+}
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
   width: 100%;
   position: relative;
@@ -6775,11 +6779,6 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a {
 ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   left: 10px;
   position: absolute;
-}
-
-ul.dropdown-menu > li > a[disabled] {
-    color: #bbb;
-    cursor: default;
 }
 .instructions-cross {
   margin-top: 20px;
@@ -7131,44 +7130,77 @@ textarea {
   background-position-x: 0px;
   overflow: hidden;
 }
-.icon.icon-error {
-  background-position-x: -30px;
-}
-.icon.dropdown-icon {
-  background-position-x: -60px;
-}
 .icon-numeric {
-  background-position-y: 0;
+  background-position: 0 0;
 }
 .icon-text {
-  background-position-y: -30px;
+  background-position: 0 -30px;
 }
 .icon-singleoption {
-  background-position-y: -60px;
+  background-position: 0 -60px;
 }
 .icon-multyoption {
-  background-position-y: -90px;
+  background-position: 0 -90px;
 }
 .icon-datetime {
-  background-position-y: -120px;
+  background-position: 0 -120px;
 }
 .icon-gpscoordinates {
-  background-position-y: -150px;
+  background-position: 0 -150px;
 }
 .icon-qrbarcode {
-  background-position-y: -180px;
+  background-position: 0 -180px;
 }
 .icon-textlist {
-  background-position-y: -210px;
+  background-position: 0 -210px;
 }
 .icon-photo {
-  background-position-y: -270px;
+  background-position: 0 -270px;
 }
 .icon-multimedia {
-  background-position-y: -270px;
+  background-position: 0 -270px;
 }
 .icon-statictext {
-  background-position-y: -300px;
+  background-position: 0 -300px;
+}
+.icon-macro {
+  background-position: 0 -388px;
+}
+.icon-error.icon-numeric {
+  background-position: -30px 0;
+}
+.icon-error.icon-text {
+  background-position: -30px -30px;
+}
+.icon-error.icon-singleoption {
+  background-position: -30px -60px;
+}
+.icon-error.icon-multyoption {
+  background-position: -30px -90px;
+}
+.icon-error.icon-datetime {
+  background-position: -30px -120px;
+}
+.icon-error.icon-gpscoordinates {
+  background-position: -30px -150px;
+}
+.icon-error.icon-qrbarcode {
+  background-position: -30px -180px;
+}
+.icon-error.icon-textlist {
+  background-position: -30px -210px;
+}
+.icon-error.icon-photo {
+  background-position: -30px -270px;
+}
+.icon-error.icon-multimedia {
+  background-position: -30px -270px;
+}
+.icon-error.icon-statictext {
+  background-position: -30px -300px;
+}
+.icon-error.icon-macro {
+  background-position: -30px -388px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7758,12 +7790,15 @@ textarea#edit-group-description {
 #designer-editor.container section#main #left-menu ul li a.left-menu-chapters {
   background: url(i/chapter-panel-btn.png) 0 19px no-repeat;
 }
+#designer-editor.container section#main #left-menu ul li a.left-menu-macroses {
+  background: url(i/macro-panel-btn.png) center center no-repeat;
+}
 #designer-editor.container section#main #left-menu ul li a:hover {
   background-color: #dbdfe2;
 }
 #designer-editor.container section#main #left-menu ul li a.unfolded {
   color: #7e898f;
-  background-color: #edeff0;
+  background-color: #e5e8ea;
 }
 #designer-editor.container section#main .left-side-panel {
   position: absolute;
@@ -7801,7 +7836,7 @@ textarea#edit-group-description {
   z-index: 15;
   width: 50px;
   height: 50px;
-  background: #edeff0 url(i/arrow-left.png) center 0 no-repeat;
+  background: #e5e8ea url(i/arrow-left.png) center 0 no-repeat;
   border-left: 1px solid #dbdfe2;
 }
 #designer-editor.container section#main .left-side-panel .foldback-button:hover {
@@ -7819,20 +7854,20 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel .macros-panel,
 #designer-editor.container section#main .left-side-panel .chapter-panel {
   height: 100%;
-  background: #edeff0;
+  background: #e5e8ea;
   position: relative;
 }
 #designer-editor.container section#main .left-side-panel .macros-panel h3,
 #designer-editor.container section#main .left-side-panel .chapter-panel h3 {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 12px;
-  letter-spacing: 1px;
-  margin: 29px 24px 0 18px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3f3f3f;
+  text-transform: none;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 18px;
+  margin: 29px 24px 20px 18px;
   color: #7e898f;
+  padding-left: 10px;
 }
 #designer-editor.container section#main .left-side-panel .macros-panel .button-holder input,
 #designer-editor.container section#main .left-side-panel .chapter-panel .button-holder input,
@@ -7840,27 +7875,13 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel .chapter-panel .button-holder button,
 #designer-editor.container section#main .left-side-panel .macros-panel .button-holder .btn,
 #designer-editor.container section#main .left-side-panel .chapter-panel .button-holder .btn {
-  background: #edeff0;
+  background: #e5e8ea;
 }
 #designer-editor.container section#main .macros-panel {
   width: 85%;
 }
-#designer-editor.container section#main .macros-panel h3 {
-  padding-left: 20px;
-}
 #designer-editor.container section#main .macros-panel .macroses {
   height: 100%;
-}
-#designer-editor.container section#main .macros-panel .macroses h3 {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 12px;
-  letter-spacing: 1px;
-  padding-bottom: 8px;
-  color: #7e898f;
 }
 #designer-editor.container section#main .macros-panel .macroses ul {
   margin: 0;
@@ -7872,17 +7893,18 @@ textarea#edit-group-description {
 #designer-editor.container section#main .macros-panel .macroses ul li {
   background: #fff;
   margin-bottom: 7px;
-  padding: 5px 30px 5px 10px;
+  padding: 5px 10px 5px 10px;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
+  border: 2px solid #fff;
   position: relative;
   z-index: 10;
+  font-family: "Lucida Console", Monaco, monospace;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li:hover {
-  -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  border: 2px solid #d9dde0;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li:hover .input-group.macros-name .input-group-btn {
   visibility: visible;
@@ -7896,6 +7918,39 @@ textarea#edit-group-description {
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"][placeholder] {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]::-moz-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]:-ms-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]::-webkit-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li .divider {
+  height: 2px;
+  width: 275px;
+  background: #d9dde0;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li input.macros-description {
+  color: #78838a;
+}
+#designer-editor.container section#main .macros-panel .macroses ul li .input-group {
+  width: 275px;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .input-group .input-group-addon {
   border: none;
@@ -7906,34 +7961,14 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .input-group.macros-name .input-group-addon {
   color: #e004c9;
-  border-bottom: 2px solid #e0e3e6;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .input-group.macros-name input {
-  width: 275px;
-  border-bottom: 2px solid #e0e3e6;
   color: #e004c9;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li .input-group.macros-name .input-group-btn {
-  width: 100%;
-  visibility: hidden;
-  border-radius: 4px;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li .input-group.macros-name .input-group-btn button {
-  color: #7e898f;
-  border-radius: 4px;
-  text-transform: lowercase;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li .input-group.macros-description .input-group-addon {
-  color: #7e898f;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li .input-group.macros-description input {
-  padding: 0;
-  color: #7e898f;
-  height: 24px;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .ace_editor {
   border: none;
   margin-bottom: 5px;
+  margin-top: 5px;
   border-radius: 0;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li a {
@@ -7957,6 +7992,7 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .actions {
   margin-left: -6px;
+  margin-right: -6px;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li button {
   background: #fff;

@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('MacrosCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService) {
+        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService) {
             'use strict';
 
             var hideMacrosPane = 'ctrl+m';
@@ -57,8 +57,9 @@
                 });
             };
 
-            $scope.saveMacro = function (macros, form) {
-                commandService.updateMacro($state.params.questionnaireId, macros).success(function () {
+            $scope.saveMacro = function (macro, form) {
+                commandService.updateMacro($state.params.questionnaireId, macro).success(function () {
+                    macro.initialMacro = angular.copy(macro);
                     form.$setPristine();
                 });
             }
@@ -71,8 +72,15 @@
 
             $scope.deleteMacro = function (index) {
                 var macro = $scope.macros[index];
-                commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
-                    $scope.macros.splice(index, 1);
+                var macroName = macro.name || "macro with no name";
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(macroName));
+
+                modalInstance.result.then(function (confirmResult) {
+                    if (confirmResult === 'ok') {
+                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
+                            $scope.macros.splice(index, 1);
+                        });
+                    }
                 });
             }
             
@@ -138,7 +146,7 @@
             $scope.$on('openMacrosList', function (scope, params) {
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {
-                    utilityService.focus("focusMacro" + params.focusOn);
+                    setTimeout(function () { utilityService.focus("focusMacro" + params.focusOn); }, 500);
                 }
             });
 

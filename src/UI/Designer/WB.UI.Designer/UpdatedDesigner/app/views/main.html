@@ -95,7 +95,7 @@
             </div>
             <div class="macroses">
                 <perfect-scrollbar class="scroller">
-                    <h3>Macros:</h3>
+                    <h3><span ng-show="macros.length!=0">{{macros.length}}</span> Macro<span ng-show="macros.length!=1" >s</span>:</h3>
                     <form role="form" name="macrosForm" novalidate>
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
@@ -103,19 +103,18 @@
                                     <a href ng-click="deleteMacro($index)" class="btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
-                                        <input focus-on-out="focusMacro{{macro.itemId}}"  placeholder="macro name" ng-model="macro.name" name="name" class="form-control" type="text" />
-                                        <span class="input-group-btn" ng-show="isDescriptionBtnVisible(macro)">
-                                            <button class="btn btn-default" type="button" ng-click="toggleDescription(macro)">{{ getDescriptionBtnName(macro) }} description</button>
-                                        </span>
+                                        <input focus-on-out="focusMacro{{macro.itemId}}" placeholder="macro name" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text"/>
                                     </div>
-                                    <div class="input-group macros-description" ng-show="macro.isDescriptionVisible">
-                                        <span class="input-group-addon">//</span>
-                                        <input placeholder="description" ng-model="macro.description" class="form-control" type="text" />
+                                    <div class="divider"></div>
+                                    <input placeholder="content" ng-model="macro.content" ui-ace="{ onLoad : aceLoaded }" class="form-control" type="text"/>
+                                    <div ng-show="macro.isDescriptionVisible">
+                                        <div class="divider"></div>
+                                        <input placeholder="description"  ng-model="macro.description" class="form-control macros-description" type="text" />
                                     </div>
-                                    <input placeholder="content" ng-model="macro.content" ui-ace="{ onLoad : aceLoaded }" class="form-control" type="text" />
                                     <div class="actions" ng-show="macroForm.$dirty">
                                         <button type="submit" ng-disabled="macroForm.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro, macroForm)">Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(macro, macroForm)">Cancel</button>
+                                        <button class="btn btn-default pull-right" ng-show="isDescriptionBtnVisible(macro)"  type="button" ng-click="toggleDescription(macro)">{{ getDescriptionBtnName(macro) }} description</button>
                                     </div>
                                 </ng-form>
                             </li>
@@ -132,7 +131,7 @@
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li><a class="left-menu-chapters" ng-class="{unfolded: isFoldedChapters }" ng-click="unfoldChapters();"></a></li>
-            <li><a class="left-menu-macroses" ng-class="{unfolded: isFoldedMacros }" ng-click="unfoldMacros();">$mcr</a></li>
+            <li><a class="left-menu-macroses" ng-class="{unfolded: isFoldedMacros }" ng-click="unfoldMacros();"></a></li>
         </ul>
     </div>
 
@@ -158,6 +157,7 @@
                                 <li class="verification-item-container" ng-repeat="reference in error.references" ng-click="navigateTo(reference)">
                                     <a class="verification-item" href="javascript:void(0);">
                                         <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
+                                        <span ng-if="reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
                                         <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                         <span class="title">{{reference.title}}</span>
                                         <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macro'" class="variable" ng-bind="reference.variable">aaaa</span>

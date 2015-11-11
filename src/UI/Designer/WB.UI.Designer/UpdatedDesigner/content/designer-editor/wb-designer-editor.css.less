@@ -174,7 +174,7 @@
         height: @main-height;
         //overflow: hidden;
 
-        @selected-panel-bg-color: #edeff0; //#dbdfe2;// #f1f2f3;
+        @selected-panel-bg-color: #e5e8ea; //#dbdfe2;// #f1f2f3;
         @selected-panel-border-color: #dbdfe2;
         @selected-panel-grey-color: #7e898f;
 
@@ -211,6 +211,7 @@
 
                     &.left-menu-macroses {
                         //.lucidaC();
+                        background: url(../i/macro-panel-btn.png) center center no-repeat;
                     }
 
                     &:hover {
@@ -292,8 +293,9 @@
 
                 h3 {
                     .chapters-title-fontstyle();
-                    margin: 29px 24px 0 18px;
+                    margin: 29px 24px 20px 18px;
                     color: @selected-panel-grey-color;
+                    padding-left: 10px;
                 }
 
                 .button-holder {
@@ -310,20 +312,11 @@
             @macroses-panel-padding-left: 20px;
             @macroses-panel-macros-bg: #fff;
             @macroses-accent-color: #e004c9;
-
-
-            h3 {
-                padding-left: @macroses-panel-padding-left;
-            }
+            @macroses-border-color: #d9dde0;
+            @macroses-decription-color: #78838a;
 
             .macroses {
                 height: 100%;
-
-                h3 {
-                    .chapters-title-fontstyle();
-                    padding-bottom: 8px;
-                    color: #7e898f;
-                }
 
                 ul {
                     margin: 0;
@@ -335,14 +328,16 @@
                     li {
                         background: @macroses-panel-macros-bg;
                         margin-bottom: 7px;
-                        padding: 5px 30px 5px 10px;
+                        padding: 5px 10px 5px 10px;
                         .border-left-radius(8px);
                         .border-right-radius(8px);
+                        border: 2px solid @macroses-panel-macros-bg;
                         position: relative;
                         z-index: 10;
+                        .lucida-console-font();
 
                         &:hover {
-                            .box-shadow(0 0 10px 0 rgba(0, 0, 0, 0.2));
+                            border: 2px solid @macroses-border-color;
 
                             .input-group.macros-name .input-group-btn {
                                 visibility: visible;
@@ -358,9 +353,46 @@
                             padding-left: 0;
                             padding-right: 0;
                             border-radius: 0;
+                            .lucida-console-font();
+                            font-size: 14px;
+                        }
+
+                        input[type="text"] {
+                            .placeholder-style() {
+                                .lucida-console-font();
+                                font-size: 14px;
+                                text-overflow: ellipsis;
+                            }
+
+                            &[placeholder] {
+                                .placeholder-style();
+                            }
+
+                            &::-moz-placeholder {
+                                .placeholder-style();
+                            }
+
+                            &:-ms-input-placeholder {
+                                .placeholder-style();
+                            }
+
+                            &::-webkit-input-placeholder {
+                                .placeholder-style();
+                            }
+                        }
+
+                        .divider {
+                            height: 2px;
+                            width: 275px;
+                            background: @macroses-border-color;
+                        }
+
+                        input.macros-description {
+                            color: @macroses-decription-color;
                         }
 
                         .input-group {
+                            width: 275px;
                             .input-group-addon {
                                 border: none;
                                 border-color: @macroses-panel-macros-bg;
@@ -372,37 +404,11 @@
                             &.macros-name {
                                 .input-group-addon {
                                     color: @macroses-accent-color;
-                                    border-bottom: 2px solid #e0e3e6;
                                 }
 
                                 input {
-                                    width: 275px;
-                                    border-bottom: 2px solid #e0e3e6;
+                                    
                                     color: @macroses-accent-color;
-                                }
-
-                                .input-group-btn {
-                                    width: 100%;
-                                    visibility: hidden;
-                                    border-radius: 4px;
-
-                                    button {
-                                        color: @selected-panel-grey-color;
-                                        border-radius: 4px;
-                                        text-transform: lowercase;
-                                    }
-                                }
-                            }
-
-                            &.macros-description {
-                                .input-group-addon {
-                                    color: @selected-panel-grey-color;
-                                }
-
-                                input {
-                                    padding: 0;
-                                    color: @selected-panel-grey-color;
-                                    height: 24px;
                                 }
                             }
                         }
@@ -410,6 +416,7 @@
                         .ace_editor {
                             border: none;
                             margin-bottom: 5px;
+                            margin-top: 5px;
                             border-radius: 0;
                         }
 
@@ -432,6 +439,7 @@
 
                         .actions {
                             margin-left: -6px;
+                            margin-right: -6px;
                         }
 
                         button {
