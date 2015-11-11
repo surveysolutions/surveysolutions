@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
         };
 
         Because of = () =>
-            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName });
+            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>());
 
         private It should_call_write_to_file = () =>
             datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<string[,]>()), Times.Once());
