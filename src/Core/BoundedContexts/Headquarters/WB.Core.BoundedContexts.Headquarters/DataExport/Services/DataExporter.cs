@@ -34,8 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.RegisterExportHandlerForFormat<AllDataQueuedProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
             this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
 
-            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPPS);
-            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPPS);
+            this.RegisterExportHandlerForFormat<AllDataQueuedProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<ApprovedDataQueuedProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
 
             this.RegisterExportHandlerForFormat<AllDataQueuedProcess, BinaryFormatDataExportProcessHandler>(DataExportFormat.Binary);
         }

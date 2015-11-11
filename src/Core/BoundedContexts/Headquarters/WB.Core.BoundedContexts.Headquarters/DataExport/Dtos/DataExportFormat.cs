@@ -4,7 +4,7 @@
     {
         Tabular,
         STATA,
-        SPPS,
+        SPSS,
         Binary
     }
 }

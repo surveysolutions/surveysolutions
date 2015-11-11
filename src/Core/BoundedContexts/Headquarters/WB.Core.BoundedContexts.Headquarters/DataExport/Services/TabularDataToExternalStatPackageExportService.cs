@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPPS, tabularDataFiles);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles);
         }
        
 

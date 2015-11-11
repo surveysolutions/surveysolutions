@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 case DataExportFormat.STATA:
                     writer = new StataWriter();
                     break;
-                case DataExportFormat.SPPS:
+                case DataExportFormat.SPSS:
                     writer = new SpssWriter();
                     break;
                 case DataExportFormat.Tabular:
