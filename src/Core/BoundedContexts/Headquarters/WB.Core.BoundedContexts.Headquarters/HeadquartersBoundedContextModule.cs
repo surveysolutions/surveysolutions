@@ -74,6 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
             this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
+            this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();

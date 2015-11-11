@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             QuestionnaireExportStructure questionnaireExportStructure = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
+            IDataQueryFactory dataQueryFactory = null,
             IDatasetWriterFactory datasetWriterFactory = null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
@@ -35,6 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
+                dataQueryFactory ?? Mock.Of< IDataQueryFactory> (),
                 datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>());
         }
 
