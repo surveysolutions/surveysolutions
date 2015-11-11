@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -223,13 +224,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-        public ConcurrentHashSet<decimal> GetRosterInstanceIds(Guid groupId, decimal[] outerRosterVector)
+        public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
         {
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
 
             return this.RosterGroupInstanceIds.ContainsKey(groupKey)
-                ? this.RosterGroupInstanceIds[groupKey]
-                : new ConcurrentHashSet<decimal>();
+                ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
+                : Enumerable.Empty<decimal>().ToReadOnlyCollection();
         }
 
 
