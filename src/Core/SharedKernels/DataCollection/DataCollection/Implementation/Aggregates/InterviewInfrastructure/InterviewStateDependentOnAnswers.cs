@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void EnableQuestions(IEnumerable<Identity> groups)
         {
-            foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.DisabledQuestions.Remove(questionKey);
             }
@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DisableQuestions(IEnumerable<Identity> groups)
         {
-            foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.DisabledQuestions.Add(questionKey);
             }
@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void EnableGroups(IEnumerable<Identity> groups)
         {
-            foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string groupKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.DisabledGroups.Remove(groupKey);
             }
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DisableGroups(IEnumerable<Identity> groups)
         {
-            foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string groupKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.DisabledGroups.Add(groupKey);
             }
@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeclareAnswersInvalid(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.ValidAnsweredQuestions.Remove(questionKey);
                 this.InvalidAnsweredQuestions.Add(questionKey);
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeclareAnswersValid(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.ValidAnsweredQuestions.Add(questionKey);
                 this.InvalidAnsweredQuestions.Remove(questionKey);
@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         
         public void RemoveAnswers(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.AnswersSupportedInExpressions.Remove(questionKey);
                 this.LinkedSingleOptionAnswersBuggy.Remove(questionKey);
@@ -231,17 +231,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.RosterGroupInstanceIds.ContainsKey(groupKey)
                 ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
                 : Enumerable.Empty<decimal>().ToReadOnlyCollection();
-        }
-
-
-        /// <remarks>
-        /// The opposite operation (get id or vector from string) should never be performed!
-        /// This is one-way transformation. Opposite operation is too slow.
-        /// If you need to compactify data and get it back, you should use another datatype, not a string.
-        /// </remarks>
-        private static string ConvertEventIdentityToString(Identity identity)
-        {
-            return ConversionHelper.ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
         }
     }
 }
