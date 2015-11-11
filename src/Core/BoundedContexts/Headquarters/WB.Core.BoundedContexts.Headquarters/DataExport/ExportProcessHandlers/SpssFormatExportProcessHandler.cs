@@ -52,13 +52,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.ClearFolder(folderForDataExport);
 
             var exportProggress = new Progress<int>();
-            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent);
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent/2);
 
             this.tabularFormatExportService
                 .ExportInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
+            exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, 50 + +(donePercent / 2));
+
             var spssFiles = tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
-                process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
+                process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport), exportProggress);
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 process.QuestionnaireIdentity,
@@ -75,13 +78,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.ClearFolder(folderForDataExport);
 
             var exportProggress = new Progress<int>();
-            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent);
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, donePercent/2);
 
             this.tabularFormatExportService
                 .ExportApprovedInterviewsInTabularFormatAsync(process.QuestionnaireIdentity, folderForDataExport, exportProggress);
 
+            exportProggress = new Progress<int>();
+            exportProggress.ProgressChanged += (sender, donePercent) => this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, 50 + +(donePercent / 2));
+
             var spssFiles = tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(process.QuestionnaireIdentity.QuestionnaireId,
-                process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport));
+                process.QuestionnaireIdentity.Version, fileSystemAccessor.GetFilesInDirectory(folderForDataExport), exportProggress);
 
             var archiveFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
                 process.QuestionnaireIdentity,
