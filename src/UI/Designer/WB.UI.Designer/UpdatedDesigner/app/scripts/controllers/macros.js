@@ -84,10 +84,7 @@
                 });
             }
             
-            $scope.getDescriptionBtnName = function (macro) {
-                return macro.isDescriptionVisible? "hide" : "add";
-            }
-            $scope.isDescriptionBtnVisible = function (macro) {
+            $scope.isDescriptionEmpty = function (macro) {
                 return _.isEmpty(macro.description);
             }
             $scope.toggleDescription = function (macro) {

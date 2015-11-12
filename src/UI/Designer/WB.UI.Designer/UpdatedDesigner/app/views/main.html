@@ -114,7 +114,7 @@
                                     <div class="actions" ng-show="macroForm.$dirty">
                                         <button type="submit" ng-disabled="macroForm.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro, macroForm)">Save</button>
                                         <button type="button" class="btn lighter-hover" ng-click="cancel(macro, macroForm)">Cancel</button>
-                                        <button class="btn btn-default pull-right" ng-show="isDescriptionBtnVisible(macro)"  type="button" ng-click="toggleDescription(macro)">{{ getDescriptionBtnName(macro) }} description</button>
+                                        <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)"  type="button" ng-click="toggleDescription(macro)">{{ macro.isDescriptionVisible? "hide" : "add" }} description</button>
                                     </div>
                                 </ng-form>
                             </li>
