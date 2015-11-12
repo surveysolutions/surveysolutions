@@ -1780,7 +1780,7 @@ namespace WB.Tests.Unit
                     {
                         CatchExceptionsByEventHandlerTypes = new Type[0],
                         IgnoredEventHandlerTypes = new Type[0]
-                    }, logger ?? Mock.Of<ILogger>()), Mock.Of<IEventStore>(), new Type[0]);
+                    }, logger ?? Mock.Of<ILogger>()), Mock.Of<IEventStore>(), eventBusSettings.IgnoredEventHandlerTypes);
             ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
         }
