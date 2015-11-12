@@ -132,7 +132,8 @@
     }
     self.showRefreshButton = function (type, format) {
         var dataReference = self.getDataReference(type, format);
-        if (dataReference == null || _.isUndefined(dataReference.CanRefreshBeRequested))
+        if (dataReference == null) return false;
+        if (_.isUndefined(dataReference.CanRefreshBeRequested))
             return true;
         return dataReference.CanRefreshBeRequested();
     }
