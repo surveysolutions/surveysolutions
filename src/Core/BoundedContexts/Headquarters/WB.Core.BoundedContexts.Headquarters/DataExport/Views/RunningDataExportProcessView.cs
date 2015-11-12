@@ -1,27 +1,18 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class RunningDataExportProcessView
     {
-        public RunningDataExportProcessView(string dataExportProcessId, DateTime beginDate, DateTime lastUpdateDate, string dataExportProcessName, int progress, DataExportType type, DataExportFormat format)
-        {
-            this.DataExportProcessId = dataExportProcessId;
-            this.BeginDate = beginDate;
-            this.LastUpdateDate = lastUpdateDate;
-            this.DataExportProcessName = dataExportProcessName;
-            this.Progress = progress;
-            this.Type = type;
-            this.Format = format;
-        }
-
-        public string DataExportProcessId { get; private set; }
-        public DateTime BeginDate { get; private set; }
-        public DateTime LastUpdateDate { get; private set; }
-        public string DataExportProcessName { get; private set; }
-        public int Progress { get; private set; }
-        public DataExportType Type { get; private set; }
-        public DataExportFormat Format { get; private set; }
+        public string DataExportProcessId { get;  set; }
+        public DateTime BeginDate { get;  set; }
+        public DateTime LastUpdateDate { get;  set; }
+        public string DataExportProcessName { get;  set; }
+        public int Progress { get;  set; }
+        public DataExportType Type { get;  set; }
+        public DataExportFormat Format { get;  set; }
+        public QuestionnaireIdentity? QuestionnaireIdentity { get; set; }
     }
 }
