@@ -96,7 +96,6 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         }
 
         [Test]
-        [Ignore("Roma should fix in KP-6279")]
         public void When_a_multiple_catch_all_handler_are_registered_for_they_should_all_been_called()
         {
             var catchAllEventHandler1 = MockRepository.GenerateMock<IEventHandler<object>>();
@@ -125,7 +124,6 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         }
 
         [Test]
-        [Ignore("Roma should fix in KP-6279")]
         public void
             When_a_multiple_specific_handlers_are_register_they_all_should_be_called_when_the_specific_event_is_published()
         {
