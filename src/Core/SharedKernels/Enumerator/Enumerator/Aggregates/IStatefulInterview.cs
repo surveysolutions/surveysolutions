@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -49,6 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         TextAnswer GetTextAnswer(Identity identity);
 
         SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
+
+        YesNoQuestionAnswer GetYesNoAnswer(Identity identity);
 
         bool HasGroup(Identity group);
 

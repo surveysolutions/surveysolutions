@@ -57,6 +57,11 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
             return this.GetQuestion<SingleOptionQuestionModel>(questionId);
         }
 
+        public YesNoQuestionModel GetYesNoQuestion(Guid questionId)
+        {
+            return this.GetQuestion<YesNoQuestionModel>(questionId);
+        }
+
         public MultiOptionQuestionModel GetMultiOptionQuestion(Guid questionId)
         {
             return this.GetQuestion<MultiOptionQuestionModel>(questionId);
