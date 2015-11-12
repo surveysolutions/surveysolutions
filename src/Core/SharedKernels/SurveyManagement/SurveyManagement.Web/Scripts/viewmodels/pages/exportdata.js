@@ -118,10 +118,10 @@
 
     self.lastUpdateDate = function(type, format) {
         var dataReference = self.getDataReference(type, format);
-
-        if (dataReference == null || _.isUndefined(dataReference.LastUpdateDate) || dataReference.LastUpdateDate() === null)
-            return "Never";
-        return self.formatDate(dataReference.LastUpdateDate());
+        if (dataReference == null) return "Please wait...";
+        if (_.isUndefined(dataReference.LastUpdateDate) || dataReference.LastUpdateDate() === null)
+            return "No exported data";
+        return "Last updated: " + self.formatDate(dataReference.LastUpdateDate());
     }
 
     self.showDownloadButton = function (type, format) {
