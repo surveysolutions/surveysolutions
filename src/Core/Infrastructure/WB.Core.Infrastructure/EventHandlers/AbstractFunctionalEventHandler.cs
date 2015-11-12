@@ -95,7 +95,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         {
             var evntType = ExtractEventType(method);
             EventTypeResolver.RegisterEventDataType(evntType);
-            oldEventBus.RegisterHandler(evntType, this.Handle);
+            oldEventBus.RegisterHandler(eventType: evntType, eventHandlerType: this.GetType(), handle: this.Handle);
         }
 
         private static void SaveView(Guid id, TEntity newState, IReadSideStorage<TEntity> storage)
