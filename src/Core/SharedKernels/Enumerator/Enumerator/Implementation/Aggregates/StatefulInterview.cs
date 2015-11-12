@@ -189,6 +189,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             answer.SetAnswers(@event.SelectedValues);
         }
 
+        internal new void Apply(YesNoQuestionAnswered @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            var answer = this.GetOrCreateAnswer<YesNoQuestionAnswer>(@event);
+            answer.SetAnswers(@event.AnsweredOptions);
+        }
+
         internal new void Apply(GeoLocationQuestionAnswered @event)
         {
             base.Apply(@event);
@@ -508,6 +517,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public SingleOptionAnswer GetSingleOptionAnswer(Identity identity)
         {
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
+        }
+
+        public YesNoQuestionAnswer GetYesNoAnswer(Identity identity)
+        {
+            return this.GetQuestionAnswer<YesNoQuestionAnswer>(identity);
         }
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)

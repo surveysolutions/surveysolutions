@@ -298,6 +298,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValues);
         }
 
+        public virtual void Apply(YesNoQuestionAnswered @event)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual void Apply(GeoLocationQuestionAnswered @event)
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);

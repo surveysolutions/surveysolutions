@@ -42,6 +42,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
             {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_cascading_single_option },
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
+            {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
