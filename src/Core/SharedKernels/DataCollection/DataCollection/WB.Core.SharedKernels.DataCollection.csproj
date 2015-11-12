@@ -76,7 +76,6 @@
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
-    <Compile Include="Commands\Interview\YesNoAnswer.cs" />
     <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />

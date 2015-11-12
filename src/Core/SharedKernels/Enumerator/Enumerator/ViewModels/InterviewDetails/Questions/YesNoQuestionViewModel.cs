@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var selectedValues = allSelectedOptions.OrderBy(x => x.CheckedTimeStamp)
                 .ThenBy(x => x.CheckedOrder)
-                .Select(x => new YesNoAnswer(x.Value, x.Selected.Value))
+                .Select(x => new AnsweredYesNoOption(x.Value, x.Selected.Value))
                 .ToArray();
 
             var command = new AnswerYesNoQuestion(
