@@ -87,9 +87,12 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
-            return new Questionnaire()
+            var questionnaire = questionnaireView.Source;
+            questionnaire.Macros = null;
+
+            return new Questionnaire
             {
-                Document = questionnaireView.Source,
+                Document = questionnaire,
                 Assembly = resultAssembly
             };
         }
