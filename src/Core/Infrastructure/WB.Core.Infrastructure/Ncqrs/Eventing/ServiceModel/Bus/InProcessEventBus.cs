@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Domain;
@@ -13,7 +12,14 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public class InProcessEventBus : IEventBus
     {
-        private readonly Dictionary<Type, List<Action<IPublishableEvent>>> handlerRegistry = new Dictionary<Type, List<Action<IPublishableEvent>>>();
+        protected struct EventHandlerMethod
+        {
+            public Type EventType { get; set; }
+            public Type EventHandlerType { get; set; }
+            public Action<IPublishableEvent> Handle { get; set; }
+        }
+
+        private readonly List<EventHandlerMethod> eventHandlerMethods = new List<EventHandlerMethod>();
         private readonly IEventStore eventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
@@ -27,11 +33,14 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
         {
-            List<Action<IPublishableEvent>> handlers = GetHandlersForEvent(eventMessage);
+            if (eventMessage?.Payload == null) return;
 
-            if (handlers.Any())
+            var eventHandlerMethodsByEventType = this.eventHandlerMethods.Where(
+                    eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo())).ToList();
+
+            if (eventHandlerMethodsByEventType.Any())
             {
-                PublishToHandlers(eventMessage, handlers, onCatchingNonCriticalEventHandlerException);
+                PublishToHandlers(eventMessage, eventHandlerMethodsByEventType, onCatchingNonCriticalEventHandlerException);
             }
         }
 
@@ -39,7 +48,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             foreach (var eventMessage in eventMessages)
             {
-                this.Publish(eventMessage, null);
+                this.Publish(eventMessage);
             }
         }
 
@@ -58,68 +67,41 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
         {
             var eventDataType = typeof(TEvent);
+            var eventHandlerType = handler.GetType();
 
-            this.handlerByEventType.Add(eventDataType, handler as IEventHandler);
-
-            RegisterHandler(eventDataType, evnt => handler.Handle((IPublishedEvent<TEvent>)evnt));
+            RegisterHandler(eventDataType, eventHandlerType,  evnt => handler.Handle((IPublishedEvent<TEvent>)evnt));
         }
 
-        private readonly Dictionary<Type, IEventHandler> handlerByEventType = new Dictionary<Type, IEventHandler>();    
-
-        public void RegisterHandler(Type eventDataType, Action<IPublishableEvent> handler)
+        public void RegisterHandler(Type eventType, Type eventHandlerType, Action<IPublishableEvent> handle)
         {
-            List<Action<IPublishableEvent>> handlers = null;
-            if (!this.handlerRegistry.TryGetValue(eventDataType, out handlers))
+            this.eventHandlerMethods.Add(new EventHandlerMethod
             {
-                handlers = new List<Action<IPublishableEvent>>(1);
-                this.handlerRegistry.Add(eventDataType, handlers);
-            }
-
-            handlers.Add(handler);
+                EventType = eventType,
+                EventHandlerType = eventHandlerType,
+                Handle = handle
+            });
         }
 
-        [ContractVerification(false)]
-        protected List<Action<IPublishableEvent>> GetHandlersForEvent(IPublishableEvent eventMessage)
-        {
-            if (eventMessage == null)
-                return null;
-
-            var dataType = eventMessage.Payload.GetType();
-            var result = new List<Action<IPublishableEvent>>();
-
-            foreach (var key in this.handlerRegistry.Keys)
-            {
-                if (key.GetTypeInfo().IsAssignableFrom(dataType.GetTypeInfo()))
-                {
-                    List<Action<IPublishableEvent>> handlers = this.handlerRegistry[key];
-                    result.AddRange(handlers);
-                }
-            }
-
-            return result;
-        }
-
-        private void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<Action<IPublishableEvent>> handlers, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException)
+        private void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<EventHandlerMethod> eventHandlerMethodsToPublish, 
+            Action<EventHandlerException> onCatchingNonCriticalEventHandlerException)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
             IPublishableEvent publishedEvent = (IPublishableEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
 
             var occurredExceptions = new List<Exception>();
 
-            foreach (var handler in handlers)
+            foreach (var eventHandlerMethod in eventHandlerMethodsToPublish)
             {
                 try
                 {
-                    handler.Invoke(publishedEvent);
+                    eventHandlerMethod.Handle.Invoke(publishedEvent);
                 }
                 catch (Exception exception)
                 {
-                    var eventHandler = this.handlerByEventType[eventMessage.Payload.GetType()];
+                    var catchEventHandlerException = this.eventBusSettings.CatchExceptionsByEventHandlerTypes.Contains(eventHandlerMethod.EventHandlerType);
 
-                    var catchEventHandlerException = eventHandler != null && this.eventBusSettings.CatchExceptionsByEventHandlerTypes.Contains(eventHandler.GetType());
-
-                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandler?.GetType(),
-                        eventType: eventMessage.Payload.GetType(), isCritical: !catchEventHandlerException,
+                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerMethod.EventHandlerType,
+                        eventType: eventHandlerMethod.EventType, isCritical: !catchEventHandlerException,
                         innerException: exception);
 
                     if (catchEventHandlerException)

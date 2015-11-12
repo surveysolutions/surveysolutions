@@ -10,7 +10,7 @@ namespace WB.Core.Infrastructure
     public interface IEventDispatcher : IEventBus
     {
         void PublishEventToHandlers(IPublishableEvent eventMessage,
-            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException);
+            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null);
 
         IEventHandler[] GetAllRegistredEventHandlers();
 
