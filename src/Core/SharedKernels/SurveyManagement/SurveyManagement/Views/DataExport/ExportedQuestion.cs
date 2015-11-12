@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -119,10 +121,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
             if (this.QuestionType == QuestionType.MultyOption)
             {
-                for (int i = 0; i < result.Length; i++)
+                if (!header.QuestionSubType.HasValue)
                 {
-                    int isOptionChecked = Array.IndexOf(answers, header.ColumnValues[i]);
-                    result[i] = isOptionChecked > -1 ? (isOptionChecked + 1).ToString() : "0";
+                    for (int i = 0; i < result.Length; i++)
+                    {
+                        int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                        result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString() : "0";
+                    }
+                }
+                else
+                {
+                    FillYesNoAnswers(answers, header, result);
                 }
             }
             else
@@ -134,6 +143,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             }
 
             return result;
+        }
+
+        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        {
+            var typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
+            int filledYesAnswersCount = 0;
+            for (int i = 0; i < result.Length; i++)
+            {
+                decimal columnValue = (decimal) header.ColumnValues[i];
+
+                var isOptionSelected = typedAnswers.FirstOrDefault(x => x.OptionValue == columnValue);
+
+                if (isOptionSelected != null)
+                {
+                    if (isOptionSelected.Yes)
+                    {
+                        result[i] = (filledYesAnswersCount + 1).ToString();
+                        filledYesAnswersCount++;
+                    }
+                    else
+                    {
+                        result[i] = "0";
+                    }
+                }
+                else
+                {
+                    result[i] = "";
+                }
+            }
         }
     }
 }

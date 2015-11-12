@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () => questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);
 
-        It should_put_fill_multioption_question_header_title = () =>
+        It should_fill_multioption_question_header_title = () =>
         {
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             ExportedHeaderItem exportedHeaderItem = headerStructureForLevel.HeaderItems[questionId];

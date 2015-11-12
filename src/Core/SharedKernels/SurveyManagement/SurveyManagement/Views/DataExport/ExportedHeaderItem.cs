@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
     {
         public Guid PublicKey { get; set; }
         public QuestionType QuestionType { get; set; }
+        public QuestionSubtype? QuestionSubType { get; set; }
         public string[] ColumnNames { get; set; }
         public string[] Titles { get; set; }
         public string VariableName { get; set; }

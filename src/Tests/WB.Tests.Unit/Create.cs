@@ -2464,5 +2464,10 @@ namespace WB.Tests.Unit
                 Description = description
             };
         }
+
+        public static AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
+        {
+            return new AnsweredYesNoOption(value, answer);
+        }
     }
 }
