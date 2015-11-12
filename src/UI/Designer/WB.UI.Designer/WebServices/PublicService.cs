@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
+
+using Main.Core.Documents;
+
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -104,7 +107,9 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
 
-            Stream stream = this.zipUtils.Compress(this.serializer.Serialize(questionnaireView.Source));
+            var questionnaire = questionnaireView.Source;
+            questionnaire.Macros = null;
+            Stream stream = this.zipUtils.Compress(this.serializer.Serialize(questionnaire));
 
             return new RemoteFileInfo
             {
