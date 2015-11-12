@@ -105,5 +105,28 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         #endregion
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType() && obj.GetType() != typeof(decimal[])) return false;
+            return this.Identical((RosterVector)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hc = this.Coordinates.Count;
+
+                foreach (var coordinate in this.Coordinates)
+                {
+                    hc = unchecked(hc * 13 + coordinate.GetHashCode());
+                }
+
+                return hc;
+            }
+        }
     }
 }
