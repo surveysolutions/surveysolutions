@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
@@ -38,6 +39,15 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 return getCategoricalAnswerOptionText == null
                     ? string.Join(", ", multiAnswer)
                     : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
+            }
+            if (answer is AnsweredYesNoOption[])
+            {
+                var yesNoAnswer = (AnsweredYesNoOption[])answer;
+                var yesAnsweredValues = yesNoAnswer.Where(a => a.Yes).Select(a => a.OptionValue);
+
+                return getCategoricalAnswerOptionText == null
+                    ? string.Join(", ", yesAnsweredValues)
+                    : string.Join(", ", yesAnsweredValues.Select(getCategoricalAnswerOptionText));
             }
             if (answer is decimal[][])
             {
