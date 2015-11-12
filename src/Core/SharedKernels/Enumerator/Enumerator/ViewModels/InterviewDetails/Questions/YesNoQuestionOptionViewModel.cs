@@ -9,10 +9,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class YesNoQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
         public YesNoQuestionViewModel QuestionViewModel { get; private set; }
+        public QuestionStateViewModel<YesNoQuestionAnswered> QuestionState { get; set; }
 
-        public YesNoQuestionOptionViewModel(YesNoQuestionViewModel questionViewModel)
+        public YesNoQuestionOptionViewModel(YesNoQuestionViewModel questionViewModel,
+            QuestionStateViewModel<YesNoQuestionAnswered> questionState)
         {
             this.QuestionViewModel = questionViewModel;
+            this.QuestionState = questionState;
         }
 
         public decimal Value { get; set; }

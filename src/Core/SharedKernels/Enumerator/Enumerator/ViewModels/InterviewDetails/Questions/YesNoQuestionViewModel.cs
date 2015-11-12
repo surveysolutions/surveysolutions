@@ -31,13 +31,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly QuestionStateViewModel<YesNoQuestionAnswered> QuestionState;
-        private readonly AnsweringViewModel Answering;
         private readonly IUserInteractionService userInteraction;
         private Guid interviewId;
         private bool areAnswersOrdered;
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
+
+        public AnsweringViewModel Answering { get; set; }
+        public QuestionStateViewModel<YesNoQuestionAnswered> QuestionState { get; set; }
         public List<YesNoQuestionOptionViewModel> Options { get; set; }
 
         public YesNoQuestionViewModel(IPrincipal principal,
@@ -92,15 +93,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private YesNoQuestionOptionViewModel ToViewModel(OptionModel model, YesNoQuestionAnswer answerModel)
         {
-            var isExistAnswer = answerModel.Answers.Any(a => a.OptionValue == model.Value);
+            var isExistAnswer = answerModel.Answers != null && answerModel.Answers.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
                 ? answerModel.Answers.First(a => a.OptionValue == model.Value).Yes 
                 : (bool?) null;
             var orderIndex = isExistAnswer && this.areAnswersOrdered
-                ? Array.IndexOf(answerModel.Answers.Select(am => am.OptionValue).ToArray(), model.Value) + 1
+                ? Array.IndexOf(answerModel.Answers.Where(am => am.Yes).Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
 
-            var optionViewModel = new YesNoQuestionOptionViewModel(this)
+            var optionViewModel = new YesNoQuestionOptionViewModel(this, this.QuestionState)
             {
                 Value = model.Value,
                 Title = model.Title,
@@ -118,7 +119,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.CheckedOrder).ToList() 
                 : this.Options.Where(x => x.Selected.HasValue).ToList();
 
-            if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
+            int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
+
+            if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
             {
                 changedModel.Selected = null;
                 return;
@@ -177,6 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void PutOrderOnOptions(YesNoQuestionAnswered @event)
         {
             var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToArray();
+            var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToArray();
 
             foreach (var option in this.Options)
             {
@@ -185,7 +189,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (selectedOptionIndex >= 0)
                 {
                     var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
-                    option.CheckedOrder = selectedOptionIndex + 1;
+                    option.CheckedOrder = answeredYesNoOption.Yes 
+                        ? Array.IndexOf(orderedYesOptions, option.Value) + 1
+                        : (int?)null; 
                     option.Selected = answeredYesNoOption.Yes;
                 }
                 else

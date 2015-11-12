@@ -6,15 +6,20 @@
     <include layout="@layout/interview_question__title" />
     <LinearLayout style="@style/Interview_Question_Body">
       <include layout="@layout/interview_question__instructions" />
+
+<!--
+      <TextView
+        style="@style/Interview_Question_MultiOptionOrder"
+        android:text="Yes / No" />
+-->
+
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
-        <TextView style="@style/Interview_Question_EmptyOptions"
-                  local:MvxBind="Text Localization('Interview_LinkedQuestion_Empty'); Visible If(HasOptions, false, true)"/>
         <MvxLinearLayout
           style="@style/Interview_Question_Answer_Options"
           local:MvxItemTemplate="@layout/interview_question_yesno_item"
-          local:MvxBind="ItemsSource Options; Visible HasOptions" />
+          local:MvxBind="ItemsSource Options;" />
 
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />
