@@ -608,6 +608,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return numericQuestion.IsInteger;
         }
 
+        public bool IsQuestionYesNo(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var multipleOptionsQuestion = question as IMultyOptionsQuestion;
+            if (multipleOptionsQuestion == null)
+                throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
+
+            return multipleOptionsQuestion.YesNoView;
+        }
+
         public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
