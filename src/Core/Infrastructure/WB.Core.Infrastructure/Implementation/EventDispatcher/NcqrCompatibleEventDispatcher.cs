@@ -49,7 +49,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 try
                 {
-                    handler.Bus.Publish(eventMessage);
+                    handler.Bus.Publish(eventMessage, onCatchingNonCriticalEventHandlerException);
                 }
                 catch (Exception exception)
                 {
