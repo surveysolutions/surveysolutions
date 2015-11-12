@@ -334,10 +334,20 @@
                 });
             };
 
-            $scope.$watch('activeQuestion.isLinked', function (newValue) {
-                if (!newValue && $scope.activeQuestion) {
+            $scope.$watch('activeQuestion.isLinked', function(newValue) {
+                if (!$scope.activeQuestion) {
+                    return;
+                }
+                if (newValue) {
+                    $scope.activeQuestion.yesNoView = false;
+                } else {
                     $scope.activeQuestion.linkedToQuestionId = null;
                     $scope.activeQuestion.linkedToQuestion = null;
+                }
+            });
+            $scope.$watch('activeQuestion.yesNoView', function (newValue) {
+                if (newValue && $scope.activeQuestion) {
+                    $scope.activeQuestion.isLinked = false;
                 }
             });
 

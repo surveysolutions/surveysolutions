@@ -73,21 +73,21 @@
             </div>
         </div>
 
-    <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
-        <div class="enabling-group-marker"></div>
-        <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression"/></label>
-        <div class="pseudo-form-control">
-            <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
+        <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
+            <div class="enabling-group-marker"></div>
+            <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
+            <div class="pseudo-form-control">
+                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
+            </div>
         </div>
-    </div>
 
-    <div class="form-group validation-group" ng-show="doesQuestionSupportValidations()">
-        <div class="validation-group-marker"></div>
-        <label for="edit-question-validation-expression">Validation condition <help key="validationExpression"/></label>
-        <div class="pseudo-form-control">
-            <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
+        <div class="form-group validation-group" ng-show="doesQuestionSupportValidations()">
+            <div class="validation-group-marker"></div>
+            <label for="edit-question-validation-expression">Validation condition <help key="validationExpression" /></label>
+            <div class="pseudo-form-control">
+                <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
+            </div>
         </div>
-    </div>
 
         <div class="form-group" ng-show="doesQuestionSupportValidations()">
             <label for="edit-question-validation-message">Error message <help key="validationMessage" /></label>
@@ -97,23 +97,23 @@
 
 
         <div class="form-group">
-                <div class="form-group pull-right">
-                    <label for="Question-scope">Question scope&nbsp;</label>
-                    <div class="btn-group dropup " dropdown>
-                        <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
-                            {{ activeQuestion.questionScope }}
-                            <span class="dropdown-arrow"></span>
-                        </button>
+            <div class="form-group pull-right">
+                <label for="Question-scope">Question scope&nbsp;</label>
+                <div class="btn-group dropup " dropdown>
+                    <button class="btn dropdown-toggle" id="Question-scope" dropdown-toggle type="button">
+                        {{ activeQuestion.questionScope }}
+                        <span class="dropdown-arrow"></span>
+                    </button>
 
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation" ng-repeat="scope in getQuestionScopes(activeQuestion)">
-                                <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
-                                    {{scope.text}}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation" ng-repeat="scope in getQuestionScopes(activeQuestion)">
+                            <a role="menuitem" tabindex="-1" ng-click="changeQuestionScope(scope)">
+                                {{scope.text}}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+            </div>
         </div>
 
         <script type="text/ng-template" id="SingleOption-template.html">
@@ -322,42 +322,44 @@
                     </div>
                 </div>
             </div>
-            <div class="table-holder">
-                <div class="row">
-                    <div class="col-xs-5">
-                        <div class="checkbox checkbox-in-column">
-                            <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
-                            <label for="cb-is-ordered"><span></span>Record answer order</label>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group singleline-group checkbox-in-column" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
-                            <label for="edit-question-max-answers-number">Max number of answers</label>
-                            <input name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
-                            <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
-                                Only integers are allowed
-                            </p>
-                        </div>
+        <div class="table-holder">
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="checkbox checkbox-in-column">
+                        <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
+                        <label for="cb-is-ordered"><span></span>Record answer order</label>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-3">
-                        <div class="checkbox checkbox-in-column">
-                            <input id="cb-multyoption-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                            <label for="cb-multyoption-is-linked"><span></span>Is linked</label>
-                        </div>
+                <div class="col-xs-6">
+                    <div class="form-group singleline-group checkbox-in-column" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
+                        <label for="edit-question-max-answers-number">Max number of answers</label>
+                        <input name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
+                        <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
+                            Only integers are allowed
+                        </p>
                     </div>
-                    <div class="col-xs-3">
-                        <div class="checkbox checkbox-in-column">
-                            <input id="cb-multyoption-yes-no-view" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.yesNoView" />
-                            <label for="cb-multyoption-yes-no-view"><span></span>Yes/No view</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}">
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="checkbox checkbox-in-column" ng-show="!activeQuestion.isLinked">
+                        <input id="cb-multyoption-yes-no-view" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.yesNoView" />
+                        <label for="cb-multyoption-yes-no-view"><span></span>Yes/No view</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4" ng-show="!activeQuestion.yesNoView">
+                    <div class="checkbox checkbox-in-column">
+                        <input id="cb-multyoption-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                        <label for="cb-multyoption-is-linked"><span></span>Is linked</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}">
+            </div>
+        </div>
         </script>
 
         <script type="text/ng-template" id="Numeric-template.html">
