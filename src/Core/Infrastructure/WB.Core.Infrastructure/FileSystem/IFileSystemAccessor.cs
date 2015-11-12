@@ -13,6 +13,7 @@ namespace WB.Core.Infrastructure.FileSystem
         string GetFileExtension(string filePath);
         long GetFileSize(string filePath);
         DateTime GetCreationTime(string filePath);
+        DateTime GetModificationTime(string filePath);
         bool IsDirectoryExists(string pathToDirectory);
         void CreateDirectory(string path);
         void DeleteDirectory(string path);
