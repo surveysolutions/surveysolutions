@@ -37,7 +37,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -2468,6 +2470,29 @@ namespace WB.Tests.Unit
         public static AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
         {
             return new AnsweredYesNoOption(value, answer);
+        }
+
+        public static ParaDataExportProcess ParaDataExportProcess()
+        {
+            return new ParaDataExportProcess() {DataExportFormat = DataExportFormat.Tabular};
+        }
+
+        public static AllDataExportProcess AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        {
+            return new AllDataExportProcess()
+            {
+                QuestionnaireIdentity = questionnaireIdentity??new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                DataExportFormat = DataExportFormat.Tabular
+            };
+        }
+
+        public static ApprovedDataExportProcess ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity=null)
+        {
+            return new ApprovedDataExportProcess()
+            {
+                QuestionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                DataExportFormat = DataExportFormat.Tabular
+            };
         }
     }
 }
