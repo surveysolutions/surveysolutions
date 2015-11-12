@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
 
-            foreach (var dataByLevel in interviewDataByLevels)
+            foreach (InterviewLevel dataByLevel in interviewDataByLevels)
             {
                 var vectorLength = dataByLevel.RosterVector.Length;
 
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 if (vectorLength == 0)
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables);
 
-                var parentRecordIds = new string[dataByLevel.RosterVector.Length];
+                string[] parentRecordIds = new string[dataByLevel.RosterVector.Length];
                 if (parentRecordIds.Length > 0)
                 {
                     parentRecordIds[0] = interview.InterviewId.FormatGuid();
@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 if (question == null)
                 {
                     var answers = new List<string>();
-                    for (int i = 0; i < headerItem.ColumnNames.Count(); i++)
+                    for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                     {
                         answers.Add(string.Empty);
                     }
@@ -244,6 +244,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             exportedHeaderItem.PublicKey = question.PublicKey;
             exportedHeaderItem.QuestionType = question.QuestionType;
+            if (question is IMultyOptionsQuestion)
+            {
+                var multioptionQuestion = (IMultyOptionsQuestion) question;
+                if (multioptionQuestion.YesNoView)
+                {
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_YesNo;
+                }
+            }
+
             exportedHeaderItem.VariableName = question.StataExportCaption;
             exportedHeaderItem.Titles = new[]
             { string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel };
