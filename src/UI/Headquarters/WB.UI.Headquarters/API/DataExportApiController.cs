@@ -25,16 +25,16 @@ namespace WB.UI.Headquarters.API
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private readonly IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory;
+        private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         public DataExportApiController( 
-            IFileSystemAccessor fileSystemAccessor, 
-            IViewFactory<ExportedDataReferenceInputModel, ExportedDataReferencesViewModel> exportedDataReferenceViewFactory, 
+            IFileSystemAccessor fileSystemAccessor,
+            IDataExportStatusReader dataExportStatusReader, 
             IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, IFilebasedExportedDataAccessor filebasedExportedDataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.exportedDataReferenceViewFactory = exportedDataReferenceViewFactory;
+            this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
@@ -124,9 +124,11 @@ namespace WB.UI.Headquarters.API
             return Request.CreateResponse(true);
         }
 
-        public ExportedDataReferencesViewModel ExportedDataReferencesForQuestionnaire(ExportedDataReferenceInputModel request)
+        public DataExportStatusView ExportedDataReferencesForQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
-            return exportedDataReferenceViewFactory.Load(request);
+            return
+                this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
         private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)

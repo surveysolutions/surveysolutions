@@ -3,9 +3,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
-    public class ExportedDataReferencesView
+    public class DataExportView
     {
-        public ExportedDataReferencesView()
+        public DataExportView()
         {
         }
         public DataExportFormat DataExportFormat { get; set; }

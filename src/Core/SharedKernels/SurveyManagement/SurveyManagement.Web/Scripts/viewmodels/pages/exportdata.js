@@ -9,17 +9,8 @@
     self.UpdateApprovedDataUrl = $updateApprovedDataUrl;
     self.Templates = templates;
 
-
-    self.ParaDataTabularReference = ko.observableArray();
-    self.DataTabularReference = ko.observableArray();
-    self.DataBinaryReference = ko.observableArray();
-    self.ApprovedDataTabularReference = ko.observableArray();
-    self.DataSTATAReference = ko.observableArray();
-    self.ApprovedDataSTATAReference = ko.observableArray();
-    self.DataSPSSReference = ko.observableArray();
-    self.ApprovedDataSPSSReference = ko.observableArray();
-
-    self.RunningProcesses = ko.observableArray([]);
+    self.DataExports = ko.observableArray([]);
+    self.RunningDataExportProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
 
     self.selectedTemplate = ko.observable();
@@ -43,11 +34,9 @@
             }, 3000);
             return;
         }
-        var filter = {
-            questionnaireId: self.selectedTemplateId(),
-            questionnaireVersion: self.selectedTemplate().version
-        };
-        self.sendWebRequest(self.Url, filter, function(data) {
+        var questionnaireId = self.selectedTemplateId();
+        var questionnaireVersion = self.selectedTemplate().version;
+        self.sendWebRequest(self.Url + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion, {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
             if (runRecursively===true) {
                 _.delay(function () {
@@ -56,9 +45,11 @@
             }
         });
     };
+
     self.stopExportProcess = function (runningExport) {
         self.sendWebRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
     }
+
     self.requestParaDataUpdate = function(format) {
         return function() {
             self.sendWebRequest(self.HistoryUrl,
@@ -128,30 +119,34 @@
     self.lastUpdateDate = function(type, format) {
         var dataReference = self.getDataReference(type, format);
 
-        if (dataReference == null || _.isUndefined(dataReference().LastUpdateDate) || dataReference().LastUpdateDate() === null)
+        if (dataReference == null || _.isUndefined(dataReference.LastUpdateDate) || dataReference.LastUpdateDate() === null)
             return "Never";
-        return self.formatDate(dataReference().LastUpdateDate());
+        return self.formatDate(dataReference.LastUpdateDate());
     }
 
     self.showDownloadButton = function (type, format) {
         var dataReference = self.getDataReference(type, format);
-        if (dataReference == null || _.isUndefined(dataReference().HasDataToExport))
+        if (dataReference == null || _.isUndefined(dataReference.HasDataToExport))
             return false;
-        return dataReference().HasDataToExport();
+        return dataReference.HasDataToExport();
     }
     self.showRefreshButton = function (type, format) {
         var dataReference = self.getDataReference(type, format);
-        if (dataReference == null || _.isUndefined(dataReference().CanRefreshBeRequested))
+        if (dataReference == null || _.isUndefined(dataReference.CanRefreshBeRequested))
             return true;
-        return dataReference().CanRefreshBeRequested();
+        return dataReference.CanRefreshBeRequested();
     }
 
-    self.getDataReference = function (type, format)
-    {
-        var referenceName = type + format + "Reference";
-        if (_.isUndefined(self[referenceName]))
+    self.getDataReference = function (type, format) {
+
+        var existingDataExport = _.find(self.DataExports(), function (dataExports) {
+            return dataExports.DataExportType() == type && dataExports.DataExportFormat() == format;
+        });
+
+        if (_.isUndefined(existingDataExport)) {
             return null;
-        return self[referenceName];
+        }
+        return existingDataExport;
     }
 
     self.exportFormatName = function (runningExport) {

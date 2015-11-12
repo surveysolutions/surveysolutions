@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
@@ -89,6 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
             this.Bind<ICsvWriter>().To<CsvWriter>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
+            this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
             this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
         }
     }
