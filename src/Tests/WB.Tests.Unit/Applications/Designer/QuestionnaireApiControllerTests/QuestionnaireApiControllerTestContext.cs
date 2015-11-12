@@ -88,8 +88,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         {
             return new QuestionnaireVerificationError[2]
             {
-                new QuestionnaireVerificationError("aaa","aaaa", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Question, Guid.NewGuid())}), 
-                new QuestionnaireVerificationError("bbb","bbbb", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Group, Guid.NewGuid())}), 
+                new QuestionnaireVerificationError("aaa","aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Question, Guid.NewGuid())}), 
+                new QuestionnaireVerificationError("bbb","bbbb", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Group, Guid.NewGuid())}), 
             };
         }
 
@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return
                 questionnaireItems.Select(
                     questionnaireItem =>
-                        new QuestionnaireVerificationError("aaa", "aaaa",
+                        new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General,
                             new QuestionnaireVerificationReference[1]
                             {
                                 new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,

@@ -377,6 +377,7 @@
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\VerificationErrorLEvel.cs" />
     <Compile Include="Views\Account\AccountDenormalizer.cs" />
     <Compile Include="Views\Account\AccountDocument.cs" />
     <Compile Include="Views\Account\AccountListItem.cs" />
