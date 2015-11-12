@@ -2,6 +2,7 @@
 
 <resources>
   <dimen name="zero">0dp</dimen>
+  <dimen name="one">1dp</dimen>
   <dimen name="button_shadow_margin">4dp</dimen>
 
   <dimen name="Theme_ProgressBar_height">16dip</dimen>
