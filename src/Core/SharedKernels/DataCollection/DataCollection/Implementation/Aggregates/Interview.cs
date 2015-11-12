@@ -792,13 +792,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : state.GetAnswerSupportedInExpressions(question);
         }
 
-        private static AnsweredYesNoOption[] ToYesNoEventAnswer(ReadOnlyCollection<YesNoAnswer> answeredOptions)
-        {
-            return answeredOptions
-                .Select(answeredOption => new AnsweredYesNoOption(answeredOption.Option, answeredOption.Answer))
-                .ToArray();
-        }
-
         /// <remarks>
         /// If roster vector should be extended, result will be a set of vectors depending on roster count of corresponding groups.
         /// </remarks>
@@ -1228,7 +1221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckYesNoQuestionInvariants(command.Question, command.AnsweredOptions, questionnaire, this.interviewState);
 
-            AnsweredYesNoOption[] answer = ToYesNoEventAnswer(command.AnsweredOptions);
+            AnsweredYesNoOption[] answer = command.AnsweredOptions.ToArray();
 
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (currentState, question) => question == command.Question
@@ -1981,9 +1974,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (rosterInstancesToAdd.Any())
             {
                 AddedRosterInstance[] instances = rosterInstancesToAdd
-                    .Select(
-                        roster =>
-                            new AddedRosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex))
+                    .Select(roster => new AddedRosterInstance(roster.GroupId, roster.OuterRosterVector, roster.RosterInstanceId, roster.SortIndex))
                     .ToArray();
 
                 this.ApplyEvent(new RosterInstancesAdded(instances));
@@ -2253,11 +2244,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckYesNoQuestionInvariants(Identity question, ReadOnlyCollection<YesNoAnswer> answeredOptions, IQuestionnaire questionnaire,
+        private void CheckYesNoQuestionInvariants(Identity question, ReadOnlyCollection<AnsweredYesNoOption> answeredOptions, IQuestionnaire questionnaire,
             IReadOnlyInterviewStateDependentOnAnswers state)
         {
-            decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.Option).ToArray();
-            var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Answer);
+            decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
+            var yesAnswersCount = answeredOptions.Count(answeredOption => answeredOption.Yes);
 
             this.ThrowIfQuestionDoesNotExist(question.Id, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(state, question.Id, question.RosterVector, questionnaire);
@@ -3031,7 +3022,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         interviewChanges = questionnaire.IsQuestionYesNo(questionId)
                             ? this.CalculateInterviewChangesOnYesNoQuestionAnswer(
-                                new Identity(questionId, currentQuestionRosterVector), ToYesNoEventAnswer((ReadOnlyCollection<YesNoAnswer>) answer),
+                                new Identity(questionId, currentQuestionRosterVector), ((ReadOnlyCollection<AnsweredYesNoOption>) answer).ToArray(),
                                 answersTime, userId, questionnaire, expressionProcessorState, changeStructures.State, getAnswer)
                             : this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(expressionProcessorState, changeStructures.State, userId, questionId,
                                 currentQuestionRosterVector, answersTime, (decimal[])answer, getAnswer, questionnaire);
@@ -3055,7 +3046,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     default:
                         throw new InterviewException(string.Format(
                             "Question {0} has type {1} which is not supported as initial pre-filled question. InterviewId: {2}",
-                            questionId, questionType, EventSourceId));
+                            questionId, questionType, this.EventSourceId));
                 }
 
                 changeStructures.State.ApplyInterviewChanges(interviewChanges);
@@ -3909,7 +3900,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (ReadOnlyCollection<YesNoAnswer>) answer, questionnaire, currentInterviewState);
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (ReadOnlyCollection<AnsweredYesNoOption>) answer, questionnaire, currentInterviewState);
                         }
                         else
                         {
