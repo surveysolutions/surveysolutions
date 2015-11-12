@@ -1774,13 +1774,17 @@ namespace WB.Tests.Unit
 
         public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
         {
+            eventBusSettings = eventBusSettings ?? new EventBusSettings
+            {
+                CatchExceptionsByEventHandlerTypes = new Type[0],
+                IgnoredEventHandlerTypes = new Type[0]
+            };
+
+            var eventStore = Mock.Of<IEventStore>();
+
             var ncqrCompatibleEventDispatcher =
                 new NcqrCompatibleEventDispatcher(
-                    () => new InProcessEventBus(Mock.Of<IEventStore>(), eventBusSettings ?? new EventBusSettings
-                    {
-                        CatchExceptionsByEventHandlerTypes = new Type[0],
-                        IgnoredEventHandlerTypes = new Type[0]
-                    }, logger ?? Mock.Of<ILogger>()), Mock.Of<IEventStore>(), eventBusSettings.IgnoredEventHandlerTypes);
+                    () =>new InProcessEventBus(eventStore, eventBusSettings, logger ?? Mock.Of<ILogger>()), eventStore, eventBusSettings.IgnoredEventHandlerTypes);
             ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
         }
