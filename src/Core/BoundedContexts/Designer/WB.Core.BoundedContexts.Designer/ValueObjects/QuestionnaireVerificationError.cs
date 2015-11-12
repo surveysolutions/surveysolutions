@@ -10,21 +10,26 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
 
         public QuestionnaireVerificationError(string code, 
             string message,
+            VerificationErrorLevel errorLevel,
             params QuestionnaireVerificationReference[] references)
         {
             this.Code = code;
             this.Message = message;
+            this.ErrorLevel = errorLevel;
             this.references = references ?? new QuestionnaireVerificationReference[0];
         }
 
         public QuestionnaireVerificationError(string code, 
             string message,
+            VerificationErrorLevel errorLevel,
             IEnumerable<QuestionnaireVerificationReference> references)
-            : this(code, message, references.ToArray()) { }
+            : this(code, message, errorLevel, references.ToArray()) { }
 
         public string Code { get; private set; }
 
         public string Message { get; private set; }
+
+        public VerificationErrorLevel ErrorLevel { get; set; }
 
         public IReadOnlyCollection<QuestionnaireVerificationReference> References
         {

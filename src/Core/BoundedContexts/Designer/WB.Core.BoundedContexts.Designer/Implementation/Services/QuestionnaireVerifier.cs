@@ -189,7 +189,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
                     ErrorsByMacrosWithDuplicateName,
-                    ErrorsByConditionAndValidationExpressions
+
+                    //ErrorsByConditionAndValidationExpressions
                 };
             }
         }
@@ -232,6 +233,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 new QuestionnaireVerificationError("WB0006",
                     VerificationMessages.WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled,
+                    VerificationErrorLevel.General,
                     gpsPrefilledQuestionsReferences)
             };
         }
@@ -494,11 +496,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var state = new VerificationState();
 
-            return
+            var staticVerificationErrors =
                 from verifier in this.AtomicVerifiers
                 let errors = verifier.Invoke(questionnaire, state)
                 from error in errors
                 select error;
+
+            if (staticVerificationErrors.Any(e => e.ErrorLevel == VerificationErrorLevel.Critical))
+                return staticVerificationErrors;
+
+            return staticVerificationErrors.Concat(
+                ErrorsByConditionAndValidationExpressions(questionnaire, state));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> MacrosVerifier(
@@ -508,7 +516,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 questionnaire
                     .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateMacrosReference(entity.Key)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message,
+                    VerificationErrorLevel.General,
+                    CreateMacrosReference(entity.Key)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
@@ -516,7 +526,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return (questionnaire, state) =>
                 hasError(questionnaire)
-                    ? new[] { new QuestionnaireVerificationError(code, message) }
+                    ? new[] { new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
         }
 
@@ -527,7 +537,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 var errorCheckResult = hasError(questionnaire);
                 return errorCheckResult.Item1
-                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2)) }
+                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2), VerificationErrorLevel.General) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
             };
         }
@@ -539,7 +549,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(hasError)
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
@@ -549,7 +559,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, state, questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
@@ -559,7 +569,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity, TReferencedEntity>(
@@ -571,7 +581,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
-                select new QuestionnaireVerificationError(code, message, verificationResult.ReferencedEntities.Select(CreateReference));
+                select new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, verificationResult.ReferencedEntities.Select(CreateReference));
         }
 
         private static bool MacroHasEmptyName(Macro macro, QuestionnaireDocument questionnaire)
@@ -1124,7 +1134,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             foreach (var macrosDuplicate in macrosDuplicates)
             {
-                yield return new QuestionnaireVerificationError("WB0020", VerificationMessages.WB0020_NameForMacrosIsNotUnique, CreateMacrosReference(macrosDuplicate.Key));
+                yield return new QuestionnaireVerificationError("WB0020", VerificationMessages.WB0020_NameForMacrosIsNotUnique, 
+                    VerificationErrorLevel.General, CreateMacrosReference(macrosDuplicate.Key));
             }
         }
 
@@ -1145,6 +1156,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     yield return
                         new QuestionnaireVerificationError("WB0093",
                             VerificationMessages.WB0093_QuestionWithTheSameVariableNameAlreadyExists,
+                            VerificationErrorLevel.Critical,
                             CreateReference(rosterVariableNameMappedOnRoster.Value.First()),
                             CreateReference(questionsVariableNamesMappedOnQuestions[rosterVariableNameMappedOnRoster.Key].First()));
 
@@ -1153,6 +1165,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 yield return new QuestionnaireVerificationError("WB0068",
                     VerificationMessages.WB0068_RosterHasNotUniqueVariableName,
+                    VerificationErrorLevel.Critical,
                     rosterVariableNameMappedOnRoster.Value.Select(CreateReference).ToArray());
             }
 
@@ -1294,6 +1307,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0015",
                 VerificationMessages.WB0015_QuestionWithTitleSubstitutionCantBePrefilled,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1301,6 +1315,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0019",
                 VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution),
                 CreateReference(questionSourceOfSubstitution));
         }
@@ -1309,6 +1324,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0018",
                 VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution),
                 CreateReference(questionSourceOfSubstitution));
         }
@@ -1317,6 +1333,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0017",
                 VerificationMessages.WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1324,6 +1341,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0016",
                 VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1332,6 +1350,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0059",
                 VerificationMessages.WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1339,6 +1358,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0011",
                 VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
+                VerificationErrorLevel.General,
                 CreateReference(linkedQuestion));
         }
 
@@ -1346,6 +1366,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0012",
                 VerificationMessages.WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType,
+                VerificationErrorLevel.General,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
         }
@@ -1354,6 +1375,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0013",
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup,
+                VerificationErrorLevel.General,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
         }
@@ -1362,6 +1384,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0062",
                 VerificationMessages.WB0062_VariableNameForQuestionIsNotUnique,
+                VerificationErrorLevel.Critical,
                 CreateReference(sourseQuestion));
         }
 
@@ -1369,7 +1392,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if(expressionLocation.ExpressionType == ExpressionLocationType.General)
             {
-                return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
+                return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError, VerificationErrorLevel.General);
             }
 
             var reference = new QuestionnaireVerificationReference(
@@ -1379,12 +1402,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if(expressionLocation.ExpressionType == ExpressionLocationType.Validation)
             {
-                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
+                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, 
+                    VerificationErrorLevel.General, reference);
             }
             else 
             {
                 return new QuestionnaireVerificationError("WB0003",
-                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
+                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, 
+                    VerificationErrorLevel.General, reference);
             }
         }
 

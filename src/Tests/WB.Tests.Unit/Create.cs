@@ -1853,7 +1853,7 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireVerificationError QuestionnaireVerificationError()
         {
-            return new QuestionnaireVerificationError("ee", "mm");
+            return new QuestionnaireVerificationError("ee", "mm", VerificationErrorLevel.General);
         }
 
         public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
