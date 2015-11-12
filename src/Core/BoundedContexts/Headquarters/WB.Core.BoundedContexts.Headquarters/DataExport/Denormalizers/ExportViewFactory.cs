@@ -286,7 +286,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             {
                 if (!IsQuestionLinked(question) && question is IMultyOptionsQuestion)
                 {
-                    exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, question.Answers[i].AnswerValue);
+                    exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption,
+                        CreateOptionValueStringWhereNegativeSignReplacedWithNAndDecimalPlaceWith_(
+                            question.Answers[i].AnswerValue));
                     exportedHeaderItem.ColumnValues[i] = decimal.Parse(question.Answers[i].AnswerValue);
                 }
                 else
@@ -303,6 +305,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
             }
             return exportedHeaderItem;
+        }
+
+        private string CreateOptionValueStringWhereNegativeSignReplacedWithNAndDecimalPlaceWith_(string optionValue)
+        {
+            decimal decimalValue;
+            if (!decimal.TryParse(optionValue, out decimalValue))
+                return optionValue;
+
+            NumberFormatInfo numericFormatWhereNIsMinusAndPointIs_ = new NumberFormatInfo();
+            numericFormatWhereNIsMinusAndPointIs_.NumberDecimalSeparator = "_";
+            numericFormatWhereNIsMinusAndPointIs_.NegativeSign = "n";
+
+            return decimalValue.ToString(numericFormatWhereNIsMinusAndPointIs_);
         }
 
         private static bool IsQuestionLinked(IQuestion question)
