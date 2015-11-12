@@ -110,8 +110,14 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType() && obj.GetType() != typeof(decimal[])) return false;
-            return this.Identical((RosterVector)obj);
+
+            if (obj.GetType() == typeof(RosterVector))
+                return this.Identical((RosterVector) obj);
+
+            if (obj.GetType() == typeof(decimal[]))
+                return this.Identical((decimal[])obj);
+
+            return false;
         }
 
         public override int GetHashCode()
