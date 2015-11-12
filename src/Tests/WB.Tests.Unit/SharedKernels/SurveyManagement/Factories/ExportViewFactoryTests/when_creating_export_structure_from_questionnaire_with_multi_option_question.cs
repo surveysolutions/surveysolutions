@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     .ColumnNames;
         };
 
-        It should_create_header_with_nullable_level_labels = () =>
+        It should_create_header_where_negative_sign_and_decimal_separator_of_a_multioption_question_value_replaced_with_n_and_underscore_respectively = () =>
             multiOptionQuestionColumnNames.ShouldEqual(new[] { "mul_n23", "mul_70_3", "mul_n44_4", "mul_2" });
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
