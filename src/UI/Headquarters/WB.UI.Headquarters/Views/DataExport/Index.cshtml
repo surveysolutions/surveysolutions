@@ -72,7 +72,7 @@
     <thead>
         <tr>
             <th>All Data</th>
-            <th>Approved Data</th>
+            <th>HQ Approved Data</th>
             <th>Binary Data</th>
             <th>DDI</th>
             @if (this.ViewBag.EnableInterviewHistory)
@@ -95,7 +95,7 @@
             </td>
             <td>
 
-                <table class="table table-condensed">
+                <table class="table table-condensed"  style="margin-bottom: 0px;">
                     <thead>
                         <tr>
                             <td><img src="@Url.Content("~/Content/icons/ddi.ico")" alt="ddi" /></td>
@@ -184,7 +184,7 @@
 @helper DataExportTemplate(DataExportType type, DataExportFormat format, string dataUrl, string iconUrl = null, bool addFromat = false)
 {
 var exportParameters = "'" + (int)type + "','" + (int)format + "'";
-    <table class="table table-condensed">
+    <table class="table table-condensed" style="margin-bottom: 0px;">
         <thead>
             <tr>
                 @if (!string.IsNullOrEmpty(iconUrl))
