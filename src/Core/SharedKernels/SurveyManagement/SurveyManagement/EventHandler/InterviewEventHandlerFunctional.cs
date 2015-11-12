@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, GeoLocationQuestionAnswered>,
         IUpdateHandler<InterviewData, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewData, PictureQuestionAnswered>,
+        IUpdateHandler<InterviewData, YesNoQuestionAnswered>,
         IUpdateHandler<InterviewData, AnswersRemoved>,
         IUpdateHandler<InterviewData, GroupsDisabled>,
         IUpdateHandler<InterviewData, GroupsEnabled>,
@@ -477,6 +478,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
        @event.Payload.PictureFileName);
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<YesNoQuestionAnswered> @event)
+        {
+            return this.SaveAnswer(state, @event.Payload.RosterVector, @event.Payload.QuestionId, @event.Payload.AnsweredOptions);
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswersRemoved> @event)
