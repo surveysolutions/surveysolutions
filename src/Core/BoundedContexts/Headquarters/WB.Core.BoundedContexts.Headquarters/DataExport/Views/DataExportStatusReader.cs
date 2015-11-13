@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -10,8 +11,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
@@ -19,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     internal class DataExportStatusReader : IDataExportStatusReader
     {
         private readonly IDataExportProcessesService dataExportProcessesService;
-
+        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -44,22 +47,28 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             IDataExportProcessesService dataExportProcessesService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IParaDataAccessor paraDataAccessor, 
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor, 
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.paraDataAccessor = paraDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.questionnaireReader = questionnaireReader;
         }
 
         public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
+            var questionnaire = this.questionnaireReader.AsVersioned()
+                .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
+            if (questionnaire == null)
+                return null;
             var runningProcesses = this.dataExportProcessesService.GetRunningProcess().Select(CreateRunningDataExportProcessView).ToArray();
             var dataExports =
                 this.supportedDataExports.Select(
                     supportedDataExport =>
-                        this.CreateDataExportView(supportedDataExport.Item1, supportedDataExport.Item2,
-                            questionnaireIdentity, runningProcesses)).ToArray();
+                        this.CreateDataExportView(supportedDataExport.Item1, supportedDataExport.Item2, questionnaireIdentity,
+                            questionnaire, runningProcesses)).ToArray();
 
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
@@ -101,20 +110,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             DataExportType dataType,
             DataExportFormat dataFormat,
             QuestionnaireIdentity questionnaireIdentity,
+            QuestionnaireExportStructure questionnaire,
             RunningDataExportProcessView[] runningProcess)
         {
             DataExportView dataExportView = null;
-
             dataExportView = new DataExportView()
             {
                 DataExportFormat = dataFormat,
                 DataExportType = dataType,
                 CanRefreshBeRequested =
-                    !runningProcess.Any(
-                        p =>
-                            p.Format == dataFormat && 
-                            p.Type == dataType && 
-                            (!p.QuestionnaireIdentity.HasValue || p.QuestionnaireIdentity.Value.Equals(questionnaireIdentity)))
+                    CanRefreshBeRequested(dataType, dataFormat, questionnaireIdentity, questionnaire, runningProcess)
             };
 
             string path = string.Empty;
@@ -138,6 +143,29 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             return dataExportView;
         }
 
+        private bool CanRefreshBeRequested(
+            DataExportType dataType,
+            DataExportFormat dataFormat,
+            QuestionnaireIdentity questionnaireIdentity,
+            QuestionnaireExportStructure questionnaire,
+            RunningDataExportProcessView[] runningProcess)
+        {
+            if (dataFormat == DataExportFormat.Binary)
+            {
+                var hasMultimediaQuestions =
+                    questionnaire.HeaderToLevelMap.Values.SelectMany(
+                        l => l.HeaderItems.Values.Where(q => q.QuestionType == QuestionType.Multimedia)).Any();
+
+                if (!hasMultimediaQuestions)
+                    return false;
+            }
+            return !runningProcess.Any(
+                p =>
+                    p.Format == dataFormat &&
+                    p.Type == dataType &&
+                    (!p.QuestionnaireIdentity.HasValue ||
+                     p.QuestionnaireIdentity.Value.Equals(questionnaireIdentity)));
+        }
 
         private void SetDataExportLastUpdateTimeIfFilePresent(DataExportView dataExportView, string filePath)
         {
