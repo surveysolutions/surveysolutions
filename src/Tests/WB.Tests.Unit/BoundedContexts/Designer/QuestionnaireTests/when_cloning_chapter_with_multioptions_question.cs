@@ -15,24 +15,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, questionnaireId: questionnaireId);
             questionnaire.Apply(new NewGroupAdded() {PublicKey = chapterId, GroupText = chapterTitle});
             
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = questionId,
-                GroupPublicKey = chapterId,
-                QuestionText = title,
-                ConditionExpression =  conditionExpression,
-                Instructions = instructions,
-                StataExportCaption = variableName,
-                Featured = isPrefilled,
-                QuestionScope = questionScope,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
-                LinkedToQuestionId = linkedToQuestionId,
-                Answers = answers,
-                QuestionType = questionType,
-                AreAnswersOrdered = areAnswersOrdered,
-                MaxAllowedAnswers = maxAllowedAnswers
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : questionId,
+                groupPublicKey : chapterId,
+                questionText : title,
+                conditionExpression :  conditionExpression,
+                instructions : instructions,
+                stataExportCaption : variableName,
+                featured : isPrefilled,
+                questionScope : questionScope,
+                validationExpression : validationExpression,
+                validationMessage : validationMessage,
+                linkedToQuestionId : linkedToQuestionId,
+                answers : answers,
+                questionType : questionType,
+                areAnswersOrdered : areAnswersOrdered,
+                maxAllowedAnswers : maxAllowedAnswers
+            ));
 
             eventContext = new EventContext();
         };

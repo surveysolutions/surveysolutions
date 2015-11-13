@@ -15,31 +15,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             questionnaire = CreateQuestionnaire(responsibleId);
             var groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
-            sourceQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var sourceQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            questionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
 
-            var questionCloned = new QuestionCloned
-            {
-                PublicKey = sourceQuestionId,
-                QuestionText = "text",
-                QuestionType = QuestionType.Numeric,
-                StataExportCaption = "varrr",
-                VariableLabel = "varlabel",
-                IsInteger = true,
-                CountOfDecimalPlaces = 100
-            };
+            var questionCloned = CreateQuestionCloned(
+                publicKey : questionId,
+                sourceQuestionId: sourceQuestionId,
+                targetIndex:0,
+                questionText : "text",
+                questionType : QuestionType.Numeric,
+                stataExportCaption : "varrr",
+                variableLabel : "varlabel",
+                isInteger : true,
+                countOfDecimalPlaces : 100
+            );
             questionnaire.Apply(questionCloned);
 
             eventContext = new EventContext();
         };
 
-        Because of = () => questionnaire.CloneQuestionById(sourceQuestionId, responsibleId, targetId);
+        Because of = () => questionnaire.CloneQuestionById(questionId, responsibleId, targetId);
 
         It should_clone_Reset_MaxValue_property = () => eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId);
 
         It should_clone_CountOfDecimalPlaces_property = () =>  eventContext.ShouldContainEvent<QuestionCloned>(x => x.PublicKey == targetId && x.CountOfDecimalPlaces == 100);
 
         static Questionnaire questionnaire;
-        static Guid sourceQuestionId;
+        static Guid questionId;
         static EventContext eventContext;
         static Guid responsibleId;
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

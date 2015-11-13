@@ -24,7 +24,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.MultyOption, LinkedToQuestionId = Guid.NewGuid(), GroupPublicKey = chapterId });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: rosterSizeQuestionId,
+                questionType: QuestionType.MultyOption,
+                groupPublicKey: chapterId,
+                linkedToQuestionId: Guid.NewGuid()
+            ));
         };
 
         Because of = () =>

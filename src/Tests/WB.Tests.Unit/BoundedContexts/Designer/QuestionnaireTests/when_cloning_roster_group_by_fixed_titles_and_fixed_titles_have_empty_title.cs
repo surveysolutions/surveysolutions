@@ -24,12 +24,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = Guid.NewGuid(),
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.Text
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: Guid.NewGuid(),
+                questionType: QuestionType.Text,
+                groupPublicKey: chapterId
+            ));
+
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
         };
 

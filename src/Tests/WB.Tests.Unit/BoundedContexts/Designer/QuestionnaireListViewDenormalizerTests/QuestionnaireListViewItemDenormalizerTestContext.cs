@@ -45,5 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
             }
             return mock.Object;
         }
+
+
     }
 }

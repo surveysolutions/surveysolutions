@@ -15,7 +15,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded() { PublicKey = questionId, GroupPublicKey = chapterId });
+            questionnaire.Apply(CreateNumericQuestionAdded(publicKey: questionId, groupPublicKey: chapterId));
+            
             questionnaire.Apply(new QRBarcodeQuestionAdded()
             {
                 QuestionId = questionId,

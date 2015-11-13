@@ -17,16 +17,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
             sourceQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            var newQuestionAdded = new NumericQuestionAdded
-            {
-                PublicKey = sourceQuestionId,
-                QuestionText = "text",
-                StataExportCaption = "varrr",
-                VariableLabel = "varlabel",
-                IsInteger = true,
-                CountOfDecimalPlaces = 4,
-                GroupPublicKey = groupId
-            };
+            var newQuestionAdded = CreateNumericQuestionAdded
+            (
+                publicKey : sourceQuestionId,
+                questionText : "text",
+                stataExportCaption : "varrr",
+                variableLabel : "varlabel",
+                isInteger : true,
+                countOfDecimalPlaces : 4,
+                groupPublicKey : groupId
+            );
             questionnaire.Apply(newQuestionAdded);
 
             eventContext = new EventContext();

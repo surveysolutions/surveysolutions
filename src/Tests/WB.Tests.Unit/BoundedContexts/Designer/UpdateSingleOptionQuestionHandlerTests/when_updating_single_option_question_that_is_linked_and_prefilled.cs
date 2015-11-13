@@ -17,14 +17,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = linkedToQuestionId,
-                GroupPublicKey = rosterId,
-                QuestionType = QuestionType.Text,
-                QuestionText = "text question",
-                StataExportCaption = "source_of_linked_question"
-            });
+            questionnaire.Apply(CreateNewQuestionAdded
+            (
+                publicKey : linkedToQuestionId,
+                groupPublicKey : rosterId,
+                questionType : QuestionType.Text,
+                questionText : "text question",
+                stataExportCaption : "source_of_linked_question"
+            ));
             questionnaire.Apply(new QRBarcodeQuestionAdded
             {
                 QuestionId = questionId,

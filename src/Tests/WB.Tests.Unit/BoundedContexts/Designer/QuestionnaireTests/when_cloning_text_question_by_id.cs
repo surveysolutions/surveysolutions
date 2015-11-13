@@ -15,24 +15,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            newQuestionAdded = new NewQuestionAdded
-            {
-                PublicKey = sourceQuestionId, 
-                QuestionText = "text",
-                VariableLabel = "varlabel",
-                QuestionType = QuestionType.Text,
-                Featured = true,
-                GroupPublicKey = chapterId,
-                QuestionScope = QuestionScope.Interviewer,
-                ConditionExpression = "Conditional",
-                ValidationExpression = "Validation",
-                ValidationMessage = "Val message",
-                Instructions = "Intructions",
-                LinkedToQuestionId = Guid.NewGuid(),
-                IsFilteredCombobox = true,
-                CascadeFromQuestionId = Guid.NewGuid(),
-                Mask = "(###)-##-##-###"
-            };
+            newQuestionAdded = CreateNewQuestionAdded(
+                publicKey : sourceQuestionId, 
+                questionText : "text",
+                variableLabel : "varlabel",
+                questionType : QuestionType.Text,
+                featured : true,
+                groupPublicKey : chapterId,
+                questionScope : QuestionScope.Interviewer,
+                conditionExpression : "Conditional",
+                validationExpression : "Validation",
+                validationMessage : "Val message",
+                instructions : "Intructions",
+                linkedToQuestionId : Guid.NewGuid(),
+                isFilteredCombobox : true,
+                cascadeFromQuestionId : Guid.NewGuid(),
+                mask : "(###)-##-##-###"
+            );
             questionnaire.Apply(newQuestionAdded);
 
             eventContext = new EventContext();

@@ -18,22 +18,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             parentQuestionId = Guid.NewGuid();
             updatedQuestionId = Guid.NewGuid();
 
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = parentQuestionId,
-                QuestionType = QuestionType.SingleOption,
-                Answers = new Answer[] { new Answer
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : parentQuestionId,
+                groupPublicKey:rootGroupId,
+                questionType : QuestionType.SingleOption,
+                answers : new Answer[] { new Answer
                 {
                     AnswerText = "one", 
                     AnswerValue = "1", 
                     PublicKey = Guid.NewGuid()
                 } }
-            });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = updatedQuestionId,
-                QuestionType = QuestionType.SingleOption,
-            });
+            ));
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : updatedQuestionId,
+                groupPublicKey: rootGroupId,
+                questionType : QuestionType.SingleOption
+            ));
         };
 
         Because of = () => exception = Catch.Exception(() => questionnaire.UpdateSingleOptionQuestion(
