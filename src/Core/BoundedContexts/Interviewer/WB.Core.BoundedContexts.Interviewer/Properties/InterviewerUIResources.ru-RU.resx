@@ -127,7 +127,7 @@
     <value>Cоздано {0}</value>
   </data>
   <data name="DashboardItem_InProgress" xml:space="preserve">
-    <value>В прогрессе</value>
+    <value>В процессе</value>
   </data>
   <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Не начатое</value>
@@ -156,7 +156,7 @@
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
     <value>Синхронизируйтесь для получения новых заданий
-или свяжитесь с вашим супервайзером
+или свяжитесь с Вашим супервизором
 для дальнейших инструкций</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
@@ -166,7 +166,7 @@
     <value>Нет новых</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Это интервтю завершено. Хотите переоткрыть его?</value>
+    <value>Это интервью завершено. Хотите переоткрыть его?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Отклоненные {0}</value>
@@ -181,7 +181,7 @@
     <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру</value>
+    <value>Проблемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Обновляем задания</value>
@@ -193,9 +193,9 @@
     <value>{0} интервью удалено</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Проблемы аутентификации. Мы не можем подтвердить ваш аккаунт интервьюера('{0}'). 
-У вашего акканта возможны следующие проблемы: пароль отличается от того что вы вводили, аккаунт заблокирован или удален Хедквотером.
-Пожалуйста введите ваш обновленный пароль. Если проблема не будет решена, пожалйста, обратитесь к Супервизору или Хедквотеру.</value>
+    <value>Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись интервьюера ('{0}'). 
+С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили, учетная запись заблокирована или удалена Хедквотером.
+Пожалуйста введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
   </data>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
     <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
@@ -207,7 +207,7 @@
     <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложени Interviewer.</value>
+    <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложение Interviewer.</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Опросники</value>
@@ -234,10 +234,10 @@
     <value>Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Адрес сайта Supervisor неверный. Убедитесь, что вы ввели корректный url-адрес</value>
+    <value>Адрес сайта Supervisor неверный. Убедитесь, что Вы ввели корректный url-адрес</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>Вы можете попробовать войти онлайн, если вы забыли пароль или он был изменен</value>
+    <value>Вы можете попробовать войти онлайн, если Вы забыли пароль или он был изменен</value>
   </data>
   <data name="Login_WrondPassword" xml:space="preserve">
     <value>Неверный пароль</value>
@@ -273,7 +273,7 @@
     <value>У вас последняя версия приложения</value>
   </data>
   <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>Найдена новая версия. Хотите ли вы скачать новую версию и обновить приложение?</value>
+    <value>Найдена новая версия. Хотите ли Вы скачать новую версию и обновить приложение?</value>
   </data>
   <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
     <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?
