@@ -66,6 +66,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
 
         It should_HasDataToExport_be_false_for_data_stata_export = () => DataExportView(DataExportType.Data, DataExportFormat.STATA).HasDataToExport.ShouldBeFalse();
 
+        It should_CanRefreshBeRequested_be_true_for_data_binary_export = () => DataExportView(DataExportType.Data, DataExportFormat.Binary).CanRefreshBeRequested.ShouldBeFalse();
+
+        It should_HasDataToExport_be_false_for_data_binary_export = () => DataExportView(DataExportType.Data, DataExportFormat.Binary).HasDataToExport.ShouldBeFalse();
+
         private static DataExportStatusReader dataExportStatusReader;
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
         private static DataExportStatusView result;
