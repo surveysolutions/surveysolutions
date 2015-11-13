@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
         protected static InterviewExportedDataDenormalizer CreateInterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter = null,
             IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage = null)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage = null)
         {
             return new InterviewExportedDataDenormalizer(dataExportWriter, userDocumentWriter,interviewSummaryStorage);
         }
