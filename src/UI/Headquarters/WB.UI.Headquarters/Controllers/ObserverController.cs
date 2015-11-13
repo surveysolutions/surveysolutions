@@ -52,6 +52,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
                 catch (Exception e)
                 {
+                    this.Logger.Error(e.Message, e);
                     this.Error(e.Message);
                     return this.View(model);
                 }
