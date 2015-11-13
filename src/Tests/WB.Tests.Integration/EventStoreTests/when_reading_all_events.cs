@@ -6,6 +6,7 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Storage.EventStore.Implementation;

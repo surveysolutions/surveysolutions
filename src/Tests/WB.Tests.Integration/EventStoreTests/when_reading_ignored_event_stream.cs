@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Storage.EventStore;
@@ -20,8 +21,8 @@ namespace WB.Tests.Integration.EventStoreTests
         Establish context = () =>
         {
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            NcqrsEnvironment.RegisterEventDataType(typeof(AccountRegistered));
+            var eventTypeResolver = new EventTypeResolver();
+            eventTypeResolver.RegisterEventDataType(typeof(AccountRegistered));
 
             events = new UncommittedEventStream(Guid.NewGuid(), null);
 
@@ -38,7 +39,7 @@ namespace WB.Tests.Integration.EventStoreTests
                     InitializeProjections = false,
                     EventStreamsToIgnore =
                         new HashSet<string>(new[] {string.Format("WB-{0}", eventSourceId.FormatGuid())})
-                });
+                }, eventTypeResolver);
 
             WriteSideEventStorage.Store(events);
         };
