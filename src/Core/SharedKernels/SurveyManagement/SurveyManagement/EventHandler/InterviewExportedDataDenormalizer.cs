@@ -30,13 +30,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage;
 
         private readonly IDataExportRepositoryWriter dataExportWriter;
 
         public InterviewExportedDataDenormalizer(IDataExportRepositoryWriter dataExportWriter,
             IReadSideRepositoryWriter<UserDocument> userDocumentWriter,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryStorage)
         {
             this.dataExportWriter = dataExportWriter;
             this.users = userDocumentWriter;
