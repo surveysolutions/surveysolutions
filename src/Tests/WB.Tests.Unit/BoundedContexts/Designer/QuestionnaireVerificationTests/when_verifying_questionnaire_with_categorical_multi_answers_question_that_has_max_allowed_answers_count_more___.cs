@@ -37,6 +37,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_code__WB0021__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0021");
 
+        It should_return_error_with_level_general = () =>
+            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+
+
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
