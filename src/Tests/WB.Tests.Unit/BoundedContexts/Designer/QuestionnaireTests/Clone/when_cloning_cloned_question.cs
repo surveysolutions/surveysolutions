@@ -16,16 +16,19 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             var groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
             sourceQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var grandQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA");
 
-            var questionCloned = new QuestionCloned
-            {
-                PublicKey = sourceQuestionId,
-                QuestionText = "text",
-                QuestionType = QuestionType.TextList,
-                StataExportCaption = "varrr",
-                VariableLabel = "varlabel",
-                MaxAnswerCount = 5
-            };
+            var questionCloned = CreateQuestionCloned
+            (
+                publicKey : sourceQuestionId,
+                sourceQuestionId: grandQuestionId,
+                targetIndex:0,
+                questionText : "text",
+                questionType : QuestionType.TextList,
+                stataExportCaption : "varrr",
+                variableLabel : "varlabel",
+                maxAnswerCount : 5
+            );
             questionnaire.Apply(questionCloned);
 
             eventContext = new EventContext();

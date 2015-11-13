@@ -17,18 +17,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
-            questionnaire.Apply(new NumericQuestionAdded
-            {
-                PublicKey = rosterSizeQuestionId,
-                IsInteger = true,
-                GroupPublicKey = anotherRosterId
-            });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = anotherRosterId,
-                QuestionType = QuestionType.MultyOption
-            });
+            questionnaire.Apply(CreateNumericQuestionAdded
+            (
+                publicKey : rosterSizeQuestionId,
+                isInteger : true,
+                groupPublicKey: anotherRosterId
+            ));
+            questionnaire.Apply(CreateNewQuestionAdded
+                (
+                    publicKey: rosterTitleQuestionId,
+                    groupPublicKey: anotherRosterId,
+                    questionType : QuestionType.MultyOption
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId));
             questionnaire.Apply(new RosterChanged(responsibleId, groupId){

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded() { PublicKey = existingQuestionId, GroupPublicKey = chapterId });
+            questionnaire.Apply(CreateNumericQuestionAdded(publicKey : existingQuestionId, groupPublicKey : chapterId ));
             questionnaire.Apply(new QRBarcodeQuestionAdded()
             {
                 QuestionId = questionId,

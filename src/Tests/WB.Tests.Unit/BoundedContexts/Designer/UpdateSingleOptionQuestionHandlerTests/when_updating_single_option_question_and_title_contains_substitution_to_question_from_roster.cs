@@ -15,13 +15,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                IsInteger = true,
-                StataExportCaption = "roster_size_question"
-            });
+            questionnaire.Apply(CreateNumericQuestionAdded(
+                publicKey : rosterSizeQuestionId,
+                groupPublicKey : chapterId,
+                isInteger : true,
+                stataExportCaption : "roster_size_question"
+            ));
+
             questionnaire.Apply(new QRBarcodeQuestionAdded()
             {
                 QuestionId = questionId,
@@ -40,13 +40,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =null 
                 });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = questionFromRosterId,
-                GroupPublicKey = rosterId,
-                IsInteger = true,
-                StataExportCaption = substitutionVariableName
-            });
+
+            questionnaire.Apply(CreateNumericQuestionAdded(publicKey: questionFromRosterId, groupPublicKey: rosterId, isInteger:true, stataExportCaption:substitutionVariableName));
+            
         };
 
         Because of = () =>

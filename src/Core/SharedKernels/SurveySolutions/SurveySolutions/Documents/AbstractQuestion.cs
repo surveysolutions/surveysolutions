@@ -22,7 +22,7 @@ namespace Main.Core.Entities.SubEntities
             this.QuestionText = text;
         }
 
-        public Order AnswerOrder { get; set; }
+        public Order? AnswerOrder { get; set; }
 
         public List<Answer> Answers { get; set; }
 

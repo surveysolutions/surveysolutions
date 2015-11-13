@@ -14,16 +14,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = questionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.SingleOption,
-                QuestionText = "text",
-                StataExportCaption = "var",
-                IsFilteredCombobox = true,
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: questionId,
+                groupPublicKey: chapterId,
+                questionType: QuestionType.SingleOption,
+                questionText: "text",
+                stataExportCaption: "var",
+                isFilteredCombobox: true,
+                responsibleId: responsibleId
+            ));
+            
         };
 
         Because of = () =>

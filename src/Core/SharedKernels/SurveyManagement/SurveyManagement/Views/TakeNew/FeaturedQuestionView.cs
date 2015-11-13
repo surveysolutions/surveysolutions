@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
         public FeaturedAnswerView[] Answers { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public Order AnswerOrder { get; set; }
+        public Order? AnswerOrder { get; set; }
 
         public string ConditionExpression { get; set; }
 

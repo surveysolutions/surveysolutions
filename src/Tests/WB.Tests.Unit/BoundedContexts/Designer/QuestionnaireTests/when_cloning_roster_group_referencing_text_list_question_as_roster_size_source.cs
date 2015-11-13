@@ -13,7 +13,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded { QuestionType = QuestionType.TextList, PublicKey = rosterSizeQuestionId, GroupPublicKey = chapterId });
+
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: rosterSizeQuestionId,
+                questionType: QuestionType.TextList,
+                groupPublicKey: chapterId
+
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = sourceGroupId, ParentGroupPublicKey = chapterId });
         };
 

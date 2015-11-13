@@ -17,18 +17,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB");
             rosterSizeSourceType = RosterSizeSourceType.FixedTitles;
             rosterFixedTitles = Enumerable.Range(1, 251).Select(i => new FixedRosterTitleItem(i++.ToString(), i.ToString())).ToArray();
-
-
+            
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = Guid.NewGuid(),
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.Text
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
+            
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = parentGroupId });
         };

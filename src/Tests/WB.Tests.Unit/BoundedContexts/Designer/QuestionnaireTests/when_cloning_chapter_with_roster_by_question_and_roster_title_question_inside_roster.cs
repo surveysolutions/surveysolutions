@@ -15,13 +15,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, questionnaireId: questionnaireId);
             questionnaire.Apply(new NewGroupAdded() {PublicKey = chapterId, GroupText = chapterTitle});
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                QuestionText = rosterSizeQuestionTitle,
-                IsInteger = isRosterSizeQuestionInteger
-            });
+            questionnaire.Apply(CreateNumericQuestionAdded(
+                publicKey : rosterSizeQuestionId,
+                groupPublicKey : chapterId,
+                questionText : rosterSizeQuestionTitle,
+                isInteger : isRosterSizeQuestionInteger
+            ));
             questionnaire.Apply(new NewGroupAdded()
             {
                 PublicKey = rosterId,
@@ -36,13 +35,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = rosterTitleQuestionId
                 });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = rosterId,
-                QuestionType = QuestionType.Text,
-                QuestionText = rosterTitleQuestionTitle
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : rosterTitleQuestionId,
+                groupPublicKey : rosterId,
+                questionType : QuestionType.Text,
+                questionText : rosterTitleQuestionTitle
+            ));
 
             eventContext = new EventContext();
         };

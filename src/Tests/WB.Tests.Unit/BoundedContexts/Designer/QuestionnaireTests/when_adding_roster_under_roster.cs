@@ -15,12 +15,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                IsInteger = true,
-            });
+            questionnaire.Apply(CreateNumericQuestionAdded(publicKey: rosterSizeQuestionId, groupPublicKey: chapterId, isInteger: true));
+            
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentRosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, parentRosterId));
             eventContext = new EventContext();

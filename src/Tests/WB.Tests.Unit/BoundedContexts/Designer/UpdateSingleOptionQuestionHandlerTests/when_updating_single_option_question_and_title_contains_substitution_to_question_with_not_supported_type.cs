@@ -16,13 +16,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = Guid.NewGuid(),
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.GpsCoordinates,
-                StataExportCaption = substitutionVariableName
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : Guid.NewGuid(),
+                groupPublicKey : chapterId,
+                questionType : QuestionType.GpsCoordinates,
+                stataExportCaption : substitutionVariableName
+            ));
             questionnaire.Apply(new QRBarcodeQuestionAdded()
             {
                 QuestionId = questionId,

@@ -43,23 +43,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return innerDocument;
         }
 
-        internal static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text, int maxValue = 0)
+        /*internal static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text, int maxValue = 0)
         {
             return new QuestionChanged
-            {
-                QuestionText = "What is your name",
-                QuestionType = type,
-                PublicKey = questionId,
-                Featured = true,
-                AnswerOrder = Order.AsIs,
-                ConditionExpression = string.Empty,
-                Answers = null,
-                Instructions = "Answer this question, please",
-                StataExportCaption = "name",
-                ValidationExpression = "[this]!=''",
-                ValidationMessage = "Empty names is invalid answer"
-            };
-        }
+            (
+                questionText : "What is your name",
+                questionType : type,
+                publicKey : questionId,
+                featured : true,
+                answerOrder : Order.AsIs,
+                conditionExpression : string.Empty,
+                answers : null,
+                instructions : "Answer this question, please",
+                stataExportCaption : "name",
+                validationExpression : "[this]!=''",
+                validationMessage : "Empty names is invalid answer"
+            );
+        }*/
 
         internal static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
         {
