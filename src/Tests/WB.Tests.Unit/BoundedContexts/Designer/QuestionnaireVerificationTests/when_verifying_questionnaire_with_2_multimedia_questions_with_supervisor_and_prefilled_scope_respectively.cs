@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.First().Code.ShouldEqual("WB0078");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.First().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
 
         It should_return_first_error_with_1_references = () =>
             resultErrors.First().References.Count().ShouldEqual(1);
