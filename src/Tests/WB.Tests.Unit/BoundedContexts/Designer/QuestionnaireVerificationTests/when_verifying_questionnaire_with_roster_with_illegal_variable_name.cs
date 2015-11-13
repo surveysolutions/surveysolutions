@@ -48,6 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_code__WB0058 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0058");
 
+        It should_return_error_with_level_general = () =>
+            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+        
         It should_return_error_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
