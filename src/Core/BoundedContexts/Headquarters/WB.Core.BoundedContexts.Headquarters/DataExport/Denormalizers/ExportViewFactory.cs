@@ -279,7 +279,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
-            exportedHeaderItem.ColumnValues = new object[columnCount];
+            exportedHeaderItem.ColumnValues = new decimal[columnCount];
             exportedHeaderItem.Titles = new string[columnCount];
 
             for (int i = 0; i < columnCount; i++)

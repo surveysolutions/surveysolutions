@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             exportedHeaderItem.ColumnNames.Length.ShouldEqual(2);
             exportedHeaderItem.ColumnNames.SequenceEqual(new[] { "mult_28", "mult_42" }).ShouldBeTrue();
             exportedHeaderItem.ColumnValues.Length.ShouldEqual(2);
-            exportedHeaderItem.ColumnValues.SequenceEqual(new[] {28m, (object)42m}).ShouldBeTrue();
+            exportedHeaderItem.ColumnValues.SequenceEqual(new[] {28m, 42m}).ShouldBeTrue();
         };
 
         static ExportViewFactory exportViewFactory;
