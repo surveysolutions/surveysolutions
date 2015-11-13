@@ -172,7 +172,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.saveCategoricalOneAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answerOptionValue = $("input:radio[name=" + answerElementId + "]:checked").val();
+        var answerOptionValue = $('input:radio[name="' + answerElementId + '"]:checked').val();
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
         question.selectedOption = ko.observable(answerOptionValue);
@@ -182,7 +182,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAllowedAnswers, selectedOptionsAsString) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answerOptionValues = $("input:checkbox[name=" + answerElementId + "]:checked").map(function() { return parseFloat($(this).val()); }).get();
+        var answerOptionValues = $('input:checkbox[name="' + answerElementId + '"]:checked').map(function() { return parseFloat($(this).val()); }).get();
         
         var observableSelectedOptionIds = ko.observableArray(answerOptionValues).extend({
             validation: [
@@ -247,7 +247,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             });
         });
         _.forEach(self.filteredComboboxes, function (filteredCombobox) {
-            var filteredComboboxElement = $("#" + filteredCombobox.id);
+            var filteredComboboxElement = $('[id="' + filteredCombobox.id + '"]');
 
             filteredCombobox.selectedValue = ko.observable({ id: ko.observable(), value: ko.observable() });
             var selectedOptionId = filteredComboboxElement.val();
