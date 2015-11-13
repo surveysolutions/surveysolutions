@@ -16,7 +16,7 @@ namespace Main.Core.Entities
             string conditionExpression,
             string validationExpression,
             string validationMessage,
-            Order answerOrder,
+            Order? answerOrder,
             bool featured,
             bool capital,
             string instructions,
@@ -68,7 +68,7 @@ namespace Main.Core.Entities
         public readonly string ConditionExpression;
         public readonly string ValidationExpression;
         public readonly string ValidationMessage;
-        public readonly Order AnswerOrder;
+        public readonly Order? AnswerOrder;
         public readonly bool Featured;
         public readonly bool Capital;
         public readonly string Instructions;

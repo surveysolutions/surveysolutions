@@ -25,13 +25,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(Guid.NewGuid(), rosterId));
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = questionId,
-                GroupPublicKey = rosterId,
-                QuestionText = questionTitle,
-                StataExportCaption = "var"
-            });
+            questionnaire.Apply(CreateNumericQuestionAdded(
+                publicKey : questionId,
+                groupPublicKey : rosterId,
+                questionText : questionTitle,
+                stataExportCaption : "var"
+            ));
             eventContext = new EventContext();
         };
 

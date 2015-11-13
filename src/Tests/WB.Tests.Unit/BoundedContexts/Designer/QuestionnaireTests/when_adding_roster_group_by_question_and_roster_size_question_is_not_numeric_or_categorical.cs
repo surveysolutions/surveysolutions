@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Text, GroupPublicKey = chapterId });
+            questionnaire.Apply(CreateNewQuestionAdded (publicKey : rosterSizeQuestionId, questionType : QuestionType.Text, groupPublicKey : chapterId ));
         };
 
         Because of = () =>

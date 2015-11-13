@@ -15,26 +15,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            newQuestionAdded = new NewQuestionAdded
-            {
-                PublicKey = sourceQuestionId, 
-                QuestionText = "text",
-                VariableLabel = "varlabel",
-                QuestionType = QuestionType.MultyOption,
-                GroupPublicKey = chapterId,
-                AreAnswersOrdered = true,
-                MaxAllowedAnswers = 1,
-                Featured = true,
-                QuestionScope = QuestionScope.Interviewer,
-                ConditionExpression = "Conditional",
-                ValidationExpression = "Validation",
-                ValidationMessage = "Val message",
-                Instructions = "Intructions",
-                LinkedToQuestionId = Guid.NewGuid(),
-                IsFilteredCombobox = true,
-                CascadeFromQuestionId = Guid.NewGuid(),
-                YesNoView = false
-            };
+            newQuestionAdded = CreateNewQuestionAdded(
+                publicKey : sourceQuestionId, 
+                questionText : "text",
+                variableLabel : "varlabel",
+                questionType : QuestionType.MultyOption,
+                groupPublicKey : chapterId,
+                areAnswersOrdered : true,
+                maxAllowedAnswers : 1,
+                featured : true,
+                questionScope : QuestionScope.Interviewer,
+                conditionExpression : "Conditional",
+                validationExpression : "Validation",
+                validationMessage : "Val message",
+                instructions : "Intructions",
+                linkedToQuestionId : Guid.NewGuid(),
+                isFilteredCombobox : true,
+                cascadeFromQuestionId : Guid.NewGuid(),
+                yesNoView : false
+            );
             questionnaire.Apply(newQuestionAdded);
 
             eventContext = new EventContext();

@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             string conditionExpression,
             string validationExpression,
             string validationMessage,
-            Order answerOrder,
+            Order? answerOrder,
             bool featured,
             bool capital,
             string instructions,

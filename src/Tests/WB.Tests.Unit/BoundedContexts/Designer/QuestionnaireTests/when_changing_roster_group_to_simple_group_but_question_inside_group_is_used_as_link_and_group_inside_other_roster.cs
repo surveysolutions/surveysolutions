@@ -42,20 +42,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             });
 
 
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = questionUsedAsLinkId,
-                GroupPublicKey = groupToUpdateId,
-                IsInteger = true
-            });
+            questionnaire.Apply(CreateNumericQuestionAdded(
+                publicKey : questionUsedAsLinkId,
+                groupPublicKey : groupToUpdateId,
+                isInteger : true
+            ));
 
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = linkedQuestionInChapterId,
-                QuestionType = QuestionType.SingleOption,
-                GroupPublicKey = chapterId,
-                LinkedToQuestionId = questionUsedAsLinkId
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : linkedQuestionInChapterId,
+                questionType : QuestionType.SingleOption,
+                groupPublicKey : chapterId,
+                linkedToQuestionId : questionUsedAsLinkId
+            ));
 
             eventContext = new EventContext();
         };

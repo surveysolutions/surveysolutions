@@ -7,7 +7,7 @@ namespace Main.Core.Entities.SubEntities
     public interface IQuestion : IComposite, IConditional
     {
         List<Answer> Answers { get; set; }
-        Order AnswerOrder { get; set; }
+        Order? AnswerOrder { get; set; }
         bool Capital { get; set; }
         bool Featured { get; set; }
         string Instructions { get; set; }

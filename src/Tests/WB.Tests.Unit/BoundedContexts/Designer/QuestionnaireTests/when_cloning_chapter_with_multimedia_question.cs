@@ -18,15 +18,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, questionnaireId: questionnaireId);
             questionnaire.Apply(new NewGroupAdded() { PublicKey = chapterId, GroupText = chapterTitle });
 
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = questionId,
-                GroupPublicKey = chapterId,
-                QuestionText = title,
-                ConditionExpression = conditionExpression,
-                Instructions = instructions,
-                StataExportCaption = variableName
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey : questionId,
+                groupPublicKey : chapterId,
+                questionText : title,
+                conditionExpression : conditionExpression,
+                instructions : instructions,
+                stataExportCaption : variableName
+            ));
 
             questionnaire.Apply(new MultimediaQuestionUpdated()
             {

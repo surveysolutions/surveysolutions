@@ -1,16 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class NumericQuestionCloned : AbstractNumericQuestionDataEvent
     {
-        public Guid? SourceQuestionnaireId { get; set; }
-        public Guid SourceQuestionId { get; set; }
-        public Guid GroupPublicKey { get; set; }
-        public int TargetIndex { get; set; }
+        public NumericQuestionCloned(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, 
+            QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, bool? isInteger, int? countOfDecimalPlaces, 
+            Guid? sourceQuestionnaireId, Guid sourceQuestionId, Guid groupPublicKey, int targetIndex) : base(responsibleId, conditionExpression, featured, instructions, capital, 
+                publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, isInteger, countOfDecimalPlaces)
+        {
+            this.SourceQuestionnaireId = sourceQuestionnaireId;
+            this.SourceQuestionId = sourceQuestionId;
+            this.GroupPublicKey = groupPublicKey;
+            this.TargetIndex = targetIndex;
+        }
+
+        public Guid? SourceQuestionnaireId { get; private set; }
+        public Guid SourceQuestionId { get; private set; }
+        public Guid GroupPublicKey { get; private set; }
+        public int TargetIndex { get; private set; }
     }
 }

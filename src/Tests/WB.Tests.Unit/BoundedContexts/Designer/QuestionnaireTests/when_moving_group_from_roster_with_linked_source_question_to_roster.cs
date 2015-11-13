@@ -14,25 +14,26 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = categoricalLinkedQuestionId,
-                QuestionType = QuestionType.MultyOption,
-                GroupPublicKey = chapterId,
-                LinkedToQuestionId = linkedSourceQuestionId
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: categoricalLinkedQuestionId,
+                groupPublicKey: chapterId,
+                questionType: QuestionType.MultyOption,
+                linkedToQuestionId:linkedSourceQuestionId
+            ));
+
+            
             questionnaire.Apply(new NewGroupAdded { PublicKey = roster1Id, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, roster1Id));
             questionnaire.Apply(new NewGroupAdded { PublicKey = roster2Id, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, roster2Id));
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupInsideRosterId, ParentGroupPublicKey = roster1Id });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = linkedSourceQuestionId,
-                GroupPublicKey = groupInsideRosterId,
-                QuestionType = QuestionType.Text
-            });
 
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: linkedSourceQuestionId,
+                groupPublicKey: groupInsideRosterId,
+                questionType: QuestionType.Text
+            ));
+            
             eventContext = new EventContext();
         };
 

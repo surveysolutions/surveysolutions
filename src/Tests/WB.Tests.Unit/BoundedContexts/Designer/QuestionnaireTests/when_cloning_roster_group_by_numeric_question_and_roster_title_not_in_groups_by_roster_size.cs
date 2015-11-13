@@ -23,19 +23,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.Text
-            });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.Numeric,
-                IsInteger = true
-            });
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: rosterTitleQuestionId,
+                questionType: QuestionType.Text,
+                groupPublicKey: chapterId
+            ));
+            questionnaire.Apply(CreateNewQuestionAdded(
+                publicKey: rosterSizeQuestionId,
+                questionType: QuestionType.Numeric,
+                groupPublicKey: chapterId,
+                isInteger : true
+            ));
+            
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
         };
 
