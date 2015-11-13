@@ -37,6 +37,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_code__WB0017 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0017");
 
+        It should_return_error_with_level_general = () =>
+            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+
         It should_return_error_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
