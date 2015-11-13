@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 responsibleId: responsibleId, rosterSizeQuestionId: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles,
                 rosterTitleQuestionId: null, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "fixed title 1") });
 
-            questionnaire.Apply(CreateNumericQuestionAdded
+            questionnaire.Apply(Create.Event.NumericQuestionAdded
             (
                 publicKey: rosterSizeQuestionId,
                 isInteger: true,

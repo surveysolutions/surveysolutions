@@ -13,8 +13,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(CreateNewQuestionAdded( publicKey : Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), stataExportCaption : "valid_varname", groupPublicKey : chapterId ));
-            questionnaire.Apply(CreateNewQuestionAdded( publicKey : Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), stataExportCaption : null, groupPublicKey : chapterId ));
+            questionnaire.Apply(Create.Event.NewQuestionAdded( publicKey : Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), stataExportCaption : "valid_varname", groupPublicKey : chapterId ));
+            questionnaire.Apply(Create.Event.NewQuestionAdded( publicKey : Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"), stataExportCaption : null, groupPublicKey : chapterId ));
         };
 
         Because of = () =>

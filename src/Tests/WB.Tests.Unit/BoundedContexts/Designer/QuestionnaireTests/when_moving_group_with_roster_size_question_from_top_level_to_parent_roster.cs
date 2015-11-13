@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupToMoveId });
-            questionnaire.Apply(CreateNumericQuestionAdded(
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 groupPublicKey : groupToMoveId,
                 isInteger : true

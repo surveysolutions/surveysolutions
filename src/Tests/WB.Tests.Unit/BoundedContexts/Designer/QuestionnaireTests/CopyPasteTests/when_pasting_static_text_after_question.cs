@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
 {
@@ -17,8 +18,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionToPastAfterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             sourceQuestionaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-
-            questionnaire = CreateQuestionnaireWithOneQuestion(questionToPastAfterId, responsibleId);
+            var questionnaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCE");
+            questionnaire = CreateQuestionnaireWithOneQuestion(questionToPastAfterId, responsibleId, questionnaireId);
 
             
             doc = Create.QuestionnaireDocument(
@@ -29,10 +30,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
                     
                 }));
             eventContext = new EventContext();
+
+            command = new PasteAfterCommand(
+               questionnaireId: questionnaireId,
+               entityId: targetId,
+               sourceItemId: staticTextId,
+               responsibleId: responsibleId,
+               sourceQuestionnaireId: questionnaireId,
+               itemToPasteAfterId: questionToPastAfterId);
+
+            command.SourceDocument = doc;
         };
 
         Because of = () => 
-            questionnaire.PasteItemAfter(targetId, questionToPastAfterId, responsibleId, staticTextId, doc);
+            questionnaire.PasteItemAfter(command);
 
         private It should_clone_MaxAnswerCount_value =
             () => eventContext.ShouldContainEvent<StaticTextCloned>();
@@ -55,6 +66,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string text = "varrr";
         private static QuestionnaireDocument doc;
+
+        private static PasteAfterCommand command;
     }
 }
 
