@@ -40,6 +40,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_errors_with_code_WB0009 = () =>
             resultErrors.ShouldEachConformTo(error => error.Code == "WB0009");
 
+        It should_return_error_with_level_general = () =>
+            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
         private static IEnumerable<QuestionnaireVerificationError> resultErrors;

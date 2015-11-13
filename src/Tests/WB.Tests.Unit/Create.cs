@@ -2516,7 +2516,7 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static ApprovedDataExportProcess ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity=null)
+        public static ApprovedDataExportProcess ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
             return new ApprovedDataExportProcess()
             {
@@ -2524,6 +2524,7 @@ namespace WB.Tests.Unit
                 DataExportFormat = DataExportFormat.Tabular
             };
 
+        }
         public static NewQuestionAdded CreateNewQuestionAdded(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel =null, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
