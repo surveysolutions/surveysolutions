@@ -1,5 +1,7 @@
 ﻿@using System.Globalization
 @using Main.Core.Entities.SubEntities
+@using WB.Core.SharedKernels.DataCollection.Commands.Interview
+@using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 @using WB.Core.SharedKernels.DataCollection.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership
@@ -145,49 +147,83 @@
                 case QuestionType.MultyOption:
                     var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
 
-                    foreach (var option in Model.Options)
+                    if (multiQuestionSettings.YesNoQuestion)
                     {
-                        string optionValue;
-                        bool isChecked = false;
-                        int orderIndex = 0;
-                        if (multiQuestionSettings.IsLinked)
-                        {
-                            optionValue = Stringify((decimal[])option.Value);
+                        var answersTyped = (AnsweredYesNoOption[])Model.Answer;
+                        var answers = (answersTyped ?? new AnsweredYesNoOption[0]).ToList();
 
-                            if (Model.Answer != null)
+                        <table>
+                            <tr>
+                                <td><span style="color: #36AEE5">Yes</span><span style="color: #E6E8E9"> / </span><span style="color: #36AEE5">No</span></td>
+                                <td></td>
+                            </tr>
+                            @foreach (var option in Model.Options)
                             {
-                                var answers = (decimal[][])Model.Answer;
-                                isChecked = answers.Any(answer => answer.SequenceEqual((decimal[])option.Value));
-                                if (isChecked)
+                                var selectedAnswer = answers.FirstOrDefault(answer => answer.OptionValue == (decimal) option.Value);
+
+                                <tr>
+                                <td>
+                                &nbsp;
+                                <input type="radio" disabled @if (selectedAnswer != null && selectedAnswer.Yes) {<text>checked</text>} />
+                                        <span style="color: #E6E8E9"> / </span>
+                                    <input type="radio" disabled @if (selectedAnswer != null && !selectedAnswer.Yes) { <text>checked</text>} />
+                                    </td>
+                                    <td>@option.Label
+                                        @if (multiQuestionSettings.AreAnswersOrdered && selectedAnswer != null)
                                 {
-                                    orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
+                                            <span class="badge">@answers.IndexOf(selectedAnswer)</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        </table>                    }
+                    else
+                    {
+                        foreach (var option in Model.Options)
+                        {
+                            string optionValue;
+                            bool isChecked = false;
+                            int orderIndex = 0;
+                            if (multiQuestionSettings.IsLinked)
+                            {
+                                optionValue = Stringify((decimal[])option.Value);
+
+                                if (Model.Answer != null)
+                                {
+                                    var answers = (decimal[][])Model.Answer;
+                                    isChecked = answers.Any(answer => answer.SequenceEqual((decimal[])option.Value));
+                                    if (isChecked)
+                                    {
+                                        orderIndex = answers.Select((item, index) => new { index, item }).First(_ => _.item.SequenceEqual((decimal[])option.Value)).index + 1;
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            optionValue = option.Value.ToString();
-
-                            if (Model.Answer != null)
+                            else
                             {
-                                var answers = (decimal[])Model.Answer;
-                                isChecked = answers.Contains((decimal)option.Value);
-                                if (isChecked)
+                                optionValue = option.Value.ToString();
+
+                                if (Model.Answer != null)
                                 {
-                                    orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
+                                    var answers = (decimal[])Model.Answer;
+                                    isChecked = answers.Contains((decimal)option.Value);
+                                    if (isChecked)
+                                    {
+                                        orderIndex = answers.Any() ? answers.Select((item, index) => new { index, item }).First(_ => _.item == Convert.ToDecimal(option.Value)).index + 1 : 0;
+                                    }
                                 }
                             }
+
+                            <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
+                                <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
+
+                                <span>@option.Label</span>
+                                @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
+                                {
+                                    <span class="badge">@orderIndex</span>
+                                }
+                            </label>
                         }
-
-                        <label class="checkbox" for="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))">
-                            <input type="checkbox" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", optionValue))" @(isChecked ? "checked" : "") disabled="disabled">
-
-                            <span>@option.Label</span>
-                            @if (multiQuestionSettings.AreAnswersOrdered && isChecked)
-                            {
-                                <span class="badge">@orderIndex</span>
-                            }
-                        </label>
                     }
                     break;
                 case QuestionType.DateTime:

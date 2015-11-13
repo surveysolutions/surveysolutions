@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -110,6 +111,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             bool shouldBeValidByConvention = !this.IsEnabled;
 
             this.IsValid = shouldBeValidByConvention || !answeredQuestion.IsInvalid();
+            this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
+        }
+
+        private string FormatAnswerAsString(object answer, IQuestion question)
+        {
+            if (answer == null) return "";
+            switch (QuestionType)
+            {
+                case QuestionType.SingleOption:
+                    if (Settings != null && (Settings as SingleQuestionSettings).IsLinked)
+                    {
+                        return AnswerUtils.AnswerToString(answer);
+                    }
+                    else
+                    {
+                        return AnswerUtils.AnswerToString(answer, x => Options.First(o => (decimal)o.Value == x).Label);
+                    }
+
+                case QuestionType.MultyOption:
+                    if ((Settings as MultiQuestionSettings).IsLinked)
+                    {
+                        return AnswerUtils.AnswerToString(answer);
+                    }
+                    else
+                    {
+                        return AnswerUtils.AnswerToString(answer, x => Options.First(o => (decimal)o.Value == x).Label);
+                    }
+                case QuestionType.DateTime:
+                    if (answer is DateTime)
+                    {
+                        var date = (DateTime)answer;
+                        return date.ToString("u");
+                    }
+                    break;
+                case QuestionType.GpsCoordinates:
+                case QuestionType.TextList:
+                case QuestionType.Numeric:
+                case QuestionType.Text:
+                case QuestionType.QRBarcode:
+                case QuestionType.Multimedia:
+                    return AnswerUtils.AnswerToString(answer);
+            }
+            return "";
         }
 
         private static string GetTitleWithSubstitutedVariables(IQuestion question, Dictionary<string, string> answersForTitleSubstitution)
@@ -143,6 +187,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             return expression1;
         }
+
+        public string AnswerString { get; private set; }
 
         public decimal[] RosterVector { get; set; }
 
