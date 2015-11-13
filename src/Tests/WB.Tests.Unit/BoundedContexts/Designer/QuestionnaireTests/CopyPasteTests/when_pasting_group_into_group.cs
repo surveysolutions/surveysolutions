@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
 {
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             groupToPasteInId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             sourceQuestionaireId = Guid.Parse("DCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            questionnaire = CreateQuestionnaireWithOneGroup(groupId: groupToPasteInId, responsibleId: responsibleId);
+            questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId : questionnaireId, groupId: groupToPasteInId, responsibleId: responsibleId);
 
             
             doc = Create.QuestionnaireDocument(
@@ -29,10 +30,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
                     
                 }));
             eventContext = new EventContext();
+
+            command = new PasteIntoCommand(
+                questionnaireId: questionnaireId,
+                entityId: targetId,
+                sourceItemId: chapterId,
+                responsibleId: responsibleId,
+                sourceQuestionnaireId: questionnaireId,
+                parentId: groupToPasteInId);
+
+            command.SourceDocument = doc;
         };
 
         Because of = () => 
-            questionnaire.PasteItemInto(targetId, groupToPasteInId, responsibleId, chapterId, doc);
+            questionnaire.PasteItemInto(command);
 
         private It should_clone_MaxAnswerCount_value =
             () => eventContext.ShouldContainEvent<GroupCloned>();
@@ -45,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         static Guid groupToPasteInId;
 
         static Guid chapterId = Guid.Parse("CCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-
+        static Guid questionnaireId = Guid.Parse("CCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDA");
         static Guid sourceQuestionaireId;
         static Guid level1QuestionId = Guid.Parse("44DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         static EventContext eventContext;
@@ -53,6 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         static Guid targetId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static string stataExportCaption = "varrr";
         private static QuestionnaireDocument doc;
+        private static PasteIntoCommand command;
     }
 }
 

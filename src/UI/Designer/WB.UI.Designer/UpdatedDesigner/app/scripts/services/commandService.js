@@ -283,26 +283,6 @@
                     return commandCall("AddDefaultTypeQuestion", command);
                 };
 
-
-                commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": newId,
-                        "title": chapter.title,
-                        "condition": "",
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": null,
-                        "sourceGroupId": chapter.chapterId,
-                        "targetIndex": 1
-                    };
-
-                    return commandCall("CloneGroupWithoutChildren", command);
-                };
-
                 commandService.deleteGroup = function(questionnaireId, itemId) {
                     var command = {
                         "questionnaireId": questionnaireId,

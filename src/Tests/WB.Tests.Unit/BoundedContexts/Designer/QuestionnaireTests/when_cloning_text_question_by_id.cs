@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            newQuestionAdded = CreateNewQuestionAdded(
+            newQuestionAdded = Create.Event.NewQuestionAdded(
                 publicKey : sourceQuestionId, 
                 questionText : "text",
                 variableLabel : "varlabel",

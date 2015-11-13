@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             parentQuestionId = Guid.NewGuid();
             updatedQuestionId = Guid.NewGuid();
 
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey : parentQuestionId,
                 groupPublicKey:rootGroupId,
                 questionType : QuestionType.SingleOption,
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
                     PublicKey = Guid.NewGuid()
                 } }
             ));
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey : updatedQuestionId,
                 groupPublicKey: rootGroupId,
                 questionType : QuestionType.SingleOption

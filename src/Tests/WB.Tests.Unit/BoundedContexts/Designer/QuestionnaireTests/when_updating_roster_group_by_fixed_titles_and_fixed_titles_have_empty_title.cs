@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(CreateNewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
+            questionnaire.Apply(Create.Event.NewQuestionAdded(publicKey: questionId, groupPublicKey: chapterId, questionType: QuestionType.Text));
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
         };
