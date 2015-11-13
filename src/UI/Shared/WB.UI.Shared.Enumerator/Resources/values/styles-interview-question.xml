@@ -171,6 +171,24 @@
     <item name="android:layout_gravity">center_vertical</item>
   </style> 
 
+  <style name="Interview_Question_YesNo_Title" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingLeft">@dimen/Interview_Question_YesNo_paddingLeft</item>
+    <item name="android:orientation">horizontal</item>
+  </style> 
+
+  <style name="Interview_Question_YesNo_Title_delimeter" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style> 
+
+  <style name="Interview_Question_YesNo_Title_text" parent="Interview_Entity_BasicFont">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/interview_question_yes_no</item>
+  </style> 
+
   <style name="Interview_Question_MultiOptionOrder" parent="Interview_Entity_BasicFont">
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>

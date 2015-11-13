@@ -40,8 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.selected = value;
                 this.CheckedTimeStamp = value.HasValue ? DateTime.Now : DateTime.MinValue;
 
-                this.RaiseAnswerCommand.Execute();
-
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(() => YesSelected);
                 this.RaisePropertyChanged(() => NoSelected);
@@ -84,7 +82,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxCommand RemoveAnswerCommand
         {
-            get { return new MvxCommand(() => { Selected = null; }); }
+            get { return new MvxCommand(() => {
+                this.Selected = null;
+                this.CheckedOrder = null;
+            }); }
         }
     }
 }
