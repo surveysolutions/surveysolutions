@@ -11,6 +11,7 @@ using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -48,6 +49,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
         readonly ILogger logger;
         readonly EventStoreSettings settings;
+        private readonly HashSet<string> eventStreamsToIgnore = new HashSet<string>(); 
+     
         bool disposed;
         static object lockObject = new Object();
 
@@ -67,6 +70,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 this.connection.ConnectAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
             }
+
+            eventStreamsToIgnore = new HashSet<string>(settings.EventStreamsToIgnore);
         }
 
         public void Dispose()
@@ -77,6 +82,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
+         	var eventStreamName = GetStreamName(id);
+
+            if (this.eventStreamsToIgnore.Contains(eventStreamName))
+            {
+                throw new InvalidOperationException(string.Format("event stream '{0}' is ignored", eventStreamName));
+            }
             var normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
             var normalMax = Math.Min(int.MaxValue, maxVersion - 1);
             if (minVersion > maxVersion)
@@ -119,7 +130,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 foreach (var @event in slice.Events)
                 {
-                    if (!IsSystemEvent(@event))
+                    if (!IsSystemEvent(@event) && !IsEventStreamIgnored(@event))
                         yield return this.ToCommittedEvent(@event);
                 }
             } while (!slice.IsEndOfStream);
@@ -168,6 +179,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         static bool IsSystemEvent(ResolvedEvent @event)
         {
             return !@event.Event.EventStreamId.StartsWith(EventsPrefix);
+        }
+        private bool IsEventStreamIgnored(ResolvedEvent @event)
+        {
+            return this.eventStreamsToIgnore.Contains(@event.OriginalStreamId);
         }
 
         static string GetStreamName(Guid eventSourceId)

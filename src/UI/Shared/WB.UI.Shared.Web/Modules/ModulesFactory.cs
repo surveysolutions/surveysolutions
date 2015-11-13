@@ -2,6 +2,7 @@
 using System.Web.Configuration;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Storage.EventStore;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Modules
@@ -15,6 +16,14 @@ namespace WB.UI.Shared.Web.Modules
             if (storeProvider == StoreProviders.EventStore)
             {
                 var eventStoreConnectionSettings = new EventStoreSettings();
+
+                var ignoredEventStreamsConfigSection =
+                    (IgnoredEventStreamsConfigSection) WebConfigurationManager.GetSection("IgnoredEventStreamsSection");
+                if (ignoredEventStreamsConfigSection != null)
+                {
+                    eventStoreConnectionSettings.EventStreamsToIgnore =
+                        ignoredEventStreamsConfigSection.GetIgnoredEventStreams();
+                }
                 eventStoreConnectionSettings.ServerIP = WebConfigurationManager.AppSettings["EventStore.ServerIP"];
                 eventStoreConnectionSettings.ServerTcpPort = Convert.ToInt32(WebConfigurationManager.AppSettings["EventStore.ServerTcpPort"]);
                 eventStoreConnectionSettings.ServerHttpPort = Convert.ToInt32(WebConfigurationManager.AppSettings["EventStore.ServerHttpPort"]);
