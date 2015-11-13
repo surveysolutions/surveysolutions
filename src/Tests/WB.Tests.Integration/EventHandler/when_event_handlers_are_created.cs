@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -55,22 +56,34 @@ namespace WB.Tests.Integration.EventHandler
                 eventHandlers.Add(eventHandlerType, new EventHandlerDescriptor(eventHandlerType, constructor, eventHandlerinstance));
             }
         };
-       
+
         Because of = () =>
         {
             foreach (var eventHandlerDescriptor in eventHandlers.Values)
             {
-                var possibleReadSideAccessors = ExcludeExpectedParameters(eventHandlerDescriptor.Constructor.GetParameters()).ToArray();
+                var possibleReadSideAccessors =
+                    ExcludeExpectedParameters(eventHandlerDescriptor.Constructor.GetParameters()).ToArray();
 
-                if (possibleReadSideAccessors.Length != eventHandlerDescriptor.Instance.Writers.Length + eventHandlerDescriptor.Instance.Readers.Length)
-                    eventHandlersWhereWritersAndReadersCountNotEqualToCountofConstructorArguments.Add(eventHandlerDescriptor.Type);
+                if (possibleReadSideAccessors.Length !=
+                    eventHandlerDescriptor.Instance.Writers.Length + eventHandlerDescriptor.Instance.Readers.Length)
+                    eventHandlersWhereWritersAndReadersCountNotEqualToCountofConstructorArguments.Add(
+                        eventHandlerDescriptor.Type);
 
+                if (eventHandlerDescriptor.Instance.Readers.Any(r => r.GetType().GetInterfaces().Any(x =>
+                    x.IsGenericType &&
+                    x.GetGenericTypeDefinition() == typeof(IReadSideRepositoryReader<>))))
+
+                    eventHandlersWhereIReadSideRepositoryReaderAreUsed.Add(eventHandlerDescriptor.Type);
                 foreach (var possibleReadSideAccessor in possibleReadSideAccessors)
                 {
-                    if(eventHandlerDescriptor.Instance.Writers.Any(w => possibleReadSideAccessor.ParameterType.IsInstanceOfType(w)))
-                       continue;
+                    if (
+                        eventHandlerDescriptor.Instance.Writers.Any(
+                            w => possibleReadSideAccessor.ParameterType.IsInstanceOfType(w)))
+                        continue;
 
-                    if (eventHandlerDescriptor.Instance.Readers.Any(w => possibleReadSideAccessor.ParameterType.IsInstanceOfType(w)))
+                    if (
+                        eventHandlerDescriptor.Instance.Readers.Any(
+                            w => possibleReadSideAccessor.ParameterType.IsInstanceOfType(w)))
                         continue;
 
                     eventHandlersWhereAcessorWasntInjectedViaConstructor.Add(eventHandlerDescriptor.Type);
@@ -84,24 +97,28 @@ namespace WB.Tests.Integration.EventHandler
         It should_register_all_respository_accessor_through_consructor = () =>
             eventHandlersWhereAcessorWasntInjectedViaConstructor.ShouldBeEmpty();
 
+        It should_not_use_IReadSideRepositoryReader = () =>
+          eventHandlersWhereIReadSideRepositoryReaderAreUsed.ShouldBeEmpty();
+
         private static Dictionary<Type, EventHandlerDescriptor> eventHandlers = new Dictionary<Type, EventHandlerDescriptor>();
         private static List<Type> eventHandlersWhereWritersAndReadersCountNotEqualToCountofConstructorArguments = new List<Type>();
         private static List<Type> eventHandlersWhereAcessorWasntInjectedViaConstructor = new List<Type>();
+        private static List<Type> eventHandlersWhereIReadSideRepositoryReaderAreUsed = new List<Type>();
 
-        private static Type[] typesToExclude =
-        {
+       private static Type[] typesToExclude =
+       {
             typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof (IQuestionnaireCacheInitializer),
             typeof (IPlainQuestionnaireRepository), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
             typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings)
         };
-      
+
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)
         {
             foreach (var parameterInfo in allParameters)
             {
-                if(typesToExclude.Contains(parameterInfo.ParameterType))
+                if (typesToExclude.Contains(parameterInfo.ParameterType))
                     continue;
 
                 yield return parameterInfo;
@@ -111,12 +128,12 @@ namespace WB.Tests.Integration.EventHandler
         private static object[] CreateConstructorArguments(ParameterInfo[] parameters)
         {
             var result = new List<object>();
-            
+
             foreach (var parameterInfo in parameters)
             {
                 if (parameterInfo.ParameterType.IsInterface)
                 {
-                    var instanceOfParameter = typeof (Mock).GetMethod("Of",new Type[0])
+                    var instanceOfParameter = typeof(Mock).GetMethod("Of", new Type[0])
                         .MakeGenericMethod(parameterInfo.ParameterType)
                         .Invoke(null, new object[0]);
                     result.Add(instanceOfParameter);
@@ -126,7 +143,7 @@ namespace WB.Tests.Integration.EventHandler
                     result.Add(Activator.CreateInstance(parameterInfo.ParameterType));
                 }
             }
-            
+
             return result.ToArray();
         }
 
