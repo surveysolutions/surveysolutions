@@ -74,4 +74,8 @@
   <color name="complete_screen_statistics_error_color">#f45d28</color>
   <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
   
+  <color name="interview_question_yes_no">#36AEE5</color>
+  <color name="interview_question_yesno_selected_text">#3f3f3f</color>
+  <color name="interview_question_yesno_not_selected_text">#a3a3a3</color>
+  
 </resources>
