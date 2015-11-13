@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(CreateNumericQuestionAdded(
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 groupPublicKey : chapterId,
                 isInteger : true,
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     RosterTitleQuestionId =null 
                 });
 
-            questionnaire.Apply(CreateNumericQuestionAdded(publicKey: questionFromRosterId, groupPublicKey: rosterId, isInteger:true, stataExportCaption:substitutionVariableName));
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey: questionFromRosterId, groupPublicKey: rosterId, isInteger:true, stataExportCaption:substitutionVariableName));
             
         };
 

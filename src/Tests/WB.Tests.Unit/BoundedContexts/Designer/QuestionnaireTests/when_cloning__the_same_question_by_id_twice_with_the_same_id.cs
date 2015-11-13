@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             var chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            var newQuestionAdded = CreateNewQuestionAdded(
+            var newQuestionAdded = Create.Event.NewQuestionAdded(
                 publicKey: sourceQuestionId,
                 groupPublicKey: chapterId,
                 questionText: "text",

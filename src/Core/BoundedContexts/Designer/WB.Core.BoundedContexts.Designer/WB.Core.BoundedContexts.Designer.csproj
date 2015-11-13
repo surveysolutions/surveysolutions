@@ -185,7 +185,6 @@
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\CloneGroupWithoutChildrenCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />

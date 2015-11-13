@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(CreateNumericQuestionAdded(
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
                 publicKey : Guid.NewGuid(),
                 groupPublicKey : chapterId,
                 stataExportCaption : notUniqueVariableName

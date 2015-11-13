@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateCascadingComboboxOptionsH
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey: parentQuestionId,
                 groupPublicKey: chapterId,
                 questionType: QuestionType.SingleOption,
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateCascadingComboboxOptionsH
                 }
             ));
 
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey: questionId,
                 groupPublicKey: chapterId,
                 questionType: QuestionType.SingleOption,

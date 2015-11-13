@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(CreateNewQuestionAdded
+            questionnaire.Apply(Create.Event.NewQuestionAdded
             (
                 publicKey : linkedToQuestionId,
                 groupPublicKey : parentGroupId,

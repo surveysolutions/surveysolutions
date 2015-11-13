@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(CreateNumericQuestionAdded(publicKey: rosterSizeQuestionId, isInteger:true, groupPublicKey: chapterId));
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey: rosterSizeQuestionId, isInteger:true, groupPublicKey: chapterId));
             
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId });
-            questionnaire.Apply(CreateNumericQuestionAdded(publicKey: prefilledQuestionId, isInteger: true, groupPublicKey: rosterId, featured:true));
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey: prefilledQuestionId, isInteger: true, groupPublicKey: rosterId, featured:true));
             
             eventContext = new EventContext();
         };

@@ -20,7 +20,6 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand) },
                     { "UpdateGroup", typeof (UpdateGroupCommand) },
                     { "AddGroup", typeof (AddGroupCommand) },
-                    { "CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand) },
                     { "CloneGroup", typeof (CloneGroupCommand) },
                     { "CloneStaticText", typeof (CloneStaticTextCommand) },
                     { "DeleteGroup", typeof (DeleteGroupCommand) },

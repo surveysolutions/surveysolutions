@@ -42,13 +42,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             });
 
 
-            questionnaire.Apply(CreateNumericQuestionAdded(
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
                 publicKey : questionUsedAsLinkId,
                 groupPublicKey : groupToUpdateId,
                 isInteger : true
             ));
 
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey : linkedQuestionInChapterId,
                 questionType : QuestionType.SingleOption,
                 groupPublicKey : chapterId,

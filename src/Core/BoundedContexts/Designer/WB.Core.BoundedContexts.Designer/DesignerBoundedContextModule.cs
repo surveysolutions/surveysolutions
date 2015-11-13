@@ -110,7 +110,6 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<AddSharedPersonToQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId))
                 .Handles<AddStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddStaticTextAndMoveIfNeeded(command.EntityId, command.ParentId, command.Text, command.ResponsibleId, command.Index))                
                 .Handles<CloneGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneGroup(command.GroupId, command.ResponsibleId, command.SourceGroupId, command.TargetIndex))
-                .Handles<CloneGroupWithoutChildrenCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneGroupWithoutChildren(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.ParentGroupId, command.SourceGroupId, command.TargetIndex, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId))
                 .Handles<CloneQuestionByIdCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneQuestionById(command.QuestionId, command.ResponsibleId, command.TargetId))
                 .Handles<CloneStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneStaticText(command.EntityId, command.SourceEntityId, command.ResponsibleId))
                 .Handles<DeleteGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId))
@@ -136,8 +135,8 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateStaticText(command.EntityId, command.Text, command.ResponsibleId))
                 .Handles<UpdateTextListQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextListQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.ResponsibleId, command.MaxAnswerCount, command.Scope))
                 .Handles<UpdateTextQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Mask, command.ResponsibleId))                
-                .Handles<PasteAfterCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemAfter(command.EntityId, command.ItemToPasteAfterId, command.ResponsibleId, command.SourceItemId, command.SourceDocument))
-                .Handles<PasteIntoCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemInto(command.EntityId, command.ParentId, command.ResponsibleId, command.SourceItemId, command.SourceDocument))                ;
+                .Handles<PasteAfterCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemAfter(command))
+                .Handles<PasteIntoCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemInto(command));
         }
     }
 }

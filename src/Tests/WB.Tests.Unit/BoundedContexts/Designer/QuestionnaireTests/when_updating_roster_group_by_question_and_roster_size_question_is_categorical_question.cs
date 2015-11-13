@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 groupPublicKey : chapterId,
                 questionType : QuestionType.MultyOption

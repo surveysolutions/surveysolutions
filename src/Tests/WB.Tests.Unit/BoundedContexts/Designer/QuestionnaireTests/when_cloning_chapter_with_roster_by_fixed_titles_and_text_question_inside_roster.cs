@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 FixedRosterTitles = rosterFixedTitles,
                 RosterTitleQuestionId = null
             });
-            questionnaire.Apply(CreateNewQuestionAdded(
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey: textQuestionId,
                 groupPublicKey: rosterId,
                 questionType: QuestionType.Text,

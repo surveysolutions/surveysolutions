@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
             sourceQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
-            var newQuestionAdded = CreateNumericQuestionAdded
+            var newQuestionAdded = Create.Event.NumericQuestionAdded
             (
                 publicKey : sourceQuestionId,
                 questionText : "text",

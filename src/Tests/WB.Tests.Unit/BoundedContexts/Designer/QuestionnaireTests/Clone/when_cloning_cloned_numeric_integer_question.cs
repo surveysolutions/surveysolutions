@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
             var sourceQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             questionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
 
-            var questionCloned = CreateQuestionCloned(
+            var questionCloned = Create.Event.QuestionCloned(
                 publicKey : questionId,
                 sourceQuestionId: sourceQuestionId,
                 targetIndex:0,
