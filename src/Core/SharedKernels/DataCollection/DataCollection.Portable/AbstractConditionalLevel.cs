@@ -340,6 +340,11 @@ namespace WB.Core.SharedKernels.DataCollection
             return answer == null || !answer.Any();
         }
 
+        protected bool IsAnswerEmpty(YesNoAnswers answer)
+        {
+            return answer.Yes.Length == 0 && answer.No.Length == 0;
+        }
+
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,
             out List<Identity> groupsToBeEnabled, out List<Identity> groupsToBeDisabled)
         {

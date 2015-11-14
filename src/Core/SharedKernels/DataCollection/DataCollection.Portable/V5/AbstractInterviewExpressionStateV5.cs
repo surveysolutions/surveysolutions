@@ -12,6 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.V5
         {
         }
 
+        #region methods using InterviewScopes should be overriden
+        public new Dictionary<string, IExpressionExecutableV5> InterviewScopes = new Dictionary<string, IExpressionExecutableV5>();
+
         public AbstractInterviewExpressionStateV5(Dictionary<string, IExpressionExecutableV5> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
         {
             this.InterviewProperties = interviewProperties.Clone();
@@ -37,21 +40,6 @@ namespace WB.Core.SharedKernels.DataCollection.V5
             this.SiblingRosters = newSiblingRosters;
         }
 
-        public new Dictionary<string, IExpressionExecutableV5> InterviewScopes = new Dictionary<string, IExpressionExecutableV5>();
-
-        protected abstract Guid GetQuestionnaireId();
-
-        protected abstract Guid[] GetParentRosterScopeIds(Guid rosterId);
-
-        protected abstract bool HasParentScropeRosterId(Guid rosterId);
-
-        public void UpdateYesNoAnswer(Guid questionId, decimal[] rosterVector, YesNoAnswersOnly answer)
-        {
-            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector) as IExpressionExecutableV5;
-            if (targetLevel == null) return;
-
-            targetLevel.UpdateYesNoAnswer(questionId, answer);
-        }
 
         public new IEnumerable<IExpressionExecutableV5> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
         {
@@ -62,6 +50,72 @@ namespace WB.Core.SharedKernels.DataCollection.V5
                 : null;
 
             return siblingRosters;
+        }
+
+        protected override IExpressionExecutable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
+        {
+            var parentsMap = this.GetParentsMap();
+            if (!parentsMap.ContainsKey(questionId))
+                return null;
+
+            var rosterKey = Util.GetRosterKey(parentsMap[questionId], rosterVector);
+            var rosterStringKey = Util.GetRosterStringKey(rosterKey);
+            return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
+        }
+
+        public new void SaveAllCurrentStatesAsPrevious()
+        {
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
+            {
+                interviewScopeKvpValue.SaveAllCurrentStatesAsPrevious();
+            }
+        }
+
+        public new ValidityChanges ProcessValidationExpressions()
+        {
+            var questionsToBeValid = new List<Identity>();
+            var questionsToBeInvalid = new List<Identity>();
+
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
+            {
+                List<Identity> questionsToBeValidByScope;
+                List<Identity> questionsToBeInvalidByScope;
+
+                interviewScopeKvpValue.CalculateValidationChanges(out questionsToBeValidByScope, out questionsToBeInvalidByScope);
+
+                questionsToBeValid.AddRange(questionsToBeValidByScope);
+                questionsToBeInvalid.AddRange(questionsToBeInvalidByScope);
+            }
+
+            return new ValidityChanges(answersDeclaredValid: questionsToBeValid, answersDeclaredInvalid: questionsToBeInvalid);
+        }
+
+        public new EnablementChanges ProcessEnablementConditions()
+        {
+            var questionsToBeEnabled = new List<Identity>();
+            var questionsToBeDisabled = new List<Identity>();
+            var groupsToBeEnabled = new List<Identity>();
+            var groupsToBeDisabled = new List<Identity>();
+
+            //order by scope depth starting from top
+            //conditionally lower scope could depend only from upper scope
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
+            {
+                List<Identity> questionsToBeEnabledArray;
+                List<Identity> questionsToBeDisabledArray;
+                List<Identity> groupsToBeEnabledArray;
+                List<Identity> groupsToBeDisabledArray;
+
+                interviewScopeKvpValue.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
+                    out groupsToBeDisabledArray);
+
+                questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
+                questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
+                groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
+                groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
+            }
+
+            return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
         }
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
@@ -134,6 +188,16 @@ namespace WB.Core.SharedKernels.DataCollection.V5
             }
         }
 
+        #endregion
+
+        public void UpdateYesNoAnswer(Guid questionId, decimal[] rosterVector, YesNoAnswersOnly answer)
+        {
+            var targetLevel = this.GetRosterByIdAndVector(questionId, rosterVector) as IExpressionExecutableV5;
+            if (targetLevel == null) return;
+
+            targetLevel.UpdateYesNoAnswer(questionId, answer);
+        }
+
         public void SetInterviewProperties(IInterviewProperties properties)
         {
             this.InterviewProperties = properties;
@@ -156,5 +220,11 @@ namespace WB.Core.SharedKernels.DataCollection.V5
         {
             return Clone() as IInterviewExpressionStateV5;
         }
+
+        protected abstract Guid GetQuestionnaireId();
+
+        protected abstract Guid[] GetParentRosterScopeIds(Guid rosterId);
+
+        protected abstract bool HasParentScropeRosterId(Guid rosterId);
     }
 }
