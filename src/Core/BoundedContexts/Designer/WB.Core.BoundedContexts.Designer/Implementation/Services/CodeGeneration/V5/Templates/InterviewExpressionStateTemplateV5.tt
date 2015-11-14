@@ -9,182 +9,191 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
- <#
- foreach (var namespaceToInclude in QuestionnaireTemplateStructure.Namespaces)
- {
- #>
+<#
+foreach (var namespaceToInclude in QuestionnaireTemplateStructure.Namespaces)
+{
+#>
 using <#=namespaceToInclude#>;
- <#
- }
- #>
+<#
+}
+#>
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionStateV5
+	public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionStateV5
 	{
-	    public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() : base()
-        {
-            var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
-            var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies, this.InterviewProperties);
-            this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);				
-        }
+		public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() : base()
+		{
+			var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
+			var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
+			var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(
+				Util.EmptyRosterVector, 
+				questionnaireIdentityKey, 
+				this.GetRosterInstances, 
+				IdOf.conditionalDependencies, 
+				IdOf.structuralDependencies, 
+				this.InterviewProperties);
+			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);				
+		}
 
-		public <#=QuestionnaireTemplateStructure.GeneratedClassName#>(Dictionary<string, IExpressionExecutableV5> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
+		public <#=QuestionnaireTemplateStructure.GeneratedClassName#>(
+			Dictionary<string, IExpressionExecutableV5> interviewScopes, 
+			Dictionary<string, List<string>> siblingRosters, 
+			IInterviewProperties interviewProperties)
 		 :base(interviewScopes, siblingRosters, interviewProperties){}
 
-        protected override bool HasParentScropeRosterId(Guid rosterId){
+		protected override bool HasParentScropeRosterId(Guid rosterId){
 			return IdOf.parentScopeMap.ContainsKey(rosterId);
 		}
 
 		protected override Guid GetQuestionnaireId()
-        {
-            return IdOf.@__questionnaire;
-        }
+		{
+			return IdOf.@__questionnaire;
+		}
 
-        protected override Guid[] GetParentRosterScopeIds(Guid rosterId)
-        {
-            return IdOf.parentScopeMap[rosterId];
-        }
+		protected override Guid[] GetParentRosterScopeIds(Guid rosterId)
+		{
+			return IdOf.parentScopeMap[rosterId];
+		}
 
-        public override IInterviewExpressionState Clone()
+		public override IInterviewExpressionState Clone()
 		{
 			return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
 		}
-        
+		
 
-        public override Dictionary<Guid, Guid[]> GetParentsMap()
-        {
-            return IdOf.parentScopeMap;
-        }
+		public override Dictionary<Guid, Guid[]> GetParentsMap()
+		{
+			return IdOf.parentScopeMap;
+		}
 	}
-        //generate QuestionnaireLevel
-<#    
-            QuestionnaireLevelTemplateV5 questionnairetemplate = CreateQuestionnaireLevelTemplate();
-            this.Write(questionnairetemplate.TransformText());                           
+		//generate QuestionnaireLevel
+<#	
+			QuestionnaireLevelTemplateV5 questionnairetemplate = CreateQuestionnaireLevelTemplate();
+			this.Write(questionnairetemplate.TransformText());						   
 #>
 
-        //generating rosters
+		//generating rosters
 <#
 		foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
-        {
-            RosterScopeTemplateV5 template = CreateRosterScopeTemplate(rosterGroup.Value);
-            this.Write(template.TransformText());
-        }
+		{
+			RosterScopeTemplateV5 template = CreateRosterScopeTemplate(rosterGroup.Value);
+			this.Write(template.TransformText());
+		}
 #>
 
-        public static class IdOf
-        {
-            public static readonly Guid @__questionnaire = Guid.Parse("<#= QuestionnaireTemplateStructure.Id #>"); 
-            //questions
+	public static class IdOf
+	{
+		public static readonly Guid @__questionnaire = Guid.Parse("<#= QuestionnaireTemplateStructure.Id #>"); 
+		//questions
 <#
-			foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
-            {
+		foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
+		{
 #>
-            public static readonly Guid <#= q.GeneratedIdName#> = Guid.Parse("<#= q.Id #>");
+		public static readonly Guid <#= q.GeneratedIdName#> = Guid.Parse("<#= q.Id #>");
+<# 
+		}
+#>
+		//groups
+<#
+		foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
+		{
+#>
+		public static readonly Guid <#= g.GeneratedIdName#> = Guid.Parse("<#= g.Id #>");
+<# 
+		}
+#>
+		//rosters
+<#
+		foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+		{
+#>
+		public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
+<# 
+		}
+#>
+		public static readonly Guid[] <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedRosterScopeName#> = new[] {@__questionnaire};
+
+<#
+		foreach (var r in QuestionnaireTemplateStructure.AllRosters)
+		{
+#>
+		public static readonly Guid[] <#= r.GeneratedRosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};
+<# 
+		}
+#>
+			
+		public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
+		{			
+<#
+			foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies)
+			{
+#>
+			{Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+<#
+			foreach (var dependencyValue in dependency.Value)
+			{
+#>
+				Guid.Parse("<#= dependencyValue #>"),
 <# 
 			}
 #>
-            //groups
+			}},
+<# 
+			}
+#>
+		};
+
+		public static Dictionary<Guid, Guid[]> structuralDependencies = new Dictionary<Guid, Guid[]>()
+		{
+<#
+			foreach (var dependency in QuestionnaireTemplateStructure.StructuralDependencies) 
+			{
+#>
+			{ Guid.Parse("<#= dependency.Key #>"), new Guid[]{
+<#
+			foreach (var d in dependency.Value)
+			{
+#>
+				Guid.Parse("<#= d #>"),
+<# 
+			}
+#>
+			}},
+<#
+			}
+#>
+		};
+
+		public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
+		{
+				
+<#				//questions
+			foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
+			{
+#>
+			{<#= q.GeneratedIdName#>, <#= q.RosterScopeName#>},
+<# 
+			}
+#>
+			//groups
 <#
 			foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
-            {
+			{
 #>
-            public static readonly Guid <#= g.GeneratedIdName#> = Guid.Parse("<#= g.Id #>");
+			{<#= g.GeneratedIdName#>, <#= g.RosterScopeName#>},
 <# 
 			}
 #>
-            //rosters
-<#
-			foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
-            {
-#>
-            public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
-<# 
-			}
-#>
-            public static readonly Guid[] <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedRosterScopeName#> = new[] {@__questionnaire};
-
+			//rosters
 <#
 			foreach (var r in QuestionnaireTemplateStructure.AllRosters)
-            {
+			{
 #>
-            public static readonly Guid[] <#= r.GeneratedRosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};
+			{<#= r.GeneratedIdName#>, <#= r.GeneratedRosterScopeName#>},
 <# 
 			}
 #>
-            
-            public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
-            {            
-<#
-				foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies)
-                {
-#>
-                {Guid.Parse("<#= dependency.Key #>"), new Guid[]{
-<#
-				foreach (var dependencyValue in dependency.Value)
-                {
-#>
-                    Guid.Parse("<#= dependencyValue #>"),
-<# 
-				}
-#>
-                }},
-<# 
-				}
-#>
-            };
-
-            public static Dictionary<Guid, Guid[]> structuralDependencies = new Dictionary<Guid, Guid[]>()
-            {
-<#
-				foreach (var dependency in QuestionnaireTemplateStructure.StructuralDependencies) 
-                {
-#>
-                { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
-<#
-				foreach (var d in dependency.Value)
-                {
-#>
-                    Guid.Parse("<#= d #>"),
-<# 
-				}
-#>
-                }},
-<#
-				}
-#>
-            };
-
-            public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
-            {
-                
-<#				//questions
-				foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
-                {
-#>
-                {<#= q.GeneratedIdName#>, <#= q.RosterScopeName#>},
-<# 
-				}
-#>
-                //groups
-<#
-				foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
-                {
-#>
-                {<#= g.GeneratedIdName#>, <#= g.RosterScopeName#>},
-<# 
-				}
-#>
-                //rosters
-<#
-				foreach (var r in QuestionnaireTemplateStructure.AllRosters)
-                {
-#>
-                {<#= r.GeneratedIdName#>, <#= r.GeneratedRosterScopeName#>},
-<# 
-				}
-#>                                        
-            };
-        }
+		};
+	}
 }

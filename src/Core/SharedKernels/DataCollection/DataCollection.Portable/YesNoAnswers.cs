@@ -1,32 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
     public class YesNoAnswers
     {
-        private List<decimal> missing = new List<decimal>();
-        private decimal[] yes;
-        private decimal[] no;
-
-        public YesNoAnswers(decimal[] yes, decimal[] no)
+        public YesNoAnswers(YesNoAnswers yesNoAnswers)
         {
-            this.yes = yes;
-            this.no = no;
+            this.allOptionCodes = yesNoAnswers.allOptionCodes;
+            this.selectedNoCodes = yesNoAnswers.selectedNoCodes;
+            this.selectedYesCodes = yesNoAnswers.selectedYesCodes;
         }
 
-        public decimal[] Yes => this.yes;
-
-        public decimal[] No => this.no;
-
-        public decimal[] Missing
+        public YesNoAnswers(decimal[] allOptionCodes)
         {
-            get { return this.missing.ToArray(); }
+            this.allOptionCodes = allOptionCodes;
+            this.selectedNoCodes = new decimal[0];
+            this.selectedYesCodes = new decimal[0];
         }
+
+        private decimal[] selectedYesCodes;
+        private decimal[] selectedNoCodes;
+        private readonly decimal[] allOptionCodes;
+
+
+        public decimal[] All => this.allOptionCodes;
+
+        public decimal[] Yes => this.selectedYesCodes;
+
+        public decimal[] No => this.selectedNoCodes;
+
+        public decimal[] Missing => this.allOptionCodes.Except(this.selectedYesCodes).Except(this.selectedNoCodes).ToArray();
 
         public void SetAnswer(YesNoAnswersOnly yesNoAnswersOnly)
         {
-            this.yes = yesNoAnswersOnly.Yes;
-            this.no = yesNoAnswersOnly.No;
+            this.selectedYesCodes = yesNoAnswersOnly.Yes;
+            this.selectedNoCodes = yesNoAnswersOnly.No;
         }
     }
 
