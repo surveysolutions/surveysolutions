@@ -1,0 +1,116 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #> 
+<#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model" #> 
+
+<#+
+void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
+{
+	foreach (var @group in groups) 
+	{
+#>
+		EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
+<#+
+	}
+}
+
+void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
+{
+	foreach (var question in questions)
+	{
+#>
+		EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
+<#+
+		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);					   
+		if(hasAnyValidation)
+		{
+#>
+		ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {							 
+				() => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
+		}); 
+
+<#+ 
+		}
+		if (question.IsMultiOptionYesNoQuestion)
+		{
+#>
+		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.GeneratedMemberName#>.SetAnswer(val); });
+<#+ 
+		}else{
+#>
+		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
+<#+ 
+		}
+	}
+}
+
+void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
+{
+	foreach (var @roster in rosters) 
+	{
+#>
+		RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
+<#+ 
+	}
+}
+
+void RostersInScopeStatesInLevelConstructor(List<RosterTemplateModel> rostersInScope)
+{
+	foreach (var roster in rostersInScope) 
+	{
+#>
+		EnablementStates.Add(<#=roster.GeneratedStateName#>.ItemId, <#=roster.GeneratedStateName#>);
+<#+ 
+	}
+}
+
+void QuestionsCopyOperatorsInCopyMembers(List<QuestionTemplateModel> questions)
+{
+	foreach (var q in questions) 
+	{
+		if (q.IsMultiOptionYesNoQuestion)
+		{
+#>
+			<#=q.GeneratedMemberName#> = new <#=typeof(YesNoAnswers).Name#>(this.<#=q.GeneratedMemberName#>),
+<#+
+		}else{
+#>
+			<#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,   
+<#+	
+		}
+	}
+}
+#>
+
+<#+
+void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
+{
+	foreach (var question in questions) 
+	{
+		if (question.IsMultiOptionYesNoQuestion)
+		{
+#>
+	private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#> = new <#=typeof(YesNoAnswers).Name#>(new decimal[]{<#+question.AllMultioptionYesNoCodes.ForEach(code => this.Write(code + ","));#>});
+<#+ 
+		}
+		else
+		{
+#>
+	private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#> = null;
+<#+ 
+		}
+#>
+	private ConditionalState <#= question.GeneratedStateName#> = new ConditionalState(IdOf.<#=question.GeneratedIdName#>);
+	public <#=question.GeneratedTypeName#> <#=question.VariableName#>
+	{
+		get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
+			
+	}
+<#+
+	}
+}
+#>

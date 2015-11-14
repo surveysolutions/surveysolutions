@@ -32,18 +32,6 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GenerateExpressionsClassForLatestVersion(Guid id)
-        {
-            var questionnaire = GetQuestionnaire(id).Source;
-
-            string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire,
-                this.engineVersionService.GetLatestSupportedVersion());
-
-            var codeWithoutEmptyStrings = Regex.Replace(generated, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
-            return Request.CreateResponse(HttpStatusCode.OK, codeWithoutEmptyStrings);
-        }
-
-        [HttpGet]
         public HttpResponseMessage GetAllClassesForLatestVersion(Guid id)
         {
             var questionnaire = GetQuestionnaire(id).Source;
