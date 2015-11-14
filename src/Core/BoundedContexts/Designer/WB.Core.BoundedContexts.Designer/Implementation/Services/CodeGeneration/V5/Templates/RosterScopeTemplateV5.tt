@@ -5,6 +5,8 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #> 
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
+<#@ include file="SharedTemplateV5.tt"#>
+
 internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelInstanceV5<<#=this.Model.GeneratedTypeName#>>, 
 	IRosterLevel<<#=this.Model.GeneratedTypeName#>>, 
 	IExpressionExecutableV5
@@ -23,73 +25,18 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	private <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
 		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
-	{		   
+	{	
 <#
-	foreach (var @group in Model.Groups) 
-	{
+	GroupsStatesInLevelConstructor(Model.Groups);
+	RostersInScopeStatesInLevelConstructor(Model.RostersInScope);
+	QuestionsStatesInLevelConstructor(Model.Questions);
+	RostersStatesInLevelConstructor(Model.Rosters);
 #>
-		EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
-<#
-	}
-#>
-
-<#
-	foreach (var @roster in Model.RostersInScope) 
-	{
-#>
-		EnablementStates.Add(<#=@roster.GeneratedStateName#>.ItemId, <#= @roster.GeneratedStateName#>);
-<# 
-	}
-#>
-
-<#
-	foreach (var question in Model.Questions) 
-	{
-#>
-		EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
-<#
-		if(!string.IsNullOrWhiteSpace(question.Validations))
-		{
-#>
-		ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {							 
-				
-<#
-			if(!string.IsNullOrWhiteSpace(question.Validations)) 
-			{
-#>
-				() => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
-<# 
-			}
-#>
-		});			 
-<# 
-		}
-		if (question.IsMultiOptionYesNoQuestion)
-		{
-#>
-		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.GeneratedMemberName#>.SetAnswer(val); });
-<# 
-		}else{
-#>
-		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
-<# 
-		}
-	}
-#>
-<#
-	foreach (var @roster in Model.Rosters) 
-	{
-#>
-		RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
-<# 
-	}
-#>
-
 <#
 	foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
-	{
+    {
 #>
-		_conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));						
+		_conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
 <#
 	}
 #>
@@ -139,19 +86,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 
 <#
-	foreach (var q in Model.Questions) 
-	{
-		if (q.IsMultiOptionYesNoQuestion)
-		{
-#>
-			<#=q.GeneratedMemberName#> = new <#=typeof(YesNoAnswers).Name#>(this.<#=q.GeneratedMemberName#>),
-<#
-		}else{
-#>
-			<#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,   
-<#	
-		}
-	}
+	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
 #>
 		};
 
@@ -169,58 +104,9 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 		 
 		return level;
 	}
-
-			   
+   
 <#
-	foreach (var question in Model.Questions) 
-	{
-#>
-<# 
-	if (question.IsMultiOptionYesNoQuestion)
-	{
-#>
-	private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#> = new <#=typeof(YesNoAnswers).Name#>(new decimal[]{<#question.AllMultioptionYesNoCodes.ForEach(code => this.Write(code + ","));#>});
-<# 
-	}
-	else
-	{
-#>
-	private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#> = null;
-<# 
-	}
-#>
-	private ConditionalState <#= question.GeneratedStateName#> = new ConditionalState(IdOf.<#=question.GeneratedIdName#>);
-	public <#=question.GeneratedTypeName#> <#=question.VariableName#>
-	{
-		get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
-			
-	}
-<#
-	if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-	{
-#>
-	private bool <#=question.GeneratedConditionsMethodName#>()
-	{
-		return <#=question.Conditions#>;
-	}	  
-<#
-	}
-#>
-
-<#
-	if(!string.IsNullOrWhiteSpace(question.Validations) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-	{
-#>
-	private bool <#=question.GeneratedValidationsMethodName#>()
-	{
-		var self = <#=question.VariableName#>;
-		return <#=question.Validations#>;
-	}  
-<#
-	}
-#>
-<# 
-	}
+	QuestionsStateDefenitions(Model.Questions);
 #>
 	//groups
 <#

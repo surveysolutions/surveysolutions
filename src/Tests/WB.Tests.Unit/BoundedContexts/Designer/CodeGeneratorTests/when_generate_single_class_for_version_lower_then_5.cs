@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                generator.Generate(questionnaire,version));
+            exception = Catch.Exception(() => generator.Generate(questionnaire,version));
 
         It should_throw_VersionNotFoundException = () =>
             exception.ShouldBeOfExactType<VersionNotFoundException>();
