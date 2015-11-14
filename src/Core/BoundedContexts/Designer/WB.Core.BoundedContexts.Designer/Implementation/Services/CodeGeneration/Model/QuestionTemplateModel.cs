@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
@@ -24,5 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string GeneratedConditionsMethodName { set; get; }
 
         public bool IsMultiOptionYesNoQuestion { get; set; }
+        public List<string> AllMultioptionYesNoCodes { get; set; }
     }
 }
