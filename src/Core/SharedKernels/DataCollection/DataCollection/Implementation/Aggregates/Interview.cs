@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
@@ -35,8 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasHardDeleted;
         protected InterviewStatus status;
 
-        private IInterviewExpressionStateV4 expressionProcessorStatePrototype = null;
-        private IInterviewExpressionStateV4 ExpressionProcessorStatePrototype
+        private IInterviewExpressionStateV5 expressionProcessorStatePrototype = null;
+        private IInterviewExpressionStateV5 ExpressionProcessorStatePrototype
         {
             get
             {
@@ -314,7 +315,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
 
-            // TODO KP-6303 this.ExpressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.Question, @event.AnsweredOptions);
+            var yesNoAnswers = ConvertToYesNoAnswers(@event.AnsweredOptions);
+            this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, yesNoAnswers);
+        }
+
+        private YesNoAnswersOnly ConvertToYesNoAnswers(AnsweredYesNoOption[] answeredOptions)
+        {
+            var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
+            var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
+            return new YesNoAnswersOnly(yesAnswers, noAnswers);
         }
 
         public virtual void Apply(GeoLocationQuestionAnswered @event)
