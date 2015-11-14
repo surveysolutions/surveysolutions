@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -38,7 +39,8 @@ namespace WB.UI.Designer.Api
             string generated = expressionProcessorGenerator.GenerateProcessorStateSingleClass(questionnaire,
                 this.engineVersionService.GetLatestSupportedVersion());
 
-            return Request.CreateResponse(HttpStatusCode.OK, generated);
+            var codeWithoutEmptyStrings = Regex.Replace(generated, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
+            return Request.CreateResponse(HttpStatusCode.OK, codeWithoutEmptyStrings);
         }
 
         [HttpGet]
@@ -58,6 +60,28 @@ namespace WB.UI.Designer.Api
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, resultBuilder.ToString());
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage GetCompilationResultForLatestVersion(Guid id)
+        {
+            //do async
+            var questionnaire = GetQuestionnaire(id).Source;
+            string assembly;
+            var generated = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
+                this.engineVersionService.GetLatestSupportedVersion(), out assembly);
+            if (generated.Success)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, "No errors");
+            }
+            else
+            {
+                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
+                var errorLocations = generated.Diagnostics.Select(x => x.Message).ToArray();
+
+                return Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+            }
         }
 
         [HttpGet]
@@ -83,9 +107,10 @@ namespace WB.UI.Designer.Api
             }
             else
             {
-                var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
+                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
+                var errorLocations = generated.Diagnostics.Select(x => x.Message).Aggregate("Errors: \r\n", (current, message) => current + "\r\n" + message);
 
-                return Request.CreateErrorResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+                return this.Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
             }
         }
 

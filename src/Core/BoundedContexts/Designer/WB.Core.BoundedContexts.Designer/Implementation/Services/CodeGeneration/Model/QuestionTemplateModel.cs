@@ -22,5 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string GeneratedValidationsMethodName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
+
+        public bool IsMultiOptionYesNoQuestion { get; set; }
     }
 }
