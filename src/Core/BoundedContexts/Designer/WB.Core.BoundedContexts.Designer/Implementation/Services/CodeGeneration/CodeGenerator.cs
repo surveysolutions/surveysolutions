@@ -9,9 +9,11 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -40,9 +42,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
         {
-            return targetVersion.Major < 10 ? 
-                new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText() : 
-                new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
+            if (targetVersion.Major < 10)
+            {
+                return new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText();
+            }
+            else if (targetVersion.Major < 11)
+            {
+                return new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
+            }
+            else
+            {
+                return new InterviewExpressionStateTemplateV5(questionnaireTemplateStructure).TransformText();
+            }
         }
 
         public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire, Version targetVersion)
@@ -107,7 +118,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
 
-            return new CodeGenerationSettings(
+            if (version.Major < 11)
+                return new CodeGenerationSettings(
                     abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV4",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
                     namespaces: new[]
@@ -120,6 +132,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     },
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
+            return new CodeGenerationSettings(
+                   abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
+                   additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+                   namespaces: new[]
+                   {
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V4",
+                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V5",
+                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
+                   },
+                   areRosterServiceVariablesPresent: true,
+                   rosterType: "RosterRowList");
         }
 
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
@@ -464,6 +491,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 : macrosSubstitutionService.SubstituteMacroses(childAsIQuestion.ConditionExpression, questionnaireDoc),
                             Validations = macrosSubstitutionService.SubstituteMacroses(childAsIQuestion.ValidationExpression, questionnaireDoc),
                             QuestionType = childAsIQuestion.QuestionType,
+                            IsMultiOptionYesNoQuestion = childAsIQuestion.QuestionType == QuestionType.MultyOption? (childAsIQuestion as IMultyOptionsQuestion).YesNoView : false,
                             GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
                             GeneratedMemberName = "@__" + varName,
                             GeneratedStateName = "@__" + varName + "_state",
@@ -601,6 +629,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     return "string";
 
                 case QuestionType.MultyOption:
+                    var multiOtion = question as MultyOptionsQuestion;
+                    if (multiOtion != null && multiOtion.YesNoView)
+                        return typeof(YesNoAnswers).Name;
                     return (question.LinkedToQuestionId == null) ? "decimal[]" : "decimal[][]";
 
                 case QuestionType.DateTime:

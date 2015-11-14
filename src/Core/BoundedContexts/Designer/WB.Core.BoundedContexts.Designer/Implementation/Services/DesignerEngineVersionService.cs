@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -31,10 +32,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Hidden questions and random value release</summary>
         private readonly Version version_10 = new Version(10, 0, 0);
 
-        
+        /// <summary>Yes/No questions</summary>
+        private readonly Version version_11 = new Version(11, 0, 0);
+
+
         public Version GetLatestSupportedVersion()
         {
-            return version_10;
+            return version_11;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
@@ -50,10 +54,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
         {
+            if (clientVersion < version_11)
+            {
+                var countOfYesNoQuestions = questionnaireDocument.Find<IMultyOptionsQuestion>(q => q.YesNoView).Count();
+
+                if (countOfYesNoQuestions != 0)
+                    return false;
+            }
             if (clientVersion < version_10)
             {
-                var countOfHiddenQuestions =
-                    questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
+                var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
              
                 return countOfHiddenQuestions == 0;
             }

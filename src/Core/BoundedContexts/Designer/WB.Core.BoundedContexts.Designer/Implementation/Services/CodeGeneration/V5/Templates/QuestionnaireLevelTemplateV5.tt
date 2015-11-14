@@ -1,0 +1,222 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
+ 
+internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelInstanceV5<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutableV5
+{
+    public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
+            Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
+        : base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+    {
+<#
+	foreach (var @group in Model.Groups) 
+    {
+#>
+        EnablementStates.Add(<#=@group.GeneratedStateName#>.ItemId, <#= @group.GeneratedStateName#>);
+<# 
+	}
+#>
+                
+<#
+	foreach (var question in Model.Questions)
+    {
+#>
+        EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
+<#
+        bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);                       
+
+        if(hasAnyValidation)
+        {
+#>    
+        ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {                             
+<#
+			if(!string.IsNullOrWhiteSpace(question.Validations)) 
+			{
+#>  
+                () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
+<# 
+			}
+#>
+        }); 
+<# 
+		}
+		if (question.IsMultiOptionYesNoQuestion)
+        {
+#>
+        AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.GeneratedMemberName#>.SetAnswer(val); });
+<# 
+        }else{
+#>
+		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=question.GeneratedTypeName#> val) => {<#=question.GeneratedMemberName#>  = val; });
+<# 
+        }
+	}
+#>
+<#
+	foreach (var @roster in Model.Rosters) 
+    {
+#>    
+        RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
+<# 
+	}
+#>
+
+<#
+	foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
+    {
+#>
+        _conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
+<#
+	}
+#>
+    }         
+
+    public override IExpressionExecutableV5 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances)
+    {
+        var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+        {
+            ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
+            InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
+<#
+			foreach (var q in Model.Questions) 
+            {
+#>        
+            <#=q.GeneratedMemberName#> = this.<#=q.GeneratedMemberName#>,        
+<#
+		}
+#>
+        };
+                 
+        ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
+        StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
+
+        foreach (var state in level.EnablementStates)
+        {
+            var originalState = this.EnablementStates[state.Key];
+            state.Value.PreviousState = originalState.PreviousState;
+            state.Value.State = originalState.State;
+        }
+            
+        return level;
+    }
+	
+<#
+	foreach (var question in Model.Questions) 
+    {
+#>            
+    private <#=question.GeneratedTypeName#> <#=question.GeneratedMemberName#> = null;
+    private ConditionalState <#= question.GeneratedStateName#> = new ConditionalState(IdOf.<#=question.GeneratedIdName#>);
+    public <#=question.GeneratedTypeName#> <#=question.VariableName#>
+    {
+        get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
+            
+    }
+<#
+	if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
+    {
+#>
+    private bool <#=question.GeneratedConditionsMethodName#>()
+    {
+        return <#=question.Conditions#>;
+    }
+<# 
+	}
+#>
+        
+<#
+	if(!string.IsNullOrWhiteSpace(question.Validations) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
+    {
+#>        
+    private bool <#=question.GeneratedValidationsMethodName#>()
+    {
+		var self = <#=question.VariableName#>;
+        return <#=question.Validations#>;
+    }
+<# 
+	}
+#>
+
+<# 
+	}
+#>
+                
+<#
+	foreach (var @roster in Model.Rosters) 
+    {
+#>
+    public <#=Model.RosterType#><<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+    {
+        get 
+        {
+            var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
+			return  new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
+        }
+    }
+<# 
+	}
+#>
+    // groups condition states
+<#
+	foreach (var @group in Model.Groups) 
+    {
+#>
+    private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
+<#
+		if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
+		{
+#>      
+    private bool <#=@group.GeneratedConditionsMethodName#>()
+    {
+        return <#=@group.Conditions#>;
+    }      
+<# 
+		}
+	}
+#>
+        
+	private readonly IList<Action> _conditionExpressions = new List<Action>();
+
+    protected override IEnumerable<Action> ConditionExpressions
+    {
+        get
+        {
+            return _conditionExpressions;
+        }
+    }
+
+    public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+    {
+        this.Validate(out questionsToBeValid, out questionsToBeInvalid);
+    }            
+        	
+    public void SetParent(IExpressionExecutableV5 parentLevel)            
+    {
+    }
+
+	public void SetParent(IExpressionExecutableV2 parentLevel)            
+    {
+    }
+
+	public void SetParent(IExpressionExecutable parentLevel)            
+    {            
+    }
+
+    IExpressionExecutableV5 IExpressionExecutableV5.GetParent()
+    {
+        return null;
+    }
+
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
+    {
+        return null;
+    }
+
+	IExpressionExecutable IExpressionExecutable.GetParent()
+    {
+        return null;
+    }
+}
