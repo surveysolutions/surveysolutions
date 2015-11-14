@@ -491,7 +491,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 : macrosSubstitutionService.SubstituteMacroses(childAsIQuestion.ConditionExpression, questionnaireDoc),
                             Validations = macrosSubstitutionService.SubstituteMacroses(childAsIQuestion.ValidationExpression, questionnaireDoc),
                             QuestionType = childAsIQuestion.QuestionType,
-                            IsMultiOptionYesNoQuestion = childAsIQuestion.QuestionType == QuestionType.MultyOption? (childAsIQuestion as IMultyOptionsQuestion).YesNoView : false,
+                            
                             GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
                             GeneratedMemberName = "@__" + varName,
                             GeneratedStateName = "@__" + varName + "_state",
@@ -500,6 +500,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             GeneratedValidationsMethodName = "IsValid_" + varName,
                             RosterScopeName = currentScope.GeneratedRosterScopeName
                         };
+
+                        if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)
+                        {
+                            var multyOptionsQuestion = childAsIQuestion as IMultyOptionsQuestion;
+                            question.IsMultiOptionYesNoQuestion = multyOptionsQuestion.YesNoView;
+                            if (question.IsMultiOptionYesNoQuestion)
+                            {
+                                question.AllMultioptionYesNoCodes = multyOptionsQuestion.Answers.Select(x => x.AnswerValue).ToList();
+                            }
+                        }
 
                         currentScope.Questions.Add(question);
 
