@@ -29,16 +29,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.expressionProcessor = expressionProcessor;
         }
-        
-        public string Generate(QuestionnaireDocument questionnaire, Version targetVersion)
-        {
-            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
-
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, true);
-
-            return GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
-        }
 
         private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
         {
@@ -56,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire, Version targetVersion)
+        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
             CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 

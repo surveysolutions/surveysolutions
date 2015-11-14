@@ -241,6 +241,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
+      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.cs">
       <DependentUpon>RosterScopeTemplateV5.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -647,6 +652,12 @@
     <None Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplateV5.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV5.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
