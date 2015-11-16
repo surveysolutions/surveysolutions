@@ -615,7 +615,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     break;
                 case AnswerType.YesNoArray:
                     this.GetOrCreateAnswer<YesNoQuestionAnswer>(answerDto.Id, answerDto.RosterVector)
-                        .SetAnswers((IEnumerable<AnsweredYesNoOption>)answerDto.Answer);
+                        .SetAnswers((AnsweredYesNoOption[])answerDto.Answer);
                     break;
                 case AnswerType.RosterVectorArray:
                     this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
