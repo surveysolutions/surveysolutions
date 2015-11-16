@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     interview.Levels.SingleOrDefault(
                         l => l.Key == this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
 
-                var questionToCheck = levelForVector.Value.QuestionsSearchCahche.ContainsKey(id) ? levelForVector.Value.QuestionsSearchCahche[id] : null;
+                var questionToCheck = levelForVector.Value.QuestionsSearchCache.ContainsKey(id) ? levelForVector.Value.QuestionsSearchCache[id] : null;
 
                 if (questionToCheck == null)
                     continue;
@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var result = new List<ExportedQuestion>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
-                var question = interviewLevel.QuestionsSearchCahche.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCahche[headerItem.PublicKey] : null;
+                var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey] : null;
                 ExportedQuestion exportedQuestion = null;
                 if (question == null)
                 {

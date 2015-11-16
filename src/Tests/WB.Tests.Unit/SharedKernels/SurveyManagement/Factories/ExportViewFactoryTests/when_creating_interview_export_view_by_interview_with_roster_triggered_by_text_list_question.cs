@@ -111,10 +111,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
             InterviewData interview = CreateInterviewData();
-            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(rosterSizeQuestionId))
-                interview.Levels["#"].QuestionsSearchCahche.Add(rosterSizeQuestionId, new InterviewQuestion(rosterSizeQuestionId));
+            if (!interview.Levels["#"].QuestionsSearchCache.ContainsKey(rosterSizeQuestionId))
+                interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, new InterviewQuestion(rosterSizeQuestionId));
 
-            var textListQuestion = interview.Levels["#"].QuestionsSearchCahche[rosterSizeQuestionId];
+            var textListQuestion = interview.Levels["#"].QuestionsSearchCache[rosterSizeQuestionId];
             textListQuestion.Answer = new string[] { "a1", "a2" };
 
             for (int i = 0; i < levelCount; i++)
@@ -123,10 +123,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
-                if (!newLevel.QuestionsSearchCahche.ContainsKey(questionInsideRosterGroupId))
-                    newLevel.QuestionsSearchCahche.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
+                if (!newLevel.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))
+                    newLevel.QuestionsSearchCache.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
 
-                var question = newLevel.QuestionsSearchCahche[questionInsideRosterGroupId];
+                var question = newLevel.QuestionsSearchCache[questionInsideRosterGroupId];
 
                 question.Answer = new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, someAnswer) });
             }

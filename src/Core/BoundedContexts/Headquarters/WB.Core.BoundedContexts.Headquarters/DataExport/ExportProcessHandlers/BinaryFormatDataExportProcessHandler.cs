@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     {
                         var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(
                             level =>
-                                level.QuestionsSearchCahche.Values.Where(
+                                level.QuestionsSearchCache.Values.Where(
                                     question =>
                                         question.IsAnswered() && !question.IsDisabled() &&
                                         multimediaQuestionIds.Any(

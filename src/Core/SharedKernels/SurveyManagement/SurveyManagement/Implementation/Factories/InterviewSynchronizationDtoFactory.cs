@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             foreach (var interviewLevel in interview.Levels.Values)
             {
-                foreach (var interviewQuestion in interviewLevel.QuestionsSearchCahche)
+                foreach (var interviewQuestion in interviewLevel.QuestionsSearchCache)
                 {
                     var answeredQuestion = new AnsweredQuestionSynchronizationDto(interviewQuestion.Key,
                         interviewLevel.RosterVector,

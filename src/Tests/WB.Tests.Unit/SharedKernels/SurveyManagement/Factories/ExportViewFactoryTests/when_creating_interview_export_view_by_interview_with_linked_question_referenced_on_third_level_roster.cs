@@ -62,10 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             interview = CreateInterviewData();
 
-            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(linkedQuestionId))
-                interview.Levels["#"].QuestionsSearchCahche.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
+            if (!interview.Levels["#"].QuestionsSearchCache.ContainsKey(linkedQuestionId))
+                interview.Levels["#"].QuestionsSearchCache.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
 
-            var textListQuestion = interview.Levels["#"].QuestionsSearchCahche[linkedQuestionId];
+            var textListQuestion = interview.Levels["#"].QuestionsSearchCache[linkedQuestionId];
 
             textListQuestion.Answer = new decimal[] { 0, 0 };
             exportViewFactory = CreateExportViewFactory();
