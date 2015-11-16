@@ -141,20 +141,8 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>ไม่สามารถเปิดแบบสอบถาม "{0}" ได้ เนื่องจากแบบสอบถามมีข้อผิดพลาด กรุณาแก้ไขแบบสอบถามที่ Survey Solutions Designer</value>
   </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>ไม่มีการเชื่อมต่อกับ Survey Solutions Designer ท่านต้องการเปิดแบบสอบถามในรูปแบบออฟไลน์หรือไม่</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>กำลังเตรียมแบบสอบถามสำหรับสร้างการสัมภาษณ์</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>กำลังบันทึกลิงค์ไลบรารี่การสัมภาษณ์ไว้บนเครื่องที่ใช้งาน</value>
-  </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>กำลังบันทึกแบบสอบถามไว้บนเครื่องที่ใช้งาน</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>กำลังตรวจสอบข้อผิดพลาดของแบบสอบถามบนเซิร์ฟเวอร์</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>ไม่สามารถเข้าถึงเว็บแอพพลิเคชันของ Survey Solutions Designer ได้ในขณะนี้ กรุณาตรวจสอบการตั้งค่าการเชื่อมต่อ หรือลองอีกครั้งภายหลัง</value>

@@ -246,17 +246,11 @@
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>ขนาดของแพคเกจ </value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>รหัสการลงทะเบียนของเครื่องที่ใช้</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>การตั้งค่าการเชื่อมต่อ</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>หมายเลขเครื่องที่ใช้งาน :</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>URL ที่ใช้ในการติดต่อกับ Survey Solutions Supervisor </value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL ของ Survey Solutions Supervisor </value>
@@ -272,9 +266,6 @@
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>กำหนดเวลาในการตอบสนองของเซิร์ฟเวอร์</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>รหัสการติดตั้ง:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>การตั้งค่าการสัมภาษณ์</value>
@@ -294,17 +285,11 @@
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>ยกเลิก</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>เงื่อนไข/การตรวจสอบ</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} จาก {1} {2} เสร็จแล้ว</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>กำลังปรับปรุงการมอบหมายงาน</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>การมอบหมายงานบางส่วนถูกปรับปรุง</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>การสัมภาษณ์ที่ถูกลบ {0} จาก {1} </value>
@@ -356,12 +341,6 @@
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} จาก {1} {2} เสร็จแล้ว</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>รูปภาพ</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>รูปภาพจากการสัมภาษณ์</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>สัมภาษณ์</value>
