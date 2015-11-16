@@ -167,8 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 		public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
 		{
-				
-<#				//questions
+<#			//questions
 			foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
 			{
 #>
