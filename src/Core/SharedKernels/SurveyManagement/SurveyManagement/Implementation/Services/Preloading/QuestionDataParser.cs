@@ -196,22 +196,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             foreach (var answerTuple in answersWithColumnName)
             {
-                string columnEncodedValue = CutVariableNameFromColumnName(answerTuple.Item1);
-                decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
-
-                int answerIndex = int.Parse(answerTuple.Item2);
-
-                if (answerIndex == 0)
+                if (!string.IsNullOrEmpty(answerTuple.Item2))
                 {
-                    result.Add(Tuple.Create(new AnsweredYesNoOption(columnValue.Value, false), answerIndex));
-                }
-                if (answerIndex > 0)
-                {
-                    result.Add(Tuple.Create(new AnsweredYesNoOption(columnValue.Value, true), answerIndex));
+                    string columnEncodedValue = CutVariableNameFromColumnName(answerTuple.Item1);
+                    decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
+
+                    int answerIndex = int.Parse(answerTuple.Item2);
+
+                    if (answerIndex == 0)
+                    {
+                        result.Add(Tuple.Create(new AnsweredYesNoOption(columnValue.Value, false), answerIndex));
+                    }
+                    if (answerIndex > 0)
+                    {
+                        result.Add(Tuple.Create(new AnsweredYesNoOption(columnValue.Value, true), answerIndex));
+                    }
                 }
             }
 
-            return result.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray();
+            var sortedYesOptions = result.Where(x => x.Item2 != 0)
+                                         .OrderBy(x => x.Item2)
+                                         .Select(x => x.Item1);
+            var noOptions = result.Where(x => x.Item2 == 0)
+                                  .Select(x => x.Item1);
+
+            return sortedYesOptions.Concat(noOptions).ToArray();
         }
 
         private decimal[] ParseMultioptionAnswer(Tuple<string, string>[] answersWithColumnName)
