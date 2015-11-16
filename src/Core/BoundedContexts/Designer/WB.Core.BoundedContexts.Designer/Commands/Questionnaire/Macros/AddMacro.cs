@@ -4,11 +4,14 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros
 {
     [Serializable]
-    public class AddMacro : QuestionnaireEntityCommand
+    public class AddMacro : QuestionnaireCommand
     {
-        public AddMacro(Guid questionnaireId, Guid entityId, Guid responsibleId)
-            : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
+        public AddMacro(Guid questionnaireId, Guid macroId, Guid responsibleId)
+            : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
+            this.MacroId = macroId;
         }
+
+        public Guid MacroId { get; private set; }
     }
 }

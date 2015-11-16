@@ -859,17 +859,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddMacro(AddMacro command)
         {
-            this.ApplyEvent(new MacroAdded(command.EntityId, command.ResponsibleId));
+            this.ApplyEvent(new MacroAdded(command.MacroId, command.ResponsibleId));
         }
 
         public void UpdateMacro(UpdateMacro command)
         {
-            this.ApplyEvent(new MacroUpdated(command.EntityId, command.Name, command.Content, command.Description, command.ResponsibleId));
+            this.ApplyEvent(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
         }
 
         public void DeleteMacro(DeleteMacro command)
         {
-            this.ApplyEvent(new MacroDeleted(command.EntityId, command.ResponsibleId));
+            this.ApplyEvent(new MacroDeleted(command.MacroId, command.ResponsibleId));
         }
       
         #endregion
@@ -1018,7 +1018,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterSizeQuestionId),
                 rosterTitleQuestionId: null,
                 rosterFixedTitles: sourceGroup.FixedRosterTitles,
-                variableName: preserveVariableName ? sourceGroup.VariableName : null));
+                variableName: preserveVariableName ? sourceGroup.VariableName : null,
+                sourceQuestionnaireId : sourceQuestionnaireId));
 
             foreach (var questionnaireItem in sourceGroup.Children)
             {
@@ -4331,7 +4332,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public IEnumerable<object> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
             Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Guid? sourceQuestionnaireId)
         {
             yield return
                 new GroupCloned
@@ -4344,7 +4345,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     ConditionExpression = condition,
                     SourceGroupId = sourceGroupId,
                     TargetIndex = targetIndex,
-                    ResponsibleId = responsibleId
+                    ResponsibleId = responsibleId,
+                    SourceQuestionnaireId = sourceQuestionnaireId
                 };
 
             if (isRoster)
