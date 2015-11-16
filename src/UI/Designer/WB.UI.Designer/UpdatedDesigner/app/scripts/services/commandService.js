@@ -33,7 +33,7 @@
                 commandService.addMacro = function (questionnaireId, macro) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "entityId": macro.itemId
+                        "macroId": macro.itemId
                     };
                     return commandCall("AddMacros", command);
                 };
@@ -41,7 +41,7 @@
                 commandService.updateMacro = function (questionnaireId, macro) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "entityId": macro.itemId,
+                        "macroId": macro.itemId,
                         "name": macro.name,
                         "content": macro.content,
                         "description": macro.description
@@ -53,7 +53,7 @@
                 commandService.deleteMacros = function (questionnaireId, itemId) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "entityId": itemId
+                        "macroId": itemId
                     };
                     return commandCall("DeleteMacros", command);
                 }

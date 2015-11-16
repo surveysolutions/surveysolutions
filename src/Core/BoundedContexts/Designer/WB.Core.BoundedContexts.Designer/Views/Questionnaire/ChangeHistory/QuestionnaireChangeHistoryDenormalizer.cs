@@ -462,13 +462,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         public void Handle(IPublishedEvent<MacroAdded> evnt)
         {
-            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.EntityId, string.Empty);
+            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.MacroId, string.Empty);
 
             AddQuestionnaireChangeItem(
                 evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Add, 
                 QuestionnaireItemType.Macro, 
-                evnt.Payload.EntityId,
+                evnt.Payload.MacroId,
                 "Empty macro added", 
                 evnt.EventSequence);
         }
@@ -476,13 +476,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<MacroUpdated> evnt)
         {
             var macroName = evnt.Payload.Name;
-            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.EntityId, macroName);
+            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.MacroId, macroName);
 
             AddQuestionnaireChangeItem(
                evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                QuestionnaireActionType.Update,
                QuestionnaireItemType.Macro,
-               evnt.Payload.EntityId,
+               evnt.Payload.MacroId,
                macroName,
                evnt.EventSequence);
         }
@@ -490,19 +490,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<MacroDeleted> evnt)
         {
             var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var macroName = questionnaire.MacroState.ContainsKey(evnt.Payload.EntityId) 
-                ? questionnaire.MacroState[evnt.Payload.EntityId]
+            var macroName = questionnaire.MacroState.ContainsKey(evnt.Payload.MacroId) 
+                ? questionnaire.MacroState[evnt.Payload.MacroId]
                 : "";
 
             AddQuestionnaireChangeItem(
                evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                QuestionnaireActionType.Delete,
                QuestionnaireItemType.Macro,
-               evnt.Payload.EntityId,
+               evnt.Payload.MacroId,
                macroName,
                evnt.EventSequence);
 
-            questionnaire.MacroState.Remove(evnt.Payload.EntityId);
+            questionnaire.MacroState.Remove(evnt.Payload.MacroId);
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
