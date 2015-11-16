@@ -28,16 +28,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.logger = logger;
             
             this.RegisterExportHandlerForFormat<ParaDataExportProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
-            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, TabularFormatDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
 
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
-            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, StataFormatExportProcessHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, StataFormatExportHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, StataFormatExportHandler>(DataExportFormat.STATA);
 
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
-            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, SpssFormatExportProcessHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, SpssFormatExportHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, SpssFormatExportHandler>(DataExportFormat.SPSS);
 
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, BinaryFormatDataExportProcessHandler>(DataExportFormat.Binary);
+            this.RegisterExportHandlerForFormat<AllDataExportProcess, BinaryFormatDataExportHandler>(DataExportFormat.Binary);
         }
 
         public void StartDataExport()
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    IDataExportProcess dataExportProcess = this.dataExportProcessesService.GetOldestUnprocessedDataExportProcess();
+                    IDataExportProcess dataExportProcess = this.dataExportProcessesService.GetAndStratOldestUnprocessedDataExport();
 
                     if (dataExportProcess == null)
                         return;
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     {
                         HandleExportProcess(dataExportProcess);
 
-                        this.dataExportProcessesService.FinishDataExportProcess(dataExportProcess.DataExportProcessId);
+                        this.dataExportProcessesService.FinishDataExport(dataExportProcess.DataExportProcessId);
                     }
                     catch (Exception e)
                     {
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                             string.Format("data export process with id {0} finished with error", dataExportProcess.DataExportProcessId),
                             e);
 
-                        this.dataExportProcessesService.FinishDataExportProcessWithError(dataExportProcess.DataExportProcessId, e);
+                        this.dataExportProcessesService.FinishDataExportWithError(dataExportProcess.DataExportProcessId, e);
                     }
                 }
             }

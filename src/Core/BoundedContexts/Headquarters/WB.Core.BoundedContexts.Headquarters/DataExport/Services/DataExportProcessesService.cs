@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaires = questionnaires;
         }
 
-        public IDataExportProcess GetOldestUnprocessedDataExportProcess()
+        public IDataExportProcess GetAndStratOldestUnprocessedDataExport()
         {
             var exportProcess = dataExportProcessDtoStorage.Values.Where(p => p.Status == DataExportStatus.Queued)
                 .OrderBy(p => p.LastUpdateDate)
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess;
         }
 
-        public string AddDataExportProcess(Guid questionnaireId, long questionnaireVersion,
+        public string AddAllDataExport(Guid questionnaireId, long questionnaireVersion,
             DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
@@ -67,11 +67,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 Status = DataExportStatus.Queued
             };
 
-            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
+            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
             return processId;
         }
 
-        public string AddApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion,
+        public string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion,
          DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
@@ -94,11 +94,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 Status = DataExportStatus.Queued
             };
 
-            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
+            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
             return processId;
         }
 
-        public string AddParaDataExportProcess(DataExportFormat exportFormat)
+        public string AddParaDataExport(DataExportFormat exportFormat)
         {
             string processId = Guid.NewGuid().FormatGuid();
             var exportProcess = new ParaDataExportProcess()
@@ -111,11 +111,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 DataExportProcessName = "ParaData",
                 Status = DataExportStatus.Queued
             };
-            this.EnQueueDataExportProcessIfPossible(exportProcess, (p) => true);
+            this.AddDataExportProcessIfPossible(exportProcess, (p) => true);
             return processId;
         }
 
-        private void EnQueueDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportProcess
+        private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportProcess
         {
             var runningOrQueuedDataExportProcessesByTheQuestionnaire =
                 dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
@@ -129,16 +129,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
 
             dataExportProcessDtoStorage[exportProcess.DataExportProcessId] = exportProcess;
-
-            StartBackgroundDataExport();
         }
 
-        public IDataExportProcess GetDataExportProcess(string processId)
+        public IDataExportProcess GetDataExport(string processId)
         {
             return dataExportProcessDtoStorage[processId];
         }
 
-        public IDataExportProcess[] GetRunningProcess()
+        public IDataExportProcess[] GetRunningDataExports()
         {
             return
                 dataExportProcessDtoStorage.Values.Where(
@@ -148,9 +146,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     .ToArray();
         }
 
-        public void FinishDataExportProcess(string processId)
+        public void FinishDataExport(string processId)
         {
-            var dataExportProcess = GetDataExportProcess(processId);
+            var dataExportProcess = this.GetDataExport(processId);
             if(dataExportProcess== null || dataExportProcess.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
@@ -159,9 +157,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.ProgressInPercents = 100;
         }
 
-        public void FinishDataExportProcessWithError(string processId, Exception e)
+        public void FinishDataExportWithError(string processId, Exception e)
         {
-            var dataExportProcess = GetDataExportProcess(processId);
+            var dataExportProcess = this.GetDataExport(processId);
             if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
@@ -174,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             if (progressInPercents < 0 || progressInPercents > 100)
                 throw new ArgumentException();
 
-            var dataExportProcess = GetDataExportProcess(processId);
+            var dataExportProcess = this.GetDataExport(processId);
             if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
@@ -182,30 +180,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.ProgressInPercents = progressInPercents;
         }
 
-        public void DeleteDataExportProcess(string processId)
+        public void DeleteDataExport(string processId)
         {
             dataExportProcessDtoStorage.Remove(processId);
-        }
-
-        private void StartBackgroundDataExport()
-        {
-            new Thread(
-                () =>
-                {
-                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                    try
-                    {
-                        ServiceLocator.Current.GetInstance<IDataExporter>().StartDataExport();
-                    }
-                    catch (Exception exc)
-                    {
-                        Logger.Error("Start of data export error ", exc);
-                    }
-                    finally
-                    {
-                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    }
-                }).Start();
         }
     }
 }

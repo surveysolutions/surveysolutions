@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.ExportInterviewsInTabularFormatAsync(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Progress<int>());
+            readSideToTabularFormatExportService.ExportInterviewsInTabularFormat(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Progress<int>());
 
         It should_record_one_completed_action = () =>
            csvWriterMock.Verify(x=>x.WriteData(Moq.It.IsAny<string>(),Moq.It.Is<IEnumerable<string[]>>(s=>s.Any(c=>c.Contains("Completed"))), Moq.It.IsAny<string>()), Times.Once);
