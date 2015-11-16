@@ -73,10 +73,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var interviewData = CreateInterviewData();
             foreach (var questionsWithAnswer in questionsWithAnswers)
             {
-                if (!interviewData.Levels["#"].QuestionsSearchCahche.ContainsKey(questionsWithAnswer))
-                    interviewData.Levels["#"].QuestionsSearchCahche.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
+                if (!interviewData.Levels["#"].QuestionsSearchCache.ContainsKey(questionsWithAnswer))
+                    interviewData.Levels["#"].QuestionsSearchCache.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
 
-                var question = interviewData.Levels["#"].QuestionsSearchCahche[questionsWithAnswer]; 
+                var question = interviewData.Levels["#"].QuestionsSearchCache[questionsWithAnswer]; 
                 
                 question.Answer = "some answer";
             }

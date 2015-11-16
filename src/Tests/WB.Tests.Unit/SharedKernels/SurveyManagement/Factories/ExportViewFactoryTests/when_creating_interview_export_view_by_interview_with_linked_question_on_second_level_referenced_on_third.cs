@@ -62,10 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var rosterLevel = new InterviewLevel(new ValueVector<Guid> { rosterId }, null, new decimal[] { 0 });
             interview.Levels.Add("0", rosterLevel);
 
-            if (!rosterLevel.QuestionsSearchCahche.ContainsKey(linkedQuestionId))
-                rosterLevel.QuestionsSearchCahche.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
+            if (!rosterLevel.QuestionsSearchCache.ContainsKey(linkedQuestionId))
+                rosterLevel.QuestionsSearchCache.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
 
-            var textListQuestion = rosterLevel.QuestionsSearchCahche[linkedQuestionId];
+            var textListQuestion = rosterLevel.QuestionsSearchCache[linkedQuestionId];
 
             textListQuestion.Answer = new decimal[] { 0, 0 };
 
