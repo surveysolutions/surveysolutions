@@ -613,6 +613,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     this.GetOrCreateAnswer<MultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswers(answerDto.Answer as decimal[]);
                     break;
+                case AnswerType.YesNoArray:
+                    this.GetOrCreateAnswer<YesNoQuestionAnswer>(answerDto.Id, answerDto.RosterVector)
+                        .SetAnswers((AnsweredYesNoOption[])answerDto.Answer);
+                    break;
                 case AnswerType.RosterVectorArray:
                     this.GetOrCreateAnswer<LinkedMultiOptionAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswers(answerDto.Answer as decimal[][]);
