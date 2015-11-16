@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     internal class QuestionDataParser : IQuestionDataParser
     {
         private readonly QuestionType[] QuestionTypesCommaFirbidden = new[] { QuestionType.MultyOption, QuestionType.SingleOption, QuestionType.Numeric, QuestionType.GpsCoordinates };
+
         public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue)
         {
             parsedValue =null;
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 case QuestionType.GpsCoordinates:
                     try
                     {
-                        parsedValue = GeoPosition.ParseProperty(answer, GetGpsPropertyFromColumnName(columnName));
+                        parsedValue = GeoPosition.ParseProperty(answer, this.CutVariableNameFromColumnName(columnName));
                         return ValueParsingResult.OK;
                     }
                     catch (Exception)
@@ -128,12 +129,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     if (multyOption == null)
                         return ValueParsingResult.QuestionTypeIsIncorrect;
 
-                    decimal answerValue;
-                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out answerValue))
+                    string columnEncodedValue = CutVariableNameFromColumnName(columnName);
+                    decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
+
+                    if (!columnValue.HasValue)
+                    {
                         return ValueParsingResult.AnswerAsDecimalWasNotParsed;
-                    if (!this.GetAnswerOptionsAsValues(question).Contains(answerValue))
+                    }
+
+                    if (!this.GetAnswerOptionsAsValues(question).Contains(columnValue.Value))
+                    {
                         return ValueParsingResult.ParsedValueIsNotAllowed;
-                    parsedValue = answerValue;
+                    }
+
+                    int answerChecked;
+                    if (!int.TryParse(answer, out answerChecked))
+                    {
+                        return ValueParsingResult.AnswerAsDecimalWasNotParsed;
+                    }
+                    if (answerChecked > 0)
+                    {
+                        parsedValue = columnValue.Value;
+                    }
+                    
                     return ValueParsingResult.OK;
             }
 
@@ -149,7 +167,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    return answersWithColumnName.Select(a => Convert.ToDecimal(a.Item2)).ToArray();
+                    return ParseMultioptionAnswer(answersWithColumnName);
                 case QuestionType.TextList:
                     return answersWithColumnName.Select((a, i) => new Tuple<decimal, string>(i + 1, a.Item2)).ToArray();
                 case QuestionType.GpsCoordinates:
@@ -161,13 +179,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
+        private decimal[] ParseMultioptionAnswer(Tuple<string, string>[] answersWithColumnName)
+        {
+            List<Tuple<decimal, int>> result = new List<Tuple<decimal, int>>();
+
+            foreach (var answerTuple in answersWithColumnName)
+            {
+                string columnEncodedValue = CutVariableNameFromColumnName(answerTuple.Item1);
+                decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
+
+                int answerIndex = int.Parse(answerTuple.Item2);
+
+                if (answerIndex > 0)
+                {
+                    result.Add(Tuple.Create(columnValue.Value, answerIndex));
+                }
+            }
+
+            return result.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray();
+        }
+
         private GeoPosition CreateGeoPositionAnswer(Tuple<string, string>[] answersWithColumnName, IQuestion question)
         {
             var result = new GeoPosition();
 
             foreach (var answerWithColumnName in answersWithColumnName)
             {
-                var propertyName = GetGpsPropertyFromColumnName(answerWithColumnName.Item1);
+                var propertyName = this.CutVariableNameFromColumnName(answerWithColumnName.Item1);
                 var typedValue = GeoPosition.ParseProperty(answerWithColumnName.Item2, propertyName);
 
                 switch (propertyName)
@@ -192,7 +230,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return result;
         }
 
-        private string GetGpsPropertyFromColumnName(string columnName)
+        private string CutVariableNameFromColumnName(string columnName)
         {
             if (!columnName.Contains("_"))
                 return columnName;

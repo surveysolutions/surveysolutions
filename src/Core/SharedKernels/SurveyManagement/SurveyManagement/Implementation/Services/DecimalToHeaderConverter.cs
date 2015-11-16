@@ -16,9 +16,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return value.ToString(NumberFormat);
         }
 
-        public static decimal ToValue(string value)
+        public static decimal? ToValue(string value)
         {
-            return decimal.Parse(value, NumberFormat);
+            decimal result;
+
+            if (decimal.TryParse(value, NumberStyles.Any, NumberFormat, out result))
+            {
+                return result;
+            }
+
+            return null;
         }
     }
 }
