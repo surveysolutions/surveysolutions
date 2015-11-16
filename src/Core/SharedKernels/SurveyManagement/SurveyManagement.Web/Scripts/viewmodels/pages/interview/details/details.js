@@ -180,12 +180,44 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
     };
 
-    self.saveYesNoMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, yes, areAnswersOrdered, maxAllowedAnswers) {
+    self.saveYesNoMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, yes, answerOptionValue, maxAllowedAnswers) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answerOptionValue = $("input:radio[name=" + answerElementId + "]").val();
+        var answers = _.result(_.find(answeredYesNoQuestionsBySupervisor, 'questionId', answerElementId), 'answers');
 
+        if (_.isNull(answers) || _.isUndefined(answers)) {
+            answers = [];
+        }
+
+        var answeredOption = _.find(answers, function(answer) { return answer.OptionValue === answerOptionValue; });
+        if (answeredOption) {
+            var indexOfAnsweredOption = answers.indexOf(answeredOption);
+            answers.splice(indexOfAnsweredOption, 1);
+        }
+
+        answers.push({ optionValue: answerOptionValue, yes: yes });
+
+        var observableAnswers = ko.observableArray(answers).extend({
+            validation: [
+                {
+                    validator: function (val) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers)) {
+                            return true;
+                        }
+
+                        return val.length <= maxAllowedAnswers;
+                    },
+                    message: 'Number of selected answers more than number of maximum permitted answers'
+                }
+            ]
+        });
+
+        if (!observableAnswers.isValid()) {
+            self.ShowError(observableAnswers.error);
+            return;
+        }
+        
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.selectedOption = ko.observable(answerOptionValue);
+        question.selectedOptions = observableAnswers;
 
 
         sendAnswerCommand(config.commands.answerYesNoQuestion, question);

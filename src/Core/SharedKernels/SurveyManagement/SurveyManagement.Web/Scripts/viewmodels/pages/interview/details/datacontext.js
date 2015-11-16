@@ -20,8 +20,7 @@
 
     commands[config.commands.answerYesNoQuestion] = function (question) {
         var command = prepareQuestionCommand(question);
-        command.answeredOptions = question.areAnswersOrdered ? question.orderedOptionsSelection() :
-            question.selectedOptions();
+        command.answeredOptions = question.selectedOptions();
         return command;
     };
 
