@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -77,31 +77,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 runningDataExportProcesses: runningProcesses);
         }
 
-        private RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportProcess exportProcess)
+        private RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportDetails dataExportDetails)
         {
             var result = new RunningDataExportProcessView()
             {
-                DataExportProcessId = exportProcess.DataExportProcessId,
-                BeginDate = exportProcess.BeginDate,
-                LastUpdateDate = exportProcess.LastUpdateDate,
-                DataExportProcessName = exportProcess.DataExportProcessName,
-                Progress = exportProcess.ProgressInPercents,
-                Format = exportProcess.DataExportFormat
+                DataExportProcessId = dataExportDetails.DataExportProcessId,
+                BeginDate = dataExportDetails.BeginDate,
+                LastUpdateDate = dataExportDetails.LastUpdateDate,
+                DataExportProcessName = dataExportDetails.DataExportProcessName,
+                Progress = dataExportDetails.ProgressInPercents,
+                Format = dataExportDetails.DataExportFormat
             };
 
-            if (exportProcess is ParaDataExportProcess)
+            if (dataExportDetails is ParaDataExportDetails)
             {
                 result.Type = DataExportType.ParaData;
             }
-            else if (exportProcess is AllDataExportProcess)
+            else if (dataExportDetails is AllDataExportDetails)
             {
                 result.Type = DataExportType.Data;
-                result.QuestionnaireIdentity = ((AllDataExportProcess) exportProcess).QuestionnaireIdentity;
+                result.QuestionnaireIdentity = ((AllDataExportDetails) dataExportDetails).QuestionnaireIdentity;
             }
-            else if (exportProcess is ApprovedDataExportProcess)
+            else if (dataExportDetails is ApprovedDataExportDetails)
             {
                 result.Type = DataExportType.ApprovedData;
-                result.QuestionnaireIdentity = ((ApprovedDataExportProcess) exportProcess).QuestionnaireIdentity;
+                result.QuestionnaireIdentity = ((ApprovedDataExportDetails) dataExportDetails).QuestionnaireIdentity;
             }
             return result;
         }

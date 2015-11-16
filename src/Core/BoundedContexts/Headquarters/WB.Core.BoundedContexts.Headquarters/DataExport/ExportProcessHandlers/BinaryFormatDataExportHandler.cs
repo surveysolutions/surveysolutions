@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    public class BinaryFormatDataExportHandler : IExportProcessHandler<AllDataExportProcess>
+    public class BinaryFormatDataExportHandler : IExportProcessHandler<AllDataExportDetails>
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainInterviewFileStorage plainFileRepository;
@@ -54,24 +54,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
-        public void ExportData(AllDataExportProcess process)
+        public void ExportData(AllDataExportDetails dataExportDetails)
         {
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
-                        _.Where(x => x.QuestionnaireId == process.QuestionnaireIdentity.QuestionnaireId &&
-                                     x.QuestionnaireVersion == process.QuestionnaireIdentity.Version && !x.IsDeleted)
+                        _.Where(x => x.QuestionnaireId == dataExportDetails.QuestionnaireIdentity.QuestionnaireId &&
+                                     x.QuestionnaireVersion == dataExportDetails.QuestionnaireIdentity.Version && !x.IsDeleted)
                             .OrderBy(x => x.InterviewId)
                             .Select(x => x.InterviewId).ToList()));
 
-            string folderForDataExport = GetFolderPathOfDataByQuestionnaire(process.QuestionnaireIdentity);
+            string folderForDataExport = GetFolderPathOfDataByQuestionnaire(dataExportDetails.QuestionnaireIdentity);
 
             this.ClearFolder(folderForDataExport);
 
             QuestionnaireExportStructure questionnaire =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.questionnaireReader.AsVersioned()
-                        .Get(process.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), process.QuestionnaireIdentity.Version));
+                        .Get(dataExportDetails.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), dataExportDetails.QuestionnaireIdentity.Version));
 
             var multimediaQuestionIds =
                 questionnaire.HeaderToLevelMap.Values.SelectMany(
@@ -116,12 +116,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     }
                 }
                 totalInterviewsProcessed++;
-                this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId,
+                this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.DataExportProcessId,
                     totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
             var archiveFilePath =
-                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(process.QuestionnaireIdentity,
+                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportDetails.QuestionnaireIdentity,
                     DataExportFormat.Binary);
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }

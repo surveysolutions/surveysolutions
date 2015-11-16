@@ -148,10 +148,10 @@
     <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
-    <Compile Include="DataExport\DataExportProcess\AllDataExportProcess.cs" />
-    <Compile Include="DataExport\DataExportProcess\ApprovedDataExportProcess.cs" />
-    <Compile Include="DataExport\DataExportProcess\IDataExportProcess.cs" />
-    <Compile Include="DataExport\DataExportProcess\ParaDataExportProcess.cs" />
+    <Compile Include="DataExport\DataExportDetails\AllDataExportDetails.cs" />
+    <Compile Include="DataExport\DataExportDetails\ApprovedDataExportDetails.cs" />
+    <Compile Include="DataExport\DataExportDetails\IDataExportDetails.cs" />
+    <Compile Include="DataExport\DataExportDetails\ParaDataExportDetails.cs" />
     <Compile Include="DataExport\Services\Exporters\CommentsExporter.cs" />
     <Compile Include="DataExport\Services\CsvWriterService.cs" />
     <Compile Include="DataExport\Services\DataExporter.cs" />

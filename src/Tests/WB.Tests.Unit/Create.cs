@@ -37,7 +37,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
@@ -2738,23 +2738,23 @@ namespace WB.Tests.Unit
             return new AnsweredYesNoOption(value, answer);
         }
 
-        public static ParaDataExportProcess ParaDataExportProcess()
+        public static ParaDataExportDetails ParaDataExportProcess()
         {
-            return new ParaDataExportProcess() {DataExportFormat = DataExportFormat.Tabular};
+            return new ParaDataExportDetails() {DataExportFormat = DataExportFormat.Tabular};
         }
 
-        public static AllDataExportProcess AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        public static AllDataExportDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new AllDataExportProcess()
+            return new AllDataExportDetails()
             {
                 QuestionnaireIdentity = questionnaireIdentity??new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 DataExportFormat = DataExportFormat.Tabular
             };
         }
 
-        public static ApprovedDataExportProcess ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        public static ApprovedDataExportDetails ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new ApprovedDataExportProcess()
+            return new ApprovedDataExportDetails()
             {
                 QuestionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 DataExportFormat = DataExportFormat.Tabular
