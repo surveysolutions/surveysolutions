@@ -145,7 +145,6 @@
     <Compile Include="Commands\Account\ResetPasswordAccountCommand.cs" />
     <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
-    <Compile Include="Commands\Account\ValidateAccountCommand.cs" />
     <Compile Include="Commands\CommandUtils.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
@@ -157,6 +156,11 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityMoveCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
+    <Compile Include="Commands\Questionnaire\Macros\AddMacro.cs" />
+    <Compile Include="Commands\Questionnaire\Macros\DeleteMacro.cs" />
+    <Compile Include="Commands\Questionnaire\PasteIntoCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PasteAfterCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Macros\UpdateMacro.cs" />
     <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
@@ -181,7 +185,6 @@
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\CloneGroupWithoutChildrenCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
@@ -194,6 +197,9 @@
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
+    <Compile Include="Events\Questionnaire\Macros\MacroAdded.cs" />
+    <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
@@ -223,6 +229,29 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV5.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplateV5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosterScopeTemplateV5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
+      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.cs">
       <DependentUpon>InterviewExpressionStateTemplateV2.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -242,7 +271,9 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
+    <Compile Include="Services\IMacrosSubstitutionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
+    <Compile Include="Implementation\Services\MacrosSubstitutionService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireVerifier.cs" />
     <Compile Include="Implementation\Services\WbHtmlSanitizer.cs" />
     <Compile Include="DesignerBoundedContextModule.cs" />
@@ -368,6 +399,7 @@
     <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
+    <Compile Include="ValueObjects\VerificationErrorLEvel.cs" />
     <Compile Include="Views\Account\AccountDenormalizer.cs" />
     <Compile Include="Views\Account\AccountDocument.cs" />
     <Compile Include="Views\Account\AccountListItem.cs" />
@@ -430,6 +462,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacroView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\IQuestionnaireInfoViewFactory.cs" />
@@ -584,12 +617,17 @@
     <None Include="Resources\WB.Core.SharedKernels.DataCollection.Portable.Profile24.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\Services\CodeGeneration\V2\Model\" />
+    <None Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV5.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>InterviewExpressionStateTemplateV2.cs</LastGenOutput>
+      <Parameters>&lt;%3fxml version="1.0" encoding="utf-16"%3f&gt;
+&lt;ArrayOfParameterStorage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" /&gt;</Parameters>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -602,6 +640,24 @@
     <None Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>RosterScopeTemplateV2.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV5.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV5.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV5.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

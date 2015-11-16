@@ -20,11 +20,13 @@
         'monospaced.elastic',
         'perfect_scrollbar',
         'ng-context-menu',
-        'ui.ace'
+        'ui.ace',
+        'templates'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         var questionnaireId = $.cookie('questionnaireId');
+        $.cookie.json = true;
         var url = '/' + questionnaireId;
         $urlRouterProvider.otherwise(url);
 
@@ -90,4 +92,7 @@
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
     }]);
+
+    angular.module('templates', []);
+
 }(jQuery));

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.QuestionnaireBrowseItemDenor
         };
 
         Because of = () =>
-            questionnaireBrowseItemDenormalizer.Handle(CreatePublishedEvent(questionnaireId, new TemplateImported() { AllowCensusMode = true, Source = questionnaireDocument }));
+            questionnaireBrowseItemDenormalizer.Handle(CreatePublishedEvent(questionnaireId, new TemplateImported() { AllowCensusMode = true, Source = questionnaireDocument, Version = 1}));
 
         It should_questionnaireBrowseItem_be_stored_at_versionedReadSideRepositoryWriter_once = () =>
            questionnaireBrowseItemStorageMock.Verify(x => x.Store(Moq.It.Is<QuestionnaireBrowseItem>(b => b.AllowCensusMode && b.Version == 1 && b.QuestionnaireId == questionnaireId), questionnaireId.FormatGuid() + "$1"), Times.Once);

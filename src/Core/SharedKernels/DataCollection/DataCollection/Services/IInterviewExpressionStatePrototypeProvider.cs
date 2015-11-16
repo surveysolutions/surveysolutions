@@ -1,10 +1,10 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V5;
 
 namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IInterviewExpressionStatePrototypeProvider
     {
-        IInterviewExpressionStateV4 GetExpressionState(Guid questionnaireId, long questionnaireVersion);
+        IInterviewExpressionStateV5 GetExpressionState(Guid questionnaireId, long questionnaireVersion);
     }
 }

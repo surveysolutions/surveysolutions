@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     internal class QuestionnaireVerifier : IQuestionnaireVerifier
     {
         private const int MaxExpressionLength = 10000;
+        private const int MaxOptionsCountInCascadingQuestion = 15000;
+        private const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         {
@@ -62,16 +64,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             QuestionType.Text
         };
 
-        private static readonly IEnumerable<QuestionType> QuestionTypesValidToHaveValidationExpressions = new[]
-        {
-            QuestionType.DateTime,
-            QuestionType.Numeric,
-            QuestionType.SingleOption,
-            QuestionType.Text,
-            QuestionType.GpsCoordinates, 
-            QuestionType.MultyOption
-        };
-
         private class VerificationState
         {
             public bool HasExceededLimitByValidationExpresssionCharactersLength { get; set; }
@@ -91,13 +83,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IDesignerEngineVersionService engineVersionService;
+        private readonly IMacrosSubstitutionService macrosSubstitutionService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
-        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor,
-            ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerEngineVersionService engineVersionService)
+        public QuestionnaireVerifier(
+            IExpressionProcessor expressionProcessor, 
+            IFileSystemAccessor fileSystemAccessor,
+            ISubstitutionService substitutionService, 
+            IKeywordsProvider keywordsProvider,
+            IExpressionProcessorGenerator expressionProcessorGenerator, 
+            IDesignerEngineVersionService engineVersionService,
+            IMacrosSubstitutionService macrosSubstitutionService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -105,6 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.keywordsProvider = keywordsProvider;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
+            this.macrosSubstitutionService = macrosSubstitutionService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -143,6 +142,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
                     Verifier<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options),
                     Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
+                    Verifier<IMultyOptionsQuestion>(MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
+                    Verifier<IMultyOptionsQuestion>(MultiOptionQuestionSupportsOnlyIntegerPositiveValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression),
                     Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
                     Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
@@ -156,7 +157,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
                     Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
-                    Verifier<IQuestion>(FilteredComboboxContainsMoreThan5000Options, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
+                    Verifier<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options),
                     Verifier<IQuestion>(CategoricalOneAnswerOptionsCountMoreThanMaxOptionCount, "WB0076", VerificationMessages.WB0076_CategoricalOneAnswerOptionsCountMoreThan200),
                     Verifier<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
                     Verifier<IMultimediaQuestion>(MultimediaShouldNotHaveValidationExpression, "WB0079", VerificationMessages.WB0079_MultimediaShouldNotHaveValidationExpression),
@@ -177,16 +178,48 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     Verifier<IQuestion>(ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
                     Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
                     Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
-                    Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),                 
+                    Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
+                    Verifier<IComposite, IComposite>(QuestionnaireEntitiesShareSameInternalId, "WB0102", VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId),
+
+                    MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
+                    MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
                     VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
-                    ErrorsByConditionAndValidationExpressions
+                    ErrorsByMacrosWithDuplicateName,
+
+                    //ErrorsByConditionAndValidationExpressions
                 };
             }
         }
+
+        private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question)
+        {
+            return question.YesNoView && question.LinkedToQuestionId.HasValue;
+        }
+
+        private bool MultiOptionQuestionSupportsOnlyIntegerPositiveValues(IMultyOptionsQuestion question)
+        {
+            if (question.Answers == null)
+                return false;
+            foreach (var answer in question.Answers)
+            {
+                int answerValue;
+                if (int.TryParse(answer.AnswerValue, out answerValue))
+                {
+                    if (answerValue < 0)
+                        return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         private IEnumerable<QuestionnaireVerificationError> VerifyGpsPrefilledQuestions(QuestionnaireDocument document, VerificationState state)
         {
@@ -200,30 +233,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 new QuestionnaireVerificationError("WB0006",
                     VerificationMessages.WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled,
+                    VerificationErrorLevel.General,
                     gpsPrefilledQuestionsReferences)
             };
         }
 
-        private static bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state)
+        private bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, QuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrEmpty(question.ValidationExpression))
                 return false;
 
-            var exceeded = question.ValidationExpression.Length > MaxExpressionLength;
+            var exceeded = macrosSubstitutionService.InlineMacros(question.ValidationExpression, questionnaire.Macros.Values).Length > MaxExpressionLength;
 
             state.HasExceededLimitByValidationExpresssionCharactersLength |= exceeded;
 
             return exceeded;
         }
 
-        private static bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state)
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state, QuestionnaireDocument questionnaire)
         {
             var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
             
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
 
-            var exceeded = customEnablementCondition.Length > MaxExpressionLength;
+            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(customEnablementCondition, questionnaire.Macros.Values);
+
+            var exceeded = substituteMacroses.Length > MaxExpressionLength;
 
             state.HasExceededLimitByConditionExpresssionCharactersLength |= exceeded;
 
@@ -291,7 +327,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool CascadingQuestionHasMoreThanAllowedOptions(SingleQuestion question)
         {
-            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > 10000;
+            return question.CascadeFromQuestionId.HasValue && question.Answers != null && question.Answers.Count > MaxOptionsCountInCascadingQuestion;
         }
 
         private static EntityVerificationResult<SingleQuestion> CascadingHasCircularReference(SingleQuestion question, QuestionnaireDocument questionnaire)
@@ -387,9 +423,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                    question.Answers != null && question.Answers.Count > 200;
         }
 
-        private static bool FilteredComboboxContainsMoreThan5000Options(IQuestion question)
+        private static bool FilteredComboboxContainsMoreThanMaxOptions(IQuestion question)
         {
-            return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > 5000;
+            return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > MaxOptionsCountInFilteredComboboxQuestion;
         }
 
         private static bool FilteredComboboxIsLinked(IQuestion question)
@@ -460,11 +496,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var state = new VerificationState();
 
-            return
+            var staticVerificationErrors =
                 from verifier in this.AtomicVerifiers
                 let errors = verifier.Invoke(questionnaire, state)
                 from error in errors
                 select error;
+
+            if (staticVerificationErrors.Any(e => e.ErrorLevel == VerificationErrorLevel.Critical))
+                return staticVerificationErrors;
+
+            return staticVerificationErrors.Concat(
+                ErrorsByConditionAndValidationExpressions(questionnaire, state));
+        }
+
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> MacrosVerifier(
+            Func<Macro, QuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) => questionnaire
+                    .Macros
+                    .Where(entity => hasError(entity.Value, questionnaire))
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateMacrosReference(entity.Key)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
@@ -472,7 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return (questionnaire, state) =>
                 hasError(questionnaire)
-                    ? new[] { new QuestionnaireVerificationError(code, message) }
+                    ? new[] { new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
         }
 
@@ -483,7 +534,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 var errorCheckResult = hasError(questionnaire);
                 return errorCheckResult.Item1
-                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2)) }
+                    ? new[] { new QuestionnaireVerificationError(code, messageBuilder.Invoke(errorCheckResult.Item2), VerificationErrorLevel.General) }
                     : Enumerable.Empty<QuestionnaireVerificationError>();
             };
         }
@@ -495,17 +546,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(hasError)
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
-            Func<TEntity, VerificationState, bool> hasError, string code, string message)
+            Func<TEntity, VerificationState, QuestionnaireDocument, bool> hasError, string code, string message)
             where TEntity : class, IComposite
         {
             return (questionnaire, state) =>
                 questionnaire
-                    .Find<TEntity>(entity => hasError(entity, state))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+                    .Find<TEntity>(entity => hasError(entity, state, questionnaire))
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity>(
@@ -515,7 +566,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, CreateReference(entity)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateReference(entity)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier<TEntity, TReferencedEntity>(
@@ -527,7 +578,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
-                select new QuestionnaireVerificationError(code, message, verificationResult.ReferencedEntities.Select(CreateReference));
+                select new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, verificationResult.ReferencedEntities.Select(CreateReference));
+        }
+
+        private static bool MacroHasEmptyName(Macro macro, QuestionnaireDocument questionnaire)
+        {
+            return string.IsNullOrWhiteSpace(macro.Name);
+        }
+
+        private static bool MacroHasInvalidName(Macro macro, QuestionnaireDocument questionnaire)
+        {
+            return !IsVariableNameValid(macro.Name);
         }
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)
@@ -886,6 +947,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !string.IsNullOrEmpty(question.ValidationExpression);
         }
 
+        private static EntityVerificationResult<IComposite> QuestionnaireEntitiesShareSameInternalId(IComposite entity, QuestionnaireDocument questionnaire)
+        {
+            List<IComposite> entitiesWithSameId = questionnaire.Find<IComposite>(e => e.PublicKey == entity.PublicKey).ToList();
+
+            bool isTheOnlyEntityWithSuchId = entitiesWithSameId.Count == 1;
+            bool isFirstEntityWithSuchId = entitiesWithSameId.First() == entity;
+
+            if (isTheOnlyEntityWithSuchId)
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            if (isFirstEntityWithSuchId)
+                return new EntityVerificationResult<IComposite> { HasErrors = true, ReferencedEntities = entitiesWithSameId };
+            else
+                return new EntityVerificationResult<IComposite> { HasErrors = false };
+        }
+
         private EntityVerificationResult<IComposite> MultimediaQuestionsCannotBeUsedInValidationExpression(IQuestion question, QuestionnaireDocument questionnaire)
         {
             return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
@@ -954,7 +1031,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             IEnumerable<IQuestion> incorrectReferencedQuestions = this.expressionProcessor
-                .GetIdentifiersUsedInExpression(expression)
+                .GetIdentifiersUsedInExpression(macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values))
                 .Select(identifier => GetQuestionByIdentifier(identifier, questionnaire))
                 .Where(referencedQuestion => referencedQuestion != null)
                 .Where(isReferencedQuestionIncorrect)
@@ -1044,6 +1121,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 yield return VariableNameIsUsedAsOtherQuestionVariableName(questionsDuplicate);
         }
 
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByMacrosWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
+        {
+            return questionnaire
+                    .Macros
+                    .Where(x => !string.IsNullOrEmpty(x.Value.Name))
+                    .GroupBy(x => x.Value.Name, StringComparer.InvariantCultureIgnoreCase)
+                    .Where(group => group.Count() > 1)
+                    .Select(group =>
+                            new QuestionnaireVerificationError(
+                                "WB0020",
+                                VerificationMessages.WB0020_NameForMacrosIsNotUnique,
+                                VerificationErrorLevel.General,
+                                group.Select(e => CreateMacrosReference(e.Key))));
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
@@ -1061,6 +1153,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     yield return
                         new QuestionnaireVerificationError("WB0093",
                             VerificationMessages.WB0093_QuestionWithTheSameVariableNameAlreadyExists,
+                            VerificationErrorLevel.Critical,
                             CreateReference(rosterVariableNameMappedOnRoster.Value.First()),
                             CreateReference(questionsVariableNamesMappedOnQuestions[rosterVariableNameMappedOnRoster.Key].First()));
 
@@ -1069,6 +1162,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 yield return new QuestionnaireVerificationError("WB0068",
                     VerificationMessages.WB0068_RosterHasNotUniqueVariableName,
+                    VerificationErrorLevel.Critical,
                     rosterVariableNameMappedOnRoster.Value.Select(CreateReference).ToArray());
             }
 
@@ -1116,6 +1210,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return incorrectReferencedQuestions;
         }
 
+        private static QuestionnaireVerificationReference CreateMacrosReference(Guid macrosId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macrosId);
+        }
+
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
         {
             return new QuestionnaireVerificationReference(
@@ -1148,41 +1247,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return ((IQuestion)entity).ConditionExpression;
             else
                 return null;
-        }
-
-        private static QuestionnaireVerificationError GetVerificationErrorByConditionsInGroupsReferencedChildQuestionsOrNull(
-            IComposite itemWithExpression, string identifier, QuestionnaireDocument questionnaire)
-        {
-            if (itemWithExpression is IQuestion)
-            {
-                return null;
-            }
-
-            if (IsSpecialThisIdentifier(identifier))
-            {
-                return null;
-            }
-
-            IQuestion questionsReferencedInExpression = GetQuestionByIdentifier(identifier, questionnaire);
-
-            if (questionsReferencedInExpression == null)
-            {
-                return null;
-            }
-
-            var parentIds = GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom((IGroup)questionsReferencedInExpression.GetParent(), questionnaire)
-                .Select(x => x.PublicKey)
-                .ToList();
-
-            if (parentIds.Contains(itemWithExpression.PublicKey))
-            {
-                return new QuestionnaireVerificationError("WB0051",
-                    VerificationMessages.WB0051_GroupsCustomConditionExpressionReferencesChildQuestion,
-                    CreateReference(itemWithExpression),
-                    CreateReference(questionsReferencedInExpression));
-            }
-
-            return null;
         }
 
         private static IQuestion GetQuestionByIdentifier(string identifier, QuestionnaireDocument questionnaire)
@@ -1240,6 +1304,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0015",
                 VerificationMessages.WB0015_QuestionWithTitleSubstitutionCantBePrefilled,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1247,6 +1312,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0019",
                 VerificationMessages.WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution),
                 CreateReference(questionSourceOfSubstitution));
         }
@@ -1255,6 +1321,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0018",
                 VerificationMessages.WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution),
                 CreateReference(questionSourceOfSubstitution));
         }
@@ -1263,6 +1330,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0017",
                 VerificationMessages.WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1270,6 +1338,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0016",
                 VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1278,6 +1347,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0059",
                 VerificationMessages.WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster,
+                VerificationErrorLevel.General,
                 CreateReference(questionsWithSubstitution));
         }
 
@@ -1285,6 +1355,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0011",
                 VerificationMessages.WB0011_LinkedQuestionReferencesNotExistingQuestion,
+                VerificationErrorLevel.General,
                 CreateReference(linkedQuestion));
         }
 
@@ -1292,6 +1363,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0012",
                 VerificationMessages.WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType,
+                VerificationErrorLevel.General,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
         }
@@ -1300,6 +1372,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0013",
                 VerificationMessages.WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup,
+                VerificationErrorLevel.General,
                 CreateReference(linkedQuestion),
                 CreateReference(sourceQuestion));
         }
@@ -1308,6 +1381,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             return new QuestionnaireVerificationError("WB0062",
                 VerificationMessages.WB0062_VariableNameForQuestionIsNotUnique,
+                VerificationErrorLevel.Critical,
                 CreateReference(sourseQuestion));
         }
 
@@ -1315,7 +1389,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if(expressionLocation.ExpressionType == ExpressionLocationType.General)
             {
-                return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
+                return new QuestionnaireVerificationError("WB0096", VerificationMessages.WB0096_GeneralCompilationError, VerificationErrorLevel.General);
             }
 
             var reference = new QuestionnaireVerificationReference(
@@ -1325,12 +1399,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if(expressionLocation.ExpressionType == ExpressionLocationType.Validation)
             {
-                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
+                return new QuestionnaireVerificationError("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, 
+                    VerificationErrorLevel.General, reference);
             }
             else 
             {
                 return new QuestionnaireVerificationError("WB0003",
-                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
+                    VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, 
+                    VerificationErrorLevel.General, reference);
             }
         }
 
@@ -1451,11 +1527,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return true;
             }
 
-        }
-
-        private static bool IsSpecialThisIdentifier(string identifier)
-        {
-            return identifier.ToLower() == "this";
         }
 
         private static bool IsSupervisorQuestion(IQuestion question)

@@ -8,7 +8,11 @@ using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -25,11 +29,34 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Integration
 {
     internal static class Create
     {
+        public static CodeGenerator CodeGenerator(
+        IMacrosSubstitutionService macrosSubstitutionService = null,
+        IExpressionProcessor expressionProcessor = null)
+        {
+            return new CodeGenerator(
+                macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+        }
+
+        public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
+        {
+            var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
+            macrosSubstitutionServiceMock.Setup(
+                x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>()))
+                .Returns((string e, IEnumerable<Macro> macros) =>
+                {
+                    return e;
+                });
+
+            return macrosSubstitutionServiceMock.Object;
+        }
+
         public class Event
         {
             private static class Default
@@ -37,6 +64,7 @@ namespace WB.Tests.Integration
                 public static readonly Guid UserId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAABBB");
                 public static readonly DateTime AnswerTime = new DateTime(2014, 1, 1);
             }
+
 
             public static SingleOptionQuestionAnswered SingleOptionQuestionAnswered(
                 Guid questionId, decimal answer, decimal[] propagationVector = null, Guid? userId = null, DateTime? answerTime = null)
@@ -161,7 +189,7 @@ namespace WB.Tests.Integration
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToList() ?? new List<IComposite>(),
             };
         }
 
@@ -412,6 +440,33 @@ namespace WB.Tests.Integration
                 serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
+
+        public static CommittedEvent CommittedEvent(string origin = null, 
+            Guid? eventSourceId = null,
+            object payload = null,
+            Guid? eventIdentifier = null, 
+            int eventSequence = 1)
+        {
+            return new CommittedEvent(
+                Guid.Parse("33330000333330000003333300003333"),
+                origin,
+                eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
+                eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
+                eventSequence,
+                new DateTime(2014, 10, 22),
+                0,
+                payload ?? "some payload");
+        }
+
+        public static CommittedEventStream CommittedEventStream(Guid eventSourceId, IEnumerable<UncommittedEvent> events)
+        {
+            return new CommittedEventStream(eventSourceId,
+                events
+                    .Select(x => Create.CommittedEvent(payload: x.Payload,
+                        eventSourceId: x.EventSourceId,
+                        eventSequence: x.EventSequence)));
+        }
+
         public static FileSystemIOAccessor FileSystemIOAccessor()
         {
             return new FileSystemIOAccessor();
@@ -434,5 +489,7 @@ namespace WB.Tests.Integration
                 ParentValue = parentValue.HasValue ? parentValue.ToString() : null
             };
         }
+
+       
     }
 }

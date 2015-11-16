@@ -29,6 +29,9 @@
 
     self.isRebuildRunning = ko.observable(false);
 
+    self.readSideApplicationVersion = ko.observable(-1);
+    self.readSideDatabaseVersion = ko.observable(-1);
+
     self.readSideRepositoryWriters = ko.observableArray([]);
     self.rebuildDenormalizerStatistic = ko.observableArray([]);
     self.rebuildErrors = ko.observableArray([]);
@@ -75,6 +78,9 @@
     self.updateStatus = function() {
         self.SendRequest(self.updateRebuildStatusApiUrl, {}, function(data) {
             self.isRebuildRunning(data.IsRebuildRunning);
+
+            self.readSideApplicationVersion(data.ReadSideApplicationVersion);
+            self.readSideDatabaseVersion(data.ReadSideDatabaseVersion);
 
             self.currentRebuildStatus(data.CurrentRebuildStatus);
             self.lastRebuildDate(data.LastRebuildDate);
@@ -185,7 +191,7 @@
     };
 
     self.rebuild = function() {
-        if (confirm("Are you sure you want to rebuild read layer at " + window.location.host + " ?")) {
+        if (confirm("Are you sure you want to rebuild read side data at " + window.location.host + " ?")) {
             self.SendRequest(self.rebuildApiUrl, {
                 numberOfSkipedEvents: self.numberOfSkipedEvents(),
                 rebuildType: self.rebuildByType(),

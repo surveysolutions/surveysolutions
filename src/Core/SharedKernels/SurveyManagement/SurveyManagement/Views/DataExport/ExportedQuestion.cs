@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -66,11 +68,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
             var arrayOfDecimal = value as IEnumerable<decimal>;
             if (arrayOfDecimal != null)
-                return arrayOfDecimal.Select(d => (object) d);
+            {
+                return arrayOfDecimal.Select(d => (object)d);
+            }
 
             var arrayOfInteger = value as IEnumerable<int>;
             if (arrayOfInteger != null)
-                return arrayOfInteger.Select(i => (object) i);
+            {
+                return arrayOfInteger.Select(i => (object)i);
+            }
 
             var interviewTextListAnswer = value as InterviewTextListAnswers;
             if (interviewTextListAnswer != null)
@@ -79,10 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             }
 
             var listOfAnswers = value as IEnumerable<object>;
-            if (listOfAnswers != null)
-                return listOfAnswers;
-
-            return null;
+            return listOfAnswers;
         }
 
         private string AnswerToStringValue(object answer, ExportedHeaderItem header)
@@ -117,12 +120,59 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
             var result = new string[header.ColumnNames.Length];
 
-            for (int i = 0; i < result.Length; i++)
+            if (this.QuestionType == QuestionType.MultyOption)
             {
-                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
+                if (!header.QuestionSubType.HasValue)
+                {
+                    for (int i = 0; i < result.Length; i++)
+                    {
+                        int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                        result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString() : "0";
+                    }
+                }
+                else
+                {
+                    FillYesNoAnswers(answers, header, result);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
+                }
             }
 
             return result;
+        }
+
+        private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        {
+            var typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
+            int filledYesAnswersCount = 0;
+            for (int i = 0; i < result.Length; i++)
+            {
+                decimal columnValue = (decimal) header.ColumnValues[i];
+
+                var isOptionSelected = typedAnswers.FirstOrDefault(x => x.OptionValue == columnValue);
+
+                if (isOptionSelected != null)
+                {
+                    if (isOptionSelected.Yes)
+                    {
+                        result[i] = (filledYesAnswersCount + 1).ToString();
+                        filledYesAnswersCount++;
+                    }
+                    else
+                    {
+                        result[i] = "0";
+                    }
+                }
+                else
+                {
+                    result[i] = "";
+                }
+            }
         }
     }
 }

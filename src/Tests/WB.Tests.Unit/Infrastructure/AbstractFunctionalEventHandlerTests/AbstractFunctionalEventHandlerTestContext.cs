@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
 
         protected static IPublishableEvent CreatePublishableEvent(object payload=null)
         {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new object()));
+            return Create.PublishableEvent(payload: payload);
         }
     }
 }

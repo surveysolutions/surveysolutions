@@ -1,5 +1,4 @@
 ﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -25,14 +24,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return sideBarItem;
         }
 
-        public SideBarSectionViewModel BuildCompleteScreenSectionItem(
-            NavigationIdentity enabledSubgroupIdentity,
-            NavigationState navigationState,
-           string interviewId)
+        public SideBarSectionViewModel BuildCompleteScreenSectionItem(NavigationState navigationState, string interviewId)
         {
             var sideBarItem = this.serviceLocator.GetInstance<SideBarSectionViewModel>();
             var interviewStateViewModel = this.serviceLocator.GetInstance<InterviewStateViewModel>();
-            sideBarItem.Init(interviewId, enabledSubgroupIdentity, null, null, interviewStateViewModel, navigationState);
+            sideBarItem.InitCompleteScreenItem(interviewId, interviewStateViewModel, navigationState);
             return sideBarItem;
         }
     }

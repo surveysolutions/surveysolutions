@@ -14,30 +14,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateCascadingComboboxOptionsH
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = parentQuestionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.SingleOption,
-                QuestionText = "text",
-                StataExportCaption = "var",
-                ResponsibleId = responsibleId,
-                Answers = new Answer[]
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : parentQuestionId,
+                groupPublicKey : chapterId,
+                questionType : QuestionType.SingleOption,
+                questionText : "text",
+                stataExportCaption : "var",
+                responsibleId : responsibleId,
+                answers : new Answer[]
                 {
                     new Answer { AnswerText = "Option 1", AnswerValue = "1" },
                     new Answer { AnswerText = "Option 2", AnswerValue = "2" }
                 }
-            });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.SingleOption,
-                QuestionText = "text",
-                StataExportCaption = "var2",
-                ResponsibleId = responsibleId,
-                CascadeFromQuestionId = parentQuestionId
-            });
+            ));
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : questionId,
+                groupPublicKey : chapterId,
+                questionType : QuestionType.SingleOption,
+                questionText : "text",
+                stataExportCaption : "var2",
+                responsibleId : responsibleId,
+                cascadeFromQuestionId : parentQuestionId
+            ));
         };
 
         Because of = () =>

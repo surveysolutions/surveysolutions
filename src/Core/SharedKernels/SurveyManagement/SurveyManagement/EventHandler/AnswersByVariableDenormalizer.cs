@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<AnswersRemoved>
     {
         private readonly IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage;
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewBriefStorage;
+        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage;
 
         public override object[] Writers
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             get { return new object[] { interviewBriefStorage, variablesStorage }; }
         }
 
-        public AnswersByVariableDenormalizer(IReadSideRepositoryReader<InterviewSummary> interviewBriefStorage,
+        public AnswersByVariableDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
             IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> variablesStorage,
             IReadSideKeyValueStorage<AnswersByVariableCollection> answersByVariableStorage)
         {
@@ -121,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
-            return vector.Length == 0 ? "#" : EventHandlerUtils.CreateLeveKeyFromPropagationVector(vector);
+            return vector.Length == 0 ? "#" : vector.CreateLeveKeyFromPropagationVector();
         }
     }
 }

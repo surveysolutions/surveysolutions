@@ -1,34 +1,19 @@
 ﻿using System.Web.Mvc;
-using System.Web.Routing;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Controllers;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Filters
 {
-    public class MaintenanceFilter : ActionFilterAttribute
+    public class MaintenanceFilter : AbstractMaintenanceFilter
     {
-        private IReadSideStatusService readSideStatusService
+        protected override bool IsMaintenanceController(ControllerBase controller)
         {
-            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
+            return controller is MaintenanceController;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected override bool IsControlPanelController(ControllerBase controller)
         {
-            if (filterContext.Controller is ControlPanelController) return;
-
-            if (!(filterContext.Controller is MaintenanceController) && readSideStatusService.AreViewsBeingRebuiltNow())
-            {
-                filterContext.Result =
-                    new RedirectToRouteResult(
-                        new RouteValueDictionary(
-                            new
-                            {
-                                controller = "Maintenance",
-                                action = "WaitForReadLayerRebuild",
-                                returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
-                            }));
-            }
+            return controller is ControlPanelController;
         }
     }
 }

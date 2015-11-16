@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password..
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password.
         /// </summary>
         public static string ImportQuestionnaire_Error_Forbidden {
             get {
@@ -134,47 +134,11 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection to the Survey Solutions designer. Open a local copy of questionnaire?.
-        /// </summary>
-        public static string ImportQuestionnaire_OpenLocalInterview {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_OpenLocalInterview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Preparing questionnaire to creating interview.
-        /// </summary>
-        public static string ImportQuestionnaire_PrepareQuestionnaire {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_PrepareQuestionnaire", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Saving interview dynamic link library to local storage.
-        /// </summary>
-        public static string ImportQuestionnaire_StoreAssembly {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_StoreAssembly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Saving questionnaire to local storage.
         /// </summary>
         public static string ImportQuestionnaire_StoreQuestionnaire {
             get {
                 return ResourceManager.GetString("ImportQuestionnaire_StoreQuestionnaire", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Checking questionnaire for errors on the server.
-        /// </summary>
-        public static string ImportQuestionnaire_VerifyOnServer {
-            get {
-                return ResourceManager.GetString("ImportQuestionnaire_VerifyOnServer", resourceCulture);
             }
         }
         

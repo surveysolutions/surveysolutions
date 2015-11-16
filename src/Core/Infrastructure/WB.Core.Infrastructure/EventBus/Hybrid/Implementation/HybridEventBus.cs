@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Ncqrs.Domain;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.Aggregates;
@@ -18,19 +20,19 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
             this.cqrsEventBus = cqrsEventBus;
         }
 
-        public void CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
+        public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
-            this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
+            return this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
         }
 
-        public void PublishUncommittedEvents(IAggregateRoot aggregateRoot)
+        public void PublishCommittedEvents(CommittedEventStream committedEvents)
         {
             ActionUtils.ExecuteInIndependentTryCatchBlocks(
-                () => this.liteEventBus.PublishUncommittedEvents(aggregateRoot),
-                () => this.cqrsEventBus.PublishUncommittedEvents(aggregateRoot));
+                () => this.liteEventBus.PublishCommittedEvents(committedEvents),
+                () => this.cqrsEventBus.PublishCommittedEvents(committedEvents));
         }
 
-        public void Publish(IPublishableEvent eventMessage)
+        public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
         {
             this.cqrsEventBus.Publish(eventMessage);
         }

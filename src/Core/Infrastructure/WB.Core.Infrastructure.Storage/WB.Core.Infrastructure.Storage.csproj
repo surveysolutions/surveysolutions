@@ -41,13 +41,13 @@
     <Reference Include="Castle.Core">
       <HintPath>..\..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="EventStore.ClientAPI, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\EventStore.Client.3.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    <Reference Include="EventStore.ClientAPI, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\EventStore.Client.3.3.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Humanizer, Version=1.34.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Humanizer.1.34.0\lib\portable-win+net40+sl50+wp8+wpa81\Humanizer.dll</HintPath>
+    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
@@ -100,8 +100,8 @@
     <Reference Include="Nito.AsyncEx.Enlightenment">
       <HintPath>..\..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\..\..\..\packages\Npgsql.3.0.1\lib\net45\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Npgsql.3.0.3\lib\net45\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -134,7 +134,9 @@
   <ItemGroup>
     <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
+    <Compile Include="EventStore\IEventStoreApiService.cs" />
     <Compile Include="EventStore\Implementation\EventMetada.cs" />
+    <Compile Include="EventStore\Implementation\EventStoreApiService.cs" />
     <Compile Include="EventStore\Implementation\EventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
@@ -156,7 +158,7 @@
     <Compile Include="Postgre\Implementation\PostgresReadSideKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\NoTransactionCqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
-    <Compile Include="Postgre\Implementation\PostgresReadSideCleaner.cs" />
+    <Compile Include="Postgre\Implementation\PostgresReadSideBootstraper.cs" />
     <Compile Include="Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
     <Compile Include="Postgre\Implementation\TransactionManagerProvider.cs" />

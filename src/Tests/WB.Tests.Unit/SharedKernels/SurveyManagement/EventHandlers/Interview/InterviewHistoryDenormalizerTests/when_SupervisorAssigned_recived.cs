@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.SupervisorAssigned);
 
 
-        private static InterviewHistoryDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();
         private static InterviewHistoryView interviewHistoryView;
     }

@@ -64,23 +64,19 @@
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
                 <th>Connected to device</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             <!-- ko foreach:Items -->
             <tr>
-                <td data-bind="text: UserName"></td>
+                <td>
+                    <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName"></a>
+                </td>
                 <td data-bind="text: CreationDate"></td>
                 <td>
                     <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
                 </td>
                 <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
-                <td>
-                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                        <i class="icon icon-edit icon-white"></i> Edit
-                    </a>
-                </td>
             </tr>
             <!-- /ko -->
         </tbody>

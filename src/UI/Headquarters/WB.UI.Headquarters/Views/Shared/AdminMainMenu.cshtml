@@ -68,7 +68,7 @@
         </i> @MainMenu.Questionnaires</a>
     </li>
     <li class="@(page == MenuItem.DataExport ? "active" : "")">
-        <a href="@Url.Action("DataExport", "HQ", new {area = ""})">
+        <a href="@Url.Action("Index", "DataExport", new {area = ""})">
             <i class="glyphicon glyphicon-download">
             </i> @MainMenu.DataExport
         </a>

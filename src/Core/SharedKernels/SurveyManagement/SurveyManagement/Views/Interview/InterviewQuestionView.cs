@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -19,7 +19,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
             this.QuestionType = question.QuestionType;
             this.IsFeatured = question.Featured;
-            this.IsCapital = question.Capital;
             this.ValidationMessage = question.ValidationMessage;
             this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
@@ -52,6 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             {
                 this.Settings = new MultiQuestionSettings
                 {
+                    YesNoQuestion = categoricalMultiQuestion.YesNoView,
                     AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
                     MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
                     IsLinked = categoricalMultiQuestion.LinkedToQuestionId.HasValue
@@ -114,15 +114,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
         }
 
-        public decimal[] RosterVector { get; set; }
-
         private string FormatAnswerAsString(object answer, IQuestion question)
         {
             if (answer == null) return "";
             switch (QuestionType)
             {
                 case QuestionType.SingleOption:
-                    if (Settings!=null && (Settings as SingleQuestionSettings).IsLinked)
+                    if (Settings != null && (Settings as SingleQuestionSettings).IsLinked)
                     {
                         return AnswerUtils.AnswerToString(answer);
                     }
@@ -143,10 +141,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 case QuestionType.DateTime:
                     if (answer is DateTime)
                     {
-                         var date = (DateTime) answer;
-                         return date.ToString("u");
+                        var date = (DateTime)answer;
+                        return date.ToString("u");
                     }
-                   break;
+                    break;
                 case QuestionType.GpsCoordinates:
                 case QuestionType.TextList:
                 case QuestionType.Numeric:
@@ -190,7 +188,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return expression1;
         }
 
-        public string AnswerString { get; set; }
+        public string AnswerString { get; private set; }
+
+        public decimal[] RosterVector { get; set; }
 
         public string Variable { get; set; }
 
@@ -205,7 +205,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public QuestionType QuestionType { get; set; }
 
         public bool IsFeatured { get; set; }
-        public bool IsCapital { get; set; }
         public bool IsValid { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsReadOnly { get; set; }
@@ -235,6 +234,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
     public class MultiQuestionSettings
     {
+        public bool YesNoQuestion { get; set; }
         public bool AreAnswersOrdered { get; set; }
 
         public int? MaxAllowedAnswers { get; set; }

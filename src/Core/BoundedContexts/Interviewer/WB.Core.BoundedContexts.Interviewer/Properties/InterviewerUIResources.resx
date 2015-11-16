@@ -225,17 +225,11 @@ for further instructions</value>
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Communication package size</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>Client Registration ID:</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Connection settings</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>Device ID:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>URL that is used to communicate with supervisor application</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>Supervisor URL</value>
@@ -251,9 +245,6 @@ for further instructions</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Server Response timeout</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>Installation ID:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Interview settings</value>
@@ -273,17 +264,11 @@ for further instructions</value>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>conditions/validations</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Updating assignments</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Some assignments were updated</value>
   </data>
   <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} of {1} new interviews downloaded</value>
@@ -329,12 +314,6 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} done</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>images by interviews</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>images</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>interviews</value>

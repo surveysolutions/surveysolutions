@@ -202,13 +202,13 @@
     <value>Отсканировать штрих-код</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
-    <value>Введенное значение не может быть интерпретировано как цело число</value>
+    <value>Введенное значение не может быть интерпретировано как целое число</value>
   </data>
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как вещественное число</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
-    <value>Все ({0}) вопросы отвеченны</value>
+    <value>Все ({0}) вопросы отвечены</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
     <value>Внимание: неотвеченных вопросов - {0}</value>
@@ -348,13 +348,10 @@
     <value>Вы не можете запустить более одного сервиса MvxLocation</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
-    <value>У вас нет ниодного интервью на устройстве. Отправьте информацию о таблете, очистите данные приложения и войдите под другой учетной записью</value>
+    <value>У вас нет ни одного интервью на устройстве. Отправьте информацию о таблете, очистите данные приложения и войдите под другой учетной записью</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
-  </data>
-  <data name="Interviewer_DashboardTitle" xml:space="preserve">
-    <value>Интервью/Перепись для {0}</value>
   </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Попробуйте войти онлайн</value>

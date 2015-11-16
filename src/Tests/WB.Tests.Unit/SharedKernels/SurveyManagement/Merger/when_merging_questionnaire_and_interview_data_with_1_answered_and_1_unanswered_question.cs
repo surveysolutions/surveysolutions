@@ -47,10 +47,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interview = CreateInterviewData(interviewId);
 
-            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(answeredQuestionId))
-                interview.Levels["#"].QuestionsSearchCahche.Add(answeredQuestionId, new InterviewQuestion(answeredQuestionId));
+            if (!interview.Levels["#"].QuestionsSearchCache.ContainsKey(answeredQuestionId))
+                interview.Levels["#"].QuestionsSearchCache.Add(answeredQuestionId, new InterviewQuestion(answeredQuestionId));
 
-            var answeredQuestion = interview.Levels["#"].QuestionsSearchCahche[answeredQuestionId];
+            var answeredQuestion = interview.Levels["#"].QuestionsSearchCache[answeredQuestionId];
 
             answeredQuestion.Answer = 5;
 

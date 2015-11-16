@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 var question = entity as IQuestion;
                 if (question != null)
                 {
-                    var answeredQuestion = interviewLevel.QuestionsSearchCahche.ContainsKey(question.PublicKey) ? interviewLevel.QuestionsSearchCahche[question.PublicKey] : null;
+                    var answeredQuestion = interviewLevel.QuestionsSearchCache.ContainsKey(question.PublicKey) ? interviewLevel.QuestionsSearchCache[question.PublicKey] : null;
                     
                     Dictionary<string, string> answersForTitleSubstitution =
                         GetAnswersForTitleSubstitution(question, variableToIdMap, interviewLevel, upperInterviewLevels, questionnaire, (questionId) => getAvailableOptions(questionId, interviewLevel.RosterVector), rosterTitleFromLevel);
@@ -354,7 +354,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private static InterviewQuestion GetQuestion(Guid questionId, InterviewLevel currentInterviewLevel)
         {
-            return currentInterviewLevel.QuestionsSearchCahche.ContainsKey(questionId)? currentInterviewLevel.QuestionsSearchCahche[questionId] : null;
+            return currentInterviewLevel.QuestionsSearchCache.ContainsKey(questionId)? currentInterviewLevel.QuestionsSearchCache[questionId] : null;
         }
 
         private Dictionary<decimal[], string> GetAvailableOptions(Guid questionId, decimal[] questionRosterVector, InterviewData interview,
@@ -368,7 +368,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
             IDictionary<decimal[], InterviewQuestion> allLinkedQuestions =
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
-                interviewLevel => interviewLevel.QuestionsSearchCahche.ContainsKey(optionsSource.ReferencedQuestionId)?interviewLevel.QuestionsSearchCahche[optionsSource.ReferencedQuestionId] : null);
+                interviewLevel => interviewLevel.QuestionsSearchCache.ContainsKey(optionsSource.ReferencedQuestionId)?interviewLevel.QuestionsSearchCache[optionsSource.ReferencedQuestionId] : null);
 
             return allLinkedQuestions.Where(question => question.Value != null && !question.Value.IsDisabled() && question.Value.Answer != null)
                 .ToDictionary(question => question.Key,

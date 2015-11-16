@@ -140,8 +140,10 @@
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\CatchExceptionsByDenormalizersConfigSection.cs" />
     <Compile Include="Configuration\IgnoredDenormalizersConfigSection.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="Configuration\IgnoredEventStreamsConfigSection.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
     <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Extensions\LinkExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Filters\AbstractMaintenanceFilter.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
     <Compile Include="Filters\PreventDoubleSubmitAttribute.cs" />

@@ -356,6 +356,7 @@
     <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
+    <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
@@ -526,7 +527,7 @@
     <EmbeddedResource Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
-    <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
     <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
@@ -561,6 +562,13 @@
     </None>
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <EmbeddedResource Include="Views\ControlPanel\SynchronizationLog.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\EventStore.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableSupervisorsQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableMultiOptionsQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

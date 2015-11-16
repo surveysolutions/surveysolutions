@@ -10,17 +10,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export
     {
         public static string GetContentFileName(string levelName)
         {
-            return string.Format("{0}{1}", levelName, ExtensionOfExportedDataFile);
+            return $"{levelName}{ExtensionOfExportedDataFile}";
         }
 
         public static string GetDDIFileName(string name)
         {
-            return string.Format("{0}{1}", name, ExtensionOfDDIMetaDataFile);
+            return $"{name}{ExtensionOfDDIMetaDataFile}";
         }
 
-        public static string ExtensionOfExportedDataFile { get { return ".tab"; } }
-        public static string ExtensionOfDDIMetaDataFile { get { return ".xml"; } }
-
-        public static char SeparatorOfExportedDataFile { get { return '\t'; } }
+        public static string ExtensionOfExportedDataFile => ".tab";
+        public static string ExtensionOfDDIMetaDataFile => ".xml";
+        public static char SeparatorOfExportedDataFile => '\t';
     }
 }

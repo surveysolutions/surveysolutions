@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -140,34 +141,17 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
 
-            this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            aggregate.MarkChangesAsCommitted();
 
             try
             {
-                this.eventBus.PublishUncommittedEvents(aggregate);
+                this.eventBus.PublishCommittedEvents(commitedEvents);
             }
             finally
             {
-                aggregate.MarkChangesAsCommitted();
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
-        }
-
-        private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, IServiceLocator serviceLocator)
-        {
-            return (aggregate, command) =>
-            {
-                var validatorInstance = serviceLocator.GetInstance(validatorType);
-                var validateMethod = validatorType.GetMethod("Validate", new[] { aggregateType, command.GetType() });
-                try
-                {
-                    validateMethod.Invoke(validatorInstance, new object[] { aggregate, command });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                }
-            };
         }
     }
 }

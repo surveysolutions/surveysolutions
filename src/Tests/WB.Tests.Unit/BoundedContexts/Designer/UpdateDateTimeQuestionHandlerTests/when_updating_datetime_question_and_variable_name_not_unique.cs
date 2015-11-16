@@ -15,12 +15,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = Guid.NewGuid(),
-                GroupPublicKey = chapterId,
-                StataExportCaption = notUniqueVariableName
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey : Guid.NewGuid(),
+                groupPublicKey : chapterId,
+                stataExportCaption : notUniqueVariableName
+            ));
             questionnaire.Apply(new QRBarcodeQuestionAdded()
             {
                 QuestionId = questionId,

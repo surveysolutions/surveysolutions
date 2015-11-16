@@ -22,7 +22,7 @@
             };
 
             $scope.itemTemplate = function (itemType) {
-                return 'views/tree' + itemType + '.html';
+                return 'views/tree' + itemType.toLowerCase() + '.html';//to use cache casted to lower
             };
 
             $scope.highlightedId = null;
@@ -31,6 +31,9 @@
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
             $scope.items = [];
+
+            
+            $rootScope.readyToPaste = !(_.isNull($.cookie('itemToCopy')) || _.isUndefined($.cookie('itemToCopy')));
 
             var scrollDown = 'down';
             var scrollUp = 'up';
@@ -215,6 +218,7 @@
                     case 'Question': return itemTypes.question;
                     case 'Group': return (item.isRoster ? itemTypes.roster : itemTypes.group);
                     case 'StaticText': return itemTypes.staticText;
+                    case 'Chapter': return itemTypes.group;
                 }
                 throw 'unknown item type: ' + item;
             };
@@ -614,6 +618,55 @@
                         parent.items.splice(index, 0, emptyStaticText);
                         emitAddedItemState("statictext", emptyStaticText.itemId);
                     });
+            };
+
+            $scope.pasteItemInto = function (parent) {
+
+                var itemToCopy = $.cookie('itemToCopy');
+                if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
+                    return;
+                
+                var newId = utilityService.guid();
+
+                commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, itemToCopy.questionnaireId, itemToCopy.itemId, newId).success(function () {
+
+                    $scope.refreshTree();
+
+                    $rootScope.$emit('itemPasted');
+                    $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+                    
+                });
+            };
+
+            $scope.pasteItemAfter = function (item) {
+
+                var itemToCopy = $.cookie('itemToCopy');
+                if (_.isNull(itemToCopy) || _.isUndefined(itemToCopy))
+                    return;
+
+                var idToPasteAfter = item.itemId || $state.params.itemId;
+                var newId = utilityService.guid();
+
+                commandService.pasteItemAfter($state.params.questionnaireId, idToPasteAfter, itemToCopy.questionnaireId, itemToCopy.itemId, newId).success(function () {
+
+                    $scope.refreshTree();
+
+                    $rootScope.$emit('itemPasted');
+                    $state.go('questionnaire.chapter.' + itemToCopy.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+
+                });
+            };
+
+            $rootScope.copyRef = function (item) {
+                var itemIdToCopy = item.itemId || $state.params.itemId;
+
+                var itemToCopy = {
+                    questionnaireId: $state.params.questionnaireId,
+                    itemId: itemIdToCopy,
+                    itemType: getItemType(item)
+                };
+
+                $.cookie('itemToCopy', itemToCopy, { expires: 30 });
             };
 
             $scope.refreshTree = function () {

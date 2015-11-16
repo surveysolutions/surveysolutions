@@ -14,7 +14,7 @@
            if (hotkeys.get(addOption) !== false) {
                 hotkeys.del(addOption);
             }
-            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
+            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                 hotkeys.bindTo($scope)
                     .add({
                         combo: saveQuestion,
@@ -66,6 +66,7 @@
                 $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
                 $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
+                $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
                 var options = question.options || [];
@@ -112,18 +113,17 @@
                     });
             };
 
-            var hasQuestionEnablementConditions = function (question) {
+            var hasQuestionEnablementConditions = function(question) {
                 return $scope.doesQuestionSupportEnablementConditions() &&
                     question.enablementCondition !== null &&
                     /\S/.test(question.enablementCondition);
+            };
 
-            }
-
-            var hasQuestionValidations = function (question) {
+            var hasQuestionValidations = function(question) {
                 return $scope.doesQuestionSupportValidations() &&
                     question.validationExpression !== null &&
                     /\S/.test(question.validationExpression);
-            }
+            };
 
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
@@ -334,17 +334,29 @@
                 });
             };
 
-            $scope.$watch('activeQuestion.isLinked', function (newValue) {
-                if (!newValue && $scope.activeQuestion) {
+            $scope.$watch('activeQuestion.isLinked', function(newValue) {
+                if (!$scope.activeQuestion) {
+                    return;
+                }
+                if (newValue) {
+                    $scope.activeQuestion.yesNoView = false;
+                } else {
                     $scope.activeQuestion.linkedToQuestionId = null;
                     $scope.activeQuestion.linkedToQuestion = null;
+                }
+            });
+            $scope.$watch('activeQuestion.yesNoView', function (newValue) {
+                if (newValue && $scope.activeQuestion) {
+                    $scope.activeQuestion.isLinked = false;
                 }
             });
 
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
+                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                            $scope.activeQuestion.questionScope = 'Interviewer';
+                        }
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
                         $scope.activeQuestion.cascadeFromQuestion = null;

@@ -243,17 +243,11 @@
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Taille du paquet de communication</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID d'enregistrement client:</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Paramètres de connexion</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>ID d'appareil:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>L'URL utilisé pour communiquer avec l'application Supervisor</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL de l'application Supervisor</value>
@@ -269,9 +263,6 @@
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Délai de réponse du serveur a expiré</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>ID d'installation:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Paramètres de l'entretien</value>
@@ -291,17 +282,11 @@
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>conditions/validations</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} reçus</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>En cours de mettre à jour les affectations</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Certaines affectations ont été mises à jour</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} de {1} entretiens ont été supprimés</value>
@@ -353,12 +338,6 @@
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} envoyés</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>images</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>images par entretiens</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>entretiens</value>

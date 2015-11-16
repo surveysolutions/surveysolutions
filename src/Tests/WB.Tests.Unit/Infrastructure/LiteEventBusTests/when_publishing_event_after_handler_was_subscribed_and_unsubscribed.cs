@@ -1,5 +1,7 @@
+using System;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using It = Machine.Specifications.It;
@@ -12,7 +14,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         {
             liteEventRegistry = Create.LiteEventRegistry();
             eventBus = Create.LiteEventBus(liteEventRegistry);
-            aggregateRoot = SetupAggregateRootWithOneEventReadyForPublishing<DummyEvent>();
+            eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
             handlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
             liteEventRegistry.Subscribe(handlerMock.Object, "id");
@@ -20,14 +22,14 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommittedEvents(aggregateRoot);
+            eventBus.PublishCommittedEvents(eventsToPublish);
 
         It should_not_call_Handle_for_this_handler = () =>
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DummyEvent>()), Times.Never);
 
         private static ILiteEventBus eventBus;
         private static ILiteEventRegistry liteEventRegistry;
-        private static IAggregateRoot aggregateRoot;
         private static Mock<ILiteEventHandler<DummyEvent>> handlerMock;
+        private static CommittedEventStream eventsToPublish;
     }
 }

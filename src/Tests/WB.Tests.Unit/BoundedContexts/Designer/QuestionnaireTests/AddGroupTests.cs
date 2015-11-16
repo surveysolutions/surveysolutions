@@ -83,9 +83,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             }
         }
 
-        [TestCase(Propagate.None)]
-        [TestCase(Propagate.AutoPropagated)]
-        public void NewAddGroup_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown(Propagate supportedPopagationKind)
+        public void NewAddGroup_When_User_Doesnot_Have_Permissions_For_Edit_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());
@@ -101,9 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
 
-        [TestCase(Propagate.None)]
-        [TestCase(Propagate.AutoPropagated)]
-        public void NewAddGroup_When_User_In_Readonly_mode_Questionnaire_Then_DomainException_should_be_thrown(Propagate supportedPopagationKind)
+        public void NewAddGroup_When_User_In_Readonly_mode_Questionnaire_Then_DomainException_should_be_thrown()
         {
             // arrange
             Questionnaire questionnaire = CreateQuestionnaire(responsibleId: Guid.NewGuid());

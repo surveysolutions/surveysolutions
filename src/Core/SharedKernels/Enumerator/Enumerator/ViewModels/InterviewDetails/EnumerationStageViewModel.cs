@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -96,30 +93,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<dynamic>();
-            this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
         }
 
-        private async void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
+        private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (navigationParams.TargetScreen == ScreenType.Complete) { return; }
+            if (eventArgs.TargetScreen == ScreenType.Complete) { return; }
             
-            GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[navigationParams.TargetGroup.Id];
+            GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
 
-            await this.CreateRegularGroupScreen(navigationParams, @group);
+            await this.CreateRegularGroupScreen(eventArgs, @group);
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
                 this.eventRegistry.Subscribe(this, this.interviewId);
             }
         }
 
-        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs navigationParams, GroupModel @group)
+        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
         {
             if (@group is RosterModel)
             {
                 string title = @group.Title;
                 this.Name = this.substitutionService.GenerateRosterName(
                     title,
-                    this.interview.GetRosterTitle(navigationParams.TargetGroup));
+                    this.interview.GetRosterTitle(eventArgs.TargetGroup));
             }
             else
             {
@@ -128,8 +125,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             await Task.Run(() =>
             {
-                this.LoadFromModel(navigationParams.TargetGroup);
-                this.SendScrollToMessage(navigationParams.AnchoredElementIdentity);
+                this.LoadFromModel(eventArgs.TargetGroup);
+                this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
             });
         }
 
@@ -200,13 +197,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     groupIdentity: this.navigationState.CurrentGroup,
                     navigationState: this.navigationState).ToList();
 
-                for (int i = 0; i < viewModelEntities.Count; i++)
+                for (int indexOfViewModel = 0; indexOfViewModel < viewModelEntities.Count; indexOfViewModel++)
                 {
-                    var viewModelEntity = viewModelEntities[i];
+                    var viewModelEntity = viewModelEntities[indexOfViewModel];
 
                     if (@event.Instances.Any(rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
                     {
-                        this.Items.Insert(i, viewModelEntity);
+                        this.Items.Insert(indexOfViewModel, viewModelEntity);
                     }
                 }
             }
@@ -269,7 +266,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this, interviewId);
-            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
+            this.navigationState.ScreenChanged -= this.OnScreenChanged;
             var disposableItems = this.Items.OfType<IDisposable>().ToArray();
 
             foreach (var disposableItem in disposableItems)

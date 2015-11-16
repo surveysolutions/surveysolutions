@@ -9,7 +9,7 @@
 .btn-group-lg > .btn {
   padding: 10px 16px;
   font-size: 18px;
-  line-height: 1.33;
+  line-height: 1.3333333;
   border-radius: 6px;
 }
 .btn-group-sm > .btn {
@@ -73,6 +73,7 @@
 }
 .btn {
   text-transform: uppercase;
+  letter-spacing: 1px;
   padding: 7px 10px;
   border-radius: 3px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -99,6 +100,7 @@ input.form-control {
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 1px;
   background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.38) 16%, #fcfdfd 42%, #f6f7f8 100%);
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(16%, rgba(255, 255, 255, 0.38)), color-stop(42%, #fcfdfd), color-stop(100%, #f6f7f8));
@@ -113,12 +115,6 @@ input.form-control {
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#f6f7f8', GradientType=0);
   /* IE6-9 */
-}
-.nav-tabs li {
-  margin-top: 38px;
-}
-.nav-tabs li:first-child {
-  margin-left: 400px;
 }
 .nav-tabs li.active a {
   color: #2a81cb;
@@ -138,19 +134,6 @@ input.form-control {
   background-color: #fff;
   color: #444655;
   border-color: #e2e3e4;
-}
-.dropdown-menu {
-  box-shadow: none;
-}
-.dropdown-menu li a {
-  font-family: "Trebuchet MS", Helvetica, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: default;
-}
-.dropdown-menu li:hover {
-  color: ;
 }
 @font-face {
   font-family: 'Roboto-Light';
@@ -421,4 +404,6 @@ footer {
     bottom: 0;
   }
 }
-/*# sourceMappingURL=designer-start.css.map */
+.recaptcha {
+  margin-bottom: 10px;
+}

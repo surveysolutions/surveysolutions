@@ -175,9 +175,6 @@
     <value>Categorical question cannot have non-numeric values.</value>
     <comment>Non-numeric value found for categorical question</comment>
   </data>
-  <data name="PL0021_MultyOptionQuestionHasDuplicateAnswers" xml:space="preserve">
-    <value>Categorical multiple answers question has duplicate values.</value>
-  </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>Roster size question cannot have negative values.</value>
   </data>

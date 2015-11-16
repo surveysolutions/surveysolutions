@@ -139,7 +139,7 @@
                         isVisible: isTopBorderVisible && isBottomBorderVisible,
                         shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
                         scrollPositionWhenScrollUp: viewport.top - $(".question-list").offset().top + distanceToBottomBorder
-                    }
+                    };
                 };
 
                 return utilityService;

@@ -30,6 +30,35 @@
                     return commandCall(type, command);
                 };
 
+                commandService.addMacro = function (questionnaireId, macro) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": macro.itemId
+                    };
+                    return commandCall("AddMacros", command);
+                };
+
+                commandService.updateMacro = function (questionnaireId, macro) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": macro.itemId,
+                        "name": macro.name,
+                        "content": macro.content,
+                        "description": macro.description
+                    };
+
+                    return commandCall("UpdateMacros", command);
+                };
+
+                commandService.deleteMacros = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "entityId": itemId
+                    };
+                    return commandCall("DeleteMacros", command);
+                }
+
+
                 commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
                     return commandCall('CloneQuestionById', {
                         questionId: itemIdToClone,
@@ -96,6 +125,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.yesNoView = question.yesNoView;
                         command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null;
                         break;
                     case "Numeric":
@@ -253,26 +283,6 @@
                     return commandCall("AddDefaultTypeQuestion", command);
                 };
 
-
-                commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": newId,
-                        "title": chapter.title,
-                        "condition": "",
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": null,
-                        "sourceGroupId": chapter.chapterId,
-                        "targetIndex": 1
-                    };
-
-                    return commandCall("CloneGroupWithoutChildren", command);
-                };
-
                 commandService.deleteGroup = function(questionnaireId, itemId) {
                     var command = {
                         "questionnaireId": questionnaireId,
@@ -298,6 +308,26 @@
                     };
 
                     return commandCall("DeleteStaticText", command);
+                };
+
+                commandService.pasteItemAfter = function (questionnaireId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, newId) {
+                    return commandCall('PasteAfter', {
+                        sourceQuestionnaireId: sourceQuestionnaireId,
+                        sourceItemId : sourceItemId,
+                        itemToPasteAfterId: itemToPasteAfterId,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
+                };
+
+                commandService.pasteItemInto = function (questionnaireId, parentGroupId, sourceQuestionnaireId, sourceItemId, newId) {
+                    return commandCall('PasteInto', {
+                        sourceQuestionnaireId: sourceQuestionnaireId,
+                        sourceItemId: sourceItemId,
+                        parentId: parentGroupId,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
                 };
 
                 return commandService;

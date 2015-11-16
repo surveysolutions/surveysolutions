@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
 using Moq;
@@ -248,8 +249,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)
         {
+            var UserPreloadingProcessIdQueue = new Queue<string>();
+            UserPreloadingProcessIdQueue.Enqueue(userPreloadingProcess.UserPreloadingProcessId);
+            UserPreloadingProcessIdQueue.Enqueue(null);
+
             var userPreloadingServiceMock = new Mock<IUserPreloadingService>();
-            userPreloadingServiceMock.Setup(x => x.DeQueuePreloadingProcessIdReadyToBeValidated()).Returns(userPreloadingProcess.UserPreloadingProcessId);
+            userPreloadingServiceMock.Setup(x => x.DeQueuePreloadingProcessIdReadyToBeValidated()).Returns(UserPreloadingProcessIdQueue.Dequeue);
             userPreloadingServiceMock.Setup(x => x.GetPreloadingProcesseDetails(userPreloadingProcess.UserPreloadingProcessId))
                 .Returns(userPreloadingProcess);
 

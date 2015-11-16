@@ -1,12 +1,9 @@
 ﻿using System;
-
 using NLog;
-
-using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Native.Logging
 {
-    internal class NLogLogger : ILogger
+    internal class NLogLogger : Portable.Services.ILogger
     {
         private readonly Logger logger;
 
@@ -17,28 +14,28 @@ namespace WB.Core.GenericSubdomains.Native.Logging
 
         public void Debug(string message, Exception exception = null)
         {
-            this.logger.DebugException(message, exception);
+            this.logger.Debug(exception, message);
         }
 
         public void Info(string message, Exception exception = null)
         {
-            this.logger.InfoException(message, exception);
+            this.logger.Info(exception, message);
         }
 
 
         public void Warn(string message, Exception exception = null)
         {
-            this.logger.WarnException(message, exception);
+            this.logger.Warn(exception, message);
         }
 
         public void Error(string message, Exception exception = null)
         {
-            this.logger.ErrorException(message, exception);
+            this.logger.Error(exception, message);
         }
 
         public void Fatal(string message, Exception exception = null)
         {
-            this.logger.FatalException(message, exception);
+            this.logger.Fatal(exception, message);
         }
     }
 }

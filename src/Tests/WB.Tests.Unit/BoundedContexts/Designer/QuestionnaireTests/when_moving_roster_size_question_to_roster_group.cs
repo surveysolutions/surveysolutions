@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 responsibleId: responsibleId, rosterSizeQuestionId: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles,
                 rosterTitleQuestionId: null, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "fixed title 1") });
 
-            questionnaire.Apply(new NumericQuestionAdded
-            {
-                PublicKey = rosterSizeQuestionId,
-                IsInteger = true,
-                GroupPublicKey = targetRosterGroupId,
-            });
-
+            questionnaire.Apply(Create.Event.NumericQuestionAdded
+            (
+                publicKey: rosterSizeQuestionId,
+                isInteger: true,
+                groupPublicKey: targetRosterGroupId
+            ));
+            
             AddGroup(questionnaire: questionnaire, groupId: rosterGroupId, parentGroupId: targetRosterGroupId, condition: null,
                 responsibleId: responsibleId, rosterSizeQuestionId: rosterSizeQuestionId, isRoster: true);
 

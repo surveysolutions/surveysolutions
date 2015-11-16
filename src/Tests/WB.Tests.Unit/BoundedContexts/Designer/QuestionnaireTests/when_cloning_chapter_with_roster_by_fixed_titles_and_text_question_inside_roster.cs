@@ -31,13 +31,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 FixedRosterTitles = rosterFixedTitles,
                 RosterTitleQuestionId = null
             });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = textQuestionId,
-                GroupPublicKey = rosterId,
-                QuestionType = QuestionType.Text,
-                QuestionText = textQuestionTitle
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey: textQuestionId,
+                groupPublicKey: rosterId,
+                questionType: QuestionType.Text,
+                questionText : textQuestionTitle
+            ));
 
             eventContext = new EventContext();
         };

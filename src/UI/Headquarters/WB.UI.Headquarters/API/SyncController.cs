@@ -17,13 +17,13 @@ namespace WB.UI.Headquarters.API
     [HeadquarterFeatureOnly]
     public class SyncController : ApiController
     {
-        private readonly ISyncManager syncManager;
         private readonly ILogger logger;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly IPlainInterviewFileStorage plainFileRepository;
 
-        public SyncController(ISyncManager syncManager, IPlainInterviewFileStorage plainFileRepository, ILogger logger)
+        public SyncController(IIncomingSyncPackagesQueue incomingSyncPackagesQueue, IPlainInterviewFileStorage plainFileRepository, ILogger logger)
         {
-            this.syncManager = syncManager;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.plainFileRepository = plainFileRepository;
             this.logger = logger;
         }
@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.API
         {
             var syncItem = await this.Request.Content.ReadAsStringAsync();
 
-            this.syncManager.SendSyncItem(interviewId: interviewId, package: syncItem);
+            this.incomingSyncPackagesQueue.Enqueue(interviewId: interviewId, item: syncItem);
 
             return Request.CreateResponse(HttpStatusCode.OK, true);
         }

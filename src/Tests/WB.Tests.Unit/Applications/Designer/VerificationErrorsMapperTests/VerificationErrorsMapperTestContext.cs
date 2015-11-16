@@ -20,14 +20,14 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
         {
             return new QuestionnaireVerificationError[4]
             {
-                new QuestionnaireVerificationError("aaa", "aaaa", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId) }),
-                new QuestionnaireVerificationError("bbb", "bbbb", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
-                new QuestionnaireVerificationError("ccc", "cccc", new QuestionnaireVerificationReference[2]
+                new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId) }),
+                new QuestionnaireVerificationError("bbb", "bbbb", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
+                new QuestionnaireVerificationError("ccc", "cccc", VerificationErrorLevel.General, new QuestionnaireVerificationReference[2]
                 {
                     new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId),
                     new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId)
                 }),
-               new QuestionnaireVerificationError("aaa", "aaaa", new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
+               new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
             };
         }
 
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
         {
             return new QuestionnaireVerificationError[1]
             {
-                new QuestionnaireVerificationError("aaa","aaaa", new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.StaticText, staticTextId)})
+                new QuestionnaireVerificationError("aaa","aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.StaticText, staticTextId)})
             };
         }
 

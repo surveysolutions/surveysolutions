@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions..
+        ///   Looks up a localized string similar to Server error. Please contact the support team at support@mysurvey.solutions.
         /// </summary>
         public static string ErrorMessage_InternalServerError {
             get {
@@ -541,7 +541,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because question is used as size of roster and specified answer is negative..
+        ///   Looks up a localized string similar to Answer &apos;{0}&apos; is incorrect because question is used as size of roster and specified answer is negative.
         /// </summary>
         public static string Interview_Question_Integer_NegativeRosterSizeAnswer {
             get {
@@ -640,15 +640,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignments/Census for {0}.
-        /// </summary>
-        public static string Interviewer_DashboardTitle {
-            get {
-                return ResourceManager.GetString("Interviewer_DashboardTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Interviewer_RelinkDevice_Cancel {
@@ -658,7 +649,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You already assigned to another device.
+        ///   Looks up a localized string similar to You are already assigned to another device.
         /// </summary>
         public static string Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage {
             get {

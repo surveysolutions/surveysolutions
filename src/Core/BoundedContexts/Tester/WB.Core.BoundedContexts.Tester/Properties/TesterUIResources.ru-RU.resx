@@ -171,20 +171,8 @@
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Подключаемся к серверу</value>
   </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>Невозможно подключиться к Survey Solutions Designer. Хотите открыть локальную копию?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Подготовка опросника к созданию интервью</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Сохранение библиотеки с выражениями в локальном хранилище</value>
-  </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>Сохранение опросника в локальном хранилище</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Удаленная проверка опросника на наличие ошибок</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
     <value>Отключить проверку SSL сертификатов</value>

@@ -3,7 +3,7 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 }
 
 function GetPathToMSBuild() {
-    return 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe'
+    return 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
 }
 
 function GetPathToConfigTransformator() {
@@ -44,7 +44,7 @@ function BuildNewDesigner(){
     Push-Location -Path $targetLocation
     Write-Host $installCommand
     iex $installCommand #install node js dependencies
-    &gulp #will execute script gulpfile.js in UpdatedDesigner folder
+    &gulp | Write-Host #will execute script gulpfile.js in UpdatedDesigner folder
     Pop-Location
 }
 function CheckPrerequisites() {

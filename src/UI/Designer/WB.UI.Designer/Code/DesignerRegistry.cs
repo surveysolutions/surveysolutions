@@ -28,13 +28,14 @@ namespace WB.UI.Designer.Code
             this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
                  .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
 
-            this.Bind<ICommandPreprocessor>().To<CommandPreprocessor>();
+            this.Bind<ICommandInflater>().To<CommandInflater>();
             this.Bind<ICommandPostprocessor>().To<CommandPostprocessor>();
             this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();
             this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
             this.Bind<ISystemMailer>().To<SystemMailer>();
             this.Bind<IDynamicCompiler>().To<RoslynCompiler>();
             this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
+            this.Bind<IMacrosSubstitutionService>().To<MacrosSubstitutionService>();
             this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();

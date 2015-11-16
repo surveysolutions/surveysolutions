@@ -3,9 +3,12 @@ using Machine.Specifications;
 using Moq;
 using StatData.Core;
 using StatData.Writers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using It = Machine.Specifications.It;
 
@@ -30,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             datasetWriter = new Mock<IDatasetWriter>();
 
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
-            datasetWriterFactory.Setup(x => x.CreateDatasetWriter(ExportDataType.Stata)).Returns(datasetWriter.Object);
+            datasetWriterFactory.Setup(x => x.CreateDatasetWriter(DataExportFormat.STATA)).Returns(datasetWriter.Object);
 
             _tabularDataToExternalStatPackagesTabDataExportService = CreateSqlToTabDataExportService(
                 fileSystemAccessor: fileSystemAccessor.Object, questionnaireExportStructure: questionnaireExportStructure,
@@ -38,10 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
         };
 
         Because of = () =>
-            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName });
+            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>());
 
         private It should_call_write_to_file = () =>
-            datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<string[,]>()), Times.Once());
+            datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<IDataQuery>()), Times.Once());
 
         private static TabularDataToExternalStatPackageExportService _tabularDataToExternalStatPackagesTabDataExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

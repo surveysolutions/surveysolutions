@@ -8,10 +8,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
 {
     public class InterviewDataExportSettings
     {
-        public InterviewDataExportSettings(string directoryPath, bool enableInterviewHistory, int maxRecordsCountPerOneExportQuery)
+        public InterviewDataExportSettings()
+        {
+            this.EnableInterviewHistory = false;
+            this.MaxRecordsCountPerOneExportQuery = 1000;
+            this.LimitOfCachedItemsByDenormalizer = 100;
+            this.DirectoryPath = String.Empty;
+        }
+
+        public InterviewDataExportSettings(string directoryPath, bool enableInterviewHistory, int maxRecordsCountPerOneExportQuery, int limitOfCachedItemsByDenormalizer)
         {
             this.EnableInterviewHistory = enableInterviewHistory;
             this.MaxRecordsCountPerOneExportQuery = maxRecordsCountPerOneExportQuery;
+            this.LimitOfCachedItemsByDenormalizer = limitOfCachedItemsByDenormalizer;
             this.DirectoryPath = directoryPath;
         }
 
@@ -25,5 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         {
             get { return "ExportedEventHistory"; }
         }
+
+        public int LimitOfCachedItemsByDenormalizer { get; private set; }
     }
 }

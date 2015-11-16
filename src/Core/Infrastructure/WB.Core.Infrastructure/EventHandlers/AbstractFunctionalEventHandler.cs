@@ -95,7 +95,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         {
             var evntType = ExtractEventType(method);
             EventTypeResolver.RegisterEventDataType(evntType);
-            oldEventBus.RegisterHandler(evntType, this.Handle);
+            oldEventBus.RegisterHandler(eventType: evntType, eventHandlerType: this.GetType(), handle: this.Handle);
         }
 
         private static void SaveView(Guid id, TEntity newState, IReadSideStorage<TEntity> storage)
@@ -108,13 +108,13 @@ namespace WB.Core.Infrastructure.EventHandlers
             return storage.GetById(id);
         }
 
-        private PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
+        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        private bool Handles(IPublishableEvent evt)
+        private bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
             return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());

@@ -1,9 +1,10 @@
+using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace WB.Core.Infrastructure.EventHandlers
 {
-    public interface IUpdateHandler<T, TEvt>
+    public interface IUpdateHandler<TState, TEvent>
     {
-        T Update(T currentState, IPublishedEvent<TEvt> evnt);
+        TState Update(TState state, IPublishedEvent<TEvent> @event);
     }
 }

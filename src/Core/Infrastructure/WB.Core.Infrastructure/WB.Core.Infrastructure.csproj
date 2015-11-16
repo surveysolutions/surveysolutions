@@ -51,6 +51,7 @@
     <Compile Include="CommandBus\ICommandValidator.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
+    <Compile Include="EventBus\EventBusSettings.cs" />
     <Compile Include="EventBus\Hybrid\Implementation\HybridEventBus.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
@@ -102,8 +103,8 @@
     <Compile Include="Ncqrs\Eventing\AggregateRootEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\CommittedEventStream.cs" />
-    <Compile Include="Ncqrs\Eventing\Event.cs" />
     <Compile Include="Ncqrs\Eventing\EventMergeUtils.cs" />
+    <Compile Include="Ncqrs\Eventing\EventHandlerException.cs" />
     <Compile Include="Ncqrs\Eventing\EventNotHandledException.cs" />
     <Compile Include="Ncqrs\Eventing\EventSourceInformation.cs" />
     <Compile Include="Ncqrs\Eventing\IEvent.cs" />
@@ -111,6 +112,8 @@
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\InProcessEventBus.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
+    <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IUncommittedEvent.cs" />
+    <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\IPublishedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\PublishedEvent.cs" />
     <Compile Include="Ncqrs\Eventing\ServiceModel\Bus\RegisterAllHandlersInAssemblyExtension.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\EntityThresholdedDomainEventHandlerWrapper.cs" />
@@ -131,6 +134,8 @@
     <Compile Include="Ncqrs\Eventing\Sourcing\Snapshotting\Snapshot.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
     <Compile Include="Ncqrs\Eventing\Sourcing\UndefinedValues.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\EventPosition.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\EventsSlice.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\EventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
@@ -154,11 +159,13 @@
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
     <Compile Include="ReadSide\IViewFactory.cs" />
+    <Compile Include="ReadSide\ReadSideSettings.cs" />
+    <Compile Include="ReadSide\ReadSideVersion.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
     <Compile Include="PlainStorage\IPlainKeyValueStorage.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\IReadSideCleaner.cs" />
+    <Compile Include="ReadSide\Repository\Accessors\IPostgresReadSideBootstraper.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideKeyValueStorage.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />

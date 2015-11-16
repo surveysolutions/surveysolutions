@@ -15,12 +15,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = Guid.NewGuid(),
-                GroupPublicKey = chapterId,
-                StataExportCaption = notUniqueVariableName
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey : Guid.NewGuid(),
+                groupPublicKey: chapterId,
+                stataExportCaption : notUniqueVariableName
+            ));
         };
 
         Because of = () =>
@@ -56,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static string notUniqueVariableName = "var1";
         private static bool isPreFilled = false;
         private static string title = "title";
-        private static string instructions = "intructions";
+        private static string instructions = "instructions";
         private static string enablementCondition = "";
         private static string validationExpression = "";
         private static string validationMessage = "";

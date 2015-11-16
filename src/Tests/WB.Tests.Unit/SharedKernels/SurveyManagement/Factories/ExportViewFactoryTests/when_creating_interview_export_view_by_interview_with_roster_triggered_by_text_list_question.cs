@@ -7,12 +7,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewExportedDataEventHandlerTests;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
              result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
-                CreateInterviewDataWith2PropagatedLevels(), InterviewExportedAction.Completed);
+                CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.ShouldEqual(2);
@@ -111,10 +111,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
             InterviewData interview = CreateInterviewData();
-            if (!interview.Levels["#"].QuestionsSearchCahche.ContainsKey(rosterSizeQuestionId))
-                interview.Levels["#"].QuestionsSearchCahche.Add(rosterSizeQuestionId, new InterviewQuestion(rosterSizeQuestionId));
+            if (!interview.Levels["#"].QuestionsSearchCache.ContainsKey(rosterSizeQuestionId))
+                interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, new InterviewQuestion(rosterSizeQuestionId));
 
-            var textListQuestion = interview.Levels["#"].QuestionsSearchCahche[rosterSizeQuestionId];
+            var textListQuestion = interview.Levels["#"].QuestionsSearchCache[rosterSizeQuestionId];
             textListQuestion.Answer = new string[] { "a1", "a2" };
 
             for (int i = 0; i < levelCount; i++)
@@ -123,10 +123,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
 
-                if (!newLevel.QuestionsSearchCahche.ContainsKey(questionInsideRosterGroupId))
-                    newLevel.QuestionsSearchCahche.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
+                if (!newLevel.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))
+                    newLevel.QuestionsSearchCache.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
 
-                var question = newLevel.QuestionsSearchCahche[questionInsideRosterGroupId];
+                var question = newLevel.QuestionsSearchCache[questionInsideRosterGroupId];
 
                 question.Answer = new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, someAnswer) });
             }

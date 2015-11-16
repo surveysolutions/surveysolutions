@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             numberOfUnhandledPackagesHealthCheckResult = NumberOfUnhandledPackagesHealthCheckResult.Happy(0);
             numberOfSyncPackagesWithBigSizeCheckResult = NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0);
             folderPermissionCheckResult = new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null);
-
+            readSideHealthCheckResult =  ReadSideHealthCheckResult.Happy();
 
             eventStoreHealthCheckMock = new Mock<IAtomicHealthCheck<EventStoreHealthCheckResult>>();
             eventStoreHealthCheckMock.Setup(m => m.Check()).Returns(eventStoreHealthCheckResult);
@@ -25,12 +25,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             numberOfSyncPackagesWithBigSizeCheckerMock.Setup(m => m.Check()).Returns(numberOfSyncPackagesWithBigSizeCheckResult);
             folderPermissionCheckerMock = new Mock<IAtomicHealthCheck<FolderPermissionCheckResult>>();
             folderPermissionCheckerMock.Setup(m => m.Check()).Returns(folderPermissionCheckResult);
+            readSideHealthCheckResultMock = new Mock<IAtomicHealthCheck<ReadSideHealthCheckResult>>();
+            readSideHealthCheckResultMock.Setup(m => m.Check()).Returns(readSideHealthCheckResult);
 
             service = CreateHealthCheckService(
                 eventStoreHealthCheckMock.Object,
                 numberOfUnhandledPackagesCheckerMock.Object,
                 numberOfSyncPackagesWithBigSizeCheckerMock.Object,
-                folderPermissionCheckerMock.Object);
+                folderPermissionCheckerMock.Object,
+                readSideHealthCheckResultMock.Object);
         };
 
         Because of = () =>
@@ -71,12 +74,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
         private static Mock<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>> numberOfUnhandledPackagesCheckerMock;
         private static Mock<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>> numberOfSyncPackagesWithBigSizeCheckerMock;
         private static Mock<IAtomicHealthCheck<FolderPermissionCheckResult>> folderPermissionCheckerMock;
+        private static Mock<IAtomicHealthCheck<ReadSideHealthCheckResult>> readSideHealthCheckResultMock;
+        
 
         private static EventStoreHealthCheckResult eventStoreHealthCheckResult;
         private static NumberOfUnhandledPackagesHealthCheckResult numberOfUnhandledPackagesHealthCheckResult;
         private static NumberOfSyncPackagesWithBigSizeCheckResult numberOfSyncPackagesWithBigSizeCheckResult;
         private static FolderPermissionCheckResult folderPermissionCheckResult;
-
+        private static ReadSideHealthCheckResult readSideHealthCheckResult;
 
         private static HealthCheckResults result;
         private static HealthCheckService service;

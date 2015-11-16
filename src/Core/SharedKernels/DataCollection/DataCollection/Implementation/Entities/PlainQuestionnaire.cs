@@ -184,9 +184,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         : AnswerType.OptionCode;
 
                 case QuestionType.MultyOption:
-                    return IsQuestionLinked(questionId)
-                        ? AnswerType.RosterVectorArray
-                        : AnswerType.OptionCodeArray;
+                    return
+                        IsQuestionYesNo(questionId)
+                            ? AnswerType.YesNoArray
+                            : IsQuestionLinked(questionId)
+                                ? AnswerType.RosterVectorArray
+                                : AnswerType.OptionCodeArray;
 
                 case QuestionType.Numeric:
                     return IsQuestionInteger(questionId)
@@ -606,6 +609,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(string.Format("Question with id '{0}' must be numeric.", questionId));
 
             return numericQuestion.IsInteger;
+        }
+
+        public bool IsQuestionYesNo(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var multipleOptionsQuestion = question as IMultyOptionsQuestion;
+            if (multipleOptionsQuestion == null)
+                throw new QuestionnaireException($"Question with id '{questionId}' must be multiple options question.");
+
+            return multipleOptionsQuestion.YesNoView;
         }
 
         public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)

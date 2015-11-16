@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -37,15 +38,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
                 archiveUtilsMock.Setup(x => x.ZipFiles(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
                     .Callback<IEnumerable<string>, string>((f, n) => zipCallback(f));
 
-            return new FilebasedExportedDataAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), "",
-                Mock.Of<ITabularDataToExternalStatPackageExportService>(),
+            return new FilebasedExportedDataAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), new InterviewDataExportSettings(), 
                 Mock.Of<IMetadataExportService>(),
-                Mock.Of<IEnvironmentContentService>(
-                    _ =>
-                        _.GetContentFilesForQuestionnaire(It.IsAny<Guid>(), It.IsAny<long>(), It.IsAny<string>()) ==
-                        environmentFiles),
-                Mock.Of<ILogger>(), archiveUtilsMock.Object, new InterviewDataExportSettings(string.Empty, false,10000),
-                Mock.Of<ITabularFormatExportService>(_ => _.GetTabularDataFilesFromFolder(Moq.It.IsAny<string>()) == (dataFiles?? new string[0])));
+                Mock.Of<ILogger>(), archiveUtilsMock.Object);
         }
 
         protected static Mock<IFileSystemAccessor> CreateFileSystemAccessorMock()

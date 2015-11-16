@@ -246,4 +246,10 @@
   <data name="UploadUsers_Title" xml:space="preserve">
     <value>List of files with preloaded users</value>
   </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Refresh</value>
+   </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Batch upload</value>
+  </data>
 </root>

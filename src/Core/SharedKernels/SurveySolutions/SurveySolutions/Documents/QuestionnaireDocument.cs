@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -21,11 +20,14 @@ namespace Main.Core.Documents
             this.ConditionExpression = string.Empty;
             this.IsPublic = false;
             this.SharedPersons = new List<Guid>();
+            this.Macros = new Dictionary<Guid, Macro>();
         }
 
         public string Id { get; set; }
 
         public List<IComposite> Children { get; set; }
+
+        public Dictionary<Guid, Macro> Macros { get; set; }
 
         public DateTime? CloseDate { get; set; }
 
@@ -46,18 +48,6 @@ namespace Main.Core.Documents
         public bool UsesCSharp { get; set; }
 
         private IComposite parent;
-
-        public Propagate Propagated
-        {
-            get
-            {
-                return Propagate.None;
-            }
-
-            set 
-            {
-            }
-        }
 
         public IComposite GetParent()
         {

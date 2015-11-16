@@ -45,7 +45,6 @@ namespace WB.Tests.Integration.InterviewTests
                                 IsRoster = true,
                                 RosterSizeQuestionId = numericQuestionId, 
                                 PublicKey = propagatableGroupId,
-                                Propagated = Propagate.AutoPropagated,
                                 Children = new List<IComposite>
                                 {
                                     new TextQuestion
@@ -58,7 +57,6 @@ namespace WB.Tests.Integration.InterviewTests
                                         IsRoster = true,
                                         RosterSizeQuestionId = numericQuestionId, 
                                         PublicKey = propagatableGroupId1,
-                                        Propagated = Propagate.AutoPropagated,
                                         Children = new List<IComposite>
                                         {
                                             new MultyOptionsQuestion
