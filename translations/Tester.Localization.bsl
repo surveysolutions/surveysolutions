@@ -83,12 +83,12 @@
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_Forbidden" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Can't open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Невозможно открыть опросник {0}. Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Can't open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Невозможно открыть опросник {0}. Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña." ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="ไม่สามารถเปิดแบบสอบถาม &quot;{0}&quot; ได้ กรุณาตรวจสอบชื่อผู้ใช้และรหัสผ่าน" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="th-TH" tx="ไม่สามารถเปิดแบบสอบถาม &quot;{0}&quot; ได้ กรุณาตรวจสอบชื่อผู้ใช้และรหัสผ่าน" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Không thể mở bảng câu hỏi &quot;{0}&quot;. Trương mục người dùng thiết kế là không được phép. Hãy kiểm tra đăng nhập và mật khẩu của bạn." ts="Changed" qs="ToReview" />
-            <li lc="id-ID" tx="Tidak bisa membuka kuesioner &quot;{0}&quot;. Akun Desainer Anda tidak berwenang. Silakan periksa login dan password Anda." ts="Translated" qs="ToReview" />
+            <li lc="id-ID" tx="Tidak bisa membuka kuesioner &quot;{0}&quot;. Akun Desainer Anda tidak berwenang. Silakan periksa login dan password Anda." ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Não é possível abrir o questionário &quot;{0}&quot;. Sua conta de usuário do Designer não é autorizada. Por favor, verifique seu login e senha." ts="Changed" qs="ToReview" />
             <li lc="ar" tx="لا يمكن فتح الاستبيان &quot;{0}&quot;. حساب المستخدم الخاص بك مصمم غير مخول. الرجاء التحقق من اسم تسجيل الدخول وكلمة المرور." ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Impossible d'ouvrir le questionnaire « {0} ». Votre compte d'utilisateur de Designer n'est pas autorisé à accéder à ce questionnaire. Veuillez vérifier votre login et mot de passe." ts="Changed" qs="ToReview" />
@@ -120,45 +120,6 @@
             <li lc="fr-FR" tx="Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire comporte des erreurs. Veuillez faire des corrections au questionnaire sur le site Designer." ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_OpenLocalInterview" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="No connection to the Survey Solutions designer. Open a local copy of questionnaire?" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Невозможно подключиться к Survey Solutions Designer. Хотите открыть локальную копию?" er="" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="No hay conexión con el Survey Solutions Designer. Abrir una copia local del cuestionario?" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="ไม่มีการเชื่อมต่อกับ Survey Solutions Designer ท่านต้องการเปิดแบบสอบถามในรูปแบบออฟไลน์หรือไม่" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Không có kết nối đến các nhà thiết kế giải pháp khảo sát. Mở một bản sao của bảng câu hỏi?" ts="Changed" qs="ToReview" />
-            <li lc="id-ID" tx="Tidak ada koneksi ke Desainer Survey Solutions. Buka salinan lokal dari kuesioner?" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Não há conexão para o Survey Solutinos Designer. Abrir uma cópia local do questionário?" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لا يوجد اتصال مصمم &quot;حلول المسح&quot;. فتح نسخة محلية من الاستبيان?" ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="Aucune connexion avec le site Designer de Survey Solutions. Ouvrir une copie locale du questionnaire?" ts="Changed" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_PrepareQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Preparing questionnaire to creating interview" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Подготовка опросника к созданию интервью" ts="Changed" qs="ToReview" />
-            <li lc="es-ES" tx="Preparando cuestionario para crear entrevista" er="" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="กำลังเตรียมแบบสอบถามสำหรับสร้างการสัมภาษณ์" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Chuẩn bị các câu hỏi để tạo ra cuộc phỏng vấn" ts="Changed" qs="ToReview" />
-            <li lc="id-ID" tx="Mempersiapkan kuesioner untuk membuat wawancara" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Preparando questionário para a criação de entrevista" ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="إعداد استبيان لخلق المقابلة" ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="En train de préparer le questionnaire pour l'entretien" ts="Changed" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_StoreAssembly" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Saving interview dynamic link library to local storage" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Сохранение библиотеки с выражениями в локальном хранилище" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Guardando biblioteca de vínculos dinámicos de entrevista en almacenamiento local" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="กำลังบันทึกลิงค์ไลบรารี่การสัมภาษณ์ไว้บนเครื่องที่ใช้งาน" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Thư viện liên kết động cuộc phỏng vấn tiết kiệm để lưu trữ cục bộ" ts="Translated" qs="AutoTranslated" />
-            <li lc="id-ID" tx="Menyimpan Dynamic Link Library wawancara ke penyimpanan lokal" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Salvando Biblioteca de ligação dinâmica  entrevista para armazenamento local" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
-            <li lc="ar" tx="حفظ مكتبة الارتباط الحيوي المقابلة للتخزين المحلي" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="En train de sauvegarder une bibliothèque au stockage local de liens dynamiques" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_StoreQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Saving questionnaire to local storage" ts="Translated" qs="ToReview" />
@@ -170,19 +131,6 @@
             <li lc="pt-PT" tx="Salvando o questionário para armazenamento local" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حفظ الاستبيان للتخزين المحلي" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="En train de sauvegarder le questionnaire au stockage local" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_VerifyOnServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Checking questionnaire for errors on the server" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Удаленная проверка опросника на наличие ошибок" er="" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Buscando errores de cuestionario en el servidor" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="กำลังตรวจสอบข้อผิดพลาดของแบบสอบถามบนเซิร์ฟเวอร์" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Các câu hỏi kiểm tra lỗi trên máy chủ" ts="Translated" qs="AutoTranslated" />
-            <li lc="id-ID" tx="Memeriksa kuesioner untuk kesalahan pada server" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Verificando questionário para errores no servidor" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="استبيان التدقيق بحثاً عن الأخطاء على الخادم" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="En cours de détecter d'erreurs dans le questionnaire" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Login_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -305,7 +253,7 @@
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of seconds to wait for coordinates" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Количество секунд, в течении которых будет ожидаться получение GPS координат" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Количество секунд, в течении которых будет ожидаться получение GPS координат" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Número de segundos a esperar para coordenadas" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="จำนวนวินาทีในการจับพิกัด" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Số giây phải đợi tọa độ" ts="Translated" qs="AutoTranslated" />
@@ -319,7 +267,7 @@
           <lis>
             <li lc="nn-nn" tx="GPS Receive timeout" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Время ожидания при считывании GPS координат" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Tiempo de espera para la recepción de GPS" er="" ts="Translated" qs="ToReview" />
+            <li lc="es-ES" tx="Tiempo de espera para la recepción de GPS" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="กำหนดเวลาในการจับพิกัด" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="GPS nhận được thời gian chờ" ts="Translated" qs="AutoTranslated" />
             <li lc="id-ID" tx="Waktu menerima GPS sudah habis" ts="Translated" qs="ToReview" />
@@ -331,7 +279,7 @@
         <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of seconds to wait until server response" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Количество секунд, в течении которых будет ожидаться получение ответа от сервера" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Количество секунд, в течении которых будет ожидаться получение ответа от сервера" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Número de segundos de espera para respuesta del servidor" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="จำนวนวินาทีในการรอการตอบสนองของเซิร์ฟเวอร์" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Số giây phải đợi đến phản ứng máy chủ" ts="Translated" qs="AutoTranslated" />

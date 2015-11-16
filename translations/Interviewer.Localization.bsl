@@ -61,7 +61,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="ApplicationIncompatibleWithServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Your application is not compatible with server one. Update your Interviewer application." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложени Interviewer." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложение Interviewer." ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Додаток несумісний із сервером. Оновіть ваш додаток." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Su aplicación no es compatible con el servidor. Actualice la aplicación del entrevistador." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="เวอร์ชันที่ใช้อยู่ไม่ตรงกับเซิร์ฟเวอร์ กรุณาปรับปรุง Survey Solutions Interviewer" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
@@ -83,21 +83,21 @@
             <li lc="vi-VN" tx="{0} hoàn thành" ts="Translated" qs="AutoTranslated" />
             <li lc="pt-PT" tx="{0} concluído" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} المكتملة" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Terminé(s) {0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr-FR" tx="Terminé(s) {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_CreateInterview" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Create&#xA;interview" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Создать&#xD;&#xA;интервью" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу" er="" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Crear entrevista" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="สร้างการสัมภาษณ์" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Membuat&#xD;&#xA;Wawancara" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Create&#xD;&#xA;Interview" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="Criar entrevista" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="Create&#xD;&#xA;interview" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Créer entretien" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Create&#xD;&#xA;interview" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Создать&#xD;&#xA;интервью" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу" ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Crear entrevista" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="สร้างการสัมภาษณ์" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Membuat&#xD;&#xA;Wawancara" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Create&#xD;&#xA;Interview" ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Criar entrevista" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="Create&#xD;&#xA;interview" ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Créer entretien" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_NewItemsLinkText" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -130,16 +130,16 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_NoInterviewsText" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Synchronize to get new tasks&#xA;or contact your supervisor&#xA;for further instructions" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Синхронизируйтесь для получения новых заданий&#xD;&#xA;или свяжитесь с вашим супервайзером&#xD;&#xA;для дальнейших инструкций" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Синхронізуйтесь, щоб отримати нові призначення або зв'яжіться з вашим керівникомі, щоб отримати подальші інструкції" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Sincronizar para obtener nuevas tareas o contactar a su supervisor para recibir más instrucciones" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="ซิงโครไนส์เพื่อรับงานใหม่ หรือติดต่อ Supervisor เพื่อรับคำแนะนำเพิ่มเติม" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Sinkronkan untuk mendapatkan tugas baru &#xD;&#xA;atau hubungi penyelia Anda&#xD;&#xA;untuk instruksi lebih lanjut" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Đồng bộ hóa để có được mới tasks&#xD;&#xA;or liên hệ của bạn hướng dẫn thêm supervisor&#xD;&#xA;for" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="Sincronizar para obter novo tarefas ou entrar em contato seu supervisor para mais instruções" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="مزامنة للحصول على الاتصال tasks&#xD;&#xA;or الجديدة الخاصة بك supervisor&#xD;&#xA;for مزيد من التعليمات" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Synchroniser afin d'obtenir de nouvelles affectations, ou contacter votre superviseur pour des informations complémentaires" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Synchronize to get new tasks&#xD;&#xA;or contact your supervisor&#xD;&#xA;for further instructions" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Синхронизируйтесь для получения новых заданий&#xD;&#xA;или свяжитесь с Вашим супервизором&#xD;&#xA;для дальнейших инструкций" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Синхронізуйтесь, щоб отримати нові призначення або зв'яжіться з вашим керівникомі, щоб отримати подальші інструкції" ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Sincronizar para obtener nuevas tareas o contactar a su supervisor para recibir más instrucciones" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ซิงโครไนส์เพื่อรับงานใหม่ หรือติดต่อ Supervisor เพื่อรับคำแนะนำเพิ่มเติม" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Sinkronkan untuk mendapatkan tugas baru &#xD;&#xA;atau hubungi penyelia Anda&#xD;&#xA;untuk instruksi lebih lanjut" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Đồng bộ hóa để có được mới tasks&#xD;&#xA;or liên hệ của bạn hướng dẫn thêm supervisor&#xD;&#xA;for" ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Sincronizar para obter novo tarefas ou entrar em contato seu supervisor para mais instruções" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="مزامنة للحصول على الاتصال tasks&#xD;&#xA;or الجديدة الخاصة بك supervisor&#xD;&#xA;for مزيد من التعليمات" ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Synchroniser afin d'obtenir de nouvelles affectations, ou contacter votre superviseur pour des informations complémentaires" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_NoInterviewsTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -173,7 +173,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Dashboard_Reinitialize_Interview_Message" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="This interview is completed. Do you want to restart the interview?" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Это интервтю завершено. Хотите переоткрыть его?" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Это интервью завершено. Хотите переоткрыть его?" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Це інтерв'ю було завершене. Ви бажаєте знову почати інтерв'ю?" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Esta entrevista está completada. Desea reiniciar la entrevista?" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="สัมภาษณ์เสร็จสมบูรณ์ ต้องการกลับไปแก้ไขเพิ่มเติมหรือไม่" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
@@ -274,7 +274,7 @@
             <li lc="ru-RU" tx="Закончено {0}" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Завершено о {0}" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Completado el {0}" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="เสร็จสมบูรณ์เมื่อ {0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="th-TH" tx="เสร็จสมบูรณ์เมื่อ {0}" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Selesai pada {0}" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Hoàn tất vào ngày {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="pt-PT" tx="Concluído em {0}" ts="Translated" qs="ToReview" />
@@ -284,22 +284,22 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="DashboardItem_CreatedOn" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Assigned on {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Cоздано {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="uk-UA" tx="Створено {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es-ES" tx="Creado el {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="th-TH" tx="มอบหมายงานเมื่อ  {0}" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Ditetapkan pada {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Created on {0}" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Cоздано {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Створено {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Creado el {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="มอบหมายงานเมื่อ  {0}" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Ditetapkan pada {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Hoàn tất vào ngày {0}" ts="Changed" qs="ToReview" />
-            <li lc="pt-PT" tx="Criado em {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="pt-PT" tx="Criado em {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
             <li lc="ar" tx="تم تعيينها في {0}" ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="Créé le {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="fr-FR" tx="Créé le {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="DashboardItem_InProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="In progress" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="В прогрессе" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="В процессе" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Триває" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="En progreso" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="กำลังดำเนินการ" ts="Translated" qs="ToReview" />
@@ -377,17 +377,17 @@
             <li lc="vi-VN" tx="Không có truy cập internet cho các trang web khảo sát giải pháp giám sát. Kiểm tra cài đặt mạng máy chủ địa chỉ and(or)" ts="Translated" qs="AutoTranslated" />
             <li lc="pt-PT" tx="Sem acesso à internet para o site do Survey Solutions Supervisor. Verifique o endereço do servidor e/ou as configurações de rede" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أي الوصول إلى الإنترنت على الموقع &quot;المشرف حلول المسح&quot;. تحقق من إعدادات شبكة الاتصال and(or) عنوان الخادم" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="InternalServerError" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Server error. Please contact the support team at support@mysurvey.solutions." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Server error. Please contact the support team at support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки на support@mysurvey.solutions." ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a  support@mysurvey.solutions." ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." ts="Translated" qs="ToReview" />
+            <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions." ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Erro de servidor. Favor entrar em contato com a equipe de suporte em support@mysurvey.solutions." ts="Changed" qs="ToReview" />
             <li lc="ar" tx="خطأ في الملقم. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions." ts="Changed" qs="ToReview" />
@@ -396,12 +396,12 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="InvalidEndpoint" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Supervisor website address is invalid. Make sure that you entered correct url address." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Адрес сайта Supervisor неверный. Убедитесь, что вы ввели корректный url-адрес" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Supervisor website address is invalid. Make sure that you entered correct url address" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Адрес сайта Supervisor неверный. Убедитесь, что Вы ввели корректный url-адрес" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу." ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="La dirección del sitio web del supervisor no es válida. Asegúrese de que ha introducido la dirección url correcta." ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="แอดเดรสของเว็บไซต์ Survey Solutions Supervisor ไม่ถูกต้อง กรุณาระบุแอดเดรสที่ถูกต้อง" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Alamat situs Supervisor tidak benar. Pastikan bahwa Anda memasukkan alamat url yang benar." ts="Translated" qs="ToReview" />
+            <li lc="th-TH" tx="แอดเดรสของเว็บไซต์ Survey Solutions Supervisor ไม่ถูกต้อง กรุณาระบุแอดเดรสที่ถูกต้อง" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Alamat situs Supervisor tidak benar. Pastikan bahwa Anda memasukkan alamat url yang benar." ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Địa chỉ trang web giám sát là không hợp lệ. Hãy chắc chắn rằng bạn nhập đúng địa chỉ url." ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Endereço do site supervisor é inválido. Certifique-se de que você digitou o endereço correto do url." ts="Changed" qs="ToReview" />
             <li lc="ar" tx="المشرف على الموقع عنوان غير صالح. تأكد من أنك قمت بإدخال عنوان url الصحيح." ts="Changed" qs="ToReview" />
@@ -425,7 +425,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Login_Online_Signin_Explanation_message" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You could try to sign in online if you forgot your password or it was reset" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Вы можете попробовать войти онлайн, если вы забыли пароль или он был изменен" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Вы можете попробовать войти онлайн, если Вы забыли пароль или он был изменен" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Ви може спробувати увійти онлайн, якщо ви забули пароль або його було скинуто" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Puede intentar conectar en línea si olvidó su contraseña o la reseteó" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ควรลองเข้าสู่ระบบแบบออนไลน์ ถ้าคุณลืมรหัสผ่านหรือรหัสผ่านถูกเปลี่ยน" ts="Translated" qs="ToReview" />
@@ -439,7 +439,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Login_Online_SignIn_Failed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Authentication problem on the remote server too. Please contact your Supervisor or Headquarter" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Пролемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Проблемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Проблема аутентифікації на віддаленому сервері. Зверніться до свого супервізора або до штаб-квартири" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Problema de autenticación en el servidor remoto también. Por favor, póngase en contacto con su Supervisor u oficina central" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="มีปัญหาการยืนยันตัวตน กรุณาติดต่อ Supervisor หรือ Headqurater" ts="Translated" qs="ToReview" />
@@ -473,7 +473,7 @@
             <li lc="th-TH" tx="เว็บไซต์ Survey Solutions Supervisor อยู่ระหว่างการบำรุงรักษา ขออภัยในความไม่สะดวก" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Situs Penyelia Survey Solutions sedang pada modus perawatan. Maaf untuk ketidaknyamanannya" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Các trang web của cuộc khảo sát giải pháp giám sát là về chế độ bảo trì bây giờ. Xin lỗi vì sự bất tiện" ts="Changed" qs="ToReview" />
-            <li lc="pt-PT" tx="O site de Survey Solutions Supervisor agora ésta em modo de manutenção. Desculpe pela inconveniência" er="" ts="Translated" qs="ToReview" />
+            <li lc="pt-PT" tx="O site de Survey Solutions Supervisor agora ésta em modo de manutenção. Desculpe pela inconveniência" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="موقع على شبكة الإنترنت &quot;استقصاء الحلول المشرف&quot; الآن في وضع الصيانة. نأسف للإزعاج" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Le site web de l'application Supervisor est en cours de maintenantance. Désolé pour le désagrément" ts="Changed" qs="ToReview" />
           </lis>
@@ -559,7 +559,7 @@
             <li lc="vi-VN" tx="Không có mạng. Kiểm tra cài đặt mạng của bạn" ts="Translated" qs="AutoTranslated" />
             <li lc="pt-PT" tx="Não há rede. Verifique suas configurações de rede" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عدم وجود شبكة اتصال. تحقق من إعدادات شبكة الاتصال الخاصة بك" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Aucune connexion. Vérifiez vos paramètres sans fil et réseaux" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr-FR" tx="Aucune connexion. Vérifiez vos paramètres sans fil et réseaux" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_AboutApplication" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -618,20 +618,6 @@
             <li lc="fr-FR" tx="Taille du paquet de communication" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_ClientRegistrationIdTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Client Registration ID:" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="ID регистрации:" er="" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Реєстраційний код клієнта:" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="ID de registro de cliente: " ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="รหัสการลงทะเบียนของเครื่องที่ใช้" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="ID Pendaftaran Klien:" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Khách hàng đăng ký ID:" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="ID de registro do cliente:" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="معرف تسجيل العميل:" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="ID d'enregistrement client:" ts="Translated" qs="AutoTranslated" />
-          </lis>
-        </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_ConnectionSettings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Connection settings" ts="Translated" qs="ToReview" />
@@ -649,7 +635,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_DeviceIdTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Device ID:" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="ID устройства:" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="ID устройства:" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Ідентифікатор пристрою:" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Identificación (ID) del dispositivo:" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="หมายเลขเครื่องที่ใช้งาน :" ts="Translated" qs="ToReview" />
@@ -658,20 +644,6 @@
             <li lc="pt-PT" tx="ID do dispositivo:" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="معرف الجهاز:" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="ID d'appareil:" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_EndpointSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="URL that is used to communicate with supervisor application" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="URL-адрес, который используется для связи с приложением руководителя" ts="Translated" qs="AutoTranslated" />
-            <li lc="uk-UA" tx="URL-адреса, що використовується для спілкування з додатком супервізора" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Dirección URL que se utiliza para comunicarse con la aplicación de supervisor " ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="URL ที่ใช้ในการติดต่อกับ Survey Solutions Supervisor " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="URL yang digunakan untuk berkomunikasi dengan aplikasi penyelia" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="URL được sử dụng để giao tiếp với giảng viên hướng dẫn ứng dụng" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="URL que é usada para se comunicar com o aplicativo supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="عنوان URL الذي يتم استخدامه للاتصال مع المشرف على التطبيق" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="L'URL utilisé pour communiquer avec l'application Supervisor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_EndpointTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -707,7 +679,7 @@
             <li lc="nn-nn" tx="GPS Receive timeout" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Время ожидания получения GPS" ts="Translated" qs="AutoTranslated" />
             <li lc="uk-UA" tx="Час очікування GPS" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Tiempo de espera para la recepción de GPS" er="" ts="Translated" qs="ToReview" />
+            <li lc="es-ES" tx="Tiempo de espera para la recepción de GPS" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="กำหนดเวลาในการจับพิกัด" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Waktu menerima GPS sudah habis" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="GPS nhận được thời gian chờ" ts="Translated" qs="AutoTranslated" />
@@ -742,20 +714,6 @@
             <li lc="pt-PT" tx="Tempo limite de resposta do servidor" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مهلة استجابة الملقم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Délai de réponse du serveur a expiré" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_InstallationIdTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Installation ID:" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="ID установки:" er="" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="КОД інсталяції:" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="Identificación (ID) de instalación:" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="รหัสการติดตั้ง:" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="ID instalasi:" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="ID cài đặt:" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="ID de instalação:" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="معرف التثبيت:" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="ID d'installation:" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Prefs_InterviewSettings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -817,7 +775,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="ServiceUnavailable" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No connection to the Survey Solutions Supervisor. Please make sure that the website is available." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Невозможно подключиться к Survey Solutions Supervisor. Убедитесь, что сайт доступен." er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Невозможно подключиться к Survey Solutions Supervisor. Убедитесь, что сайт доступен." ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Немає зв'язку з додатком супервізора. Будь ласка, переконайтеся, що веб-сайт доступний." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="No hay conexión con el Survey Solutions Supervisor. Por favor, asegúrese de que el sitio web está disponible." ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่สามารถเชื่อมต่อกับเว็บไซต์ Survey Solutions Supervisor กรุณาตรวจสอบให้แน่ใจว่าเว็บไซต์พร้อมใช้งาน" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
@@ -840,20 +798,6 @@
             <li lc="pt-PT" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء الأمر" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Annuler" ts="Translated" qs="AutoTranslated" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Conditions_Validations" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="conditions/validations" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="условия/проверки" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="умови/перевірки" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="condiciones/validaciones" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="เงื่อนไข/การตรวจสอบ" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="kondisi/validasi" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="điều kiện/validations" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="condições/validações" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="الشروط/عمليات التحقق من الصحة" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="conditions/validations" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Download_Description_Format" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -882,20 +826,6 @@
             <li lc="pt-PT" tx="Atualizando as atribuições" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحديث تعيينات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="En cours de mettre à jour les affectations" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Some assignments were updated" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Некоторые интервью были обновлены" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Деякі призначення були оновлені" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Se actualizaron algunas tareas" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="การมอบหมายงานบางส่วนถูกปรับปรุง" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Beberapa tugas diperbarui" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Một số bài tập đã được Cập Nhật" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="Algumas atribuições foram atualizadas" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="تم تحديث بعض التعيينات" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Certaines affectations ont été mises à jour" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_State_DeletedInterviews_Format" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -957,7 +887,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Synchronization was interrupted, please try again" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Синхронизация оборвалась. Повторите попытку позже, пожалуйста" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Синхронизация оборвалась. Повторите попытку позже, пожалуйста" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Синхронізація була перервана, будь ласка, спробуйте ще раз" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Sincronización interrumpida, por favor, inténtelo de nuevo" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="การซิงโครไนส์ไม่สำเร็จ กรุณาลองอีกครั้ง" ts="Translated" qs="ToReview" />
@@ -1055,7 +985,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Success_State_NewInterviews_Format" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} new interviews downloaded" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="{0} новых интервью скачано" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="{0} новых интервью скачано" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="{0} нових інтерв'ю було скачано" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="{0} nuevas entrevistas descargadas" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="การสัมภาษณ์ที่ถูกดาวน์โหลดใหม่ : {0}" ts="Translated" qs="ToReview" />
@@ -1099,7 +1029,7 @@
             <li lc="nn-nn" tx="Synchronization succesfully completed" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Синхронизация успешно завершена" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Синхронізацію успішно завершено" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="Sincronización completada con éxito" er="" ts="Translated" qs="ToReview" />
+            <li lc="es-ES" tx="Sincronización completada con éxito" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="การ Synchronize เสร็จสมบูรณ์" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Sinkronisasi berhasil diselesaikan" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Đồng bộ hoá thành công hoàn thành" ts="Translated" qs="AutoTranslated" />
@@ -1134,34 +1064,6 @@
             <li lc="pt-PT" tx="{0} de {1} {2} feito" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} من {1} {2} عمله" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="{0} de {1} {2} envoyés" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_Images_Text" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="images" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="картинки" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="зображення" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="imágenes" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="รูปภาพ" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="gambar" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="hình ảnh" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="imagens" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="الصور" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="images" ts="Translated" qs="AutoTranslated" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_ImagesByInterviews_Text" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="images by interviews" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="картинки по интервью" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="зображення по інтерв'ю" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="imágenes por entrevistas" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="รูปภาพจากการสัมภาษณ์" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="gambar oleh wawancara" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="hình ảnh của cuộc phỏng vấn" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="imagens por entrevistas" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="الصور عن طريق المقابلات" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="images par entretiens" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_Interviews_Text" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1250,16 +1152,16 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_UserPassword_Update_Format" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Authentication problem. We were unable to confirm your interviewer account ('{0}'). &#xA;Your account may have one of the following problems: have a different password than you entered, be locked by Headquarter, or be deleted by Headquarter.&#xA;Please enter your updated password. If doing so does not resolve the problem, please contact your Supervisor or Headquarter." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Проблемы аутентификации. Мы не можем подтвердить ваш аккаунт интервьюера('{0}'). &#xD;&#xA;У вашего акканта возможны следующие проблемы: пароль отличается от того что вы вводили, аккаунт заблокирован или удален Хедквотером.&#xD;&#xA;Пожалуйста введите ваш обновленный пароль. Если проблема не будет решена, пожалйста, обратитесь к Супервизору или Хедквотеру." ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Проблема аутентифікації. Ми не змогли підтвердити ваш обліковий запис ('{0}'). &#xD;&#xA;Ваш обліковий запис, можливо має одну з таких проблем: відмінний від введеного пароль, заблокований штаб-квартирою або можливо видалиний. &#xD;&#xA;Будь ласка, спробуйте оновлений пароль. Якщо це не вирішить проблему, зверніться до свого супервізора або до штаб-квартири." ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Problema de autenticación. No ha sido posible confirmar su cuenta de entrevistador ('{0}'). Su cuenta puede tener uno de los siguientes problemas: tener una contraseña diferente a la que entró, estar bloqueada por la oficina central o haber sido borrada por la misma. &#xD;&#xA;Please introducir contraseña actualizada. Si esto no resuelve el problema, póngase en contacto con su Supervisor u oficina central.&#xD;&#xA;" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="ไม่สามารถยืนยันบัญชีผู้ใช้ได้ ({0}) อาจจะมีปัญหาอย่างใดอย่างหนึ่งต่อไปนี้ พิมพ์รหัสผ่านไม่ถูกต้อง บัญชีผู้ใช้ถูกล็อคโดย Headquarter บัญชีผู้ใช้ถูกลบโดย Headquarter กรุณาป้อนรหัสผ่านล่าสุด ถ้ายังไม่สามารถแก้ปัญหาได้ กรุณาติดต่อ Supervisor" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Masalah otentikasi. Kami tidak dapat mengkonfirmasi akun pewawancara Anda ('{0}').&#xD;&#xA;Akun Anda mungkin memiliki salah satu dari masalah berikut: memiliki password yang berbeda dari yang Anda masukkan, dikunci oleh Kantor Pusat, atau dihapus oleh Kantor Pusat.&#xD;&#xA;Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaikan masalah, silahkan hubungi Penyelia Anda atau Kantor Pusat." ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Vấn đề xác thực. Chúng tôi đã không thể xác nhận tài khoản của bạn phỏng vấn ('{0}'). &#xD;&#xA;your tài khoản có thể có một trong những vấn đề sau đây: có một mật khẩu khác nhau hơn bạn đã nhập, bị khóa bởi trụ sở chính, hoặc bị xóa bởi trụ. &#xD;&#xA;Please nhập mật khẩu của bạn Cập Nhật. Nếu làm như vậy không giải quyết vấn đề, xin vui lòng liên hệ với quản lý của bạn hoặc trụ sở chính." ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="Problema de autenticação. Fomos incapazes de confirmar sua conta do entrevistador ('{0}'). Sua conta pode ter um dos seguintes problemas: ter uma senha diferente do que você entrou, ser bloqueada pela sede, ou ser excluído pela sede. &#xD;&#xA;Favor a digitar sua senha atualizada. Se fazer isso não se resolve o problema, entre em contato com seu Supervisor ou sede." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="مشكلة مصادقة. لم نتمكن من تأكيد حسابك المقابلة ('{0}'). قد يكون لديك حساب &#xD;&#xA;Your واحدة من المشاكل التالية: يكون كلمة مرور مختلفة من دخل، ويكون مؤمناً بالمقر، أو حذف من قبل المقر. &#xD;&#xA;Please أدخل كلمة المرور المحدثة. في حالة القيام بذلك لا حل المشكلة، الرجاء الاتصال بالمشرف أو المقر." ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Problème d'authentification. Nous n'avons pas pu confirmer votre compte enquêteur ('{0}'). &#xD;&#xA;Votre compte peut avoir l'un des problèmes suivants : il a un mot de passe différent de celui que vous avez composé, il est été verrouillé par le quartier général, ou il a été supprimé par le quartier général. &#xD;&#xA;Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le problème, veuillez contacter votre superviseur ou le quartier général." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Authentication problem. We were unable to confirm your interviewer account ('{0}'). &#xD;&#xA;Your account may have one of the following problems: have a different password than you entered, be locked by Headquarter, or be deleted by Headquarter.&#xD;&#xA;Please enter your updated password. If doing so does not resolve the problem, please contact your Supervisor or Headquarter." ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись интервьюера ('{0}'). &#xD;&#xA;С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили, учетная запись заблокирована или удалена Хедквотером.&#xD;&#xA;Пожалуйста введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру." ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Проблема аутентифікації. Ми не змогли підтвердити ваш обліковий запис ('{0}'). &#xD;&#xA;Ваш обліковий запис, можливо має одну з таких проблем: відмінний від введеного пароль, заблокований штаб-квартирою або можливо видалиний. &#xD;&#xA;Будь ласка, спробуйте оновлений пароль. Якщо це не вирішить проблему, зверніться до свого супервізора або до штаб-квартири." ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Problema de autenticación. No ha sido posible confirmar su cuenta de entrevistador ('{0}'). Su cuenta puede tener uno de los siguientes problemas: tener una contraseña diferente a la que entró, estar bloqueada por la oficina central o haber sido borrada por la misma. &#xD;&#xA;Please introducir contraseña actualizada. Si esto no resuelve el problema, póngase en contacto con su Supervisor u oficina central.&#xD;&#xA;" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ไม่สามารถยืนยันบัญชีผู้ใช้ได้ ({0}) อาจจะมีปัญหาอย่างใดอย่างหนึ่งต่อไปนี้ พิมพ์รหัสผ่านไม่ถูกต้อง บัญชีผู้ใช้ถูกล็อคโดย Headquarter บัญชีผู้ใช้ถูกลบโดย Headquarter กรุณาป้อนรหัสผ่านล่าสุด ถ้ายังไม่สามารถแก้ปัญหาได้ กรุณาติดต่อ Supervisor" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Masalah otentikasi. Kami tidak dapat mengkonfirmasi akun pewawancara Anda ('{0}').&#xD;&#xA;Akun Anda mungkin memiliki salah satu dari masalah berikut: memiliki password yang berbeda dari yang Anda masukkan, dikunci oleh Kantor Pusat, atau dihapus oleh Kantor Pusat.&#xD;&#xA;Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaikan masalah, silahkan hubungi Penyelia Anda atau Kantor Pusat." ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Vấn đề xác thực. Chúng tôi đã không thể xác nhận tài khoản của bạn phỏng vấn ('{0}'). &#xD;&#xA;your tài khoản có thể có một trong những vấn đề sau đây: có một mật khẩu khác nhau hơn bạn đã nhập, bị khóa bởi trụ sở chính, hoặc bị xóa bởi trụ. &#xD;&#xA;Please nhập mật khẩu của bạn Cập Nhật. Nếu làm như vậy không giải quyết vấn đề, xin vui lòng liên hệ với quản lý của bạn hoặc trụ sở chính." ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Problema de autenticação. Fomos incapazes de confirmar sua conta do entrevistador ('{0}'). Sua conta pode ter um dos seguintes problemas: ter uma senha diferente do que você entrou, ser bloqueada pela sede, ou ser excluído pela sede. &#xD;&#xA;Favor a digitar sua senha atualizada. Se fazer isso não se resolve o problema, entre em contato com seu Supervisor ou sede." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="مشكلة مصادقة. لم نتمكن من تأكيد حسابك المقابلة ('{0}'). قد يكون لديك حساب &#xD;&#xA;Your واحدة من المشاكل التالية: يكون كلمة مرور مختلفة من دخل، ويكون مؤمناً بالمقر، أو حذف من قبل المقر. &#xD;&#xA;Please أدخل كلمة المرور المحدثة. في حالة القيام بذلك لا حل المشكلة، الرجاء الاتصال بالمشرف أو المقر." ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Problème d'authentification. Nous n'avons pas pu confirmer votre compte enquêteur ('{0}'). &#xD;&#xA;Votre compte peut avoir l'un des problèmes suivants : il a un mot de passe différent de celui que vous avez composé, il est été verrouillé par le quartier général, ou il a été supprimé par le quartier général. &#xD;&#xA;Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le problème, veuillez contacter votre superviseur ou le quartier général." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_Backup" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1349,7 +1251,7 @@
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_NewVerisonExist" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="New version exists. Would you like to download and update application?" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Найдена новая версия. Хотите ли вы скачать новую версию и обновить приложение?" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Найдена новая версия. Хотите ли Вы скачать новую версию и обновить приложение?" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Існує нова версія. Ви бажаєте завантажити та оновити додаток?" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Existe nueva versión. Le gustaría descargar y actualizar la aplicación?" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="มีเวอร์ชันใหม่แล้ว คุณต้องการดาวน์โหลดและปรับปรุง Survey solution Interviewer หรือไม่" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
@@ -1385,7 +1287,7 @@
             <li lc="vi-VN" tx="Tất cả dữ liệu hiện tại sẽ bị xóa. Bạn có chắc bạn muốn tiếp tục để khôi phục lại. Nếu có, xin vui lòng chắc chắn rằng dữ liệu khôi phục được trình bày tại {0}" ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Todos os dados atuais serão apagados. Tem certeza que deseja prosseguir para restaurar? Se sim, por favor certifique-se que restauração de dados é apresentada na {0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="سيتم مسح كافة البيانات الحالية. هل أنت متأكد من أنك تريد المضي قدما لاستعادة. إذا كان الجواب نعم، يرجى التأكد من استعادة البيانات ويرد على {0}" ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="Toutes les données actuelles seront supprimées. Êtes-vous sûr de vouloir continuer à restaurer? Si oui, assurez-vous que les données à restaurer sont disponibles à {0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr-FR" tx="Toutes les données actuelles seront supprimées. Êtes-vous sûr de vouloir continuer à restaurer? Si oui, assurez-vous que les données à restaurer sont disponibles à {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_CreatingInformationPackage" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1418,11 +1320,11 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_InformationPackageIsSuccessfullySent" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Information package is successfully sent." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Информационный пакет успешно отправлен" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Information package is successfully sent" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Информационный пакет успешно отправлен" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Інформаційний пакет успішно відправлено." ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Paquete de información enviado con éxito." ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="แพคเกจข้อมูลถูกส่งเรียบร้อยแล้ว" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="th-TH" tx="แพคเกจข้อมูลถูกส่งเรียบร้อยแล้ว" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="id-ID" tx="Paket informasi berhasil dikirim." ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Gói thông tin được gửi thành công." ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Pacote de informações é enviada com sucesso." ts="Changed" qs="ToReview" />
@@ -1477,7 +1379,7 @@
             <li lc="nn-nn" tx="Cancelling" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Отмена" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Скасування операції" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="Cancelando" er="" ts="Translated" qs="ToReview" />
+            <li lc="es-ES" tx="Cancelando" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="กำลังยกเลิก" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Membatalkan" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Hủy bỏ" ts="Translated" qs="AutoTranslated" />
@@ -1488,16 +1390,16 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_RestorationErrorMessage" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Something went wrong and tabled tablet failed to be restored" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Something went wrong and tabled failed to be restored" ts="Changed" qs="ToReview" />
             <li lc="ru-RU" tx="Произошла неизвестная ошибка при восстановлении резервной копии приложения" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Щось пішло не так і таблет не був відновлений" ts="Changed" qs="ToReview" />
-            <li lc="es-ES" tx="Algo salió mal y la tableta no se ha podido restablecer" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="เกิดข้อผิดพลาดบางอย่าง และการกู้คืนฐานข้อมูลใน Tablet ล้มเหลว" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Sesuatu yang tidak beres terjadi dan tabletnya gagal untuk di-restore" ts="Translated" qs="ToReview" />
+            <li lc="es-ES" tx="Algo salió mal y la tableta no se ha podido restablecer" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="เกิดข้อผิดพลาดบางอย่าง และการกู้คืนฐานข้อมูลใน Tablet ล้มเหลว" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Sesuatu yang tidak beres terjadi dan tabletnya gagal untuk di-restore" ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Một cái gì đó đã đi sai và tabled không được khôi phục" ts="Changed" qs="ToReview" />
-            <li lc="pt-PT" tx="Algo deu errado e não conseguiram  restaurar o tablet" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="pt-PT" tx="Algo deu errado e não conseguiram  restaurar o tablet" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
             <li lc="ar" tx="شيء ذهب خاطئ وطرحت فشل في استعادة" ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="Un problème est survenu. La tentative de restaurer la tablette a échoué" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr-FR" tx="Un problème est survenu. La tentative de restaurer la tablette a échoué" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_Restore" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1547,7 +1449,7 @@
             <li lc="nn-nn" tx="Sending of information package is failed" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Отправка информации об устройстве была прервана" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Невдале відправлення пакета інформації" ts="Changed" qs="ToReview" />
-            <li lc="es-ES" tx="Fallo en el envío de paquete de información" er="" ts="Translated" qs="ToReview" />
+            <li lc="es-ES" tx="Fallo en el envío de paquete de información" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="การส่งแพคเกจข้อมูลล้มเหลว" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Pengiriman paket informasi gagal" ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Gửi thông tin gói không thành công" ts="Changed" qs="ToReview" />
@@ -1586,14 +1488,14 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Troubleshooting_Unknown_ErrorMessage" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Error occurred on version check. Please, check settings or try again later." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Произошла ошибка при проверки версий. Пожалуйста, проверьте настройки приложения и повторите попытку позже" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="uk-UA" tx="Сталася помилка під час перевірки версії. Будь ласка, перевірте налаштування або повторіть спробу пізніше" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es-ES" tx="Error en la comprobación de la versión. Por favor, compruebe la configuración o inténtalo más tarde" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="th-TH" tx="เกิดข้อผิดพลาดในการตรวจสอบเวอร์ชัน กรุณาตรวจสอบการตั้งค่าหรือลองอีกครั้งภายหลัง" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Kesalahan terjadi pada pemeriksaan versi. Silahkan periksa kembali pengaturan atau coba lagi nanti" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Error occurred on version check. Please, check settings or try again later" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Произошла ошибка при проверки версий. Пожалуйста, проверьте настройки приложения и повторите попытку позже" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Сталася помилка під час перевірки версії. Будь ласка, перевірте налаштування або повторіть спробу пізніше" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Error en la comprobación de la versión. Por favor, compruebe la configuración o inténtalo más tarde" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="เกิดข้อผิดพลาดในการตรวจสอบเวอร์ชัน กรุณาตรวจสอบการตั้งค่าหรือลองอีกครั้งภายหลัง" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Kesalahan terjadi pada pemeriksaan versi. Silahkan periksa kembali pengaturan atau coba lagi nanti" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Có lỗi trên phiên bản kiểm tra. Xin vui lòng, hãy kiểm tra cài đặt hoặc thử lại sau." ts="Changed" qs="ToReview" />
-            <li lc="pt-PT" tx="Ocorreu um erro na verificação de versão. Por favor, verifique as configurações ou tente novamente mais tarde" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="pt-PT" tx="Ocorreu um erro na verificação de versão. Por favor, verifique as configurações ou tente novamente mais tarde" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ar" tx="حدث خطأ في التحقق من الإصدار. الرجاء التحقق من إعدادات أو حاول مرة أخرى لاحقاً." ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Erreur est survenue lors du contrôle de version du logiciel. Veuillez vérifiez les paramètres ou réessayer plus tard." ts="Changed" qs="ToReview" />
           </lis>
@@ -1602,7 +1504,7 @@
           <lis>
             <li lc="nn-nn" tx="Your login or password is incorrect" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Логин или пароль введены неверно" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Логін або пароль вказано невірно" er="" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Логін або пароль вказано невірно" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Su inicio de sesión o contraseña es incorrecto" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Login atau sandi Anda salah" ts="Translated" qs="ToReview" />
