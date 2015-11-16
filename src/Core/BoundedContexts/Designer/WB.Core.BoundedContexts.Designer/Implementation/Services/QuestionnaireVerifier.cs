@@ -243,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(question.ValidationExpression))
                 return false;
 
-            var exceeded = macrosSubstitutionService.SubstituteMacroses(question.ValidationExpression, questionnaire).Length > MaxExpressionLength;
+            var exceeded = macrosSubstitutionService.InlineMacros(question.ValidationExpression, questionnaire.Macros.Values).Length > MaxExpressionLength;
 
             state.HasExceededLimitByValidationExpresssionCharactersLength |= exceeded;
 
@@ -257,7 +257,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
 
-            var substituteMacroses = this.macrosSubstitutionService.SubstituteMacroses(customEnablementCondition, questionnaire);
+            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(customEnablementCondition, questionnaire.Macros.Values);
 
             var exceeded = substituteMacroses.Length > MaxExpressionLength;
 
@@ -512,13 +512,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> MacrosVerifier(
             Func<Macro, QuestionnaireDocument, bool> hasError, string code, string message)
         {
-            return (questionnaire, state) =>
-                questionnaire
+            return (questionnaire, state) => questionnaire
                     .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message,
-                    VerificationErrorLevel.General,
-                    CreateMacrosReference(entity.Key)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateMacrosReference(entity.Key)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
@@ -1034,7 +1031,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
             IEnumerable<IQuestion> incorrectReferencedQuestions = this.expressionProcessor
-                .GetIdentifiersUsedInExpression(macrosSubstitutionService.SubstituteMacroses(expression, questionnaire))
+                .GetIdentifiersUsedInExpression(macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values))
                 .Select(identifier => GetQuestionByIdentifier(identifier, questionnaire))
                 .Where(referencedQuestion => referencedQuestion != null)
                 .Where(isReferencedQuestionIncorrect)
@@ -1126,17 +1123,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByMacrosWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
         {
-            var macrosDuplicates = questionnaire
-                .Macros
-                .Where(x => !string.IsNullOrEmpty(x.Value.Name))
-                .GroupBy(x => x.Value.Name, StringComparer.InvariantCultureIgnoreCase)
-                .SelectMany(group => group.Skip(1));
-
-            foreach (var macrosDuplicate in macrosDuplicates)
-            {
-                yield return new QuestionnaireVerificationError("WB0020", VerificationMessages.WB0020_NameForMacrosIsNotUnique, 
-                    VerificationErrorLevel.General, CreateMacrosReference(macrosDuplicate.Key));
-            }
+            return questionnaire
+                    .Macros
+                    .Where(x => !string.IsNullOrEmpty(x.Value.Name))
+                    .GroupBy(x => x.Value.Name, StringComparer.InvariantCultureIgnoreCase)
+                    .Where(group => group.Count() > 1)
+                    .Select(group =>
+                            new QuestionnaireVerificationError(
+                                "WB0020",
+                                VerificationMessages.WB0020_NameForMacrosIsNotUnique,
+                                VerificationErrorLevel.General,
+                                group.Select(e => CreateMacrosReference(e.Key))));
         }
 
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(

@@ -1,11 +1,13 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class MacrosSubstitutionService : IMacrosSubstitutionService
     {
-        public string SubstituteMacroses(string expression, QuestionnaireDocument questionnaire)
+        public string InlineMacros(string expression, IEnumerable<Macro> macros)
         {
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
@@ -15,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return expression;
 
             var resultExpression = expression;
-            foreach (var macro in questionnaire.Macros.Values)
+            foreach (var macro in macros)
             {
                 resultExpression = resultExpression.Replace("$" + macro.Name, macro.Content);
             }

@@ -102,9 +102,9 @@ namespace WB.Core.BoundedContexts.Designer
                 .InitializesWith<CreateQuestionnaireCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateQuestionnaire(command.PublicKey, command.Title, command.CreatedBy, command.IsPublic))
                 .InitializesWith<ImportQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.ImportQuestionnaire(command.CreatedBy, command.Source))
                 // Macro
-                .Handles<AddMacroCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddMacro(command))
-                .Handles<DeleteMacroCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteMacro(command))
-                .Handles<UpdateMacroCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateMacro(command))
+                .Handles<AddMacro>(command => command.QuestionnaireId, aggregate => aggregate.AddMacro)
+                .Handles<DeleteMacro>(command => command.QuestionnaireId, aggregate => aggregate.DeleteMacro)
+                .Handles<UpdateMacro>(command => command.QuestionnaireId, aggregate => aggregate.UpdateMacro)
 
                 .Handles<AddGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index))
                 .Handles<AddSharedPersonToQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId))

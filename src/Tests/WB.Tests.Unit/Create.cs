@@ -163,19 +163,19 @@ namespace WB.Tests.Unit
                 return new ImportFromSupervisor(source);
             }
 
-            public static AddMacroCommand AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
+            public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
             {
-                return new AddMacroCommand(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+                return new AddMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-            public static DeleteMacroCommand DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
+            public static DeleteMacro DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
             {
-                return new DeleteMacroCommand(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+                return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-            internal static UpdateMacroCommand UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
+            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
             {
-                return new UpdateMacroCommand(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
+                return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
         }
 
@@ -1539,8 +1539,8 @@ namespace WB.Tests.Unit
         {
             var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
             macrosSubstitutionServiceMock.Setup(
-                x => x.SubstituteMacroses(It.IsAny<string>(), It.IsAny<QuestionnaireDocument>()))
-                .Returns((string e, QuestionnaireDocument questionnaire) =>
+                x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>()))
+                .Returns((string e, IEnumerable<Macro> macros) =>
                 {
                     return e;
                 });

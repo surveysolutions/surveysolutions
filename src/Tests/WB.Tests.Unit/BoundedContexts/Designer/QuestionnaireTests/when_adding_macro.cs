@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
-            addMacroCommand = Create.Command.AddMacro(questionnaireId, macroId, responsibleId);
+            addMacro = Create.Command.AddMacro(questionnaireId, macroId, responsibleId);
 
             eventContext = new EventContext();
         };
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext = null;
         };
 
-        Because of = () => questionnaire.AddMacro(addMacroCommand);
+        Because of = () => questionnaire.AddMacro(addMacro);
 
         It should_raise_MacroAdded_event_with_EntityId_specified = () =>
             eventContext.GetSingleEvent<MacroAdded>().EntityId.ShouldEqual(macroId);
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_raise_MacroAdded_event_with_ResponsibleId_specified = () =>
             eventContext.GetSingleEvent<MacroAdded>().ResponsibleId.ShouldEqual(responsibleId);
 
-        private static AddMacroCommand addMacroCommand;
+        private static AddMacro addMacro;
         private static Questionnaire questionnaire;
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

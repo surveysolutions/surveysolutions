@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
-            updateMacroCommand = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, responsibleId);
+            updateMacro = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, responsibleId);
 
             eventContext = new EventContext();
         };
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext = null;
         };
 
-        Because of = () => questionnaire.UpdateMacro(updateMacroCommand);
+        Because of = () => questionnaire.UpdateMacro(updateMacro);
 
         It should_raise_MacroUpdated_event_with_EntityId_specified = () =>
             eventContext.GetSingleEvent<MacroUpdated>().EntityId.ShouldEqual(macroId);
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_raise_MacroUpdated_event_with_Description_specified = () =>
             eventContext.GetSingleEvent<MacroUpdated>().Description.ShouldEqual(description);
 
-        private static UpdateMacroCommand updateMacroCommand;
+        private static UpdateMacro updateMacro;
         private static Questionnaire questionnaire;
         private static readonly string name = "macros";
         private static readonly string content = "macros content";
