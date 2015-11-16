@@ -186,6 +186,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(question.Id, questionRosterVector, (decimal[][])(question.Answer));
                     }
+                    if (question.Answer is AnsweredYesNoOption[])
+                    {
+                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, ConvertToYesNoAnswers((AnsweredYesNoOption[])question.Answer));
+                    }
                     if (question.Answer is Tuple<decimal, string>[])
                     {
                         this.ExpressionProcessorStatePrototype.UpdateTextListAnswer(question.Id, questionRosterVector, (Tuple<decimal, string>[])(question.Answer));
@@ -550,6 +554,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             state.UpdateTextListAnswer(questionId, rosterVector, null);
             state.UpdateLinkedSingleOptionAnswer(questionId, rosterVector, null);
             state.UpdateLinkedMultiOptionAnswer(questionId, rosterVector, null);
+            state.UpdateYesNoAnswer(questionId, rosterVector, null);
         }
 
         #region Dependencies
