@@ -1,8 +1,8 @@
 ﻿using System.Web;
 using System.Web.Http.Controllers;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.UI.Headquarters.Code;
 using System.Web.Http.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -12,9 +12,9 @@ namespace WB.UI.Headquarters.Filters
         {
             if (!LegacyOptions.SupervisorFunctionsEnabled)
             {
-                var controller = filterContext.ControllerContext.Controller as InterviewerSyncController;
+                var interviewerDevicesController = filterContext.ControllerContext.Controller as InterviewerDevicesController;
 
-                if (controller != null)
+                if (interviewerDevicesController != null)
                 {
                     throw new HttpException(404, "synchronization controller is missing with current web site configuration");
                 }

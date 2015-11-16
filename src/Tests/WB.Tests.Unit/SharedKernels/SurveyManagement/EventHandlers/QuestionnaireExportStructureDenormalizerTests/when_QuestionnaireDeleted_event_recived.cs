@@ -8,13 +8,17 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
@@ -29,10 +33,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         {
             questionnaireId = Guid.NewGuid();
             questionnaireExportStructureMock = new Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>>();
-            dataExportService = new Mock<IDataExportRepositoryWriter>();
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportService.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>());
+                questionnaireExportStructureMock.Object, Mock.Of<IExportViewFactory>(), Mock.Of<IPlainQuestionnaireRepository>());
         };
 
         Because of = () =>
@@ -41,10 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         It should_QuestionnaireExportStructure_be_deleted_from_readside = () =>
             questionnaireExportStructureMock.Verify(x => x.Remove(questionnaireId.FormatGuid() + "$" + QuestionnaireVersion),
                 Times.Once());
-
-        It should_exported_data_be_deleted_by_IDataExportService = () =>
-            dataExportService.Verify(x => x.DeleteExportedDataForQuestionnaireVersion(questionnaireId, QuestionnaireVersion),
-                Times.Once());
+        
 
         protected static IPublishedEvent<QuestionnaireDeleted> CreatePublishableEvent()
         {
@@ -57,8 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
 
         private static QuestionnaireExportStructureDenormalizer questionnaireExportStructureDenormalizer;
         private static Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>> questionnaireExportStructureMock;
-
-        private static Mock<IDataExportRepositoryWriter> dataExportService;
         private static Guid questionnaireId;
         private const int QuestionnaireVersion = 2;
     }

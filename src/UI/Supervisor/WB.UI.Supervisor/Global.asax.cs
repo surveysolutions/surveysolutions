@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
@@ -24,6 +26,8 @@ namespace WB.UI.Supervisor
     using System.Web.Routing;
 
     using Supervisor.App_Start;
+    using Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+    using Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -39,7 +43,8 @@ namespace WB.UI.Supervisor
         }
 
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-        
+        private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new ReplacePrincipal());
@@ -69,10 +74,12 @@ namespace WB.UI.Supervisor
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
-            this.logger.Fatal("Unexpected error occurred", lastError);
+            if (lastError.IsHttpNotFound()) return;
+
+            this.logger.Error("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
-                this.logger.Fatal("Unexpected error occurred", lastError.InnerException);
+                this.logger.Error("Unexpected error occurred", lastError.InnerException);
             }
         }
 
@@ -103,7 +110,24 @@ namespace WB.UI.Supervisor
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
 
-            //AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
+            try
+            {
+                var checkStatus = healthCheckService.Check();
+                if (checkStatus.Status == HealthCheckStatus.Down)
+                {
+                    var hostName = Dns.GetHostName();
+                    this.logger.Fatal(string.Format("Initial Health Check for {0} failed. Result: {1}", hostName, checkStatus.GetStatusDescription()));
+                }
+            }
+            catch (Exception exc)
+            {
+                this.logger.Fatal("Error on checking application health.", exc);
+            }
+        }
+
+        protected void Application_End()
+        {
+            this.logger.Info("Ending application.");
         }
 
         private static void RegisterVirtualPathProvider()

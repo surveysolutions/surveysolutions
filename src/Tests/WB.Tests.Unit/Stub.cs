@@ -2,7 +2,6 @@ using System;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Plugins.Messenger;
 using Moq;
-using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -57,10 +56,10 @@ namespace WB.Tests.Unit
 
         public static IInterviewExpressionStatePrototypeProvider InterviewExpressionStateProvider()
         {
-            var expressionState = new StronglyTypedInterviewEvaluator();
+            var expressionState = new InterviewExpressionStateStub();
 
-            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
-                => _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
+            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ => 
+                _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState);
         }
     }
 }

@@ -17,18 +17,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
-            questionnaire.Apply(new NumericQuestionAdded
-            {
-                PublicKey = rosterSizeQuestionId,
-                IsInteger = true,
-                GroupPublicKey = anotherRosterId
-            });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = anotherRosterId,
-                QuestionType = QuestionType.MultyOption
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded
+            (
+                publicKey : rosterSizeQuestionId,
+                isInteger : true,
+                groupPublicKey : anotherRosterId
+            ));
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : rosterTitleQuestionId,
+                groupPublicKey : anotherRosterId,
+                questionType : QuestionType.MultyOption
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, groupId));
             questionnaire.Apply(new RosterChanged(responsibleId, groupId){
@@ -55,7 +55,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 options: options,
                 linkedToQuestionId: linkedToQuestionId,
                 areAnswersOrdered: areAnswersOrdered,
-                maxAllowedAnswers: maxAllowedAnswers
+                maxAllowedAnswers: maxAllowedAnswers,
+                yesNoView: yesNoView
                 ));
 
         It should_throw_QuestionnaireException = () =>
@@ -84,5 +85,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static Option[] options = null;
         private static bool areAnswersOrdered = false;
         private static int? maxAllowedAnswers = null;
+        private static bool yesNoView = false;
     }
 }

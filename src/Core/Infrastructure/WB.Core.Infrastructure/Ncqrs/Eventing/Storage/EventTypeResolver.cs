@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -12,6 +9,11 @@ namespace Ncqrs.Eventing.Storage
 
         public Type ResolveType(string eventName)
         {
+            if (!KnownEventDataTypes.ContainsKey(eventName))
+            {
+                throw new ArgumentException($"There is no event with name {eventName} registered", nameof(eventName));
+            }
+
             return KnownEventDataTypes[eventName];
         }
 

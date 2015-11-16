@@ -14,18 +14,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestion1Id,
-                GroupPublicKey = chapterId,
-                IsInteger = true
-            });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestion2Id,
-                GroupPublicKey = chapterId,
-                IsInteger = true
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey : rosterSizeQuestion1Id,
+                groupPublicKey : chapterId,
+                isInteger : true
+            ));
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey : rosterSizeQuestion2Id,
+                groupPublicKey : chapterId,
+                isInteger : true
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = targetGroupId, ParentGroupPublicKey = chapterId});
             questionnaire.Apply(new GroupBecameARoster(responsibleId, targetGroupId));
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: targetGroupId){
@@ -45,11 +43,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 });
 
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = sourceRosterId });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = groupFromRosterId
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey : rosterTitleQuestionId,
+                groupPublicKey : groupFromRosterId
+            ));
         };
 
         Because of = () =>

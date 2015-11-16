@@ -69,6 +69,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
@@ -146,6 +150,10 @@
     </Reference>
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NLog.4.1.2\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -260,6 +268,9 @@
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
+    <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
+    <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
     <Compile Include="Code\Implementation\ShareChangeType.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
@@ -269,6 +280,8 @@
     <Compile Include="Code\Implementation\MailNotifier.cs" />
     <Compile Include="Code\IRecipientNotifier.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
+    <Compile Include="Implementation\Services\AuthenticationService.cs" />
+    <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
@@ -285,8 +298,8 @@
     <Compile Include="Code\AccountRepositoryFactory.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
-    <Compile Include="Code\ICommandPreprocessor.cs" />
-    <Compile Include="Code\Implementation\CommandPreprocessor.cs" />
+    <Compile Include="Code\ICommandInflater.cs" />
+    <Compile Include="Code\Implementation\CommandInflater.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
@@ -385,6 +398,8 @@
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="WebServices\IPublicService.cs" />
     <Compile Include="WebServices\PublicService.cs" />
@@ -411,7 +426,12 @@
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
+    <EmbeddedResource Include="Scripts\components\query-string.js" />
     <Content Include="Scripts\editForm.js" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -430,8 +450,11 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <Content Include="Scripts\viewmodels\pages\login.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
@@ -447,6 +470,8 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
+    <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
@@ -1143,6 +1168,7 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\gulpfile.js" />
+    <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1192,6 +1218,7 @@
     <Content Include="Views\SystemMailer\TargetPersonStopShareNotification.cshtml" />
     <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
     <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
+    <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1267,13 +1294,12 @@
     <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="UpdatedDesigner\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
     <Content Include="UpdatedDesigner\package.json" />
-    <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>

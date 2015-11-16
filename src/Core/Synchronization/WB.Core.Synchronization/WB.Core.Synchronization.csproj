@@ -80,7 +80,6 @@
     <Compile Include="Commands\RegisterTabletCommand.cs" />
     <Compile Include="Documents\ClientDeviceDocument.cs" />
     <Compile Include="Documents\TabletDocument.cs" />
-    <Compile Include="Documents\TabletSyncLog.cs" />
     <Compile Include="EventHandler\TabletDenormalizer.cs" />
     <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />
     <Compile Include="Events\Sync\NewClientDeviceCreated.cs" />
@@ -89,14 +88,10 @@
     <Compile Include="Events\Sync\UpdateRegisteredDevice.cs" />
     <Compile Include="IBackupManager.cs" />
     <Compile Include="IIncomingSyncPackagesQueue.cs" />
-    <Compile Include="Implementation\SyncLogger\SyncLogger.cs" />
     <Compile Include="IncomingSyncPackage.cs" />
     <Compile Include="IncomingSyncPackageException.cs" />
     <Compile Include="ISyncPackagesProcessor.cs" />
     <Compile Include="Implementation\ImportManager\DefaultBackupManager.cs" />
-    <Compile Include="Implementation\SyncManager\SyncManager.cs" />
-    <Compile Include="ISyncManager.cs" />
-    <Compile Include="Mapping\TabletSyncLogMap.cs" />
     <Compile Include="MetaInfo\IMetaInfoBuilder.cs" />
     <Compile Include="MetaInfo\MetaInfoBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,11 +105,7 @@
     <Compile Include="SyncSettings.cs" />
     <Compile Include="SyncStorage\InterviewResponsible.cs" />
     <Compile Include="SyncStorage\InterviewSyncPackageMeta.cs" />
-    <Compile Include="SyncStorage\ISyncLogger.cs" />
-    <Compile Include="SyncStorage\ISyncPackage.cs" />
-    <Compile Include="SyncStorage\QuestionnaireSyncPackageMeta.cs" />
     <Compile Include="SyncStorage\SyncPackageNotFoundException.cs" />
-    <Compile Include="SyncStorage\UserSyncPackageMeta.cs" />
     <Compile Include="ZipFileData.cs" />
   </ItemGroup>
   <ItemGroup>

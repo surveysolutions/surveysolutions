@@ -6,11 +6,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewExportedDataEventHandlerTests;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
                result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
-                CreateInterviewDataWith2PropagatedLevels(), InterviewExportedAction.Completed);
+                CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.ShouldEqual(2);
@@ -107,10 +107,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 var newLevel = new InterviewLevel(new ValueVector<Guid> { rosterSizeQuestionId }, null, vector);
                 interview.Levels.Add(string.Join(",", vector), newLevel);
                 
-                if (!newLevel.QuestionsSearchCahche.ContainsKey(questionInsideNestedGroupId))
-                    newLevel.QuestionsSearchCahche.Add(questionInsideNestedGroupId, new InterviewQuestion(questionInsideNestedGroupId));
+                if (!newLevel.QuestionsSearchCache.ContainsKey(questionInsideNestedGroupId))
+                    newLevel.QuestionsSearchCache.Add(questionInsideNestedGroupId, new InterviewQuestion(questionInsideNestedGroupId));
 
-                var question = newLevel.QuestionsSearchCahche[questionInsideNestedGroupId];
+                var question = newLevel.QuestionsSearchCache[questionInsideNestedGroupId];
 
                 question.Answer = someAnswer;
             }

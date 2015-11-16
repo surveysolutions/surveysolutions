@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView.Records[0].Parameters["roster"].ShouldEqual("1");
 
 
-        private static InterviewHistoryDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();
         private static InterviewHistoryView interviewHistoryView;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

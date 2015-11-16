@@ -16,7 +16,7 @@ namespace Main.Core.Entities
             string conditionExpression,
             string validationExpression,
             string validationMessage,
-            Order answerOrder,
+            Order? answerOrder,
             bool featured,
             bool capital,
             string instructions,
@@ -29,8 +29,8 @@ namespace Main.Core.Entities
             int? maxAllowedAnswers,
             int? maxAnswerCount,
             bool? isFilteredCombobox,
-            Guid? cascadeFromQuestionId
-            )
+            Guid? cascadeFromQuestionId,
+            bool? yesNoView)
         {
             this.PublicKey = publicKey;
             this.QuestionType = questionType;
@@ -56,6 +56,7 @@ namespace Main.Core.Entities
             this.MaxAnswerCount = maxAnswerCount;
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
+            this.YesNoView = yesNoView;
         }
 
         public readonly Guid PublicKey;
@@ -67,7 +68,7 @@ namespace Main.Core.Entities
         public readonly string ConditionExpression;
         public readonly string ValidationExpression;
         public readonly string ValidationMessage;
-        public readonly Order AnswerOrder;
+        public readonly Order? AnswerOrder;
         public readonly bool Featured;
         public readonly bool Capital;
         public readonly string Instructions;
@@ -83,5 +84,6 @@ namespace Main.Core.Entities
         public readonly int? MaxAnswerCount;
         public readonly bool? IsFilteredCombobox;
         public readonly Guid? CascadeFromQuestionId;
+        public readonly bool? YesNoView;
     }
 }

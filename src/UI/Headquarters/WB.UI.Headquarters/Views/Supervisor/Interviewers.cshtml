@@ -23,7 +23,7 @@
                 return {
                     SupervisorId: '@Model.SupervisorId',
                     ShowOnlyNotConnectedToDevice: @Model.ShowOnlyNotConnectedToDevice.ToString().ToLower()
-                };
+                    };
             };
             ko.applyBindings(model);
             model.load();
@@ -96,7 +96,10 @@
                 {
                     <th>Connected to device</th>
                 }
-                <th></th>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <th></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -108,7 +111,9 @@
                         <input type="checkbox" data-bind="checked: IsSelected" />
                     </td>
                 }
-                <td data-bind="text: UserName"></td>
+                <td>
+                    <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName"></a>
+                </td>
                 <td data-bind="text: CreationDate"></td>
                 <td>
                     <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
@@ -117,19 +122,14 @@
                 {
                     <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
                 }
-                <td>
-                    <a class="btn btn-success" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                        <i class="icon icon-edit icon-white"></i> Edit
-                    </a>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-danger" data-bind="click : $parent.archiveUser">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </a>
-                        </div>
-                    }
-                </td>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <td class="interviewers-list-actions-column">
+                        <a class="btn btn-danger" data-bind="click : $parent.archiveUser">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </a>
+                    </td>
+                }
             </tr>
             <!-- /ko -->
         </tbody>

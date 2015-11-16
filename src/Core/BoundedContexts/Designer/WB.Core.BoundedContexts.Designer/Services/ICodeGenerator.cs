@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface ICodeGenerator
     {
-        string Generate(QuestionnaireDocument questionnaire, Version targetVersion);
-        Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire, Version targetVersion);
+        Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion);
     }
 }

@@ -22,13 +22,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupId, ParentGroupPublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.Numeric,
-                IsInteger = true
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey : rosterSizeQuestionId,
+                groupPublicKey : chapterId,
+                questionType : QuestionType.Numeric,
+                isInteger: true
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
         };
 

@@ -38,6 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { typeof(GpsCoordinatesQuestionModel), Load<GpsCoordinatesQuestionViewModel> },
                 { typeof(MultimediaQuestionModel), Load<MultimedaQuestionViewModel> },
                 { typeof(QRBarcodeQuestionModel), Load<QRBarcodeQuestionViewModel> },
+                { typeof(YesNoQuestionModel), Load<YesNoQuestionViewModel> },
                 { typeof(GroupModel), Load<GroupViewModel> },
                 { typeof(RosterModel), Load<GroupViewModel>}
             };

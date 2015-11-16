@@ -39,6 +39,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_first_error_with_code__WB0078 = () =>
             resultErrors.First().Code.ShouldEqual("WB0078");
 
+        It should_return_error_with_level_general = () =>
+            resultErrors.First().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+
         It should_return_first_error_with_1_references = () =>
             resultErrors.First().References.Count().ShouldEqual(1);
 

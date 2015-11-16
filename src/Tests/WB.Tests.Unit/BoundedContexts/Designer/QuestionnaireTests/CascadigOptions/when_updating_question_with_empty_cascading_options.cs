@@ -19,11 +19,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             parentQuestionId = Guid.Parse("22222222222222222222222222222222");
             updatedQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = parentQuestionId,
-                QuestionType = QuestionType.SingleOption,
-                Answers = new[] {
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : parentQuestionId,
+                groupPublicKey:rootGroupId,
+                questionType : QuestionType.SingleOption,
+                answers : new[] {
                     new Answer
                     {
                         AnswerText = "one",
@@ -31,13 +32,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
                         PublicKey = Guid.NewGuid()
                     }
                 }
-            });
+            ));
 
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = updatedQuestionId,
-                QuestionType = QuestionType.SingleOption,
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : updatedQuestionId,
+                groupPublicKey: rootGroupId,
+                questionType : QuestionType.SingleOption
+            ));
 
             eventContext = new EventContext();
         };

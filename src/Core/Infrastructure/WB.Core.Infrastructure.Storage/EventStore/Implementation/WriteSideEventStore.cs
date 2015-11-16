@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -8,12 +9,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
+using EventStore.ClientAPI.Projections;
 using EventStore.ClientAPI.SystemData;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
@@ -48,6 +52,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
         readonly ILogger logger;
         readonly EventStoreSettings settings;
+        private readonly HashSet<string> eventStreamsToIgnore = new HashSet<string>(); 
+     
         bool disposed;
         static object lockObject = new Object();
 
@@ -67,6 +73,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 this.connection.ConnectAsync().WaitAndUnwrapException(cancellationTokenSource.Token);
             }
+
+            eventStreamsToIgnore = new HashSet<string>(settings.EventStreamsToIgnore);
         }
 
         public void Dispose()
@@ -77,6 +85,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
+         	var eventStreamName = GetStreamName(id);
+
+            if (this.eventStreamsToIgnore.Contains(eventStreamName))
+            {
+                throw new InvalidOperationException(string.Format("event stream '{0}' is ignored", eventStreamName));
+            }
             var normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
             var normalMax = Math.Min(int.MaxValue, maxVersion - 1);
             if (minVersion > maxVersion)
@@ -108,7 +122,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            var position = Position.Start;
+            Position position = Position.Start;
             AllEventsSlice slice;
 
             do
@@ -119,28 +133,109 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 foreach (var @event in slice.Events)
                 {
-                    if (!IsSystemEvent(@event))
+                    if (!IsSystemEvent(@event) && !IsEventStreamIgnored(@event))
                         yield return this.ToCommittedEvent(@event);
                 }
             } while (!slice.IsEndOfStream);
         }
 
-        public void Store(UncommittedEventStream eventStream)
+        public long GetEventsCountAfterPosition(EventPosition? position)
+        {
+            var totalCountOfEvents = this.CountOfAllEvents();
+            if (!position.HasValue)
+                return totalCountOfEvents;
+
+            var eventSlicesAfter = GetEventsAfterPosition(position);
+
+            foreach (var eventSlice in eventSlicesAfter)
+            {
+                var firstEventInSlice = eventSlice.FirstOrDefault();
+                if (firstEventInSlice != null)
+                    return totalCountOfEvents - firstEventInSlice.GlobalSequence + 1;
+            }
+
+            return 0;
+        }
+
+        public IEnumerable<EventSlice> GetEventsAfterPosition(EventPosition? position)
+        {
+            //if end of stream is empty slice
+            AllEventsSlice slice;
+
+            Position eventStorePosition = position.HasValue
+                ? new Position(position.Value.CommitPosition, position.Value.PreparePosition)
+                : Position.Start;
+
+            var shouldLookForLastHandledEvent = position.HasValue;
+            EventPosition? previousSliceEventPosition = null;
+            do
+            {
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, settings.MaxCountToRead, false));
+
+                var eventsInSlice = slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent).ToArray();
+
+                if (shouldLookForLastHandledEvent)
+                {
+                    IEnumerable<CommittedEvent> afterLastSuccessfullyHandledEvent =
+                        eventsInSlice.SkipWhile(
+                            x =>
+                                x.EventSourceId != position.Value.EventSourceIdOfLastEvent &&
+                                x.EventSequence != position.Value.SequenceOfLastEvent).ToArray();
+
+                    if (afterLastSuccessfullyHandledEvent.Any())
+                    {
+                        eventsInSlice = afterLastSuccessfullyHandledEvent.Skip(1).ToArray();
+                        shouldLookForLastHandledEvent = false;
+                    }
+                }
+
+                var lastHandledEvent = eventsInSlice.LastOrDefault();
+
+                if (lastHandledEvent == null)
+                {
+                    if (slice.IsEndOfStream)
+                    {
+                        if (previousSliceEventPosition.HasValue)
+                            yield return
+                                new EventSlice(Enumerable.Empty<CommittedEvent>(), previousSliceEventPosition.Value,
+                                    true);
+                        yield break;
+                    }
+                    eventStorePosition = slice.NextPosition;
+                    continue;
+                }
+
+                previousSliceEventPosition = new EventPosition(eventStorePosition.CommitPosition,
+                    eventStorePosition.PreparePosition,
+                    lastHandledEvent.EventSourceId, lastHandledEvent.EventSequence);
+
+                yield return
+                    new EventSlice(eventsInSlice, previousSliceEventPosition.Value, slice.IsEndOfStream);
+
+
+                eventStorePosition = slice.NextPosition;
+
+            } while (!slice.IsEndOfStream);
+        }
+
+        public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             if (eventStream.IsNotEmpty)
             {
                 var expectedStreamVersion = eventStream.InitialVersion - 1;
                 var stream = GetStreamName(eventStream.SourceId);
 
-                var events = eventStream.Select(BuildEventData).ToList();
-                using (var writeTimeout = new CancellationTokenSource())
-                {
-                    writeTimeout.CancelAfter(this.defaultTimeout);
+                List<Tuple<EventData, CommittedEvent>> dataToStore =
+                    eventStream.Select(@event => this.BuildEventData(@event, eventStream.CommitId)).ToList();
 
-                    this.connection.AppendToStreamAsync(stream, expectedStreamVersion, events)
-                        .WaitAndUnwrapException(writeTimeout.Token);
-                }
+                var eventDatas = dataToStore.Select(x => x.Item1);
+                var committedEvents = dataToStore.Select(x => x.Item2);
+
+                this.RunWithDefaultTimeout(this.connection.AppendToStreamAsync(stream, expectedStreamVersion, eventDatas));
+                return new CommittedEventStream(eventStream.SourceId, committedEvents);
             }
+
+            return new CommittedEventStream(eventStream.SourceId);
         }
 
         public int CountOfAllEvents()
@@ -159,15 +254,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return value != null ? value.count : 0;
         }
 
-        public long GetLastEventSequence(Guid id)
-        {
-            var slice = this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), 0, 1, false));
-            return slice.LastEventNumber + 1;
-        }
-
         static bool IsSystemEvent(ResolvedEvent @event)
         {
             return !@event.Event.EventStreamId.StartsWith(EventsPrefix);
+        }
+        private bool IsEventStreamIgnored(ResolvedEvent @event)
+        {
+            return this.eventStreamsToIgnore.Contains(@event.OriginalStreamId);
         }
 
         static string GetStreamName(Guid eventSourceId)
@@ -175,16 +268,32 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return EventsPrefix + eventSourceId.FormatGuid();
         }
 
-        CommittedEvent ToCommittedEvent(ResolvedEvent resolvedEvent)
+        private CommittedEvent ToCommittedEvent(ResolvedEvent resolvedEvent)
         {
-            var value = Encoding.GetString(resolvedEvent.Event.Data);
-            var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
             try
             {
-                var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
-                var eventData = JsonConvert.DeserializeObject(value,
-                    eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase()),
-                    JsonSerializerSettings);
+                EventMetada metadata;
+                object eventData;
+
+                var resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
+                var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
+                metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
+                if (resolvedEvent.Event.IsJson)
+                {
+                    var value = Encoding.GetString(resolvedEvent.Event.Data);
+                    eventData = JsonConvert.DeserializeObject(value,
+                        resolvedEventType,
+                        JsonSerializerSettings);
+                }
+                else
+                {
+                    var dataStream = new MemoryStream(resolvedEvent.Event.Data);
+                    dataStream.Seek(0, SeekOrigin.Begin);
+                    BsonReader dataReader = new BsonReader(dataStream);
+                    
+                    JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
+                    eventData = serializer.Deserialize(dataReader, resolvedEventType);
+                }
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
@@ -204,27 +313,60 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
         }
 
-        internal EventData BuildEventData(UncommittedEvent @event)
+        private Tuple<EventData, CommittedEvent> BuildEventData(UncommittedEvent @event, Guid commitId)
         {
-            var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
             var globalSequence = this.GetNextSequnce();
-            var metaData = JsonConvert.SerializeObject(new EventMetada
+            byte[] eventDataBytes;
+
+            var eventMetada = new EventMetada
             {
                 Timestamp = @event.EventTimeStamp,
                 Origin = @event.Origin,
                 EventSourceId = @event.EventSourceId,
                 GlobalSequence = globalSequence
-            });
-            @event.GlobalSequence = globalSequence;
+            };
+
+            var metaData = JsonConvert.SerializeObject(eventMetada);
+            var eventMetadataBytes = Encoding.GetBytes(metaData);
+            if (this.settings.UseBson)
+            {
+                eventDataBytes = SerializeToBson(@event.Payload);
+            }
+            else
+            {
+                var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
+                eventDataBytes = Encoding.GetBytes(eventString);
+            }
+
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
-                true,
-                Encoding.GetBytes(eventString),
-                Encoding.GetBytes(metaData));
-            return eventData;
+                !this.settings.UseBson,
+                eventDataBytes,
+                eventMetadataBytes);
+
+            var committedEvent = new CommittedEvent(commitId,
+                                          @event.Origin,
+                                          @event.EventIdentifier,
+                                          @event.EventSourceId,
+                                          @event.EventSequence,
+                                          @event.EventTimeStamp,
+                                          globalSequence,
+                                          @event.Payload);
+
+            return Tuple.Create(eventData, committedEvent);
         }
 
-        TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
+        private byte[] SerializeToBson(object data)
+        {
+            JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
+            MemoryStream payloadEventStream = new MemoryStream();
+
+            BsonWriter writer = new BsonWriter(payloadEventStream);
+            serializer.Serialize(writer, data);
+            return payloadEventStream.ToArray();
+        }
+
+        private TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
         {
             using (var timeoutTokenSource = new CancellationTokenSource())
             {
@@ -330,7 +472,13 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
         } 
     })";
 
-                    manager.CreateContinuousAsync(CountProjectionName, ProjectionQuery, userCredentials).WaitAndUnwrapException();
+                    manager.CreateContinuousAsync(CountProjectionName, ProjectionQuery, userCredentials)
+                        .WaitAndUnwrapException();
+                }
+                catch (Exception exception)
+                {
+                    this.logger.Fatal("Error on configuration Event Store", exception);
+                    throw;
                 }
             }
         }

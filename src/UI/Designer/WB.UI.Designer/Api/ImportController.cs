@@ -148,10 +148,12 @@ namespace WB.UI.Designer.Api
                     ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
                 });
             }
-            
+
+            var questionnaire = questionnaireView.Source;
+            questionnaire.Macros = null;
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaireView.Source)),
+                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)),
                 QuestionnaireAssembly = resultAssembly
             };
         }

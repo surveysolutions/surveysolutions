@@ -77,10 +77,11 @@ namespace WB.Tests.Unit
             Option[] options,
             Guid? linkedToQuestionId,
             bool areAnswersOrdered,
-            int? maxAllowedAnswers)
+            int? maxAllowedAnswers,
+            bool yesNoView)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers);
+            questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView);
         }
 
         public static void AddSingleOptionQuestion(

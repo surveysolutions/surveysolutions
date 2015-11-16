@@ -15,21 +15,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, questionnaireId: questionnaireId);
             questionnaire.Apply(new NewGroupAdded() {PublicKey = chapterId, GroupText = chapterTitle});
             
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = questionId,
-                GroupPublicKey = chapterId,
-                QuestionText = title,
-                ConditionExpression =  conditionExpression,
-                Instructions = instructions,
-                StataExportCaption = variableName,
-                CountOfDecimalPlaces = countOfDecimalPlaces,
-                Featured = isPrefilled,
-                IsInteger = isInteger,
-                QuestionScope = questionScope,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey : questionId,
+                groupPublicKey : chapterId,
+                questionText : title,
+                conditionExpression :  conditionExpression,
+                instructions : instructions,
+                stataExportCaption : variableName,
+                countOfDecimalPlaces : countOfDecimalPlaces,
+                featured : isPrefilled,
+                isInteger : isInteger,
+                questionScope : questionScope,
+                validationExpression : validationExpression,
+                validationMessage : validationMessage
+            ));
 
             eventContext = new EventContext();
         };

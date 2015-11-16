@@ -16,12 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             var brokenSyncPackagesStorage = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Warning(numberOfunhandledPackages,numberOfUnhandledPackagesErrorMessage));
             var chunkReader = Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(m => m.Check() == NumberOfSyncPackagesWithBigSizeCheckResult.Warning(numberOfSyncPackagesWithBigSize, numberOfSyncPackagesWithBigSizeErrorMessage));
             var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Down, currentUserName, allowedFoldersList, denidedFoldersList));
+            var readSideHealthChecker = Mock.Of<IAtomicHealthCheck<ReadSideHealthCheckResult>>(m => m.Check() == ReadSideHealthCheckResult.Happy());
 
             service = CreateHealthCheckService(
                 eventStoreHealthCheck,
                 brokenSyncPackagesStorage,
                 chunkReader,
-                folderPermissionChecker);
+                folderPermissionChecker,
+                readSideHealthChecker);
         };
 
         Because of = () =>

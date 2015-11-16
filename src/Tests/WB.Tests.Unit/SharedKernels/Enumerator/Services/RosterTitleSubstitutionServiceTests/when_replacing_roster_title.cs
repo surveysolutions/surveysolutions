@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
             rosterTitle = "rosterValue";
 
             var interview = Mock.Of<IStatefulInterview>(x => 
-                x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>()) == 
+                x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == 
                     new InterviewRoster { Title = rosterTitle });
 
             var questionnaire = new QuestionnaireModel { 

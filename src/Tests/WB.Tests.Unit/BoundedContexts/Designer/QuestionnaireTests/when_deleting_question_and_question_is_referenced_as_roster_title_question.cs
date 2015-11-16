@@ -21,12 +21,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = rosterSizeQuestionId,
-                QuestionType = QuestionType.Numeric,
-                GroupPublicKey = chapterId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey: rosterSizeQuestionId,
+                groupPublicKey: chapterId,
+                questionType: QuestionType.Numeric
+            ));
+            
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, GroupText = rosterTitle });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
             questionnaire.Apply(new RosterChanged(responsibleId, rosterId){
@@ -35,12 +35,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                     FixedRosterTitles =  null,
                     RosterTitleQuestionId =rosterTitleQuestionId 
                 });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = rosterTitleQuestionId,
-                QuestionType = QuestionType.Text,
-                GroupPublicKey = rosterId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey: rosterTitleQuestionId,
+                groupPublicKey: rosterId,
+                questionType: QuestionType.Text
+            ));
         };
 
         Because of = () =>

@@ -57,304 +57,304 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             this.questionnaireEntityFactory = questionnaireEntityFactory;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewQuestionnaireCreated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<NewQuestionnaireCreated> @event)
         {
             return this.CreateStateWithAllQuestions(new QuestionnaireDocument());
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<QuestionnaireCloned> @event)
         {
-            return this.CreateStateWithAllQuestions(evnt.Payload.QuestionnaireDocument);
+            return this.CreateStateWithAllQuestions(@event.Payload.QuestionnaireDocument);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<TemplateImported> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<TemplateImported> @event)
         {
-            return this.CreateStateWithAllQuestions(evnt.Payload.Source);
+            return this.CreateStateWithAllQuestions(@event.Payload.Source);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<NewQuestionAdded> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NewQuestionAddedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey.Value, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NewQuestionAddedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupPublicKey.Value, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<QuestionCloned> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionClonedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey.Value, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionClonedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupPublicKey.Value, question);
 
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionChanged> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<QuestionChanged> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(evnt));
-            return this.UpdateStateWithUpdatedQuestion(currentState, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QuestionChangedToQuestionData(@event));
+            return this.UpdateStateWithUpdatedQuestion(state, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<NumericQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<NumericQuestionAdded> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupPublicKey, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<NumericQuestionChanged> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<NumericQuestionChanged> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(evnt));
-            return this.UpdateStateWithUpdatedQuestion(currentState, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(@event));
+            return this.UpdateStateWithUpdatedQuestion(state, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<NumericQuestionCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<NumericQuestionCloned> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupPublicKey, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionClonedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupPublicKey, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<TextListQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<TextListQuestionAdded> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<TextListQuestionCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<TextListQuestionCloned> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.GroupId, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<TextListQuestionChanged> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<TextListQuestionChanged> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(evnt));
-            return this.UpdateStateWithUpdatedQuestion(currentState, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(@event));
+            return this.UpdateStateWithUpdatedQuestion(state, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<QRBarcodeQuestionAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<QRBarcodeQuestionAdded> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.ParentGroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<QRBarcodeQuestionUpdated> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(evnt));
-            return this.UpdateStateWithUpdatedQuestion(currentState, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionUpdatedToQuestionData(@event));
+            return this.UpdateStateWithUpdatedQuestion(state, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<QRBarcodeQuestionCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<QRBarcodeQuestionCloned> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(evnt));
-            return this.UpdateStateWithAddedQuestion(currentState, evnt.Payload.ParentGroupId, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionClonedToQuestionData(@event));
+            return this.UpdateStateWithAddedQuestion(state, @event.Payload.ParentGroupId, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<MultimediaQuestionUpdated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<MultimediaQuestionUpdated> @event)
         {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.MultimediaQuestionUpdatedToQuestionData(evnt));
-            return this.UpdateStateWithUpdatedQuestion(currentState, question);
+            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.MultimediaQuestionUpdatedToQuestionData(@event));
+            return this.UpdateStateWithUpdatedQuestion(state, question);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<StaticTextAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<StaticTextAdded> @event)
         {
-            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
-                text: evnt.Payload.Text);
-            return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
+                text: @event.Payload.Text);
+            return this.UpdateStateWithAddedStaticText(state, @event.Payload.ParentId, staticText);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<StaticTextUpdated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<StaticTextUpdated> @event)
         {
-            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
-                text: evnt.Payload.Text);
-            return this.UpdateStateWithUpdatedStaticText(currentState, staticText);
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
+                text: @event.Payload.Text);
+            return this.UpdateStateWithUpdatedStaticText(state, staticText);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<StaticTextCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<StaticTextCloned> @event)
         {
-            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId,
-                text: evnt.Payload.Text);
-            return this.UpdateStateWithAddedStaticText(currentState, evnt.Payload.ParentId, staticText);
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
+                text: @event.Payload.Text);
+            return this.UpdateStateWithAddedStaticText(state, @event.Payload.ParentId, staticText);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<StaticTextDeleted> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<StaticTextDeleted> @event)
         {
-            var staticText = currentState.StaticTexts.FirstOrDefault(x => x.Id == evnt.Payload.EntityId);
+            var staticText = state.StaticTexts.FirstOrDefault(x => x.Id == @event.Payload.EntityId);
             if (staticText != null)
             {
-                currentState.StaticTexts.Remove(staticText);   
+                state.StaticTexts.Remove(staticText);   
             }
-            return currentState;
+            return state;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionDeleted> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<QuestionDeleted> @event)
         {
-            if (currentState == null)
+            if (state == null)
             {
                 return null;
             }
 
-            var oldQuestion = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.QuestionId);
-            currentState.Questions.Remove(oldQuestion);
-            return currentState;
+            var oldQuestion = state.Questions.FirstOrDefault(x => x.Id == @event.Payload.QuestionId);
+            state.Questions.Remove(oldQuestion);
+            return state;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<QuestionnaireItemMoved> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<QuestionnaireItemMoved> @event)
         {
-            if (currentState == null)
+            if (state == null)
             {
                 return null;
             }
 
-            var question = currentState.Questions.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            var question = state.Questions.FirstOrDefault(x => x.Id == @event.Payload.PublicKey);
             if (question != null)
             {
-                question.ParentGroupId = evnt.Payload.GroupKey.Value;
-                UpdateBreadcrumbs(currentState, question, question.ParentGroupId);
-                return currentState;
+                question.ParentGroupId = @event.Payload.GroupKey.Value;
+                UpdateBreadcrumbs(state, question, question.ParentGroupId);
+                return state;
             }
-            var staticText = currentState.StaticTexts.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            var staticText = state.StaticTexts.FirstOrDefault(x => x.Id == @event.Payload.PublicKey);
             if (staticText != null)
             {
-                staticText.ParentGroupId = evnt.Payload.GroupKey.Value;
-                UpdateBreadcrumbs(currentState, staticText, staticText.ParentGroupId);
-                return currentState;
+                staticText.ParentGroupId = @event.Payload.GroupKey.Value;
+                UpdateBreadcrumbs(state, staticText, staticText.ParentGroupId);
+                return state;
             }
 
-            var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.PublicKey);
+            var group = state.Groups.FirstOrDefault(x => x.Id == @event.Payload.PublicKey);
             if (group != null)
             {
-                group.ParentGroupId = evnt.Payload.GroupKey ?? evnt.EventSourceId;
-                UpdateBreadcrumbs(currentState, group, group.Id);
+                group.ParentGroupId = @event.Payload.GroupKey ?? @event.EventSourceId;
+                UpdateBreadcrumbs(state, group, group.Id);
 
-                var descendantGroups = this.GetAllDescendantGroups(currentState, group.Id);
-                descendantGroups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
+                var descendantGroups = this.GetAllDescendantGroups(state, group.Id);
+                descendantGroups.ForEach(x => UpdateBreadcrumbs(state, x, x.Id));
 
-                var descendantQuestion = this.GetAllDescendantQuestions(currentState, group.Id);
-                descendantQuestion.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+                var descendantQuestion = this.GetAllDescendantQuestions(state, group.Id);
+                descendantQuestion.ForEach(x => UpdateBreadcrumbs(state, x, x.ParentGroupId));
 
-                var descendantStaticTexts = this.GetAllDescendantStaticTexts(currentState, group.Id);
-                descendantStaticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+                var descendantStaticTexts = this.GetAllDescendantStaticTexts(state, group.Id);
+                descendantStaticTexts.ForEach(x => UpdateBreadcrumbs(state, x, x.ParentGroupId));
             }
-            return currentState;
+            return state;
         }
 
-        //public void Delete(QuestionDetailsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt) { }
+        //public void Delete(QuestionDetailsCollectionView state, IPublishedEvent<QuestionnaireDeleted> event) { }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<NewGroupAdded> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<NewGroupAdded> @event)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.VariableName, evnt.Payload.Description,
-                evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
+            return UpdateStateWithAddedGroup(state, @event.Payload.PublicKey, @event.Payload.GroupText, @event.Payload.VariableName, @event.Payload.Description,
+                @event.Payload.ConditionExpression, @event.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupCloned> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<GroupCloned> @event)
         {
-            return UpdateStateWithAddedGroup(currentState, evnt.Payload.PublicKey, evnt.Payload.GroupText, evnt.Payload.VariableName, evnt.Payload.Description,
-                evnt.Payload.ConditionExpression, evnt.Payload.ParentGroupPublicKey ?? Guid.Empty);
+            return UpdateStateWithAddedGroup(state, @event.Payload.PublicKey, @event.Payload.GroupText, @event.Payload.VariableName, @event.Payload.Description,
+                @event.Payload.ConditionExpression, @event.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupDeleted> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<GroupDeleted> @event)
         {
-            if (currentState == null)
+            if (state == null)
             {
                 return null;
             }
 
-            var shouldBeDeletedGroups = GetAllDescendantGroups(currentState, evnt.Payload.GroupPublicKey);
-            shouldBeDeletedGroups.ForEach(x => currentState.Groups.Remove(x));
+            var shouldBeDeletedGroups = GetAllDescendantGroups(state, @event.Payload.GroupPublicKey);
+            shouldBeDeletedGroups.ForEach(x => state.Groups.Remove(x));
 
-            var shouldBeDeletedQuestions = GetAllDescendantQuestions(currentState, evnt.Payload.GroupPublicKey);
-            shouldBeDeletedQuestions.ForEach(x => currentState.Questions.Remove(x));
+            var shouldBeDeletedQuestions = GetAllDescendantQuestions(state, @event.Payload.GroupPublicKey);
+            shouldBeDeletedQuestions.ForEach(x => state.Questions.Remove(x));
 
-            var shouldBeDeletedStaticTexts = GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupPublicKey);
-            shouldBeDeletedStaticTexts.ForEach(x => currentState.StaticTexts.Remove(x));
+            var shouldBeDeletedStaticTexts = GetAllDescendantStaticTexts(state, @event.Payload.GroupPublicKey);
+            shouldBeDeletedStaticTexts.ForEach(x => state.StaticTexts.Remove(x));
 
 
-            return currentState;
+            return state;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<RosterChanged> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<RosterChanged> @event)
         {
-            if (currentState == null)
+            if (state == null)
             {
                 return null;
             }
 
-            var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
+            var group = state.Groups.FirstOrDefault(x => x.Id == @event.Payload.GroupId);
             if (group == null)
-                return currentState;
+                return state;
 
             group.IsRoster = true;
-            group.RosterSizeQuestionId = evnt.Payload.RosterSizeQuestionId;
-            group.RosterSizeSourceType = evnt.Payload.RosterSizeSource;
-            group.FixedRosterTitles = evnt.Payload.FixedRosterTitles;
-            group.RosterTitleQuestionId = evnt.Payload.RosterTitleQuestionId;
+            group.RosterSizeQuestionId = @event.Payload.RosterSizeQuestionId;
+            group.RosterSizeSourceType = @event.Payload.RosterSizeSource;
+            group.FixedRosterTitles = @event.Payload.FixedRosterTitles;
+            group.RosterTitleQuestionId = @event.Payload.RosterTitleQuestionId;
 
-            var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
-            var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
-            var staticTexts = this.GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupId);
-            groups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
-            questions.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
-            staticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+            var groups = this.GetAllDescendantGroups(state, @event.Payload.GroupId);
+            var questions = this.GetAllDescendantQuestions(state, @event.Payload.GroupId);
+            var staticTexts = this.GetAllDescendantStaticTexts(state, @event.Payload.GroupId);
+            groups.ForEach(x => UpdateBreadcrumbs(state, x, x.Id));
+            questions.ForEach(x => UpdateBreadcrumbs(state, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(state, x, x.ParentGroupId));
 
-            return currentState;
+            return state;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState,
-            IPublishedEvent<GroupStoppedBeingARoster> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
+            IPublishedEvent<GroupStoppedBeingARoster> @event)
         {
-            if (currentState == null)
+            if (state == null)
             {
                 return null;
             }
 
-            var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupId);
+            var group = state.Groups.FirstOrDefault(x => x.Id == @event.Payload.GroupId);
             if (group == null)
-                return currentState;
+                return state;
 
             group.IsRoster = false;
             group.RosterSizeQuestionId = null;
             group.FixedRosterTitles = new FixedRosterTitle[0];
             group.RosterTitleQuestionId = null;
 
-            var groups = this.GetAllDescendantGroups(currentState, evnt.Payload.GroupId);
-            var questions = this.GetAllDescendantQuestions(currentState, evnt.Payload.GroupId);
-            var staticTexts = this.GetAllDescendantStaticTexts(currentState, evnt.Payload.GroupId);
-            groups.ForEach(x => UpdateBreadcrumbs(currentState, x, x.Id));
-            questions.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
-            staticTexts.ForEach(x => UpdateBreadcrumbs(currentState, x, x.ParentGroupId));
+            var groups = this.GetAllDescendantGroups(state, @event.Payload.GroupId);
+            var questions = this.GetAllDescendantQuestions(state, @event.Payload.GroupId);
+            var staticTexts = this.GetAllDescendantStaticTexts(state, @event.Payload.GroupId);
+            groups.ForEach(x => UpdateBreadcrumbs(state, x, x.Id));
+            questions.ForEach(x => UpdateBreadcrumbs(state, x, x.ParentGroupId));
+            staticTexts.ForEach(x => UpdateBreadcrumbs(state, x, x.ParentGroupId));
 
-            return currentState;
+            return state;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<GroupUpdated> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<GroupUpdated> @event)
         {
-            if (currentState == null)
+            if (state == null)
             {
                 return null;
             }
 
-            var group = currentState.Groups.FirstOrDefault(x => x.Id == evnt.Payload.GroupPublicKey);
+            var group = state.Groups.FirstOrDefault(x => x.Id == @event.Payload.GroupPublicKey);
             if (group == null)
-                return currentState;
+                return state;
 
-            group.Title = evnt.Payload.GroupText;
-            group.EnablementCondition = evnt.Payload.ConditionExpression;
-            group.VariableName = evnt.Payload.VariableName;
+            group.Title = @event.Payload.GroupText;
+            group.EnablementCondition = @event.Payload.ConditionExpression;
+            group.VariableName = @event.Payload.VariableName;
 
-            return currentState;
+            return state;
         }
 
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView currentState, IPublishedEvent<QuestionnaireDeleted> evnt)
+        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<QuestionnaireDeleted> @event)
         {
             return null;
         }

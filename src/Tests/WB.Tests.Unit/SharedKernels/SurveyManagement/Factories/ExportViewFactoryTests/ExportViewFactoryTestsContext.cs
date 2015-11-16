@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
@@ -72,14 +73,28 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var interviewData = CreateInterviewData();
             foreach (var questionsWithAnswer in questionsWithAnswers)
             {
-                if (!interviewData.Levels["#"].QuestionsSearchCahche.ContainsKey(questionsWithAnswer))
-                    interviewData.Levels["#"].QuestionsSearchCahche.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
+                if (!interviewData.Levels["#"].QuestionsSearchCache.ContainsKey(questionsWithAnswer))
+                    interviewData.Levels["#"].QuestionsSearchCache.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
 
-                var question = interviewData.Levels["#"].QuestionsSearchCahche[questionsWithAnswer]; 
+                var question = interviewData.Levels["#"].QuestionsSearchCache[questionsWithAnswer]; 
                 
                 question.Answer = "some answer";
             }
             return interviewData;
+        }
+    }
+    internal static class ShouldExtensions
+    {
+        public static void ShouldQuestionHasOneNotEmptyAnswer(this ExportedQuestion[] questions, Guid questionId)
+        {
+            questions.ShouldContain(q => q.QuestionId == questionId);
+            var answers = questions.First(q => q.QuestionId == questionId).Answers;
+            answers.ShouldContain(a => !string.IsNullOrEmpty(a));
+        }
+
+        public static void ShouldQuestionHasNoAnswers(this ExportedQuestion[] questions, Guid questionId)
+        {
+            questions.ShouldNotContain(q => q.QuestionId == questionId && q.Answers.Any(a => !string.IsNullOrEmpty(a)));
         }
     }
 }

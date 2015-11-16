@@ -6,7 +6,13 @@ namespace WB.UI.Designer.Controllers
     public class MaintenanceController : Controller
     {
         [NoTransaction]
-        public ActionResult WaitForReadLayerRebuild(string returnUrl)
+        public ActionResult WaitForReadSideRebuild(string returnUrl)
+        {
+            return this.View(model: returnUrl);
+        }
+
+        [NoTransaction]
+        public ActionResult ReadSideIsOutdated(string returnUrl)
         {
             return this.View(model: returnUrl);
         }

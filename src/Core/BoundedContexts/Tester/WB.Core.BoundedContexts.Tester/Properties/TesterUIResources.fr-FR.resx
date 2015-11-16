@@ -141,20 +141,8 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire comporte des erreurs. Veuillez faire des corrections au questionnaire sur le site Designer.</value>
   </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>Aucune connexion avec le site Designer de Survey Solutions. Ouvrir une copie locale du questionnaire?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>En train de préparer le questionnaire pour l'entretien</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>En train de sauvegarder une bibliothèque au stockage local de liens dynamiques</value>
-  </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>En train de sauvegarder le questionnaire au stockage local</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>En cours de détecter d'erreurs dans le questionnaire</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Le site Designer n'est pas accessible en ce moment. Veuillez vérifiez votre connexion ou réessayez plus tard</value>

@@ -24,35 +24,35 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = parentQuestionId,
-                Answers = new Answer[] { new Answer{ AnswerText = "option1", AnswerValue = "1"}, new Answer{AnswerText = "option2", AnswerValue = "2"}},
-                GroupPublicKey = chapterId,
-                QuestionText = "Parent question",
-                QuestionType = QuestionType.SingleOption,
-                StataExportCaption = "cascade_parent",
-                Featured = false,
-                ResponsibleId = responsibleId,
-                LinkedToQuestionId = null,
-                IsFilteredCombobox = false,
-                CascadeFromQuestionId = null
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : parentQuestionId,
+                answers : new Answer[] { new Answer{ AnswerText = "option1", AnswerValue = "1"}, new Answer{AnswerText = "option2", AnswerValue = "2"}},
+                groupPublicKey : chapterId,
+                questionText : "Parent question",
+                questionType : QuestionType.SingleOption,
+                stataExportCaption : "cascade_parent",
+                featured : false,
+                responsibleId : responsibleId,
+                linkedToQuestionId : null,
+                isFilteredCombobox : false,
+                cascadeFromQuestionId : null
+            ));
 
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = cascadeQuestionId,
-                Answers = oldAnswers,
-                GroupPublicKey = chapterId,
-                QuestionText = "Cascade question",
-                QuestionType = QuestionType.SingleOption,
-                StataExportCaption = "cascade",
-                Featured = false,
-                ResponsibleId = responsibleId,
-                LinkedToQuestionId = null,
-                IsFilteredCombobox = false,
-                CascadeFromQuestionId = parentQuestionId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : cascadeQuestionId,
+                answers : oldAnswers,
+                groupPublicKey : chapterId,
+                questionText : "Cascade question",
+                questionType : QuestionType.SingleOption,
+                stataExportCaption : "cascade",
+                featured : false,
+                responsibleId : responsibleId,
+                linkedToQuestionId : null,
+                isFilteredCombobox : false,
+                cascadeFromQuestionId : parentQuestionId
+            ));
             
             eventContext = new EventContext();
         };

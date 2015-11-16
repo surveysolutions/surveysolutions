@@ -10,14 +10,18 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 using TemplateImported = datacollection::Main.Core.Events.Questionnaire.TemplateImported;
@@ -32,24 +36,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         {
             questionnaireId = Guid.NewGuid();
             questionnaireDocument = new QuestionnaireDocument() { PublicKey = questionnaireId };
-            questionnaireExportStructureMock = new Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>>();
-            dataExportServiceMock = new Mock<IDataExportRepositoryWriter>();
+            questionnaireExportStructureMock = new TestInMemoryWriter<QuestionnaireExportStructure>();
             exportViewFactory = new Mock<IExportViewFactory>();
+            exportViewFactory.Setup(
+                x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()))
+                .Returns(new QuestionnaireExportStructure());
 
             questionnaireExportStructureDenormalizer = new QuestionnaireExportStructureDenormalizer(
-                questionnaireExportStructureMock.Object, dataExportServiceMock.Object, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>());
+                questionnaireExportStructureMock, exportViewFactory.Object, Mock.Of<IPlainQuestionnaireRepository>());
         };
 
         Because of = () =>
           questionnaireExportStructureDenormalizer.Handle(CreatePublishableEvent());
 
         It should_QuestionnaireExportStructure_be_stored_readside = () =>
-            questionnaireExportStructureMock.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireExportStructure>(), questionnaireId.FormatGuid() + "$" + QuestionnaireVersion.ToString()),
-                Times.Once());
-
-        It should_QuestionnaireExportStructure_be_stored_by_IDataExportService = () =>
-            dataExportServiceMock.Verify(x => x.CreateExportStructureByTemplate(Moq.It.IsAny<QuestionnaireExportStructure>()),
-                Times.Once());
+            questionnaireExportStructureMock.AsVersioned().Get(questionnaireId.FormatGuid(), QuestionnaireVersion).ShouldNotBeNull();
 
         It should_QuestionnaireExportStructure_be_created_by_IExportViewFactory = () =>
             exportViewFactory.Verify(x => x.CreateQuestionnaireExportStructure(questionnaireDocument, QuestionnaireVersion),
@@ -65,8 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Questionnai
         }
 
         private static QuestionnaireExportStructureDenormalizer questionnaireExportStructureDenormalizer;
-        private static Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>> questionnaireExportStructureMock;
-        private static Mock<IDataExportRepositoryWriter> dataExportServiceMock;
+        private static IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureMock;
         private static Mock<IExportViewFactory> exportViewFactory;
         private static Guid questionnaireId;
         private const int QuestionnaireVersion = 2;

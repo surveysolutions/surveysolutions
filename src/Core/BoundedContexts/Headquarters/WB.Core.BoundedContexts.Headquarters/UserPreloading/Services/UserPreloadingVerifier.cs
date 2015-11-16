@@ -22,6 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             get { return transactionManagerProvider.GetTransactionManager(); }
         }
 
+        private bool IsWorking = false; //please use singleton injection
+
         private readonly IPlainTransactionManager plainTransactionManager;
 
         private readonly ITransactionManagerProvider transactionManagerProvider;
@@ -60,32 +62,44 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public void VerifyProcessFromReadyToBeVerifiedQueue()
         {
-            string preloadingProcessIdToValidate = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-                userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated());
-
-            if (string.IsNullOrEmpty(preloadingProcessIdToValidate))
+            if (IsWorking)
                 return;
 
-            var preloadingProcessDataToValidate =
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () =>
-                        userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate)
-                            .UserPrelodingData.ToList());
+            IsWorking = true;
             try
             {
-                this.ValidatePreloadedData(preloadingProcessDataToValidate,
-                    preloadingProcessIdToValidate);
+                while (IsWorking)
+                {
+                    string preloadingProcessIdToValidate = this.plainTransactionManager.ExecuteInPlainTransaction(
+                        () => userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated());
+
+                    if (string.IsNullOrEmpty(preloadingProcessIdToValidate))
+                        return;
+
+                    var preloadingProcessDataToValidate = this.plainTransactionManager.ExecuteInPlainTransaction(
+                            () => userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate).UserPrelodingData.ToList());
+                    try
+                    {
+                        this.ValidatePreloadedData(preloadingProcessDataToValidate, preloadingProcessIdToValidate);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message, e);
+                        this.plainTransactionManager.ExecuteInPlainTransaction(
+                            () => userPreloadingService.FinishValidationProcessWithError(preloadingProcessIdToValidate, e.Message));
+                        return;
+
+                    }
+                    this.plainTransactionManager.ExecuteInPlainTransaction(
+                        () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
+                }
             }
-            catch (Exception e)
+            finally
             {
-                logger.Error(e.Message, e);
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingService.FinishValidationProcessWithError(preloadingProcessIdToValidate, e.Message));
-                return;
-                
+                IsWorking = false;
             }
-            this.plainTransactionManager.ExecuteInPlainTransaction(
-                () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
+
+
         }
 
         private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)

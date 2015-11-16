@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -50,6 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
 
+        YesNoQuestionAnswer GetYesNoAnswer(Identity identity);
+
         bool HasGroup(Identity group);
 
         bool IsValid(Identity identity);
@@ -66,13 +69,13 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         /// Gets an answer by roster vector that will be reduced until requested question is found.
         /// </summary>
         /// <returns>null if question is not answered yet.</returns>
-        BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, decimal[] targetRosterVector);
+        BaseInterviewAnswer FindBaseAnswerByOrDeeperRosterLevel(Guid questionId, RosterVector targetRosterVector);
 
         IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion);
 
-        InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, decimal[] targetRosterVector);
+        InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, RosterVector targetRosterVector);
 
-        IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, decimal[] rosterVector);
+        IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, RosterVector rosterVector);
 
         int CountInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
 
@@ -98,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IEnumerable<Identity> GetInterviewerEntities(Identity groupIdentity);
 
-        IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, decimal[] parentRosterVector);
+        IEnumerable<Identity> GetEnabledGroupInstances(Guid groupId, RosterVector parentRosterVector);
 
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Microsoft.VisualBasic.CompilerServices;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
@@ -59,6 +60,22 @@ namespace WB.Core.SharedKernels.DataCollection
         public bool Equals(Guid id, RosterVector rosterVector)
         {
             return Equals(new Identity(id, rosterVector));
+        }
+
+        public static bool operator ==(Identity a, Identity b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if (((object)a == null) || ((object)b == null))
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Identity a, Identity b)
+        {
+            return !(a == b);
         }
     }
 }

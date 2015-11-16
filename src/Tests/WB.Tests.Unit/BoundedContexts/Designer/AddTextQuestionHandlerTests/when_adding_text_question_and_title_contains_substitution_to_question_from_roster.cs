@@ -15,13 +15,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                IsInteger = true,
-                StataExportCaption = "roster_size_question"
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded
+            (
+                publicKey : rosterSizeQuestionId,
+                groupPublicKey : chapterId,
+                isInteger : true,
+                stataExportCaption : "roster_size_question"
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
@@ -30,13 +30,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = null
                 });
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                PublicKey = questionFromRosterId,
-                GroupPublicKey = rosterId,
-                IsInteger = true,
-                StataExportCaption = substitutionVariableName
-            });
+            questionnaire.Apply( Create.Event.NumericQuestionAdded(
+                publicKey : questionFromRosterId,
+                groupPublicKey : rosterId,
+                isInteger : true,
+                stataExportCaption : substitutionVariableName
+            ));
         };
 
         Because of = () =>

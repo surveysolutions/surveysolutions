@@ -5,13 +5,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.EventHandler;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewExportedDataEventHandlerTests;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -57,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         Because of = () =>
                result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
-                CreateInterviewDataWith2PropagatedLevels(), InterviewExportedAction.Completed);
+                CreateInterviewDataWith2PropagatedLevels());
 
         It should_records_count_equals_4 = () =>
            GetLevel(result, new[] { rosterId, nestedRosterId }).Records.Length.ShouldEqual(4);
@@ -100,10 +96,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     var nestedLevel = new InterviewLevel(new ValueVector<Guid> { rosterId, nestedRosterId }, null, nestedVector);
                     interview.Levels.Add(string.Join(",", nestedVector), nestedLevel);
 
-                    if (!nestedLevel.QuestionsSearchCahche.ContainsKey(questionInsideRosterGroupId))
-                        nestedLevel.QuestionsSearchCahche.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
+                    if (!nestedLevel.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))
+                        nestedLevel.QuestionsSearchCache.Add(questionInsideRosterGroupId, new InterviewQuestion(questionInsideRosterGroupId));
 
-                    var question = nestedLevel.QuestionsSearchCahche[questionInsideRosterGroupId];
+                    var question = nestedLevel.QuestionsSearchCache[questionInsideRosterGroupId];
 
                     question.Answer = "some answer";
                 }

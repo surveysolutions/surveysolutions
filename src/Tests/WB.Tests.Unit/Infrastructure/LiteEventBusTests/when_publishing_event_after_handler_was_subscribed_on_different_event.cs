@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -13,8 +14,8 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         Establish context = () =>
         {
             eventStub = CreateDummyEvent();
-            var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            aggregateRoot = SetupAggregateRootWithEventReadyForPublishing(eventSourceId, eventStub);
+            eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
 
             var eventRegistry = Create.LiteEventRegistry();
             eventBus = Create.LiteEventBus(eventRegistry);
@@ -24,16 +25,15 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
         };
 
         Because of = () =>
-            eventBus.PublishUncommittedEvents(aggregateRoot);
+            eventBus.PublishCommittedEvents(eventsToPublish);
 
         It should_not_call_Handle_for_this_handler = () =>
             handlerMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);
 
-
-
         private static ILiteEventBus eventBus;
         private static DummyEvent eventStub;
-        private static IAggregateRoot aggregateRoot;
         private static Mock<ILiteEventHandler<DifferentDummyEvent>> handlerMock;
+        private static Guid eventSourceId;
+        private static CommittedEventStream eventsToPublish;
     }
 }

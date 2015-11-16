@@ -67,7 +67,7 @@ namespace WB.UI.Designer
                         new RouteValueDictionary(new
                         {
                             controller = "Maintenance",
-                            action = "WaitForReadLayerRebuild",
+                            action = "WaitForReadSideRebuild",
                             returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
                         }));
                 return;

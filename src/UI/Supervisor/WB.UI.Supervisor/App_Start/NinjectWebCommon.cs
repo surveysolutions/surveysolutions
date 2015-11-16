@@ -29,9 +29,11 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -145,13 +147,14 @@ namespace WB.UI.Supervisor.App_Start
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
 
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
-                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewDataExportSettings(basePath, false,
-                        WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000)),
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings,
+                    readSideSettings,
                     isSupervisorFunctionsEnabled: true,
                     interviewLimitCount: interviewCountLimit));
 
@@ -182,9 +185,22 @@ namespace WB.UI.Supervisor.App_Start
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             var ignoredDenormalizersConfigSection =
-               (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
+                (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+
+            var catchExceptionsByDenormalizersConfigSection =
+                (CatchExceptionsByDenormalizersConfigSection)WebConfigurationManager.GetSection("CatchExceptionsByDenormalizersSection");
+            Type[] catchExceptionsByDenormalizers = catchExceptionsByDenormalizersConfigSection == null ? new Type[0] : catchExceptionsByDenormalizersConfigSection.GetTypesOfDenormalizers();
+
+
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                new EventBusSettings()
+                {
+                    IgnoredEventHandlerTypes = handlersToIgnore,
+                    CatchExceptionsByEventHandlerTypes = catchExceptionsByDenormalizers
+                },
+                kernel.Get<ILogger>());
+
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);

@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
@@ -224,7 +225,8 @@ namespace WB.UI.Interviewer
             var liteEventBus = this.kernel.Get<ILiteEventBus>();
             this.kernel.Unbind<ILiteEventBus>();
 
-            var cqrsEventBus = new InProcessEventBus(Kernel.Get<IEventStore>());
+            var cqrsEventBus = new InProcessEventBus(Kernel.Get<IEventStore>(), new EventBusSettings(),
+                kernel.Get<ILogger>());
 
             var hybridEventBus = new HybridEventBus(liteEventBus, cqrsEventBus);
 

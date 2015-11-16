@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
@@ -9,18 +8,15 @@ using System.Web.Mvc;
 using Main.DenormalizerStorage;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Ncqrs;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Native.Logging;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,8 +26,8 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -127,7 +123,7 @@ namespace WB.UI.Headquarters
             var basePath = appDataDirectory;
             //const string QuestionnaireAssembliesFolder = "QuestionnaireAssemblies";
 
-            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly};
+            var mappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly };
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
@@ -175,23 +171,29 @@ namespace WB.UI.Headquarters
                     passwordFormatRegex: MembershipProviderSettings.Instance.PasswordStrengthRegularExpression,
                     phoneNumberFormatRegex: userPreloadingConfigurationSection.PhoneNumberFormatRegex);
 
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
+  			var dataExportSettings = new DataExportSettings();
+            var interviewDataExportSettings=
+            new InterviewDataExportSettings(basePath,
+                bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
+                WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000),
+                WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToInt(100));
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, true,
-                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewDataExportSettings(basePath,
-                        bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
-                        WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000)),
+                    applicationBuildVersion, interviewDetailsDataLoaderSettings,
+                    readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings));
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, dataExportSettings,
+                    interviewDataExportSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
@@ -213,8 +215,7 @@ namespace WB.UI.Headquarters
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            ServiceLocator.Current.GetInstance<UserPreloadingVerificationTask>().Configure();
-            ServiceLocator.Current.GetInstance<UserBatchCreatingTask>().Configure();
+
             ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
@@ -227,9 +228,22 @@ namespace WB.UI.Headquarters
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             var ignoredDenormalizersConfigSection =
-                (IgnoredDenormalizersConfigSection) WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
+                (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+
+            var catchExceptionsByDenormalizersConfigSection =
+                (CatchExceptionsByDenormalizersConfigSection)WebConfigurationManager.GetSection("CatchExceptionsByDenormalizersSection");
+            Type[] catchExceptionsByDenormalizers = catchExceptionsByDenormalizersConfigSection == null ? new Type[0] : catchExceptionsByDenormalizersConfigSection.GetTypesOfDenormalizers();
+
+
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                new EventBusSettings()
+                {
+                    IgnoredEventHandlerTypes = handlersToIgnore,
+                    CatchExceptionsByEventHandlerTypes = catchExceptionsByDenormalizers
+                },
+                kernel.Get<ILogger>());
+
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<ILiteEventBus>().ToConstant(bus);

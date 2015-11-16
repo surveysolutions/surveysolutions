@@ -17,14 +17,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = parentGroupId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, rosterId));
-            questionnaire.Apply(new NewQuestionAdded
-            {
-                PublicKey = linkedToQuestionId,
-                GroupPublicKey = parentGroupId,
-                QuestionType = QuestionType.Text,
-                QuestionText = "text question",
-                StataExportCaption = "source_of_linked_question"
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded
+            (
+                publicKey : linkedToQuestionId,
+                groupPublicKey : parentGroupId,
+                questionType : QuestionType.Text,
+                questionText : "text question",
+                stataExportCaption : "source_of_linked_question"
+            ));
             questionnaire.Apply(new QRBarcodeQuestionAdded
             {
                 QuestionId = questionId,
@@ -54,7 +54,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     , options: options,
                     linkedToQuestionId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers
+                    maxAllowedAnswers: maxAllowedAnswers,
+                    yesNoView: yesNoView
                     ));
 
 
@@ -83,5 +84,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static bool areAnswersOrdered = false;
         private static int? maxAllowedAnswers = null;
         private static QuestionScope scope = QuestionScope.Interviewer;
+        private static bool yesNoView = false;
     }
 }

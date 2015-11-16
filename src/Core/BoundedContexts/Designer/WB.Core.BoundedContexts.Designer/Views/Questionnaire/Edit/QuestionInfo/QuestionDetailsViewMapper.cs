@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 var multioptionQuestionView = ((MultiOptionDetailsView)questionView);
                 multioptionQuestionView.LinkedToQuestionId = multioptionQuestion.LinkedToQuestionId;
                 multioptionQuestionView.AreAnswersOrdered = multioptionQuestion.AreAnswersOrdered;
+                multioptionQuestionView.YesNoView = multioptionQuestion.YesNoView;
                 multioptionQuestionView.MaxAllowedAnswers = multioptionQuestion.MaxAllowedAnswers;
                 multioptionQuestionView.Options = this.CreateCategoricalOptions(multioptionQuestion.Answers);
                 return multioptionQuestionView;

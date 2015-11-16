@@ -68,6 +68,20 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public DateTime GetModificationTime(string filePath)
+        {
+            if (!this.IsFileExists(filePath))
+                return DateTime.MinValue;
+            try
+            {
+                return new FileInfo(filePath).LastWriteTime;
+            }
+            catch (PathTooLongException)
+            {
+                return new ZlpFileInfo(filePath).LastWriteTime;
+            }
+        }
+
         public bool IsDirectoryExists(string pathToDirectory)
         {
             return ZlpIOHelper.DirectoryExists(pathToDirectory);

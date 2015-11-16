@@ -29,6 +29,25 @@ namespace WB.Core.SharedKernels.DataCollection
             return string.Format("<{0}>", string.Join("-", this.Coordinates));
         }
 
+        public RosterVector Shrink(int targetLength)
+        {
+            if (targetLength == 0)
+                return Empty;
+
+            if (targetLength == this.Length)
+                return this;
+
+            if (targetLength > this.Length)
+                throw new ArgumentException($"Cannot shrink roster vector {this} with length {this.Length} to bigger length {targetLength}.");
+
+            return this.Coordinates.Take(targetLength).ToArray();
+        }
+
+        public RosterVector ExtendWithOneCoordinate(decimal coordinate)
+        {
+            return new List<decimal>(this.Coordinates) { coordinate }.ToArray();
+        }
+
         #region Backward compatibility with decimal[]
 
         private decimal[] array;
@@ -86,5 +105,34 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
         #endregion
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+
+            if (obj.GetType() == typeof(RosterVector))
+                return this.Identical((RosterVector) obj);
+
+            if (obj.GetType() == typeof(decimal[]))
+                return this.Identical((decimal[])obj);
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hc = this.Coordinates.Count;
+
+                foreach (var coordinate in this.Coordinates)
+                {
+                    hc = unchecked(hc * 13 + coordinate.GetHashCode());
+                }
+
+                return hc;
+            }
+        }
     }
 }

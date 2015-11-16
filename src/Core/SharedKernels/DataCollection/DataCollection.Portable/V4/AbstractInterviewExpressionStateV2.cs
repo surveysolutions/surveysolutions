@@ -240,7 +240,7 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             return siblingRosters;
         }
 
-        protected IExpressionExecutable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
+        protected virtual IExpressionExecutable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
         {
             var parentsMap = this.GetParentsMap();
             if (!parentsMap.ContainsKey(questionId))

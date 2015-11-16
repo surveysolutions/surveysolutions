@@ -376,7 +376,6 @@
     <Compile Include="Implementations\Services\MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Implementations\Services\QuestionnaireModelRepository.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
-    <Compile Include="Extensions\StoredEventExtensions.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Ninject\AndroidCoreRegistry.cs" />
@@ -449,11 +448,6 @@
     <AndroidResource Include="Resources\Layout\dashboard_item_prefilled_question.axml" />
     <AndroidResource Include="Resources\Layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Layout\Main.axml">
-      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>

@@ -115,11 +115,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multi option yes/no question can&apos;t be linked.
+        /// </summary>
+        internal static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
+            get {
+                return ResourceManager.GetString("WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi option question supports only integer positive values.
+        /// </summary>
+        internal static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
+            get {
+                return ResourceManager.GetString("WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
         internal static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
             get {
                 return ResourceManager.GetString("WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Macro has invalid name..
+        /// </summary>
+        internal static string WB0010_MacroHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0010_MacroHasInvalidName", resourceCulture);
             }
         }
         
@@ -147,6 +174,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
                 return ResourceManager.GetString("WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Macro cannot have empty name..
+        /// </summary>
+        internal static string WB0014_MacroHasEmptyName {
+            get {
+                return ResourceManager.GetString("WB0014_MacroHasEmptyName", resourceCulture);
             }
         }
         
@@ -193,6 +229,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             get {
                 return ResourceManager.GetString("WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLe" +
                         "vel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another Macro with the same name already exists..
+        /// </summary>
+        internal static string WB0020_NameForMacrosIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0020_NameForMacrosIsNotUnique", resourceCulture);
             }
         }
         
@@ -712,7 +757,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have less than 10.000 options..
+        ///   Looks up a localized string similar to Cascading combo box question should have less than 15,000 options..
         /// </summary>
         internal static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -766,7 +811,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has length more than 10000 characters..
+        ///   Looks up a localized string similar to Enabling condition has length more than 10,000 characters..
         /// </summary>
         internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -775,7 +820,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition has length more than 10000 characters..
+        ///   Looks up a localized string similar to Validation condition has length more than 10,000 characters..
         /// </summary>
         internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -835,6 +880,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0101_GroupHasLevelDepthMoreThan10 {
             get {
                 return ResourceManager.GetString("WB0101_GroupHasLevelDepthMoreThan10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them..
+        /// </summary>
+        internal static string WB0102_QuestionnaireEntitiesShareSameInternalId {
+            get {
+                return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
             }
         }
     }

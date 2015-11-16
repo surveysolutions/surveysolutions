@@ -36,12 +36,13 @@ namespace WB.Tests.Integration.PostgreSQLTests
             using (var connection = new NpgsqlConnection(TestConnectionString))
             {
                 connection.Open();
-                var command = @"DROP DATABASE " + databaseName;
+                var command = string.Format(@"SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '{0}'; DROP DATABASE {0};", databaseName);
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = command;
                     sqlCommand.ExecuteNonQuery();
                 }
+                connection.Close();
             }
         };
 

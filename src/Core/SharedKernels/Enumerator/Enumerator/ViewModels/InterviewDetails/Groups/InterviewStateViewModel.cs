@@ -1,7 +1,6 @@
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -48,11 +47,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 return SimpleGroupStatus.Completed;
 
             return SimpleGroupStatus.Other;
-        }
-
-        private bool AreAllQuestionsAnswered()
-        {
-            return this.QuestionsCount == this.AnsweredQuestionsCount;
         }
     }
 }
