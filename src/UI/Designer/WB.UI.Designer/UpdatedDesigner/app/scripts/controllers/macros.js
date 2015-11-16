@@ -32,8 +32,11 @@
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
                     var macro = {};
-                    dataBind(macro, macroDto);
-                    $scope.macros.push(macro);
+                    if (!_.any($scope.macros, 'itemId', macroDto.itemId))
+                    {
+                        dataBind(macro, macroDto);
+                        $scope.macros.push(macro);
+                    }
                 });
             };
 

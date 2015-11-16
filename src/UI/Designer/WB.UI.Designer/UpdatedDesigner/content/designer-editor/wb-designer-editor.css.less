@@ -344,7 +344,7 @@
                             }
                         }
 
-                        input {
+                        input,textarea {
                             display: block;
                             border: none;
                             border-color: @macroses-panel-macros-bg;
@@ -357,7 +357,8 @@
                             font-size: 14px;
                         }
 
-                        input[type="text"] {
+                        input[type="text"],
+                        textarea {
                             .placeholder-style() {
                                 .lucida-console-font();
                                 font-size: 14px;
@@ -387,7 +388,7 @@
                             background: @macroses-border-color;
                         }
 
-                        input.macros-description {
+                        textarea.macros-description {
                             color: @macroses-decription-color;
                         }
 

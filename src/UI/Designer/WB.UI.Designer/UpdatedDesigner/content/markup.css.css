@@ -7909,7 +7909,8 @@ textarea#edit-group-description {
 #designer-editor.container section#main .macros-panel .macroses ul li:hover .input-group.macros-name .input-group-btn {
   visibility: visible;
 }
-#designer-editor.container section#main .macros-panel .macroses ul li input {
+#designer-editor.container section#main .macros-panel .macroses ul li input,
+#designer-editor.container section#main .macros-panel .macroses ul li textarea {
   display: block;
   border: none;
   border-color: #fff;
@@ -7921,22 +7922,26 @@ textarea#edit-group-description {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
 }
-#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"][placeholder] {
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"][placeholder],
+#designer-editor.container section#main .macros-panel .macroses ul li textarea[placeholder] {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]::-moz-placeholder {
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]::-moz-placeholder,
+#designer-editor.container section#main .macros-panel .macroses ul li textarea::-moz-placeholder {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]:-ms-input-placeholder {
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]:-ms-input-placeholder,
+#designer-editor.container section#main .macros-panel .macroses ul li textarea:-ms-input-placeholder {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]::-webkit-input-placeholder {
+#designer-editor.container section#main .macros-panel .macroses ul li input[type="text"]::-webkit-input-placeholder,
+#designer-editor.container section#main .macros-panel .macroses ul li textarea::-webkit-input-placeholder {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
@@ -7946,7 +7951,7 @@ textarea#edit-group-description {
   width: 275px;
   background: #d9dde0;
 }
-#designer-editor.container section#main .macros-panel .macroses ul li input.macros-description {
+#designer-editor.container section#main .macros-panel .macroses ul li textarea.macros-description {
   color: #78838a;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li .input-group {
