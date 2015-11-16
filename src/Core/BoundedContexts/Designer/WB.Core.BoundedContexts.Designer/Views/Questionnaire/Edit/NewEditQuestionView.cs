@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string Mask { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public int? MaxAnswerCount { get; set; }
+        public bool YesNoView { get; set; }
         public bool? IsFilteredCombobox { get; set; }
         public string CascadeFromQuestionId { get; set; }
 

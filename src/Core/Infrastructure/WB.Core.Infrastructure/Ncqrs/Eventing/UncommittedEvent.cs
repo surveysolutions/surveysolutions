@@ -8,7 +8,7 @@ namespace Ncqrs.Eventing
     /// Represents an event which has not been yet persisted.
     /// </summary>
     [DebuggerDisplay("{Payload.GetType().Name} {EventIdentifier}")]
-    public class UncommittedEvent : IPublishableEvent
+    public class UncommittedEvent : IUncommittedEvent
     {
         private readonly object _payload;
         private readonly int _eventSequence;

@@ -20,17 +20,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                QuestionType = QuestionType.Text,
-                PublicKey = questionId,
-                GroupPublicKey = chapterId,
-                QuestionText = "old title",
-                StataExportCaption = "old_variable_name",
-                Instructions = "old instructions",
-                ConditionExpression = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                questionType : QuestionType.Text,
+                publicKey : questionId,
+                groupPublicKey : chapterId,
+                questionText : "old title",
+                stataExportCaption : "old_variable_name",
+                instructions : "old instructions",
+                conditionExpression : "old condition",
+                responsibleId : responsibleId
+            ));
             eventContext = new EventContext();
         };
 

@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
@@ -15,11 +16,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionnaireDisabled>
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly ISerializer serializer;
         private readonly IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter;
 
-        public QuestionnaireBrowseItemEventHandler(IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireBrowseItemEventHandler(
+            IReadSideRepositoryWriter<QuestionnaireBrowseItem> readsideRepositoryWriter, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            ISerializer serializer)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.serializer = serializer;
             this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
 
@@ -30,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
         {
-            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode);
+            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode, this.serializer.Serialize(questionnaireDocument).Length);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

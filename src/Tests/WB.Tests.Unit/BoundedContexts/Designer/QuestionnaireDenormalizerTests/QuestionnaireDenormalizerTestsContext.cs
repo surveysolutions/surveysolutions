@@ -198,23 +198,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         protected static IPublishedEvent<NewQuestionAdded> CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X")
         {
-            return ToPublishedEvent(new NewQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = groupId,
-                QuestionText = title,
-                QuestionType = QuestionType.Numeric
-            });
+            return ToPublishedEvent(Create.Event.NewQuestionAdded
+            (
+                publicKey : questionId,
+                groupPublicKey : groupId,
+                questionText : title,
+                questionType : QuestionType.Numeric
+            ));
         }
 
         protected static IPublishedEvent<QuestionChanged> CreateQuestionChangedEvent(Guid questionId, Guid targetGroupId, string title, QuestionType questionType = QuestionType.Numeric)
         {
-            return ToPublishedEvent(new QuestionChanged
-            {
-                PublicKey = questionId,
-                QuestionType = questionType,
-                QuestionText = title
-            });
+            return ToPublishedEvent(Create.Event.QuestionChanged
+            (
+                publicKey : questionId,
+                questionType : questionType,
+                questionText : title
+            ));
         }
 
         protected static IPublishedEvent<QuestionnaireItemMoved> CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
@@ -252,11 +252,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(
             Guid questionId, Guid? parentGroupId = null)
         {
-            return ToPublishedEvent(new NumericQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid()
-            });
+            return ToPublishedEvent(Create.Event.NumericQuestionAdded
+            (
+                publicKey : questionId,
+                groupPublicKey : parentGroupId ?? Guid.NewGuid()
+            ));
         }
 
         protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
@@ -288,33 +288,32 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
             Guid questionId)
         {
-            return ToPublishedEvent(new NumericQuestionChanged
-            {
-                PublicKey = questionId
-            });
+            return ToPublishedEvent(Create.Event.NumericQuestionChanged
+            (
+                publicKey : questionId
+            ));
         }
 
         protected static IPublishedEvent<NumericQuestionCloned> CreateNumericQuestionClonedEvent(
             Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null)
         {
-            return ToPublishedEvent(new NumericQuestionCloned
-            {
-                PublicKey = questionId,
-                SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid()
-            });
+            return ToPublishedEvent(Create.Event.NumericQuestionCloned
+            (
+                publicKey : questionId,
+                sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
+                groupPublicKey : parentGroupId ?? Guid.NewGuid()
+            ));
         }
 
         protected static IPublishedEvent<QuestionCloned> CreateQuestionClonedEvent(
             Guid questionId, QuestionType questionType = QuestionType.Numeric, Guid? sourceQuestionId = null, Guid? parentGroupId = null, int? maxValue = null)
         {
-            return ToPublishedEvent(new QuestionCloned
-            {
-                PublicKey = questionId,
-                QuestionType = questionType,
-                SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                GroupPublicKey = parentGroupId ?? Guid.NewGuid()
-            });
+            return ToPublishedEvent(Create.Event.QuestionCloned(
+                publicKey : questionId,
+                questionType : questionType,
+                sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
+                groupPublicKey : parentGroupId ?? Guid.NewGuid()
+            ));
         }
 
         protected static IPublishedEvent<TemplateImported> CreateTemplateImportedEvent(QuestionnaireDocument questionnaireDocument = null)
@@ -407,5 +406,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 EntityId = entityId
             });
         }
+        
     }
 }

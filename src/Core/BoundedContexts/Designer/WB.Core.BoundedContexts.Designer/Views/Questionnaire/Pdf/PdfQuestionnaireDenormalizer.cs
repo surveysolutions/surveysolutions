@@ -6,11 +6,14 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
@@ -41,7 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<StaticTextAdded>,
         IEventHandler<StaticTextUpdated>,
         IEventHandler<StaticTextCloned>,
-        IEventHandler<StaticTextDeleted>
+        IEventHandler<StaticTextDeleted>,
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroUpdated>,
+        IEventHandler<MacroDeleted>
     {
         private readonly IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
@@ -593,5 +599,39 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             });
         }
         #endregion
+
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                questionnaire.AddMacro(@event.EntityId.FormatGuid());
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                var updatedMacro = new Macro
+                {
+                    Name = evnt.Payload.Name,
+                    Content = evnt.Payload.Content,
+                    Description = evnt.Payload.Description
+                };
+
+                questionnaire.UpdateMacro(@event.EntityId.FormatGuid(), updatedMacro);
+                return questionnaire;
+            });
+        }
+
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+        {
+            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
+            {
+                questionnaire.RemoveMacro(@event.EntityId.FormatGuid());
+                return questionnaire;
+            });
+        }
     }
 }

@@ -67,8 +67,6 @@ namespace Main.Core.Entities.SubEntities
 
         private IComposite parent;
 
-        public Propagate Propagated { get; set; }
-
         public IComposite GetParent()
         {
             return parent;
@@ -152,7 +150,6 @@ namespace Main.Core.Entities.SubEntities
                 ConditionExpression = this.ConditionExpression,
                 Description = this.Description,
                 Enabled = this.Enabled,
-                Propagated = this.Propagated,
                 PublicKey = this.PublicKey,
                 Title = this.Title,
                 VariableName = this.VariableName,

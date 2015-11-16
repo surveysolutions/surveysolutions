@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
@@ -45,7 +46,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         {
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
 
-            this.Kernel.Bind<IReadSideCleaner>().To<PostgresReadSideCleaner>();
+            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
 
             this.Kernel.Bind(typeof(PostgreReadSideRepository<>)).ToSelf().InSingletonScope();
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetReadSideRepositoryWriter).InSingletonScope(); 
@@ -77,7 +78,16 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         private ISessionFactory BuildSessionFactory()
         {
             //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
-            DatabaseManagement.CreateDatabase(connectionString);
+            try
+            {
+                DatabaseManagement.CreateDatabase(connectionString);
+            }
+            catch (Exception exc)
+            {
+                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                throw;
+            }
+            
 
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>

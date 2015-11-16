@@ -35,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
         };
 
         Because of = () =>
-            questionnaireBrowseItemDenormalizer.Handle(CreatePublishedEvent(questionnaireId, new TemplateImported() { AllowCensusMode = true, Source = questionnaireDocument }));
+            questionnaireBrowseItemDenormalizer.Handle(CreatePublishedEvent(questionnaireId, 
+                new TemplateImported() { AllowCensusMode = true, Source = questionnaireDocument, Version = 1}));
 
         It should_questionnaireBrowseItem_be_stored_at_versionedReadSideRepositoryWriter_once = () =>
            questionnaireDocumentVersionedStorageMock.Verify(x => x.Store(Moq.It.Is<QuestionnaireDocumentVersioned>(b => b.Version == 1 && b.Questionnaire.PublicKey == questionnaireDocument.PublicKey), questionnaireId.FormatGuid() + "$1"), Times.Once);

@@ -6,42 +6,47 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     internal class CodeGenerator : ICodeGenerator
     {
+        private readonly IMacrosSubstitutionService macrosSubstitutionService;
+        private readonly IExpressionProcessor expressionProcessor;
+
         private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
-        private IExpressionProcessor ExpressionProcessor
+        
+        public CodeGenerator(IMacrosSubstitutionService macrosSubstitutionService, IExpressionProcessor expressionProcessor)
         {
-            get { return ServiceLocator.Current.GetInstance<IExpressionProcessor>(); }
-        }
-
-        public string Generate(QuestionnaireDocument questionnaire, Version targetVersion)
-        {
-            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
-
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure =
-                CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, true);
-
-            return GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
+            this.macrosSubstitutionService = macrosSubstitutionService;
+            this.expressionProcessor = expressionProcessor;
         }
 
         private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
         {
-            return targetVersion.Major < 10 ? 
-                new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText() : 
-                new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
+            if (targetVersion.Major < 10)
+            {
+                return new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText();
+            }
+            else if (targetVersion.Major < 11)
+            {
+                return new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
+            }
+            else
+            {
+                return new InterviewExpressionStateTemplateV5(questionnaireTemplateStructure).TransformText();
+            }
         }
 
-        public Dictionary<string, string> GenerateEvaluator(QuestionnaireDocument questionnaire, Version targetVersion)
+        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
             CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
@@ -103,7 +108,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
 
-            return new CodeGenerationSettings(
+            if (version.Major < 11)
+                return new CodeGenerationSettings(
                     abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV4",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
                     namespaces: new[]
@@ -116,6 +122,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     },
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
+            return new CodeGenerationSettings(
+                   abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
+                   additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+                   namespaces: new[]
+                   {
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V4",
+                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V5",
+                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
+                   },
+                   areRosterServiceVariablesPresent: true,
+                   rosterType: "RosterRowList");
         }
 
         private static void GenerateRostersPartialClasses(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
@@ -457,9 +478,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             VariableName = varName,
                             Conditions = childAsIQuestion.CascadeFromQuestionId.HasValue
                                 ? GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
-                                : childAsIQuestion.ConditionExpression,
-                            Validations = childAsIQuestion.ValidationExpression,
+                                : macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values),
+                            Validations = macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values),
                             QuestionType = childAsIQuestion.QuestionType,
+                            
                             GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
                             GeneratedMemberName = "@__" + varName,
                             GeneratedStateName = "@__" + varName + "_state",
@@ -468,6 +490,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             GeneratedValidationsMethodName = "IsValid_" + varName,
                             RosterScopeName = currentScope.GeneratedRosterScopeName
                         };
+
+                        if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)
+                        {
+                            var multyOptionsQuestion = childAsIQuestion as IMultyOptionsQuestion;
+                            question.IsMultiOptionYesNoQuestion = multyOptionsQuestion.YesNoView;
+                            if (question.IsMultiOptionYesNoQuestion)
+                            {
+                                question.AllMultioptionYesNoCodes = multyOptionsQuestion.Answers.Select(x => x.AnswerValue).ToList();
+                            }
+                        }
 
                         currentScope.Questions.Add(question);
 
@@ -498,7 +530,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             var roster = new RosterTemplateModel
                             {
                                 Id = childAsIGroup.PublicKey,
-                                Conditions = childAsIGroup.ConditionExpression,
+                                Conditions = macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
                                 VariableName = varName,
                                 GeneratedTypeName =
                                     GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey.FormatGuid()), currentRosterScope, generatedScopesTypeNames),
@@ -526,7 +558,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 new GroupTemplateModel
                                 {
                                     Id = childAsIGroup.PublicKey,
-                                    Conditions = childAsIGroup.ConditionExpression,
+                                    Conditions = macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
                                     VariableName = "@__" + varName, //generating variable name by publicKey
                                     GeneratedStateName = "@__" + varName + "_state",
                                     GeneratedIdName = "@__" + varName + "_id",
@@ -551,12 +583,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
             var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
 
-            if (parentQuestion == null)
-                return childQuestion.ConditionExpression;
+            var conditionForChildCascadingQuestion = this.macrosSubstitutionService.InlineMacros(childQuestion.ConditionExpression, questionnaireDocument.Macros.Values);
 
-            string childQuestionCondition = (string.IsNullOrWhiteSpace(childQuestion.ConditionExpression)
+            if (parentQuestion == null)
+            {
+                return conditionForChildCascadingQuestion;
+            }
+
+            string childQuestionCondition = (string.IsNullOrWhiteSpace(conditionForChildCascadingQuestion)
                 ? string.Empty
-                : string.Format(" && {0}", childQuestion.ConditionExpression));
+                : $" && {conditionForChildCascadingQuestion}");
 
             var valuesOfParentCascadingThatHaveChildOptions = childQuestion.Answers.Select(x => x.ParentValue).Distinct();
             var allValuesOfParentCascadingQuestion = parentQuestion.Answers.Select(x => x.AnswerValue);
@@ -593,6 +629,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     return "string";
 
                 case QuestionType.MultyOption:
+                    var multiOtion = question as MultyOptionsQuestion;
+                    if (multiOtion != null && multiOtion.YesNoView)
+                        return typeof(YesNoAnswers).Name;
                     return (question.LinkedToQuestionId == null) ? "decimal[]" : "decimal[][]";
 
                 case QuestionType.DateTime:
@@ -625,11 +664,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(
                 x => x.PublicKey,
-                x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames));
+                x => GetIdsOfQuestionsInvolvedInExpression(
+                    macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), 
+                    variableNames));
 
             questionsWithCondition.ToDictionary(
                 x => x.PublicKey,
-                x => GetIdsOfQuestionsInvolvedInExpression(x.ConditionExpression, variableNames))
+                x => GetIdsOfQuestionsInvolvedInExpression(
+                    macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames))
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
 
@@ -655,7 +697,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private List<Guid> GetIdsOfQuestionsInvolvedInExpression(string conditionExpression,
             Dictionary<string, Guid> variableNames)
         {
-            var identifiersUsedInExpression = ExpressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
+            var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 
             return new List<Guid>(
                 from variable in identifiersUsedInExpression

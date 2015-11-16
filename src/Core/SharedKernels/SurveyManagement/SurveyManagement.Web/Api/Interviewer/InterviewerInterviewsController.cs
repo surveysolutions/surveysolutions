@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -15,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
+using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
@@ -28,6 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
+        private readonly IMetaInfoBuilder metaBuilder;
+        private readonly ISerializer serializer;
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IInterviewInformationFactory interviewerInterviewsFactory;
 
@@ -37,7 +42,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IInterviewInformationFactory interviewerInterviewsFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ICommandService commandService,
-            IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader)
+            IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
+            IMetaInfoBuilder metaBuilder,
+            ISerializer serializer)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.globalInfoProvider = globalInfoProvider;
@@ -45,6 +52,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.commandService = commandService;
             this.syncPackagesMetaReader = syncPackagesMetaReader;
+            this.metaBuilder = metaBuilder;
+            this.serializer = serializer;
         }
 
         [HttpGet]
@@ -94,12 +103,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             if (packageMetaInformation == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return new InterviewSyncPackageDto
+            var interviewSynchronizationPackage = new InterviewSyncPackageDto
             {
-                PackageId = packageMetaInformation.PackageId,
-                Content = packageMetaInformation.Content,
-                MetaInfo = packageMetaInformation.Meta
+                PackageId = packageMetaInformation.PackageId
             };
+
+            if (packageMetaInformation.ItemType == SyncItemType.Interview)
+            {
+                var interviewSynchronizationDto = this.interviewerInterviewsFactory.GetInterviewDetails(packageMetaInformation.InterviewId);
+
+                interviewSynchronizationPackage.Content = this.serializer.Serialize(interviewSynchronizationDto, TypeSerializationSettings.AllTypes);
+                interviewSynchronizationPackage.MetaInfo =
+                    this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
+            }
+            else
+            {
+                interviewSynchronizationPackage.Content = packageMetaInformation.InterviewId.FormatGuid();
+            }
+
+            return interviewSynchronizationPackage;
         }
 
         [HttpPost]
@@ -179,7 +201,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         private IList<T> GetUpdateFromLastPackage<T>(Guid userId, string lastSyncedPackageId,
             Func<Guid, long?, IQueryable<T>> groupedQuery, Func<Guid, IQueryable<T>> allQuery)
-            where T : IOrderableSyncPackage
+            where T : InterviewSyncPackageMeta
         {
             if (lastSyncedPackageId == null)
             {

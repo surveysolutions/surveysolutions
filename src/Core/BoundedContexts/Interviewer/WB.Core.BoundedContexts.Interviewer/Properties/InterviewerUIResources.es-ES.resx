@@ -243,17 +243,11 @@
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Tamaño del paquete de comunicación</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID de registro de cliente: </value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Configuración de la conexión</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>Identificación (ID) del dispositivo:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con la aplicación de supervisor </value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL del supervisor </value>
@@ -269,9 +263,6 @@
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Tiempo de respuesta de servidor</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>Identificación (ID) de instalación:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Configuración de la entrevista</value>
@@ -291,17 +282,11 @@
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>condiciones/validaciones</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} completados</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Actualización de las tareas</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Se actualizaron algunas tareas</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} de {1} entrevistas eliminadas</value>
@@ -353,12 +338,6 @@
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} completados</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>imágenes</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>imágenes por entrevistas</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>entrevistas</value>

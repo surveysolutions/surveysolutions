@@ -15,24 +15,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            newQuestionAdded = new NewQuestionAdded
-            {
-                PublicKey = sourceQuestionId, 
-                QuestionText = "text",
-                VariableLabel = "varlabel",
-                QuestionType = QuestionType.Text,
-                Featured = true,
-                GroupPublicKey = chapterId,
-                QuestionScope = QuestionScope.Interviewer,
-                ConditionExpression = "Conditional",
-                ValidationExpression = "Validation",
-                ValidationMessage = "Val message",
-                Instructions = "Intructions",
-                LinkedToQuestionId = Guid.NewGuid(),
-                IsFilteredCombobox = true,
-                CascadeFromQuestionId = Guid.NewGuid(),
-                Mask = "(###)-##-##-###"
-            };
+            newQuestionAdded = Create.Event.NewQuestionAdded(
+                publicKey : sourceQuestionId, 
+                questionText : "text",
+                variableLabel : "varlabel",
+                questionType : QuestionType.Text,
+                featured : true,
+                groupPublicKey : chapterId,
+                questionScope : QuestionScope.Interviewer,
+                conditionExpression : "Conditional",
+                validationExpression : "Validation",
+                validationMessage : "Val message",
+                instructions : "Intructions",
+                linkedToQuestionId : Guid.NewGuid(),
+                isFilteredCombobox : true,
+                cascadeFromQuestionId : Guid.NewGuid(),
+                mask : "(###)-##-##-###"
+            );
             questionnaire.Apply(newQuestionAdded);
 
             eventContext = new EventContext();
@@ -57,11 +56,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             e.TargetIndex == 1 &&
             e.ResponsibleId == responsibleId &&
             e.IsFilteredCombobox == newQuestionAdded.IsFilteredCombobox &&
-            e.Mask == newQuestionAdded.Mask
+            e.Mask == newQuestionAdded.Mask &&
+            e.SourceQuestionnaireId == questionnaire.EventSourceId &&
+            e.YesNoView == newQuestionAdded.YesNoView
         );
         
         // If we extend QuestionCloned be sure to add check in the validation above and increase counter here
-        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(27);
+        It should_copy_all_known_properties = () => typeof(QuestionCloned).GetProperties().Count().ShouldEqual(29);
 
         static Questionnaire questionnaire;
         static Guid questionId = Guid.Parse("11111111111111111111111111111111");

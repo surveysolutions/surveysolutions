@@ -90,40 +90,58 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 
         private static QuestionChanged CreateQuestionChangedEvent(Guid questionId, QuestionType type = QuestionType.Text)
         {
-            return new QuestionChanged
-                {
-                    QuestionText = "What is your name",
-                    QuestionType = type,
-                    PublicKey = questionId,
-                    Featured = true,
-                    AnswerOrder = Order.AsIs,
-                    ConditionExpression = string.Empty,
-                    Answers = null,
-                    Instructions = "Answer this question, please",
-                    StataExportCaption = "name",
-                    ValidationExpression = "[this]!=''",
-                    ValidationMessage = "Empty names is invalid answer"
-                };
-        }
-
-        private static GroupUpdated CreateGroupUpdatedEvent(Guid groupId, Propagate propagationKind = Propagate.None)
-        {
-            return new GroupUpdated
-                {
-                    GroupPublicKey = groupId
-                };
+            return CreateQuestionChanged(
+                questionText : "What is your name",
+                    questionType : type,
+                    publicKey : questionId,
+                    featured : true,
+                    answerOrder : Order.AsIs,
+                    conditionExpression : string.Empty,
+                    answers : null,
+                    instructions : "Answer this question, please",
+                    stataExportCaption : "name",
+                    validationExpression : "[this]!=''",
+                    validationMessage : "Empty names is invalid answer"
+                );
         }
 
         private static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
         {
-            IPublishedEvent<T> e = new PublishedEvent<T>(new UncommittedEvent(Guid.NewGuid(),
-                                                                              questionnaireId,
-                                                                              1,
-                                                                              1,
-                                                                              DateTime.Now,
-                                                                              evnt)
-                );
+            IPublishedEvent<T> e = new PublishedEvent<T>(Create.PublishableEvent(eventSourceId:questionnaireId, payload: evnt));
             return e;
+        }
+
+        public static QuestionChanged CreateQuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
+            string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
+            QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
+            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null)
+        {
+            return new QuestionChanged(
+                publicKey: publicKey,
+                groupPublicKey: groupPublicKey,
+                questionText: questionText,
+                stataExportCaption: stataExportCaption,
+                variableLabel: null,
+                featured: featured,
+                questionScope: questionScope,
+                conditionExpression: conditionExpression,
+                validationExpression: validationExpression,
+                validationMessage: validationMessage,
+                instructions: instructions,
+                responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                capital: capital,
+                isInteger: isInteger,
+                questionType: questionType,
+                answerOrder: answerOrder,
+                answers: answers,
+                linkedToQuestionId: null,
+                areAnswersOrdered: null,
+                yesNoView: null,
+                maxAllowedAnswers: null,
+                mask: null,
+                isFilteredCombobox: isFilteredCombobox,
+                cascadeFromQuestionId: cascadeFromQuestionId,
+                targetGroupKey: Guid.NewGuid());
         }
     }
 }

@@ -15,6 +15,8 @@
         DecimalAndStringArray = 8,
         String = 9,
         GpsData = 10,
-        FileName = 11
+        FileName = 11,
+
+        YesNoArray = 12,
     }
 }

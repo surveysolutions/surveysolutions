@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public Identity[] RosterKey { get; private set; }
 
         protected Dictionary<Guid, ConditionalState> EnablementStates { get; private set; }
-
+        
         protected Dictionary<Guid, Action<string>> QuestionStringUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<long?>> QuestionLongUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<decimal?>> QuestionDecimalUpdateMap { get; private set; }
@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection
         protected Dictionary<Guid, Action<decimal[][]>> QuestionDecimal2DArrayUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<Tuple<decimal, string>[]>> QuestionTupleArrayUpdateMap { get; private set; }
         protected Dictionary<Guid, Action<GeoLocation>> QuestionGpsUpdateMap { get; private set; }
+        protected Dictionary<Guid, Action<YesNoAnswersOnly>> QuestionYesNoAnswerUpdateMap { get; private set; }
 
         protected Dictionary<Guid, Func<decimal[], Identity[], IExpressionExecutable>> RosterGenerators { get; set; }
 
@@ -65,6 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection
             this.QuestionDoubleUpdateMap = new Dictionary<Guid, Action<double?>>();
             this.QuestionGpsUpdateMap = new Dictionary<Guid, Action<GeoLocation>>();
             this.QuestionTupleArrayUpdateMap = new Dictionary<Guid, Action<Tuple<decimal, string>[]>>();
+            this.QuestionYesNoAnswerUpdateMap = new Dictionary<Guid, Action<YesNoAnswersOnly>>();
 
             this.RosterGenerators = new Dictionary<Guid, Func<decimal[], Identity[], IExpressionExecutable>>();
         }
@@ -134,11 +136,15 @@ namespace WB.Core.SharedKernels.DataCollection
             }
         }
 
+        protected void AddUpdaterToMap(Guid id, Action<YesNoAnswersOnly> action)
+        {
+            this.QuestionYesNoAnswerUpdateMap.Add(id, action);
+        }
+
         protected void AddUpdaterToMap(Guid id, Action<string> action)
         {
             this.QuestionStringUpdateMap.Add(id, action);
         }
-
 
         protected void AddUpdaterToMap(Guid id, Action<long?> action)
         {
@@ -154,7 +160,6 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             this.QuestionDecimal1DArrayUpdateMap.Add(id, action);
         }
-
 
         protected void AddUpdaterToMap(Guid id, Action<decimal[][]> action)
         {
@@ -333,6 +338,11 @@ namespace WB.Core.SharedKernels.DataCollection
         protected bool IsAnswerEmpty(Tuple<decimal, string>[] answer)
         {
             return answer == null || !answer.Any();
+        }
+
+        protected bool IsAnswerEmpty(YesNoAnswers answer)
+        {
+            return answer.Yes.Length == 0 && answer.No.Length == 0;
         }
 
         public void CalculateConditionChanges(out List<Identity> questionsToBeEnabled, out List<Identity> questionsToBeDisabled,

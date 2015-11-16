@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.Practices.ServiceLocation;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -16,6 +19,8 @@ namespace WB.UI.Headquarters.Controllers
     public class BatchUserUploadController : BaseController
     {
         private readonly IUserPreloadingService userPreloadingService;
+       
+
         public BatchUserUploadController(
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
@@ -58,7 +63,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var preloadedDataId = this.userPreloadingService.CreateUserPreloadingProcess(model.File.InputStream,
                     model.File.FileName);
-
+                
                 return this.RedirectToAction("ImportUserDetails", new { id = preloadedDataId });
             }
             catch (Exception e)
@@ -70,11 +75,19 @@ namespace WB.UI.Headquarters.Controllers
                 });
             }
         }
-
+       
         [ObserverNotAllowed]
         public ActionResult ImportUserDetails(string id)
         {
-            return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
+            try
+            {
+                return this.View(this.userPreloadingService.GetPreloadingProcesseDetails(id));
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
+                return RedirectToAction("UserBatchUploads");
+            }
         }
 
         [HttpPost]
@@ -82,10 +95,60 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult VerifyUserPreloadig(string id)
         {
-            this.userPreloadingService.EnqueueForValidation(id);
-            return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
+            try
+            {
+                this.userPreloadingService.EnqueueForValidation(id);
+                
+                RunVerification();
+
+                return this.RedirectToAction("UserPreloadigVerificationDetails", new {id});
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
+                return RedirectToAction("UserBatchUploads");
+            }
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult RefreshVerifyUsers(string id)
+        {
+            try
+            {
+                RunVerification();
+                return this.RedirectToAction("UserPreloadigVerificationDetails", new { id });
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Error on user verification ", e);
+                return RedirectToAction("UserBatchUploads");
+            }
+        }
+
+        private void RunVerification()
+        {
+            //a bit slower but threads from pool serve to handle requests
+            new Thread(
+                    () =>
+                    {
+                        ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                        try
+                        {
+                            ServiceLocator.Current.GetInstance<IUserPreloadingVerifier>().VerifyProcessFromReadyToBeVerifiedQueue();
+                        }
+                        catch (Exception exc)
+                        {
+                            Logger.Error("Error on user verification ", exc);
+                        }
+                        finally
+                        {
+                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                        }
+                    }).Start();
+        }
+
         [ObserverNotAllowed]
         public ActionResult UserPreloadigVerificationDetails(string id)
         {
@@ -97,8 +160,58 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult CreateUsers(string id)
         {
-            this.userPreloadingService.EnqueueForUserCreation(id);
-            return this.RedirectToAction("UserCreationProcessDetails", new { id });
+            try
+            {
+                this.userPreloadingService.EnqueueForUserCreation(id);
+                
+                RunCreation();
+
+                return this.RedirectToAction("UserCreationProcessDetails", new {id});
+            }
+            catch (Exception e)
+            {
+                this.Error(e.Message);
+                return RedirectToAction("UserBatchUploads");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult RefreshCreateUsers(string id)
+        {
+            try
+            {
+                RunCreation();
+                return this.RedirectToAction("UserCreationProcessDetails", new { id });
+            }
+            catch (Exception e)
+            {
+                Logger.Error("Error on user verification ", e);
+                return RedirectToAction("UserBatchUploads");
+            }
+        }
+
+        private void RunCreation()
+        {
+            //a bit slower but threads from pool serve to handle requests
+            new Thread(
+                    () =>
+                    {
+                        ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                        try
+                        {
+                            ServiceLocator.Current.GetInstance<IUserBatchCreator>().CreateUsersFromReadyToBeCreatedQueue();
+                        }
+                        catch (Exception exc)
+                        {
+                            Logger.Error("Error on user verification ", exc);
+                        }
+                        finally
+                        {
+                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                        }
+                    }).Start();
         }
 
         [ObserverNotAllowed]

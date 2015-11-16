@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState = navigationState;
             this.interviewId = interviewId;
-            this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
@@ -73,15 +73,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return changedRosterInstanceIdentity;
         }
 
-        void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
+        void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (navigationParams.TargetScreen != ScreenType.Group)
+            if (eventArgs.TargetScreen != ScreenType.Group)
             {
                 this.Items = new ReadOnlyCollection<BreadCrumbItemViewModel>(new List<BreadCrumbItemViewModel>());
             }
             else
             {
-                this.BuildBreadCrumbs(navigationParams.TargetGroup);
+                this.BuildBreadCrumbs(eventArgs.TargetGroup);
             }
         }
 
@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
+            this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.eventRegistry.Unsubscribe(this, interviewId);
         }
     }

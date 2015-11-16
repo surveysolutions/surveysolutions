@@ -61,7 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 return statistics;
             });
 
-            List<HeadquarterSurveysAndStatusesReportLine> currentPage = inteviewsGroupByTemplateAndStatus
+            List<HeadquarterSurveysAndStatusesReportLine> currentPage = inteviewsGroupByTemplateAndStatus.AsQueryable()
+                           .OrderUsingSortExpression(input.Order)
                            .Select(doc => new HeadquarterSurveysAndStatusesReportLine
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
@@ -81,7 +82,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    
                                    Responsible = GetResponsibleName(doc)
                            }).ToList();
-
+            currentPage = currentPage.Skip((input.Page - 1) * input.PageSize)
+                .Take(input.PageSize).ToList();
             int totalCount = this.interviewSummaryReader.Query(_ =>
             {
                 int result = ApplyFilter(input, _)

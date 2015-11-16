@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using System;
+using Npgsql;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
@@ -26,5 +27,5 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 }
             }
         }
-    }
+   }
 }

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V5;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV4
+    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV5
     {
         public InterviewExpressionStateForPreloading()
         {
@@ -111,6 +112,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
+       
+
         public void SetInterviewProperties(IInterviewProperties properties)
         {
         }
@@ -118,6 +121,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
             string rosterTitle)
         {
+        }
+
+        public void UpdateYesNoAnswer(Guid questionId, decimal[] propagationVector, YesNoAnswersOnly answers)
+        {
+        }
+
+        IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
         }
 
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()

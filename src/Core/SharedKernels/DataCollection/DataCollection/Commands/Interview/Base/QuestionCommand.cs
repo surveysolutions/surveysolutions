@@ -7,6 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
         public Guid QuestionId { get; private set; }
         public decimal[] RosterVector { get; private set; }
 
+        public Identity Question => new Identity(this.QuestionId, this.RosterVector);
+
         protected QuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector)
             : base(interviewId, userId)
         {

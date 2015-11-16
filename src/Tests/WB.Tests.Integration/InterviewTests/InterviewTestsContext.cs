@@ -7,24 +7,21 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Native;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V2;
-using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V5;
+
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -61,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            var expressionState = new Mock<IInterviewExpressionStateV4>();
+            var expressionState = new Mock<IInterviewExpressionStateV5>();
 
             var emptyList = new List<Identity>();
 
@@ -86,7 +83,7 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV4 precompiledState = null)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV5 precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -97,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests
                     && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
                     && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
 
-            IInterviewExpressionStateV4 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            IInterviewExpressionStateV5 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -155,7 +152,7 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static IInterviewExpressionStateV4 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionStateV5 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
             var fileSystemAccessor = new FileSystemIOAccessor(); 
             var questionnaireVersionProvider =new DesignerEngineVersionService();
@@ -176,7 +173,7 @@ namespace WB.Tests.Integration.InterviewTests
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    new CodeGenerator(),
+                    Create.CodeGenerator(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
             string resultAssembly;

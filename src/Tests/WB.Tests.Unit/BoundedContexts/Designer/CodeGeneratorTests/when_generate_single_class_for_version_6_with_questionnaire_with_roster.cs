@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -27,12 +29,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                             })
                     });
 
-            generator = CreateCodeGenerator();
+            generator = Create.CodeGenerator();
         };
 
         Because of = () =>
-            generatedClassContent =
-                generator.Generate(questionnaire, version);
+            generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
         It should_generate_class_with_V3_namespaces_included = () =>
             generatedClassContent.ShouldNotContain("WB.Core.SharedKernels.DataCollection.V3");

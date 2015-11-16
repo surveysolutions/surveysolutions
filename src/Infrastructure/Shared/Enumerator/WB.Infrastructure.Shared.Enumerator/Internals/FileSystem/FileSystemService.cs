@@ -43,6 +43,13 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             return new FileInfo(filePath).CreationTime;
         }
 
+        public DateTime GetModificationTime(string filePath)
+        {
+            if (!this.IsFileExists(filePath))
+                return DateTime.MinValue;
+            return new FileInfo(filePath).LastWriteTime;
+        }
+
         public bool IsDirectoryExists(string pathToDirectory)
         {
             return Directory.Exists(pathToDirectory);

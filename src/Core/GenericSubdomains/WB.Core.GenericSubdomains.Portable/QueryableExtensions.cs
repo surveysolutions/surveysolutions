@@ -55,7 +55,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         private static IEnumerable<OrderRequestItem> ParseSortExpression(string sortExpression)
         {
-            string[] orderFields = sortExpression.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            string[] orderFields = sortExpression.Split(new [] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (!orderFields.Any())
                 return null;
 

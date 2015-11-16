@@ -16,13 +16,13 @@ namespace WB.Core.Synchronization.EventHandler
         {
         }
 
-        public TabletDocument Update(TabletDocument currentState, IPublishedEvent<TabletRegistered> evnt)
+        public TabletDocument Update(TabletDocument state, IPublishedEvent<TabletRegistered> @event)
         {
             return new TabletDocument {
-                       Id = evnt.EventSourceId.FormatGuid(),
-                       AndroidId = evnt.Payload.AndroidId,
-                       DeviceId = evnt.EventSourceId,
-                       RegistrationDate = evnt.EventTimeStamp
+                       Id = @event.EventSourceId.FormatGuid(),
+                       AndroidId = @event.Payload.AndroidId,
+                       DeviceId = @event.EventSourceId,
+                       RegistrationDate = @event.EventTimeStamp
                    };
         }
     }

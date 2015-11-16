@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
 using Ncqrs.Domain.Storage;
@@ -12,6 +13,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Web.Common;
+using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Native.Logging;
@@ -31,7 +33,10 @@ using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 
@@ -77,7 +82,10 @@ namespace WB.UI.Designer.App_Start
             var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly }; 
+            var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
+
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -98,15 +106,22 @@ namespace WB.UI.Designer.App_Start
                 new FileInfrastructureModule()
                 );
 
+            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
+                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
+                .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
             kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
             kernel.Load(ModulesFactory.GetEventStoreModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            kernel.Bind<ReadSideSettings>().ToConstant(readSideSettings);
             kernel.Bind<ReadSideService>().ToSelf().InSingletonScope();
             kernel.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
             kernel.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
+
+            kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
+            kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
 
             CreateAndRegisterEventBus(kernel);
             
@@ -128,10 +143,21 @@ namespace WB.UI.Designer.App_Start
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
             var ignoredDenormalizersConfigSection =
-               (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
+                (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
             Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
 
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
+            var catchExceptionsByDenormalizersConfigSection =
+                (CatchExceptionsByDenormalizersConfigSection)WebConfigurationManager.GetSection("CatchExceptionsByDenormalizersSection");
+            Type[] catchExceptionsByDenormalizers = catchExceptionsByDenormalizersConfigSection == null ? new Type[0] : catchExceptionsByDenormalizersConfigSection.GetTypesOfDenormalizers();
+
+
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                new EventBusSettings()
+                {
+                    IgnoredEventHandlerTypes = handlersToIgnore,
+                    CatchExceptionsByEventHandlerTypes = catchExceptionsByDenormalizers
+                },
+                kernel.Get<ILogger>());
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
 
             foreach (var handler in kernel.GetAll(typeof (IEventHandler)))

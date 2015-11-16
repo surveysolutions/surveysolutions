@@ -328,7 +328,7 @@
     <value>Circular references in cascading combo box questions not allowed.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>Cascading combo box question should have less than 10.000 options.</value>
+    <value>Cascading combo box question should have less than 15,000 options.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
     <value>Cascading combo box question should have unique value and parent value options list.</value>
@@ -346,10 +346,10 @@
     <value>Question with the same variable name already exists.</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Enabling condition has length more than 10000 characters.</value>
+    <value>Enabling condition has length more than 10,000 characters.</value>
   </data>
   <data name="WB0095_ValidationExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Validation condition has length more than 10000 characters.</value>
+    <value>Validation condition has length more than 10,000 characters.</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Error occurred during questionnaire compilation.</value>
@@ -374,5 +374,23 @@
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
     <value>Only one GPS question could be marked as prefilled</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>Multi option yes/no question can't be linked</value>
+  </data>
+  <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Multi option question supports only integer positive values</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>Macro has invalid name.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Another Macro with the same name already exists.</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>Macro cannot have empty name.</value>
   </data>
 </root>

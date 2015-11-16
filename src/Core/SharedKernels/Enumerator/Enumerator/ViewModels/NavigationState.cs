@@ -21,14 +21,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
         }
 
-        public virtual event GroupChanged GroupChanged;
-        public virtual event BeforeGroupChanged BeforeGroupChanged;
+        public virtual event ScreenChanged ScreenChanged;
+        public virtual event BeforeGroupChanged BeforeScreenChanged;
 
         private bool isNavigationStarted = false;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
-        public virtual ScreenType CurrentGroupType { get; private set; }
+        public virtual ScreenType CurrentScreenType { get; private set; }
 
         private readonly Stack<NavigationIdentity> navigationStack = new Stack<NavigationIdentity>();
 
@@ -163,30 +163,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void ChangeCurrentGroupAndFireEvent(NavigationIdentity navigationIdentity)
         {
-            if (this.BeforeGroupChanged != null)
-            {
-                this.BeforeGroupChanged(new BeforeGroupChangedEventArgs(this.CurrentGroup, navigationIdentity.TargetGroup));
-            }
+            this.BeforeScreenChanged?.Invoke(new BeforeScreenChangedEventArgs(this.CurrentGroup, navigationIdentity.TargetGroup));
 
             this.CurrentGroup = navigationIdentity.TargetGroup;
-            this.CurrentGroupType = navigationIdentity.TargetScreen;
+            this.CurrentScreenType = navigationIdentity.TargetScreen;
 
-            if (this.GroupChanged != null)
+            if (this.ScreenChanged != null)
             {
-                var groupChangedEventArgs = new ScreenChangedEventArgs
+                var screenChangedEventArgs = new ScreenChangedEventArgs
                 {
                     TargetGroup = navigationIdentity.TargetGroup,
-                    AnchoredElementIdentity =
-                        navigationIdentity.AnchoredElementIdentity,
+                    AnchoredElementIdentity = navigationIdentity.AnchoredElementIdentity,
                     TargetScreen = navigationIdentity.TargetScreen
                 };
 
-                this.GroupChanged(groupChangedEventArgs);
+                this.ScreenChanged(screenChangedEventArgs);
             }
         }
     }
 
-    public delegate void BeforeGroupChanged(BeforeGroupChangedEventArgs eventArgs);
+    public delegate void BeforeGroupChanged(BeforeScreenChangedEventArgs eventArgs);
 
-    public delegate void GroupChanged(ScreenChangedEventArgs newGroupIdentity);
+    public delegate void ScreenChanged(ScreenChangedEventArgs eventArgs);
 }

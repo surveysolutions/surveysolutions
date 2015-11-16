@@ -8,7 +8,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DataExport;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             result.ShouldEndWith(string.Format("template_{0}_v{1}.zip", questionnaireId.FormatGuid(), 1));
 
         It should_only_create_template_for_preload_once = () =>
-            exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, 1, Moq.It.IsAny<string>()), Times.Once);
+            exportedDataFormatter.Verify(x => x.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, 1), Moq.It.IsAny<string>()), Times.Once);
 
         private static PreloadingTemplateService preloadingTemplateService;
         private static string result;

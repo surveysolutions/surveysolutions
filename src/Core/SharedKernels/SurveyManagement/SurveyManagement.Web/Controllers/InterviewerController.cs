@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public ActionResult Create(InterviewerModel model)
-        {
+        { 
             if (this.ModelState.IsValid)
             {
                 try
@@ -49,6 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
                 catch (Exception e)
                 {
+                    this.Logger.Error(e.Message, e);
                     this.Error(e.Message);
                     return this.View(model);
                 }

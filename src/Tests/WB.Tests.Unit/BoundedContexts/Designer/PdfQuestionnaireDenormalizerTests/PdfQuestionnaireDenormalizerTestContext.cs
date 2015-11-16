@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
@@ -72,6 +73,42 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 PublicId = entityId ?? Guid.NewGuid(),
                 Title = title
             };
+        }
+
+        protected static QuestionCloned CreateQuestionCloned(QuestionType questionType, Guid publicKey, Guid groupPublicKey, 
+            string questionText, string validationExpression)
+        {
+            return new QuestionCloned (
+                publicKey: publicKey,
+                questionType:questionType,
+                groupPublicKey:groupPublicKey,
+                questionText: questionText,
+                validationExpression: validationExpression,
+                responsibleId: Guid.NewGuid(),
+                conditionExpression: null,
+                featured:false,
+                instructions: null,
+                capital: false,
+                questionScope: QuestionScope.Interviewer, 
+                stataExportCaption: null,
+                variableLabel: null,
+                validationMessage: null,
+                answerOrder: null,
+                answers: null,
+                linkedToQuestionId: null,
+                isInteger: null,
+                areAnswersOrdered: null,
+                yesNoView: null,
+                maxAllowedAnswers: null,
+                mask: null,
+                maxAnswerCount: null,
+                isFilteredCombobox: null,
+                cascadeFromQuestionId: null,
+                sourceQuestionnaireId: null,
+                sourceQuestionId: Guid.NewGuid(), 
+                targetIndex: 0,
+                countOfDecimalPlaces: null
+                );
         }
     }
 }

@@ -217,8 +217,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     }
                     break;
                 case QuestionType.MultyOption:
-                    var multiQuestion = question as MultyOptionsQuestion;
-                    if (multiQuestion.LinkedToQuestionId.HasValue)
+                    var multiQuestion = (MultyOptionsQuestion)question;
+                    if (multiQuestion.YesNoView)
+                    {
+                        questionModel = new YesNoQuestionModel()
+                        {
+                            AreAnswersOrdered = multiQuestion.AreAnswersOrdered,
+                            MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
+                            Options = question.Answers.Select(ToOptionModel).ToList(),
+                            IsRosterSizeQuestion = isRosterSizeQuestion
+                        };
+                    }
+                    else if (multiQuestion.LinkedToQuestionId.HasValue)
                     {
                         questionModel = new LinkedMultiOptionQuestionModel
                         {

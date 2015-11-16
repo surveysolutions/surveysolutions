@@ -139,33 +139,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\InterviewerUIResources.es-ES.Designer.cs" />
-    <Compile Include="Properties\InterviewerUIResources.es-ES1.Designer.cs">
+    <Compile Include="Properties\InterviewerUIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.es-ES.resx</DependentUpon>
+      <DependentUpon>InterviewerUIResources.id-ID.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\InterviewerUIResources.fr-FR.Designer.cs" />
-    <Compile Include="Properties\InterviewerUIResources.fr-FR1.Designer.cs">
+    <Compile Include="Properties\InterviewerUIResources.th-TH.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.pt-PT.Designer.cs" />
-    <Compile Include="Properties\InterviewerUIResources.pt-PT1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.pt-PT.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.ru-RU.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.ru-RU.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\InterviewerUIResources.uk-UA.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerUIResources.uk-UA.resx</DependentUpon>
+      <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\ICapiCleanUpService.cs" />
     <Compile Include="Services\ICapiDataSynchronizationService.cs" />
@@ -250,31 +232,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.es-ES.resx">
+    <EmbeddedResource Include="Properties\InterviewerUIResources.es-ES.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.es-ES1.Designer.cs</LastGenOutput>
+      <LastGenOutput>InterviewerUIResources.id-ID.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.fr-FR.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.fr-FR1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.pt-PT.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.pt-PT1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.pt-PT.resx" />
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx">
+    <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.ru-RU.Designer.cs</LastGenOutput>
+      <LastGenOutput>InterviewerUIResources.th-TH.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.uk-UA.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

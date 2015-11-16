@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using Main.Core.Documents;
@@ -16,12 +11,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         Establish context = () =>
         {
             questionnaire = Create.QuestionnaireDocument();
-            generator = CreateCodeGenerator();
+            generator = Create.CodeGenerator();
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                generator.Generate(questionnaire,version));
+            exception = Catch.Exception(() => generator.Generate(questionnaire,version));
 
         It should_throw_VersionNotFoundException = () =>
             exception.ShouldBeOfExactType<VersionNotFoundException>();

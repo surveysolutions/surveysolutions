@@ -84,10 +84,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
 
             foreach (var answeredQuestion in answeredQuestions)
             {
-                if (!rosterLevel.QuestionsSearchCahche.ContainsKey(answeredQuestion.Key))
-                    rosterLevel.QuestionsSearchCahche.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
+                if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
+                    rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
 
-                var nestedQuestion = rosterLevel.QuestionsSearchCahche[answeredQuestion.Key];
+                var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
 
                 nestedQuestion.Answer = answeredQuestion.Value;
             }

@@ -188,9 +188,6 @@
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
-  <data name="Interviewer_DashboardTitle" xml:space="preserve">
-    <value>Призначення/перепис для {0}</value>
-  </data>
   <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
     <value>Скасувати</value>
   </data>

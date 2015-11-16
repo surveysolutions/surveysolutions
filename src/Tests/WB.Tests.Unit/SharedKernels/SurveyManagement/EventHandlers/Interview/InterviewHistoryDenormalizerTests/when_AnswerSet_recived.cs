@@ -114,7 +114,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_answer_on_PictureQuestionAnswered_be_my_png = () =>
             interviewHistoryView.Records[11].Parameters["answer"].ShouldEqual("my.png");
 
-        private static InterviewHistoryDenormalizer interviewExportedDataDenormalizer;
+        private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();
         private static Guid userId = Guid.NewGuid();
         private static InterviewHistoryView interviewHistoryView;

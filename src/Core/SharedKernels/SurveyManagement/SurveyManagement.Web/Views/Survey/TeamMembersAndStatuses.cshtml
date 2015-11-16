@@ -24,13 +24,18 @@
     <h3 class="sinle-line-header">Team members and Statuses</h3>
 }
 
+@section actionbar
+{
+    <h4 class="sinle-line-header text-italic" data-bind="text: QuestionnaireName"></h4>
+}
+
 @section filters
 {
     <ul class="list-group">
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Template</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedTemplate" class="form-control">
+                <select id="questionnaireSelector" data-bind="value: SelectedTemplate" class="form-control">
                     @if (Model.Count() > 1)
                     {
                         <option value="">Any</option>

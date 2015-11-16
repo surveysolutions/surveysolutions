@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
             }
 
-            var bigTemplate = bigTemplateObject == null ? null : bigTemplateObject.Questionnaire;
+            var bigTemplate = bigTemplateObject?.Questionnaire;
 
             if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
             {

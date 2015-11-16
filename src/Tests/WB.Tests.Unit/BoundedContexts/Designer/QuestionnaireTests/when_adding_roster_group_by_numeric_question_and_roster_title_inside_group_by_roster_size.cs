@@ -32,19 +32,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = rosterTitleQuestionId
                 });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = rosterTitleQuestionId,
-                GroupPublicKey = rosterGroupWithRosterTitleQuestionId,
-                QuestionType = QuestionType.Text
-            });
-            questionnaire.Apply(new NewQuestionAdded()
-            {
-                PublicKey = rosterSizeQuestionId,
-                GroupPublicKey = chapterId,
-                QuestionType = QuestionType.Numeric,
-                IsInteger = true
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey : rosterTitleQuestionId,
+                groupPublicKey : rosterGroupWithRosterTitleQuestionId,
+                questionType : QuestionType.Text
+            ));
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey : rosterSizeQuestionId,
+                groupPublicKey : chapterId,
+                questionType : QuestionType.Numeric,
+                isInteger : true
+            ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = parentGroupId });
 
             eventContext = new EventContext();

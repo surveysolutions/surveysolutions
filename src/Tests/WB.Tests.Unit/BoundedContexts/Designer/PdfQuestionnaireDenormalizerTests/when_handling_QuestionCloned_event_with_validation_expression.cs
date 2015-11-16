@@ -16,14 +16,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
         {
             var parentGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            @event = CreatePublishedEvent(new QuestionCloned()
-            {
-                QuestionType = QuestionType.Text,
-                PublicKey = questionId, 
-                GroupPublicKey = parentGroupId, 
-                QuestionText = "someTitle",
-                ValidationExpression = "some expression"
-            });
+            @event = CreatePublishedEvent(CreateQuestionCloned(
+                questionType : QuestionType.Text,
+                publicKey : questionId, 
+                groupPublicKey : parentGroupId, 
+                questionText : "someTitle",
+                validationExpression : "some expression"
+            ));
 
             pdfQuestionnaireDocument = CreatePdfQuestionnaire(CreateGroup(parentGroupId));
 
@@ -32,6 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             denormalizer = CreatePdfQuestionnaireDenormalizer(documentStorage: documentStorage);
         };
 
+        
         Because of = () =>
             denormalizer.Handle(@event);
 

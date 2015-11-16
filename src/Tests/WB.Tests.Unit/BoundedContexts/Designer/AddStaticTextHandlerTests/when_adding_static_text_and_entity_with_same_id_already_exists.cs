@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddStaticTextHandlerTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new NumericQuestionAdded() { PublicKey = entityId, GroupPublicKey = chapterId });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(entityId, chapterId ));
         };
 
         Because of = () =>

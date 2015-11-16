@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using Microsoft.Practices.ServiceLocation;
+
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly AnswerNotifier answerNotifier;
-        readonly IServiceLocator serviceLocator;
 
         private string interviewId;
 
@@ -74,8 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState,
-            ILiteEventRegistry eventRegistry, 
-            IServiceLocator serviceLocator)
+            ILiteEventRegistry eventRegistry)
         {
             this.Enablement = enablement;
             this.interviewRepository = interviewRepository;
@@ -83,7 +81,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
             this.eventRegistry = eventRegistry;
-            this.serviceLocator = serviceLocator;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)

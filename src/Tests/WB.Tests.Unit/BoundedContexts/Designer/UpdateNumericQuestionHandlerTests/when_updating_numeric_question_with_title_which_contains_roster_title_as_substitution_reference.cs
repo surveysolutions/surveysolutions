@@ -21,13 +21,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateNumericQuestionHandlerTes
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(new NumericQuestionAdded()
-            {
-                GroupPublicKey = chapterId,
-                PublicKey = questionId,
-                StataExportCaption = "var",
-                QuestionText = "title"
-            });
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                groupPublicKey: chapterId,
+                publicKey: questionId,
+                stataExportCaption: "var",
+                questionText: "title"
+            ));
             eventContext = new EventContext();
         };
 

@@ -31,11 +31,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.EnumerationStage.Init(interviewId, navigationState);
 
-            this.navigationState.GroupChanged += this.navigationState_OnGroupChanged;
+            this.navigationState.ScreenChanged += this.OnScreenChanged;
 
         }
 
-        private void navigationState_OnGroupChanged(ScreenChangedEventArgs navigationParams)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
             this.RaisePropertyChanged(() => this.Items);
             this.RaisePropertyChanged(() => this.Name);
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                if (this.navigationState.CurrentGroupType == ScreenType.Complete)
+                if (this.navigationState.CurrentScreenType == ScreenType.Complete)
                 {
                     var completionInterview = this.CompletionInterviewViewModel();
                     completionInterview.Init(this.interviewId);
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get
             {
-                if (this.navigationState.CurrentGroupType == ScreenType.Complete)
+                if (this.navigationState.CurrentScreenType == ScreenType.Complete)
                 {
                     return UIResources.Interview_Complete_Screen_Title;
                 }
@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            this.navigationState.GroupChanged -= this.navigationState_OnGroupChanged;
+            this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.EnumerationStage.Dispose();
         }
     }

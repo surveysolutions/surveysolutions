@@ -1,18 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfQuestionnaireView : PdfEntityView, IReadSideRepositoryEntity
     {
+        public PdfQuestionnaireView()
+        {
+            this.Macros = new Dictionary<string, Macro>();
+        }
         public string CreatedBy { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public Dictionary<string, Macro> Macros { get; set; }
 
         public int GetChaptersCount()
         {
@@ -35,13 +43,28 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return this.Children.TreeToEnumerable().OfType<PdfQuestionView>().Count(x => x.GetHasCondition());
         }
 
+        internal void AddMacro(string macroId)
+        {
+            this.Macros[macroId] = new Macro();
+        }
+
+        internal void UpdateMacro(string macroId, Macro macro)
+        {
+            if (!this.Macros.ContainsKey(macroId))
+                return;
+
+            this.Macros[macroId] = macro;
+        }
+
+        internal void RemoveMacro(string macroId)
+        {
+            this.Macros.Remove(macroId);
+        }
+
         internal void RemoveGroup(Guid groupId)
         {
             var item = this.Children.TreeToEnumerable<PdfEntityView>().FirstOrDefault(x => x.PublicId == groupId);
-            if (item != null)
-            {
-                item.GetParent().Children.Remove(item);
-            }
+            item?.GetParent().Children.Remove(item);
         }
 
         internal PdfGroupView GetGroup(Guid groupId)
@@ -204,6 +227,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public IEnumerable<PdfQuestionView> GetQuestionsWithValidation()
         {
             return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.GetReadableValidationExpression())).OrderBy(x => x.GetStringItemNumber());
+        }
+
+        public IEnumerable<Macro> GetMacros()
+        {
+            return this.Macros.Values.OrderBy(x => x.Name);
         }
     }
 }

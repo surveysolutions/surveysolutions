@@ -21,8 +21,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
     [Subject(typeof(QuestionnaireVerifier))]
     internal class QuestionnaireVerifierTestsContext
     {
-        protected static QuestionnaireVerifier CreateQuestionnaireVerifier(IExpressionProcessor expressionProcessor = null,
-            ISubstitutionService substitutionService = null, IKeywordsProvider keywordsProvider = null, IExpressionProcessorGenerator expressionProcessorGenerator = null)
+        protected static QuestionnaireVerifier CreateQuestionnaireVerifier(
+            IExpressionProcessor expressionProcessor = null,
+            ISubstitutionService substitutionService = null, 
+            IKeywordsProvider keywordsProvider = null, 
+            IExpressionProcessorGenerator expressionProcessorGenerator = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -39,7 +43,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
-                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, new DesignerEngineVersionService());
+                expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, 
+                new DesignerEngineVersionService(),
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
@@ -276,7 +282,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
             return new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    new CodeGenerator(),
+                    Create.CodeGenerator(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
         }
     }

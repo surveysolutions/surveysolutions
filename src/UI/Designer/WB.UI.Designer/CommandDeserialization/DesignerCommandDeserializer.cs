@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -19,7 +20,6 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand) },
                     { "UpdateGroup", typeof (UpdateGroupCommand) },
                     { "AddGroup", typeof (AddGroupCommand) },
-                    { "CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand) },
                     { "CloneGroup", typeof (CloneGroupCommand) },
                     { "CloneStaticText", typeof (CloneStaticTextCommand) },
                     { "DeleteGroup", typeof (DeleteGroupCommand) },
@@ -46,7 +46,14 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateStaticText", typeof (UpdateStaticTextCommand) },
                     { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
                     { "MoveStaticText", typeof (MoveStaticTextCommand) },
-                    { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)}
+                    { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
+
+                    {"PasteAfter", typeof(PasteAfterCommand) },
+                    {"PasteInto", typeof(PasteIntoCommand) },
+                    //Macro commands
+                    { "AddMacros", typeof (AddMacro) },
+                    { "UpdateMacros", typeof (UpdateMacro) },
+                    { "DeleteMacros", typeof (DeleteMacro) }
                 };
             }
         }

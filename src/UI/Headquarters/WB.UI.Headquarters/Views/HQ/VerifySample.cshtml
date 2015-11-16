@@ -22,6 +22,8 @@
 }
 
 <div class="row-fluid">
+    <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.BatchUpload_Title, Model.Version, Model.QuestionnaireTitle)</h3>
+    <br />
     @if (Model.Errors.Length > 0)
     {
         <div style="height: 500px; overflow-y: scroll;">

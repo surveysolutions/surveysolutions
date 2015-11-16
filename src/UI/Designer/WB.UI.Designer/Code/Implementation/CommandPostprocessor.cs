@@ -49,7 +49,7 @@ namespace WB.UI.Designer.Code.Implementation
             }
             catch (Exception exc)
             {
-                logger.Fatal("Error on command post-processing", exc);
+                logger.Error("Error on command post-processing", exc);
             }
         }
 
