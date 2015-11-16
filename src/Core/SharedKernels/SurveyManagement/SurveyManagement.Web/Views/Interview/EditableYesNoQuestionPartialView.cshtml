@@ -17,7 +17,6 @@
 
     var questionId = @Model.Id;
     var questionRosterVectorAsString = Stringify(Model.RosterVector);
-    var isOrderedAsString = multiQuestionSettings.AreAnswersOrdered.ToString().ToLower();
 }
 
 @if (Model.Options.Any())
@@ -34,13 +33,13 @@
             <tr>
                 <td>
                     &nbsp;
-                    <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", option.Value))"
-                           @if (selectedAnswer != null && selectedAnswer.Yes){<text> checked</text>} value="@option.Value"
-                           data-bind="click: saveYesNoMultiAnswer.bind($data, '@questionId', '@questionRosterVectorAsString', true, @isOrderedAsString, @jsMaxAllowedAnswersValueAsString)" />
+                    <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", option.Value))"
+                           @if (selectedAnswer != null && selectedAnswer.Yes){<text> checked</text>}
+                           data-bind="click: saveYesNoMultiAnswer.bind($data, '@questionId', '@questionRosterVectorAsString', true, @option.Value, @jsMaxAllowedAnswersValueAsString)" />
                     <span style="color: #E6E8E9"> / </span>
-                    <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector)" id="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", option.Value))"
-                           @if (selectedAnswer != null && !selectedAnswer.Yes){<text> checked</text>} value="@option.Value"
-                           data-bind="click: saveYesNoMultiAnswer.bind($data, '@questionId', '@questionRosterVectorAsString', false, @isOrderedAsString, @jsMaxAllowedAnswersValueAsString)" />
+                    <input type="radio" name="@getInterviewItemIdWithPostfix(Model.Id, Model.RosterVector, string.Format("option{0}", option.Value))" 
+                           @if (selectedAnswer != null && !selectedAnswer.Yes){<text> checked</text>}
+                           data-bind="click: saveYesNoMultiAnswer.bind($data, '@questionId', '@questionRosterVectorAsString', false, @option.Value, @jsMaxAllowedAnswersValueAsString)" />
                 </td>
                 <td>
                     @option.Label
