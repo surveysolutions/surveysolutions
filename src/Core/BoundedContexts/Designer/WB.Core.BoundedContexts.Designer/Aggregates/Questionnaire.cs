@@ -1018,7 +1018,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 rosterSizeQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterSizeQuestionId),
                 rosterTitleQuestionId: null,
                 rosterFixedTitles: sourceGroup.FixedRosterTitles,
-                variableName: preserveVariableName ? sourceGroup.VariableName : null));
+                variableName: preserveVariableName ? sourceGroup.VariableName : null,
+                sourceQuestionnaireId : sourceQuestionnaireId));
 
             foreach (var questionnaireItem in sourceGroup.Children)
             {
@@ -4331,7 +4332,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public IEnumerable<object> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
             Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Guid? sourceQuestionnaireId)
         {
             yield return
                 new GroupCloned
@@ -4344,7 +4345,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     ConditionExpression = condition,
                     SourceGroupId = sourceGroupId,
                     TargetIndex = targetIndex,
-                    ResponsibleId = responsibleId
+                    ResponsibleId = responsibleId,
+                    SourceQuestionnaireId = sourceQuestionnaireId
                 };
 
             if (isRoster)
