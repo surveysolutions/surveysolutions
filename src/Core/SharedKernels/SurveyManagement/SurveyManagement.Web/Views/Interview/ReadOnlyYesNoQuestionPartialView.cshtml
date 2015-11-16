@@ -6,6 +6,7 @@
 @{
     var answersTyped = (AnsweredYesNoOption[])Model.Answer;
     var answers = (answersTyped ?? new AnsweredYesNoOption[0]).ToList();
+    var orderedYesAnswers = answers.Where(answer => answer.Yes).ToList();
     var multiQuestionSettings = Model.Settings as MultiQuestionSettings;
 }
 
@@ -29,9 +30,9 @@
                 </td>
                 <td>
                     @option.Label
-                    @if (multiQuestionSettings.AreAnswersOrdered && selectedAnswer != null)
+                    @if (multiQuestionSettings.AreAnswersOrdered && selectedAnswer != null && selectedAnswer.Yes)
                     {
-                        <span class="badge">@(answers.IndexOf(selectedAnswer) + 1)</span>
+                        <span class="badge">@(orderedYesAnswers.IndexOf(selectedAnswer) + 1)</span>
                     }
                 </td>
             </tr>
