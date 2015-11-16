@@ -249,17 +249,11 @@ untuk instruksi lebih lanjut</value>
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Ukuran paket komunikasi</value>
   </data>
-  <data name="Prefs_ClientRegistrationIdTitle" xml:space="preserve">
-    <value>ID Pendaftaran Klien:</value>
-  </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Pengaturan sambungan</value>
   </data>
   <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>ID perangkat:</value>
-  </data>
-  <data name="Prefs_EndpointSummary" xml:space="preserve">
-    <value>URL yang digunakan untuk berkomunikasi dengan aplikasi penyelia</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
     <value>URL Penyelia</value>
@@ -275,9 +269,6 @@ untuk instruksi lebih lanjut</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Waktu respon server sudah habis</value>
-  </data>
-  <data name="Prefs_InstallationIdTitle" xml:space="preserve">
-    <value>ID instalasi:</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
     <value>Pengaturan wawancara</value>
@@ -297,17 +288,11 @@ untuk instruksi lebih lanjut</value>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Batal</value>
   </data>
-  <data name="Synchronization_Conditions_Validations" xml:space="preserve">
-    <value>kondisi/validasi</value>
-  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} dari {1} {2} dilakukan</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Memperbarui tugas</value>
-  </data>
-  <data name="Synchronization_Fail_Description" xml:space="preserve">
-    <value>Beberapa tugas diperbarui</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
     <value>{0} dari {1} wawancara dihapus</value>
@@ -359,12 +344,6 @@ untuk instruksi lebih lanjut</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} dari {1} {2} dikerjakan</value>
-  </data>
-  <data name="Synchronization_Upload_Images_Text" xml:space="preserve">
-    <value>gambar</value>
-  </data>
-  <data name="Synchronization_Upload_ImagesByInterviews_Text" xml:space="preserve">
-    <value>gambar oleh wawancara</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>wawancara</value>

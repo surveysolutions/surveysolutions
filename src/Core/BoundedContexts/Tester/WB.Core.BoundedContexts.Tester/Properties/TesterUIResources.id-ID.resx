@@ -141,20 +141,8 @@
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
     <value>Tidak bisa membuka kuesioner "{0}". Kuesioner memiliki kesalahan. Silahkan perbaiki di Desainer.</value>
   </data>
-  <data name="ImportQuestionnaire_OpenLocalInterview" xml:space="preserve">
-    <value>Tidak ada koneksi ke Desainer Survey Solutions. Buka salinan lokal dari kuesioner?</value>
-  </data>
-  <data name="ImportQuestionnaire_PrepareQuestionnaire" xml:space="preserve">
-    <value>Mempersiapkan kuesioner untuk membuat wawancara</value>
-  </data>
-  <data name="ImportQuestionnaire_StoreAssembly" xml:space="preserve">
-    <value>Menyimpan Dynamic Link Library wawancara ke penyimpanan lokal</value>
-  </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
     <value>Menyimpan kuesioner ke penyimpanan lokal</value>
-  </data>
-  <data name="ImportQuestionnaire_VerifyOnServer" xml:space="preserve">
-    <value>Memeriksa kuesioner untuk kesalahan pada server</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Aplikasi web desainer tidak dapat diakses pada saat ini. Periksa pengaturan sambungan atau coba lagi nanti</value>
