@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Because of = () => questionnaire.AddMacro(addMacro);
 
         It should_raise_MacroAdded_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<MacroAdded>().EntityId.ShouldEqual(macroId);
+            eventContext.GetSingleEvent<MacroAdded>().MacroId.ShouldEqual(macroId);
 
         It should_raise_MacroAdded_event_with_ResponsibleId_specified = () =>
             eventContext.GetSingleEvent<MacroAdded>().ResponsibleId.ShouldEqual(responsibleId);
