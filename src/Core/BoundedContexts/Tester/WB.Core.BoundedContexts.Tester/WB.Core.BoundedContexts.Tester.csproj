@@ -41,6 +41,16 @@
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
     <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
+    <Compile Include="Properties\TesterUIResources.id-ID.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.id-ID.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\TesterUIResources.th-TH.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.th-TH.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -160,6 +170,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\TesterUIResources.es-ES.resx" />
     <EmbeddedResource Include="Properties\TesterUIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.id-ID.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.id-ID.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.pt-PT.resx" />
     <EmbeddedResource Include="Properties\TesterUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -167,6 +181,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\TesterUIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\TesterUIResources.th-TH.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.th-TH.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
