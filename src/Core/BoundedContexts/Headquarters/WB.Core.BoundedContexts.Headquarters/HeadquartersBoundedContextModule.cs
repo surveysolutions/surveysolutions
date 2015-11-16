@@ -80,11 +80,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
 
-            this.Bind<TabularFormatDataExportProcessHandler>().ToSelf();
+            this.Bind<TabularFormatDataExportHandler>().ToSelf();
             this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
-            this.Bind<StataFormatExportProcessHandler>().ToSelf();
-            this.Bind<SpssFormatExportProcessHandler>().ToSelf();
-            this.Bind<BinaryFormatDataExportProcessHandler>().ToSelf();
+            this.Bind<StataFormatExportHandler>().ToSelf();
+            this.Bind<SpssFormatExportHandler>().ToSelf();
+            this.Bind<BinaryFormatDataExportHandler>().ToSelf();
 
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();

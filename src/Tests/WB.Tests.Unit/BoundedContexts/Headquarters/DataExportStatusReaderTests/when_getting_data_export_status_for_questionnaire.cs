@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
     {
         Establish context = () =>
         {
-            dataExportProcessesService.Setup(x => x.GetRunningProcess())
+            dataExportProcessesService.Setup(x => x.GetRunningDataExports())
                 .Returns(new IDataExportProcess[]
                 {Create.ParaDataExportProcess(), Create.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.ApprovedDataExportProcess()});
 

@@ -64,8 +64,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             string currentDataInfo = string.Empty;
             try
             {
-                var questionnaireExportStructure = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                    this.questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                var questionnaireExportStructure =
+                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                        this.questionnaireExportStructureWriter.AsVersioned()
+                            .Get(questionnaireId.FormatGuid(), questionnaireVersion));
 
                 if (questionnaireExportStructure == null)
                     return new string[0];
@@ -87,23 +89,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     string dataFilePath = this.fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
 
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
+
                     UpdateMetaWithLabels(meta, varLabels, varValueLabels);
 
-                    IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile);
-                    writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
+                    using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
+                    {
+                        writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
+                    }
                     result.Add(dataFilePath);
 
                     processdFiles++;
                     progress.Report(processdFiles.PercentOf(dataFiles.Length));
 
                 }
-
                 return result.ToArray();
-
             }
             catch (Exception exc)
             {
-                this.logger.Error(string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ", questionnaireId, questionnaireVersion), exc);
+                this.logger.Error(
+                    string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ",
+                        questionnaireId, questionnaireVersion), exc);
                 this.logger.Error(currentDataInfo);
             }
 

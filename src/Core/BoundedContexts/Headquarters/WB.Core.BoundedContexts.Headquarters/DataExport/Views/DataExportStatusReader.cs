@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
             if (questionnaire == null)
                 return null;
-            var runningProcesses = this.dataExportProcessesService.GetRunningProcess().Select(CreateRunningDataExportProcessView).ToArray();
+            var runningProcesses = this.dataExportProcessesService.GetRunningDataExports().Select(CreateRunningDataExportProcessView).ToArray();
             var dataExports =
                 this.supportedDataExports.Select(
                     supportedDataExport =>

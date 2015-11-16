@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    public class BinaryFormatDataExportProcessHandler : IExportProcessHandler<AllDataExportProcess>
+    public class BinaryFormatDataExportHandler : IExportProcessHandler<AllDataExportProcess>
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPlainInterviewFileStorage plainFileRepository;
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
         private readonly string pathToExportedData;
 
-        public BinaryFormatDataExportProcessHandler(IFileSystemAccessor fileSystemAccessor, IPlainInterviewFileStorage plainFileRepository, IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+        public BinaryFormatDataExportHandler(IFileSystemAccessor fileSystemAccessor, IPlainInterviewFileStorage plainFileRepository, IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, ITransactionManager transactionManager, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, IArchiveUtils archiveUtils, IReadSideKeyValueStorage<InterviewData> interviewDatas, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -81,8 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             foreach (var interviewId in interviewIdsToExport)
             {
                 var interviewBinaryFiles = plainFileRepository.GetBinaryFilesForInterview(interviewId);
-                var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport,
-                    interviewId.FormatGuid());
+                var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport, interviewId.FormatGuid());
 
                 if (interviewBinaryFiles.Count > 0)
                 {
@@ -146,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             {
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
-            this.archiveUtils.ZipFiles(this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport), archiveFilePath);
+            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath);
         }
     }
 }
