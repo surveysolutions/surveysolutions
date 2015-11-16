@@ -5,9 +5,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros
 {
     [Serializable]
-    public class UpdateMacroCommand : QuestionnaireEntityCommand
+    public class UpdateMacro : QuestionnaireEntityCommand
     {
-        public UpdateMacroCommand(Guid questionnaireId, Guid entityId, string name, string content, string description, Guid responsibleId)
+        public UpdateMacro(Guid questionnaireId, Guid entityId, string name, string content, string description, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
             this.Name = name;

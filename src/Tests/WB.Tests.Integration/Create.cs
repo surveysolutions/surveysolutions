@@ -29,6 +29,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Integration
 {
@@ -47,8 +48,8 @@ namespace WB.Tests.Integration
         {
             var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
             macrosSubstitutionServiceMock.Setup(
-                x => x.SubstituteMacroses(It.IsAny<string>(), It.IsAny<QuestionnaireDocument>()))
-                .Returns((string e, QuestionnaireDocument questionnaire) =>
+                x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>()))
+                .Returns((string e, IEnumerable<Macro> macros) =>
                 {
                     return e;
                 });

@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("KP-6312")]
     class when_verifying_questionnaire_with_3_macros_having_same_name : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
