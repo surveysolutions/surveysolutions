@@ -520,7 +520,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 return (T?) valueParseResult;
             }
-            catch (Exception)
+            catch (InvalidCastException)
             {
                 return null;
             }

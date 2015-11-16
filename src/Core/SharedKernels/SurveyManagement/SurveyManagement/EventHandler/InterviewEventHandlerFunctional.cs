@@ -165,10 +165,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return PreformActionOnLevel(interview, vector, (questionsAtTheLevel) =>
             {
-                if (!questionsAtTheLevel.QuestionsSearchCahche.ContainsKey(questionId))
-                    questionsAtTheLevel.QuestionsSearchCahche.Add(questionId, new InterviewQuestion(questionId));
+                if (!questionsAtTheLevel.QuestionsSearchCache.ContainsKey(questionId))
+                    questionsAtTheLevel.QuestionsSearchCache.Add(questionId, new InterviewQuestion(questionId));
 
-                var answeredQuestion = questionsAtTheLevel.QuestionsSearchCahche[questionId];
+                var answeredQuestion = questionsAtTheLevel.QuestionsSearchCache[questionId];
 
                 update(answeredQuestion);
             });
@@ -201,12 +201,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return PreformActionOnLevel(interview, vector, (level) =>
             {
                 InterviewQuestion answeredQuestion;
-                if (level.QuestionsSearchCahche.ContainsKey(questionId))
-                    answeredQuestion = level.QuestionsSearchCahche[questionId];
+                if (level.QuestionsSearchCache.ContainsKey(questionId))
+                    answeredQuestion = level.QuestionsSearchCache[questionId];
                 else
                 {
                     answeredQuestion = new InterviewQuestion(questionId);
-                    level.QuestionsSearchCahche.Add(questionId, answeredQuestion);
+                    level.QuestionsSearchCache.Add(questionId, answeredQuestion);
                 }
                 
                 answeredQuestion.Answer = answer;

@@ -2465,7 +2465,7 @@ namespace WB.Tests.Unit
             interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
             foreach (var interviewQuestion in topLevelQuestions)
             {
-                interviewData.Levels["#"].QuestionsSearchCahche.Add(interviewQuestion.Id, interviewQuestion);
+                interviewData.Levels["#"].QuestionsSearchCache.Add(interviewQuestion.Id, interviewQuestion);
             }
             return interviewData;
         }

@@ -68,11 +68,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
             var arrayOfDecimal = value as IEnumerable<decimal>;
             if (arrayOfDecimal != null)
+            {
                 return arrayOfDecimal.Select(d => (object)d);
+            }
 
             var arrayOfInteger = value as IEnumerable<int>;
             if (arrayOfInteger != null)
+            {
                 return arrayOfInteger.Select(i => (object)i);
+            }
 
             var interviewTextListAnswer = value as InterviewTextListAnswers;
             if (interviewTextListAnswer != null)
@@ -81,10 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             }
 
             var listOfAnswers = value as IEnumerable<object>;
-            if (listOfAnswers != null)
-                return listOfAnswers;
-
-            return null;
+            return listOfAnswers;
         }
 
         private string AnswerToStringValue(object answer, ExportedHeaderItem header)
