@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Because of = () => questionnaire.DeleteMacro(deleteMacro);
 
         It should_raise_MacroDeleted_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<MacroDeleted>().EntityId.ShouldEqual(macroId);
+            eventContext.GetSingleEvent<MacroDeleted>().MacroId.ShouldEqual(macroId);
 
         It should_raise_MacroDeleted_event_with_ResponsibleId_specified = () =>
             eventContext.GetSingleEvent<MacroDeleted>().ResponsibleId.ShouldEqual(responsibleId);

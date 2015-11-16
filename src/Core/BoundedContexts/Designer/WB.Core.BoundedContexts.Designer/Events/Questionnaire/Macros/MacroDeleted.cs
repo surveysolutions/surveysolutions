@@ -4,13 +4,15 @@ using Main.Core.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros
 {
-    public class MacroDeleted : QuestionnaireEntityEvent
+    public class MacroDeleted : QuestionnaireActiveEvent
     {
         public MacroDeleted() { }
-        public MacroDeleted(Guid entityId, Guid responsibleId)
+        public MacroDeleted(Guid macroId, Guid responsibleId)
         {
-            this.EntityId = entityId;
+            this.MacroId = macroId;
             this.ResponsibleId = responsibleId;
         }
+
+        public Guid MacroId { get; set; }
     }
 }
