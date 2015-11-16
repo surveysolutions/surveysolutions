@@ -180,6 +180,17 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
     };
 
+    self.saveYesNoMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, yes, areAnswersOrdered, maxAllowedAnswers) {
+        var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
+        var answerOptionValue = $("input:radio[name=" + answerElementId + "]").val();
+
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.selectedOption = ko.observable(answerOptionValue);
+
+
+        sendAnswerCommand(config.commands.answerYesNoQuestion, question);
+    }
+
     self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAllowedAnswers, selectedOptionsAsString) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
         var answerOptionValues = $('input:checkbox[name="' + answerElementId + '"]:checked').map(function() { return parseFloat($(this).val()); }).get();

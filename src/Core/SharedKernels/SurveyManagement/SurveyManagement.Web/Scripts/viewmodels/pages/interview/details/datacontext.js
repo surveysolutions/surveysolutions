@@ -18,6 +18,13 @@
         return command;
     };
 
+    commands[config.commands.answerYesNoQuestion] = function (question) {
+        var command = prepareQuestionCommand(question);
+        command.answeredOptions = question.areAnswersOrdered ? question.orderedOptionsSelection() :
+            question.selectedOptions();
+        return command;
+    };
+
     commands[config.commands.answerNumericRealQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
         command.answer = question.answer();
