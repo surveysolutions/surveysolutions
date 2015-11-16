@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             {
                 var interviewSynchronizationDto = this.interviewerInterviewsFactory.GetInterviewDetails(packageMetaInformation.InterviewId);
 
-                interviewSynchronizationPackage.Content = this.serializer.Serialize(interviewSynchronizationDto);
+                interviewSynchronizationPackage.Content = this.serializer.Serialize(interviewSynchronizationDto, TypeSerializationSettings.AllTypes);
                 interviewSynchronizationPackage.MetaInfo =
                     this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
             }
