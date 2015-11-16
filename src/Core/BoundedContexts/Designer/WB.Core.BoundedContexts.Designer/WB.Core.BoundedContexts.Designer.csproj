@@ -236,18 +236,18 @@
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.cs">
-      <DependentUpon>QuestionnaireLevelTemplateV5.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
-      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.cs">
       <DependentUpon>RosterScopeTemplateV5.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
+      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -18,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -319,15 +317,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.interviewState.AnsweredQuestions.Remove(questionKey);
             }
 
-            var yesNoAnswers = ConvertToYesNoAnswers(@event.AnsweredOptions);
+            var yesNoAnswers = ConvertToYesNoAnswersOnly(@event.AnsweredOptions);
             this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, yesNoAnswers);
-        }
-
-        private YesNoAnswersOnly ConvertToYesNoAnswers(AnsweredYesNoOption[] answeredOptions)
-        {
-            var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
-            var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
-            return new YesNoAnswersOnly(yesAnswers, noAnswers);
         }
 
         public virtual void Apply(GeoLocationQuestionAnswered @event)
@@ -2565,7 +2556,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             RosterCalculationData rosterCalculationData = this.CalculateRosterDataWithRosterTitlesFromYesNoQuestions(
                 question, rosterIds, rosterInstanceIdsWithSortIndexes, questionnaire, state, getAnswer);
 
-            expressionProcessorState.UpdateYesNoAnswer(question.Id, question.RosterVector, ConvertToYesNoAnswers(answer));
+            expressionProcessorState.UpdateYesNoAnswer(question.Id, question.RosterVector, ConvertToYesNoAnswersOnly(answer));
 
             var rosterInstancesToAdd = this.GetUnionOfUniqueRosterInstancesToAddWithRosterTitlesByRosterAndNestedRosters(rosterCalculationData);
 
@@ -4308,7 +4299,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         (decimal[]) answerChange.Answer);
                     break;
                 case AnswerChangeType.YesNo:
-                    expressionProcessorState.UpdateYesNoAnswer(answerChange.QuestionId, answerChange.RosterVector, ConvertToYesNoAnswers((AnsweredYesNoOption[])answerChange.Answer));
+                    expressionProcessorState.UpdateYesNoAnswer(answerChange.QuestionId, answerChange.RosterVector, ConvertToYesNoAnswersOnly((AnsweredYesNoOption[])answerChange.Answer));
                     break;
             }
         }
@@ -4316,6 +4307,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool HasInvalidAnswers()
         {
             return this.interviewState.InvalidAnsweredQuestions.Any();
+        }
+
+        private static YesNoAnswersOnly ConvertToYesNoAnswersOnly(AnsweredYesNoOption[] answeredOptions)
+        {
+            var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
+            var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
+            return new YesNoAnswersOnly(yesAnswers, noAnswers);
         }
     }
 }

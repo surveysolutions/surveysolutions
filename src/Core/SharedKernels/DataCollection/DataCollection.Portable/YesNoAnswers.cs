@@ -11,11 +11,11 @@ namespace WB.Core.SharedKernels.DataCollection
             this.selectedYesCodes = yesNoAnswers.selectedYesCodes;
         }
 
-        public YesNoAnswers(decimal[] allOptionCodes)
+        public YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
         {
             this.allOptionCodes = allOptionCodes;
-            this.selectedNoCodes = new decimal[0];
-            this.selectedYesCodes = new decimal[0];
+            this.selectedNoCodes = yesNoAnswersOnly?.No ?? new decimal[0];
+            this.selectedYesCodes = yesNoAnswersOnly?.Yes ??  new decimal[0];
         }
 
         private decimal[] selectedYesCodes;
@@ -30,12 +30,6 @@ namespace WB.Core.SharedKernels.DataCollection
         public decimal[] No => this.selectedNoCodes;
 
         public decimal[] Missing => this.allOptionCodes.Except(this.selectedYesCodes).Except(this.selectedNoCodes).ToArray();
-
-        public void SetAnswer(YesNoAnswersOnly yesNoAnswersOnly)
-        {
-            this.selectedYesCodes = yesNoAnswersOnly.Yes;
-            this.selectedNoCodes = yesNoAnswersOnly.No;
-        }
     }
 
     public class YesNoAnswersOnly

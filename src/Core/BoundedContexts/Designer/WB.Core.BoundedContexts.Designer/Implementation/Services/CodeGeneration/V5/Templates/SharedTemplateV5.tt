@@ -38,7 +38,7 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 		if (question.IsMultiOptionYesNoQuestion)
 		{
 #>
-		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.GeneratedMemberName#>.SetAnswer(val); });
+		AddUpdaterToMap(IdOf.<#=question.GeneratedIdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.GeneratedMemberName#> = new <#=typeof(YesNoAnswers).Name#>(<#=question.GeneratedMemberName#>.All,val); });
 <#+ 
 		}else{
 #>
