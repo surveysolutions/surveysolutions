@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         };
 
         Because of = () => 
-            questionnaire.PasteItemInto(command);
+            questionnaire.PasteInto(command);
 
         private It should_clone_MaxAnswerCount_value =
             () => eventContext.ShouldContainEvent<QuestionCloned>();
