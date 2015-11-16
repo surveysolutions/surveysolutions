@@ -518,7 +518,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.Macros[evnt.Payload.EntityId] = new Macro();
+            document.Macros[evnt.Payload.MacroId] = new Macro();
 
             this.UpdateQuestionnaire(evnt, document);
         }
@@ -526,7 +526,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<MacroUpdated> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            var macroId = evnt.Payload.EntityId;
+            var macroId = evnt.Payload.MacroId;
             if (!document.Macros.ContainsKey(macroId))
                 return;
 
@@ -541,7 +541,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<MacroDeleted> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            document.Macros.Remove(evnt.Payload.EntityId);
+            document.Macros.Remove(evnt.Payload.MacroId);
             this.UpdateQuestionnaire(evnt, document);
         }
     }

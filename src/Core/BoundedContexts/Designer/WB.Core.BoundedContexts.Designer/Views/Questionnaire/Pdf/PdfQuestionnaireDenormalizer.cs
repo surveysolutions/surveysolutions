@@ -604,7 +604,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                questionnaire.AddMacro(@event.EntityId.FormatGuid());
+                questionnaire.AddMacro(@event.MacroId.FormatGuid());
                 return questionnaire;
             });
         }
@@ -620,7 +620,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Description = evnt.Payload.Description
                 };
 
-                questionnaire.UpdateMacro(@event.EntityId.FormatGuid(), updatedMacro);
+                questionnaire.UpdateMacro(@event.MacroId.FormatGuid(), updatedMacro);
                 return questionnaire;
             });
         }
@@ -629,7 +629,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                questionnaire.RemoveMacro(@event.EntityId.FormatGuid());
+                questionnaire.RemoveMacro(@event.MacroId.FormatGuid());
                 return questionnaire;
             });
         }

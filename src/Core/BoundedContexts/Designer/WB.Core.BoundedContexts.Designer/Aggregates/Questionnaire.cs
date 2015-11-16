@@ -859,17 +859,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddMacro(AddMacro command)
         {
-            this.ApplyEvent(new MacroAdded(command.EntityId, command.ResponsibleId));
+            this.ApplyEvent(new MacroAdded(command.MacroId, command.ResponsibleId));
         }
 
         public void UpdateMacro(UpdateMacro command)
         {
-            this.ApplyEvent(new MacroUpdated(command.EntityId, command.Name, command.Content, command.Description, command.ResponsibleId));
+            this.ApplyEvent(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
         }
 
         public void DeleteMacro(DeleteMacro command)
         {
-            this.ApplyEvent(new MacroDeleted(command.EntityId, command.ResponsibleId));
+            this.ApplyEvent(new MacroDeleted(command.MacroId, command.ResponsibleId));
         }
       
         #endregion
