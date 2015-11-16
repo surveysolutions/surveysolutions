@@ -2253,7 +2253,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckYesNoQuestionInvariants(Identity question, ReadOnlyCollection<AnsweredYesNoOption> answeredOptions, IQuestionnaire questionnaire,
+        private void CheckYesNoQuestionInvariants(Identity question, AnsweredYesNoOption[] answeredOptions, IQuestionnaire questionnaire,
             IReadOnlyInterviewStateDependentOnAnswers state)
         {
             decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
@@ -3031,7 +3031,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         interviewChanges = questionnaire.IsQuestionYesNo(questionId)
                             ? this.CalculateInterviewChangesOnYesNoQuestionAnswer(
-                                new Identity(questionId, currentQuestionRosterVector), ((ReadOnlyCollection<AnsweredYesNoOption>) answer).ToArray(),
+                                new Identity(questionId, currentQuestionRosterVector), (AnsweredYesNoOption[]) answer,
                                 answersTime, userId, questionnaire, expressionProcessorState, changeStructures.State, getAnswer)
                             : this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(expressionProcessorState, changeStructures.State, userId, questionId,
                                 currentQuestionRosterVector, answersTime, (decimal[])answer, getAnswer, questionnaire);
@@ -3909,7 +3909,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (ReadOnlyCollection<AnsweredYesNoOption>) answer, questionnaire, currentInterviewState);
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (AnsweredYesNoOption[]) answer, questionnaire, currentInterviewState);
                         }
                         else
                         {
