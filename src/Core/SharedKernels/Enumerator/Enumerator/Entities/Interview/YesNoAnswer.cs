@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -16,9 +15,9 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
         {
         }
 
-        public void SetAnswers(IEnumerable<AnsweredYesNoOption> answers)
+        public void SetAnswers(AnsweredYesNoOption[] answer)
         {
-            this.Answers = answers.ToArray();
+            this.Answers = answer;
         }
 
         public override bool IsAnswered
