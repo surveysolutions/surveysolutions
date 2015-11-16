@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class DataExportProcessesService: IDataExportProcessesService
     {
-        private readonly ConcurrentDictionary<string, IDataExportProcess> dataExportProcessDtoStorage=new ConcurrentDictionary<string, IDataExportProcess>();
+        private readonly ConcurrentDictionary<string, IDataExportDetails> dataExportProcessDtoStorage=new ConcurrentDictionary<string, IDataExportDetails>();
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
         protected readonly ILogger Logger;
 
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaires = questionnaires;
         }
 
-        public IDataExportProcess GetAndStratOldestUnprocessedDataExport()
+        public IDataExportDetails GetAndStratOldestUnprocessedDataExport()
         {
             var exportProcess = dataExportProcessDtoStorage.Values.Where(p => p.Status == DataExportStatus.Queued)
                 .OrderBy(p => p.LastUpdateDate)
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             string processId = Guid.NewGuid().FormatGuid();
 
-            var exportProcess = new AllDataExportProcess()
+            var exportProcess = new AllDataExportDetails()
             {
                 BeginDate = DateTime.UtcNow,
                 DataExportProcessId = processId,
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             string processId = Guid.NewGuid().FormatGuid();
 
-            var exportProcess = new ApprovedDataExportProcess()
+            var exportProcess = new ApprovedDataExportDetails()
             {
                 BeginDate = DateTime.UtcNow,
                 DataExportProcessId = processId,
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public string AddParaDataExport(DataExportFormat exportFormat)
         {
             string processId = Guid.NewGuid().FormatGuid();
-            var exportProcess = new ParaDataExportProcess()
+            var exportProcess = new ParaDataExportDetails()
             {
                 BeginDate = DateTime.UtcNow,
                 DataExportProcessId = processId,
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return processId;
         }
 
-        private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportProcess
+        private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportDetails
         {
             var runningOrQueuedDataExportProcessesByTheQuestionnaire =
                 dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
@@ -131,12 +131,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcessDtoStorage[exportProcess.DataExportProcessId] = exportProcess;
         }
 
-        public IDataExportProcess GetDataExport(string processId)
+        public IDataExportDetails GetDataExport(string processId)
         {
             return dataExportProcessDtoStorage[processId];
         }
 
-        public IDataExportProcess[] GetRunningDataExports()
+        public IDataExportDetails[] GetRunningDataExports()
         {
             return
                 dataExportProcessDtoStorage.Values.Where(

@@ -2,9 +2,9 @@
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public class AllDataExportProcess: IDataExportProcess
+    public class ApprovedDataExportDetails : IDataExportDetails
     {
         public string DataExportProcessId { get; set; }
         public string DataExportProcessName { get; set; }

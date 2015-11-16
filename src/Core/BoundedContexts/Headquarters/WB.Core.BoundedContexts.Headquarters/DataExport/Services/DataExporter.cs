@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,8 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly ILogger logger;
 
-        private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportProcess>>> registeredExporters =
-            new Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportProcess>>>();
+        private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportDetails>>> registeredExporters =
+            new Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportDetails>>>();
 
         public DataExporter(IDataExportProcessesService dataExportProcessesService,
             ILogger logger)
@@ -27,17 +27,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.dataExportProcessesService = dataExportProcessesService;
             this.logger = logger;
             
-            this.RegisterExportHandlerForFormat<ParaDataExportProcess, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
-            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<ParaDataExportDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<AllDataExportDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
 
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, StataFormatExportHandler>(DataExportFormat.STATA);
-            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, StataFormatExportHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<AllDataExportDetails, StataFormatExportHandler>(DataExportFormat.STATA);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportDetails, StataFormatExportHandler>(DataExportFormat.STATA);
 
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, SpssFormatExportHandler>(DataExportFormat.SPSS);
-            this.RegisterExportHandlerForFormat<ApprovedDataExportProcess, SpssFormatExportHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<AllDataExportDetails, SpssFormatExportHandler>(DataExportFormat.SPSS);
+            this.RegisterExportHandlerForFormat<ApprovedDataExportDetails, SpssFormatExportHandler>(DataExportFormat.SPSS);
 
-            this.RegisterExportHandlerForFormat<AllDataExportProcess, BinaryFormatDataExportHandler>(DataExportFormat.Binary);
+            this.RegisterExportHandlerForFormat<AllDataExportDetails, BinaryFormatDataExportHandler>(DataExportFormat.Binary);
         }
 
         public void StartDataExport()
@@ -50,24 +50,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    IDataExportProcess dataExportProcess = this.dataExportProcessesService.GetAndStratOldestUnprocessedDataExport();
+                    IDataExportDetails dataExportDetails = this.dataExportProcessesService.GetAndStratOldestUnprocessedDataExport();
 
-                    if (dataExportProcess == null)
+                    if (dataExportDetails == null)
                         return;
                     
                     try
                     {
-                        HandleExportProcess(dataExportProcess);
+                        HandleExportProcess(dataExportDetails);
 
-                        this.dataExportProcessesService.FinishDataExport(dataExportProcess.DataExportProcessId);
+                        this.dataExportProcessesService.FinishDataExport(dataExportDetails.DataExportProcessId);
                     }
                     catch (Exception e)
                     {
                         logger.Error(
-                            string.Format("data export process with id {0} finished with error", dataExportProcess.DataExportProcessId),
+                            string.Format("data export process with id {0} finished with error", dataExportDetails.DataExportProcessId),
                             e);
 
-                        this.dataExportProcessesService.FinishDataExportWithError(dataExportProcess.DataExportProcessId, e);
+                        this.dataExportProcessesService.FinishDataExportWithError(dataExportDetails.DataExportProcessId, e);
                     }
                 }
             }
@@ -77,18 +77,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
         }
 
-        private void HandleExportProcess(IDataExportProcess dataExportProcess)
+        private void HandleExportProcess(IDataExportDetails dataExportDetails)
         {
-            registeredExporters[dataExportProcess.DataExportFormat][dataExportProcess.GetType()](dataExportProcess);
+            registeredExporters[dataExportDetails.DataExportFormat][dataExportDetails.GetType()](dataExportDetails);
         }
 
         private void RegisterExportHandlerForFormat<T, THandler>(DataExportFormat format)
-            where T : class, IDataExportProcess
+            where T : class, IDataExportDetails
             where THandler : IExportProcessHandler<T>
 
         {
             if (!registeredExporters.ContainsKey(format))
-                registeredExporters[format] = new Dictionary<Type, Action<IDataExportProcess>>();
+                registeredExporters[format] = new Dictionary<Type, Action<IDataExportDetails>>();
 
             registeredExporters[format][typeof (T)] =
                 (p) => { ServiceLocator.Current.GetInstance<THandler>().ExportData(p as T); };

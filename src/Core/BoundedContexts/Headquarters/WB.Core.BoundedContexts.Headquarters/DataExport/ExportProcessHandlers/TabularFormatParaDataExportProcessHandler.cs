@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataExportProcess>
+    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataExportDetails>
     {
         private readonly IStreamableEventStore eventStore;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.paraDataAccessor = paraDataAccessor;
         }
 
-        public void ExportData(ParaDataExportProcess process)
+        public void ExportData(ParaDataExportDetails dataExportDetails)
         {
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,
@@ -101,14 +101,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000 * persistCount)
                 {
-                    this.PersistResults(process.DataExportProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
+                    this.PersistResults(dataExportDetails.DataExportProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
                     persistCount++;
                 }
             }
 
             this.paraDataAccessor.ArchiveParaDataExport();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(process.DataExportProcessId, 100);
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.DataExportProcessId, 100);
         }
 
         private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
