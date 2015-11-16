@@ -7,6 +7,8 @@ using System.Net.Mime;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
@@ -167,7 +169,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    return ParseMultioptionAnswer(answersWithColumnName);
+                    var multioptionQuestion = question as IMultyOptionsQuestion;
+
+                    if (!multioptionQuestion.YesNoView)
+                    {
+                        return ParseMultioptionAnswer(answersWithColumnName);
+                    }
+                    else
+                    {
+                        return ParseYesNoAnswer(answersWithColumnName);
+                    }
                 case QuestionType.TextList:
                     return answersWithColumnName.Select((a, i) => new Tuple<decimal, string>(i + 1, a.Item2)).ToArray();
                 case QuestionType.GpsCoordinates:
@@ -177,6 +188,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     this.TryParse(answersWithColumnName[0].Item2, answersWithColumnName[0].Item1, question, out parsedAnswer);
                     return parsedAnswer;
             }
+        }
+
+        private AnsweredYesNoOption[] ParseYesNoAnswer(Tuple<string, string>[] answersWithColumnName)
+        {
+            List<Tuple<AnsweredYesNoOption, int>> result = new List<Tuple<AnsweredYesNoOption, int>>();
+
+            foreach (var answerTuple in answersWithColumnName)
+            {
+                string columnEncodedValue = CutVariableNameFromColumnName(answerTuple.Item1);
+                decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
+
+                int answerIndex = int.Parse(answerTuple.Item2);
+
+                if (answerIndex == 0)
+                {
+                    result.Add(Tuple.Create(new AnsweredYesNoOption(columnValue.Value, false), answerIndex));
+                }
+                if (answerIndex > 0)
+                {
+                    result.Add(Tuple.Create(new AnsweredYesNoOption(columnValue.Value, true), answerIndex));
+                }
+            }
+
+            return result.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray();
         }
 
         private decimal[] ParseMultioptionAnswer(Tuple<string, string>[] answersWithColumnName)
