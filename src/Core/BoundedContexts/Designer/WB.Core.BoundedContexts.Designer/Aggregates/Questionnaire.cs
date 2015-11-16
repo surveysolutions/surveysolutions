@@ -2203,7 +2203,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region CopyPaste command handler
         
-        public void PasteItemAfter(PasteAfterCommand pasteAfterCommand)
+        public void PasteAfter(PasteAfterCommand pasteAfterCommand)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteAfterCommand.ResponsibleId);
             this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfterCommand.ItemToPasteAfterId);
@@ -2224,7 +2224,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 pasteAfterCommand.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
         }
 
-        public void PasteItemInto(PasteIntoCommand pasteIntoCommand)
+        public void PasteInto(PasteIntoCommand pasteIntoCommand)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteIntoCommand.ResponsibleId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteIntoCommand.EntityId);

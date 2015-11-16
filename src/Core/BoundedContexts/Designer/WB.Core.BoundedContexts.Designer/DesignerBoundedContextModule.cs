@@ -135,8 +135,8 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateStaticText(command.EntityId, command.Text, command.ResponsibleId))
                 .Handles<UpdateTextListQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextListQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.ResponsibleId, command.MaxAnswerCount, command.Scope))
                 .Handles<UpdateTextQuestionCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.UpdateTextQuestion(command.QuestionId, command.Title, command.VariableName, command.VariableLabel, command.IsPreFilled, command.Scope, command.EnablementCondition, command.ValidationExpression, command.ValidationMessage, command.Instructions, command.Mask, command.ResponsibleId))                
-                .Handles<PasteAfterCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemAfter(command))
-                .Handles<PasteIntoCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.PasteItemInto(command));
+                .Handles<PasteAfterCommand>(command => command.QuestionnaireId, aggregate => aggregate.PasteAfter)
+                .Handles<PasteIntoCommand>(command => command.QuestionnaireId, aggregate => aggregate.PasteInto);
         }
     }
 }
