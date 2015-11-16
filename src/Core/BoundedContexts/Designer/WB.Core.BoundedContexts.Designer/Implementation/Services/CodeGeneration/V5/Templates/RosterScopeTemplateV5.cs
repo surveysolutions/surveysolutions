@@ -714,7 +714,35 @@ this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName)
         #line hidden
         
         #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
-this.Write(".SetAnswer(val); });\r\n");
+this.Write(" = new ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(typeof(YesNoAnswers).Name));
+
+        
+        #line default
+        #line hidden
+        
+        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write("(");
+
+        
+        #line default
+        #line hidden
+        
+        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
+
+        
+        #line default
+        #line hidden
+        
+        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(".All, val); });\r\n");
 
         
         #line default
