@@ -10,12 +10,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class AnswerYesNoQuestion : AnswerQuestionCommand
     {
-        public ReadOnlyCollection<AnsweredYesNoOption> AnsweredOptions { get; private set; }
+        public AnsweredYesNoOption[] AnsweredOptions { get; private set; }
 
         public AnswerYesNoQuestion(Guid interviewId, Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, IEnumerable<AnsweredYesNoOption> answeredOptions)
             : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
-            this.AnsweredOptions = answeredOptions.ToReadOnlyCollection();
+            this.AnsweredOptions = answeredOptions.ToArray();
         }
     }
 }
