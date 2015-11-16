@@ -186,9 +186,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         this.ExpressionProcessorStatePrototype.UpdateLinkedMultiOptionAnswer(question.Id, questionRosterVector, (decimal[][])(question.Answer));
                     }
-                    if (question.Answer is AnsweredYesNoOption[])
+                    if (question.Answer is IEnumerable<AnsweredYesNoOption>)
                     {
-                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, ConvertToYesNoAnswers((AnsweredYesNoOption[])question.Answer));
+                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, ConvertToYesNoAnswers((IEnumerable<AnsweredYesNoOption>)question.Answer));
                     }
                     if (question.Answer is Tuple<decimal, string>[])
                     {
@@ -323,7 +323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(@event.QuestionId, @event.RosterVector, yesNoAnswers);
         }
 
-        private YesNoAnswersOnly ConvertToYesNoAnswers(AnsweredYesNoOption[] answeredOptions)
+        private YesNoAnswersOnly ConvertToYesNoAnswers(IEnumerable<AnsweredYesNoOption> answeredOptions)
         {
             var yesAnswers = answeredOptions.Where(x => x.Yes).Select(x => x.OptionValue).ToArray();
             var noAnswers = answeredOptions.Where(x => !x.Yes).Select(x => x.OptionValue).ToArray();
@@ -1755,7 +1755,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.ApplyEvent(questionnaire.IsQuestionLinked(questionId)
                             ? new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[][])answer) as object
                             : questionnaire.IsQuestionYesNo(questionId)
-                                ? new YesNoQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (AnsweredYesNoOption[])answer) as object
+                                ? new YesNoQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, ((IEnumerable<AnsweredYesNoOption>)answer).ToArray()) as object
                                 : new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[])answer) as object);
                         break;
                     case QuestionType.Multimedia:
@@ -2127,7 +2127,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         this.ApplyEvent(new MultipleOptionsQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (decimal[])change.Answer));
                         break;
                     case AnswerChangeType.YesNo:
-                        this.ApplyEvent(new YesNoQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (AnsweredYesNoOption[])change.Answer));
+                        this.ApplyEvent(new YesNoQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, ((IEnumerable<AnsweredYesNoOption>)change.Answer).ToArray()));
                         break;
                     case AnswerChangeType.QRBarcode:
                         this.ApplyEvent(new QRBarcodeQuestionAnswered(change.UserId, change.QuestionId, change.RosterVector, change.AnswerTime, (string)change.Answer));
@@ -2258,7 +2258,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void CheckYesNoQuestionInvariants(Identity question, AnsweredYesNoOption[] answeredOptions, IQuestionnaire questionnaire,
+        private void CheckYesNoQuestionInvariants(Identity question, IEnumerable<AnsweredYesNoOption> answeredOptions, IQuestionnaire questionnaire,
             IReadOnlyInterviewStateDependentOnAnswers state)
         {
             decimal[] selectedValues = answeredOptions.Select(answeredOption => answeredOption.OptionValue).ToArray();
@@ -2541,7 +2541,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 substitutionChanges);
         }
 
-        private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Identity question, AnsweredYesNoOption[] answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
+        private InterviewChanges CalculateInterviewChangesOnYesNoQuestionAnswer(Identity question, IEnumerable<AnsweredYesNoOption> answer, DateTime answerTime, Guid userId, IQuestionnaire questionnaire,
             IInterviewExpressionStateV5 expressionProcessorState, IReadOnlyInterviewStateDependentOnAnswers state, Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer)
         {
             List<decimal> availableValues = questionnaire.GetAnswerOptionsAsValues(question.Id).ToList();
@@ -3036,7 +3036,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         interviewChanges = questionnaire.IsQuestionYesNo(questionId)
                             ? this.CalculateInterviewChangesOnYesNoQuestionAnswer(
-                                new Identity(questionId, currentQuestionRosterVector), (AnsweredYesNoOption[]) answer,
+                                new Identity(questionId, currentQuestionRosterVector), (IEnumerable<AnsweredYesNoOption>) answer,
                                 answersTime, userId, questionnaire, expressionProcessorState, changeStructures.State, getAnswer)
                             : this.CalculateInterviewChangesOnAnswerMultipleOptionsQuestion(expressionProcessorState, changeStructures.State, userId, questionId,
                                 currentQuestionRosterVector, answersTime, (decimal[])answer, getAnswer, questionnaire);
@@ -3829,7 +3829,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 case QuestionType.MultyOption:
                     if (questionnaire.IsQuestionYesNo(rosterSizeQuestionId.Value))
                     {
-                        var yesNoAnswer = answerOnRosterSizeQuestion as AnsweredYesNoOption[];
+                        var yesNoAnswer = answerOnRosterSizeQuestion as IEnumerable<AnsweredYesNoOption>;
                         if (yesNoAnswer != null)
                         {
                             return yesNoAnswer.Where(a => a.Yes).Select(a => a.OptionValue).ToDictionary(
@@ -3914,7 +3914,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(questionId))
                         {
-                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (AnsweredYesNoOption[]) answer, questionnaire, currentInterviewState);
+                            this.CheckYesNoQuestionInvariants(new Identity(questionId, currentRosterVector), (IEnumerable<AnsweredYesNoOption>) answer, questionnaire, currentInterviewState);
                         }
                         else
                         {
@@ -4308,7 +4308,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         (decimal[]) answerChange.Answer);
                     break;
                 case AnswerChangeType.YesNo:
-                    expressionProcessorState.UpdateYesNoAnswer(answerChange.QuestionId, answerChange.RosterVector, ConvertToYesNoAnswers((AnsweredYesNoOption[])answerChange.Answer));
+                    expressionProcessorState.UpdateYesNoAnswer(answerChange.QuestionId, answerChange.RosterVector, ConvertToYesNoAnswers((IEnumerable<AnsweredYesNoOption>)answerChange.Answer));
                     break;
             }
         }
