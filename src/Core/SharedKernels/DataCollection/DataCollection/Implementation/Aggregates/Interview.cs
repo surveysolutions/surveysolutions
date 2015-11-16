@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                     if (question.Answer is AnsweredYesNoOption[])
                     {
-                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, ConvertToYesNoAnswers((AnsweredYesNoOption[])question.Answer));
+                        this.ExpressionProcessorStatePrototype.UpdateYesNoAnswer(question.Id, questionRosterVector, ConvertToYesNoAnswersOnly((AnsweredYesNoOption[])question.Answer));
                     }
                     if (question.Answer is Tuple<decimal, string>[])
                     {
