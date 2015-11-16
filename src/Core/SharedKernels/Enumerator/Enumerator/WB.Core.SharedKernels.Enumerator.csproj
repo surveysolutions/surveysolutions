@@ -92,6 +92,16 @@
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
+    <Compile Include="Properties\UIResources.id-ID.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.id-ID.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\UIResources.th-TH.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.th-TH.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -255,6 +265,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\UIResources.es-ES.resx" />
     <EmbeddedResource Include="Properties\UIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\UIResources.id-ID.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.id-ID.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.pt-PT.resx" />
     <EmbeddedResource Include="Properties\UIResources.resx">
       <SubType>Designer</SubType>
@@ -262,6 +276,10 @@
       <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\UIResources.th-TH.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.th-TH.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.uk-UA.resx" />
   </ItemGroup>
   <ItemGroup />

@@ -139,6 +139,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\InterviewerUIResources.id-ID.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.id-ID.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\InterviewerUIResources.th-TH.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\ICapiCleanUpService.cs" />
     <Compile Include="Services\ICapiDataSynchronizationService.cs" />
     <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
@@ -224,6 +234,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\InterviewerUIResources.es-ES.resx" />
     <EmbeddedResource Include="Properties\InterviewerUIResources.fr-FR.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.id-ID.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.id-ID.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.pt-PT.resx" />
     <EmbeddedResource Include="Properties\InterviewerUIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -231,6 +245,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.ru-RU.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.th-TH.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.th-TH.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx" />
   </ItemGroup>
   <ItemGroup />
