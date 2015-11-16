@@ -184,9 +184,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                         : AnswerType.OptionCode;
 
                 case QuestionType.MultyOption:
-                    return IsQuestionLinked(questionId)
-                        ? AnswerType.RosterVectorArray
-                        : AnswerType.OptionCodeArray;
+                    return
+                        IsQuestionYesNo(questionId)
+                            ? AnswerType.YesNoArray
+                            : IsQuestionLinked(questionId)
+                                ? AnswerType.RosterVectorArray
+                                : AnswerType.OptionCodeArray;
 
                 case QuestionType.Numeric:
                     return IsQuestionInteger(questionId)
