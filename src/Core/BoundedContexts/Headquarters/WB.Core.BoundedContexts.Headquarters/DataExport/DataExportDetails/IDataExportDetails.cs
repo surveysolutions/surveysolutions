@@ -1,9 +1,9 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public interface IDataExportProcess
+    public interface IDataExportDetails
     {
         string DataExportProcessId { get; set; }
         string DataExportProcessName { get; set; }

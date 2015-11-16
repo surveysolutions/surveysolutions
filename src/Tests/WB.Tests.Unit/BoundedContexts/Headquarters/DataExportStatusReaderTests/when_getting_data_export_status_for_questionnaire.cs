@@ -2,13 +2,13 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportProcess;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
         Establish context = () =>
         {
             dataExportProcessesService.Setup(x => x.GetRunningDataExports())
-                .Returns(new IDataExportProcess[]
+                .Returns(new IDataExportDetails[]
                 {Create.ParaDataExportProcess(), Create.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.ApprovedDataExportProcess()});
 
             var tabularDataExportFilePath = "tabularDataExportFilePath";
