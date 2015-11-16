@@ -478,8 +478,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             VariableName = varName,
                             Conditions = childAsIQuestion.CascadeFromQuestionId.HasValue
                                 ? GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
-                                : macrosSubstitutionService.SubstituteMacroses(childAsIQuestion.ConditionExpression, questionnaireDoc),
-                            Validations = macrosSubstitutionService.SubstituteMacroses(childAsIQuestion.ValidationExpression, questionnaireDoc),
+                                : macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values),
+                            Validations = macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values),
                             QuestionType = childAsIQuestion.QuestionType,
                             
                             GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
@@ -530,7 +530,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             var roster = new RosterTemplateModel
                             {
                                 Id = childAsIGroup.PublicKey,
-                                Conditions = macrosSubstitutionService.SubstituteMacroses(childAsIGroup.ConditionExpression, questionnaireDoc),
+                                Conditions = macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
                                 VariableName = varName,
                                 GeneratedTypeName =
                                     GenerateTypeNameByScope(string.Format("{0}_{1}_", varName, childAsIGroup.PublicKey.FormatGuid()), currentRosterScope, generatedScopesTypeNames),
@@ -558,7 +558,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                 new GroupTemplateModel
                                 {
                                     Id = childAsIGroup.PublicKey,
-                                    Conditions = macrosSubstitutionService.SubstituteMacroses(childAsIGroup.ConditionExpression, questionnaireDoc),
+                                    Conditions = macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
                                     VariableName = "@__" + varName, //generating variable name by publicKey
                                     GeneratedStateName = "@__" + varName + "_state",
                                     GeneratedIdName = "@__" + varName + "_id",
@@ -583,7 +583,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var childQuestion = questionnaireDocument.Find<SingleQuestion>(cascadingQuestionId);
             var parentQuestion = questionnaireDocument.Find<SingleQuestion>(childQuestion.CascadeFromQuestionId.Value);
 
-            var conditionForChildCascadingQuestion = this.macrosSubstitutionService.SubstituteMacroses(childQuestion.ConditionExpression, questionnaireDocument);
+            var conditionForChildCascadingQuestion = this.macrosSubstitutionService.InlineMacros(childQuestion.ConditionExpression, questionnaireDocument.Macros.Values);
 
             if (parentQuestion == null)
             {
@@ -665,13 +665,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> dependencies = groupsWithConditions.ToDictionary(
                 x => x.PublicKey,
                 x => GetIdsOfQuestionsInvolvedInExpression(
-                    macrosSubstitutionService.SubstituteMacroses(x.ConditionExpression, questionnaireDocument), 
+                    macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), 
                     variableNames));
 
             questionsWithCondition.ToDictionary(
                 x => x.PublicKey,
                 x => GetIdsOfQuestionsInvolvedInExpression(
-                    macrosSubstitutionService.SubstituteMacroses(x.ConditionExpression, questionnaireDocument), variableNames))
+                    macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames))
                 .ToList()
                 .ForEach(x => dependencies.Add(x.Key, x.Value));
 

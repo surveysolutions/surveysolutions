@@ -30,14 +30,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0020");
 
         It should_return_error_with_1_reference = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+            resultErrors.Single().References.Count().ShouldEqual(2);
 
         It should_return_error_reference_with_type_Macro = () =>
-            resultErrors.Single()
-                .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Macro);
+            resultErrors.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Macro);
+
+        It should_return_error_reference_with_id_of_macro1 = () =>
+            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(macro1Id);
 
         It should_return_error_reference_with_id_of_macro2 = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(macro2Id);
+            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(macro2Id);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;

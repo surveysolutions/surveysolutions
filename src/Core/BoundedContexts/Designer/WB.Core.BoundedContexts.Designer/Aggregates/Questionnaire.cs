@@ -857,17 +857,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Macro command handlers
 
-        public void AddMacro(AddMacroCommand command)
+        public void AddMacro(AddMacro command)
         {
             this.ApplyEvent(new MacroAdded(command.EntityId, command.ResponsibleId));
         }
 
-        public void UpdateMacro(UpdateMacroCommand command)
+        public void UpdateMacro(UpdateMacro command)
         {
             this.ApplyEvent(new MacroUpdated(command.EntityId, command.Name, command.Content, command.Description, command.ResponsibleId));
         }
 
-        public void DeleteMacro(DeleteMacroCommand command)
+        public void DeleteMacro(DeleteMacro command)
         {
             this.ApplyEvent(new MacroDeleted(command.EntityId, command.ResponsibleId));
         }
