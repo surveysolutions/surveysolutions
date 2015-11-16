@@ -182,29 +182,23 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.saveYesNoMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, yes, answerOptionValue, maxAllowedAnswers) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answers = _.result(_.find(answeredYesNoQuestionsBySupervisor, 'questionId', answerElementId), 'answers');
+        var answers = _.result(_.find(answeredYesNoQuestionsBySupervisor, function(answersByQuestion) { return answersByQuestion.questionId === answerElementId; }), 'answers');
 
         if (_.isNull(answers) || _.isUndefined(answers)) {
             answers = [];
         }
 
         var answeredOption = _.find(answers, function(answer) { return answer.OptionValue === answerOptionValue; });
-        if (answeredOption) {
-            var indexOfAnsweredOption = answers.indexOf(answeredOption);
-            answers.splice(indexOfAnsweredOption, 1);
-        }
-
-        answers.push({ optionValue: answerOptionValue, yes: yes });
-
+        
         var observableAnswers = ko.observableArray(answers).extend({
             validation: [
                 {
                     validator: function (val) {
-                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers)) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers) || answeredOption) {
                             return true;
                         }
 
-                        return val.length <= maxAllowedAnswers;
+                        return val.length < maxAllowedAnswers;
                     },
                     message: 'Number of selected answers more than number of maximum permitted answers'
                 }
@@ -215,6 +209,12 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             self.ShowError(observableAnswers.error);
             return;
         }
+
+        if (answeredOption) {
+            var indexOfAnsweredOption = answers.indexOf(answeredOption);
+            answers.splice(indexOfAnsweredOption, 1);
+        }
+        answers.push({ optionValue: answerOptionValue, yes: yes });
         
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
         question.selectedOptions = observableAnswers;
