@@ -232,15 +232,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical multiple answers question has duplicate values..
-        /// </summary>
-        internal static string PL0021_MultyOptionQuestionHasDuplicateAnswers {
-            get {
-                return ResourceManager.GetString("PL0021_MultyOptionQuestionHasDuplicateAnswers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Roster size question cannot have negative values..
         /// </summary>
         internal static string PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative {

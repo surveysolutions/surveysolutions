@@ -74,7 +74,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
             errors.AddRange(this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric)(datas, preloadedDataService));
-            errors.AddRange(this.Verifier(this.ErrorsByMultiOptionQuestions, QuestionType.MultyOption)(datas, preloadedDataService));
             
             errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
 
@@ -159,7 +158,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     this.Verifier(this.ColumnDuplications),
                     this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
                     this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
-                    this.Verifier(this.ErrorsByMultiOptionQuestions, QuestionType.MultyOption),
                     
                     this.ErrorsBySupervisorName
                 };
@@ -492,38 +490,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsByMultiOptionQuestions(
-            HeaderStructureForLevel level,
-            ExportedHeaderItem multiOptionExportedQuestion,
-            PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
-        {
-            var multiOptionAnswersColumnIndexes = GetColumnIndexesWhichContainsAnswersOnQuestion(multiOptionExportedQuestion, levelData, preloadedDataService);
-
-            for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
-            {
-                var selectedOptions = new List<decimal>();
-
-                foreach (var multiOptionAnswersColumnIndex in multiOptionAnswersColumnIndexes)
-                {
-                    var parsedValue = GetValue<decimal>(levelData.Content[rowIndex], levelData.Header,
-                        multiOptionAnswersColumnIndex, level, preloadedDataService);
-                 
-                    if (!parsedValue.HasValue)
-                        continue;
-
-                    selectedOptions.Add(parsedValue.Value);
-                }
-                if (selectedOptions.Count > 0 && selectedOptions.GroupBy(n => n).Any(c => c.Count() > 1))
-                    yield return
-                        new PreloadedDataVerificationError("PL0021",
-                            PreloadingVerificationMessages.PL0021_MultyOptionQuestionHasDuplicateAnswers,
-                            new PreloadedDataVerificationReference(PreloadedDataVerificationReferenceType.Column,
-                                multiOptionExportedQuestion.VariableName, levelData.FileName));
-
-            }
-        }
-
         private int[] GetColumnIndexesWhichContainsAnswersOnQuestion(
             ExportedHeaderItem exportedQuestion,
             PreloadedDataByFile levelData,
@@ -545,14 +511,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             object valueParseResult;
 
-            var parseResult = preloadedDataService.ParseQuestionInLevel(row[columnIndex],
+            ValueParsingResult parseResult = preloadedDataService.ParseQuestionInLevel(row[columnIndex],
                 header[columnIndex], level, out valueParseResult);
 
             if (parseResult != ValueParsingResult.OK)
                 return null;
             try
             {
-                return (T)valueParseResult;
+                return (T?) valueParseResult;
             }
             catch (Exception)
             {
