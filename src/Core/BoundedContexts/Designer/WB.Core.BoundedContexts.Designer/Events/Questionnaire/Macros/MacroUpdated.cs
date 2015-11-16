@@ -4,13 +4,13 @@ using Main.Core.Events.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros
 {
-    public class MacroUpdated : QuestionnaireEntityEvent
+    public class MacroUpdated : QuestionnaireActiveEvent
     {
         public MacroUpdated() { }
 
-        public MacroUpdated(Guid entityId, string name, string content, string description, Guid responsibleId)
+        public MacroUpdated(Guid macroId, string name, string content, string description, Guid responsibleId)
         {
-            this.EntityId = entityId;
+            this.MacroId = macroId;
             this.ResponsibleId = responsibleId;
             this.Name = name;
             this.Content = content;
@@ -19,5 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros
         public string Name { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }
+        public Guid MacroId { get; set; }
     }
 }
