@@ -564,6 +564,11 @@
     <EmbeddedResource Include="Views\ControlPanel\SynchronizationLog.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\EventStore.cshtml" />
     <EmbeddedResource Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableSupervisorsQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableMultiOptionsQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

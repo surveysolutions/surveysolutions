@@ -17,6 +17,7 @@
             answerSingleOptionQuestionCommand: "AnswerSingleOptionQuestionCommand",
             answerTextQuestionCommand: "AnswerTextQuestionCommand",
             answerGeoLocationQuestionCommand: "AnswerGeoLocationQuestionCommand",
+            answerYesNoQuestion: "AnswerYesNoQuestion",
 
             setCommentCommand: "CommentAnswerCommand",
             setAnswerCommand: "SetAnswerCommand",
