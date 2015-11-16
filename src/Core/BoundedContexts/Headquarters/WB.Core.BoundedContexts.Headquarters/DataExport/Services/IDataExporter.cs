@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    internal interface IDataExporter
+    public interface IDataExporter
     {
         void StartDataExport();
     }

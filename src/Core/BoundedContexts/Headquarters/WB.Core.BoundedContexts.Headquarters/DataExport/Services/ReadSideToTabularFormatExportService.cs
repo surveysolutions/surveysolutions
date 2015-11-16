@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.interviewActionsExporter = new InterviewActionsExporter(interviewDataExportSettings, fileSystemAccessor, csvWriter, transactionManager, interviewActionsDataStorage);
         }
 
-        public void ExportInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
-        public void ExportApprovedInterviewsInTabularFormatAsync(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 

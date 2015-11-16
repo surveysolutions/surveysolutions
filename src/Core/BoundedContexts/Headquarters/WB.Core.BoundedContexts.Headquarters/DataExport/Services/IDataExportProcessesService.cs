@@ -6,24 +6,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportProcessesService
     {
-        IDataExportProcess GetOldestUnprocessedDataExportProcess();
+        IDataExportProcess GetAndStratOldestUnprocessedDataExport();
 
-        string AddDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+        string AddAllDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
-        string AddApprovedDataExportProcess(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+        string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
-        string AddParaDataExportProcess(DataExportFormat exportFormat);
+        string AddParaDataExport(DataExportFormat exportFormat);
 
-        IDataExportProcess GetDataExportProcess(string processId);
+        IDataExportProcess GetDataExport(string processId);
 
-        IDataExportProcess[] GetRunningProcess();
+        IDataExportProcess[] GetRunningDataExports();
 
-        void FinishDataExportProcess(string processId);
+        void FinishDataExport(string processId);
 
-        void FinishDataExportProcessWithError(string processId, Exception e);
+        void FinishDataExportWithError(string processId, Exception e);
 
         void UpdateDataExportProgress(string processId, int progressInPercents);
 
-        void DeleteDataExportProcess(string processId);
+        void DeleteDataExport(string processId);
     }
 }
