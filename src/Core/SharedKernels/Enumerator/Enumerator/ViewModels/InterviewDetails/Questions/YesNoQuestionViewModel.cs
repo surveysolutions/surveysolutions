@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(OptionModel model, YesNoQuestionAnswer answerModel)
+        private YesNoQuestionOptionViewModel ToViewModel(OptionModel model, YesNoAnswer answerModel)
         {
             var isExistAnswer = answerModel.Answers != null && answerModel.Answers.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
@@ -123,19 +123,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
             {
-                changedModel.Selected = null;
+                var interview = this.interviewRepository.Get(this.interviewId.ToString());
+                var answerModel = interview.GetYesNoAnswer(Identity);
+                var answeredYesNoOption = answerModel.Answers.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
+                changedModel.Selected = answeredYesNoOption?.Yes;
                 return;
             }
 
             if (this.isRosterSizeQuestion && (!changedModel.Selected.HasValue || !changedModel.Selected.Value))
             {
-                var amountOfRostersToRemove = 1;
-                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                    amountOfRostersToRemove);
-                if (!(await this.userInteraction.ConfirmAsync(message)))
+                var interview = this.interviewRepository.Get(this.interviewId.ToString());
+                var answerModel = interview.GetYesNoAnswer(Identity);
+
+                var backendYesAnswersCount = answerModel.Answers.Count(a => a.Yes);
+                var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
+
+                if (backendYesAnswersCount > UIYesAnswersCount)
                 {
-                    changedModel.Selected = true;
-                    return;
+                    var amountOfRostersToRemove = 1;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                        amountOfRostersToRemove);
+                    if (!(await this.userInteraction.ConfirmAsync(message)))
+                    {
+                        changedModel.Selected = true;
+                        return;
+                    }
                 }
             }
 

@@ -2237,6 +2237,11 @@ namespace WB.Tests.Unit
             return new MultiOptionAnswer(questionId, rosterVector);
         }
 
+        public static YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
+        {
+            return new YesNoAnswer(questionId, rosterVector);
+        }
+
         public static NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {
             var result = new NavigationState(

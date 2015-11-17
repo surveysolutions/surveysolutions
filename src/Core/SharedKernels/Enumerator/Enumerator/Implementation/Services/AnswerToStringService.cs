@@ -55,15 +55,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 return string.Join(", ", stringAnswers);
             }
 
-            if (answer is YesNoQuestionAnswer)
+            if (answer is YesNoAnswer)
             {
-                var yesNoAnswer = (YesNoQuestionAnswer)answer;
+                var yesNoAnswer = (YesNoAnswer)answer;
                 List<string> stringAnswers = new List<string>();
                 var yesNoQuestionModel = (YesNoQuestionModel)question;
-                foreach (var answerValue in yesNoAnswer.Answers)
+                var yesAnswers = yesNoAnswer.Answers.Where(s => s.Yes);
+                foreach (var answerValue in yesAnswers)
                 {
                     stringAnswers.Add(yesNoQuestionModel.Options
-                        .Single(x => x.Value == answerValue.OptionValue && answerValue.Yes)
+                        .Single(x => x.Value == answerValue.OptionValue)
                         .Title);
                 }
 
