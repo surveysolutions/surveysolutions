@@ -73,7 +73,6 @@
             }
             hotkeys.add({
                 combo: openTreeItemInEditor,
-                allowIn: ['INPUT', 'SELECT'],
                 description: 'Open item in editor',
                 callback: function (event) {
                     event.preventDefault();

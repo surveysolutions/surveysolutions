@@ -5,15 +5,12 @@
             var dictionnaires = {};
 
             var saveQuestion = 'ctrl+s';
-            var addOption = 'enter';
+          
             
             if (hotkeys.get(saveQuestion) !== false) {
                 hotkeys.del(saveQuestion);
             }
 
-           if (hotkeys.get(addOption) !== false) {
-                hotkeys.del(addOption);
-            }
             if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                 hotkeys.bindTo($scope)
                     .add({
@@ -28,23 +25,19 @@
                     });
 
             }
-            hotkeys.add({
-                    combo: addOption,
-                    description: 'Add option',
-                    allowIn: ["INPUT"],
-                    callback: function(event) {
-                        event.preventDefault();
 
-                        utilityService.moveFocusAndAddOptionIfNeeded(
-                            event.target,
-                            ".question-options-editor",
-                            ".question-options-editor input.question-option-value-editor",
-                            $scope.activeQuestion.options,
-                            function () { return $scope.addOption(); },
-                            "option");
-                    }
-                });
-            
+            $scope.onKeyPressInOptions = function (keyEvent) {
+                if (keyEvent.which === 13) {
+                    keyEvent.preventDefault();
+                    utilityService.moveFocusAndAddOptionIfNeeded(
+                        event.target,
+                        ".question-options-editor",
+                        ".question-options-editor input.question-option-value-editor",
+                        $scope.activeQuestion.options,
+                        function () { return $scope.addOption(); },
+                        "option");
+                }
+            }
 
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
