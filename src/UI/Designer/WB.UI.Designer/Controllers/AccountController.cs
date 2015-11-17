@@ -154,7 +154,7 @@ namespace WB.UI.Designer.Controllers
                                 ConfirmationToken = confirmationToken
                             }).SendAsync();
 
-                    this.Error(ErrorMessages.Look_for_an_email_in_your_inbox);
+                    this.Error(ErrorMessages.RestorePassword_EmailSentInstructions);
                     return this.RedirectToAction("Login");
                 }
             }
