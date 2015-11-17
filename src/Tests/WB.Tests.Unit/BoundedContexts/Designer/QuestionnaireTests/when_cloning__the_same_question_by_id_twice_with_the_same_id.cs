@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 instructions: "Instructions",
                 stataExportCaption: "test",
                 featured: true,
-                questionScope: QuestionScope.Interviewer,
+                questionScope: QuestionScope.Hidden,
                 validationExpression: "Validation",
                 validationMessage: "Val message",
                 questionType: QuestionType.Text,

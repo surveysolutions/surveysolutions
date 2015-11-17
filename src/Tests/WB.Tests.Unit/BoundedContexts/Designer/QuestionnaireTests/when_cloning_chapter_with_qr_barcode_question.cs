@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -23,7 +24,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Instructions = instructions,
                 VariableName = variableName,
                 ValidationExpression = validation,
-                ValidationMessage = validationMessage
+                ValidationMessage = validationMessage,
+                QuestionScope = QuestionScope.Hidden
             });
 
             eventContext = new EventContext();
@@ -81,6 +83,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         It should_QRBarcodeQuestionCloned_event_ValidationMessage_be_equal_validationMessage = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().ValidationMessage.ShouldEqual(validationMessage);
+
+        It should_QRBarcodeQuestionCloned_event_scope_be_equal_hidden = () =>
+            eventContext.GetSingleEvent<QRBarcodeQuestionCloned>().QuestionScope.ShouldEqual(QuestionScope.Hidden);
+        
 
         private static Questionnaire questionnaire;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

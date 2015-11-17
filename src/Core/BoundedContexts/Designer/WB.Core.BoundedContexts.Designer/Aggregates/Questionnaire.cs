@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.VariableLabel,
@@ -375,7 +375,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.PublicKey,
                         QuestionType.TextList,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.QuestionText,
                         e.StataExportCaption,
                         e.VariableLabel,
@@ -553,7 +553,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.Title,
                         e.VariableName,
                         e.VariableLabel,
@@ -669,7 +669,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     new QuestionData(
                         e.QuestionId,
                         QuestionType.QRBarcode,
-                        QuestionScope.Interviewer,
+                        e.QuestionScope,
                         e.Title,
                         e.VariableName,
                         e.VariableLabel,
@@ -1096,6 +1096,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
                             responsibleId: responsibleId,
+                            scope : textListQuestion.QuestionScope,
                             maxAnswerCount: textListQuestion.MaxAnswerCount));
                         continue;
                     }
@@ -1111,7 +1112,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationMessage: qrBarcodeQuestion.ValidationMessage, 
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
-                            sourceQuestionnaireId: sourceQuestionnaireId, 
+                            sourceQuestionnaireId: sourceQuestionnaireId,
+                            scope: qrBarcodeQuestion.QuestionScope,
                             responsibleId: responsibleId));
                         continue;
                     }
@@ -1143,6 +1145,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             sourceQuestionnaireId: sourceQuestionnaireId,
                             responsibleId: responsibleId, validationExpression: geoLocationQuestion.ValidationExpression,
                             validationMessage: geoLocationQuestion.ValidationMessage,
+                            scope: geoLocationQuestion.QuestionScope,
                             featured: geoLocationQuestion.Featured,
                             capital: geoLocationQuestion.Capital));
                         continue;
@@ -1157,7 +1160,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
-                            responsibleId: responsibleId, scope: dateTitmeQuestion.QuestionScope,
+                            responsibleId: responsibleId, 
+                            scope: dateTitmeQuestion.QuestionScope,
                             isPreFilled: dateTitmeQuestion.Featured,
                             validationExpression: dateTitmeQuestion.ValidationExpression,
                             validationMessage: dateTitmeQuestion.ValidationMessage));
@@ -1223,6 +1227,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId, 
+                            scope : multimediaQuestion.QuestionScope,
                             responsibleId: responsibleId));
                         continue;
                     }
@@ -4084,7 +4089,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private IEnumerable<object> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId,
-            Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, bool featured, bool capital)
+            Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital)
         {
             yield return new QuestionCloned(
                 publicKey: questionId,
@@ -4093,7 +4098,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 questionType: QuestionType.GpsCoordinates,
                 stataExportCaption: variableName,
                 variableLabel: variableLabel,
-                questionScope: QuestionScope.Interviewer,
+                questionScope: scope,
                 conditionExpression: enablementCondition,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
@@ -4247,7 +4252,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 countOfDecimalPlaces: null);
         }
 
-        private IEnumerable<object> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
+        private IEnumerable<object> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
+            string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, 
+            Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             yield return new NumericQuestionCloned
             (
@@ -4274,7 +4281,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private IEnumerable<object> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, 
             string variableLabel, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
-            Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, int? maxAnswerCount)
+            Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, int? maxAnswerCount)
         {
             yield return new TextListQuestionCloned
             {
@@ -4291,13 +4298,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionnaireId = sourceQuestionnaireId,
                 TargetIndex = targetIndex,
                 ResponsibleId = responsibleId,
-                MaxAnswerCount = maxAnswerCount
+                MaxAnswerCount = maxAnswerCount,
+                QuestionScope = scope
             };
         }
 
         private IEnumerable<object> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId,
-            int targetIndex, Guid responsibleId)
+            int targetIndex, QuestionScope scope, Guid responsibleId)
         {
             yield return new QRBarcodeQuestionCloned
             {
@@ -4313,12 +4321,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 SourceQuestionId = sourceQuestionId,
                 SourceQuestionnaireId = sourceQuestionnaireId,
                 TargetIndex = targetIndex,
+                QuestionScope = scope,
                 ResponsibleId = responsibleId
             };
         }
 
         private IEnumerable<object> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
+            string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope)
         {
             yield return
                 new QuestionCloned(
@@ -4330,7 +4339,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     variableLabel : variableLabel,
                     featured : false,
                     capital : false,
-                    questionScope : QuestionScope.Interviewer,
+                    questionScope : scope,
                     conditionExpression : enablementCondition,
                     instructions : instructions,
                     sourceQuestionId : sourceQuestionId,
@@ -4360,7 +4369,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     VariableLabel = variableLabel,
                     EnablementCondition = enablementCondition,
                     Instructions = instructions,
-                    ResponsibleId = responsibleId
+                    ResponsibleId = responsibleId,
+                    QuestionScope = scope
                 };
         }
 
