@@ -5,9 +5,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public abstract class AbstractDataExportDetails : IDataExportDetails
+    public abstract class AbstractDataExportProcessDetails : IDataExportProcessDetails
     {
-        protected AbstractDataExportDetails(string processName, DataExportFormat format)
+        protected AbstractDataExportProcessDetails(string processName, DataExportFormat format)
         {
             this.ProcessId = Guid.NewGuid().FormatGuid();
             this.BeginDate = DateTime.UtcNow;

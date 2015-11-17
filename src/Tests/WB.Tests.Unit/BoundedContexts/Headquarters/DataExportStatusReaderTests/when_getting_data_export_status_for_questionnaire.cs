@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
         Establish context = () =>
         {
             dataExportProcessesService.Setup(x => x.GetRunningDataExports())
-                .Returns(new IDataExportDetails[]
+                .Returns(new IDataExportProcessDetails[]
                 {Create.ParaDataExportProcess(), Create.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.ApprovedDataExportProcess()});
 
             var tabularDataExportFilePath = "tabularDataExportFilePath";
