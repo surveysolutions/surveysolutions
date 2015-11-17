@@ -22,7 +22,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             InterviewDataExportSettings interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings)
+            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
+            IDataExportProcessesService dataExportProcessesService
+            ) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
         {
             this.tabularFormatExportService = tabularFormatExportService;
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
