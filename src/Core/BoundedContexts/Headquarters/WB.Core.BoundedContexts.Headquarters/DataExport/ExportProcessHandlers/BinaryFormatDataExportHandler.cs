@@ -35,8 +35,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
         private readonly string pathToExportedData;
 
-        public BinaryFormatDataExportHandler(IFileSystemAccessor fileSystemAccessor, IPlainInterviewFileStorage plainFileRepository, IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            InterviewDataExportSettings interviewDataExportSettings, ITransactionManager transactionManager, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, IArchiveUtils archiveUtils, IReadSideKeyValueStorage<InterviewData> interviewDatas, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, IDataExportProcessesService dataExportProcessesService)
+        public BinaryFormatDataExportHandler(
+            IFileSystemAccessor fileSystemAccessor, 
+            IPlainInterviewFileStorage plainFileRepository, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            InterviewDataExportSettings interviewDataExportSettings, 
+            ITransactionManager transactionManager, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
+            IArchiveUtils archiveUtils, 
+            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
+            IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;

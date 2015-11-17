@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
@@ -14,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IArchiveUtils archiveUtils;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        private readonly IDataExportProcessesService dataExportProcessesService;
         private const string allDataFolder = "AllData";
         private const string approvedDataFolder = "ApprovedData";
 
@@ -21,11 +23,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IFileSystemAccessor fileSystemAccessor,
             IArchiveUtils archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            InterviewDataExportSettings interviewDataExportSettings)
+            InterviewDataExportSettings interviewDataExportSettings, 
+            IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
@@ -39,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.ProcessId, donePercent);
 
             this.ExportAllDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
 
@@ -58,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.ProcessId, donePercent);
 
             ExportApprovedDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
 
@@ -73,16 +77,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected abstract void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress);
 
-        private void UpdateDataExportProgress(IDataExportProcessDetails dataExportProcessDetails, int progressInPercents)
+        private void UpdateDataExportProgress(string dataExportProcessDetailsId, int progressInPercents)
         {
-            if (progressInPercents < 0 || progressInPercents > 100)
-                throw new ArgumentException();
-
-            if (dataExportProcessDetails == null || dataExportProcessDetails.Status != DataExportStatus.Running)
-                throw new InvalidOperationException();
-
-            dataExportProcessDetails.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcessDetails.ProgressInPercents = progressInPercents;
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetailsId,
+                progressInPercents);
         }
 
         private string GetArchiveNameForApprovedData(QuestionnaireIdentity questionnaireIdentity)

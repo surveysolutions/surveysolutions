@@ -128,7 +128,7 @@
     <Compile Include="DataExport\Accessors\TabFileReaderFactory.cs" />
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
     <Compile Include="DataExport\DataExportDetails\AbstractDataExportProcessDetails.cs" />
-    <Compile Include="DataExport\DataExportSettings.cs" />
+    <Compile Include="DataExport\ExportSettings.cs" />
     <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
     <Compile Include="DataExport\Denormalizers\IExportViewFactory.cs" />
     <Compile Include="DataExport\Dtos\DataExportStatus.cs" />
@@ -147,6 +147,8 @@
     <Compile Include="DataExport\Factories\IDatasetWriterFactory.cs" />
     <Compile Include="DataExport\Factories\IMetaDescriptionFactory.cs" />
     <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Jobs\ExportJob.cs" />
+    <Compile Include="DataExport\Jobs\ExportJobScheduler.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
     <Compile Include="DataExport\DataExportDetails\AllDataExportProcessDetails.cs" />

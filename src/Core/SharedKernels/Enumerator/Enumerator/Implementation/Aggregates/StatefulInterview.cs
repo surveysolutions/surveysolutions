@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            var answer = this.GetOrCreateAnswer<YesNoQuestionAnswer>(@event);
+            var answer = this.GetOrCreateAnswer<YesNoAnswer>(@event);
             answer.SetAnswers(@event.AnsweredOptions);
         }
 
@@ -519,9 +519,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return this.GetQuestionAnswer<SingleOptionAnswer>(identity);
         }
 
-        public YesNoQuestionAnswer GetYesNoAnswer(Identity identity)
+        public YesNoAnswer GetYesNoAnswer(Identity identity)
         {
-            return this.GetQuestionAnswer<YesNoQuestionAnswer>(identity);
+            return this.GetQuestionAnswer<YesNoAnswer>(identity);
         }
 
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
@@ -614,7 +614,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                         .SetAnswers(answerDto.Answer as decimal[]);
                     break;
                 case AnswerType.YesNoArray:
-                    this.GetOrCreateAnswer<YesNoQuestionAnswer>(answerDto.Id, answerDto.RosterVector)
+                    this.GetOrCreateAnswer<YesNoAnswer>(answerDto.Id, answerDto.RosterVector)
                         .SetAnswers((AnsweredYesNoOption[])answerDto.Answer);
                     break;
                 case AnswerType.RosterVectorArray:
