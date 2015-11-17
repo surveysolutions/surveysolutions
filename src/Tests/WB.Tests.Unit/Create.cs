@@ -2769,5 +2769,15 @@ namespace WB.Tests.Unit
         {
             return new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
         }
+
+        public static IDesignerEngineVersionService DesignerEngineVersionService()
+        {
+            return new DesignerEngineVersionService();
+        }
+
+        public static YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
+        {
+            return new YesNoAnswers(allOptionCodes: allOptionCodes, yesNoAnswersOnly: yesNoAnswersOnly);
+        }
     }
 }
