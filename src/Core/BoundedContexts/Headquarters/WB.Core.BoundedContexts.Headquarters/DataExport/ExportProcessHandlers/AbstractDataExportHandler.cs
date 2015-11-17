@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    abstract class AbstractDataExportHandler : IExportProcessHandler<AllDataExportDetails>, IExportProcessHandler<ApprovedDataExportDetails>
+    abstract class AbstractDataExportHandler : IExportProcessHandler<AllDataExportProcessDetails>, IExportProcessHandler<ApprovedDataExportProcessDetails>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
@@ -29,42 +29,42 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
-        public void ExportData(AllDataExportDetails dataExportDetails)
+        public void ExportData(AllDataExportProcessDetails dataExportProcessDetails)
         {
             string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportDetails.Questionnaire), allDataFolder);
+              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire), allDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportDetails, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails, donePercent);
 
-            this.ExportAllDataIntoDirectory(dataExportDetails.Questionnaire, folderForDataExport, exportProgress);
+            this.ExportAllDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
-            RecreateExportArchive(filesToArchive, this.GetArchiveNameForAllData(dataExportDetails.Questionnaire));
+            RecreateExportArchive(filesToArchive, this.GetArchiveNameForAllData(dataExportProcessDetails.Questionnaire));
         }
 
-        public void ExportData(ApprovedDataExportDetails dataExportDetails)
+        public void ExportData(ApprovedDataExportProcessDetails dataExportProcessDetails)
         {
             string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportDetails.Questionnaire), approvedDataFolder);
+              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire), approvedDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportDetails, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails, donePercent);
 
-            ExportApprovedDataIntoDirectory(dataExportDetails.Questionnaire, folderForDataExport, exportProgress);
+            ExportApprovedDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
-            RecreateExportArchive(filesToArchive, GetArchiveNameForApprovedData(dataExportDetails.Questionnaire));
+            RecreateExportArchive(filesToArchive, GetArchiveNameForApprovedData(dataExportProcessDetails.Questionnaire));
         }
 
         protected abstract DataExportFormat Format { get; }
@@ -73,16 +73,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected abstract void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress);
 
-        private void UpdateDataExportProgress(IDataExportDetails dataExportDetails, int progressInPercents)
+        private void UpdateDataExportProgress(IDataExportProcessDetails dataExportProcessDetails, int progressInPercents)
         {
             if (progressInPercents < 0 || progressInPercents > 100)
                 throw new ArgumentException();
 
-            if (dataExportDetails == null || dataExportDetails.Status != DataExportStatus.Running)
+            if (dataExportProcessDetails == null || dataExportProcessDetails.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
-            dataExportDetails.LastUpdateDate = DateTime.UtcNow;
-            dataExportDetails.ProgressInPercents = progressInPercents;
+            dataExportProcessDetails.LastUpdateDate = DateTime.UtcNow;
+            dataExportProcessDetails.ProgressInPercents = progressInPercents;
         }
 
         private string GetArchiveNameForApprovedData(QuestionnaireIdentity questionnaireIdentity)

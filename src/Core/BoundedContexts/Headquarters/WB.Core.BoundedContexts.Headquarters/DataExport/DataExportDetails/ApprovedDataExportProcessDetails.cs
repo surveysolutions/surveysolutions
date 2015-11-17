@@ -3,9 +3,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public class ApprovedDataExportDetails : AbstractDataExportDetails
+    public class ApprovedDataExportProcessDetails : AbstractDataExportProcessDetails
     {
-        public ApprovedDataExportDetails(string processName, DataExportFormat format, QuestionnaireIdentity questionnaire)
+        public ApprovedDataExportProcessDetails(string processName, DataExportFormat format, QuestionnaireIdentity questionnaire)
             : base(processName, format)
         {
             this.Questionnaire = questionnaire;

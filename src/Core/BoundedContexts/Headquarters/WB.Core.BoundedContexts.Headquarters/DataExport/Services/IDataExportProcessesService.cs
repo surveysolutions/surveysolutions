@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportProcessesService
     {
-        IDataExportDetails GetAndStartOldestUnprocessedDataExport();
+        IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
 
         string AddAllDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 
@@ -14,9 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         string AddParaDataExport(DataExportFormat exportFormat);
 
-        IDataExportDetails GetDataExport(string processId);
-
-        IDataExportDetails[] GetRunningDataExports();
+        IDataExportProcessDetails[] GetRunningDataExports();
 
         void FinishDataExport(string processId);
 

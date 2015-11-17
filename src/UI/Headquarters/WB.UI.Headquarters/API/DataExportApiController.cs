@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Microsoft.Practices.ServiceLocation;
@@ -122,8 +123,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportProcessesService.AddApprovedDataExport(questionnaireId, questionnaireVersion,
-                    format);
+                this.dataExportProcessesService.AddApprovedDataExport(questionnaireId, questionnaireVersion, format);
                 StartBackgroundDataExport();
             }
             catch (Exception e)
@@ -152,9 +152,8 @@ namespace WB.UI.Headquarters.API
         public DataExportStatusView ExportedDataReferencesForQuestionnaire(Guid questionnaireId,
             long questionnaireVersion)
         {
-            return
-                this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(
-                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            return this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(
+                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
         private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)
@@ -169,30 +168,29 @@ namespace WB.UI.Headquarters.API
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
             result.Content.Headers.ContentDisposition.FileName = fileSystemAccessor.GetFileName(filePath);
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+
             return result;
         }
 
 
         private void StartBackgroundDataExport()
         {
-            new Thread(
-                () =>
+            Task.Run(() =>
+            {
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                try
                 {
-                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                    try
-                    {
-                        ServiceLocator.Current.GetInstance<IDataExporter>().StartDataExport();
-                    }
-                    catch (Exception exc)
-                    {
-                        logger.Error("Start of data export error ", exc);
-                    }
-                    finally
-                    {
-                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    }
-                }).Start();
-
+                    ServiceLocator.Current.GetInstance<IDataExporter>().RunPendingDataExport();
+                }
+                catch (Exception exc)
+                {
+                    logger.Error("Start of data export error ", exc);
+                }
+                finally
+                {
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                }
+            });
         }
     }
 }
