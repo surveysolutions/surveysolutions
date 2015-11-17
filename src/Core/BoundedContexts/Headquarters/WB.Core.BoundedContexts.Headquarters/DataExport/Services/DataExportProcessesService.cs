@@ -87,7 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(
+                    $"{runningOrQueuedDataExportProcessesByTheQuestionnaire.Format} export of '{runningOrQueuedDataExportProcessesByTheQuestionnaire.ProcessName}' is runing now");
             }
 
             this.processes[exportProcess.ProcessId] = exportProcess;
@@ -111,8 +112,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void FinishExportSuccessfully(string processId)
         {
             var dataExportProcess = this.GetDataExportProcess(processId);
-            if(dataExportProcess== null || dataExportProcess.Status != DataExportStatus.Running)
-                throw new InvalidOperationException();
+
+             ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
 
             dataExportProcess.Status=DataExportStatus.Finished;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
@@ -122,8 +123,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void FinishExportWithError(string processId, Exception e)
         {
             var dataExportProcess = this.GetDataExportProcess(processId);
-            if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)
-                throw new InvalidOperationException();
+
+            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
 
             dataExportProcess.Status = DataExportStatus.FinishedWithError;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
@@ -132,11 +133,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void UpdateDataExportProgress(string processId, int progressInPercents)
         {
             if (progressInPercents < 0 || progressInPercents > 100)
-                throw new ArgumentException();
+                throw new ArgumentException(
+                    $"Progress of data export process '{processId}' equals to '{progressInPercents}', but it can't be greater then 100 or less then 0");
 
             var dataExportProcess = this.GetDataExportProcess(processId);
-            if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)
-                throw new InvalidOperationException();
+
+            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
 
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = progressInPercents;
@@ -145,6 +147,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void DeleteDataExport(string processId)
         {
             this.processes.Remove(processId);
+        }
+
+        private void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
+        {
+            if (dataExportProcess == null)
+                throw new InvalidOperationException($"process with id '{processId}' is absent");
+            if (dataExportProcess.Status != DataExportStatus.Running)
+            {
+                throw new InvalidOperationException(
+                    $"process with id '{processId}' should be in Running state, but it is in state {dataExportProcess.Status}");
+            }
         }
     }
 }
