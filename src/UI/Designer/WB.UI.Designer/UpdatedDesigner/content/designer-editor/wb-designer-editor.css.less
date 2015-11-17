@@ -227,7 +227,7 @@
         }
 
         @macroses-panel-width: 85%;
-        @chapters-panel-width: 354px;
+        @chapters-panel-width: 75%;
 
         .left-side-panel {
             position: absolute;
@@ -293,7 +293,7 @@
 
                 h3 {
                     .chapters-title-fontstyle();
-                    margin: 29px 24px 20px 18px;
+                    margin: 18px 24px 20px 18px;
                     color: @selected-panel-grey-color;
                     padding-left: 10px;
                 }
@@ -302,6 +302,11 @@
                     input, button, .btn {
                         background: @selected-panel-bg-color;
                     }
+
+                    margin: 8px;
+                    padding-left: 24px;
+                    padding-top: 24px;
+                    border-top: 2px solid @selected-panel-border-color;
                 }
             }
         }
@@ -454,9 +459,7 @@
                 }
             }
 
-            .button-holder {
-                padding-left: @macroses-panel-padding-left;
-            }
+           
         }
 
         .chapter-panel {
@@ -472,26 +475,20 @@
                     list-style: none;
                     margin: 0;
                     padding: 0;
-                    padding-left: 8px;
                     //overflow: hidden;
+
                     h3 {
-                        padding-bottom: 8px;
-                        border-bottom: 2px solid @selected-panel-border-color;
+                        padding-left: 18px;
+                    }
+
+                    .chapters-list{
+                        margin-left: 18px;
                     }
 
                     .btn-group ul.dropdown-menu {
                         left: inherit;
                         right: 0;
                     }
-                }
-
-                .button-holder {
-                    margin-top: 2px;
-                    margin-left: 18px;
-                    margin-right: 24px;
-                    border-top: 2px solid @selected-panel-border-color;
-                    padding: 8px 0 20px 0;
-                    overflow: hidden;
                 }
             }
         }
@@ -696,24 +693,30 @@ li.chapter-panel-item {
             //position: relative;
             display: block;
             padding-left: 18px;
-            padding-right: 24px;
+            margin-right: 24px;
             .border-left-radius(4px);
 
             > .handler {
                 position: absolute;
-                left: 0;
+                right: 24px;
                 top: 0;
-                height: 100%;
+                bottom: 0;
                 width: 18px;
-                .border-left-radius(4px);
+                padding: 10px 0;
+                .border-right-radius(4px);
+
+                span{
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                }
             }
 
             > a.chapter-panel-item-body {
                 text-decoration: none;
                 margin: 0;
                 .questionnarie-chapter-list-fontstyle();
-                padding: 14px 0 16px;
-                border-bottom: 2px solid @tree-item-border-color;
+                padding: 14px 18px 16px 0;
                 display: block;
                 min-height: @chapter-item-height;
                 font-weight: bold;
@@ -723,13 +726,14 @@ li.chapter-panel-item {
 
     &.current {
         position: relative;
-        top: -2px;
-        z-index: 9;
         min-height: @chapter-item-height;
 
+        .holder .inner {
+            margin-right: 0;
+            padding-right: 24px;
+        }
+
         .holder .inner a.chapter-panel-item-body {
-            border-bottom: none;
-            padding-top: 16px;
             outline: none;
         }
 
@@ -737,7 +741,7 @@ li.chapter-panel-item {
             > .inner {
                 background-color: @chapter-item-selected-color;
 
-                > .handler {
+                > .handler span{
                     background: @chapter-item-selected-color url(../i/chapter-list-li-dots.png) center no-repeat;
                 }
             }
@@ -748,7 +752,7 @@ li.chapter-panel-item {
                 > .inner {
                     background-color: @chapter-item-selected-color;
 
-                    > .handler {
+                    > .handler span{
                         background-color: @chapter-item-selected-color;
                     }
                 }
@@ -758,22 +762,20 @@ li.chapter-panel-item {
 
     &:hover {
         position: relative;
-        top: -2px;
-        z-index: 10;
         min-height: @chapter-item-height;
 
         .holder .inner a.chapter-panel-item-body {
-            border-bottom: none;
-            padding-top: 16px;
             outline: none;
         }
 
         > .holder {
             > .inner {
-                background-color: @chapter-item-hover-color;
+                background-color: @chapter-item-selected-color;
+                .border-right-radius(4px);
 
-                > .handler {
-                    background: @chapter-item-hover-color url(../i/chapter-list-li-dots.png) center no-repeat;
+                > .handler span{
+                    background: @chapter-item-selected-color url(../i/chapter-list-li-dots.png) center no-repeat;
+                    .border-right-radius(4px);
                 }
             }
         }
