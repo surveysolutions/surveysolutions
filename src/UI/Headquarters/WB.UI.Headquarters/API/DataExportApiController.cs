@@ -3,23 +3,16 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using Microsoft.Practices.ServiceLocation;
-using Quartz;
-using Quartz.Impl.Matchers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
@@ -50,6 +43,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage Paradata(Guid id, long version)
         {
             return
@@ -58,6 +52,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format)
         {
             return
@@ -67,6 +62,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage ApprovedData(Guid id, long version, DataExportFormat format)
         {
             return
@@ -76,6 +72,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpGet]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage DDIMetadata(Guid id, long version)
         {
             return
@@ -85,6 +82,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage RequestUpdateOfParadata()
         {
             try
@@ -100,6 +98,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage RequestUpdate(Guid questionnaireId, long questionnaireVersion,
             DataExportFormat format)
         {
@@ -115,7 +114,9 @@ namespace WB.UI.Headquarters.API
             return Request.CreateResponse(true);
         }
 
+
         [HttpPost]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage RequestUpdateOfApproved(Guid questionnaireId, long questionnaireVersion,
             DataExportFormat format)
         {
@@ -132,6 +133,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage DeleteDataExportProcess(string id)
         {
             try
