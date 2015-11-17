@@ -81,12 +81,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         {
             var result = new RunningDataExportProcessView()
             {
-                DataExportProcessId = dataExportDetails.DataExportProcessId,
+                DataExportProcessId = dataExportDetails.ProcessId,
                 BeginDate = dataExportDetails.BeginDate,
                 LastUpdateDate = dataExportDetails.LastUpdateDate,
-                DataExportProcessName = dataExportDetails.DataExportProcessName,
+                DataExportProcessName = dataExportDetails.ProcessName,
                 Progress = dataExportDetails.ProgressInPercents,
-                Format = dataExportDetails.DataExportFormat
+                Format = dataExportDetails.Format
             };
 
             if (dataExportDetails is ParaDataExportDetails)
@@ -96,12 +96,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             else if (dataExportDetails is AllDataExportDetails)
             {
                 result.Type = DataExportType.Data;
-                result.QuestionnaireIdentity = ((AllDataExportDetails) dataExportDetails).QuestionnaireIdentity;
+                result.QuestionnaireIdentity = ((AllDataExportDetails) dataExportDetails).Questionnaire;
             }
             else if (dataExportDetails is ApprovedDataExportDetails)
             {
                 result.Type = DataExportType.ApprovedData;
-                result.QuestionnaireIdentity = ((ApprovedDataExportDetails) dataExportDetails).QuestionnaireIdentity;
+                result.QuestionnaireIdentity = ((ApprovedDataExportDetails) dataExportDetails).Questionnaire;
             }
             return result;
         }
