@@ -16,7 +16,7 @@ namespace WB.UI.Shared.Web.Extensions
 
         public static int GetInt(this NameValueCollection collection, string key, int @default)
         {
-            return collection.GetString(key).ToInt(@default);
+            return collection.GetString(key).ToIntOrDefault(@default);
         }
     }
 

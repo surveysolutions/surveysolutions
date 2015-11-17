@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     .ToArray();
         }
 
-        public void FinishDataExport(string processId)
+        public void FinishExportSuccessfully(string processId)
         {
             var dataExportProcess = this.GetDataExportProcess(processId);
             if(dataExportProcess== null || dataExportProcess.Status != DataExportStatus.Running)
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             dataExportProcess.ProgressInPercents = 100;
         }
 
-        public void FinishDataExportWithError(string processId, Exception e)
+        public void FinishExportWithError(string processId, Exception e)
         {
             var dataExportProcess = this.GetDataExportProcess(processId);
             if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)

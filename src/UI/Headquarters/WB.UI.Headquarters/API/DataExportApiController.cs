@@ -90,7 +90,6 @@ namespace WB.UI.Headquarters.API
             try
             {
                 this.dataExportProcessesService.AddParaDataExport(DataExportFormat.Tabular);
-                StartBackgroundDataExport();
             }
             catch (Exception e)
             {
@@ -107,7 +106,6 @@ namespace WB.UI.Headquarters.API
             try
             {
                 this.dataExportProcessesService.AddAllDataExport(questionnaireId, questionnaireVersion, format);
-                StartBackgroundDataExport();
             }
             catch (Exception e)
             {
@@ -124,7 +122,6 @@ namespace WB.UI.Headquarters.API
             try
             {
                 this.dataExportProcessesService.AddApprovedDataExport(questionnaireId, questionnaireVersion, format);
-                StartBackgroundDataExport();
             }
             catch (Exception e)
             {
@@ -170,27 +167,6 @@ namespace WB.UI.Headquarters.API
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
 
             return result;
-        }
-
-
-        private void StartBackgroundDataExport()
-        {
-            Task.Run(() =>
-            {
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                try
-                {
-                    ServiceLocator.Current.GetInstance<IDataExporter>().RunPendingDataExport();
-                }
-                catch (Exception exc)
-                {
-                    logger.Error("Start of data export error ", exc);
-                }
-                finally
-                {
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                }
-            });
         }
     }
 }

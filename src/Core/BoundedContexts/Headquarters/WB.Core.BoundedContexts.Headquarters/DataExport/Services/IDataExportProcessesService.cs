@@ -16,9 +16,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         IDataExportProcessDetails[] GetRunningDataExports();
 
-        void FinishDataExport(string processId);
+        void FinishExportSuccessfully(string processId);
 
-        void FinishDataExportWithError(string processId, Exception e);
+        void FinishExportWithError(string processId, Exception e);
 
         void UpdateDataExportProgress(string processId, int progressInPercents);
 
