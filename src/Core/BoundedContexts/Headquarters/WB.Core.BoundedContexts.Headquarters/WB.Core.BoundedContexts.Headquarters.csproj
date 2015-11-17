@@ -127,6 +127,7 @@
     <Compile Include="DataExport\Accessors\TabFileReader.cs" />
     <Compile Include="DataExport\Accessors\TabFileReaderFactory.cs" />
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
+    <Compile Include="DataExport\DataExportDetails\AbstractDataExportDetails.cs" />
     <Compile Include="DataExport\DataExportSettings.cs" />
     <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
     <Compile Include="DataExport\Denormalizers\IExportViewFactory.cs" />
