@@ -2,6 +2,8 @@ angular.module('designerApp')
     .controller('MainCtrl',
         function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
 
+            $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
+
             $scope.verificationStatus = {
                 errorsCount: null,
                 errors: [],
