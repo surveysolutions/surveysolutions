@@ -47,7 +47,23 @@
     };
 
     self.stopExportProcess = function (runningExport) {
-        self.sendWebRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
+        runningExport.exportFormatName = self.exportFormatName;
+        var confirmMessageHtml = self.getBindedHtmlTemplate("#confirm-delete-template", runningExport);
+
+        bootbox.dialog({
+            message: confirmMessageHtml,
+            buttons: {
+                cancel: {
+                    label: "No"
+                },
+                success: {
+                    label: "Yes",
+                    callback: function () {
+                        self.sendWebRequest(self.DeleteDataExportProcessUrl + "/" + runningExport.DataExportProcessId());
+                    }
+                }
+            }
+        });
     }
 
     self.requestParaDataUpdate = function(format) {
