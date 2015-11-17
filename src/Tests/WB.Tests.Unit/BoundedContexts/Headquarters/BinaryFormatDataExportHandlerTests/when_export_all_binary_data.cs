@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Tests.Unit.BoundedContexts.Interviewer.CapiDataSynchronizationServiceTests;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -71,6 +72,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 
         It should_request_binary_data_for_answered_multimedia_question =
             () => plainInterviewFileStorageMock.Verify(x=>x.GetInterviewBinaryData(interviewId, "var.jpg"), Times.Once);
+
+        It should_write_answered_multimedia_question =
+          () => fileSystemAccessor.Verify(x => x.WriteAllBytes("var.jpg", Moq.It.IsAny<byte[]>()), Times.Once);
 
         private static BinaryFormatDataExportHandler binaryFormatDataExportHandler;
         private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);

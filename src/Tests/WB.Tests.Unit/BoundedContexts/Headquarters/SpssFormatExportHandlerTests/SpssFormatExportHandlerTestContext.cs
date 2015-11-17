@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
                 tabularFormatExportService ?? Mock.Of<ITabularFormatExportService>(),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
                 tabularDataToExternalStatPackageExportService ??
-                Mock.Of<ITabularDataToExternalStatPackageExportService>());
+                Mock.Of<ITabularDataToExternalStatPackageExportService>(),
+                Mock.Of<IDataExportProcessesService>());
         }
     }
 }

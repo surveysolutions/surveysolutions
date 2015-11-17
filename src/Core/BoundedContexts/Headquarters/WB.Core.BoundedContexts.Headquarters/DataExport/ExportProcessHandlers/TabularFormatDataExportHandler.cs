@@ -36,7 +36,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ITransactionManagerProvider transactionManagerProvider, 
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService, 
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings)
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IDataExportProcessesService dataExportProcessesService
+            ) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
         {
             this.questionnaireReader = questionnaireReader;
             this.transactionManagerProvider = transactionManagerProvider;
