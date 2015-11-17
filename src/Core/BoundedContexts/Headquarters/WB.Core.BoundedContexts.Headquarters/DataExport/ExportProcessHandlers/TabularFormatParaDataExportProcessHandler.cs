@@ -101,14 +101,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000 * persistCount)
                 {
-                    this.PersistResults(dataExportDetails.DataExportProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
+                    this.PersistResults(dataExportDetails.ProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
                     persistCount++;
                 }
             }
 
             this.paraDataAccessor.ArchiveParaDataExport();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.DataExportProcessId, 100);
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.ProcessId, 100);
         }
 
         private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
