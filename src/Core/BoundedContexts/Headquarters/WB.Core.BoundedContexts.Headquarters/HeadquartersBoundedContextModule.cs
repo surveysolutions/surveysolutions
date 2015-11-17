@@ -32,13 +32,13 @@ namespace WB.Core.BoundedContexts.Headquarters
     {
         private readonly bool supervisorFunctionsEnabled;
         private readonly UserPreloadingSettings userPreloadingSettings;
-        private readonly DataExportSettings dataExportSettings;
+        private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
-        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, DataExportSettings dataExportSettings, InterviewDataExportSettings interviewDataExportSettings)
+        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, ExportSettings exportSettings, InterviewDataExportSettings interviewDataExportSettings)
         {
             this.supervisorFunctionsEnabled = supervisorFunctionsEnabled;
             this.userPreloadingSettings = userPreloadingSettings;
-            this.dataExportSettings = dataExportSettings;
+            this.exportSettings = exportSettings;
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
 
             this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
-            this.Bind<DataExportSettings>().ToConstant(this.dataExportSettings);
+            this.Bind<ExportSettings>().ToConstant(this.exportSettings);
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
             this.Bind<IMetadataExportService>().To<MetadataExportService>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();

@@ -16,6 +16,7 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Native.Logging;
@@ -174,12 +175,13 @@ namespace WB.UI.Headquarters
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
-  			var dataExportSettings = new DataExportSettings();
+            var exportSettings = new ExportSettings(
+                WebConfigurationManager.AppSettings["Export.BackgroundExportIntervalInSeconds"].ToIntOrDefault(15));
             var interviewDataExportSettings=
             new InterviewDataExportSettings(basePath,
                 bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
-                WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToInt(10000),
-                WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToInt(100));
+                WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
+                WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100));
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -187,7 +189,7 @@ namespace WB.UI.Headquarters
                     readSideSettings,
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
-                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, dataExportSettings,
+                new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, exportSettings,
                     interviewDataExportSettings));
 
 
@@ -215,8 +217,8 @@ namespace WB.UI.Headquarters
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-
             ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
+            ServiceLocator.Current.GetInstance<ExportJobScheduler>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
