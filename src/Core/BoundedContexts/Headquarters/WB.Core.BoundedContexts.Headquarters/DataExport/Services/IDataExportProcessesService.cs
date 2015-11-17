@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportProcessesService
     {
-        IDataExportDetails GetAndStratOldestUnprocessedDataExport();
+        IDataExportDetails GetAndStartOldestUnprocessedDataExport();
 
         string AddAllDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
 

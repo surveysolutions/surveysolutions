@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         public void ExportData(AllDataExportDetails dataExportDetails)
         {
             string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportDetails.QuestionnaireIdentity), allDataFolder);
+              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportDetails.Questionnaire), allDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
@@ -41,17 +41,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => UpdateDataExportProgress(dataExportDetails, donePercent);
 
-            this.ExportAllDataIntoDirectory(dataExportDetails.QuestionnaireIdentity, folderForDataExport, exportProgress);
+            this.ExportAllDataIntoDirectory(dataExportDetails.Questionnaire, folderForDataExport, exportProgress);
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
-            RecreateExportArchive(filesToArchive, this.GetArchiveNameForAllData(dataExportDetails.QuestionnaireIdentity));
+            RecreateExportArchive(filesToArchive, this.GetArchiveNameForAllData(dataExportDetails.Questionnaire));
         }
 
         public void ExportData(ApprovedDataExportDetails dataExportDetails)
         {
             string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportDetails.QuestionnaireIdentity), approvedDataFolder);
+              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportDetails.Questionnaire), approvedDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
@@ -60,11 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => UpdateDataExportProgress(dataExportDetails, donePercent);
 
-            ExportApprovedDataIntoDirectory(dataExportDetails.QuestionnaireIdentity, folderForDataExport, exportProgress);
+            ExportApprovedDataIntoDirectory(dataExportDetails.Questionnaire, folderForDataExport, exportProgress);
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
-            RecreateExportArchive(filesToArchive, GetArchiveNameForApprovedData(dataExportDetails.QuestionnaireIdentity));
+            RecreateExportArchive(filesToArchive, GetArchiveNameForApprovedData(dataExportDetails.Questionnaire));
         }
 
         protected abstract DataExportFormat Format { get; }

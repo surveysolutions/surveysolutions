@@ -59,19 +59,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
-                        _.Where(x => x.QuestionnaireId == dataExportDetails.QuestionnaireIdentity.QuestionnaireId &&
-                                     x.QuestionnaireVersion == dataExportDetails.QuestionnaireIdentity.Version && !x.IsDeleted)
+                        _.Where(x => x.QuestionnaireId == dataExportDetails.Questionnaire.QuestionnaireId &&
+                                     x.QuestionnaireVersion == dataExportDetails.Questionnaire.Version && !x.IsDeleted)
                             .OrderBy(x => x.InterviewId)
                             .Select(x => x.InterviewId).ToList()));
 
-            string folderForDataExport = GetFolderPathOfDataByQuestionnaire(dataExportDetails.QuestionnaireIdentity);
+            string folderForDataExport = GetFolderPathOfDataByQuestionnaire(dataExportDetails.Questionnaire);
 
             this.ClearFolder(folderForDataExport);
 
             QuestionnaireExportStructure questionnaire =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.questionnaireReader.AsVersioned()
-                        .Get(dataExportDetails.QuestionnaireIdentity.QuestionnaireId.FormatGuid(), dataExportDetails.QuestionnaireIdentity.Version));
+                        .Get(dataExportDetails.Questionnaire.QuestionnaireId.FormatGuid(), dataExportDetails.Questionnaire.Version));
 
             var multimediaQuestionIds =
                 questionnaire.HeaderToLevelMap.Values.SelectMany(
@@ -116,12 +116,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     }
                 }
                 totalInterviewsProcessed++;
-                this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.DataExportProcessId,
+                this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.ProcessId,
                     totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
             var archiveFilePath =
-                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportDetails.QuestionnaireIdentity,
+                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportDetails.Questionnaire,
                     DataExportFormat.Binary);
             RecreateExportArchive(folderForDataExport, archiveFilePath);
         }

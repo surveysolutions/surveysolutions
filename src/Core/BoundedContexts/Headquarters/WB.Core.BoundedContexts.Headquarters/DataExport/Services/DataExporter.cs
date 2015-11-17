@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 while (IsWorking)
                 {
-                    IDataExportDetails dataExportDetails = this.dataExportProcessesService.GetAndStratOldestUnprocessedDataExport();
+                    IDataExportDetails dataExportDetails = this.dataExportProcessesService.GetAndStartOldestUnprocessedDataExport();
 
                     if (dataExportDetails == null)
                         return;
@@ -59,15 +59,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     {
                         HandleExportProcess(dataExportDetails);
 
-                        this.dataExportProcessesService.FinishDataExport(dataExportDetails.DataExportProcessId);
+                        this.dataExportProcessesService.FinishDataExport(dataExportDetails.ProcessId);
                     }
                     catch (Exception e)
                     {
                         logger.Error(
-                            string.Format("data export process with id {0} finished with error", dataExportDetails.DataExportProcessId),
+                            string.Format("data export process with id {0} finished with error", dataExportDetails.ProcessId),
                             e);
 
-                        this.dataExportProcessesService.FinishDataExportWithError(dataExportDetails.DataExportProcessId, e);
+                        this.dataExportProcessesService.FinishDataExportWithError(dataExportDetails.ProcessId, e);
                     }
                 }
             }
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private void HandleExportProcess(IDataExportDetails dataExportDetails)
         {
-            registeredExporters[dataExportDetails.DataExportFormat][dataExportDetails.GetType()](dataExportDetails);
+            registeredExporters[dataExportDetails.Format][dataExportDetails.GetType()](dataExportDetails);
         }
 
         private void RegisterExportHandlerForFormat<T, THandler>(DataExportFormat format)

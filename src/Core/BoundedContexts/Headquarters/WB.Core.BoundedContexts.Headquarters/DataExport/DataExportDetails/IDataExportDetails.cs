@@ -5,11 +5,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
     public interface IDataExportDetails
     {
-        string DataExportProcessId { get; set; }
-        string DataExportProcessName { get; set; }
-        DateTime BeginDate { get; set; }
+        string ProcessId { get; }
+        string ProcessName { get; }
+        DataExportFormat Format { get; }
+        DateTime BeginDate { get; }
+
         DateTime LastUpdateDate { get; set; }
-        DataExportFormat DataExportFormat { get; set; }
         DataExportStatus Status { get; set; }
         int ProgressInPercents { get; set; }
     }
