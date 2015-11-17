@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Threading;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    internal class DataExportProcessesService: IDataExportProcessesService
+    internal class DataExportProcessesService : IDataExportProcessesService
     {
-        private readonly ConcurrentDictionary<string, IDataExportDetails> dataExportProcessDtoStorage = new ConcurrentDictionary<string, IDataExportDetails>();
+        private readonly ConcurrentDictionary<string, IDataExportProcessDetails> processes = new ConcurrentDictionary<string, IDataExportProcessDetails>();
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
 
         public DataExportProcessesService(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
@@ -26,9 +21,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaires = questionnaires;
         }
 
-        public IDataExportDetails GetAndStartOldestUnprocessedDataExport()
+        public IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
         {
-            var exportProcess = dataExportProcessDtoStorage.Values
+            var exportProcess = this.processes.Values
                 .Where(p => p.Status == DataExportStatus.Queued)
                 .OrderBy(p => p.LastUpdateDate)
                 .FirstOrDefault();
@@ -42,15 +37,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess;
         }
 
-        public string AddAllDataExport(Guid questionnaireId, long questionnaireVersion,
-            DataExportFormat exportFormat)
+        public string AddAllDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             if (questionnaire == null)
                 throw new ArgumentException($"Questionnaire {questionnaireId.FormatGuid()} with version {questionnaireVersion} wasn't found");
 
-            var exportProcess = new AllDataExportDetails(
+            var exportProcess = new AllDataExportProcessDetails(
                 $"(ver. {questionnaireVersion}) {questionnaire.Title}",
                 exportFormat,
                 new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
@@ -59,15 +53,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess.ProcessId;
         }
 
-        public string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion,
-         DataExportFormat exportFormat)
+        public string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             if (questionnaire == null)
                 throw new ArgumentException($"Questionnaire {questionnaireId.FormatGuid()} with version {questionnaireVersion} wasn't found");
 
-            var exportProcess = new ApprovedDataExportDetails(
+            var exportProcess = new ApprovedDataExportProcessDetails(
                 $"(ver. {questionnaireVersion}) {questionnaire.Title}, Approved",
                 exportFormat,
                 new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
@@ -78,16 +71,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public string AddParaDataExport(DataExportFormat exportFormat)
         {
-            var exportProcess = new ParaDataExportDetails(exportFormat);
+            var exportProcess = new ParaDataExportProcessDetails(exportFormat);
 
             this.AddDataExportProcessIfPossible(exportProcess, (p) => true);
             return exportProcess.ProcessId;
         }
 
-        private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportDetails
+        private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportProcessDetails
         {
             var runningOrQueuedDataExportProcessesByTheQuestionnaire =
-                dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
+                this.processes.Values.OfType<T>().FirstOrDefault(
                     p =>
                         (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running) &&
                         p.Format == exportProcess.Format && additionalQuery(p));
@@ -97,18 +90,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 throw new InvalidOperationException();
             }
 
-            dataExportProcessDtoStorage[exportProcess.ProcessId] = exportProcess;
+            this.processes[exportProcess.ProcessId] = exportProcess;
         }
 
-        public IDataExportDetails GetDataExport(string processId)
+        private IDataExportProcessDetails GetDataExportProcess(string processId)
         {
-            return dataExportProcessDtoStorage[processId];
+            return this.processes.GetOrNull(processId);
         }
 
-        public IDataExportDetails[] GetRunningDataExports()
+        public IDataExportProcessDetails[] GetRunningDataExports()
         {
             return
-                dataExportProcessDtoStorage.Values.Where(
+                this.processes.Values.Where(
                     p =>
                         (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running))
                     .OrderBy(p => p.BeginDate)
@@ -117,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void FinishDataExport(string processId)
         {
-            var dataExportProcess = this.GetDataExport(processId);
+            var dataExportProcess = this.GetDataExportProcess(processId);
             if(dataExportProcess== null || dataExportProcess.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
@@ -128,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void FinishDataExportWithError(string processId, Exception e)
         {
-            var dataExportProcess = this.GetDataExport(processId);
+            var dataExportProcess = this.GetDataExportProcess(processId);
             if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
@@ -141,7 +134,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             if (progressInPercents < 0 || progressInPercents > 100)
                 throw new ArgumentException();
 
-            var dataExportProcess = this.GetDataExport(processId);
+            var dataExportProcess = this.GetDataExportProcess(processId);
             if (dataExportProcess == null || dataExportProcess.Status != DataExportStatus.Running)
                 throw new InvalidOperationException();
 
@@ -151,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void DeleteDataExport(string processId)
         {
-            dataExportProcessDtoStorage.Remove(processId);
+            this.processes.Remove(processId);
         }
     }
 }
