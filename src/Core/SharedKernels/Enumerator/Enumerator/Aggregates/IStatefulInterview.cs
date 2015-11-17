@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         SingleOptionAnswer GetSingleOptionAnswer(Identity identity);
 
-        YesNoQuestionAnswer GetYesNoAnswer(Identity identity);
+        YesNoAnswer GetYesNoAnswer(Identity identity);
 
         bool HasGroup(Identity group);
 

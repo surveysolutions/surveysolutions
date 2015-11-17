@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
@@ -13,6 +14,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         public static IAnswerToStringService CreateAnswerToStringService()
         {
             return new AnswerToStringService();
+        }
+
+        public static YesNoAnswer CreateYesNoAnswer(AnsweredYesNoOption[] answer)
+        {
+            var yesNoAnswer = new YesNoAnswer();
+            yesNoAnswer.SetAnswers(answer);
+            return yesNoAnswer;
+        }
+
+        public static YesNoQuestionModel CreateYesNoQuestionModel(IEnumerable<OptionModel> options)
+        {
+            var model = new YesNoQuestionModel();
+            model.Options = options.ToList();
+            return model;
         }
 
         public static SingleOptionAnswer CreateSingleOptionAnswer(decimal answer)
