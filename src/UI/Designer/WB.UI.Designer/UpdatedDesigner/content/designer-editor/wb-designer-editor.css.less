@@ -234,10 +234,10 @@
             left: @left-menu-width;
             top: 0;
             z-index: 800;
-            width: 0;
+            width: calc(~"50%" - (@left-menu-width));
+            left: -50%;
             height: 100%;
-            display: none;
-            .transition(width 0.4s ease);
+            .transition(left 0.4s ease);
 
             .foldback-region {
                 position: absolute;
@@ -276,7 +276,7 @@
             }
 
             &.unfolded {
-                width: calc(~"50%" - (@left-menu-width));
+                left: @left-menu-width;
                 cursor: default;
                 background-image: none;
                 display: block;

@@ -7805,12 +7805,12 @@ textarea#edit-group-description {
   left: 52px;
   top: 0;
   z-index: 800;
-  width: 0;
+  width: calc(50% - 52px);
+  left: -50%;
   height: 100%;
-  display: none;
-  -webkit-transition: width 0.4s ease;
-  -o-transition: width 0.4s ease;
-  transition: width 0.4s ease;
+  -webkit-transition: left 0.4s ease;
+  -o-transition: left 0.4s ease;
+  transition: left 0.4s ease;
 }
 #designer-editor.container section#main .left-side-panel .foldback-region {
   position: absolute;
@@ -7843,7 +7843,7 @@ textarea#edit-group-description {
   background-position: -3px -55px;
 }
 #designer-editor.container section#main .left-side-panel.unfolded {
-  width: calc(50% - 52px);
+  left: 52px;
   cursor: default;
   background-image: none;
   display: block;
