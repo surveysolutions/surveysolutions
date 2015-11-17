@@ -1,9 +1,6 @@
 using System;
-
 using Machine.Specifications;
-
 using Ncqrs.Spec;
-
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
@@ -15,6 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
+            questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
 
             deleteMacro = Create.Command.DeleteMacro(questionnaireId, macroId, responsibleId);
 

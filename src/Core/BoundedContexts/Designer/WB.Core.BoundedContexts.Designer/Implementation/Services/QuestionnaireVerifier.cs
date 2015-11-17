@@ -1210,9 +1210,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return incorrectReferencedQuestions;
         }
 
-        private static QuestionnaireVerificationReference CreateMacrosReference(Guid macrosId)
+        private static QuestionnaireVerificationReference CreateMacrosReference(Guid macroId)
         {
-            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macrosId);
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macroId);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)
