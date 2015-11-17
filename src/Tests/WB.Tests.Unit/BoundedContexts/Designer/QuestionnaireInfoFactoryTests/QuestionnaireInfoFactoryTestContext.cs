@@ -265,6 +265,38 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             };
         }
 
+        protected static QuestionsAndGroupsCollectionView CreateRosterWithNoTrigger()
+        {
+            return new QuestionsAndGroupsCollectionView
+            {
+                Groups = new List<GroupAndRosterDetailsView>
+                {
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g1Id,
+                        Title = "Group 1",
+                        ParentGroupId = Guid.Empty,
+                        ParentGroupsIds = new Guid[0],
+                        RosterScopeIds = new Guid[0]
+                    },
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = g2Id,
+                        Title = "Roster 1.1",
+                        IsRoster = true,
+                        RosterSizeSourceType = RosterSizeSourceType.Question,
+                        RosterSizeQuestionId = q2Id,
+                        RosterTitleQuestionId = q3Id,
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] { q2Id }
+                    }
+                },
+                Questions = new List<QuestionDetailsView>(),
+                StaticTexts = new List<StaticTextDetailsView>()
+            };
+        }
+
         protected static QuestionsAndGroupsCollectionView CreateQuestionsAndGroupsCollectionViewWithCascadingQuestions()
         {
             return new QuestionsAndGroupsCollectionView
