@@ -2740,15 +2740,15 @@ namespace WB.Tests.Unit
 
         public static ParaDataExportDetails ParaDataExportProcess()
         {
-            return new ParaDataExportDetails() {DataExportFormat = DataExportFormat.Tabular};
+            return new ParaDataExportDetails() {Format = DataExportFormat.Tabular};
         }
 
         public static AllDataExportDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
             return new AllDataExportDetails()
             {
-                QuestionnaireIdentity = questionnaireIdentity??new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                DataExportFormat = DataExportFormat.Tabular
+                Questionnaire = questionnaireIdentity??new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                Format = DataExportFormat.Tabular
             };
         }
 
@@ -2756,8 +2756,8 @@ namespace WB.Tests.Unit
         {
             return new ApprovedDataExportDetails()
             {
-                QuestionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                DataExportFormat = DataExportFormat.Tabular
+                Questionnaire = questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                Format = DataExportFormat.Tabular
             };
 
         }

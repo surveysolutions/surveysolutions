@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage;
@@ -19,19 +18,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class DataExportProcessesService: IDataExportProcessesService
     {
-        private readonly ConcurrentDictionary<string, IDataExportDetails> dataExportProcessDtoStorage=new ConcurrentDictionary<string, IDataExportDetails>();
+        private readonly ConcurrentDictionary<string, IDataExportDetails> dataExportProcessDtoStorage = new ConcurrentDictionary<string, IDataExportDetails>();
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
-        protected readonly ILogger Logger;
 
-        public DataExportProcessesService(ILogger logger, IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
+        public DataExportProcessesService(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
         {
-            this.Logger = logger;
             this.questionnaires = questionnaires;
         }
 
-        public IDataExportDetails GetAndStratOldestUnprocessedDataExport()
+        public IDataExportDetails GetAndStartOldestUnprocessedDataExport()
         {
-            var exportProcess = dataExportProcessDtoStorage.Values.Where(p => p.Status == DataExportStatus.Queued)
+            var exportProcess = dataExportProcessDtoStorage.Values
+                .Where(p => p.Status == DataExportStatus.Queued)
                 .OrderBy(p => p.LastUpdateDate)
                 .FirstOrDefault();
 
@@ -48,71 +46,42 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+
             if (questionnaire == null)
-            {
-                throw new ArgumentException("questionnaire wasn't found");
-            }
+                throw new ArgumentException($"Questionnaire {questionnaireId.FormatGuid()} with version {questionnaireVersion} wasn't found");
 
-            string processId = Guid.NewGuid().FormatGuid();
+            var exportProcess = new AllDataExportDetails(
+                $"(ver. {questionnaireVersion}) {questionnaire.Title}",
+                exportFormat,
+                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
 
-            var exportProcess = new AllDataExportDetails()
-            {
-                BeginDate = DateTime.UtcNow,
-                DataExportProcessId = processId,
-                DataExportFormat = exportFormat,
-                LastUpdateDate = DateTime.UtcNow,
-                ProgressInPercents = 0,
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                DataExportProcessName = string.Format("(ver. {1}) {0}", questionnaire.Title, questionnaireVersion),
-                Status = DataExportStatus.Queued
-            };
-
-            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
-            return processId;
+            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.Questionnaire.QuestionnaireId == questionnaireId && p.Questionnaire.Version == questionnaireVersion);
+            return exportProcess.ProcessId;
         }
 
         public string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion,
          DataExportFormat exportFormat)
         {
             var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+
             if (questionnaire == null)
-            {
-                throw new ArgumentException("questionnaire wasn't found");
-            }
+                throw new ArgumentException($"Questionnaire {questionnaireId.FormatGuid()} with version {questionnaireVersion} wasn't found");
 
-            string processId = Guid.NewGuid().FormatGuid();
+            var exportProcess = new ApprovedDataExportDetails(
+                $"(ver. {questionnaireVersion}) {questionnaire.Title}, Approved",
+                exportFormat,
+                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
 
-            var exportProcess = new ApprovedDataExportDetails()
-            {
-                BeginDate = DateTime.UtcNow,
-                DataExportProcessId = processId,
-                DataExportFormat = exportFormat,
-                LastUpdateDate = DateTime.UtcNow,
-                ProgressInPercents = 0,
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                DataExportProcessName = string.Format("(ver. {1}) {0}, Approved", questionnaire.Title, questionnaireVersion),
-                Status = DataExportStatus.Queued
-            };
-
-            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.QuestionnaireIdentity.QuestionnaireId == questionnaireId && p.QuestionnaireIdentity.Version == questionnaireVersion);
-            return processId;
+            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.Questionnaire.QuestionnaireId == questionnaireId && p.Questionnaire.Version == questionnaireVersion);
+            return exportProcess.ProcessId;
         }
 
         public string AddParaDataExport(DataExportFormat exportFormat)
         {
-            string processId = Guid.NewGuid().FormatGuid();
-            var exportProcess = new ParaDataExportDetails()
-            {
-                BeginDate = DateTime.UtcNow,
-                DataExportProcessId = processId,
-                DataExportFormat = exportFormat,
-                LastUpdateDate = DateTime.UtcNow,
-                ProgressInPercents = 0,
-                DataExportProcessName = "ParaData",
-                Status = DataExportStatus.Queued
-            };
+            var exportProcess = new ParaDataExportDetails(exportFormat);
+
             this.AddDataExportProcessIfPossible(exportProcess, (p) => true);
-            return processId;
+            return exportProcess.ProcessId;
         }
 
         private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportDetails
@@ -121,14 +90,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 dataExportProcessDtoStorage.Values.OfType<T>().FirstOrDefault(
                     p =>
                         (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running) &&
-                        p.DataExportFormat == exportProcess.DataExportFormat && additionalQuery(p));
+                        p.Format == exportProcess.Format && additionalQuery(p));
 
             if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
             {
                 throw new InvalidOperationException();
             }
 
-            dataExportProcessDtoStorage[exportProcess.DataExportProcessId] = exportProcess;
+            dataExportProcessDtoStorage[exportProcess.ProcessId] = exportProcess;
         }
 
         public IDataExportDetails GetDataExport(string processId)
