@@ -174,8 +174,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 var rosterSizeQuestion =
                     questionnaire.Questions.Find(question => question.Id == rosterSizeQuestionId.Value);
-
-                if (rosterSizeQuestion != null)
+                
+                if (rosterSizeQuestion == null)
+                    return RosterType.Numeric;
+                else
                 {
                     switch (rosterSizeQuestion.Type)
                     {
