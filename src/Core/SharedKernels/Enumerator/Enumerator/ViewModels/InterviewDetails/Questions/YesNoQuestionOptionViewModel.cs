@@ -49,13 +49,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool YesSelected
         {
             get { return this.Selected.HasValue && this.Selected.Value; }
-            set { this.Selected = true; }
+            set
+            {
+                if (this.YesSelected == value)
+                    return;
+
+                this.Selected = true;
+                this.RaiseAnswerCommand.Execute();
+            }
         }
 
         public bool NoSelected
         {
             get { return this.Selected.HasValue && !this.Selected.Value; }
-            set { this.Selected = false; }
+            set
+            {
+                if (this.NoSelected == value)
+                    return;
+
+                this.Selected = false;
+                this.RaiseAnswerCommand.Execute();
+            }
         }
 
         private int? checkedOrder;
@@ -82,10 +96,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxCommand RemoveAnswerCommand
         {
-            get { return new MvxCommand(() => {
-                this.Selected = null;
-                this.CheckedOrder = null;
-            }); }
+            get
+            {
+                return new MvxCommand(() => {
+                    this.Selected = null;
+                    this.CheckedOrder = null;
+                    this.RaiseAnswerCommand.Execute();
+                });
+            }
         }
     }
 }
