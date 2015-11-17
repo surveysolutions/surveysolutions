@@ -2,6 +2,6 @@
 {
     public interface IDataExporter
     {
-        void StartDataExport();
+        void RunPendingDataExport();
     }
 }

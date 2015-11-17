@@ -2738,23 +2738,23 @@ namespace WB.Tests.Unit
             return new AnsweredYesNoOption(value, answer);
         }
 
-        public static ParaDataExportDetails ParaDataExportProcess()
+        public static ParaDataExportProcessDetails ParaDataExportProcess()
         {
-            return new ParaDataExportDetails() {Format = DataExportFormat.Tabular};
+            return new ParaDataExportProcessDetails() {Format = DataExportFormat.Tabular};
         }
 
-        public static AllDataExportDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        public static AllDataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new AllDataExportDetails()
+            return new AllDataExportProcessDetails()
             {
                 Questionnaire = questionnaireIdentity??new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 Format = DataExportFormat.Tabular
             };
         }
 
-        public static ApprovedDataExportDetails ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        public static ApprovedDataExportProcessDetails ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new ApprovedDataExportDetails()
+            return new ApprovedDataExportProcessDetails()
             {
                 Questionnaire = questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 Format = DataExportFormat.Tabular

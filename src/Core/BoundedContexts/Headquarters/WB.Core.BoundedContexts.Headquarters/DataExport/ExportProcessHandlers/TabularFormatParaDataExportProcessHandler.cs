@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataExportDetails>
+    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataExportProcessDetails>
     {
         private readonly IStreamableEventStore eventStore;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.paraDataAccessor = paraDataAccessor;
         }
 
-        public void ExportData(ParaDataExportDetails dataExportDetails)
+        public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
         {
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,
@@ -101,14 +101,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000 * persistCount)
                 {
-                    this.PersistResults(dataExportDetails.ProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
+                    this.PersistResults(dataExportProcessDetails.ProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
                     persistCount++;
                 }
             }
 
             this.paraDataAccessor.ArchiveParaDataExport();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportDetails.ProcessId, 100);
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.ProcessId, 100);
         }
 
         private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
