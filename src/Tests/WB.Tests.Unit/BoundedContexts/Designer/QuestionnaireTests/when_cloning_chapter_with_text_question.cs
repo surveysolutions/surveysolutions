@@ -105,7 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static string conditionExpression = "condition expression";
         private static string instructions = "instructions";
         private static bool isPrefilled = true;
-        private static QuestionScope questionScope = QuestionScope.Interviewer;
+        private static QuestionScope questionScope = QuestionScope.Hidden;
         private static string validationExpression = "validation expression";
         private static string validationMessage = "validation message";
         private static QuestionType questionType = QuestionType.Text;
