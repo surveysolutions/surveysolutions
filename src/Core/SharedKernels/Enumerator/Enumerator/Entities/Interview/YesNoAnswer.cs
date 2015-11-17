@@ -5,12 +5,12 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 
 namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
-    public class YesNoQuestionAnswer : BaseInterviewAnswer
+    public class YesNoAnswer : BaseInterviewAnswer
     {
         public AnsweredYesNoOption[] Answers { get; private set; }
 
-        public YesNoQuestionAnswer() { }
-        public YesNoQuestionAnswer(Guid id, decimal[] rosterVector)
+        public YesNoAnswer() { }
+        public YesNoAnswer(Guid id, decimal[] rosterVector)
             : base(id, rosterVector)
         {
         }

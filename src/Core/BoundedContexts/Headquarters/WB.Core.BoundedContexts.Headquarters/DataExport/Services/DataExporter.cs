@@ -12,14 +12,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class DataExporter : IDataExporter
     {
-        private bool IsWorking = false; //please use singleton injection
-
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly ILogger logger;
 
         private readonly Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportProcessDetails>>> registeredExporters =
             new Dictionary<DataExportFormat, Dictionary<Type, Action<IDataExportProcessDetails>>>();
+
+        private static readonly object ExportLockObject = new object();
 
         public DataExporter(IDataExportProcessesService dataExportProcessesService,
             ILogger logger)
@@ -40,38 +40,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.RegisterExportHandlerForFormat<AllDataExportProcessDetails, BinaryFormatDataExportHandler>(DataExportFormat.Binary);
         }
 
-        public void RunPendingDataExport()
+        public void RunPendingExport()
         {
-            if (IsWorking)
-                return;
-
-            IsWorking = true;
-            try
+            lock (ExportLockObject)
             {
-                while (IsWorking)
+                IDataExportProcessDetails pendingExportProcess = this.dataExportProcessesService.GetAndStartOldestUnprocessedDataExport();
+
+                if (pendingExportProcess == null)
+                    return;
+
+                try
                 {
-                    IDataExportProcessDetails dataExportProcessDetails = this.dataExportProcessesService.GetAndStartOldestUnprocessedDataExport();
+                    this.HandleExportProcess(pendingExportProcess);
 
-                    if (dataExportProcessDetails == null)
-                        return;
-                    
-                    try
-                    {
-                        HandleExportProcess(dataExportProcessDetails);
-
-                        this.dataExportProcessesService.FinishDataExport(dataExportProcessDetails.ProcessId);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error($"Data export process with id {dataExportProcessDetails.ProcessId} finished with error", e);
-
-                        this.dataExportProcessesService.FinishDataExportWithError(dataExportProcessDetails.ProcessId, e);
-                    }
+                    this.dataExportProcessesService.FinishExportSuccessfully(pendingExportProcess.ProcessId);
                 }
-            }
-            finally
-            {
-                IsWorking = false;
+                catch (Exception e)
+                {
+                    this.logger.Error($"Data export process '{pendingExportProcess.ProcessName}' finished with error", e);
+
+                    this.dataExportProcessesService.FinishExportWithError(pendingExportProcess.ProcessId, e);
+                }
             }
         }
 

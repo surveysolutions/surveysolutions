@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates.Snapshots
         public long Version { get; set; }
         public bool WasExpressionsMigrationPerformed { get; set; }
         public HashSet<Guid> ReadOnlyUsers { get; set; }
+        public HashSet<Guid> MacroIds { get; set; }
     }
 }

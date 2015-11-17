@@ -344,6 +344,8 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_6_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_10.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_11.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
@@ -374,8 +376,13 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_macro_with_invalid_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_title_question.cs" />
+    <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\BinaryFormatDataExportHandlerTestContext.cs" />
+    <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\when_export_all_binary_data.cs" />
     <Compile Include="BoundedContexts\Headquarters\DataExportStatusReaderTests\DataExportStatusReaderTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\DataExportStatusReaderTests\when_getting_data_export_status_for_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\SpssFormatExportHandlerTestContext.cs" />
+    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_all_data.cs" />
+    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_approved_data.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
@@ -444,6 +451,7 @@
     <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
+    <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
@@ -453,6 +461,10 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\QuestionnaireModelBuilderTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\when_building_model_and_questionnaire_document_has_list_roster_without_max_value.cs" />
@@ -591,6 +603,14 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_of_another_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_initializing_answered_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_toggling_answer.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_toggling_answer_and_max_answers_count_reached.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_toggling_no_answer_and_this_is_roster_trigger_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_toggling_answer_and_user_rejects_reduce_roster_size.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\YesNoQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewExportedCommentariesDenormalizerTests\InterviewExportedCommentariesDenormalizerNunitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_unapproved_by_headquarters_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />

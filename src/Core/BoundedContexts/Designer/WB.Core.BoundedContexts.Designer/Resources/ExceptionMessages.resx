@@ -141,6 +141,15 @@
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
   </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>Macro with such is is already exist.</value>
+  </data>
+  <data name="MacroContentIsEmpty" xml:space="preserve">
+    <value>Macro can not have empty content.</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>Macro with such is is absent.</value>
+  </data>
   <data name="QuestionOrRosterIdentifierIsMissing" xml:space="preserve">
     <value>Identifier '{0}' from expression '{1}' is not valid question or roster identifier. Question or roster with such an identifier is missing.</value>
   </data>

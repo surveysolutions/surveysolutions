@@ -1007,7 +1007,9 @@ namespace WB.Tests.Unit
             return new InterviewSummary();
         }
 
-        public static InterviewSummary InterviewSummary(Guid? questionnaireId = null, 
+        public static InterviewSummary InterviewSummary(
+            Guid? interviewId=null,
+            Guid? questionnaireId = null, 
             long? questionnaireVersion = null,
             InterviewStatus? status = null,
             Guid? responsibleId = null,
@@ -1018,6 +1020,7 @@ namespace WB.Tests.Unit
         {
             return new InterviewSummary()
             {
+                InterviewId = interviewId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireVersion = questionnaireVersion ?? 1,
                 Status = status.GetValueOrDefault(),
@@ -2237,6 +2240,11 @@ namespace WB.Tests.Unit
             return new MultiOptionAnswer(questionId, rosterVector);
         }
 
+        public static YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
+        {
+            return new YesNoAnswer(questionId, rosterVector);
+        }
+
         public static NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {
             var result = new NavigationState(
@@ -2474,6 +2482,10 @@ namespace WB.Tests.Unit
         {
             var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid());
             interviewQuestion.Answer = answer;
+            if (answer != null)
+            {
+                interviewQuestion.QuestionState = interviewQuestion.QuestionState | QuestionState.Answered;
+            }
             return interviewQuestion;
         }
 
@@ -2740,26 +2752,32 @@ namespace WB.Tests.Unit
 
         public static ParaDataExportProcessDetails ParaDataExportProcess()
         {
-            return new ParaDataExportProcessDetails() {Format = DataExportFormat.Tabular};
+            return new ParaDataExportProcessDetails(DataExportFormat.Tabular);
         }
 
         public static AllDataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new AllDataExportProcessDetails()
-            {
-                Questionnaire = questionnaireIdentity??new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                Format = DataExportFormat.Tabular
-            };
+            return new AllDataExportProcessDetails("all data", DataExportFormat.Tabular, questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
         public static ApprovedDataExportProcessDetails ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new ApprovedDataExportProcessDetails()
-            {
-                Questionnaire = questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                Format = DataExportFormat.Tabular
-            };
+            return new ApprovedDataExportProcessDetails("approved data", DataExportFormat.Tabular, questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1));
+        }
 
+        public static InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
+        {
+            return new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", () => new byte[0]);
+        }
+
+        public static IDesignerEngineVersionService DesignerEngineVersionService()
+        {
+            return new DesignerEngineVersionService();
+        }
+
+        public static YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
+        {
+            return new YesNoAnswers(allOptionCodes: allOptionCodes, yesNoAnswersOnly: yesNoAnswersOnly);
         }
     }
 }
