@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public interface IDataExportDetails
+    public interface IDataExportProcessDetails
     {
         string ProcessId { get; }
         string ProcessName { get; }

@@ -61,9 +61,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         {
             var questionnaire = this.questionnaireReader.AsVersioned()
                 .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
+
             if (questionnaire == null)
                 return null;
+
             var runningProcesses = this.dataExportProcessesService.GetRunningDataExports().Select(CreateRunningDataExportProcessView).ToArray();
+
             var dataExports =
                 this.supportedDataExports.Select(
                     supportedDataExport =>
@@ -77,31 +80,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 runningDataExportProcesses: runningProcesses);
         }
 
-        private RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportDetails dataExportDetails)
+        private RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportProcessDetails dataExportProcessDetails)
         {
             var result = new RunningDataExportProcessView()
             {
-                DataExportProcessId = dataExportDetails.ProcessId,
-                BeginDate = dataExportDetails.BeginDate,
-                LastUpdateDate = dataExportDetails.LastUpdateDate,
-                DataExportProcessName = dataExportDetails.ProcessName,
-                Progress = dataExportDetails.ProgressInPercents,
-                Format = dataExportDetails.Format
+                DataExportProcessId = dataExportProcessDetails.ProcessId,
+                BeginDate = dataExportProcessDetails.BeginDate,
+                LastUpdateDate = dataExportProcessDetails.LastUpdateDate,
+                DataExportProcessName = dataExportProcessDetails.ProcessName,
+                Progress = dataExportProcessDetails.ProgressInPercents,
+                Format = dataExportProcessDetails.Format
             };
 
-            if (dataExportDetails is ParaDataExportDetails)
+            if (dataExportProcessDetails is ParaDataExportProcessDetails)
             {
                 result.Type = DataExportType.ParaData;
             }
-            else if (dataExportDetails is AllDataExportDetails)
+            else if (dataExportProcessDetails is AllDataExportProcessDetails)
             {
                 result.Type = DataExportType.Data;
-                result.QuestionnaireIdentity = ((AllDataExportDetails) dataExportDetails).Questionnaire;
+                result.QuestionnaireIdentity = ((AllDataExportProcessDetails) dataExportProcessDetails).Questionnaire;
             }
-            else if (dataExportDetails is ApprovedDataExportDetails)
+            else if (dataExportProcessDetails is ApprovedDataExportProcessDetails)
             {
                 result.Type = DataExportType.ApprovedData;
-                result.QuestionnaireIdentity = ((ApprovedDataExportDetails) dataExportDetails).Questionnaire;
+                result.QuestionnaireIdentity = ((ApprovedDataExportProcessDetails) dataExportProcessDetails).Questionnaire;
             }
             return result;
         }

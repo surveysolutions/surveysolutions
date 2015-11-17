@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace WB.Core.GenericSubdomains.Portable
@@ -21,6 +22,18 @@ namespace WB.Core.GenericSubdomains.Portable
             value = valueInit.Invoke();
             dict.Add(key, value);
             return value;
+        }
+
+        public static TValue GetOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : class
+        {
+            return dictionary.ContainsKey(key) ? dictionary[key] : null;
+        }
+
+        public static TValue GetOrNull<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : class
+        {
+            return dictionary.ContainsKey(key) ? dictionary[key] : null;
         }
     }
 }
