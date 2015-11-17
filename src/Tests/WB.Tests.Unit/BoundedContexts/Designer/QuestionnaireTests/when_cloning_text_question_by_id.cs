@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 questionType : QuestionType.Text,
                 featured : true,
                 groupPublicKey : chapterId,
-                questionScope : QuestionScope.Interviewer,
+                questionScope : QuestionScope.Hidden,
                 conditionExpression : "Conditional",
                 validationExpression : "Validation",
                 validationMessage : "Val message",
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             e.QuestionText == newQuestionAdded.QuestionText &&
             e.VariableLabel == newQuestionAdded.VariableLabel &&
             e.Featured &&
-            e.QuestionScope == QuestionScope.Interviewer &&
+            e.QuestionScope == QuestionScope.Hidden &&
             e.ConditionExpression == newQuestionAdded.ConditionExpression &&
             e.ValidationExpression == newQuestionAdded.ValidationExpression &&
             e.ValidationMessage == newQuestionAdded.ValidationMessage &&
