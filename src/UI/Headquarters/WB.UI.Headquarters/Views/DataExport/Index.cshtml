@@ -1,6 +1,7 @@
-﻿@using System.Web.Optimization
+﻿@using System
+@using System.Web.Optimization
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
-@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.TemplateViewItem>
+@model System.Collections.Generic.IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.TemplateViewItem>
 
 @{
     ViewBag.Title = "Data Export";
@@ -11,21 +12,21 @@
 {
 
     @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js",
-                    "~/Scripts/viewmodels/pages/exportdata.js")
+        "~/Scripts/viewmodels/pages/exportdata.js")
 
     <script type="text/javascript">
 
-        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "AllData" })';
-        var $ApprovedDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ApprovedData" })';
-        var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "Paradata" })';
-        var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata" })';
-        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdate" })';
+        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
+        var $ApprovedDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ApprovedData"})';
+        var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
+        var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata"})';
+        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
 
-        var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApproved" })';
-        var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DDIMetadata" })';
-        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire" })';
-        var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess" })';
-        $(function () {
+        var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApproved"})';
+        var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
+        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire"})';
+        var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
+        $(function() {
             var templates = [
                 @foreach (var item in Model)
                 {
@@ -35,9 +36,10 @@
             var exportFromats = [];
             @foreach (DataExportFormat formatValue in Enum.GetValues(typeof (DataExportFormat)))
             {
-              <text>exportFromats[@((int)formatValue)]='@formatValue.ToString()'</text>
+                <text>exportFromats[@((int) formatValue)] = '@formatValue.ToString()'</text>
             }
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl,$UpdateApprovedTabularDataUrl);
+
+            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl, $UpdateApprovedTabularDataUrl);
             ko.applyBindings(model);
         });
 
@@ -151,7 +153,7 @@
                 <th>Name</th>
                 <th>Format</th>
                 <th>Start date</th>
-                <th>Last update data</th>
+                <th>Last update date</th>
                 <th>Progress</th>
                 <th> </th>
             </tr>
@@ -209,3 +211,8 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
         </thead>
     </table>
 }
+<script type="text/html" id="confirm-delete-template">
+    <h3>
+        Are you sure you want to stop <b>'<span class='text-normal' data-bind='text: DataExportProcessName'></span>'</b> <span class='text-normal' data-bind='text: exportFormatName($data)'></span> export?
+    </h3>
+</script>
