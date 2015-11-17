@@ -344,6 +344,8 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_6_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_10.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_11.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
@@ -459,6 +461,9 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\QuestionnaireModelBuilderTestContext.cs" />
