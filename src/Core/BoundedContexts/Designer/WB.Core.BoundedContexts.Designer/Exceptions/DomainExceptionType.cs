@@ -142,6 +142,12 @@
 
         CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
 
-        CategoricalCascadingQuestionOptionsMaxLength
+        CategoricalCascadingQuestionOptionsMaxLength,
+
+        MacroIsAbsent,
+
+        MacroAlreadyExist,
+
+        MacroContentIsEmpty
     }
 }

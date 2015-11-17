@@ -48,10 +48,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
+        private HashSet<Guid> macroIds = new HashSet<Guid>();
         private bool wasExpressionsMigrationPerformed = false;
 
         internal void Apply(MacroAdded e)
         {
+            this.macroIds.Add(e.MacroId);
         }
 
         internal void Apply(MacroUpdated e)
@@ -60,6 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(MacroDeleted e)
         {
+            this.macroIds.Remove(e.MacroId);
         }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
@@ -731,7 +734,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 QuestionnaireDocument = this.innerDocument,
                 Version = this.Version,
                 WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
-                ReadOnlyUsers = this.readOnlyUsers
+                ReadOnlyUsers = this.readOnlyUsers,
+                MacroIds = this.macroIds
             };
         }
 
@@ -740,6 +744,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument = snapshot.QuestionnaireDocument.Clone() as QuestionnaireDocument;
             this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
             this.readOnlyUsers = snapshot.ReadOnlyUsers;
+            this.macroIds = snapshot.MacroIds;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
@@ -859,16 +864,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddMacro(AddMacro command)
         {
+            this.ThrowDomainExceptionIfMacroAlreadyExist(command.MacroId);
             this.ApplyEvent(new MacroAdded(command.MacroId, command.ResponsibleId));
         }
 
         public void UpdateMacro(UpdateMacro command)
         {
+            this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
+            this.ThrowDomainExceptionIfMacroContentIsEmpty(command.Content);
             this.ApplyEvent(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
         }
 
         public void DeleteMacro(DeleteMacro command)
         {
+            this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
             this.ApplyEvent(new MacroDeleted(command.MacroId, command.ResponsibleId));
         }
       
@@ -3034,6 +3043,30 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (elementsWithSameId.Count > expectedCount)
             {
                 throw new QuestionnaireException(exceptionType, getExceptionDescription(elementsWithSameId));
+            }
+        }
+
+        private void ThrowDomainExceptionIfMacroAlreadyExist(Guid macroId)
+        {
+            if (this.macroIds.Contains(macroId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.MacroAlreadyExist, ExceptionMessages.MacroAlreadyExist);
+            }
+        }
+
+        private void ThrowDomainExceptionIfMacroContentIsEmpty(string macroContent)
+        {
+            if (string.IsNullOrWhiteSpace(macroContent))
+            {
+                throw new QuestionnaireException(DomainExceptionType.MacroContentIsEmpty, ExceptionMessages.MacroContentIsEmpty);
+            }
+        }
+
+        private void ThrowDomainExceptionIfMacroIsAbsent(Guid macroId)
+        {
+            if (!this.macroIds.Contains(macroId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.MacroIsAbsent, ExceptionMessages.MacroIsAbsent);
             }
         }
 
