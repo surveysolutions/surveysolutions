@@ -8,6 +8,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
@@ -33,7 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Title = title,
                 EnablementCondition = conditionExpression,
                 Instructions = instructions,
-                VariableName = variableName
+                VariableName = variableName,
+                QuestionScope = questionScope
             });
 
             eventContext = new EventContext();
@@ -107,6 +109,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_MultimediaQuestionUpdated_event_EnablementCondition_be_equal_conditionExpression = () =>
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>().EnablementCondition.ShouldEqual(conditionExpression);
 
+        It should_QuestionCloned_event_QuestionScope_be_equal_questionScope = () =>
+           eventContext.GetSingleEvent<MultimediaQuestionUpdated>().QuestionScope.ShouldEqual(questionScope);
+
         private static Questionnaire questionnaire;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static Guid targetGroupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -116,9 +121,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid questionId = Guid.Parse("22222222222222222222222222222222");
         private static string title = "text question title";
         private static string variableName = "var_name";
-        private static string conditionExpression = "condition exptession";
+        private static string conditionExpression = "condition expression";
         private static string instructions = "instructions";
-
+        private static QuestionScope questionScope = QuestionScope.Hidden;
         private static int targetIndex = 0;
         private static EventContext eventContext;
     }

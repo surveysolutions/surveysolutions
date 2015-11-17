@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static int? countOfDecimalPlaces = 5;
         private static bool isPrefilled = true;
         private static bool isInteger = true;
-        private static QuestionScope questionScope = QuestionScope.Interviewer;
+        private static QuestionScope questionScope = QuestionScope.Hidden;
         private static string validationExpression = "validation expression";
         private static string validationMessage = "validation message";
             
