@@ -4,9 +4,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public class ParaDataExportDetails : AbstractDataExportDetails
+    public class ParaDataExportProcessDetails : AbstractDataExportProcessDetails
     {
-        public ParaDataExportDetails(DataExportFormat format)
+        public ParaDataExportProcessDetails(DataExportFormat format)
             : base("Paradata", format) { }
     }
 }
