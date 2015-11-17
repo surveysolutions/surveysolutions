@@ -35,7 +35,7 @@
                         "questionnaireId": questionnaireId,
                         "macroId": macro.itemId
                     };
-                    return commandCall("AddMacros", command);
+                    return commandCall("AddMacro", command);
                 };
 
                 commandService.updateMacro = function (questionnaireId, macro) {
@@ -47,7 +47,7 @@
                         "description": macro.description
                     };
 
-                    return commandCall("UpdateMacros", command);
+                    return commandCall("UpdateMacro", command);
                 };
 
                 commandService.deleteMacros = function (questionnaireId, itemId) {
@@ -55,7 +55,7 @@
                         "questionnaireId": questionnaireId,
                         "macroId": itemId
                     };
-                    return commandCall("DeleteMacros", command);
+                    return commandCall("DeleteMacro", command);
                 }
 
 
