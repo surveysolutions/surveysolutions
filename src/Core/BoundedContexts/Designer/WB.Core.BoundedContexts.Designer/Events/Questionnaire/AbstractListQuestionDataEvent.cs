@@ -16,5 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public int? MaxAnswerCount { get; set; }
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
+
+        public QuestionScope QuestionScope { get; set; }
     }
 }

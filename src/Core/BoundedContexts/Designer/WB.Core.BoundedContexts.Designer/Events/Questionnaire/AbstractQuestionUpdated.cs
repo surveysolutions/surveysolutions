@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
@@ -13,5 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string VariableLabel { get; set; }
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
+
+        public QuestionScope QuestionScope { get; set; }
     }
 }
