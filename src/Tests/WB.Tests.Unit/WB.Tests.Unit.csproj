@@ -374,8 +374,13 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_macro_with_invalid_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_title_question.cs" />
+    <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\BinaryFormatDataExportHandlerTestContext.cs" />
+    <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\when_export_all_binary_data.cs" />
     <Compile Include="BoundedContexts\Headquarters\DataExportStatusReaderTests\DataExportStatusReaderTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\DataExportStatusReaderTests\when_getting_data_export_status_for_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\SpssFormatExportHandlerTestContext.cs" />
+    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_all_data.cs" />
+    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_approved_data.cs" />
     <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
