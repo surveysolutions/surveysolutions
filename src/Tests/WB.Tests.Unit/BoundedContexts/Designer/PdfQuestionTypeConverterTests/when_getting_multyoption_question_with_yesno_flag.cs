@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionTypeConverterTests
         {
             question = new MultyOptionsQuestion()
             {
+                QuestionType = QuestionType.MultyOption,
                 YesNoView = true
             };
 
