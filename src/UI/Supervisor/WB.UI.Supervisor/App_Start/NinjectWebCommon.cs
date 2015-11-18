@@ -185,18 +185,10 @@ namespace WB.UI.Supervisor.App_Start
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
             var eventBusConfigSection =
-               (EventBusConfigSection)WebConfigurationManager.GetSection("EventBus");
+               (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
 
-            var eventBusSettings = new EventBusSettings();
-            if (eventBusConfigSection != null)
-            {
-                eventBusSettings.CatchExceptionsByEventHandlerTypes =
-                    eventBusConfigSection.GetEventHandlersWhichExceptionsShouldBeIgnored();
-                eventBusSettings.IgnoredAggregateRoots = eventBusConfigSection.GetIgnoredAggregateRoots();
-                eventBusSettings.IgnoredEventHandlerTypes = eventBusConfigSection.GetDisabledEventHandlers();
-            }
             var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
-                eventBusSettings,
+                 eventBusConfigSection.GetSettings(),
                 kernel.Get<ILogger>());
 
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();

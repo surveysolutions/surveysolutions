@@ -2053,7 +2053,7 @@ namespace WB.Tests.Unit
 
             var ncqrCompatibleEventDispatcher =
                 new NcqrCompatibleEventDispatcher(eventStore: Mock.Of<IEventStore>(), eventBusSettings: eventBusSettings, logger: logger ?? Mock.Of<ILogger>());
-            ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
+              ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
         }
 
