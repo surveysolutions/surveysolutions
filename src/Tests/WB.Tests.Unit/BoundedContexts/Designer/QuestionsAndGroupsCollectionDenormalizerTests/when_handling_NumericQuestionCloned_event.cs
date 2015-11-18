@@ -24,15 +24,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 .Returns((IQuestion q, Guid p) => new NumericDetailsView
                 {
                     Id = q.PublicKey,
-                    ParentGroupId = p
+                    ParentGroupId = p,
+                    QuestionScope = q.QuestionScope
                 });
 
             questionFactoryMock = new Mock<IQuestionnaireEntityFactory>();
             questionFactoryMock
                 .Setup(x => x.CreateQuestion(Moq.It.IsAny<QuestionData>()))
-                .Returns((QuestionData q) => new TextQuestion { PublicKey = q.PublicKey });
+                .Returns((QuestionData q) => new TextQuestion { PublicKey = q.PublicKey , QuestionScope = q.QuestionScope});
 
-            evnt = CreateNumericQuestionClonedEvent(questionId, parentGroupId: g3Id);
+            evnt = CreateNumericQuestionClonedEvent(questionId, parentGroupId: g3Id, scope: scope);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsViewMapperMock.Object,
@@ -60,11 +61,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         It should_return_question_N7_with_roster_scope_ids_contains_only_g3Id_q2Id = () =>
             newState.Questions.Single(x => x.Id == questionId).RosterScopeIds.ShouldContainOnly(g3Id, q2Id);
 
+        It should_return_question_N7_with_provided_scope = () =>
+            newState.Questions.Single(x => x.Id == questionId).QuestionScope.ShouldEqual(scope);
+
         private static QuestionsAndGroupsCollectionDenormalizer denormalizer;
         private static IPublishedEvent<NumericQuestionCloned> evnt;
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionDetailsViewMapper> questionDetailsViewMapperMock = null;
         private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
         private static Guid questionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        private static QuestionScope scope = QuestionScope.Hidden;
     }
 }

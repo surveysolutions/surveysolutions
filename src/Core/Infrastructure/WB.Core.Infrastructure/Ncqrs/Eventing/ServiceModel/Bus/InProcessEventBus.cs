@@ -31,7 +31,9 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             this.logger = logger;
         }
 
-        public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
+        public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
+
+        public void Publish(IPublishableEvent eventMessage)
         {
             if (eventMessage?.Payload == null) return;
 
@@ -40,7 +42,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
             if (eventHandlerMethodsByEventType.Any())
             {
-                PublishToHandlers(eventMessage, eventHandlerMethodsByEventType, onCatchingNonCriticalEventHandlerException);
+                PublishToHandlers(eventMessage, eventHandlerMethodsByEventType);
             }
         }
 
@@ -82,8 +84,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             });
         }
 
-        private void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<EventHandlerMethod> eventHandlerMethodsToPublish, 
-            Action<EventHandlerException> onCatchingNonCriticalEventHandlerException)
+        private void PublishToHandlers(IPublishableEvent eventMessage, IEnumerable<EventHandlerMethod> eventHandlerMethodsToPublish)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventMessage.Payload.GetType());
             IPublishableEvent publishedEvent = (IPublishableEvent)Activator.CreateInstance(publishedEventClosedType, eventMessage);
@@ -98,16 +99,16 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
                 }
                 catch (Exception exception)
                 {
-                    var catchEventHandlerException = this.eventBusSettings.CatchExceptionsByEventHandlerTypes.Contains(eventHandlerMethod.EventHandlerType);
+                    var shouldIgnoreException = this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerMethod.EventHandlerType);
 
                     var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerMethod.EventHandlerType,
-                        eventType: eventHandlerMethod.EventType, isCritical: !catchEventHandlerException,
+                        eventType: eventHandlerMethod.EventType, isCritical: !shouldIgnoreException,
                         innerException: exception);
 
-                    if (catchEventHandlerException)
+                    if (shouldIgnoreException)
                     {
                         this.logger.Error($"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} for event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.", eventHandlerException);
-                        onCatchingNonCriticalEventHandlerException?.Invoke(eventHandlerException);
+                        this.OnCatchingNonCriticalEventHandlerException?.Invoke(eventHandlerException);
                     }
                     else
                     {

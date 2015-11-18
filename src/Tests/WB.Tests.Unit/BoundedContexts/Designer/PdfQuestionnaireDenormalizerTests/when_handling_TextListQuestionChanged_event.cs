@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
 
             @event = CreatePublishedEvent(new TextListQuestionChanged() { PublicKey = questionId, QuestionText = questionTitle });
 
-            pdfQuestionnaireDocument = CreatePdfQuestionnaire(CreateGroup(parentGroupId,children:new List<PdfEntityView>{CreateQuestion(questionId,"some title",QuestionType.TextList)}));
+            pdfQuestionnaireDocument = CreatePdfQuestionnaire(CreateGroup(parentGroupId,children:new List<PdfEntityView>{CreateQuestion(questionId,"some title", PdfQuestionType.TextList)}));
 
             var documentStorage = Mock.Of<IReadSideKeyValueStorage<PdfQuestionnaireView>>(writer => writer.GetById(Moq.It.IsAny<string>()) == pdfQuestionnaireDocument);
 
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             denormalizer.Handle(@event);
 
         It should_set_TextList_question_type_to_QuestionType_TextList = () =>
-            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).QuestionType.ShouldEqual(QuestionType.TextList);
+            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).QuestionType.ShouldEqual(PdfQuestionType.TextList);
 
         It should_set_TextList_question_title_be_equal_to_passed_title = () =>
             pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).Title.ShouldEqual(questionTitle);

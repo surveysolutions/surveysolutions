@@ -697,7 +697,8 @@ namespace WB.Tests.Unit
                 string validationMessage = null,
                 string instructions = null,
                 Guid? responsibleId = null,
-                int targetIndex = 0)
+                int targetIndex = 0,
+                QuestionScope scope = QuestionScope.Interviewer)
             {
                 return new NumericQuestionCloned(
                     publicKey: publicKey,
@@ -706,7 +707,7 @@ namespace WB.Tests.Unit
                     stataExportCaption: stataExportCaption,
                     variableLabel: variableLabel,
                     featured: featured,
-                    questionScope: QuestionScope.Interviewer,
+                    questionScope: scope,
                     conditionExpression: conditionExpression,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
@@ -2042,21 +2043,34 @@ namespace WB.Tests.Unit
             return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new object()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
         }
 
-        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
+        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null, 
+            EventHandlerExceptionDelegate eventHandlerExceptionDelegate = null)
         {
             eventBusSettings = eventBusSettings ?? new EventBusSettings
             {
-                CatchExceptionsByEventHandlerTypes = new Type[0],
-                IgnoredEventHandlerTypes = new Type[0]
+                EventHandlerTypesWithIgnoredExceptions = new Type[0],
+                DisabledEventHandlerTypes = new Type[0]
             };
 
             var eventStore = Mock.Of<IEventStore>();
 
             var ncqrCompatibleEventDispatcher =
                 new NcqrCompatibleEventDispatcher(
-                    () =>new InProcessEventBus(eventStore, eventBusSettings, logger ?? Mock.Of<ILogger>()), eventStore, eventBusSettings.IgnoredEventHandlerTypes);
+                    () => GetInProcessEventBus(eventBusSettings, logger, eventHandlerExceptionDelegate, eventStore), eventStore, eventBusSettings.DisabledEventHandlerTypes);
             ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
+        }
+
+        private static InProcessEventBus GetInProcessEventBus(EventBusSettings eventBusSettings, ILogger logger,
+            EventHandlerExceptionDelegate eventHandlerExceptionDelegate, IEventStore eventStore)
+        {
+            var inProcessEventBus = new InProcessEventBus(eventStore, eventBusSettings, logger ?? Mock.Of<ILogger>());
+            if (eventHandlerExceptionDelegate != null)
+            {
+                inProcessEventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
+            }
+
+            return inProcessEventBus;
         }
 
         public static ImportFromDesigner ImportFromDesignerCommand(Guid responsibleId, string base64StringOfAssembly)

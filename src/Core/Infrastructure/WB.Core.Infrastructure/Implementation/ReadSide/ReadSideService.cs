@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 
 using WB.Core.GenericSubdomains.Portable;
@@ -199,8 +200,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
 
 
-            var criticalErrors = errors.Where(error => IsCriticalEventHandlerException(error.Item3)).ToList();
-            var warningEventHandlerErrors = errors.Except(criticalErrors).ToList();
+            var criticalRebuildReadSideExceptions = errors.Where(error => IsCriticalException(error.Item3)).ToList();
+            var exceptionsByEventHandlersWhichShouldBeIgnored = errors.Except(criticalRebuildReadSideExceptions).ToList();
 
             return new ReadSideStatus()
             {
@@ -232,14 +233,14 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                                 WriterName = GetStorageEntityName(writer),
                                 Status = writer.GetReadableStatus()
                             }),
-                WarningEventHandlerErrors = ReverseList(warningEventHandlerErrors)
+                WarningEventHandlerErrors = ReverseList(exceptionsByEventHandlersWhichShouldBeIgnored)
                     .Select(error => new ReadSideRepositoryWriterError()
                     {
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
                         InnerException = GetFullUnwrappedExceptionText(error.Item3.InnerException)
                     }),
-                RebuildErrors = ReverseList(criticalErrors)
+                RebuildErrors = ReverseList(criticalRebuildReadSideExceptions)
                     .Select(error => new ReadSideRepositoryWriterError()
                     {
                         ErrorTime = error.Item1,
@@ -250,7 +251,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             };
         }
 
-        private static bool IsCriticalEventHandlerException(Exception exception)
+        private static bool IsCriticalException(Exception exception)
         {
             var eventHandlerException =  exception.GetSelfOrInnerAs<EventHandlerException>();
 
@@ -668,22 +669,31 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 string eventTypeName = @event.Payload.GetType().Name;
                 UpdateStatusMessage(string.Format("Publishing event {0} {1}. ", this.processedEventsCount + 1, eventTypeName));
 
+                EventHandlerExceptionDelegate eventHandlerExceptionDelegate = (nonCriticalEventHandlerException) =>
+                {
+                    string message =
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                    this.SaveErrorForStatusReport(
+                        $"{nonCriticalEventHandlerException.EventHandlerType.Name}.{nonCriticalEventHandlerException.EventType.Name}: {message}",
+                        nonCriticalEventHandlerException);
+                };
+
                 try
                 {
-                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches,
-                        (nonCriticalEventHandlerException) =>
-                        {
-                            string message = $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
-                            this.SaveErrorForStatusReport($"{nonCriticalEventHandlerException.EventHandlerType.Name}.{nonCriticalEventHandlerException.EventType.Name}: {message}",
-                                nonCriticalEventHandlerException);
-                        });
+                    this.eventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
+                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
                 }
                 catch (Exception exception)
                 {
-                    string message = $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                    string message =
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
                     this.SaveErrorForStatusReport(message, exception);
                     this.logger.Error(message, exception);
 
+                }
+                finally
+                {
+                    this.eventBus.OnCatchingNonCriticalEventHandlerException -= eventHandlerExceptionDelegate;
                 }
 
                 this.processedEventsCount++;

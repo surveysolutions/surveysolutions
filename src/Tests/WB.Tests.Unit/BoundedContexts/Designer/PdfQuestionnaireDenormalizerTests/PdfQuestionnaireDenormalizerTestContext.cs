@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
         }
 
         protected static PdfQuestionView CreateQuestion(Guid? questionId = null, string title = "Question X",
-            QuestionType type = QuestionType.Numeric)
+            PdfQuestionType type = PdfQuestionType.Numeric)
         {
             return new PdfQuestionView
             {

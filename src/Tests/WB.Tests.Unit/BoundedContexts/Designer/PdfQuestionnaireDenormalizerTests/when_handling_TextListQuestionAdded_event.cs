@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             denormalizer.Handle(@event);
 
         It should_set_TextList_question_type_be_QuestionType_TextList = () =>
-            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).QuestionType.ShouldEqual(QuestionType.TextList);
+            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).QuestionType.ShouldEqual(PdfQuestionType.TextList);
 
         It should_set_TextList_question_title_be_equal_to_passed_title = () =>
             pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).Title.ShouldEqual(questionTitle);
