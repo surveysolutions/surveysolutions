@@ -35,7 +35,7 @@
                     if (keyEvent.which === 13) {
                         keyEvent.preventDefault();
                         utilityService.moveFocusAndAddOptionIfNeeded(
-                               event.target,
+                               event.target ? event.target : event.srcElement,
                                ".fixed-roster-titles-editor",
                                ".fixed-roster-titles-editor input.fixed-roster-value-editor",
                                $scope.activeRoster.fixedRosterTitles,

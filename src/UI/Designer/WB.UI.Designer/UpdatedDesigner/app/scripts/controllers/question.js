@@ -30,7 +30,7 @@
                 if (keyEvent.which === 13) {
                     keyEvent.preventDefault();
                     utilityService.moveFocusAndAddOptionIfNeeded(
-                        event.target,
+                        event.target ? event.target : event.srcElement,
                         ".question-options-editor",
                         ".question-options-editor input.question-option-value-editor",
                         $scope.activeQuestion.options,
