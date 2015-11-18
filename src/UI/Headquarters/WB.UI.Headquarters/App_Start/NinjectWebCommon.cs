@@ -229,21 +229,9 @@ namespace WB.UI.Headquarters
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var ignoredDenormalizersConfigSection =
-                (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
-            Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
+            var eventBusConfigSection = (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
 
-            var catchExceptionsByDenormalizersConfigSection =
-                (CatchExceptionsByDenormalizersConfigSection)WebConfigurationManager.GetSection("CatchExceptionsByDenormalizersSection");
-            Type[] catchExceptionsByDenormalizers = catchExceptionsByDenormalizersConfigSection == null ? new Type[0] : catchExceptionsByDenormalizersConfigSection.GetTypesOfDenormalizers();
-
-
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
-                new EventBusSettings()
-                {
-                    IgnoredEventHandlerTypes = handlersToIgnore,
-                    CatchExceptionsByEventHandlerTypes = catchExceptionsByDenormalizers
-                },
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), eventBusConfigSection.GetSettings(),
                 kernel.Get<ILogger>());
 
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();

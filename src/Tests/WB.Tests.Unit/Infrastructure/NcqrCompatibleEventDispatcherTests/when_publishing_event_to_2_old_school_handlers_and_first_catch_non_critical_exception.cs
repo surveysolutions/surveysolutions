@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             eventDispatcher = Create.NcqrCompatibleEventDispatcher(new EventBusSettings()
             {
-                CatchExceptionsByEventHandlerTypes = new[]
+                EventHandlerTypesWithIgnoredExceptions = new[]
                 {
                     typeof (FirstEventHandler)
                 },
-                IgnoredEventHandlerTypes = new Type[0]
+                DisabledEventHandlerTypes = new Type[0]
             }, loggerMock.Object);
 
             var firstEventHandler = new FirstEventHandler();
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         Because of = () =>
             aggregateException = Catch.Only<AggregateException>(() =>
-                eventDispatcher.Publish(publishableEvent, onCatchingNonCriticalEventHandlerExceptionActionMock.Object));
+                eventDispatcher.Publish(publishableEvent));
 
         It should_throw_AggregateException = () =>
             aggregateException.ShouldNotBeNull();

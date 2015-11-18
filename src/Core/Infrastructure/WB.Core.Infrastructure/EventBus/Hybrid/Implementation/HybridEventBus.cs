@@ -32,7 +32,9 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
                 () => this.cqrsEventBus.PublishCommittedEvents(committedEvents));
         }
 
-        public void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null)
+        public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
+
+        public void Publish(IPublishableEvent eventMessage)
         {
             this.cqrsEventBus.Publish(eventMessage);
         }
