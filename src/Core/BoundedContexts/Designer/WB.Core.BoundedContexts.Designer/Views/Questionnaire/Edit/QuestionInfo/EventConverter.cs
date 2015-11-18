@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -17,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
@@ -79,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.QuestionId,
                 QuestionType.QRBarcode,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.Title,
                 e.VariableName,
                 e.VariableLabel,
@@ -141,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.PublicKey,
                 QuestionType.TextList,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
                 e.VariableLabel,
@@ -172,7 +170,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             var data = new QuestionData(
                 e.PublicKey,
                 QuestionType.TextList,
-                QuestionScope.Interviewer,
+                e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
                 e.VariableLabel,
