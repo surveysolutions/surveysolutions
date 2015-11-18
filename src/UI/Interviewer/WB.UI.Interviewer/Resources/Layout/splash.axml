@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:layout_centerInParent="true" />
   
-  <ImageView
+  <!--<ImageView
      android:id="@+id/splash_image"
      android:layout_width="@dimen/Splash_Logo_size"
      android:layout_height="@dimen/Splash_Logo_size"
@@ -22,7 +22,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@+id/anchorInCenter"
-      android:src="@drawable/splash_animation"/>
+      android:src="@drawable/splash_animation"/>-->
   
 
 </RelativeLayout>
