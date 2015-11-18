@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -166,6 +167,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         private void Fill(PdfGroupView group, IComposite item)
         {
+            var pdfTypeConverter = new PdfQuestionTypeConverter();
+
             if (item.Children != null)
             {
                 foreach (var child in item.Children)
@@ -188,7 +191,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                             VariableName = childQuestion.StataExportCaption,
                             ValidationExpression = childQuestion.ValidationExpression,
                             ConditionExpression = childQuestion.ConditionExpression,
-                            QuestionType = childQuestion.QuestionType,
+                            QuestionType = pdfTypeConverter.GetPdfQuestionTypeFromQuestion(childQuestion),
                             Depth = this.GetEntityDepth(childQuestion.PublicKey) + 1
                         };
 
