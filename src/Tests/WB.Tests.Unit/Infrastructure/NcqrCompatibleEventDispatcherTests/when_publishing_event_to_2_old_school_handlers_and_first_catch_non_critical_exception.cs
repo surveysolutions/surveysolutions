@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -31,14 +29,17 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         {
             publishableEvent = Create.PublishableEvent();
 
-            eventDispatcher = Create.NcqrCompatibleEventDispatcher(new EventBusSettings()
-            {
-                EventHandlerTypesWithIgnoredExceptions = new[]
+            eventDispatcher = Create.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
+                eventBusSettings: new EventBusSettings()
                 {
-                    typeof (FirstEventHandler)
+                    EventHandlerTypesWithIgnoredExceptions = new[]
+                    {
+                        typeof (FirstEventHandler)
+                    },
+                    DisabledEventHandlerTypes = new Type[0]
                 },
-                DisabledEventHandlerTypes = new Type[0]
-            }, loggerMock.Object);
+                eventHandlerExceptionDelegate: (e) => { handledNonCriticalEventHandlerException = e; });
+            
 
             var firstEventHandler = new FirstEventHandler();
 
@@ -71,14 +72,17 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         It should_log_catched_exception = () =>
             loggerMock.Verify(x => x.Error(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()), Times.Once);
 
-        It should_invoked_action_onCatchingNonCriticalEventHandlerException = () =>
-            onCatchingNonCriticalEventHandlerExceptionActionMock.Verify(x => x(Moq.It.IsAny<EventHandlerException>()), Times.Once);
+        It should_be_handled_event_handler_exception = () =>
+            handledNonCriticalEventHandlerException.ShouldNotBeNull();
+
+        It should_not_event_handler_exception_be_critical = () =>
+            handledNonCriticalEventHandlerException.IsCritical.ShouldBeFalse();
 
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;
         private static AggregateException aggregateException;
         private static Mock<IEventHandler<object>> secondOldSchoolEventHandlerMock;
-        private static readonly Mock<Action<EventHandlerException>> onCatchingNonCriticalEventHandlerExceptionActionMock = new Mock<Action<EventHandlerException>>();
+        private static EventHandlerException handledNonCriticalEventHandlerException;
         private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
     }
 }
