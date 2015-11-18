@@ -151,8 +151,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
-            var selectedValues = allSelectedOptions.OrderBy(x => x.CheckedTimeStamp)
-                .ThenBy(x => x.CheckedOrder)
+            var selectedValues = allSelectedOptions.Where(x => x.CheckedOrder.HasValue && x.Value != changedModel.Value).OrderBy(x => x.CheckedOrder.Value)
+                .Union(allSelectedOptions.Where(x => !x.CheckedOrder.HasValue || x.Value == changedModel.Value))
                 .Select(x => new AnsweredYesNoOption(x.Value, x.Selected.Value))
                 .ToArray();
 
