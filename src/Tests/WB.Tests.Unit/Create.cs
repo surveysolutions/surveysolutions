@@ -697,7 +697,8 @@ namespace WB.Tests.Unit
                 string validationMessage = null,
                 string instructions = null,
                 Guid? responsibleId = null,
-                int targetIndex = 0)
+                int targetIndex = 0,
+                QuestionScope scope = QuestionScope.Interviewer)
             {
                 return new NumericQuestionCloned(
                     publicKey: publicKey,
@@ -706,7 +707,7 @@ namespace WB.Tests.Unit
                     stataExportCaption: stataExportCaption,
                     variableLabel: variableLabel,
                     featured: featured,
-                    questionScope: QuestionScope.Interviewer,
+                    questionScope: scope,
                     conditionExpression: conditionExpression,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
