@@ -32,13 +32,28 @@ pre.wrap {
     </form>
 </div>
 
-<pre id="resultArea" class="wrap" style="height: 400px; overflow-y: scroll;"></pre>
+<pre id="resultArea" class="wrap" style="height: 800px; overflow-y: scroll;"></pre>
 
 @section scripts
 {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/theme-github.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ext-searchbox.js"></script>
+
     <script type="text/javascript">
 
-        $(function() {
+        $(function () {
+
+            var editor = ace.edit("resultArea");
+            editor.setTheme("ace/theme/github");
+            editor.getSession().setMode("ace/mode/csharp");
+            editor.setOptions({
+                readOnly: true,
+                highlightActiveLine: false,
+                highlightGutterLine: false
+            });
+
             $('#getPartial').click(function() {
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
@@ -67,6 +82,7 @@ pre.wrap {
                             .text(errors[i]);
                         errorList.append(li);
                     });
+
                     $('#resultArea').text("");
                     $('#resultArea').append(errorList);
                 });
@@ -77,8 +93,8 @@ pre.wrap {
                 $output.text("sending request...");
 
                 $.ajax(ajaxSettings
-                ).done(function(result) {
-                    $('#resultArea').text(result);
+                ).done(function (result) {
+                    editor.setValue(result);
                     $output.text("done");
                 }).fail(function(xhr, status, error) {
                     $output.text("failed: " + error + "\r\n" + getExceptionDetails(xhr));
