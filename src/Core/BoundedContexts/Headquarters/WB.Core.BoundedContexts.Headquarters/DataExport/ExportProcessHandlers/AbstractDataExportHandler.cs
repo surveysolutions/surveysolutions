@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.ProcessId, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
             this.ExportAllDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
 
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.ProcessId, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
             ExportApprovedDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
 
