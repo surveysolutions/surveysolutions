@@ -2757,12 +2757,18 @@ namespace WB.Tests.Unit
 
         public static AllDataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new AllDataExportProcessDetails("all data", DataExportFormat.Tabular, questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1));
+            return new AllDataExportProcessDetails(
+                DataExportFormat.Tabular,
+                questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                "some questionnaire");
         }
 
         public static ApprovedDataExportProcessDetails ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
         {
-            return new ApprovedDataExportProcessDetails("approved data", DataExportFormat.Tabular, questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1));
+            return new ApprovedDataExportProcessDetails(
+                DataExportFormat.Tabular,
+                questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
+                "some questionnaire");
         }
 
         public static InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()

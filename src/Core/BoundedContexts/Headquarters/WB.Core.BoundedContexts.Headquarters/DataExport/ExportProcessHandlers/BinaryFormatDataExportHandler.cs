@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     }
                 }
                 totalInterviewsProcessed++;
-                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.ProcessId,
+                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId,
                     totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
