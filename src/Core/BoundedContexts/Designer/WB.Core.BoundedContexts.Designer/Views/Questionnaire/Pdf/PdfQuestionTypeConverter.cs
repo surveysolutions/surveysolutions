@@ -1,3 +1,4 @@
+using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
@@ -15,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return PdfQuestionType.YesNo;
             }
 
-            return (PdfQuestionType)question.QuestionType;
+            return GetPdfQuestionTypeByQuestionType(question.QuestionType);
         }
 
         public PdfQuestionType GetPdfQuestionTypeFromFullQuestionDataEvent(FullQuestionDataEvent @event)
@@ -26,7 +27,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return PdfQuestionType.YesNo;
             }
 
-            return (PdfQuestionType)@event.QuestionType;
+            return GetPdfQuestionTypeByQuestionType(@event.QuestionType);
+        }
+
+        private PdfQuestionType GetPdfQuestionTypeByQuestionType(QuestionType questionType)
+        {
+            switch (questionType)
+            {
+                case QuestionType.DateTime: return PdfQuestionType.DateTime;
+                case QuestionType.GpsCoordinates: return PdfQuestionType.GpsCoordinates;
+                case QuestionType.Multimedia: return PdfQuestionType.Multimedia;
+                case QuestionType.MultyOption: return PdfQuestionType.MultyOption;
+                case QuestionType.Numeric: return PdfQuestionType.Numeric;
+                case QuestionType.QRBarcode: return PdfQuestionType.QRBarcode;
+                case QuestionType.SingleOption: return PdfQuestionType.SingleOption;
+                case QuestionType.Text: return PdfQuestionType.Text;
+                case QuestionType.TextList: return PdfQuestionType.TextList;
+                default:
+                    throw new ArgumentException(nameof(questionType));
+            }
         }
     }
 }
