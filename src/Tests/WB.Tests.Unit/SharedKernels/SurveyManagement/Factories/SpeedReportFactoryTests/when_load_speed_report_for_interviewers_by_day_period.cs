@@ -25,15 +25,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     statuses: new[]
                     {
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddHours(1), 
+                            supervisorId: supervisorId,
+                            timestamp: input.From.Date.AddHours(1),
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
+                        Create.InterviewCommentedStatus(interviewerId: Guid.NewGuid(),
+                            supervisorId: Guid.NewGuid(),
+                            timestamp: input.From.Date.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
-                            timestamp: input.From.Date.AddHours(1), 
+                            supervisorId: supervisorId,
+                            timestamp: input.From.Date.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                            supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(10)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                            supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(333))
                     }), "2");
