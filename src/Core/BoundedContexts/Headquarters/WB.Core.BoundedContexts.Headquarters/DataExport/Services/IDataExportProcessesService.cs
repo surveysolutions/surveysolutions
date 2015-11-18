@@ -1,6 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -8,13 +9,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
 
-        string AddAllDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+        string AddAllDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat);
 
-        string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat);
+        string AddApprovedDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat);
 
         string AddParaDataExport(DataExportFormat exportFormat);
 
-        IDataExportProcessDetails[] GetRunningDataExports();
+        IDataExportProcessDetails[] GetRunningExportProcesses();
 
         void FinishExportSuccessfully(string processId);
 

@@ -7,20 +7,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
     public abstract class AbstractDataExportProcessDetails : IDataExportProcessDetails
     {
-        protected AbstractDataExportProcessDetails(string processName, DataExportFormat format)
+        protected AbstractDataExportProcessDetails(DataExportFormat format)
         {
-            this.ProcessId = Guid.NewGuid().FormatGuid();
             this.BeginDate = DateTime.UtcNow;
             this.LastUpdateDate = DateTime.UtcNow;
             this.Status = DataExportStatus.Queued;
             this.ProgressInPercents = 0;
 
-            this.ProcessName = processName;
             this.Format = format;
         }
 
-        public string ProcessId { get; }
-        public string ProcessName { get; }
+        public abstract string NaturalId { get; }
+        public abstract string Name { get; }
+
         public DataExportFormat Format { get; }
         public DateTime BeginDate { get; }
 

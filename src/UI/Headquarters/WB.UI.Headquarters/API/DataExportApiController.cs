@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportProcessesService.AddAllDataExport(questionnaireId, questionnaireVersion, format);
+                this.dataExportProcessesService.AddAllDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format);
             }
             catch (Exception e)
             {
@@ -122,7 +122,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportProcessesService.AddApprovedDataExport(questionnaireId, questionnaireVersion, format);
+                this.dataExportProcessesService.AddApprovedDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format);
             }
             catch (Exception e)
             {
