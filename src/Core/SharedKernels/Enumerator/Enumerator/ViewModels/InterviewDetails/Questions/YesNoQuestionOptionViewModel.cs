@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -38,7 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.selected = value;
-                this.CheckedTimeStamp = value.HasValue ? DateTime.Now : DateTime.MinValue;
 
                 this.RaisePropertyChanged();
                 this.RaisePropertyChanged(() => YesSelected);
@@ -86,8 +86,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.RaisePropertyChanged();
             }
         }
-
-        public DateTime CheckedTimeStamp { get; private set; }
 
         public IMvxCommand RaiseAnswerCommand
         {
