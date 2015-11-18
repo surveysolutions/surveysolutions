@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
@@ -36,6 +37,9 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         public void Publish(IPublishableEvent eventMessage)
         {
             if (eventMessage?.Payload == null) return;
+
+            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid()))
+                return;
 
             var eventHandlerMethodsByEventType = this.eventHandlerMethods.Where(
                     eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo())).ToList();

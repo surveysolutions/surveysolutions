@@ -21,7 +21,6 @@ namespace WB.Tests.Integration.EventStoreTests
         Establish context = () =>
         {
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            ignoredEventSourceId=Guid.NewGuid();
 
             int sequenceCounter = 1;
             var eventTypeResolver = new EventTypeResolver();
@@ -30,7 +29,6 @@ namespace WB.Tests.Integration.EventStoreTests
             eventTypeResolver.RegisterEventDataType(typeof(AccountLocked));
 
             events = new UncommittedEventStream(Guid.NewGuid(), null);
-            var ignoredEventStream= new UncommittedEventStream(Guid.NewGuid(), null);
             events.Append(new UncommittedEvent(Guid.NewGuid(), 
                 eventSourceId, 
                 sequenceCounter++, 
@@ -50,21 +48,11 @@ namespace WB.Tests.Integration.EventStoreTests
                 0, 
                 DateTime.UtcNow,
                 new AccountLocked()));
-                
-   			ignoredEventStream.Append(new UncommittedEvent(Guid.NewGuid(),
-               ignoredEventSourceId,
-               0,
-               0,
-               DateTime.UtcNow,
-               new AccountRegistered { ApplicationName = "App", ConfirmationToken = "token", Email = "test@test.com" }));
 
             WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(),
             new EventStoreSettings {
-            InitializeProjections = false,
-            EventStreamsToIgnore =
-            new HashSet<string>(new[] {string.Format("WB-{0}", ignoredEventSourceId.FormatGuid())})}, eventTypeResolver);
+            InitializeProjections = false}, eventTypeResolver);
             WriteSideEventStorage.Store(events);
-            WriteSideEventStorage.Store(ignoredEventStream);
         };
 
         Because of = () => readEvents = WriteSideEventStorage.GetAllEvents();
@@ -80,16 +68,12 @@ namespace WB.Tests.Integration.EventStoreTests
 
             accountRegistered.Email.ShouldEqual("test@test.com");
         };
-
-        It should_not_read_events_by_ignored_event_stream =
-            () => readEvents.Where(e => e.EventSourceId == ignoredEventSourceId).ShouldBeEmpty();
-
+        
         Cleanup things = () => WriteSideEventStorage.Dispose();
 
         private static UncommittedEventStream events;
         private static WriteSideEventStore WriteSideEventStorage;
         private static Guid eventSourceId;
-        private static Guid ignoredEventSourceId;
         private static IEnumerable<CommittedEvent> readEvents;
     }
 }
