@@ -184,7 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
             {
                 PublicId = publicKey,
                 Title = "question text",
-                QuestionType = QuestionType.Text,
+                QuestionType = PdfQuestionType.Text,
                 Answers = new List<PdfAnswerView>(),
                 VariableName = stataCaption,
                 ValidationExpression = validationExpression,

@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             denormalizer.Handle(@event);
 
         It should_set_Text_question_type_for_cloned_question = () =>
-            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).QuestionType.ShouldEqual(QuestionType.Text);
+            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).QuestionType.ShouldEqual(PdfQuestionType.Text);
 
         It should_set__someTitle__as_title_for_cloned_question = () =>
             pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).Title.ShouldEqual("someTitle");
