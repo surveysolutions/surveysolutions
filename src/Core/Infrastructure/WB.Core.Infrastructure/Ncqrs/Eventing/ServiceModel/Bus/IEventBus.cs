@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Ncqrs.Domain;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
+    public delegate void EventHandlerExceptionDelegate(EventHandlerException e);
+
     public interface IEventBus : ILiteEventBus
     {
-        void Publish(IPublishableEvent eventMessage, Action<EventHandlerException> onCatchingNonCriticalEventHandlerException = null);
+        event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
+
+        void Publish(IPublishableEvent eventMessage);
 
         void Publish(IEnumerable<IPublishableEvent> eventMessages);
     }

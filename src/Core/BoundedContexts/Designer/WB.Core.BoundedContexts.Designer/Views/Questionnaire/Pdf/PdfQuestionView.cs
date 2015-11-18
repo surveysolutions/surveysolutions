@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.Answers = new List<PdfAnswerView>();
         }
 
-        public QuestionType QuestionType { get; set; }
+        public PdfQuestionType QuestionType { get; set; }
 
         public List<PdfAnswerView> Answers { get; set; }
 

@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.Infrastructure.ReadSideServiceTests
                 _ => _.UnpinTransactionManager(), Times.Once);
 
         It should_publish_one_event_on_event_dispatcher = () =>
-            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<Dictionary<IEventHandler, Stopwatch>>(), Moq.It.IsAny<Action<EventHandlerException>>()), Times.Once);
+            eventDispatcherMock.Verify(x => x.PublishEventToHandlers(committedEvent, Moq.It.IsAny<Dictionary<IEventHandler, Stopwatch>>()), Times.Once);
 
         private static ReadSideService readSideService;
         private static Mock<IEventDispatcher> eventDispatcherMock;
