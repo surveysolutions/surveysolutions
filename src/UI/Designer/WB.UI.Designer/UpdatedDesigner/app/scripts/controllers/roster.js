@@ -12,14 +12,8 @@
 
                 var saveRoster = 'ctrl+s';
 
-                var addRosterTitle = 'enter';
-
                 if (hotkeys.get(saveRoster) !== false) {
                     hotkeys.del(saveRoster);
-                }
-
-                if (hotkeys.get(addRosterTitle) !== false) {
-                    hotkeys.del(addRosterTitle);
                 }
 
                 if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
@@ -36,22 +30,20 @@
                             }
                         });
                 }
-                hotkeys.add({
-                        combo: addRosterTitle,
-                        description: 'Add roster title',
-                        allowIn: ["INPUT"],
-                        callback: function (event) {
-                            event.preventDefault();
-                            utilityService.moveFocusAndAddOptionIfNeeded(
-                                event.target,
-                                ".fixed-roster-titles-editor",
-                                ".fixed-roster-titles-editor input.fixed-roster-value-editor",
-                                $scope.activeRoster.fixedRosterTitles,
-                                function() { return $scope.addFixedTitle(); },
-                                "title");
-                        }
-                    });
-                
+
+                $scope.onKeyPressInOptions = function (keyEvent) {
+                    if (keyEvent.which === 13) {
+                        keyEvent.preventDefault();
+                        utilityService.moveFocusAndAddOptionIfNeeded(
+                               event.target,
+                               ".fixed-roster-titles-editor",
+                               ".fixed-roster-titles-editor input.fixed-roster-value-editor",
+                               $scope.activeRoster.fixedRosterTitles,
+                               function () { return $scope.addFixedTitle(); },
+                               "title");
+                    }
+                }
+
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
                     $scope.activeRoster.variable = result.variableName;
