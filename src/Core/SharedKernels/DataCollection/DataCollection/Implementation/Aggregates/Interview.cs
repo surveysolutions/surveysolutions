@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : @event.InterviewData.Answers
                     .Where(
                         question =>
-                            !(question.Answer is GeoPosition || question.Answer is decimal[] || question.Answer is decimal[][] ||
+                            !(question.Answer is decimal[] || question.Answer is decimal[][] ||
                                 question.Answer is Tuple<decimal, string>[]))
                     .ToConcurrentDictionary(
                         question => ConversionHelper.ConvertIdAndRosterVectorToString(question.Id, question.QuestionRosterVector),
@@ -325,6 +325,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.QuestionId, @event.RosterVector);
 
+            this.interviewState.AnswersSupportedInExpressions[questionKey] = new GeoPosition(
+                @event.Latitude, @event.Longitude, @event.Accuracy, @event.Altitude, @event.Timestamp);
+                
             this.interviewState.AnsweredQuestions.Add(questionKey);
 
             this.ExpressionProcessorStatePrototype.UpdateGeoLocationAnswer(@event.QuestionId, @event.RosterVector, @event.Latitude,
@@ -1330,7 +1333,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
 
-            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
             InterviewChanges interviewChanges = CalculateInterviewChangesOnAnswerGeoLocationQuestion(expressionProcessorState, this.interviewState, userId, questionId,
                 rosterVector, answerTime, latitude, longitude, accuracy, altitude, timestamp, answeredQuestion, questionnaire);
