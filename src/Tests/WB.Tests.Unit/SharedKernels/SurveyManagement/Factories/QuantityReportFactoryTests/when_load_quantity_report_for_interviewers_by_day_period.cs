@@ -16,9 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         {
             input = CreateQuantityByInterviewersReportInputModel(supervisorId: supervisorId);
 
-            var user = Create.UserDocument(supervisorId: supervisorId);
-            userDocuments=new TestInMemoryWriter<UserDocument>();
-            userDocuments.Store(user, "1");
+            var user = Guid.NewGuid();
+            var userFromOtherTeam = Guid.NewGuid();
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
@@ -26,15 +25,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddHours(1)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(interviewerId: userFromOtherTeam, supervisorId: Guid.NewGuid(),
+                            timestamp: input.From.Date.AddHours(1)),
+                        Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(2)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-2))
                     }), "2");
 
-            quantityReportFactory = CreateQuantityReportFactory(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateQuantityReportFactory(interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
@@ -55,7 +56,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         private static QuantityReportFactory quantityReportFactory;
         private static QuantityByInterviewersReportInputModel input;
         private static QuantityByResponsibleReportView result;
-        private static TestInMemoryWriter<UserDocument> userDocuments;
         private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }
