@@ -41,7 +41,8 @@
 
                 var newChapter = {
                     title: 'New Section',
-                    itemId: newId
+                    itemId: newId,
+                    itemType: "Chapter"
                 };
 
                 commandService.addChapter($state.params.questionnaireId, newChapter).success(function () {
@@ -60,7 +61,8 @@
                 commandService.cloneGroup($state.params.questionnaireId, idToClone, targetIndex, newId).success(function () {
                     var newChapter = {
                         title: chapter.title,
-                        itemId: newId
+                        itemId: newId,
+                        itemType: "Chapter"
                     };
                     $scope.questionnaire.chapters.splice(targetIndex, 0, newChapter);
                     $rootScope.$emit('chapterCloned');
@@ -114,7 +116,8 @@
 
                     var newChapter = {
                         title: "pasting...",
-                        itemId: newId
+                        itemId: newId,
+                        itemType: "Chapter"
                     };
 
                     var chapter = _.find($scope.questionnaire.chapters, { itemId: idToPasteAfter });
