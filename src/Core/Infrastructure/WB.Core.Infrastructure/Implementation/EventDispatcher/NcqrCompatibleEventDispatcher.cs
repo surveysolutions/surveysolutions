@@ -35,6 +35,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
+            this.ignoredAggregateRoots = eventBusSettings.IgnoredAggregateRoots;
             this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
         }
 
@@ -83,6 +84,9 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                this.registredHandlers.Values.Except(functionalHandlers).ToList();
 
             Guid firstEventSourceId = events.First().EventSourceId;
+
+            if (this.ignoredAggregateRoots.Contains(firstEventSourceId.FormatGuid()))
+                return;
 
             var errorsDuringHandling = new List<Exception>();
 

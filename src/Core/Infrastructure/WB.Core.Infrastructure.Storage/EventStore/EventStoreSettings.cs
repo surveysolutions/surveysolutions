@@ -8,7 +8,6 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         {
             InitializeProjections = true;
             MaxCountToRead = 1024;
-            this.EventStreamsToIgnore=new HashSet<string>();
         }
 
         public string ServerIP { get; set; }
@@ -29,7 +28,5 @@ namespace WB.Core.Infrastructure.Storage.EventStore
         public string Password { get; set; }
 
         public int MaxCountToRead { get; set; }
-
-        public HashSet<string> EventStreamsToIgnore { get; set; } 
     }
 }
