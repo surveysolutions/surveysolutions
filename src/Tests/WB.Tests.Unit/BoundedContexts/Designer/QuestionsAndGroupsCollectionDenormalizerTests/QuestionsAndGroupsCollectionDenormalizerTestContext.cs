@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -254,23 +255,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             });
         }
 
-        protected static IPublishedEvent<QRBarcodeQuestionCloned> CreateQRBarcodeQuestionClonedEvent(Guid questionId,Guid parentGroupId, Guid? sourceQuestionId = null)
+        protected static IPublishedEvent<QRBarcodeQuestionCloned> CreateQRBarcodeQuestionClonedEvent(Guid questionId,Guid parentGroupId, Guid? sourceQuestionId = null, QuestionScope scope = QuestionScope.Interviewer)
         {
             return ToPublishedEvent(new QRBarcodeQuestionCloned
             {
                 QuestionId = questionId,
                 SourceQuestionId = sourceQuestionId ?? Guid.NewGuid(),
-                ParentGroupId = parentGroupId
+                ParentGroupId = parentGroupId,
+                QuestionScope = scope
             });
         }
         protected static IPublishedEvent<NumericQuestionCloned> CreateNumericQuestionClonedEvent(
-            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null)
+            Guid questionId, Guid? sourceQuestionId = null, Guid? parentGroupId = null, QuestionScope scope = QuestionScope.Interviewer)
         {
             return ToPublishedEvent(Create.Event.NumericQuestionCloned
             (
                 publicKey : questionId,
                 sourceQuestionId : sourceQuestionId ?? Guid.NewGuid(),
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
+                groupPublicKey : parentGroupId ?? Guid.NewGuid(),
+                scope: scope
             ));
         }
 

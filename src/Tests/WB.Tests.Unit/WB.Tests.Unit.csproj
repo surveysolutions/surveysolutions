@@ -349,6 +349,9 @@
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionTypeConverterTests\PdfQuestionTypeConverterTestsContext.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionTypeConverterTests\when_getting_multyoption_question_with_yesno_flag.cs" />
+    <Compile Include="BoundedContexts\Designer\PdfQuestionTypeConverterTests\when_cheking_pdf_question_type_for_all_question_types.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_duplicated_MacroAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_roster_edit_view_referencing_non_existing_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CopyPasteTests\when_pasting_group_into_group.cs" />

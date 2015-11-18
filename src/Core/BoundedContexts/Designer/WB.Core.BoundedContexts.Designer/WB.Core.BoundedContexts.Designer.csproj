@@ -494,6 +494,8 @@
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireView.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionType.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionTypeConverter.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfStaticTextView.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionView.cs">
       <SubType>Code</SubType>

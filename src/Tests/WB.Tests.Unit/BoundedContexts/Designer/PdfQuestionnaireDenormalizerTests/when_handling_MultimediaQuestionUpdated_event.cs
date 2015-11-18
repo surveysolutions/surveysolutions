@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             GetQuestion().ShouldNotBeNull();
 
         It should_update_question_of_Multimedia_type = () =>
-            GetQuestion().QuestionType.ShouldEqual(QuestionType.Multimedia);
+            GetQuestion().QuestionType.ShouldEqual(PdfQuestionType.Multimedia);
 
         It should_update_question_title = () =>
             GetQuestion().Title.ShouldEqual(questionTitle);

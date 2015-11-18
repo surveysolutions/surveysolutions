@@ -204,12 +204,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (question.Answers == null)
                 return false;
-            foreach (var answer in question.Answers)
+            foreach (var option in question.Answers)
             {
-                int answerValue;
-                if (int.TryParse(answer.AnswerValue, out answerValue))
+                int optionValue;
+                if (int.TryParse(option.AnswerValue, out optionValue))
                 {
-                    if (answerValue < 0)
+                    if (optionValue < 0)
                         return true;
                 }
                 else

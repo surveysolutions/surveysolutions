@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             GetQuestion().ShouldNotBeNull();
 
         It should_question_type_be_QRBarcode = () =>
-            GetQuestion().QuestionType.ShouldEqual(QuestionType.QRBarcode);
+            GetQuestion().QuestionType.ShouldEqual(PdfQuestionType.QRBarcode);
 
         It should_question_title_be_equal_to_specified_title = () =>
             GetQuestion().Title.ShouldEqual(questionTitle);
