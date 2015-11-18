@@ -2043,7 +2043,8 @@ namespace WB.Tests.Unit
             return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new object()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
         }
 
-        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
+        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null, 
+            EventHandlerExceptionDelegate eventHandlerExceptionDelegate = null)
         {
             eventBusSettings = eventBusSettings ?? new EventBusSettings
             {
@@ -2055,9 +2056,21 @@ namespace WB.Tests.Unit
 
             var ncqrCompatibleEventDispatcher =
                 new NcqrCompatibleEventDispatcher(
-                    () =>new InProcessEventBus(eventStore, eventBusSettings, logger ?? Mock.Of<ILogger>()), eventStore, eventBusSettings.DisabledEventHandlerTypes);
+                    () => GetInProcessEventBus(eventBusSettings, logger, eventHandlerExceptionDelegate, eventStore), eventStore, eventBusSettings.DisabledEventHandlerTypes);
             ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
+        }
+
+        private static InProcessEventBus GetInProcessEventBus(EventBusSettings eventBusSettings, ILogger logger,
+            EventHandlerExceptionDelegate eventHandlerExceptionDelegate, IEventStore eventStore)
+        {
+            var inProcessEventBus = new InProcessEventBus(eventStore, eventBusSettings, logger ?? Mock.Of<ILogger>());
+            if (eventHandlerExceptionDelegate != null)
+            {
+                inProcessEventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
+            }
+
+            return inProcessEventBus;
         }
 
         public static ImportFromDesigner ImportFromDesignerCommand(Guid responsibleId, string base64StringOfAssembly)
