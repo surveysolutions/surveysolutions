@@ -178,15 +178,17 @@ namespace WB.Tests.Unit
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
 
-            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? questionId = null)
+            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? userId = null,
+                Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null,
+                DateTime? answerTime = null)
             {
                 return new AnswerYesNoQuestion(
                     interviewId: Guid.NewGuid(),
-                    userId: Guid.NewGuid(),
+                    userId: userId ?? Guid.NewGuid(),
                     questionId: questionId ?? Guid.NewGuid(),
-                    rosterVector: RosterVector.Empty,
-                    answerTime: DateTime.UtcNow,
-                    answeredOptions: new AnsweredYesNoOption[] {});
+                    rosterVector: rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    answerTime: answerTime ?? DateTime.UtcNow,
+                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
             }
         }
 
@@ -1681,11 +1683,12 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IMultyOptionsQuestion YesNoQuestion(Guid? questionId = null)
+        public static IMultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null)
         {
             return Create.MultipleOptionsQuestion(
                 isYesNo: true,
-                questionId: questionId);
+                questionId: questionId,
+                answers: answers ?? new decimal[] {});
         }
 
         public static InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
@@ -2746,7 +2749,7 @@ namespace WB.Tests.Unit
         {
             return new AnsweredQuestionSynchronizationDto(
                 questionId ?? Guid.NewGuid(),
-                rosterVector ?? RosterVector.Empty,
+                rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer ?? "42",
                 "no comment");
         }
@@ -2829,6 +2832,11 @@ namespace WB.Tests.Unit
             return new PlainQuestionnaire(
                 document: document,
                 version: version);
+        }
+
+        public static RosterVector RosterVector(params decimal[] coordinates)
+        {
+            return new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
         }
     }
 }
