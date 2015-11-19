@@ -810,15 +810,6 @@ namespace WB.Tests.Unit
             }
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-        {
-            return new QuestionnaireDocument
-            {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
-            };
-        }
-
         public static Group Chapter(string title = "Chapter X",Guid? chapterId=null, IEnumerable<IComposite> children = null)
         {
             return Create.Group(
@@ -1587,12 +1578,21 @@ namespace WB.Tests.Unit
             return new EventContext();
         }
 
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                Children = children?.ToList() ?? new List<IComposite>(),
+            };
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
             };
         }
@@ -1663,7 +1663,8 @@ namespace WB.Tests.Unit
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, params decimal[] answers)
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false,
+            params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
             {
@@ -1675,8 +1676,16 @@ namespace WB.Tests.Unit
                 MaxAllowedAnswers = maxAllowedAnswers,
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
+                YesNoView = isYesNo,
                 Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
+        }
+
+        public static IMultyOptionsQuestion YesNoQuestion(Guid? questionId = null)
+        {
+            return Create.MultipleOptionsQuestion(
+                isYesNo: true,
+                questionId: questionId);
         }
 
         public static InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
@@ -2813,6 +2822,13 @@ namespace WB.Tests.Unit
         public static YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
         {
             return new YesNoAnswers(allOptionCodes: allOptionCodes, yesNoAnswersOnly: yesNoAnswersOnly);
+        }
+
+        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
+        {
+            return new PlainQuestionnaire(
+                document: document,
+                version: version);
         }
     }
 }
