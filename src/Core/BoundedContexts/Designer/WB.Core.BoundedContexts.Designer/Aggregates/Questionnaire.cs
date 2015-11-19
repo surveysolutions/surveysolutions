@@ -1025,7 +1025,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isRoster: sourceGroup.IsRoster, 
                 rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterSizeQuestionId),
-                rosterTitleQuestionId: null,
+                rosterTitleQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterTitleQuestionId),
                 rosterFixedTitles: sourceGroup.FixedRosterTitles,
                 variableName: preserveVariableName ? sourceGroup.VariableName : null,
                 sourceQuestionnaireId : sourceQuestionnaireId));
