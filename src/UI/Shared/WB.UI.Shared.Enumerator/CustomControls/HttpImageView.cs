@@ -6,7 +6,7 @@ using Android.Util;
 using Android.Widget;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
-using Cirrious.MvvmCross.Plugins.DownloadCache;
+using MvvmCross.Plugins.DownloadCache;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {

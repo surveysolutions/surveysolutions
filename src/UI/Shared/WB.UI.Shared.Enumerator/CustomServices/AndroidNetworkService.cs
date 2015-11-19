@@ -2,7 +2,7 @@ using System.Linq;
 using Android.Content;
 using Android.Net;
 using Cirrious.CrossCore.Droid.Platform;
-using Cirrious.MvvmCross.Plugins.Network.Reachability;
+using MvvmCross.Plugins.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices

@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using Cirrious.CrossCore.Converters;
-using Cirrious.MvvmCross.Plugins.Location;
+using MvvmCross.Plugins.Location;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
