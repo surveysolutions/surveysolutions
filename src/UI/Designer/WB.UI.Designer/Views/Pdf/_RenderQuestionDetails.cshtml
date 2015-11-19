@@ -1,5 +1,7 @@
 ﻿@model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionView
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+
+
 <div class="question no-page-break">
     <span>
         @Model.ItemNumber &nbsp;&nbsp; @Model.Title <span class="variable-name">@Model.VariableName</span>
@@ -15,7 +17,7 @@
 
     @if (Model.Answers.Count > 0) {
         <ul class="answer-options">
-            @if (Model.QuestionType == WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionType.YesNo)
+            @if (Model.QuestionType == PdfQuestionType.YesNo)
             {
                 <li>
                     <span>
@@ -27,7 +29,7 @@
             @foreach (PdfAnswerView answer in this.Model.Answers.Take(20))
             {
                 <li>
-                    @if (Model.QuestionType == WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionType.YesNo)
+                    @if (Model.QuestionType == PdfQuestionType.YesNo)
                     {
                         <input type="radio" disabled="disabled"/>
                         <span> / </span>
@@ -35,7 +37,7 @@
                     }
                     else
                     {
-                        <input type="@(Model.QuestionType == WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
+                        <input type="@(Model.QuestionType == PdfQuestionType.MultyOption ? "checkbox" : "radio")" title="@answer.Title" disabled="disabled" />
                     }
                     <span class="answer-value">
                         @answer.AnswerValue
@@ -57,14 +59,14 @@
     else {
         switch (Model.QuestionType)
         {
-            case WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionType.Text:
+            case PdfQuestionType.Text:
                 {
                 <div class="answer-placeholder">&nbsp;</div>
                 <div class="answer-placeholder">&nbsp;</div>
                 <div class="answer-placeholder">&nbsp;</div>
                     break;
                 }
-            case WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionType.DateTime:
+            case PdfQuestionType.DateTime:
                 {
                     <span class="no-line-break">
                         <span class="answer-placeholder date-answer-day"></span>/
@@ -73,7 +75,7 @@
                     </span>
                     break;
                 }
-            case WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionType.Numeric:
+            case PdfQuestionType.Numeric:
                 {
                     <span class="no-line-break">
                         @for (int i = 0; i < 10; i++) {
