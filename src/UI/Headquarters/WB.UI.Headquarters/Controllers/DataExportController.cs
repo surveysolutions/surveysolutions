@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
+        [ObserverNotAllowed]
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;
