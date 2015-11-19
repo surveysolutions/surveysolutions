@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Ncqrs;
+using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
@@ -23,28 +24,21 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly Type[] handlersToIgnore;
         private readonly Func<InProcessEventBus> getInProcessEventBus;
         private readonly IEventStore eventStore;
+        private readonly EventBusSettings eventBusSettings;
+        private readonly ILogger logger;
 
         public ITransactionManagerProvider TransactionManager { get; set; }
 
         public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger)
         {
             this.eventStore = eventStore;
+            this.eventBusSettings = eventBusSettings;
+            this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
             this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
         }
 
-        internal NcqrCompatibleEventDispatcher(Func<InProcessEventBus> getInProcessEventBus, IEventStore eventStore, IEnumerable<Type> handlersToIgnore)
-        {
-            this.getInProcessEventBus = getInProcessEventBus;
-            this.eventStore = eventStore;
-            this.handlersToIgnore = handlersToIgnore.ToArray();
-        }
-
-        public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException
-        {
-            add { this.getInProcessEventBus().OnCatchingNonCriticalEventHandlerException += value; }
-            remove { this.getInProcessEventBus().OnCatchingNonCriticalEventHandlerException -= value; }
-        }
+        public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;
 
         public void Publish(IPublishableEvent eventMessage)
         {
@@ -52,6 +46,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             foreach (EventHandlerWrapper handler in this.registredHandlers.Values.ToList())
             {
+                handler.Bus.OnCatchingNonCriticalEventHandlerException +=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 try
                 {
                     handler.Bus.Publish(eventMessage);
@@ -59,6 +55,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 catch (Exception exception)
                 {
                     occurredExceptions.Add(exception);
+                }
+                finally
+                {
+                    handler.Bus.OnCatchingNonCriticalEventHandlerException -=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 }
             }
 
@@ -76,10 +77,10 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 return;
 
             var functionalHandlers =
-               this.registredHandlers.Values.Select(h => h.Handler as IFunctionalEventHandler).Where(h => h != null).ToList();
+               this.registredHandlers.Values.Where(h => (h.Handler as IFunctionalEventHandler) != null).ToList();
 
             var oldStyleHandlers =
-               this.registredHandlers.Values.Where(h => !(h.Handler is IFunctionalEventHandler)).ToList();
+               this.registredHandlers.Values.Except(functionalHandlers).ToList();
 
             Guid firstEventSourceId = events.First().EventSourceId;
 
@@ -87,16 +88,46 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             foreach (var functionalEventHandler in functionalHandlers)
             {
+                var handler = (IFunctionalEventHandler) functionalEventHandler.Handler;
+
+                functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 try
                 {
                     this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
-                    functionalEventHandler.Handle(events, firstEventSourceId);
+                    handler.Handle(events, firstEventSourceId);
                     this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                 }
                 catch (Exception exception)
                 {
-                    errorsDuringHandling.Add(exception);
+                    var eventHandlerType = handler.GetType();
+                    var shouldIgnoreException =
+                        this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
+
+                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
+                        eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
+                        innerException: exception);
+
+                    if (shouldIgnoreException)
+                    {
+                        this.logger.Error(
+                            $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
+                            eventHandlerException);
+
+                        this.OnCatchingNonCriticalEventHandlerException?.Invoke(
+                            eventHandlerException);
+                    }
+                    else
+                    {
+                        errorsDuringHandling.Add(eventHandlerException);
+                    }
+
                     this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+                }
+                finally
+                {
+                    functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException -=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 }
             }
 
@@ -104,6 +135,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 foreach (var handler in oldStyleHandlers)
                 {
+                    handler.Bus.OnCatchingNonCriticalEventHandlerException +=
+                        this.OnCatchingNonCriticalEventHandlerException;
                     try
                     {
                         this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
@@ -114,6 +147,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     {
                         errorsDuringHandling.Add(exception);
                         this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+                    }
+                    finally
+                    {
+                        handler.Bus.OnCatchingNonCriticalEventHandlerException -=
+                            this.OnCatchingNonCriticalEventHandlerException;
                     }
                 }
             }
@@ -155,6 +193,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
                 stopWatch.Start();
 
+                bus.OnCatchingNonCriticalEventHandlerException +=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 try
                 {
                     this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
@@ -165,6 +205,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 {
                     occurredExceptions.Add(exception);
                     this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+                }
+                finally
+                {
+                    bus.OnCatchingNonCriticalEventHandlerException -=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 }
 
                 stopWatch.Stop();

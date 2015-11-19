@@ -51,15 +51,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         private readonly IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter;
         private readonly IReadSideRepositoryWriter<AccountDocument> accounts;
+        private readonly PdfQuestionTypeConverter pdfTypeConverter;
         private readonly ILogger logger;
 
         public PdfQuestionnaireDenormalizer(IReadSideKeyValueStorage<PdfQuestionnaireView> repositoryWriter,
             ILogger logger,
-            IReadSideRepositoryWriter<AccountDocument> accounts)
+            IReadSideRepositoryWriter<AccountDocument> accounts,
+            PdfQuestionTypeConverter pdfTypeConverter)
         {
             this.repositoryWriter = repositoryWriter;
             this.logger = logger;
             this.accounts = accounts;
+            this.pdfTypeConverter = pdfTypeConverter;
         }
 
         public override object[] Writers
@@ -159,8 +162,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var pdfTypeConverter = new PdfQuestionTypeConverter();
-
                 var newQuestion = new PdfQuestionView
                     {
                         PublicId = @event.PublicKey,
@@ -187,8 +188,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var pdfTypeConverter = new PdfQuestionTypeConverter();
-
                 var existingQuestion = questionnaire.GetEntityById<PdfQuestionView>(@event.PublicKey);
                 if (existingQuestion == null)
                 {
@@ -216,8 +215,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
             {
-                var pdfTypeConverter = new PdfQuestionTypeConverter();
-
                 var newQuestion = new PdfQuestionView
                 {
                     PublicId = @event.PublicKey,
