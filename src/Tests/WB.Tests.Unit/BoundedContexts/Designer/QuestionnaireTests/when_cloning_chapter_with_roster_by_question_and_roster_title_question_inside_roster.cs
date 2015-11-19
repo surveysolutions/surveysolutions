@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             eventContext.GetSingleEvent<RosterChanged>().RosterSizeSource.ShouldEqual(RosterSizeSourceType.Question);
 
         It should_RosterChanged_event_roster_title_qiestion_id_be_null = () =>
-            eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldBeNull();
+            eventContext.GetSingleEvent<RosterChanged>().RosterTitleQuestionId.ShouldNotBeNull();
 
         It should_raise_NumericQuestionCloned_event = () =>
             eventContext.ShouldContainEvent<NumericQuestionCloned>();

@@ -1169,7 +1169,7 @@
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\gulpfile.js" />
-    <Content Include="Views\ControlPanel\ExpressionGeneration.cshtml" />
+    <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml">
       <SubType>Code</SubType>
     </Content>

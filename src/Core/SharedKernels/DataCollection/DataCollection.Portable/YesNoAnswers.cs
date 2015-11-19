@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection
             {
                 if (!this.allOptionCodes.Contains(code))
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new IndexOutOfRangeException("Option with code {code} is absent");
                 }
                 if (this.selectedNoCodes.Contains(code))
                 {

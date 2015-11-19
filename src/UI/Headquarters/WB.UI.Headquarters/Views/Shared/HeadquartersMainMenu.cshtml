@@ -1,5 +1,5 @@
 ﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
-@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
@@ -58,12 +58,15 @@
             </i> @MainMenu.Questionnaires
         </a>
     </li>
+@if (!(User.Identity.IsObserver()))
+{
     <li class="@(page == MenuItem.DataExport ? "active" : "")">
         <a href="@Url.Action("Index", "DataExport", new {area = ""})">
             <i class="glyphicon glyphicon-download">
             </i> @MainMenu.DataExport
         </a>
     </li>
+}
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     <li class="active glow-animate" style="display: none" id="IncomingPackagesQueueIndicator">
