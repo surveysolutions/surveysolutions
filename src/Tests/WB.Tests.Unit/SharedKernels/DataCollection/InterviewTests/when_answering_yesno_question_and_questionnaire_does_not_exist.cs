@@ -14,14 +14,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
+            command = Create.Command.AnswerYesNoQuestion();
+
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == null as IQuestionnaire);
 
             interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
 
             interview.Apply(Create.Event.InterviewCreated(questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion));
-
-            command = Create.Command.AnswerYesNoQuestion();
         };
 
         Because of = () =>

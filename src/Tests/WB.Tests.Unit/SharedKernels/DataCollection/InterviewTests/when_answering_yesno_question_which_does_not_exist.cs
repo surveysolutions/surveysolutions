@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -13,14 +14,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
+            command = Create.Command.AnswerYesNoQuestion(questionId: Guid.Parse("11111111111111111111111111111111"));
+
             var questionnaire = Mock.Of<IQuestionnaire>
             (_
-                => _.HasQuestion(questionId) == false
+                => _.HasQuestion(command.QuestionId) == false
             );
 
             interview = Setup.InterviewForQuestionnaire(questionnaire);
-
-            command = Create.Command.AnswerYesNoQuestion(questionId: questionId);
         };
 
         Because of = () =>
@@ -33,9 +34,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         It should_throw_exception_with_message_containing__question____not_____found__ = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("question", "not", "found");
 
+        It should_throw_exception_with_message_containing_question_id_from_command = () =>
+            exception.Message.ShouldContain(command.QuestionId.ToString());
+
         private static AnswerYesNoQuestion command;
         private static Interview interview;
         private static InterviewException exception;
-        private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
     }
 }
