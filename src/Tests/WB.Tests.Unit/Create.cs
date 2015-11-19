@@ -177,6 +177,17 @@ namespace WB.Tests.Unit
             {
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
+
+            public static AnswerYesNoQuestion AnswerYesNoQuestion()
+            {
+                return new AnswerYesNoQuestion(
+                    interviewId: Guid.NewGuid(),
+                    userId: Guid.NewGuid(),
+                    questionId: Guid.NewGuid(),
+                    rosterVector: RosterVector.Empty,
+                    answerTime: DateTime.UtcNow,
+                    answeredOptions: new AnsweredYesNoOption[] {});
+            }
         }
 
         internal static class Event
@@ -782,6 +793,12 @@ namespace WB.Tests.Unit
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: Guid.NewGuid());
+            }
+
+            internal static InterviewHardDeleted InterviewHardDeleted()
+            {
+                return new InterviewHardDeleted(
+                    userId: Guid.NewGuid());
             }
         }
 
