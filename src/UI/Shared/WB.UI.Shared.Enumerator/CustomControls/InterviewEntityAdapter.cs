@@ -2,11 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Microsoft.CSharp.RuntimeBinder;
+using Cirrious.MvvmCross.Droid.Support.RecyclerView;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -15,15 +14,10 @@ using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDeta
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
-    public class InterviewEntityAdapter : MvxRecyclerViewAdapter
+    public class InterviewEntityAdapter : MvxRecyclerAdapter
     {
         private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>(); 
         private const int UnknownViewType = -1;
-
-        public InterviewEntityAdapter(Context context, IMvxAndroidBindingContext bindingContext)
-            : base(context, bindingContext)
-        {
-        }
 
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
         {
@@ -49,9 +43,15 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
         };
 
+
+        public InterviewEntityAdapter(IMvxAndroidBindingContext bindingContext)
+            : base(bindingContext)
+        {
+        }
+
         public override int GetItemViewType(int position)
         {
-            object source = this.GetRawItem(position);
+            object source = this.GetItem(position);
 
             var typeOfViewModel = source.GetType();
 
@@ -98,14 +98,15 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
         {
+            
             return viewType != UnknownViewType
                 ? bindingContext.BindingInflate(viewType, parent, false)
-                : this.CreateEmptyView();
+                : this.CreateEmptyView(parent.Context);
         }
 
-        private View CreateEmptyView()
+        private View CreateEmptyView(Context context)
         {
-            return new View(this.Context);
+            return new View(context);
         }
     }
 }
