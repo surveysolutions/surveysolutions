@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Location;
+using MvvmCross.Plugins.Location;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {

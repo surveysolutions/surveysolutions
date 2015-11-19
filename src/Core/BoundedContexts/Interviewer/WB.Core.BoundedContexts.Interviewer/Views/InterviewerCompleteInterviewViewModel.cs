@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Messenger;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Repositories;

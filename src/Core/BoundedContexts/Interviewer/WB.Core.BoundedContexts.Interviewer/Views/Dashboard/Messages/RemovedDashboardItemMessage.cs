@@ -1,4 +1,4 @@
-﻿using Cirrious.MvvmCross.Plugins.Messenger;
+﻿using MvvmCross.Plugins.Messenger;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages
 {
