@@ -11,11 +11,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            command = Create.Command.AnswerYesNoQuestion();
-
             interview = Create.Interview();
 
             interview.Apply(Create.Event.InterviewHardDeleted());
+
+            command = Create.Command.AnswerYesNoQuestion();
         };
 
         Because of = () =>

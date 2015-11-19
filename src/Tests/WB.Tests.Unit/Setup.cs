@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -135,6 +136,11 @@ namespace WB.Tests.Unit
                 questionnaireVersion: questionnaireVersion));
 
             return interview;
+        }
+
+        public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
+        {
+            return Setup.InterviewForQuestionnaire(Create.PlainQuestionnaire(document: questionnaireDocument));
         }
     }
 }
