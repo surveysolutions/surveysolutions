@@ -193,6 +193,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
                 stopWatch.Start();
 
+                bus.OnCatchingNonCriticalEventHandlerException +=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 try
                 {
                     this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
@@ -203,6 +205,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 {
                     occurredExceptions.Add(exception);
                     this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+                }
+                finally
+                {
+                    bus.OnCatchingNonCriticalEventHandlerException -=
+                        this.OnCatchingNonCriticalEventHandlerException;
                 }
 
                 stopWatch.Stop();
