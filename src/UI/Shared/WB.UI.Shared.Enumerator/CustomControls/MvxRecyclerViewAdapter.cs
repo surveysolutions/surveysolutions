@@ -208,7 +208,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected virtual IMvxAndroidBindingContext CreateBindingContextForViewHolder()
         {
-            return new MvxAndroidBindingContext(this.context, this.bindingContext.LayoutInflater);
+            return new MvxAndroidBindingContext(this.context, this.bindingContext.LayoutInflaterHolder);
         }
 
         protected virtual View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
