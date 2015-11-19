@@ -461,6 +461,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_and_questionnaire_does_not_exist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_on_hard_deleted_interview.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_does_not_exist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
