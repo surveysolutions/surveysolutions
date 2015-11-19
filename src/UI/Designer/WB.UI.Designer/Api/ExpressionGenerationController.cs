@@ -5,17 +5,15 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
 {
-    [LocalOrDevelopmentAccessOnly]
+    [Authorize]
     public class ExpressionGenerationController : ApiController
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
@@ -113,9 +111,5 @@ namespace WB.UI.Designer.Api
 
             return questionnaire;
         }
-
     }
-
-
-
 }

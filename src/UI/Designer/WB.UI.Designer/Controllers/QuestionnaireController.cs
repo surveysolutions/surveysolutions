@@ -164,6 +164,11 @@ namespace WB.UI.Designer.Controllers
             return this.Redirect(this.Request.UrlReferrer.ToString());
         }
 
+        public ActionResult ExpressionGeneration()
+        {
+            return this.View();
+        }
+
         public ActionResult Index(int? p, string sb, int? so, string f)
         {
             return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
