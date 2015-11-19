@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -30,6 +31,26 @@ namespace WB.Core.SharedKernels.DataCollection
         public decimal[] No => this.selectedNoCodes;
 
         public decimal[] Missing => this.allOptionCodes.Except(this.selectedYesCodes).Except(this.selectedNoCodes).ToArray();
+
+        public bool? this[int code]
+        {
+            get
+            {
+                if (!this.allOptionCodes.Contains(code))
+                {
+                    throw new IndexOutOfRangeException();
+                }
+                if (this.selectedNoCodes.Contains(code))
+                {
+                    return false;
+                }
+                if (this.selectedYesCodes.Contains(code))
+                {
+                    return true;
+                }
+                return null;
+            }
+        }
     }
 
     public class YesNoAnswersOnly

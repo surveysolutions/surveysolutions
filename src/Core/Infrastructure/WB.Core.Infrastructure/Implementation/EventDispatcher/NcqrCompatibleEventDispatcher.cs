@@ -84,6 +84,9 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             Guid firstEventSourceId = events.First().EventSourceId;
 
+            if (this.eventBusSettings.IgnoredAggregateRoots.Contains(firstEventSourceId.FormatGuid()))
+                return;
+
             var errorsDuringHandling = new List<Exception>();
 
             foreach (var functionalEventHandler in functionalHandlers)

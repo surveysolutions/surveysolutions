@@ -177,6 +177,19 @@ namespace WB.Tests.Unit
             {
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
+
+            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? userId = null,
+                Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null,
+                DateTime? answerTime = null)
+            {
+                return new AnswerYesNoQuestion(
+                    interviewId: Guid.NewGuid(),
+                    userId: userId ?? Guid.NewGuid(),
+                    questionId: questionId ?? Guid.NewGuid(),
+                    rosterVector: rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    answerTime: answerTime ?? DateTime.UtcNow,
+                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
+            }
         }
 
         internal static class Event
@@ -783,15 +796,20 @@ namespace WB.Tests.Unit
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: Guid.NewGuid());
             }
-        }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-        {
-            return new QuestionnaireDocument
+            internal static InterviewHardDeleted InterviewHardDeleted()
             {
-                PublicKey = id ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
-            };
+                return new InterviewHardDeleted(
+                    userId: Guid.NewGuid());
+            }
+
+            public static InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            {
+                return new InterviewCreated(
+                    userId: Guid.NewGuid(),
+                    questionnaireId: questionnaireId ?? Guid.NewGuid(),
+                    questionnaireVersion: questionnaireVersion ?? 7);
+            }
         }
 
         public static Group Chapter(string title = "Chapter X",Guid? chapterId=null, IEnumerable<IComposite> children = null)
@@ -1562,12 +1580,21 @@ namespace WB.Tests.Unit
             return new EventContext();
         }
 
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                Children = children?.ToList() ?? new List<IComposite>(),
+            };
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, bool usesCSharp = false, IEnumerable<IComposite> children = null)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children != null ? children.ToList() : new List<IComposite>(),
+                Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
             };
         }
@@ -1638,7 +1665,8 @@ namespace WB.Tests.Unit
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, params decimal[] answers)
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false,
+            params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
             {
@@ -1650,8 +1678,17 @@ namespace WB.Tests.Unit
                 MaxAllowedAnswers = maxAllowedAnswers,
                 QuestionType = QuestionType.MultyOption,
                 LinkedToQuestionId = linkedToQuestionId,
+                YesNoView = isYesNo,
                 Answers = answers.Select(a => Create.Answer(a.ToString(), a)).ToList()
             };
+        }
+
+        public static IMultyOptionsQuestion YesNoQuestion(Guid? questionId = null, decimal[] answers = null)
+        {
+            return Create.MultipleOptionsQuestion(
+                isYesNo: true,
+                questionId: questionId,
+                answers: answers ?? new decimal[] {});
         }
 
         public static InterviewsFeedDenormalizer InterviewsFeedDenormalizer(IReadSideRepositoryWriter<InterviewFeedEntry> feedEntryWriter = null,
@@ -2028,14 +2065,14 @@ namespace WB.Tests.Unit
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
-            Guid questionnaireId, IQuestionnaire questionaire = null)
+            Guid questionnaireId, IQuestionnaire questionaire = null, long? questionnaireVersion = null)
         {
             questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
 
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionaire.Version) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionaire);
         }
 
         public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, object payload = null)
@@ -2053,7 +2090,7 @@ namespace WB.Tests.Unit
 
             var ncqrCompatibleEventDispatcher =
                 new NcqrCompatibleEventDispatcher(eventStore: Mock.Of<IEventStore>(), eventBusSettings: eventBusSettings, logger: logger ?? Mock.Of<ILogger>());
-            ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
+              ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
         }
 
@@ -2712,7 +2749,7 @@ namespace WB.Tests.Unit
         {
             return new AnsweredQuestionSynchronizationDto(
                 questionId ?? Guid.NewGuid(),
-                rosterVector ?? RosterVector.Empty,
+                rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer ?? "42",
                 "no comment");
         }
@@ -2794,6 +2831,18 @@ namespace WB.Tests.Unit
         public static YesNoAnswers YesNoAnswers(decimal[] allOptionCodes, YesNoAnswersOnly yesNoAnswersOnly = null)
         {
             return new YesNoAnswers(allOptionCodes: allOptionCodes, yesNoAnswersOnly: yesNoAnswersOnly);
+        }
+
+        public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
+        {
+            return new PlainQuestionnaire(
+                document: document,
+                version: version);
+        }
+
+        public static RosterVector RosterVector(params decimal[] coordinates)
+        {
+            return new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
         }
     }
 }
