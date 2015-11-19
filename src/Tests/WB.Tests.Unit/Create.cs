@@ -2043,8 +2043,7 @@ namespace WB.Tests.Unit
             return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new object()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
         }
 
-        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null, 
-            EventHandlerExceptionDelegate eventHandlerExceptionDelegate = null)
+        public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
         {
             eventBusSettings = eventBusSettings ?? new EventBusSettings
             {
@@ -2052,11 +2051,8 @@ namespace WB.Tests.Unit
                 DisabledEventHandlerTypes = new Type[0]
             };
 
-            var eventStore = Mock.Of<IEventStore>();
-
             var ncqrCompatibleEventDispatcher =
-                new NcqrCompatibleEventDispatcher(
-                    () => GetInProcessEventBus(eventBusSettings, logger, eventHandlerExceptionDelegate, eventStore), eventStore, eventBusSettings.DisabledEventHandlerTypes);
+                new NcqrCompatibleEventDispatcher(eventStore: Mock.Of<IEventStore>(), eventBusSettings: eventBusSettings, logger: logger ?? Mock.Of<ILogger>());
             ncqrCompatibleEventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>());
             return ncqrCompatibleEventDispatcher;
         }
