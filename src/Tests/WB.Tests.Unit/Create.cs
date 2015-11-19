@@ -800,6 +800,14 @@ namespace WB.Tests.Unit
                 return new InterviewHardDeleted(
                     userId: Guid.NewGuid());
             }
+
+            public static InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+            {
+                return new InterviewCreated(
+                    userId: Guid.NewGuid(),
+                    questionnaireId: questionnaireId ?? Guid.NewGuid(),
+                    questionnaireVersion: questionnaireVersion ?? 7);
+            }
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
