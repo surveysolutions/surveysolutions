@@ -41,11 +41,6 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
-        public ActionResult ExpressionGeneration()
-        {
-            return this.View();
-        }
-
         public ActionResult MakeAdmin()
         {
             return this.View();
