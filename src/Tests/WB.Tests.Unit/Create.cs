@@ -178,12 +178,12 @@ namespace WB.Tests.Unit
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
 
-            public static AnswerYesNoQuestion AnswerYesNoQuestion()
+            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid? questionId = null)
             {
                 return new AnswerYesNoQuestion(
                     interviewId: Guid.NewGuid(),
                     userId: Guid.NewGuid(),
-                    questionId: Guid.NewGuid(),
+                    questionId: questionId ?? Guid.NewGuid(),
                     rosterVector: RosterVector.Empty,
                     answerTime: DateTime.UtcNow,
                     answeredOptions: new AnsweredYesNoOption[] {});
@@ -2053,14 +2053,14 @@ namespace WB.Tests.Unit
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
-            Guid questionnaireId, IQuestionnaire questionaire = null)
+            Guid questionnaireId, IQuestionnaire questionaire = null, long? questionnaireVersion = null)
         {
             questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
 
             return Mock.Of<IQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionaire.Version) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionaire.Version) == questionaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionaire);
         }
 
         public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, object payload = null)
