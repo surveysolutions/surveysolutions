@@ -473,6 +473,11 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_absent_option_code1.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_existing_no_option_code.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_existing_yes_option_code.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_not_selected_no_option_code.cs" />
+    <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_not_selected_yes_option_code.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
