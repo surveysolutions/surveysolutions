@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Xml;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 
 namespace WB.UI.Shared.Web.Configuration
@@ -8,6 +10,8 @@ namespace WB.UI.Shared.Web.Configuration
     public class EventBusConfigSection : ConfigurationSection
     {
         private const string EVENTHANDLERSTAGNAME = "eventHandlers";
+        private const string IGNOREDAGGREGATEROOTS = "ignoredAggregateRoots";
+        private const string AGGREGATEROOTID = "aggregateRootId";
 
         [ConfigurationProperty(EVENTHANDLERSTAGNAME)]
         public EventHandlersConfigurationElement EventHandlers
@@ -15,6 +19,10 @@ namespace WB.UI.Shared.Web.Configuration
             get { return ((EventHandlersConfigurationElement)(base[EVENTHANDLERSTAGNAME])); }
             set { base[EVENTHANDLERSTAGNAME] = value; }
         }
+
+        [ConfigurationProperty(IGNOREDAGGREGATEROOTS, IsDefaultCollection = false)]
+        [ConfigurationCollection(typeof(IgnoredAggregateRootConfigurationElement), AddItemName = AGGREGATEROOTID)]
+        public IgnoredAggregateRootsConfigurationCollection IgnoredAggregateRoots => (IgnoredAggregateRootsConfigurationCollection)base[IGNOREDAGGREGATEROOTS];
 
         public EventBusSettings GetSettings()
         {
@@ -28,7 +36,11 @@ namespace WB.UI.Shared.Web.Configuration
                 EventHandlerTypesWithIgnoredExceptions =
                     this.EventHandlers.WithIgnoredExceptions.OfType<EventHandlerConfigurationElement>()
                         .Select(x => Type.GetType(x.EventHandlerType))
-                        .ToArray()
+                        .ToArray(),
+                IgnoredAggregateRoots =
+                    this.IgnoredAggregateRoots.OfType<IgnoredAggregateRootConfigurationElement>()
+                        .Select(x => x.Value)
+                        .ToHashSet()
             };
         }
     }
@@ -79,5 +91,30 @@ namespace WB.UI.Shared.Web.Configuration
             get { return ((string) (base[TYPEATTRIBUTENAME])); }
             set { base[TYPEATTRIBUTENAME] = value; }
         }
+    }
+
+    public class IgnoredAggregateRootsConfigurationCollection : ConfigurationElementCollection
+    {
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return new IgnoredAggregateRootConfigurationElement();
+        }
+
+        protected override object GetElementKey(ConfigurationElement element)
+        {
+            return ((IgnoredAggregateRootConfigurationElement)element).Value;
+        }
+    }
+
+    public class IgnoredAggregateRootConfigurationElement : ConfigurationElement
+    {
+        private string _value;
+
+        protected override void DeserializeElement(XmlReader reader, bool serializeCollectionKey)
+        {
+            _value = (string)reader.ReadElementContentAs(typeof(string), null);
+        }
+
+        public string Value => this._value;
     }
 }

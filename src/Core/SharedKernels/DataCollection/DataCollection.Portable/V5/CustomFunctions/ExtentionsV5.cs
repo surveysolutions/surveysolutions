@@ -20,5 +20,20 @@ namespace WB.Core.SharedKernels.DataCollection.V5.CustomFunctions
 
             return _regex.IsMatch(email);
         }
+
+        public static bool IsYes(this bool? yesNoOrMissing)
+        {
+            return yesNoOrMissing == true;
+        }
+
+        public static bool IsNo(this bool? yesNoOrMissing)
+        {
+            return yesNoOrMissing == false;
+        }
+
+        public static bool IsMissing(this bool? yesNoOrMissing)
+        {
+            return !yesNoOrMissing.HasValue;
+        }
     }
 }

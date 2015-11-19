@@ -229,9 +229,12 @@ namespace WB.UI.Headquarters
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var eventBusConfigSection = (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
+            var eventBusConfigSection =
+                (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
 
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), eventBusConfigSection.GetSettings(),
+            var bus = new NcqrCompatibleEventDispatcher(
+                kernel.Get<IEventStore>(),
+                eventBusConfigSection.GetSettings(),
                 kernel.Get<ILogger>());
 
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();

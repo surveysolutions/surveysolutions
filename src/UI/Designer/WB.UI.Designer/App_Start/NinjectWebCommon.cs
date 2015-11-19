@@ -142,9 +142,11 @@ namespace WB.UI.Designer.App_Start
 
         private static NcqrCompatibleEventDispatcher CreateEventBus(StandardKernel kernel)
         {
-            var eventBusConfigSection = (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
+            var eventBusConfigSection =
+               (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
 
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), eventBusConfigSection.GetSettings(),
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                 eventBusConfigSection.GetSettings(),
                 kernel.Get<ILogger>());
 
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();

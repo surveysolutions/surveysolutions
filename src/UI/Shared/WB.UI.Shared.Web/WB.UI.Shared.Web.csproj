@@ -140,9 +140,8 @@
     <Compile Include="CommandDeserialization\CommandDeserializer.cs" />
     <Compile Include="CommandDeserialization\ICommandDeserializer.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
-    <Compile Include="Configuration\EventHandlersConfigSection.cs" />
+    <Compile Include="Configuration\EventBusConfigSection.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
-    <Compile Include="Configuration\IgnoredEventStreamsConfigSection.cs" />
     <Compile Include="DataAnnotations\PasswordRegularExpressionAttribute.cs" />
     <Compile Include="DataAnnotations\PasswordStringLengthAttribute.cs" />
     <Compile Include="DataAnnotations\DataAnnotationsConfig.cs" />
