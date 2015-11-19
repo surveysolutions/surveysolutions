@@ -1,4 +1,4 @@
-using Machine.Specifications;
+﻿using Machine.Specifications;
 
 using WB.Core.SharedKernels.DataCollection;
 
