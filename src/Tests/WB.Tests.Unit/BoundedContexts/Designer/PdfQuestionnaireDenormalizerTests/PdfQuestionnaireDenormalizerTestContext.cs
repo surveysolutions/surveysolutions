@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             IReadSideKeyValueStorage<PdfQuestionnaireView> documentStorage = null,
             ILogger logger = null)
         {
-            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null);
+            var pdfQuestionTypeConverter = new PdfQuestionTypeConverter();
+            return new PdfQuestionnaireDenormalizer(documentStorage, logger, null, pdfQuestionTypeConverter);
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(T @event)

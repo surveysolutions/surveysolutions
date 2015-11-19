@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Unbind<IDynamicCompilerSettingsGroup>();
             this.Bind<IDynamicCompilerSettingsGroup>().ToConstant(this.dynamicCompilerSettingsGroup);
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
+            this.Bind<PdfQuestionTypeConverter>().To<PdfQuestionTypeConverter>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);

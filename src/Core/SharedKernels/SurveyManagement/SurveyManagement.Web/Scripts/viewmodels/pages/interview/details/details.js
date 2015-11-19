@@ -182,42 +182,45 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.saveYesNoMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, yes, answerOptionValue, maxAllowedAnswers) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answers = _.result(_.find(answeredYesNoQuestionsBySupervisor, function(answersByQuestion) { return answersByQuestion.questionId === answerElementId; }), 'answers');
+        var actualAnswers = _.result(_.find(answeredYesNoQuestionsBySupervisor, function(answersByQuestion) { return answersByQuestion.questionId === answerElementId; }), 'answers');
 
-        if (_.isNull(answers) || _.isUndefined(answers)) {
-            answers = [];
+        var expectedAnswers = _.clone(actualAnswers);
+
+        if (_.isNull(expectedAnswers) || _.isUndefined(expectedAnswers)) {
+            expectedAnswers = [];
         }
 
-        var answeredOption = _.find(answers, function(answer) { return answer.OptionValue === answerOptionValue; });
+        var answeredOption = _.find(expectedAnswers, function (answer) { return answer.OptionValue === answerOptionValue; });
+        if (answeredOption) {
+            var indexOfAnsweredOption = expectedAnswers.indexOf(answeredOption);
+            expectedAnswers.splice(indexOfAnsweredOption, 1);
+        }
+        expectedAnswers.push({ OptionValue: answerOptionValue, Yes: yes });
         
-        var observableAnswers = ko.observableArray(answers).extend({
+        var observableExpectedAnswers = ko.observableArray(expectedAnswers).extend({
             validation: [
                 {
                     validator: function (val) {
-                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers) || answeredOption) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers)) {
                             return true;
                         }
 
-                        return val.length < maxAllowedAnswers;
+                        var yesAnswers = _.where(val, { "Yes": true });
+
+                        return yesAnswers.length <= maxAllowedAnswers;
                     },
                     message: 'Number of selected answers more than number of maximum permitted answers'
                 }
             ]
         });
 
-        if (!observableAnswers.isValid()) {
-            self.ShowError(observableAnswers.error);
+        if (!observableExpectedAnswers.isValid()) {
+            self.ShowError(observableExpectedAnswers.error);
             return;
         }
-
-        if (answeredOption) {
-            var indexOfAnsweredOption = answers.indexOf(answeredOption);
-            answers.splice(indexOfAnsweredOption, 1);
-        }
-        answers.push({ optionValue: answerOptionValue, yes: yes });
         
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
-        question.selectedOptions = observableAnswers;
+        question.selectedOptions = observableExpectedAnswers;
 
 
         sendAnswerCommand(config.commands.answerYesNoQuestion, question);
