@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Droid.Support.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.UI.Shared.Enumerator.CustomControls;
-
 
 namespace WB.UI.Interviewer.CustomControls
 {
-    public class InterviewerDashboardAdapter : MvxRecyclerViewAdapter
+    public class InterviewerDashboardAdapter : MvxRecyclerAdapter
     {
         private const int UnknownViewType = -1;
-
-        public InterviewerDashboardAdapter(Context context, IMvxAndroidBindingContext bindingContext)
-            : base(context, bindingContext)
-        {
-        }
 
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
         {
@@ -24,9 +18,14 @@ namespace WB.UI.Interviewer.CustomControls
             {typeof (InterviewDashboardItemViewModel), Resource.Layout.dashboard_interview_item },
         };
 
+        public InterviewerDashboardAdapter(IMvxAndroidBindingContext bindingContext)
+           : base(bindingContext)
+        {
+        }
+
         public override int GetItemViewType(int position)
         {
-            object source = this.GetRawItem(position);
+            object source = this.GetItem(position);
             var typeOfViewModel = source.GetType();
             return EntityTemplates.ContainsKey(typeOfViewModel) ? EntityTemplates[typeOfViewModel] : UnknownViewType;
         }
@@ -35,12 +34,12 @@ namespace WB.UI.Interviewer.CustomControls
         {
             return viewType != UnknownViewType
                 ? bindingContext.BindingInflate(viewType, parent, false)
-                : this.CreateEmptyView();
+                : this.CreateEmptyView(parent.Context);
         }
 
-        private View CreateEmptyView()
+        private View CreateEmptyView(Context context)
         {
-            return new View(this.Context);
+            return new View(context);
         }
     }
 
