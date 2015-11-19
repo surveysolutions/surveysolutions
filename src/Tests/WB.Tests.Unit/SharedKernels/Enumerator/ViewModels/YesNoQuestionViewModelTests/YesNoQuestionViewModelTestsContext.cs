@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 );
         }
 
-        protected static QuestionnaireModel BuildDefaultQuestionnaire(Identity questionId)
+        protected static QuestionnaireModel BuildDefaultQuestionnaire(Identity questionId, int? maxAllowedAnswers = 2)
         {
             var questionnaire = Create.QuestionnaireModel();
             questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>();
@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                             Value = 5
                         },
                     },
-                    MaxAllowedAnswers = 2
+                    MaxAllowedAnswers = maxAllowedAnswers
                 });
             return questionnaire;
         }
