@@ -18,7 +18,7 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v10/questionnaires")]
+    [RoutePrefix("api/v11/questionnaires")]
     public class QuestionnairesController : ApiController
     {
         internal static readonly Version ApiVersion = new Version(11, 0, 0);
@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Api
             this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v10/login")]
+        [Route("~/api/v11/login")]
         [HttpGet]
         public void Login()
         {
