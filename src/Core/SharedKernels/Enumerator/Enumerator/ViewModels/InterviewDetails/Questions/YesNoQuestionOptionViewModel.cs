@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.YesSelected == value)
                     return;
 
-                this.Selected = true;
+                this.Selected = value;
                 this.RaiseAnswerCommand.Execute();
             }
         }
@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.NoSelected == value)
                     return;
 
-                this.Selected = false;
+                this.Selected = !value;
                 this.RaiseAnswerCommand.Execute();
             }
         }
@@ -98,7 +98,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(() => {
                     this.Selected = null;
-                    this.CheckedOrder = null;
                     this.RaiseAnswerCommand.Execute();
                 });
             }

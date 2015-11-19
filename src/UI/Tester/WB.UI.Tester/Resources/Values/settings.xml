@@ -4,5 +4,5 @@
   <integer name="BufferSize">512</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
-  <string name="DesignerEndpoint">https://solutions.worldbank.org/api/v10</string>
+  <string name="DesignerEndpoint">https://solutions.worldbank.org/api/v11</string>
 </resources>

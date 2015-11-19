@@ -454,10 +454,15 @@
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_FeaturedItem_list_with_json_utils.cs" />
     <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception.cs" />
+ 	<Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_by_ignored_event_source.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_and_questionnaire_does_not_exist.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_on_hard_deleted_interview.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_does_not_exist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
@@ -609,6 +614,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_when_ordered_functionlity_is_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_of_another_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_initializing_answered_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_toggling_answer.cs" />

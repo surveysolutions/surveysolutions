@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using Rhino.Mocks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Tests.Unit;
@@ -191,6 +193,33 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             catchAllEventHandler.AssertWasCalled(h => h.Handle(null),
                 options => options.IgnoreArguments().Repeat.Times(events.Length));
+        }
+
+        [Test]
+        public void When_event_of_ignored_event_stream_is_published_it_should_not_be_published()
+        {
+            var eventSourceToIgnore = Guid.NewGuid();
+
+            var eventToPublish = Create.PublishableEvent(eventSourceId: eventSourceToIgnore, payload: new AEvent());
+            
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<object>>();
+            var bus = new InProcessEventBus(Mock.Of<IEventStore>(),
+                new EventBusSettings()
+                {
+                    IgnoredAggregateRoots = new HashSet<string>(new[] {eventSourceToIgnore.FormatGuid()})
+                },
+                Mock.Of<ILogger>());
+            bus.RegisterHandler(catchAllEventHandler);
+
+            var events = new[]
+            {
+                eventToPublish
+            };
+
+            bus.Publish(events);
+
+            catchAllEventHandler.AssertWasCalled(h => h.Handle(null),
+                options => options.IgnoreArguments().Repeat.Times(0));
         }
     }
 }
