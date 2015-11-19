@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -115,6 +116,25 @@ namespace WB.Tests.Unit
         {
             return Mock.Of<IStatefulInterviewRepository>(_
                 => _.Get(It.IsAny<string>()) == interview);
+        }
+
+        public static Interview InterviewForQuestionnaire(IQuestionnaire questionnaire)
+        {
+            Guid questionnaireId = Guid.NewGuid();
+            long questionnaireVersion = 777;
+
+            IQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(
+                questionnaireId: questionnaireId,
+                questionnaireVersion: questionnaireVersion,
+                questionaire: questionnaire);
+
+            Interview interview = Create.Interview(questionnaireRepository: questionnaireRepository);
+
+            interview.Apply(Create.Event.InterviewCreated(
+                questionnaireId: questionnaireId,
+                questionnaireVersion: questionnaireVersion));
+
+            return interview;
         }
     }
 }
