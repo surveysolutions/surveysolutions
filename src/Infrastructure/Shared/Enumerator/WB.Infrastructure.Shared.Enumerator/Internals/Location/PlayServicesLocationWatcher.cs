@@ -11,7 +11,7 @@ using Cirrious.CrossCore.Droid;
 using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.CrossCore.Exceptions;
 using Cirrious.CrossCore.Platform;
-using Cirrious.MvvmCross.Plugins.Location;
+using MvvmCross.Plugins.Location;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.Location

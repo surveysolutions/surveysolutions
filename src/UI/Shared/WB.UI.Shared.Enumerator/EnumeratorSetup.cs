@@ -13,6 +13,7 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
+using Cirrious.MvvmCross.Droid.Support.RecyclerView;
 using Cirrious.MvvmCross.Views;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -122,6 +123,7 @@ namespace WB.UI.Shared.Enumerator
                 // Add assemblies with other views we use.  When the XML is inflated
                 // MvvmCross knows about the types and won't complain about them.  This
                 // speeds up inflation noticeably.
+                toReturn.Add(typeof(FlowLayout).Assembly);
                 toReturn.Add(typeof(MvxRecyclerView).Assembly);
                 toReturn.Add(typeof(DrawerLayout).Assembly);
                 toReturn.Add(typeof(SwitchCompat).Assembly);
