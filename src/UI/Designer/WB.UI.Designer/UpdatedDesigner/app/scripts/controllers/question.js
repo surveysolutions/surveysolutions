@@ -26,7 +26,7 @@
 
             }
 
-            $scope.onKeyPressInOptions = function (keyEvent) {
+            $scope.onKeyPressInOptions = function(keyEvent) {
                 if (keyEvent.which === 13) {
                     keyEvent.preventDefault();
                     utilityService.moveFocusAndAddOptionIfNeeded(
@@ -34,10 +34,10 @@
                         ".question-options-editor",
                         ".question-options-editor input.question-option-value-editor",
                         $scope.activeQuestion.options,
-                        function () { return $scope.addOption(); },
+                        function() { return $scope.addOption(); },
                         "option");
                 }
-            }
+            };
 
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};

@@ -27,7 +27,7 @@
             };
 
             $scope.loadMacros = function () {
-                if ($scope.questionnaire == null || $scope.questionnaire.macros == null)
+                if ($scope.questionnaire === null || $scope.questionnaire.macros === null)
                     return;
 
                 _.each($scope.questionnaire.macros, function (macroDto) {
@@ -60,39 +60,39 @@
                 });
             };
 
-            $scope.saveMacro = function (macro, form) {
-                commandService.updateMacro($state.params.questionnaireId, macro).success(function () {
+            $scope.saveMacro = function(macro, form) {
+                commandService.updateMacro($state.params.questionnaireId, macro).success(function() {
                     macro.initialMacro = angular.copy(macro);
                     form.$setPristine();
                 });
-            }
+            };
 
-            $scope.cancel = function (macro, form) {
+            $scope.cancel = function(macro, form) {
                 var temp = angular.copy(macro.initialMacro);
                 dataBind(macro, temp);
                 form.$setPristine();
-            }
+            };
 
-            $scope.deleteMacro = function (index) {
+            $scope.deleteMacro = function(index) {
                 var macro = $scope.macros[index];
                 var macroName = macro.name || "macro with no name";
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(macroName));
 
-                modalInstance.result.then(function (confirmResult) {
+                modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function () {
+                        commandService.deleteMacros($state.params.questionnaireId, macro.itemId).success(function() {
                             $scope.macros.splice(index, 1);
                         });
                     }
                 });
-            }
-            
-            $scope.isDescriptionEmpty = function (macro) {
+            };
+
+            $scope.isDescriptionEmpty = function(macro) {
                 return _.isEmpty(macro.description);
-            }
-            $scope.toggleDescription = function (macro) {
+            };
+            $scope.toggleDescription = function(macro) {
                 macro.isDescriptionVisible = !macro.isDescriptionVisible;
-            }
+            };
 
             $scope.aceLoaded = function (editor) {
                 var expressionEditorPlaceholder = "content";

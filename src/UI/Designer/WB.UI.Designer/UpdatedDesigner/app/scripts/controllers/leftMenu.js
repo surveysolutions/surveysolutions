@@ -6,7 +6,7 @@
             $scope.isFoldedChapters = false;
             $scope.isFoldedMacros = false;
 
-            var closeOpenPanelIfAny = function () {
+            var closeOpenPanelIfAny = function() {
                 if (!($scope.isFoldedChapters || $scope.isFoldedMacros))
                     return;
 
@@ -17,7 +17,7 @@
                 if ($scope.isFoldedMacros) {
                     $rootScope.$broadcast("closeMacrosListRequested", {});
                 }
-            }
+            };
 
             $scope.unfoldChapters = function () {
                 if ($scope.isFoldedChapters)
