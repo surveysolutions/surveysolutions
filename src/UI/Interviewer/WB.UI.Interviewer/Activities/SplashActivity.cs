@@ -3,8 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics.Drawables;
+using Android.OS;
+using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Droid.Views;
+using Java.Lang;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -19,6 +23,14 @@ namespace WB.UI.Interviewer.Activities
     {
         public SplashActivity() : base(Resource.Layout.splash)
         {
+        }
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            var splashAnimation = this.FindViewById<ImageView>(Resource.Id.splash_animation);
+            ((AnimationDrawable)splashAnimation.Drawable).Start();
         }
 
         protected override async void TriggerFirstNavigate()
