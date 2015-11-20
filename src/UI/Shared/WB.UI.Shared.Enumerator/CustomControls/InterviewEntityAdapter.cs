@@ -5,8 +5,10 @@ using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
 using Android.Views;
+using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Cirrious.MvvmCross.Droid.Support.RecyclerView;
+using Java.Lang;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -116,7 +118,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 base.NotifyDataSetChanged(e);
             }
-            catch { }
+            catch (IllegalStateException) { }
         }
     }
 }

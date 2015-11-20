@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
 using MvvmCross.Plugins.DownloadCache;
@@ -53,8 +54,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         private void ImageHelperOnImageChanged(object sender, MvxValueEventArgs<Bitmap> mvxValueEventArgs)
         {
-            this.SetImageBitmap(mvxValueEventArgs.Value);
-            this.Invalidate();
+            var mvxMainThreadDispatcher = Mvx.Resolve<IMvxMainThreadDispatcher>();
+            mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.SetImageBitmap(mvxValueEventArgs.Value);
+                this.Invalidate();
+            });
         }
     }
 }
