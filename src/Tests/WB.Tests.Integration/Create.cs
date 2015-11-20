@@ -320,7 +320,7 @@ namespace WB.Tests.Integration
         {
             return new GpsCoordinateQuestion
             {
-                QuestionType = QuestionType.Numeric,
+                QuestionType = QuestionType.GpsCoordinates,
                 PublicKey = id ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
