@@ -111,10 +111,6 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta5\lib\MonoAndroid\Cirrious.MvvmCross.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Droid.Fragging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Droid.Fragging.3.5.2-alpha2\lib\MonoAndroid\Cirrious.MvvmCross.Droid.Fragging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid.Support.AppCompat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Cirrious.MvvmCross.Droid.Support.AppCompat.4.0.0-beta6\lib\MonoAndroid403\Cirrious.MvvmCross.Droid.Support.AppCompat.dll</HintPath>
       <Private>True</Private>
