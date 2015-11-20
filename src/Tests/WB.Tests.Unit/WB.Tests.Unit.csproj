@@ -58,11 +58,8 @@
       <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta5\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Messenger">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Messenger.dll</HintPath>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Test.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Tests.3.5.1\lib\net45\Cirrious.MvvmCross.Test.Core.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Test.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Tests.4.0.0-beta5\lib\net45\Cirrious.MvvmCross.Test.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -138,6 +135,10 @@
     </Reference>
     <Reference Include="Mvc.Mailer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.4.0.0-beta5\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -340,6 +341,7 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
+    <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_9_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_6_with_questionnaire_with_roster.cs" />

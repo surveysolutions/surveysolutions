@@ -3,10 +3,10 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Cirrious.MvvmCross.Droid.Support.RecyclerView;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomControls;
 
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -18,10 +18,7 @@ namespace WB.UI.Tester.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.dashboard; }
-        }
+        protected override int ViewResourceId => Resource.Layout.dashboard;
 
         protected override void OnCreate(Bundle bundle)
         {
