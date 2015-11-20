@@ -1,6 +1,6 @@
 using Cirrious.CrossCore.Plugins;
 
-namespace WB.UI.Interviewer.Bootstrap
+namespace WB.UI.Tester.Bootstrap
 {
     public class ResourceLoaderPluginBootstrap
         : MvxPluginBootstrapAction<MvvmCross.Plugins.ResourceLoader.PluginLoader>

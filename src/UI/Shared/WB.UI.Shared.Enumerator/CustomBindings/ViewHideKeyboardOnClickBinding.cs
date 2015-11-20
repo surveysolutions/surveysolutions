@@ -1,6 +1,8 @@
 using System;
 using Android.App;
 using Android.Views;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -40,8 +42,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void HandleClick(object sender, EventArgs e)
         {
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            var activity = topActivity.Activity;
             var view = (View) sender;
-            var activity = (Activity) view.Context;
 
             activity.RemoveFocusFromEditText();
             activity.HideKeyboard(view.WindowToken);

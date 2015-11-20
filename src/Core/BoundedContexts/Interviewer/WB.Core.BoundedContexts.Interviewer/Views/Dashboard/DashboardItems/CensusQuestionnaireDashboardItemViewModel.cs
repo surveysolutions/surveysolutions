@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;

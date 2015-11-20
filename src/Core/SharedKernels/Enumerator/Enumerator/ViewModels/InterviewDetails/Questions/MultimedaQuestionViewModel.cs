@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Plugins.PictureChooser;
 using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Plugins.PictureChooser;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;

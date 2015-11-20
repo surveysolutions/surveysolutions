@@ -1,20 +1,17 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Cirrious.MvvmCross.Plugins.Messenger;
+using Cirrious.MvvmCross.Droid.Support.RecyclerView;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.CustomControls;
-using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomControls;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -47,7 +44,7 @@ namespace WB.UI.Interviewer.Activities
             recyclerView.SetLayoutManager(layoutManager);
             recyclerView.HasFixedSize = true;
 
-            var adapter = new InterviewerDashboardAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+            var adapter = new InterviewerDashboardAdapter((IMvxAndroidBindingContext)this.BindingContext);
             recyclerView.Adapter = adapter;
         }
 

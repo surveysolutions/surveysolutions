@@ -1,6 +1,6 @@
-using Cirrious.MvvmCross.Plugins.Location;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
+using MvvmCross.Plugins.Location;
 using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.Infrastructure.FileSystem;

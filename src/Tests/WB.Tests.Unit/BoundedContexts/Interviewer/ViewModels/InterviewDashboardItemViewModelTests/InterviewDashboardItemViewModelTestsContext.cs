@@ -1,6 +1,5 @@
-﻿using Cirrious.MvvmCross.Plugins.Messenger;
-using Machine.Specifications;
-using Moq;
+﻿using Machine.Specifications;
+using MvvmCross.Plugins.Messenger;
 using NSubstitute;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Services;
