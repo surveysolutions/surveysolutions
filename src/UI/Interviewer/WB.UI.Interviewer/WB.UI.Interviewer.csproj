@@ -570,7 +570,6 @@
     <AndroidResource Include="Resources\Drawable\splash_76.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_77.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_78.jpg" />
-    <AndroidResource Include="Resources\Drawable\splash_79.jpg" />
     <AndroidResource Include="Resources\Drawable\splash_animation.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
