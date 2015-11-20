@@ -454,7 +454,7 @@
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_FeaturedItem_list_with_json_utils.cs" />
     <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception.cs" />
- 	<Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_by_ignored_event_source.cs" />
+    <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_by_ignored_event_source.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
@@ -463,6 +463,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_and_questionnaire_does_not_exist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_on_hard_deleted_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_does_not_exist.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
@@ -470,6 +471,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_link_source_question_of_multi_option_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\with_event_context.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />

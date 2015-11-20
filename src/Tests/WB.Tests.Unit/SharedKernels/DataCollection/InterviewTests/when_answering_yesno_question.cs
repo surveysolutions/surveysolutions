@@ -1,20 +1,13 @@
 using System;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Moq;
-using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answering_yesno_question
+    internal class when_answering_yesno_question : with_event_context
     {
         Establish context = () =>
         {
@@ -44,18 +37,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId: rosterId, fullRosterVectors: command.RosterVector));
-
-            eventContext = Create.EventContext();
         };
 
         Because of = () =>
             interview.AnswerYesNoQuestion(command);
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         It should_raise_YesNoQuestionAnswered_event = () =>
             eventContext.ShouldContainEvent<YesNoQuestionAnswered>();
@@ -82,7 +67,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;
-        private static EventContext eventContext;
         private static Guid rosterId = Guid.Parse("44444444444444444444444444444444");
     }
 }
