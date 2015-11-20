@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-  <View
-        android:id="@+id/anchorInCenter"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true" />
-  
-  <!--<ImageView
-     android:id="@+id/splash_image"
-     android:layout_width="@dimen/Splash_Logo_size"
-     android:layout_height="@dimen/Splash_Logo_size"
-     android:layout_above="@+id/anchorInCenter"
-     android:layout_centerHorizontal="true"
-     android:src="@drawable/login_logo"/>
-
-  <ImageView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/anchorInCenter"
-      android:src="@drawable/splash_animation"/>-->
-  
-
-</RelativeLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/applicationBackground"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ImageView
+            style="@style/Login_Logo"
+            android:id="@+id/LoginPage_logo" />
+        <ImageView
+            android:id="@+id/splash_animation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/splash_animation" />
+    </LinearLayout>
+</LinearLayout>
