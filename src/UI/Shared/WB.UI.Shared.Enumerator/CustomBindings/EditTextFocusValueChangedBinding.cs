@@ -2,6 +2,8 @@
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
@@ -103,10 +105,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void HideKeyboard(object sender)
         {
-            var view = (View)sender;
-            var activity = (Activity)view.Context;
-
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            var activity = topActivity.Activity;
             activity.RemoveFocusFromEditText();
+
+            var view = (View)sender;
             activity.HideKeyboard(view.WindowToken);
         }
     }

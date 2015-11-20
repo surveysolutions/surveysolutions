@@ -6,7 +6,8 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Cirrious.MvvmCross.Plugins.Messenger;
+using Cirrious.MvvmCross.Droid.Support.RecyclerView;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -61,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.recyclerView.SetLayoutManager(this.layoutManager);
             this.recyclerView.HasFixedSize = true;
 
-            this.adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+            this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
 
             this.recyclerView.Adapter = this.adapter;
         }
