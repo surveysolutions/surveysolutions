@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             yesNoAnswer.SetAnswers(new[]
             {
                 new AnsweredYesNoOption(5, true),
-                new AnsweredYesNoOption(1, true),
+                new AnsweredYesNoOption(1, false),
                 new AnsweredYesNoOption(4, false),
                 new AnsweredYesNoOption(3, true),
                 new AnsweredYesNoOption(2, true),
@@ -70,11 +70,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             answering.Verify(s => s.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(
                 c =>
                     c.AnsweredOptions.Length == 5
-                    && c.AnsweredOptions[0].Yes == true && c.AnsweredOptions[0].OptionValue == 5
-                    && c.AnsweredOptions[1].Yes == true && c.AnsweredOptions[1].OptionValue == 1
-                    && c.AnsweredOptions[2].Yes == true && c.AnsweredOptions[2].OptionValue == 3
-                    && c.AnsweredOptions[3].Yes == true && c.AnsweredOptions[3].OptionValue == 2
-                    && c.AnsweredOptions[4].Yes == true && c.AnsweredOptions[4].OptionValue == 4
+                    && c.AnsweredOptions[0].Yes == true  && c.AnsweredOptions[0].OptionValue == 5
+                    && c.AnsweredOptions[1].Yes == false && c.AnsweredOptions[1].OptionValue == 1
+                    && c.AnsweredOptions[2].Yes == true  && c.AnsweredOptions[2].OptionValue == 3
+                    && c.AnsweredOptions[3].Yes == true  && c.AnsweredOptions[3].OptionValue == 2
+                    && c.AnsweredOptions[4].Yes == true  && c.AnsweredOptions[4].OptionValue == 4
                 )), 
                 Times.Once());
         };

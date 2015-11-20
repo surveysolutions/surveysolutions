@@ -97,8 +97,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var isSelected = isExistAnswer 
                 ? answerModel.Answers.First(a => a.OptionValue == model.Value).Yes 
                 : (bool?) null;
-            var orderIndex = isExistAnswer && this.areAnswersOrdered
+            var displayOrderIndex = isExistAnswer && this.areAnswersOrdered
                 ? Array.IndexOf(answerModel.Answers.Where(am => am.Yes).Select(am => am.OptionValue).ToArray(), model.Value) + 1
+                : (int?)null;
+            var realOrderIndex = isExistAnswer && this.areAnswersOrdered
+                ? Array.IndexOf(answerModel.Answers.Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
 
             var optionViewModel = new YesNoQuestionOptionViewModel(this, this.QuestionState)
@@ -106,7 +109,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Value = model.Value,
                 Title = model.Title,
                 Selected = isSelected,
-                CheckedOrder = orderIndex,
+                YesCheckedOrder = displayOrderIndex,
+                AnswerCheckedOrder = realOrderIndex
             };
 
             return optionViewModel;
@@ -116,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             List<YesNoQuestionOptionViewModel> allSelectedOptions =
                 this.areAnswersOrdered
-                ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.CheckedOrder).ToList() 
+                ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList() 
                 : this.Options.Where(x => x.Selected.HasValue).ToList();
 
             int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
@@ -151,8 +155,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
-            var selectedValues = allSelectedOptions.Where(x => x.CheckedOrder.HasValue && x.Value != changedModel.Value).OrderBy(x => x.CheckedOrder.Value)
-                .Union(allSelectedOptions.Where(x => !x.CheckedOrder.HasValue || x.Value == changedModel.Value))
+            var selectedValues = allSelectedOptions.Where(x => x.AnswerCheckedOrder.HasValue && x.Value != changedModel.Value).OrderBy(x => x.AnswerCheckedOrder.Value)
+                .Union(allSelectedOptions.Where(x => !x.AnswerCheckedOrder.HasValue || x.Value == changedModel.Value))
                 .Select(x => new AnsweredYesNoOption(x.Value, x.Selected.Value))
                 .ToArray();
 
@@ -201,14 +205,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (selectedOptionIndex >= 0)
                 {
                     var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
-                    option.CheckedOrder = answeredYesNoOption.Yes 
+                    option.YesCheckedOrder = answeredYesNoOption.Yes 
                         ? Array.IndexOf(orderedYesOptions, option.Value) + 1
-                        : (int?)null; 
+                        : (int?)null;
+                    option.AnswerCheckedOrder = Array.IndexOf(orderedOptions, option.Value) + 1;
                     option.Selected = answeredYesNoOption.Yes;
                 }
                 else
                 {
-                    option.CheckedOrder = null;
+                    option.YesCheckedOrder = null;
+                    option.AnswerCheckedOrder = null;
                     option.Selected = null;
                 }
             }

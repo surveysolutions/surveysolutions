@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var lastOption = viewModel.Options.Last();
             lastOption.YesSelected.ShouldBeTrue();
             lastOption.Title.ShouldEqual("item5");
-            lastOption.CheckedOrder.ShouldEqual(1);
+            lastOption.YesCheckedOrder.ShouldEqual(1);
             lastOption.Value.ShouldEqual(5m);
         };
 
