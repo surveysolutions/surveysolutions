@@ -316,6 +316,18 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new GpsCoordinateQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression
+            };
+        }
+
         public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
             string[] fixedTitles = null, IEnumerable<IComposite> children = null, RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
             Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
