@@ -72,20 +72,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private int? checkedOrder;
+        private int? yesCheckedOrder;
 
-        public int? CheckedOrder
+        public int? YesCheckedOrder
         {
-            get { return this.checkedOrder; }
+            get { return this.yesCheckedOrder; }
             set
             {
-                if (this.checkedOrder == value)
+                if (this.yesCheckedOrder == value)
                     return;
 
-                this.checkedOrder = value;
+                this.yesCheckedOrder = value;
                 this.RaisePropertyChanged();
             }
         }
+
+        public int? AnswerCheckedOrder { get; set; }
 
         public IMvxCommand RaiseAnswerCommand
         {

@@ -6,7 +6,7 @@
 
   <TextView
     style="@style/Interview_Question_MultiOptionOrder"
-    local:MvxBind="Text CheckedOrder; Visible CheckedOrder"/>
+    local:MvxBind="Text YesCheckedOrder; Visible YesCheckedOrder"/>
   
   <RadioButton
     style="@style/Interview_Question_Answer_YesNo_Option"
