@@ -666,6 +666,8 @@
                 };
 
                 $.cookie('itemToCopy', itemToCopy, { expires: 30 });
+
+                $rootScope.readyToPaste = true;
             };
 
             $scope.refreshTree = function () {
