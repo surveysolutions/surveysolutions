@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 string dataByTheLevelFilePath =
-                    this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(level.LevelName, this.dataFileExtension));
+                    this.fileSystemAccessor.CombinePath(basePath, CreateFormatDataFileName(level.LevelName));
 
                 List<string> interviewLevelHeader = new List<string> { level.LevelIdColumnName };
 
@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
                 {
-                    var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(level.LevelName, this.dataFileExtension));
+                    var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath, CreateFormatDataFileName(level.LevelName));
 
                     if (result.ContainsKey(level.LevelName))
                     {
@@ -200,6 +200,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             };
 
             return interviewExportedData;
+        }
+
+        private string CreateFormatDataFileName(string fileName)
+        {
+            return String.Format("{0}.{1}", fileName, dataFileExtension);
         }
     }
 }
