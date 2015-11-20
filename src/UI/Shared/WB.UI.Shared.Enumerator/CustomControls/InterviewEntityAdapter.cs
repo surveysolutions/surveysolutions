@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
 using Android.Views;
@@ -107,6 +108,15 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private View CreateEmptyView(Context context)
         {
             return new View(context);
+        }
+
+        protected override void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            try
+            {
+                base.NotifyDataSetChanged(e);
+            }
+            catch { }
         }
     }
 }
