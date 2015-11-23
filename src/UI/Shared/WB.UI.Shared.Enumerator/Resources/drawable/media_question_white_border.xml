@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:local="http://schemas.android.com/apk/res-auto"
        android:shape="rectangle">
   <corners
       android:radius="@dimen/Interview_Question_Answer_Media_background_corners_radius" />
