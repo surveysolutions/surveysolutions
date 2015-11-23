@@ -67,7 +67,7 @@
 
       
         <# if(Model.AreRowSpecificVariablesPresent){#>
-		public decimal @rowcode { get { return RosterVector.Last(); } }
+		public decimal @rowcode { get { return this.RosterVector.Last(); } }
 
         public int @rowindex { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }    
 
