@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
 
             var result =
                 designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
-                    Create.QuestionnaireDocument(), new Version(8, 1, 1));
+                    Create.QuestionnaireDocument(), new Version(9, 0, 0));
 
             Assert.That(result, Is.True);
         }
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
             var result =
                 designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
                     Create.QuestionnaireDocument(children:
-                        new IComposite[] {Create.TextQuestion(scope: QuestionScope.Hidden)}), new Version(8, 1, 1));
+                        new IComposite[] {Create.TextQuestion(scope: QuestionScope.Hidden)}), new Version(9, 0, 0));
 
             Assert.That(result, Is.False);
         }
