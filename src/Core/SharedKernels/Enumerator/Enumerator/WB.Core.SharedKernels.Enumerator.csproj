@@ -248,7 +248,8 @@
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
-    </Reference>
+      <Private>True</Private>
+	</Reference>
     <Reference Include="SiaqodbPortable, Version=4.0.2.27, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Siaqodb.5.0.0.7\lib\portable-net45+win+wpa81\SiaqodbPortable.dll</HintPath>
       <Private>True</Private>
