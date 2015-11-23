@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var engineVersion = GetLatestSupportedVersion();
             if (engineVersion > clientVersion)
             {
-                if (clientVersion < version_5)
+                if (clientVersion < version_9)
                     return false;
             }
             return true;
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 if (countOfYesNoQuestions != 0)
                     return false;
             }
-            if (clientVersion < version_10)
+            if (clientVersion == version_9)
             {
                 var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
              
