@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto">
     <item android:state_checked="true" android:state_window_focused="false" 
           android:state_enabled="true"
           android:drawable="@drawable/theme_blue_light_btn_radio_on_holo_light" />

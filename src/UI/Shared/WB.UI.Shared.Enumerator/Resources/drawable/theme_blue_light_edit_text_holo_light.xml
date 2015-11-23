@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto">
     <item android:state_window_focused="false" android:state_enabled="true" android:drawable="@drawable/theme_blue_light_textfield_default_holo_light" />
     <item android:state_window_focused="false" android:state_enabled="false" android:drawable="@drawable/theme_blue_light_textfield_disabled_holo_light" />
     <item android:state_enabled="true" android:state_focused="true" android:drawable="@drawable/theme_blue_light_textfield_activated_holo_light" />
