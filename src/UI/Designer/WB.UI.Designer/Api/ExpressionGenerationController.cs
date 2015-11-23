@@ -30,12 +30,15 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GetAllClassesForLatestVersion(Guid id)
+        public HttpResponseMessage GetAllClassesForLatestVersion(Guid id, int? version)
         {
             var questionnaire = GetQuestionnaire(id).Source;
 
-            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire,
-                this.engineVersionService.GetLatestSupportedVersion());
+            var supervisorVersion = version.HasValue
+                ? new Version(version.Value, 0, 0)
+                :this.engineVersionService.GetLatestSupportedVersion();
+
+            var generated = expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion);
             
             var resultBuilder =new StringBuilder();
             

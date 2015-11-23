@@ -189,8 +189,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\r\n\tpublic decimal @rowcode { get { return RosterVector.Last(); } }\r\n\r\n\tpublic int" +
-                    " @rowindex { get { return @_parent.");
+            this.Write("\r\n\tpublic decimal @rowcode { get { return this.RosterVector.Last(); } }\r\n\r\n\tpubli" +
+                    "c int @rowindex { get { return @_parent.");
             
             #line 58 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.RostersInScope[0].VariableName));
@@ -742,7 +742,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName)
         #line hidden
         
         #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
-this.Write(".All, val); });\r\n");
+this.Write(".All,val); });\r\n");
 
         
         #line default
