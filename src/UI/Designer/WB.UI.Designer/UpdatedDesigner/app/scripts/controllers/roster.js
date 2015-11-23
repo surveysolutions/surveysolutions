@@ -31,18 +31,18 @@
                         });
                 }
 
-                $scope.onKeyPressInOptions = function (keyEvent) {
+                $scope.onKeyPressInOptions = function(keyEvent) {
                     if (keyEvent.which === 13) {
                         keyEvent.preventDefault();
                         utilityService.moveFocusAndAddOptionIfNeeded(
-                               event.target ? event.target : event.srcElement,
-                               ".fixed-roster-titles-editor",
-                               ".fixed-roster-titles-editor input.fixed-roster-value-editor",
-                               $scope.activeRoster.fixedRosterTitles,
-                               function () { return $scope.addFixedTitle(); },
-                               "title");
+                            event.target ? event.target : event.srcElement,
+                            ".fixed-roster-titles-editor",
+                            ".fixed-roster-titles-editor input.fixed-roster-value-editor",
+                            $scope.activeRoster.fixedRosterTitles,
+                            function() { return $scope.addFixedTitle(); },
+                            "title");
                     }
-                }
+                };
 
                 var dataBind = function(result) {
                     $scope.activeRoster = result;

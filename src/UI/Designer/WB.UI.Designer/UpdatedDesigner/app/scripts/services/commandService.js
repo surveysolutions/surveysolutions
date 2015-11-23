@@ -50,13 +50,13 @@
                     return commandCall("UpdateMacro", command);
                 };
 
-                commandService.deleteMacros = function (questionnaireId, itemId) {
+                commandService.deleteMacros = function(questionnaireId, itemId) {
                     var command = {
                         "questionnaireId": questionnaireId,
                         "macroId": itemId
                     };
                     return commandCall("DeleteMacro", command);
-                }
+                };
 
 
                 commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {

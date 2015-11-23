@@ -24,11 +24,12 @@
         'templates'
     ]);
 
-    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', function ($stateProvider, $urlRouterProvider, $rootScopeProvider) {
         var questionnaireId = $.cookie('questionnaireId');
         $.cookie.json = true;
         var url = '/' + questionnaireId;
         $urlRouterProvider.otherwise(url);
+        $rootScopeProvider.digestTtl(12);
 
         $stateProvider
             .state('questionnaire', {
