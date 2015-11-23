@@ -810,6 +810,16 @@ namespace WB.Tests.Unit
                     questionnaireId: questionnaireId ?? Guid.NewGuid(),
                     questionnaireVersion: questionnaireVersion ?? 7);
             }
+
+            public static YesNoQuestionAnswered YesNoQuestionAnswered(Guid? questionId = null, AnsweredYesNoOption[] answeredOptions = null)
+            {
+                return new YesNoQuestionAnswered(
+                    userId: Guid.NewGuid(),
+                    questionId: questionId ?? Guid.NewGuid(),
+                    rosterVector: Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    answerTimeUtc: DateTime.UtcNow,
+                    answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
+            }
         }
 
         public static Group Chapter(string title = "Chapter X",Guid? chapterId=null, IEnumerable<IComposite> children = null)
