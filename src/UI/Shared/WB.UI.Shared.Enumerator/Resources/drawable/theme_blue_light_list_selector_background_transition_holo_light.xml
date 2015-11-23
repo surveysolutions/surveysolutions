@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<transition xmlns:android="http://schemas.android.com/apk/res/android">
+<transition xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto">
     <item android:drawable="@drawable/theme_blue_light_list_pressed_holo_light"  />
     <item android:drawable="@drawable/theme_blue_light_list_longpressed_holo"  />
 </transition>
