@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    internal class when_interview_has_yesno_question : ExportViewFactoryTestsContext
+    internal class when_interview_has_yesno_question_with_sorted_answers : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -31,22 +31,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             interview = Create.InterviewData(Create.InterviewQuestion(questionId, new[]
             {
-                Create.AnsweredYesNoOption(42m, true),
-                Create.AnsweredYesNoOption(28m, false),
                 Create.AnsweredYesNoOption(21m, true),
+                Create.AnsweredYesNoOption(42m, false),
+                Create.AnsweredYesNoOption(28m, true),
             }));
         };
 
         Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);
 
-        It should_fill_yesno_question_answer = () =>
+        It should_fill_yesno_question_answer_with_order = () =>
         {
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().Questions.First();
             exportedQuestion.QuestionType.ShouldEqual(QuestionType.MultyOption);
             exportedQuestion.QuestionId.ShouldEqual(questionId);
             exportedQuestion.Answers.Length.ShouldEqual(4);
-            exportedQuestion.Answers.SequenceEqual(new[] { "0", "1", "2","" }).ShouldBeTrue();
+            exportedQuestion.Answers.SequenceEqual(new[] { "2", "0", "1", "" }).ShouldBeTrue(); // 1 0 2
         };
 
         static ExportViewFactory exportViewFactory;

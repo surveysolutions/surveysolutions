@@ -148,19 +148,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result)
         {
-            var typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
+            AnsweredYesNoOption[] typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
             int filledYesAnswersCount = 0;
             for (int i = 0; i < result.Length; i++)
             {
-                decimal columnValue = (decimal) header.ColumnValues[i];
+                decimal columnValue = header.ColumnValues[i];
 
-                var isOptionSelected = typedAnswers.FirstOrDefault(x => x.OptionValue == columnValue);
+                var selectedOption = typedAnswers.FirstOrDefault(x => x.OptionValue == columnValue);
 
-                if (isOptionSelected != null)
+                if (selectedOption != null)
                 {
-                    if (isOptionSelected.Yes)
+                    if (selectedOption.Yes)
                     {
-                        result[i] = (filledYesAnswersCount + 1).ToString();
+                        var selectedItemIndex = typedAnswers
+                                .Where(x => x.Yes)
+                                .Select((item, index) => new {item, index})
+                                .FirstOrDefault(x => x.item.OptionValue == columnValue);
+
+                        result[i] = (selectedItemIndex.index + 1).ToString();
                         filledYesAnswersCount++;
                     }
                     else
@@ -176,3 +181,4 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         }
     }
 }
+    
