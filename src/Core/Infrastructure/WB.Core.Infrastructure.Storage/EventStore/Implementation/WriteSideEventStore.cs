@@ -31,6 +31,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
     {
         const string CountProjectionName = "AllEventsCountV1";
         const string EventsPrefix = EventsCategory + "-";
+        const string StreamDeletedEventType = "$streamDeleted";
         private const int maxAllowedBatchSize = 4096;
         private readonly IEventTypeResolver eventTypeResolver;
         const string EventsCategory = "WB";
@@ -124,7 +125,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 foreach (var @event in slice.Events)
                 {
-                    if (!IsSystemEvent(@event))
+                    if (!IsSystemEventOrFromDeletedStream(@event))
                         yield return this.ToCommittedEvent(@event);
                 }
             } while (!slice.IsEndOfStream);
@@ -163,7 +164,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, settings.MaxCountToRead, false));
 
-                var eventsInSlice = slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent).ToArray();
+                var eventsInSlice = slice.Events.Where(e => !IsSystemEventOrFromDeletedStream(e)).Select(ToCommittedEvent).ToArray();
 
                 if (shouldLookForLastHandledEvent)
                 {
@@ -245,9 +246,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return value != null ? value.count : 0;
         }
 
-        static bool IsSystemEvent(ResolvedEvent @event)
+        static bool IsSystemEventOrFromDeletedStream(ResolvedEvent @event)
         {
-            return !@event.Event.EventStreamId.StartsWith(EventsPrefix);
+            return !@event.Event.EventStreamId.StartsWith(EventsPrefix) ||
+                   @event.Event.EventType.Equals(StreamDeletedEventType, StringComparison.InvariantCultureIgnoreCase);
         }
 
         static string GetStreamName(Guid eventSourceId)
@@ -417,7 +419,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 foreach (var @event in slice.Events)
                 {
-                    if (!IsSystemEvent(@event))
+                    if (!IsSystemEventOrFromDeletedStream(@event))
                     {
                         var meta = Encoding.GetString(@event.Event.Metadata);
                         var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
