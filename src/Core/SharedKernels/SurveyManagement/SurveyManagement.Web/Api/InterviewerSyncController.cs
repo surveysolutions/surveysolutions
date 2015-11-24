@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
@@ -21,13 +23,15 @@ using WB.Core.Synchronization;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     public class InterviewerSyncController : BaseApiController
-    {
+    { 
         private readonly ISupportedVersionProvider versionProvider;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+
+        private readonly IUserWebViewFactory userInfoViewFactory;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
@@ -42,7 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
+            IUserWebViewFactory userInfoViewFactory)
             : base(commandService, globalInfo, logger)
         {
 
@@ -51,6 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.userInfoViewFactory = userInfoViewFactory;
             this.syncVersionProvider = syncVersionProvider;
         }
 
@@ -66,11 +72,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TabletSyncMessages.InterviewerIsNotCompatibleWithThisVersion);
         }
 
+        [HttpGet]
+        [ApiBasicAuth]
+        public bool CheckExpectedDevice(string deviceId)
+        {
+            var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
+            return string.IsNullOrEmpty(interviewerInfo.DeviceId) || interviewerInfo.DeviceId == deviceId;
+        }
+
         [HttpPost]
         [ApiBasicAuth]
         public HttpResponseMessage GetHandshakePackage(HandshakePackageRequest request)
         {
-            return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, TabletSyncMessages.InterviewerIsNotCompatibleWithThisVersion);
+            throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
+            {
+                ReasonPhrase = TabletSyncMessages.InterviewerIsNotCompatibleWithThisVersion
+            });
         }
 
         [HttpPost]
