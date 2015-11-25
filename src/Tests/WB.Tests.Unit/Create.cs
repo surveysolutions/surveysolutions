@@ -2848,5 +2848,10 @@ namespace WB.Tests.Unit
         {
             return new RosterVector(coordinates ?? Enumerable.Empty<decimal>());
         }
+
+        public static MacrosSubstitutionService MacrosSubstitutionService()
+        {
+            return new MacrosSubstitutionService();
+        }
     }
 }
