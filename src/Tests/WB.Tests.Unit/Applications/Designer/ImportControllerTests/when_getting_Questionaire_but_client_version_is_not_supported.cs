@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             exception.Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
 
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("failed", "open", "questionnaire", "version", "update");
+            exception.Response.ReasonPhrase.ShouldContain("You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.");
 
         private static ImportController importController;
         private static HttpResponseException exception;

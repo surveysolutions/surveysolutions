@@ -476,6 +476,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
+  
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
