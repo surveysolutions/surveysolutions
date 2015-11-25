@@ -364,8 +364,14 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_with_macros.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_yes_no_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
@@ -634,8 +640,10 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_multi_option_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_interview_has_multioption_linked_question_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_interview_has_multioption_question_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_interview_has_yesno_question_with_sorted_answers.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_questionnaire_has_multioption_lined_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_questionnaire_has_multioption_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_questionnaire_has_yesno_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
