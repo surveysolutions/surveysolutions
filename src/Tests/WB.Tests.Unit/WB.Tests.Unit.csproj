@@ -362,8 +362,14 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_with_macros.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_macro_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_yes_no_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
