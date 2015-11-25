@@ -248,7 +248,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             if (question is IMultyOptionsQuestion)
             {
                 var multioptionQuestion = (IMultyOptionsQuestion) question;
-                if (multioptionQuestion.YesNoView)
+                if (multioptionQuestion.LinkedToQuestionId.HasValue)
+                {
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Linked;
+                }
+                else if (multioptionQuestion.YesNoView)
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_YesNo;
                 }

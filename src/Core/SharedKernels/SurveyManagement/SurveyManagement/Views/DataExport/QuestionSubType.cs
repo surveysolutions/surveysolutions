@@ -2,6 +2,7 @@
 {
     public enum QuestionSubtype
     {
-        MultyOption_YesNo
+        MultyOption_YesNo = 1,
+        MultyOption_Linked = 2
     }
 }
