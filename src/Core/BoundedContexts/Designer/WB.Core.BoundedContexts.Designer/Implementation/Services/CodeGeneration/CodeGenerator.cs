@@ -72,30 +72,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
         {
-            if (version.Major < 5)
+            if (version.Major <= 8)
                 throw new VersionNotFoundException(string.Format("version '{0}' is not found", version));
-
-            if (version.Major == 5)
-                return new CodeGenerationSettings(
-                    abstractConditionalLevelClassName:"AbstractConditionalLevel",
-                    additionInterfaces: new string[0], 
-                    namespaces: new string[0],
-                    areRosterServiceVariablesPresent: false,
-                    rosterType: "IEnumerable");
-
-            if (version.Major == 6)
-                return new CodeGenerationSettings(
-                    abstractConditionalLevelClassName:"AbstractConditionalLevel",
-                    additionInterfaces: new[] { "IInterviewExpressionStateV2" }, 
-                    namespaces: new[]
-                        {
-                            "WB.Core.SharedKernels.DataCollection.V2",
-                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions"
-                        },
-                    areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList");
-
-            if (version.Major < 10)
+            
+            if (version.Major == 9)
                 return new CodeGenerationSettings(
                     abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2" },
@@ -108,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     areRosterServiceVariablesPresent: true,
                     rosterType: "RosterRowList");
 
-            if (version.Major < 11)
+            if (version.Major == 10)
                 return new CodeGenerationSettings(
                     abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV4",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },

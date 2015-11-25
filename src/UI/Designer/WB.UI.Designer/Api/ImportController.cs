@@ -95,7 +95,7 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
                     ReasonPhrase =
-                        string.Format(ErrorMessages.ClientVersionIsNotSupported, supportedClientVersion)
+                        string.Format(ErrorMessages.OldClientPleaseUpdate, supportedClientVersion)
                 });
             }
 
