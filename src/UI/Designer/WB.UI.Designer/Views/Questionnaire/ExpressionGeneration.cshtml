@@ -17,8 +17,11 @@ pre.wrap {
     <form class="form-horizontal">
         <div class="form-group">
             <label for="questionnaireId" class="col-xs-3 control-label">Questionnaire identifier</label>
-            <div class="col-xs-9">
-                <input id="questionnaireId" type="text" class="form-control" value="00000000-0000-0000-0000-000000000000" />
+            <div class="col-xs-7">
+                <input id="questionnaireId" type="text" class="form-control" value="00000000-0000-0000-0000-000000000000"/>
+            </div>
+            <div class="col-xs-2">
+                <input id="version" type="text" class="form-control" value="" />
             </div>
         </div>
         <div class="form-group">
@@ -58,7 +61,7 @@ pre.wrap {
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
                     url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetAllClassesForLatestVersion" })',
-                    data: { id: $('#questionnaireId').val() },
+                    data: { id: $('#questionnaireId').val(), version: $('#version').val() },
                 });
             });
 
@@ -73,7 +76,7 @@ pre.wrap {
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
                     url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetCompilationResultForLatestVersion" })',
-                    data: { id: $('#questionnaireId').val() },
+                    data: { id: $('#questionnaireId').val(), version: $('#version').val() },
                 }, function(response) {
                     var errors = response.responseJSON;
                     var errorList = $('<ol></ol>');

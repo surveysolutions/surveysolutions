@@ -124,26 +124,43 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             {
                 if (!header.QuestionSubType.HasValue)
                 {
-                    for (int i = 0; i < result.Length; i++)
-                    {
-                        int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                        result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString() : "0";
-                    }
+                    FillMultioptionAnswers(answers, header, result);
                 }
                 else
                 {
-                    FillYesNoAnswers(answers, header, result);
+                    if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNo)
+                    {
+                        FillYesNoAnswers(answers, header, result);
+                    }
+                    else
+                    {
+                        this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
+                    }
                 }
             }
             else
             {
-                for (int i = 0; i < result.Length; i++)
-                {
-                    result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
-                }
+                this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
             }
 
             return result;
+        }
+
+        private static void FillMultioptionAnswers(object[] answers, ExportedHeaderItem header, string[] result)
+        {
+            for (int i = 0; i < result.Length; i++)
+            {
+                int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
+                result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString() : "0";
+            }
+        }
+
+        private void PutAnswersAsStringValuesIntoResultArray(object[] answers, ExportedHeaderItem header, string[] result)
+        {
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = answers.Length > i ? this.AnswerToStringValue(answers[i], header) : string.Empty;
+            }
         }
 
         private static void FillYesNoAnswers(object[] answers, ExportedHeaderItem header, string[] result)
