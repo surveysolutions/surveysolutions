@@ -264,9 +264,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             exportedHeaderItem.ColumnNames = new string[] { question.StataExportCaption };
 
             exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
-            foreach (var answer in question.Answers)
+            if (question.Answers != null)
             {
-                exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
+                foreach (var answer in question.Answers)
+                {
+                    exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
+                }
             }
 
             if (lengthOfRosterVectorWhichNeedToBeExported.HasValue)
