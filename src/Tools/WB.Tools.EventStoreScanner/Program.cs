@@ -16,25 +16,47 @@ namespace WB.Tools.EventStoreScanner
     {
         static void Main(string[] args)
         {
-            var eventStoreSettings= GetEventStoreSettingsFromCommandLineArguments(args);
+            var eventStoreSettings = GetEventStoreSettingsFromCommandLineArguments(args);
+            Console.WriteLine(
+                @"Event store settings: serverip: {0}, servertcpport: {1}, serverhttpport: {2}, usebson: {3}, login: {4}, password:{5}",
+                eventStoreSettings.ServerIP, eventStoreSettings.ServerTcpPort, eventStoreSettings.ServerHttpPort,
+                eventStoreSettings.UseBson, eventStoreSettings.Login, eventStoreSettings.Password);
+
+
+            Console.WriteLine(@"---------------------------------------------------------------------");
             var eventTypeResolver = CreateEventTypeResolver();
-            
+
             var eventStore = new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreSettings),
                 Mock.Of<ILogger>(), eventStoreSettings, eventTypeResolver);
 
+            ScanEventStoreForUserNameDuplicates(eventStore);
+
+            Console.WriteLine(@"Done");
+            Console.ReadLine();
+        }
+
+        private static void ScanEventStoreForUserNameDuplicates(WriteSideEventStore eventStore)
+        {
             var events = eventStore.GetAllEvents();
+            var eventsCount = eventStore.CountOfAllEvents();
 
             var userNames = new Dictionary<string, List<Guid>>();
-
+            var countOfScannedEvents = 0;
             foreach (var committedEvent in events)
             {
                 var createUserEvent = committedEvent.Payload as NewUserCreated;
                 if (createUserEvent != null)
                 {
                     var userNameLowerCase = createUserEvent.Name.ToLower();
-                    if(!userNames.ContainsKey(userNameLowerCase))
-                        userNames[userNameLowerCase]=new List<Guid>();
+                    if (!userNames.ContainsKey(userNameLowerCase))
+                        userNames[userNameLowerCase] = new List<Guid>();
                     userNames[userNameLowerCase].Add(committedEvent.EventSourceId);
+                }
+                countOfScannedEvents++;
+
+                if (countOfScannedEvents%5000 == 0)
+                {
+                    Console.WriteLine(@"Scanned {0} out of {1}", countOfScannedEvents, eventsCount);
                 }
             }
 
@@ -42,10 +64,11 @@ namespace WB.Tools.EventStoreScanner
             {
                 if (userName.Value.Count > 1)
                 {
-                    Console.WriteLine(@"User name '{0}' is duplicated by event sources:{1}", userName.Key, string.Join(",", userName.Value));
+                    Console.WriteLine(@"User name '{0}' is duplicated by event sources:{1}", userName.Key,
+                        string.Join(",", userName.Value));
+                    Console.WriteLine(@"---------------------------------------------------------------------");
                 }
             }
-            Console.ReadLine();
         }
 
         private static EventTypeResolver CreateEventTypeResolver()
