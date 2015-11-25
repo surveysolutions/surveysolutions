@@ -864,12 +864,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddMacro(AddMacro command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroAlreadyExist(command.MacroId);
             this.ApplyEvent(new MacroAdded(command.MacroId, command.ResponsibleId));
         }
 
         public void UpdateMacro(UpdateMacro command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
             this.ThrowDomainExceptionIfMacroContentIsEmpty(command.Content);
             this.ApplyEvent(new MacroUpdated(command.MacroId, command.Name, command.Content, command.Description, command.ResponsibleId));
@@ -877,6 +879,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void DeleteMacro(DeleteMacro command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
             this.ApplyEvent(new MacroDeleted(command.MacroId, command.ResponsibleId));
         }
