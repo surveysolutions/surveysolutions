@@ -21,8 +21,8 @@
     <MandroidI18n>West</MandroidI18n>
     <JavaMaximumHeapSize />
     <JavaOptions />
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NuGetPackageImportStamp>c61bd999</NuGetPackageImportStamp>
