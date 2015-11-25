@@ -97,10 +97,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var isSelected = isExistAnswer 
                 ? answerModel.Answers.First(a => a.OptionValue == model.Value).Yes 
                 : (bool?) null;
-            var displayOrderIndex = isExistAnswer && this.areAnswersOrdered
+            var yesAnswerCheckedOrder = isExistAnswer && this.areAnswersOrdered
                 ? Array.IndexOf(answerModel.Answers.Where(am => am.Yes).Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
-            var realOrderIndex = isExistAnswer && this.areAnswersOrdered
+            var answerCheckedOrder = isExistAnswer && this.areAnswersOrdered
                 ? Array.IndexOf(answerModel.Answers.Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?)null;
 
@@ -109,8 +109,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Value = model.Value,
                 Title = model.Title,
                 Selected = isSelected,
-                YesCheckedOrder = displayOrderIndex,
-                AnswerCheckedOrder = realOrderIndex
+                YesAnswerCheckedOrder = yesAnswerCheckedOrder,
+                AnswerCheckedOrder = answerCheckedOrder
             };
 
             return optionViewModel;
@@ -195,25 +195,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void PutOrderOnOptions(YesNoQuestionAnswered @event)
         {
-            var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToArray();
-            var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToArray();
+            var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToList();
+            var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
 
             foreach (var option in this.Options)
             {
-                var selectedOptionIndex = Array.IndexOf(orderedOptions, option.Value);
+                var selectedOptionIndex = orderedOptions.IndexOf(option.Value);
 
                 if (selectedOptionIndex >= 0)
                 {
                     var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
-                    option.YesCheckedOrder = answeredYesNoOption.Yes 
-                        ? Array.IndexOf(orderedYesOptions, option.Value) + 1
+                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes 
+                        ? orderedYesOptions.IndexOf(option.Value) + 1
                         : (int?)null;
-                    option.AnswerCheckedOrder = Array.IndexOf(orderedOptions, option.Value) + 1;
+                    option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;
                     option.Selected = answeredYesNoOption.Yes;
                 }
                 else
                 {
-                    option.YesCheckedOrder = null;
+                    option.YesAnswerCheckedOrder = null;
                     option.AnswerCheckedOrder = null;
                     option.Selected = null;
                 }
