@@ -455,7 +455,7 @@ namespace WB.Tests.Integration
 
         public static CommittedEvent CommittedEvent(string origin = null, 
             Guid? eventSourceId = null,
-            object payload = null,
+            ILiteEvent payload = null,
             Guid? eventIdentifier = null, 
             int eventSequence = 1)
         {
@@ -467,7 +467,7 @@ namespace WB.Tests.Integration
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 0,
-                payload ?? "some payload");
+                payload ?? Mock.Of<ILiteEvent>());
         }
 
         public static CommittedEventStream CommittedEventStream(Guid eventSourceId, IEnumerable<UncommittedEvent> events)

@@ -3,6 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing
@@ -10,6 +11,8 @@ namespace Ncqrs.Tests.Eventing
     [TestFixture]
     internal class UncommittedEventStreamTests
     {
+        internal class DummyEvent : ILiteEvent { }
+
         [SetUp]
         public void SetUp()
         {
@@ -27,7 +30,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_contains_single_event_should_indicate_a_single_source()
         {
             var sut = new UncommittedEventStream(Guid.NewGuid(), null);
-            sut.Append(new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new object()));
+            sut.Append(new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 0, 0, DateTime.UtcNow, new DummyEvent()));
             Assert.IsTrue(sut.HasSingleSource);
         }
 
@@ -52,7 +55,7 @@ namespace Ncqrs.Tests.Eventing
 
         private static UncommittedEvent CreateEvent(Guid eventSourceId)
         {
-            return new UncommittedEvent(Guid.NewGuid(), eventSourceId, 0, 0, DateTime.UtcNow, new object());
+            return new UncommittedEvent(Guid.NewGuid(), eventSourceId, 0, 0, DateTime.UtcNow, new DummyEvent());
         }
     }
 }

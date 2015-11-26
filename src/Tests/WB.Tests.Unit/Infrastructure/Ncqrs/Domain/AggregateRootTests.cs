@@ -7,6 +7,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
 using MockRepository = Rhino.Mocks.MockRepository;
 
@@ -21,12 +22,12 @@ namespace Ncqrs.Tests.Domain
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class HandledEvent
+        public class HandledEvent : ILiteEvent
         {
         }
 
-        public class UnhandledEvent
-        {}
+        public class UnhandledEvent : ILiteEvent
+        { }
 
         public class MyAggregateRoot : AggregateRoot
         {
