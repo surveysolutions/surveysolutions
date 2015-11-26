@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.Storage = storage;
         }
 
-        public TEntity GetById(string id)
+        public virtual TEntity GetById(string id)
         {
             return this.Query(entities=>entities.FirstOrDefault(_ => _.Id == id));
         }
@@ -29,10 +29,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.RemoveAsync(new[] { entity });
         }
 
-        public async Task RemoveAsync(IEnumerable<TEntity> entities)
+        public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
-            var isFailedTransaction = false;
-
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
@@ -45,11 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch
             {
-                isFailedTransaction = true;
-            }
-
-            if (isFailedTransaction)
                 await transaction.RollbackAsync();
+            }
         }
 
         public async Task StoreAsync(TEntity entity)
@@ -57,10 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.StoreAsync(new[] { entity });
         }
 
-        public async Task StoreAsync(IEnumerable<TEntity> entities)
+        public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
-            var isFailedTransaction = false;
-
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
@@ -73,11 +66,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch
             {
-                isFailedTransaction = true;
-            }
-
-            if(isFailedTransaction)
                 await transaction.RollbackAsync();
+            }
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
