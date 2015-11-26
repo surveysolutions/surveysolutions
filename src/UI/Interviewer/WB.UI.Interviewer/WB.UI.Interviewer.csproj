@@ -414,7 +414,6 @@
     <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorageSettings.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
-    <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />

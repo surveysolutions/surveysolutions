@@ -89,7 +89,9 @@
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
+    <Compile Include="Implementation\Services\SiaqodbPlainStorageWithCache.cs" />
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
+    <Compile Include="Implementation\Services\SiaqodbSerializer.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
     <Compile Include="Properties\UIResources.id-ID.Designer.cs">
@@ -251,6 +253,10 @@
     </Reference>
     <Reference Include="MvvmCross.Plugins.PictureChooser, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.PictureChooser.4.0.0-beta5\lib\portable-win+net45+wp8+win8+wpa81\MvvmCross.Plugins.PictureChooser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject">

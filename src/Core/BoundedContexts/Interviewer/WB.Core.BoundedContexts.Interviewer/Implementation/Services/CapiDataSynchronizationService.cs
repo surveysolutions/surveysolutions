@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.InterviewMetaInfo;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -24,8 +25,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ICapiSynchronizationCacheService capiSynchronizationCacheService;
         private readonly ICommandService commandService;
         private readonly ISerializer serializer;
-        private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory;
         private readonly IPrincipal principal;
+        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public CapiDataSynchronizationService(
             IChangeLogManipulator changelog,
@@ -34,14 +35,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ILogger logger,
             ICapiSynchronizationCacheService capiSynchronizationCacheService,
             ISerializer serializer,
-            IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> interviewIntoFactory,
-            IPrincipal principal)
+            IPrincipal principal,
+            IAsyncPlainStorage<InterviewView> interviewViewRepository)
         {
             this.logger = logger;
             this.capiSynchronizationCacheService = capiSynchronizationCacheService;
             this.serializer = serializer;
-            this.interviewIntoFactory = interviewIntoFactory;
             this.principal = principal;
+            this.interviewViewRepository = interviewViewRepository;
             this.changelog = changelog;
             this.commandService = commandService;
             this.capiCleanUpService = capiCleanUpService;
@@ -72,7 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             try
             {
-                InterviewMetaInfo interviewMetaInfo = this.interviewIntoFactory.Load(new InterviewMetaInfoInputModel(interviewId));
+                var interviewMetaInfo = this.interviewViewRepository.GetById(item.Content);
                 if (interviewMetaInfo != null && interviewMetaInfo.ResponsibleId == synchronizedUserId)
                 {
                     this.capiCleanUpService.DeleteInterview(interviewId);

@@ -1,11 +1,13 @@
 using System;
 using Main.Core.Events;
 using WB.Core.BoundedContexts.Interviewer.ChangeLog;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.InterviewMetaInfo;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.ChangeLog
 {
@@ -13,22 +15,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.ChangeLog
     {
         private const string ChangelogFolder = "Changelog";
         private readonly string changelogPath;
-        private readonly IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory;
         private readonly IArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISerializer serializer;
+        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public FileChangeLogStore(
-            IViewFactory<InterviewMetaInfoInputModel, InterviewMetaInfo> metaInfoFactory,
             IArchiveUtils archiver, 
             IFileSystemAccessor fileSystemAccessor,
             ISerializer serializer,
+            IAsyncPlainStorage<InterviewView> interviewViewRepository,
             string environmentalPersonalFolderPath)
         {
-            this.metaInfoFactory = metaInfoFactory;
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.serializer = serializer;
+            this.interviewViewRepository = interviewViewRepository;
             this.changelogPath = fileSystemAccessor.CombinePath(environmentalPersonalFolderPath, ChangelogFolder);
             if (!fileSystemAccessor.IsDirectoryExists(this.changelogPath))
             {
@@ -43,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.ChangeLog
             var path = this.GetFileName(recordId);
             var eventSourceId = recordData[0].EventSourceId;
 
-            var metaData = this.metaInfoFactory.Load(new InterviewMetaInfoInputModel(eventSourceId));
+            var metaData = this.interviewViewRepository.GetById(eventSourceId.ToString());
 
             var syncItem = new SyncItem()
                 {

@@ -9,6 +9,7 @@ using WB.UI.Interviewer.Implementations.DenormalizerStorage;
 
 namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
+    [Obsolete]
     public class QuestionnaireDTO : DenormalizerRow
     {
         private ISerializer serializer
