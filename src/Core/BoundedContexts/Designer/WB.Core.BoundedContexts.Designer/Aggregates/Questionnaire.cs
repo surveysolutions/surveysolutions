@@ -2348,7 +2348,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
                 replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
 
-                var events = new List<object>();
+                var events = new List<ILiteEvent>();
 
                 this.FillGroup(
                     parentGroupId: targetToPasteIn == null ? (Guid?) null : targetToPasteIn.PublicKey,

@@ -107,6 +107,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         }
 
         private static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
+            where T : ILiteEvent
         {
             IPublishedEvent<T> e = new PublishedEvent<T>(Create.PublishableEvent(eventSourceId:questionnaireId, payload: evnt));
             return e;
