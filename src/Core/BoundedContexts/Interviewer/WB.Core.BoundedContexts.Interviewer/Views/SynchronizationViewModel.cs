@@ -10,21 +10,15 @@ using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -54,8 +48,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStuctureRepository;
-        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private CancellationTokenSource synchronizationCancellationTokenSource;
         private IMvxMessenger messenger;
 
@@ -77,8 +69,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureRepository,
-            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
             IMvxMessenger messenger)
         {
             this.synchronizationService = synchronizationService;
@@ -97,9 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.passwordHasher = passwordHasher;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.interviewViewRepository = interviewViewRepository;
-            this.questionnaireDocumentRepository = questionnaireDocumentRepository;
-            this.questionnaireRosterStuctureRepository = questionnaireRosterStructureRepository;
-            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
+            this.questionnaireDocumentRepository = questionnaireDocumentRepository;;
             this.messenger = messenger;
 
             this.restCredentials = new RestCredentials()
@@ -457,9 +445,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version);
-                    
-                this.questionnaireRosterStuctureRepository.AsVersioned()
-                    .Remove(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
             });
         }
 
@@ -505,16 +490,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);
             await this.questionnaireViewRepository.StoreAsync(questionnaireView);
             await this.questionnaireModelViewRepository.StoreAsync(questionnaireModelView);
-
-
-            await Task.Run(() =>
-            {
-                var questionnaireRosterStructure = this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(
-                    questionnaireDocumentView.Document, questionnaireIdentity.Version);
-
-                this.questionnaireRosterStuctureRepository.AsVersioned().Store(questionnaireRosterStructure,
-                questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
-            });
         }
 
         public void CancelSynchronizaion()
