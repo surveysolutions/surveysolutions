@@ -151,6 +151,7 @@
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
+    <Compile Include="Services\Infrastructure\QuestionnaireModelKeyValueStorage.cs" />
     <Compile Include="Services\Infrastructure\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\IInterviewPackageIdsStorage.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Views\InterviewerIdentity.cs" />
     <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
+    <Compile Include="Views\QuestionnaireModelView.cs" />
     <Compile Include="Views\QuestionnaireDocumentView.cs" />
     <Compile Include="Views\QuestionnaireView.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
