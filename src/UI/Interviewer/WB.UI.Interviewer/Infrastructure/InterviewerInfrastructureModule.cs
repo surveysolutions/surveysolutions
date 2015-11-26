@@ -1,11 +1,13 @@
-﻿using Ninject;
+﻿using Main.Core.Documents;
+using Ninject;
 using Ninject.Modules;
 using PCLStorage;
 using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.SharedKernels.DataCollection.Accessors;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -27,10 +29,17 @@ namespace WB.UI.Interviewer.Infrastructure
 
         public override void Load()
         {
-            SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
+            this.Bind<IDocumentSerializer>().To<SiaqodbSerializer>();
 
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
+            SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
+            SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
+            SiaqodbConfigurator.AddDocument("Document", typeof(QuestionnaireDocumentView));
+
+            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
+            
+            this.Bind(typeof (IPlainKeyValueStorage<QuestionnaireDocument>)).To<QuestionnaireKeyValueStorage>();
+
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>));
 
             this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
 

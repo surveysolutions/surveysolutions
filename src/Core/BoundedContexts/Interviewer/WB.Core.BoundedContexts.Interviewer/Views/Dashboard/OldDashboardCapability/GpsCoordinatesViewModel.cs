@@ -1,5 +1,8 @@
+using System;
+
 namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
+    [Obsolete]
     public class GpsCoordinatesViewModel
     {
         public double Latitude { get; private set; }

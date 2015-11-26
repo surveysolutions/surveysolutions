@@ -17,8 +17,8 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
-using WB.UI.Interviewer.ViewModel.Dashboard;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
@@ -34,6 +34,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IMvxMessenger messenger;
         private readonly ISyncPackageRestoreService packageRestoreService;
         private readonly IExternalAppLauncher externalAppLauncher;
+        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
@@ -53,7 +55,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             ICapiCleanUpService capiCleanUpService,
             IMvxMessenger messenger, 
             ISyncPackageRestoreService packageRestoreService,
-            IExternalAppLauncher externalAppLauncher)
+            IExternalAppLauncher externalAppLauncher,
+            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
+            IAsyncPlainStorage<InterviewView> interviewViewRepository)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
@@ -65,52 +69,71 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.messenger = messenger;
             this.packageRestoreService = packageRestoreService;
             this.externalAppLauncher = externalAppLauncher;
+            this.questionnaireViewRepository = questionnaireViewRepository;
+            this.interviewViewRepository = interviewViewRepository;
         }
 
-        public void Init(DashboardQuestionnaireItem item)
+        public void Init(string intrerviewId)
         {
-            this.InterviewId = item.PublicKey;
-            this.Status = item.Status;
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, item.Title, item.QuestionnaireVersion);
-            this.DateComment = this.GetInterviewDateCommentByStatus(item, this.Status);
-            this.Comment = this.GetInterviewCommentByStatus(item);
-            this.PrefilledQuestions = this.GetTop3PrefilledQuestions(item.Properties);
-            this.GpsLocation = item.GpsLocation;
-            this.IsSupportedRemove = item.CanBeDeleted;
+            var interview = this.interviewViewRepository.GetById(intrerviewId);
+            var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
+
+            this.InterviewId = interview.InterviewId;
+            this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
+            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
+            this.DateComment = this.GetInterviewDateCommentByStatus(interview);
+            this.Comment = this.GetInterviewCommentByStatus(interview);
+            this.PrefilledQuestions = this.GetTop3PrefilledQuestions(interview.AnswersOnPrefilledQuestions);
+            this.GpsLocation = interview.GpsLocation.Coordinates;
+            this.IsSupportedRemove = interview.CanBeDeleted;
             this.HasComment = !string.IsNullOrEmpty(this.Comment);
         }
 
-        public GpsCoordinatesViewModel GpsLocation { get; private set; }
-
-        public bool HasGpsLocation
+        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
         {
-            get { return this.GpsLocation != null; }
+            switch (interviewStatus)
+            {
+                case InterviewStatus.RejectedBySupervisor:
+                    return DashboardInterviewStatus.Rejected;
+                case InterviewStatus.Completed:
+                    return DashboardInterviewStatus.Completed;
+                case InterviewStatus.Restarted:
+                    return DashboardInterviewStatus.InProgress;
+                case InterviewStatus.InterviewerAssigned:
+                    return startedDateTime.HasValue
+                        ? DashboardInterviewStatus.InProgress
+                        : DashboardInterviewStatus.New;
+
+                default:
+                    throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
+            }
         }
+
+        public InterviewGpsCoordinatesView GpsLocation { get; private set; }
+        public bool HasGpsLocation => this.GpsLocation != null;
 
         public IMvxCommand NavigateToGpsLocationCommand
         {
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
-        }
+        } 
 
         private void NavigateToGpsLocation()
         {
             this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude);
         }
 
-        private string GetInterviewDateCommentByStatus(DashboardQuestionnaireItem item, DashboardInterviewStatus status)
+        private string GetInterviewDateCommentByStatus(InterviewView interview)
         {
-            switch (status)
+            switch (this.Status)
             {
                 case DashboardInterviewStatus.New:
-                    if (item.InterviewerAssignedDateTime.HasValue)
-                        return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, item.InterviewerAssignedDateTime);
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_CreatedOn, item.CreatedDateTime);
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.InProgress:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_StartedOn, item.StartedDateTime);
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_StartedOn, interview.StartedDateTime);
                 case DashboardInterviewStatus.Completed:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_CompletedOn, item.CompletedDateTime);
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_CompletedOn, interview.CompletedDateTime);
                 case DashboardInterviewStatus.Rejected:
-                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedOn, item.RejectedDateTime);
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedOn, interview.RejectedDateTime);
                 default:
                     return string.Empty;
             }
@@ -125,29 +148,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             return string.Format(formatString, utcDateTime.ToLocalTime().ToString(CultureInfo.CurrentUICulture));
         }
 
-        private string GetInterviewCommentByStatus(DashboardQuestionnaireItem item)
+        private string GetInterviewCommentByStatus(InterviewView interview)
         {
-            switch (item.Status)
+            switch (this.Status)
             {
                 case DashboardInterviewStatus.New:
                     return InterviewerUIResources.DashboardItem_NotStarted;
                 case DashboardInterviewStatus.InProgress:
                     return InterviewerUIResources.DashboardItem_InProgress;
                 case DashboardInterviewStatus.Completed:
-                    return item.Comments;
+                    return interview.LastInterviewerOrSupervisorComment;
                 case DashboardInterviewStatus.Rejected:
-                    return item.Comments;
+                    return interview.LastInterviewerOrSupervisorComment;
                 default:
                     return string.Empty;
             }
         }
 
-        private List<PrefilledQuestion> GetTop3PrefilledQuestions(IEnumerable<FeaturedItem> featuredItems)
+        private List<PrefilledQuestion> GetTop3PrefilledQuestions(IEnumerable<InterviewAnswerOnPrefilledQuestionView> answersOnPrefilledQuestions)
         {
-            return featuredItems.Select(fi => new PrefilledQuestion {
-                                    Answer = fi.Value,
-                                    Question = fi.Title
-                                }).Take(3).ToList();
+            return answersOnPrefilledQuestions.Select(fi => new PrefilledQuestion
+            {
+                Answer = fi.Answer,
+                Question = fi.QuestionText
+            }).Take(3).ToList();
         }
 
         public bool IsSupportedRemove { get; set; }

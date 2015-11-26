@@ -9,16 +9,14 @@ using Android.Runtime;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core.Events.File;
-using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting;
-using WB.Core.BoundedContexts.Interviewer.EventHandler;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
-using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
@@ -28,11 +26,9 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
@@ -46,7 +42,6 @@ using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.Syncronization.Implementation;
-using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Shared.Enumerator;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -79,26 +74,6 @@ namespace WB.UI.Interviewer
         {
         }
 
-        private void InitTemplateStorage(InProcessEventBus bus)
-        {
-            var templateDenoramalizer = new QuestionnaireDenormalizer(
-                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                this.kernel.Get<IPlainQuestionnaireRepository>());
-
-            bus.RegisterHandler(templateDenoramalizer, typeof(TemplateImported));
-            bus.RegisterHandler(templateDenoramalizer, typeof(QuestionnaireDeleted));
-            bus.RegisterHandler(templateDenoramalizer, typeof(PlainQuestionnaireRegistered));
-            
-            var rosterStructureDenormalizer = new QuestionnaireRosterStructureDenormalizer(
-                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
-                this.kernel.Get<IQuestionnaireRosterStructureFactory>(),
-                this.kernel.Get<IPlainQuestionnaireRepository>());
-
-            bus.RegisterHandler(rosterStructureDenormalizer, typeof(TemplateImported));
-            bus.RegisterHandler(rosterStructureDenormalizer, typeof(QuestionnaireDeleted));
-            bus.RegisterHandler(rosterStructureDenormalizer, typeof(PlainQuestionnaireRegistered));
-        }
-
         private void InitFileStorage(InProcessEventBus bus)
         {
             var fileSorage = new AndroidFileStoreDenormalizer(this.kernel.Get<IReadSideRepositoryWriter<FileDescription>>());
@@ -109,26 +84,16 @@ namespace WB.UI.Interviewer
         private void InitDashboard(InProcessEventBus bus)
         {
             var dashboardeventHandler = new DashboardDenormalizer(
-                this.kernel.Get<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                this.kernel.Get<IReadSideRepositoryWriter<SurveyDto>>(),
-                this.kernel.Get<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                this.kernel.Get<IPlainQuestionnaireRepository>());
+                this.kernel.Get<IAsyncPlainStorage<InterviewView>>(),
+                this.kernel.Get<IAsyncPlainStorage<QuestionnaireDocumentView>>());
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredValid));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeclaredInvalid));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
-            bus.RegisterHandler(dashboardeventHandler, typeof(TemplateImported));
-            bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireDeleted));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeleted));
-            bus.RegisterHandler(dashboardeventHandler, typeof(PlainQuestionnaireRegistered));
-
+            
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));
-
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewerAssigned));
-            bus.RegisterHandler(dashboardeventHandler, typeof(SupervisorAssigned));
-
+            
             bus.RegisterHandler(dashboardeventHandler, typeof(TextQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(MultipleOptionsQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(SingleOptionQuestionAnswered));
@@ -233,8 +198,7 @@ namespace WB.UI.Interviewer
             this.kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
 
             this.kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
-
-            this.InitTemplateStorage(cqrsEventBus);
+            
             this.InitFileStorage(cqrsEventBus);
             this.InitDashboard(cqrsEventBus);
 

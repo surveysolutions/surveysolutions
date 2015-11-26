@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard
 {
+    [Obsolete]
     public class FeaturedCategoricalItem : FeaturedItem
     {
         public FeaturedCategoricalItem(Guid publicKey, string title, string value,

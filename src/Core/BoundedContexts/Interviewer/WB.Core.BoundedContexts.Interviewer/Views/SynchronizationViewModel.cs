@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,17 +19,16 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.UI.Interviewer.ViewModel.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -38,8 +38,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly ICommandService commandService;
         private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
         private readonly IInterviewPackageIdsStorage interviewPackageIdsStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
@@ -52,8 +50,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
-        private readonly IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository;
-        private readonly IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository;
+        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
+        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStuctureRepository;
+        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private CancellationTokenSource synchronizationCancellationTokenSource;
         private IMvxMessenger messenger;
 
@@ -62,8 +63,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IQuestionnaireModelBuilder questionnaireModelBuilder,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
-            IPlainQuestionnaireRepository questionnaireRepository,
-            ICommandService commandService,
             ICapiDataSynchronizationService capiDataSynchronizationService,
             IInterviewPackageIdsStorage interviewPackageIdsStorage,
             ICapiCleanUpService capiCleanUpService,
@@ -74,16 +73,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             IPasswordHasher passwordHasher,
             IPrincipal principal,
-            IFilterableReadSideRepositoryReader<SurveyDto> questionnaireInfoRepository,
-            IFilterableReadSideRepositoryReader<QuestionnaireDTO> interviewInfoRepository, 
+            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
+            IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository,
+            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureRepository,
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory,
             IMvxMessenger messenger)
         {
             this.synchronizationService = synchronizationService;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.questionnaireModelBuilder = questionnaireModelBuilder;
             this.questionnaireModelRepository = questionnaireModelRepository;
-            this.questionnaireRepository = questionnaireRepository;
-            this.commandService = commandService;
             this.capiDataSynchronizationService = capiDataSynchronizationService;
             this.interviewPackageIdsStorage = interviewPackageIdsStorage;
             this.capiCleanUpService = capiCleanUpService;
@@ -94,8 +94,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userInteractionService = userInteractionService;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;
-            this.questionnaireInfoRepository = questionnaireInfoRepository;
-            this.interviewInfoRepository = interviewInfoRepository;
+            this.questionnaireViewRepository = questionnaireViewRepository;
+            this.interviewViewRepository = interviewViewRepository;
+            this.questionnaireDocumentRepository = questionnaireDocumentRepository;
+            this.questionnaireRosterStuctureRepository = questionnaireRosterStructureRepository;
+            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.messenger = messenger;
 
             this.restCredentials = new RestCredentials()
@@ -281,8 +284,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(this.Token);
 
-            var localCensusQuestionnaireIdentities = this.questionnaireInfoRepository.Filter(questionnaire => questionnaire.AllowCensusMode)
-                .Select(questionnaire => new QuestionnaireIdentity(Guid.Parse(questionnaire.QuestionnaireId), questionnaire.QuestionnaireVersion)).ToList();
+            var localCensusQuestionnaireIdentities = this.questionnaireViewRepository.Query(
+                questionnaires => questionnaires.Where(questionnaire => questionnaire.Census)
+                    .Select(questionnaire => questionnaire.Identity)
+                    .ToList());
 
             var notExistingRemoteCensusQuestionnaireIdentities = localCensusQuestionnaireIdentities.Where(
                     questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
@@ -311,12 +316,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             await Task.Run(() =>
             {
-                var formattedQuestionnaireId = censusQuestionnaireIdentity.QuestionnaireId.FormatGuid();
-                var interviewIdsByQuestionnaire = this.interviewInfoRepository
-                    .Filter(interview => interview.Survey == formattedQuestionnaireId &&
-                                         interview.SurveyVersion == censusQuestionnaireIdentity.Version)
-                    .Select(interview => Guid.Parse(interview.Id))
-                    .ToList();
+                var interviewIdsByQuestionnaire = this.interviewViewRepository.Query(
+                    interviews => interviews.Where(
+                        interview => interview.QuestionnaireIdentity.Equals(censusQuestionnaireIdentity))
+                        .Select(interview => interview.InterviewId)
+                        .ToList());
 
                 foreach (var interviewId in interviewIdsByQuestionnaire)
                 {
@@ -338,11 +342,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     questionnaireIdentity.Version, questionnaireAssembly);
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
-
-            var formattedQuestionnaireId = questionnaireIdentity.QuestionnaireId.FormatGuid();
-            if (!this.questionnaireInfoRepository.Filter(questionnaire =>
-                        questionnaire.QuestionnaireId == formattedQuestionnaireId &&
-                        questionnaire.QuestionnaireVersion == questionnaireIdentity.Version).Any())
+            
+            if (this.questionnaireViewRepository.GetById(questionnaireIdentity.ToString()) == null)
             {
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
@@ -448,15 +449,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task DeleteQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
         {
+            await this.questionnaireDocumentRepository.RemoveAsync(questionnaireIdentity.ToString());
+
             await Task.Run(() =>
             {
-                    this.commandService.Execute(new DisableQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, null));
-                    this.questionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+                    //this.questionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     this.questionnaireModelRepository.Remove(questionnaireIdentity.ToString());
-
-                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, null));
-                
+                this.questionnaireRosterStuctureRepository.AsVersioned()
+                    .Remove(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
             });
         }
 
@@ -479,13 +480,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SaveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireApiView questionnaireApiView)
         {
+            var questionnaireDocumentView = new QuestionnaireDocumentView
+            {
+                Id = questionnaireIdentity.ToString(),
+                Document = this.serializer.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument)
+            };
+            await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);
+
+            var questionnaireView = new QuestionnaireView()
+            {
+                Id = questionnaireIdentity.ToString(),
+                Identity = questionnaireIdentity,
+                Census = questionnaireApiView.AllowCensus,
+                Title = questionnaireDocumentView.Document.Title
+            };
+            await this.questionnaireViewRepository.StoreAsync(questionnaireView);
+
             await Task.Run(() =>
             {
-                var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument);
-                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocument);
+                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document);
                 this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
-                this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
-                this.commandService.Execute(new RegisterPlainQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireApiView.AllowCensus, string.Empty));
+
+                var questionnaireRosterStructure = this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(
+                    questionnaireDocumentView.Document, questionnaireIdentity.Version);
+
+                this.questionnaireRosterStuctureRepository.AsVersioned().Store(questionnaireRosterStructure,
+                questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
+
+
+                //this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
             });
         }
 

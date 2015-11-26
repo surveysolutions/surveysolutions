@@ -2,6 +2,7 @@ using System;
 
 namespace WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard
 {
+    [Obsolete]
     public class FeaturedItem
     {
         public FeaturedItem(Guid publicKey, string title, string value)

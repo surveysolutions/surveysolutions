@@ -166,8 +166,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 p =>
                     p.Format == dataFormat &&
                     p.Type == dataType &&
-                    (!p.QuestionnaireIdentity.HasValue ||
-                     p.QuestionnaireIdentity.Value.Equals(questionnaireIdentity)));
+                    (p.QuestionnaireIdentity != null ||
+                     p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
         }
 
         private void SetDataExportLastUpdateTimeIfFilePresent(DataExportView dataExportView, string filePath)
