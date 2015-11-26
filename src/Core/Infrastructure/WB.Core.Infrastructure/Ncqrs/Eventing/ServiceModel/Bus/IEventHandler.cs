@@ -1,10 +1,13 @@
-﻿namespace Ncqrs.Eventing.ServiceModel.Bus
+﻿using WB.Core.Infrastructure.EventBus.Lite;
+
+namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     /// <summary>
     /// Represents an object which can handle events of a given type (and all types derived from it).
     /// </summary>
     /// <typeparam name="TEvent">Type of event this object can handle.</typeparam>
     public interface IEventHandler<in TEvent>
+        where TEvent : ILiteEvent
     {
         /// <summary>
         /// Processes provided event. Acual event type could be a subtype of <typeparamref name="TEvent"/>. In such cache,

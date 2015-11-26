@@ -12,6 +12,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
     {
         Establish context = () =>
         {
-            var eventsToPublish = new List<object>
+            var eventsToPublish = new List<ILiteEvent>
             {
                 new NewGroupAdded(),
                 new GroupCloned(),

@@ -1,4 +1,6 @@
-﻿namespace Ncqrs.Eventing.ServiceModel.Bus
+﻿using WB.Core.Infrastructure.EventBus.Lite;
+
+namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     /// <summary>
     /// An interface that represents an event during its publishing and handling. At this stage event objects are genericaly typed
@@ -11,6 +13,7 @@
     /// </remarks>
     /// <typeparam name="TEvent">Type of the payload.</typeparam>
     public interface IPublishedEvent<out TEvent> : IPublishableEvent
+        where TEvent : ILiteEvent
     {        
         /// <summary>
         /// Gets the payload of the event.

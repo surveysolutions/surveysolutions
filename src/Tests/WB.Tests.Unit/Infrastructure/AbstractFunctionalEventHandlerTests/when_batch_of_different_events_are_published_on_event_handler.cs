@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 using It = Machine.Specifications.It;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
             testableFunctionalEventHandler = CreateAbstractFunctionalEventHandler(readSideRepositoryWriterMock.Object);
         };
 
-        Because of = () => testableFunctionalEventHandler.Handle(new[] { CreatePublishableEvent(), CreatePublishableEvent(), CreatePublishableEvent(), CreatePublishableEvent("test") }, eventSourceId);
+        Because of = () => testableFunctionalEventHandler.Handle(new[] { CreatePublishableEvent(), CreatePublishableEvent(), CreatePublishableEvent(), CreatePublishableEvent(Mock.Of<ILiteEvent>()) }, eventSourceId);
 
         It should_readSideRepositoryWriters_method_GetById_called_only_once_at_firts_read = () =>
             readSideRepositoryWriterMock.Verify(x => x.GetById(eventSourceId.FormatGuid()), Times.Once());
