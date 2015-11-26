@@ -30,6 +30,7 @@ using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.ReadSideStore;
 using WB.UI.Interviewer.SharedPreferences;
 using WB.UI.Interviewer.Syncronization;
+using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Login;
 using WB.UI.Interviewer.ViewModel.Synchronization;
 
@@ -59,8 +60,8 @@ namespace WB.UI.Interviewer.Ninject
             var snapshotStore = new InMemoryCachedSnapshotStore(this.writeSideCleanerRegistry);
             var denormalizerStore = new SqliteDenormalizerStore(ProjectionStoreName);
             var plainStore = new SqlitePlainStore(PlainStoreName);
-            //var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
-            //var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
+            var surveyStore = new SqliteReadSideRepositoryAccessor<SurveyDto>(denormalizerStore);
+            var questionnaireStore = new SqliteReadSideRepositoryAccessor<QuestionnaireDTO>(denormalizerStore);
             var publicStore = new SqliteReadSideRepositoryAccessor<PublicChangeSetDTO>(denormalizerStore);
             var draftStore = new SqliteReadSideRepositoryAccessor<DraftChangesetDTO>(denormalizerStore);
             var fileSystem = new FileStorageService();
@@ -80,15 +81,12 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
             
-            this.Bind<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore));
-            //this.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
-            //this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
+            this.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
+            this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
+            this.Bind<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);
             this.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
-
-            var questionnaireModelStore = new QuestionnaireModelRepository(new SqlitePlainStorageAccessor<QuestionnaireModel>(plainStore), this.Kernel.Get<IPlainQuestionnaireRepository>());
-            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().ToConstant(questionnaireModelStore);
 
             this.Bind<IFileStorageService>().ToConstant(fileSystem);
             this.Bind<IChangeLogManipulator>().To<ChangeLogManipulator>().InSingletonScope();

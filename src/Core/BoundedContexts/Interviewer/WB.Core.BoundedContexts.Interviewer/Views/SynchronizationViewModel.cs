@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ISynchronizationService synchronizationService;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
+        
         private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
         private readonly IInterviewPackageIdsStorage interviewPackageIdsStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
@@ -50,6 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
+        private readonly IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
@@ -62,7 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISynchronizationService synchronizationService,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IQuestionnaireModelBuilder questionnaireModelBuilder,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
+            IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository,
             ICapiDataSynchronizationService capiDataSynchronizationService,
             IInterviewPackageIdsStorage interviewPackageIdsStorage,
             ICapiCleanUpService capiCleanUpService,
@@ -83,7 +84,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationService = synchronizationService;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.questionnaireModelBuilder = questionnaireModelBuilder;
-            this.questionnaireModelRepository = questionnaireModelRepository;
+            this.questionnaireModelViewRepository = questionnaireModelViewRepository;
             this.capiDataSynchronizationService = capiDataSynchronizationService;
             this.interviewPackageIdsStorage = interviewPackageIdsStorage;
             this.capiCleanUpService = capiCleanUpService;
@@ -450,12 +451,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private async Task DeleteQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             await this.questionnaireDocumentRepository.RemoveAsync(questionnaireIdentity.ToString());
+            await this.questionnaireModelViewRepository.RemoveAsync(questionnaireIdentity.ToString());
 
             await Task.Run(() =>
             {
-                    //this.questionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-                    this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-                    this.questionnaireModelRepository.Remove(questionnaireIdentity.ToString());
+                this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity.QuestionnaireId,
+                    questionnaireIdentity.Version);
+                    
                 this.questionnaireRosterStuctureRepository.AsVersioned()
                     .Remove(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
             });
@@ -485,30 +487,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 Id = questionnaireIdentity.ToString(),
                 Document = this.serializer.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument)
             };
-            await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);
-
-            var questionnaireView = new QuestionnaireView()
+            
+            var questionnaireView = new QuestionnaireView
             {
                 Id = questionnaireIdentity.ToString(),
                 Identity = questionnaireIdentity,
                 Census = questionnaireApiView.AllowCensus,
                 Title = questionnaireDocumentView.Document.Title
             };
+            
+            var questionnaireModelView = new QuestionnaireModelView
+            {
+                Model = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document),
+                Id = questionnaireIdentity.ToString()
+            };
+
+            await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);
             await this.questionnaireViewRepository.StoreAsync(questionnaireView);
+            await this.questionnaireModelViewRepository.StoreAsync(questionnaireModelView);
+
 
             await Task.Run(() =>
             {
-                var questionnaireModel = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document);
-                this.questionnaireModelRepository.Store(questionnaireModel, questionnaireIdentity.ToString());
-
                 var questionnaireRosterStructure = this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(
                     questionnaireDocumentView.Document, questionnaireIdentity.Version);
 
                 this.questionnaireRosterStuctureRepository.AsVersioned().Store(questionnaireRosterStructure,
                 questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
-
-
-                //this.questionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
             });
         }
 
