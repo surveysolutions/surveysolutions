@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.EventHandlers;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.EventHandlers.ReadyToSendToHe
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid? eventSourceId = null)
-            where T : class
+            where T : class, ILiteEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event

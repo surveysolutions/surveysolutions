@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -28,6 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireDenormalizer
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
+            where T: ILiteEvent
         {
             return new PublishedEvent<T>(Create.PublishableEvent(eventSourceId: questionnaireId, payload: evnt));
         }

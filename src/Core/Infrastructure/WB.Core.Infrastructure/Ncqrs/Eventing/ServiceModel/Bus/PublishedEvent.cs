@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -7,7 +8,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     /// </summary>
     public abstract class PublishedEvent : IUncommittedEvent
     {
-        private readonly object _payload;
+        private readonly ILiteEvent _payload;
         private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
@@ -32,7 +33,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// <summary>
         /// Gets the payload of the event.
         /// </summary>
-        public object Payload
+        public ILiteEvent Payload
         {
             get { return this._payload; }
         }
@@ -99,6 +100,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     /// </summary>
     /// <typeparam name="TEvent">Type of the event.</typeparam>
     public class PublishedEvent<TEvent> : PublishedEvent, IPublishedEvent<TEvent>
+        where TEvent : ILiteEvent
     {
         /// <summary>
         /// Gets the payload of the event.

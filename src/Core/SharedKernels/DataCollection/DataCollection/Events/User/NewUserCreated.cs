@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.User
@@ -9,7 +10,7 @@ namespace Main.Core.Events.User
     /// <summary>
     /// The new user created.
     /// </summary>
-    public class NewUserCreated
+    public class NewUserCreated : ILiteEvent
     {
         public string Email { get; set; }
 
