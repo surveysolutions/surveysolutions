@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    internal class when_questionnaire_has_multioption_lined_question : ExportViewFactoryTestsContext
+    internal class when_questionnaire_has_multioption_linked_question : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -18,8 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             linkedSourceQuestionId = Guid.NewGuid();
 
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.Roster(rosterId: Guid.NewGuid(), variable: "row", fixedTitles: new[] {"1", "2"},
-                    children: new[] {Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")}),
+                Create.Roster(rosterId: Guid.NewGuid(), 
+                    variable: "row", 
+                    fixedTitles: new[] {"1", "2"},
+                    children: new[]
+                    {
+                        Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                    }),
                 Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
