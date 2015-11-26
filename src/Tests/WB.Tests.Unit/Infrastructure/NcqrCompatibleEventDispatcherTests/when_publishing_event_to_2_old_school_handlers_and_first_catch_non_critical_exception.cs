@@ -8,6 +8,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using It = Machine.Specifications.It;
 
@@ -15,9 +16,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception : NcqrCompatibleEventDispatcherTestContext
     {
-        private class FirstEventHandler : IEventHandler, IEventHandler<object>
+        private class FirstEventHandler : IEventHandler, IEventHandler<ILiteEvent>
         {
-            public void Handle(IPublishedEvent<object> evnt)
+            public void Handle(IPublishedEvent<ILiteEvent> evnt)
             {
                 throw new NotImplementedException();
             }
@@ -47,9 +48,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var uniqueEventHandlerMock = new Mock<IEnumerable<bool>>();
             var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            secondOldSchoolEventHandlerMock = eventHandlerMock.As<IEventHandler<object>>();
+            secondOldSchoolEventHandlerMock = eventHandlerMock.As<IEventHandler<ILiteEvent>>();
             secondOldSchoolEventHandlerMock
-                .Setup(_ => _.Handle(Moq.It.IsAny<IPublishedEvent<object>>()))
+                .Setup(_ => _.Handle(Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()))
                 .Throws<Exception>();;
 
             eventDispatcher.Register(firstEventHandler);
@@ -68,7 +69,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         It should_call_2_event_handlers = () =>
             secondOldSchoolEventHandlerMock.Verify(x => x.Handle(
-                Moq.It.IsAny<IPublishedEvent<object>>()),
+                Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()),
                 Times.Once);
 
         It should_log_catched_exception = () =>
@@ -83,7 +84,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;
         private static AggregateException aggregateException;
-        private static Mock<IEventHandler<object>> secondOldSchoolEventHandlerMock;
+        private static Mock<IEventHandler<ILiteEvent>> secondOldSchoolEventHandlerMock;
         private static EventHandlerException handledNonCriticalEventHandlerException;
         private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
     }

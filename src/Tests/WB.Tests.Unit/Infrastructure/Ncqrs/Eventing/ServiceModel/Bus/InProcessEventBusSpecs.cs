@@ -203,7 +203,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             var eventToPublish = Create.PublishableEvent(eventSourceId: eventSourceToIgnore, payload: new AEvent());
             
-            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<object>>();
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(),
                 new EventBusSettings()
                 {
