@@ -19,9 +19,7 @@ using WB.Core.Infrastructure.Backup;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Implementations.Services;
-using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
-using OperationCanceledException = System.OperationCanceledException;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
