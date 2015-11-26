@@ -355,8 +355,6 @@
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
     <Compile Include="InterviewerBoundedContextModule.cs" />
     <Compile Include="Backup\FileReportSender.cs" />
-    <Compile Include="Controls\AlertDialogAsyncExtension.cs" />
-    <Compile Include="Extensions\ViewExtensions.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\EmailReporterAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\GoogleFormReporterAttribute.cs" />
@@ -407,7 +405,6 @@
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SharedPreferences\SharedPreferencesBackupOperator.cs" />
     <Compile Include="Syncronization\CapiCleanUpService.cs" />
-    <Compile Include="NinjectServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Setup.cs" />
@@ -416,14 +413,12 @@
     <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorage.cs" />
     <Compile Include="Syncronization\Implementation\InterviewPackageIdsStorageSettings.cs" />
     <Compile Include="Syncronization\Implementation\SyncPackageId.cs" />
-    <Compile Include="Utils\AndroidUIHelper.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\InterviewMetaInfo\InterviewMetaInfoFactory.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\Synchronization\DraftChangesetDTO.cs" />
     <Compile Include="ViewModel\Synchronization\PublicChangeSetDTO.cs" />
-    <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -476,7 +471,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <Content Include="Properties\AndroidManifest.xml">
@@ -704,8 +698,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\Adapters\" />
-    <Folder Include="Infrastructure\Internals\Security\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

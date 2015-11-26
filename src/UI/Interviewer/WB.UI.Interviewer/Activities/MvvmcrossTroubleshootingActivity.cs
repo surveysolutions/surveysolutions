@@ -4,7 +4,6 @@ using Android.OS;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
