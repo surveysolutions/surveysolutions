@@ -75,8 +75,6 @@ namespace WB.UI.Interviewer.Ninject
 
             var syncCacher = new FileCapiSynchronizationCacheService(this.Kernel.Get<IFileSystemAccessor>(), this.basePath);
             var sharedPreferencesBackup = new SharedPreferencesBackupOperator();
-            
-            var propagationStructureStore = new FileReadSideRepositoryWriter<QuestionnaireRosterStructure>(this.Kernel.Get<ISerializer>());
 
             this.Bind<IEventStore>().ToConstant(evenStore);
             this.Bind<ISnapshotStore>().ToConstant(snapshotStore);
@@ -84,7 +82,7 @@ namespace WB.UI.Interviewer.Ninject
             this.Bind<IFilterableReadSideRepositoryReader<LoginDTO>>().ToConstant(new SqliteReadSideRepositoryAccessor<LoginDTO>(denormalizerStore));
             this.Bind<IFilterableReadSideRepositoryReader<SurveyDto>>().ToConstant(surveyStore);
             this.Bind<IFilterableReadSideRepositoryReader<QuestionnaireDTO>>().ToConstant(questionnaireStore);
-            this.Bind<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);
+            
             this.Bind<IReadSideRepositoryWriter<PublicChangeSetDTO>>().ToConstant(publicStore);
             this.Bind<IFilterableReadSideRepositoryWriter<DraftChangesetDTO>>().ToConstant(draftStore);
 
@@ -99,7 +97,7 @@ namespace WB.UI.Interviewer.Ninject
             var backupable = new List<IBackupable>()
             {
                     evenStore, changeLogStore, fileSystem, denormalizerStore, plainStore,
-                    syncCacher, sharedPreferencesBackup, propagationStructureStore
+                    syncCacher, sharedPreferencesBackup
             };
             if (this.globalBackupables != null && this.globalBackupables.Length > 0)
             {
