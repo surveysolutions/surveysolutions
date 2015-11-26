@@ -305,7 +305,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
 
             return this.RosterGroupInstanceIds.ContainsKey(groupKey)
-                ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
+                ? this.RosterGroupInstanceIds[groupKey].OrderBy(d => d).ToReadOnlyCollection()
                 : Enumerable.Empty<decimal>().ToReadOnlyCollection();
         }
 

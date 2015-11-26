@@ -11,7 +11,6 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public ConcurrentHashSet()
         {
-            var a = new HashSet<T>();
             this.dictionary = new ConcurrentDictionary<T,byte>();
         }
 
@@ -39,8 +38,8 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         bool ICollection<T>.Remove(T item)
         {
-            byte removedVelue;
-            return dictionary.TryRemove(item, out removedVelue);
+            byte removedValue;
+            return dictionary.TryRemove(item, out removedValue);
         }
 
         public int Count { get { return dictionary.Count; } }
