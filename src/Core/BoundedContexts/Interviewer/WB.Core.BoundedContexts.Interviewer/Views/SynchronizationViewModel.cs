@@ -440,6 +440,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             await this.questionnaireDocumentRepository.RemoveAsync(questionnaireIdentity.ToString());
             await this.questionnaireModelViewRepository.RemoveAsync(questionnaireIdentity.ToString());
+            await this.questionnaireViewRepository.RemoveAsync(questionnaireIdentity.ToString());
 
             await Task.Run(() =>
             {
