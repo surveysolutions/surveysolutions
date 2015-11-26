@@ -1,9 +1,9 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
+namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class QuestionnaireModelKeyValueStorage : IPlainKeyValueStorage<QuestionnaireModel>
     {

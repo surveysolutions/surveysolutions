@@ -123,6 +123,8 @@
     <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
@@ -151,8 +153,6 @@
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
-    <Compile Include="Services\Infrastructure\QuestionnaireModelKeyValueStorage.cs" />
-    <Compile Include="Services\Infrastructure\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\IInterviewPackageIdsStorage.cs" />
     <Compile Include="Services\ISyncPackageRestoreService.cs" />
