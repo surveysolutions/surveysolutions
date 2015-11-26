@@ -17,8 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             linkedSourceQuestionId = Guid.NewGuid();
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.Roster(rosterId: Guid.NewGuid(), variable: "row", fixedTitles: new[] { "1", "2" },
-                    children: new[] { Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt") }),
+                Create.Roster(rosterId: Guid.NewGuid(), 
+                              variable: "row", 
+                              fixedTitles: new[] { "1", "2" },
+                              children: new[] {
+                                  Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                              }),
                 Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
