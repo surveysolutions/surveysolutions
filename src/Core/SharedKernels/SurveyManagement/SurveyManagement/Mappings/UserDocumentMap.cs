@@ -39,7 +39,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 
             Set(x => x.Roles, m =>
             {
-                m.Key(km => km.Column("UserId"));
+                m.Key(km => km.Column(cm =>
+                {
+                    cm.Name("UserId");
+                    cm.Index("Users_Roles_fk");
+                }));
                 m.Table("Roles");
                 m.Lazy(CollectionLazy.NoLazy);
             },
