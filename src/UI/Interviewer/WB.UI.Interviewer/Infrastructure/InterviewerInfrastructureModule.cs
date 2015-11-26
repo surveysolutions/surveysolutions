@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
@@ -34,12 +35,15 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
             SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
             SiaqodbConfigurator.AddDocument("Document", typeof(QuestionnaireDocumentView));
+            SiaqodbConfigurator.AddDocument("Model", typeof(QuestionnaireModelView));
 
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
             
-            this.Bind(typeof (IPlainKeyValueStorage<QuestionnaireDocument>)).To<QuestionnaireKeyValueStorage>();
+            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
+            this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
+            //this.Bind<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>().ToConstant(propagationStructureStore);
 
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>));
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
 
             this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
 
