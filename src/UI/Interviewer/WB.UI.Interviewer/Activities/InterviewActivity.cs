@@ -3,7 +3,6 @@ using Android.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Interviewer.Utils;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 

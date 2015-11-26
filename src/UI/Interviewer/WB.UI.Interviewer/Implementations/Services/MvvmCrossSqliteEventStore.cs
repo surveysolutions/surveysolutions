@@ -9,7 +9,6 @@ using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.WriteSide;
-using WB.UI.Interviewer.Extensions;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
