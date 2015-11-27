@@ -53,7 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 interviewSummaries, 
                 fileSystemAccessor, 
                 interviewDatas, 
-                exportViewFactory, 
+                exportViewFactory,
+                interviewDataExportSettings, 
                 csvWriter);
 
             this.commentsExporter = new CommentsExporter(interviewDataExportSettings, 
