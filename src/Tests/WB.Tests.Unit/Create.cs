@@ -1808,6 +1808,8 @@ namespace WB.Tests.Unit
             return headquartersSettingsMock.Object;
         }
 
+        internal class DummyEvent : ILiteEvent { }
+
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, ILiteEvent payload = null,
             Guid? eventIdentifier = null, int eventSequence = 1)
         {
@@ -1819,7 +1821,7 @@ namespace WB.Tests.Unit
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 0,
-                payload ?? Mock.Of<ILiteEvent>());
+                payload ?? new DummyEvent());
         }
 
         public static Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
@@ -2087,7 +2089,7 @@ namespace WB.Tests.Unit
 
         public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, ILiteEvent payload = null)
         {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<ILiteEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
+            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? new DummyEvent()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
         }
 
         public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
