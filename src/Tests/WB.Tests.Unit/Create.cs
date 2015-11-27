@@ -34,7 +34,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
@@ -44,7 +43,7 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;
@@ -130,6 +129,8 @@ using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
+using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
+using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
 
 namespace WB.Tests.Unit
 {
@@ -2155,9 +2156,15 @@ namespace WB.Tests.Unit
             return user;
         }
 
-        public static UserLight UserLight(Guid? userId=null)
+        public static InterviewEventHandler DashboardDenormalizer(
+            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage = null)
         {
-            return new UserLight(userId ?? Guid.NewGuid(), "test");
+            return new InterviewEventHandler(
+                questionnaireDtoDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
+                Mock.Of<IReadSideRepositoryWriter<SurveyDto>>(),
+                questionnaireStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         public static UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email="", string phoneNumber="", string role=null)

@@ -46,6 +46,7 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
+            this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
 
@@ -54,8 +55,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-
-            this.Bind<ICapiDataSynchronizationService>().To<CapiDataSynchronizationService>();
+            
             this.Bind<IQuestionnaireAssemblyFileAccessor>()
                 .To<InterviewerQuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", FileSystem.Current.LocalStorage.Path).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesFolder);
         }

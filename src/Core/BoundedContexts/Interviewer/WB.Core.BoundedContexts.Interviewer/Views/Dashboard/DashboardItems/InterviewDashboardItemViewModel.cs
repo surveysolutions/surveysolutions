@@ -5,9 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -29,13 +28,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
-        private readonly IChangeLogManipulator changeLogManipulator;
-        private readonly ICapiCleanUpService capiCleanUpService;
         private readonly IMvxMessenger messenger;
-        private readonly ISyncPackageRestoreService packageRestoreService;
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IInterviewerInterviewFactory interviewerInterviewFactory;
 
         public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
@@ -51,32 +48,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
             IPrincipal principal,
-            IChangeLogManipulator changeLogManipulator,
-            ICapiCleanUpService capiCleanUpService,
             IMvxMessenger messenger, 
-            ISyncPackageRestoreService packageRestoreService,
             IExternalAppLauncher externalAppLauncher,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository)
+            IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IInterviewerInterviewFactory interviewFactory)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;
             this.interviewRepository = interviewRepository;
             this.commandService = commandService;
             this.principal = principal;
-            this.changeLogManipulator = changeLogManipulator;
-            this.capiCleanUpService = capiCleanUpService;
             this.messenger = messenger;
-            this.packageRestoreService = packageRestoreService;
             this.externalAppLauncher = externalAppLauncher;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.interviewViewRepository = interviewViewRepository;
+            this.interviewerInterviewFactory = interviewFactory;
         }
 
         public void Init(string intrerviewId)
         {
             var interview = this.interviewViewRepository.GetById(intrerviewId);
-            var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
+            var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
 
             this.InterviewId = interview.InterviewId;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
@@ -176,10 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public bool IsSupportedRemove { get; set; }
 
-        public IMvxCommand RemoveInterviewCommand
-        {
-            get { return new MvxCommand(this.RemoveInterview); }
-        }
+        public IMvxCommand RemoveInterviewCommand => new MvxCommand(this.RemoveInterview);
 
         private async void RemoveInterview()
         {
@@ -191,7 +181,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             if (!isNeedDelete)
                 return;
 
-            capiCleanUpService.DeleteInterview(this.InterviewId);
+            await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
             RaiseRemovedDashboardItem();
         }
 
@@ -216,13 +206,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                 await this.commandService.ExecuteAsync(restartInterviewCommand);
-                this.changeLogManipulator.CreateOrReopenDraftRecord(this.InterviewId, this.principal.CurrentUserIdentity.UserId);
             }
 
             await Task.Run(async () =>
             {
                 RaiseStartingLongOperation();
-                this.packageRestoreService.CheckAndApplySyncPackage(this.InterviewId);
 
                 var interviewIdString = this.InterviewId.FormatGuid();
                 IStatefulInterview interview = interviewRepository.Get(interviewIdString);

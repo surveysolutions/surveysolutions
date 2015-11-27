@@ -17,6 +17,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
+    [Obsolete]
     internal class InterviewSynchronizationDenormalizer : BaseDenormalizer,
         IEventHandler<InterviewStatusChanged>,
         IEventHandler<InterviewerAssigned>,

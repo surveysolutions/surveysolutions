@@ -2,7 +2,7 @@ using System;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_store_prefilled_GPS_question_ID_to_result_dashboard_item = () =>
             dashboardItem.GpsLocationQuestionId.ShouldEqual(prefilledGpsQuestionId.FormatGuid());
 
-        private static DashboardDenormalizer denormalizer;
+        private static InterviewEventHandler denormalizer;
         private static IPublishedEvent<InterviewOnClientCreated> @event;
         private static QuestionnaireDTO dashboardItem;
         private static Guid prefilledGpsQuestionId = Guid.Parse("11111111111111111111111111111111");

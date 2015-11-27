@@ -14,34 +14,32 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability
+namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class DashboardDenormalizer :                                            
-                                      BaseDenormalizer,
-                                      IEventHandler<SynchronizationMetadataApplied>,
-                                      IEventHandler<InterviewSynchronized>,
-                                      IEventHandler<InterviewStatusChanged>, 
-                                      IEventHandler<InterviewDeleted>,
-                                      IEventHandler<InterviewHardDeleted>,
+    public class InterviewEventHandler : BaseDenormalizer,
+                                         IEventHandler<SynchronizationMetadataApplied>,
+                                         IEventHandler<InterviewSynchronized>,
+                                         IEventHandler<InterviewStatusChanged>, 
+                                         IEventHandler<InterviewHardDeleted>,
 
-                                      IEventHandler<TextQuestionAnswered>,
-                                      IEventHandler<MultipleOptionsQuestionAnswered>,
-                                      IEventHandler<SingleOptionQuestionAnswered>,
-                                      IEventHandler<NumericRealQuestionAnswered>,
-                                      IEventHandler<NumericIntegerQuestionAnswered>,
-                                      IEventHandler<DateTimeQuestionAnswered>,
-                                      IEventHandler<GeoLocationQuestionAnswered>,
-                                      IEventHandler<QRBarcodeQuestionAnswered>,
+                                         IEventHandler<TextQuestionAnswered>,
+                                         IEventHandler<MultipleOptionsQuestionAnswered>,
+                                         IEventHandler<SingleOptionQuestionAnswered>,
+                                         IEventHandler<NumericRealQuestionAnswered>,
+                                         IEventHandler<NumericIntegerQuestionAnswered>,
+                                         IEventHandler<DateTimeQuestionAnswered>,
+                                         IEventHandler<GeoLocationQuestionAnswered>,
+                                         IEventHandler<QRBarcodeQuestionAnswered>,
 
-                                      IEventHandler<AnswersRemoved>,
+                                         IEventHandler<AnswersRemoved>,
 
-                                      IEventHandler<InterviewOnClientCreated>,
-                                      IEventHandler<AnswerRemoved>
+                                         IEventHandler<InterviewOnClientCreated>,
+                                         IEventHandler<AnswerRemoved>
     {
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository;
 
-        public DashboardDenormalizer(IAsyncPlainStorage<InterviewView> interviewViewRepository,
+        public InterviewEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository,
                                      IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository)
         {
             this.interviewViewRepository = interviewViewRepository;
@@ -51,9 +49,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
         public override object[] Writers => new object[] { this.interviewViewRepository };
         public override object[] Readers => new object[] { this.interviewViewRepository};
 
-        public async void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
+        public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            await this.AddOrUpdateInterviewToDashboardAsync(evnt.Payload.QuestionnaireId,
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion,
                 evnt.EventSourceId,
                 evnt.Payload.UserId,
@@ -68,9 +66,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
         }
 
 
-        public async void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
+        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
         {
-            await this.AddOrUpdateInterviewToDashboardAsync(evnt.Payload.QuestionnaireId,
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
                 evnt.Payload.QuestionnaireVersion,
                 evnt.EventSourceId,
                 evnt.Payload.UserId,
@@ -85,7 +83,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
         }
 
 
-        private async Task AddOrUpdateInterviewToDashboardAsync(
+        private void AddOrUpdateInterviewToDashboard(
             Guid questionnaireId, long questionnaireVersion, Guid interviewId, Guid responsibleId, InterviewStatus status,
             string comments, IEnumerable<AnsweredQuestionSynchronizationDto> answeredQuestions,
             bool createdOnClient, bool canBeDeleted,
@@ -150,7 +148,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
             interviewView.LastInterviewerOrSupervisorComment = comments;
             interviewView.GpsLocation.Coordinates = gpsCoordinates;
             
-            await this.interviewViewRepository.StoreAsync(interviewView);
+            this.interviewViewRepository.StoreAsync(interviewView).Wait();
         }
 
         private static GeoPosition GetGeoPositionAnswer(AnsweredQuestionSynchronizationDto item)
@@ -217,25 +215,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
                 : string.Empty;
         }
 
-        public async void Handle(IPublishedEvent<InterviewSynchronized> evnt)
+        public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            await this.AddOrUpdateInterviewToDashboardAsync(evnt.Payload.InterviewData.QuestionnaireId,
-                            evnt.Payload.InterviewData.QuestionnaireVersion,
-                            evnt.EventSourceId,
-                            evnt.Payload.UserId,
-                            evnt.Payload.InterviewData.Status,
-                            evnt.Payload.InterviewData.Comments,
-                            evnt.Payload.InterviewData.Answers,
-                            evnt.Payload.InterviewData.CreatedOnClient,
-                            canBeDeleted: false,
-                            assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
-                            startedDateTime: null,
-                            rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime);
-        }
-
-        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
-        {
-            this.interviewViewRepository.RemoveAsync(evnt.EventSourceId.FormatGuid());
+            this.AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId,
+                evnt.Payload.InterviewData.QuestionnaireVersion,
+                evnt.EventSourceId,
+                evnt.Payload.UserId,
+                evnt.Payload.InterviewData.Status,
+                evnt.Payload.InterviewData.Comments,
+                evnt.Payload.InterviewData.Answers,
+                evnt.Payload.InterviewData.CreatedOnClient,
+                canBeDeleted: false,
+                assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
+                startedDateTime: null,
+                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
@@ -243,7 +236,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
             this.interviewViewRepository.RemoveAsync(evnt.EventSourceId.FormatGuid());
         }
 
-        public async void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
+        public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
             if(!this.IsInterviewCompletedOrRestarted(evnt.Payload.Status))
                 return;
@@ -261,7 +254,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
 
-            await this.interviewViewRepository.StoreAsync(interviewView);
+            this.interviewViewRepository.StoreAsync(interviewView).Wait();
         }
 
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
@@ -269,7 +262,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
 
-        private async void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
+        private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
 
@@ -306,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
                 interviewView.StartedDateTime = answerTimeUtc;
             }
 
-            await this.interviewViewRepository.StoreAsync(interviewView);
+            this.interviewViewRepository.StoreAsync(interviewView).Wait();
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)

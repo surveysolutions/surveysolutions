@@ -3,6 +3,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.Synchronization.SyncStorage
 {
+    [Obsolete]
     public class InterviewSyncPackageMeta : IView
     {
         //DO not delete - is used for deserialization

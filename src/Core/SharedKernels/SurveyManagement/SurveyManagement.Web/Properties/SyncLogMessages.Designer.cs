@@ -133,6 +133,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download interview: &lt;b&gt;{0}&lt;/b&gt;.
+        /// </summary>
+        public static string GetInterview {
+            get {
+                return ResourceManager.GetString("GetInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download interviewer information. &lt;br/&gt;Supervisor: &lt;b&gt;{0}&lt;/b&gt; [{1}].
         /// </summary>
         public static string GetInterviewer {
@@ -156,6 +165,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string GetInterviewPackages {
             get {
                 return ResourceManager.GetString("GetInterviewPackages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download list of interviews. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;.
+        /// </summary>
+        public static string GetInterviews {
+            get {
+                return ResourceManager.GetString("GetInterviews", resourceCulture);
             }
         }
         
@@ -192,6 +210,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string InterviewPackageProcessed {
             get {
                 return ResourceManager.GetString("InterviewPackageProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;font color=&quot;green&quot;&apos;&gt;Interview &lt;b&gt;{0}&lt;/b&gt; successfully processed&lt;/font&gt;.
+        /// </summary>
+        public static string InterviewProcessed {
+            get {
+                return ResourceManager.GetString("InterviewProcessed", resourceCulture);
             }
         }
         

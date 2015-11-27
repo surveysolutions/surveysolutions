@@ -2,7 +2,7 @@ using System;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_clear_GPS_location_longitude = () =>
             dashboardItem.GpsLocationLongitude.ShouldBeNull();
 
-        private static DashboardDenormalizer denormalizer;
+        private static InterviewEventHandler denormalizer;
         private static IPublishedEvent<AnswersRemoved> @event;
         private static QuestionnaireDTO dashboardItem;
     }

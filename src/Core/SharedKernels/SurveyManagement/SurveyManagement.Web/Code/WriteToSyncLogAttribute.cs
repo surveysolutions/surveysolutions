@@ -123,6 +123,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                     case SynchronizationLogType.InterviewPackageProcessed:
                         logItem.Log = SyncLogMessages.InterviewPackageProcessed.FormatString(context.GetActionArgument<string>("id"));
                         break;
+                    case SynchronizationLogType.GetInterviews:
+                        logItem.Log = this.GetInterviewsLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetInterview:
+                        logItem.Log = SyncLogMessages.GetInterview.FormatString(context.GetActionArgument<Guid>("id"));
+                        break;
+                    case SynchronizationLogType.InterviewProcessed:
+                        logItem.Log = SyncLogMessages.InterviewProcessed.FormatString(context.GetActionArgument<Guid>("id"));
+                        break;
 
                     default:
                         throw new ArgumentException("logAction");
@@ -133,6 +142,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             {
                 this.logger.Error("Error updating sync log.", exception);
             }
+        }
+
+        private string GetInterviewsLogMessage(HttpActionExecutedContext context)
+        {
+            var interviewsApiView = this.GetResponseObject<List<InterviewApiView>>(context);
+
+            var messagesByInterviews = interviewsApiView.Select(x => new UrlHelper(context.Request).Link("Default",
+                        new { controller = "Interview", action = "Details", id = x.Id })).ToList();
+
+            return SyncLogMessages.GetInterviews.FormatString(!messagesByInterviews.Any()
+                    ? SyncLogMessages.NoNewInterviewPackagesToDownload
+                    : string.Join("<br>", messagesByInterviews));
         }
 
         private string GetInterviewPackagesLogMessage(HttpActionExecutedContext context)

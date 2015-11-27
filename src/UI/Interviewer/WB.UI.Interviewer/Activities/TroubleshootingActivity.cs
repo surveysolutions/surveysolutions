@@ -9,13 +9,11 @@ using Android.Views;
 using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
 using Mono.CSharp;
-using Ninject;
 using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Implementations.Services;
@@ -91,7 +89,6 @@ namespace WB.UI.Interviewer.Activities
         private ProgressDialog progress;
 
         private PendingImplementation.Operation? currentOperation;
-        private IBackup backupManager;
 
         #endregion
 
@@ -106,10 +103,9 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-
-            this.backupManager = InterviewerApplication.Kernel.Get<IBackup>();
-            this.btnBackup.Click += this.btnBackup_Click;
-            this.btnRestore.Click += this.btnRestore_Click;
+            
+            //this.btnBackup.Click += this.btnBackup_Click;
+            //this.btnRestore.Click += this.btnRestore_Click;
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
             this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
@@ -118,11 +114,6 @@ namespace WB.UI.Interviewer.Activities
             this.llContainer.Click += this.llContainer_Click;
             this.btnVersion.Click += this.btnVersion_Click;
             this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", this.interviewerSettings.GetApplicationVersionName());
-        }
-
-        public override void OnBackPressed()
-        {
-            base.OnBackPressed();
         }
 
         private async void btnVersion_Click(object sender, EventArgs evnt)
@@ -224,69 +215,69 @@ namespace WB.UI.Interviewer.Activities
             }
         }
 
-        private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
-        {
-            try
-            {
-                this.backupManager.Restore();
+        //private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.backupManager.Restore();
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.SetPositiveButton("OK",  (o, args) =>
-                {
-                    this.StartActivity(new Intent(this, typeof(SplashActivity)));   
-                });
-                alert.SetTitle("Success");
-                alert.SetMessage("Tablet was successfully restored");
-                alert.Show();
-            }
-            catch (Exception ex)
-            {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.SetTitle("Restore Error");
-                alert.SetMessage(ex.Message + " " + ex.StackTrace);
-                alert.Show();
-            }
-        }
+        //        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        //        alert.SetPositiveButton("OK",  (o, args) =>
+        //        {
+        //            this.StartActivity(new Intent(this, typeof(SplashActivity)));   
+        //        });
+        //        alert.SetTitle("Success");
+        //        alert.SetMessage("Tablet was successfully restored");
+        //        alert.Show();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        //        alert.SetTitle("Restore Error");
+        //        alert.SetMessage(ex.Message + " " + ex.StackTrace);
+        //        alert.Show();
+        //    }
+        //}
 
-        private void btnRestore_Click(object sender, EventArgs e)
-        {
-            var alertWarningAboutRestore = this.CreateYesNoDialog(this,
-               this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click,
-               InterviewerUIResources.Warning, message: string.Format(InterviewerUIResources.Troubleshooting_Old_AreYouSureYouWantToRestore, this.backupManager.RestorePath));
+        //private void btnRestore_Click(object sender, EventArgs e)
+        //{
+        //    var alertWarningAboutRestore = this.CreateYesNoDialog(this,
+        //       this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click,
+        //       InterviewerUIResources.Warning, message: string.Format(InterviewerUIResources.Troubleshooting_Old_AreYouSureYouWantToRestore, this.backupManager.RestorePath));
 
-            alertWarningAboutRestore.Show();
-        }
+        //    alertWarningAboutRestore.Show();
+        //}
 
-        private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
-        {
-        }
+        //private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
+        //{
+        //}
 
-        void btnBackup_Click(object sender, EventArgs e)
-        {
-            string path = string.Empty;
-            try
-            {
-                path = this.backupManager.Backup();
-            }
-            catch (Exception exception)
-            {
-                this.Logger.Error("Error occurred during Backup. ", exception);
-            }
+        //void btnBackup_Click(object sender, EventArgs e)
+        //{
+        //    string path = string.Empty;
+        //    try
+        //    {
+        //        path = this.backupManager.Backup();
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        this.Logger.Error("Error occurred during Backup. ", exception);
+        //    }
 
-            var alert = new AlertDialog.Builder(this);
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                alert.SetTitle("Error");
-                alert.SetMessage(string.Format("Something went wrong and backup failed to be created."));
-            }
-            else
-            {
-                alert.SetTitle("Success");
-                alert.SetMessage(string.Format("Backup was saved to {0}", path));
-            }
+        //    var alert = new AlertDialog.Builder(this);
+        //    if (string.IsNullOrWhiteSpace(path))
+        //    {
+        //        alert.SetTitle("Error");
+        //        alert.SetMessage(string.Format("Something went wrong and backup failed to be created."));
+        //    }
+        //    else
+        //    {
+        //        alert.SetTitle("Success");
+        //        alert.SetMessage(string.Format("Backup was saved to {0}", path));
+        //    }
 
-            alert.Show();
-        }
+        //    alert.Show();
+        //}
 
         private void btnSendTabletInfo_Click(object sender, EventArgs e)
         {

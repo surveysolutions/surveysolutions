@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.UI.Interviewer.ReadSideStore
 {
-    public class FileReadSideRepositoryWriter<TEntity> : IReadSideKeyValueStorage<TEntity>, IBackupable
+    public class FileReadSideRepositoryWriter<TEntity> : IReadSideKeyValueStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISerializer serializer;

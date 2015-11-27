@@ -36,7 +36,7 @@ namespace WB.UI.Interviewer.Activities
         protected override async void TriggerFirstNavigate()
         {
             #warning remove this a little bit later
-            await this.BackwardCompatibilityWithPotatoidAsync();
+            //await this.BackwardCompatibilityWithPotatoidAsync();
 
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 
@@ -48,27 +48,27 @@ namespace WB.UI.Interviewer.Activities
             await viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
-        private async Task BackwardCompatibilityWithPotatoidAsync()
-        {
-            var newInterviewersPlainStorage = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
+        //private async Task BackwardCompatibilityWithPotatoidAsync()
+        //{
+        //    var newInterviewersPlainStorage = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
 
-            if (newInterviewersPlainStorage.Query(interviewers => interviewers.Any())) return;
+        //    if (newInterviewersPlainStorage.Query(interviewers => interviewers.Any())) return;
 
-            var oldUsersStorage = Mvx.Resolve<IFilterableReadSideRepositoryReader<LoginDTO>>();
-            if (oldUsersStorage == null) return;
+        //    var oldUsersStorage = Mvx.Resolve<IFilterableReadSideRepositoryReader<LoginDTO>>();
+        //    if (oldUsersStorage == null) return;
 
-            var firstUserFromOldStorage = oldUsersStorage.Filter(oldUser => true).FirstOrDefault();
-            if (firstUserFromOldStorage != null)
-            {
-                await newInterviewersPlainStorage.StoreAsync(new InterviewerIdentity()
-                {
-                    Id = firstUserFromOldStorage.Id,
-                    UserId = Guid.Parse(firstUserFromOldStorage.Id),
-                    Password = firstUserFromOldStorage.Password,
-                    Name = firstUserFromOldStorage.Login,
-                    SupervisorId = Guid.Parse(firstUserFromOldStorage.Supervisor)
-                });
-            }
-        }
+        //    var firstUserFromOldStorage = oldUsersStorage.Filter(oldUser => true).FirstOrDefault();
+        //    if (firstUserFromOldStorage != null)
+        //    {
+        //        await newInterviewersPlainStorage.StoreAsync(new InterviewerIdentity()
+        //        {
+        //            Id = firstUserFromOldStorage.Id,
+        //            UserId = Guid.Parse(firstUserFromOldStorage.Id),
+        //            Password = firstUserFromOldStorage.Password,
+        //            Name = firstUserFromOldStorage.Login,
+        //            SupervisorId = Guid.Parse(firstUserFromOldStorage.Supervisor)
+        //        });
+        //    }
+        //}
     }
 }
