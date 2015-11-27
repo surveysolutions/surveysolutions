@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
+using PCLStorage;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -113,6 +116,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
         }
 
+        public async Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
+        {
+            var assembliesDirectory = await FileSystem.Current.GetFolderFromPathAsync(this.pathToStore);
+
+            string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+
+            var assemblyFile = await assembliesDirectory.CreateFileAsync(assemblyFileName, CreationCollisionOption.ReplaceExisting);
+            using (var fileHandler = await assemblyFile.OpenAsync(FileAccess.ReadAndWrite))
+            {
+                await fileHandler.WriteAsync(assembly, 0, assembly.Length);
+            }
+        }
+
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
@@ -130,6 +146,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 Logger.Error(string.Format("Error on assembly deletion for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
                 Logger.Error(e.Message, e);
             }
+        }
+
+        public async Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+
+            var assemblyFile = await FileSystem.Current.GetFileFromPathAsync(PortablePath.Combine(this.pathToStore, assemblyFileName));
+
+            await assemblyFile.DeleteAsync();
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
