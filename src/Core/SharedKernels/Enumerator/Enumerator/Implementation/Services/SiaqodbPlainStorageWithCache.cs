@@ -26,16 +26,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public override async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
+            var entitiesToRemove = entities.Where(entity => entity != null).ToList();
+
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
-                foreach (var entity in entities.Where(entity => entity != null))
+                foreach (var entity in entitiesToRemove)
                 {
                     await this.Storage.DeleteAsync(entity, transaction);
                 }
 
                 await transaction.CommitAsync();
-                this.RemoveFromMemory(entities);
+                this.RemoveFromMemory(entitiesToRemove);
             }
             catch
             {
@@ -45,16 +47,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public override async Task StoreAsync(IEnumerable<TEntity> entities)
         {
+            var entitiesToStore = entities.Where(entity => entity != null).ToList();
+
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
-                foreach (var entity in entities.Where(entity => entity != null))
+                foreach (var entity in entitiesToStore)
                 {
                     await this.Storage.StoreObjectAsync(entity, transaction);
                 }
 
                 await transaction.CommitAsync();
-                this.StoreToMemory(entities);
+                this.StoreToMemory(entitiesToStore);
             }
             catch
             {
