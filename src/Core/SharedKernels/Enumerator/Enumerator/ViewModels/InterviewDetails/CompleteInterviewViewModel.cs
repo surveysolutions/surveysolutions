@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await this.CloseInterviewAsync();
         }
 
-        protected async virtual Task CloseInterviewAsync()
+        protected virtual async Task CloseInterviewAsync()
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync();
 

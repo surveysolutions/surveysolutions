@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
@@ -144,32 +143,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     credentials: this.restCredentials, token: token));
         }
 
-        public async Task<InterviewPackagesApiView> GetInterviewPackagesAsync(string lastPackageId, CancellationToken token)
-        {
-            return await this.TryGetRestResponseOrThrowAsync(async () =>
-            {
-                var interviewPackages = await this.restService.GetAsync<InterviewPackagesApiView>(
-                    url: string.Concat(this.interviewsController, "/packages/", lastPackageId),
-                    credentials: this.restCredentials, token: token);
-
-                interviewPackages.Interviews = interviewPackages.Interviews ?? new List<InterviewApiView>();
-                interviewPackages.Packages = interviewPackages.Packages ?? new List<SynchronizationChunkMeta>();
-
-                return interviewPackages;
-            });
-        }
-
-        public async Task LogPackageAsSuccessfullyHandledAsync(string packageId)
+        public async Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
-                url: string.Concat(this.interviewsController, "/package/", packageId, "/logstate"),
+                url: string.Concat(this.interviewsController, "/", interviewId, "/logstate"),
                 credentials: this.restCredentials));
         }
 
-        public async Task<InterviewSyncPackageDto> GetInterviewPackageAsync(string packageId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public async Task<InterviewDetailsApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewSyncPackageDto>(
-                url: string.Concat(this.interviewsController, "/package/", packageId),
+            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewDetailsApiView>(
+                url: string.Concat(this.interviewsController, "/", interviewId),
                 credentials: this.restCredentials,
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token));
@@ -178,7 +162,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task UploadInterviewAsync(Guid interviewId, string content, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
-                url: string.Concat(this.interviewsController, "/package/", interviewId),
+                url: string.Concat(this.interviewsController, "/", interviewId),
                 request: content,
                 credentials: this.restCredentials,
                 token: token));

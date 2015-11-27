@@ -13,8 +13,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly);
 
-        Task RemoveQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity);
-
         List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities();
 
         bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity);

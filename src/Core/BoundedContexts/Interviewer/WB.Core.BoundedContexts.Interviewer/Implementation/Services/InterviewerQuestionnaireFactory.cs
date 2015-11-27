@@ -16,10 +16,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private readonly ISerializer serializer;
         private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
+        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private readonly IInterviewerInterviewFactory interviewFactory;
+
         private readonly IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
+        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public InterviewerQuestionnaireFactory(
             ISerializer serializer,
@@ -27,14 +30,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository,
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
+            IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
+            IInterviewerInterviewFactory interviewFactory)
         {
             this.serializer = serializer;
             this.questionnaireModelBuilder = questionnaireModelBuilder;
             this.questionnaireModelViewRepository = questionnaireModelViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
+            this.interviewViewRepository = interviewViewRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
+            this.interviewFactory = interviewFactory;
         }
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
@@ -55,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             var questionnaireModelView = new QuestionnaireModelView
             {
-                Model = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document),
+                Model = await Task.FromResult(this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document)),
                 Id = questionnaireIdentity.ToString()
             };
 
@@ -66,20 +73,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task RemoveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            await this.questionnaireDocumentRepository.RemoveAsync(questionnaireIdentity.ToString());
-            await this.questionnaireModelViewRepository.RemoveAsync(questionnaireIdentity.ToString());
-            await this.questionnaireViewRepository.RemoveAsync(questionnaireIdentity.ToString());
-            await this.RemoveQuestionnaireAssemblyAsync(questionnaireIdentity);
+            var questionnaireId = questionnaireIdentity.ToString();
+
+            await this.DeleteInterviewsByQuestionnaireAsync(questionnaireId);
+            await this.questionnaireDocumentRepository.RemoveAsync(questionnaireId);
+            await this.questionnaireModelViewRepository.RemoveAsync(questionnaireId);
+            await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
+            await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
+        }
+
+        private async Task DeleteInterviewsByQuestionnaireAsync(string questionnaireId)
+        {
+            var interviewIdsByQuestionnaire = this.interviewViewRepository.Query(
+                interviews => interviews.Where(
+                    interview => interview.QuestionnaireId == questionnaireId)
+                    .Select(interview => interview.InterviewId)
+                    .ToList());
+
+            foreach (var interviewId in interviewIdsByQuestionnaire)
+            {
+                await this.interviewFactory.RemoveInterviewAsync(interviewId);
+            }
         }
 
         public async Task StoreQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             await this.questionnaireAssemblyFileAccessor.StoreAssemblyAsync(questionnaireIdentity, assembly);
-        }
-
-        public async Task RemoveQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
-        {
-            await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
         }
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()

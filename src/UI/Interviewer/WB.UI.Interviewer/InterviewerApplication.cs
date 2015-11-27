@@ -16,14 +16,12 @@ using WB.Core.BoundedContexts.Interviewer.ErrorReporting;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -41,7 +39,6 @@ using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Attributes;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.Settings;
-using WB.UI.Interviewer.Syncronization.Implementation;
 using WB.UI.Shared.Enumerator;
 using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -83,14 +80,14 @@ namespace WB.UI.Interviewer
 
         private void InitDashboard(InProcessEventBus bus)
         {
-            var dashboardeventHandler = new DashboardDenormalizer(
+            var dashboardeventHandler = new InterviewEventHandler(
                 this.kernel.Get<IAsyncPlainStorage<InterviewView>>(),
                 this.kernel.Get<IAsyncPlainStorage<QuestionnaireDocumentView>>());
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewSynchronized));
-            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewDeleted));
+            bus.RegisterHandler(dashboardeventHandler, typeof(InterviewHardDeleted));
             
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewOnClientCreated));
             
@@ -136,10 +133,7 @@ namespace WB.UI.Interviewer
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                 : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
             
-            const string SynchronizationFolder = "SYNC";
-            const string InterviewFilesFolder = "InterviewData";
             const string QuestionnaireAssembliesFolder = "assemblies";
-            const string SynchronizationPackagesFileName = "synchronizationPackages";
 
             this.kernel = new StandardKernel(
 
@@ -153,26 +147,18 @@ namespace WB.UI.Interviewer
                 new EnumeratorInfrastructureModule(),
                 new EnumeratorUIModule(),
                 new InterviewerUIModule(),
-
-                new InterviewerBoundedContextModule(),
+                
                 new AndroidCoreRegistry(),
                 new AndroidSharedModule(),
                 new AndroidLoggingModule());
 
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
-
-            this.kernel.Bind<InterviewPackageIdsStorageSettings>()
-                .ToConstant(new InterviewPackageIdsStorageSettings(basePath, SynchronizationPackagesFileName));
-
-            this.kernel.Bind<InterviewPackageIdsStorage>().ToSelf().InSingletonScope();
-            this.kernel.Bind<IInterviewPackageIdsStorage>().To<InterviewPackageIdsStorage>();
-
-            this.kernel.Load(new AndroidModelModule(basePath,
-                    new[] { SynchronizationFolder, InterviewFilesFolder, QuestionnaireAssembliesFolder }, this.kernel.Get<IWriteSideCleanerRegistry>(), this.kernel.Get<InterviewPackageIdsStorage>()),
+            
+            this.kernel.Load(
+                new AndroidModelModule(),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
-                new AndroidDataCollectionSharedKernelModule(basePath: basePath,
-                    syncDirectoryName: SynchronizationFolder));
+                new AndroidDataCollectionSharedKernelModule(basePath: basePath));
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
@@ -189,10 +175,6 @@ namespace WB.UI.Interviewer
 
             kernel.Bind<IEventBus>().ToConstant(hybridEventBus);
             kernel.Bind<ILiteEventBus>().ToConstant(hybridEventBus);
-
-            this.kernel.Unbind<ISyncPackageRestoreService>();
-            this.kernel.Bind<ISyncPackageRestoreService>().To<SyncPackageRestoreService>().InSingletonScope();
-
 
             this.kernel.Bind<IInterviewerSettings>().To<InterviewerSettings>();
             this.kernel.Bind<ISynchronizationService>().To<SynchronizationService>();

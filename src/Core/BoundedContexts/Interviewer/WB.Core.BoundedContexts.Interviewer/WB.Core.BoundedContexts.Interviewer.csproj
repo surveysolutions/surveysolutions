@@ -112,10 +112,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChangeLog\ChangeLogRecordWithContent.cs" />
-    <Compile Include="ChangeLog\ChangeLogShortRecord.cs" />
-    <Compile Include="ChangeLog\IChangeLogManipulator.cs" />
-    <Compile Include="ChangeLog\IChangeLogStore.cs" />
     <Compile Include="ErrorReporting\ErrorReportingModule.cs" />
     <Compile Include="ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs" />
     <Compile Include="ErrorReporting\Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
@@ -125,12 +121,9 @@
     <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs" />
     <Compile Include="ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
-    <Compile Include="Implementation\ChangeLog\FileChangeLogStore.cs" />
-    <Compile Include="Implementation\DenormalizerStorage\DenormalizerRow.cs" />
-    <Compile Include="Implementation\Services\CapiDataSynchronizationService.cs" />
-    <Compile Include="Implementation\Services\FileCapiSynchronizationCacheService.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
+    <Compile Include="Implementation\Services\InterviewerInterviewFactory.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
@@ -138,7 +131,6 @@
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
-    <Compile Include="Implementation\Services\SyncPackageRestoreService.cs" />
     <Compile Include="LinqUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\InterviewerUIResources.Designer.cs">
@@ -156,20 +148,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\ICapiCleanUpService.cs" />
-    <Compile Include="Services\ICapiDataSynchronizationService.cs" />
-    <Compile Include="Services\ICapiSynchronizationCacheService.cs" />
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
+    <Compile Include="Services\Infrastructure\IInterviewerInterviewFactory.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireFactory.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
-    <Compile Include="Services\IInterviewPackageIdsStorage.cs" />
-    <Compile Include="Services\ISyncPackageRestoreService.cs" />
+    <Compile Include="Views\InterviewEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\DashboardDenormalizer.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalItem.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalOption.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedItem.cs" />
@@ -216,10 +204,6 @@
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Backup\WB.Core.Infrastructure.Backup.csproj">
-      <Project>{A134F8E7-42C7-4804-8177-D11178600CAA}</Project>
-      <Name>WB.Core.Infrastructure.Backup</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>

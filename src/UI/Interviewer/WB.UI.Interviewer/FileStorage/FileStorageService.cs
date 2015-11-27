@@ -1,10 +1,9 @@
 using System.IO;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.UI.Interviewer.FileStorage
 {
-    public class FileStorageService : IFileStorageService, IBackupable
+    public class FileStorageService : IFileStorageService
     {
         private const string ImageFolder = "IMAGES";
         private readonly string _basePath;

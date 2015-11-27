@@ -321,10 +321,15 @@
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
     <Compile Include="Views\UserDocument.cs" />
+    <Compile Include="WebApi\InterviewAnswerOnPrefilledQuestionApiView.cs" />
+    <Compile Include="WebApi\InterviewDetailsApiView.cs" />
     <Compile Include="WebApi\InterviewApiView.cs" />
+    <Compile Include="WebApi\IdentityApiView.cs" />
     <Compile Include="WebApi\InterviewPackageApiView.cs" />
     <Compile Include="WebApi\QuestionnaireApiView.cs" />
     <Compile Include="WebApi\InterviewerApiView.cs" />
+    <Compile Include="WebApi\RosterApiView.cs" />
+    <Compile Include="WebApi\RosterInstanceApiView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
