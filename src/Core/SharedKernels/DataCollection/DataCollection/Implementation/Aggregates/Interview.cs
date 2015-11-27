@@ -431,7 +431,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(GroupPropagated @event)
         {
             string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(@event.GroupId, @event.OuterScopeRosterVector);
-            var rosterRowInstances = new ConcurrentHashSet<decimal>();
+            var rosterRowInstances = new ConcurrentDistinctList<decimal>();
 
             for (int i = 0; i < @event.Count; i++)
             {
@@ -765,11 +765,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         #region StaticMethods
 
-        private static ConcurrentDictionary<string, ConcurrentHashSet<decimal>> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
+        private static ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> BuildRosterInstanceIdsFromSynchronizationDto(InterviewSynchronizationDto synchronizationDto)
         {
             return synchronizationDto.RosterGroupInstances.ToConcurrentDictionary(
                 pair => ConversionHelper.ConvertIdAndRosterVectorToString(pair.Key.Id, pair.Key.InterviewItemRosterVector),
-                pair => new ConcurrentHashSet<decimal>(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
+                pair => new ConcurrentDistinctList<decimal>(pair.Value.Select(rosterInstance => rosterInstance.RosterInstanceId).ToList()));
         }
 
         private string GetLinkedQuestionAnswerFormattedAsRosterTitle(IReadOnlyInterviewStateDependentOnAnswers state, Identity linkedQuestion, IQuestionnaire questionnaire)
