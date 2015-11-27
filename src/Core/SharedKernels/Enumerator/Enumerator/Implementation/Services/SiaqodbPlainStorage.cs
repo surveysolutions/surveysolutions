@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
-                foreach (var entity in entities)
+                foreach (var entity in entities.Where(entity => entity != null))
                 {
                     await this.Storage.DeleteAsync(entity, transaction);
                 }
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
-                foreach (var entity in entities)
+                foreach (var entity in entities.Where(entity => entity != null))
                 {
                     await this.Storage.StoreObjectAsync(entity, transaction);
                 }
