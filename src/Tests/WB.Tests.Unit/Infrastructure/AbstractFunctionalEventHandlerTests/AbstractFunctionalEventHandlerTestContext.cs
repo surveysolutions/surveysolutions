@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
             return Mock.Of<IReadSideRepositoryEntity>();
         }
 
-        protected static IPublishableEvent CreatePublishableEvent(ILiteEvent payload=null)
+        protected static IPublishableEvent CreatePublishableEvent(ILiteEvent payload =null)
         {
-            return Create.PublishableEvent(payload: payload);
+            return Create.PublishableEvent(payload: payload ?? new TestableFunctionalEvent()); 
         }
     }
 }
