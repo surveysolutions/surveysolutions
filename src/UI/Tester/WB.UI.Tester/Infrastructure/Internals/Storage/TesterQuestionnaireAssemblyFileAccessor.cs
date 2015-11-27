@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Storage
 {
@@ -23,6 +25,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             throw new NotImplementedException();
         }
@@ -65,6 +72,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Storage
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
 
+        }
+
+        public Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            throw new NotImplementedException();
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)

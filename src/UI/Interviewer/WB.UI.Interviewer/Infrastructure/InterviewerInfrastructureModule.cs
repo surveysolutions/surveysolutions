@@ -43,6 +43,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
 
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
+            this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
 
             this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
 
