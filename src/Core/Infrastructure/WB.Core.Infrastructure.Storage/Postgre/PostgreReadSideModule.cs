@@ -96,6 +96,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.Dialect<PostgreSQL82Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
+            cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
