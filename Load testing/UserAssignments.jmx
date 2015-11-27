@@ -36,7 +36,7 @@
       <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Users" enabled="true">
         <stringProp name="delimiter"></stringProp>
         <stringProp name="fileEncoding"></stringProp>
-        <stringProp name="filename">D:\users.csv</stringProp>
+        <stringProp name="filename">users.csv</stringProp>
         <boolProp name="quotedData">false</boolProp>
         <boolProp name="recycle">true</boolProp>
         <stringProp name="shareMode">shareMode.all</stringProp>
