@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -15,13 +16,13 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public long QuestionnaireVersion { get; set; }
 
-        public ILiteEvent[] SynchronizedEvents { get; set; }
+        public IEvent[] SynchronizedEvents { get; set; }
 
         public InterviewStatus InterviewStatus { get;  set; }
 
         public bool CreatedOnClient { get; set; }
 
-        public SynchronizeInterviewEventsCommand(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, ILiteEvent[] synchronizedEvents, InterviewStatus interviewStatus, bool createdOnClient)
+        public SynchronizeInterviewEventsCommand(Guid interviewId, Guid userId, Guid questionnaireId, long questionnaireVersion, IEvent[] synchronizedEvents, InterviewStatus interviewStatus, bool createdOnClient)
             : base(interviewId, userId)
         {
             QuestionnaireId = questionnaireId;

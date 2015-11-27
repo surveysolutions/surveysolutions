@@ -8,6 +8,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -17,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
@@ -45,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         protected static IPublishedEvent<T> CreatePublishableEvent<T>(Func<T> eventCreator, Guid? eventSourceId = null)
-            where T: ILiteEvent
+            where T: IEvent
         {
             var publishableEventMock = new Mock<IPublishedEvent<T>>();
 
@@ -77,7 +79,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             };
         }
 
-        protected static void PublishEventsOnOnInterviewExportedDataDenormalizer(List<ILiteEvent> eventsToPublish, InterviewHistoryView interviewHistoryView, InterviewParaDataEventHandler interviewExportedDataDenormalizer)
+        protected static void PublishEventsOnOnInterviewExportedDataDenormalizer(List<IEvent> eventsToPublish, InterviewHistoryView interviewHistoryView, InterviewParaDataEventHandler interviewExportedDataDenormalizer)
         {
             foreach (var eventToPublish in eventsToPublish)
             {

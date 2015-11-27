@@ -11,8 +11,10 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
@@ -63,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         }*/
 
         internal static IPublishedEvent<T> CreatePublishedEvent<T>(Guid questionnaireId, T evnt)
-            where T: ILiteEvent
+            where T: IEvent
         {
             return new PublishedEvent<T>(Create.PublishableEvent(eventSourceId: questionnaireId, payload: evnt));
         }

@@ -123,6 +123,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Supervisor.Controllers;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
@@ -137,7 +138,7 @@ namespace WB.Tests.Unit
             string origin = null,
             DateTime? eventTimeStamp = null,
             Guid? eventId = null)
-            where T : class, ILiteEvent
+            where T : class, IEvent
         {
             var mock = new Mock<IPublishedEvent<T>>();
             var eventIdentifier = eventId ?? Guid.NewGuid();
@@ -1808,7 +1809,7 @@ namespace WB.Tests.Unit
             return headquartersSettingsMock.Object;
         }
 
-        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, ILiteEvent payload = null,
+        public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
             Guid? eventIdentifier = null, int eventSequence = 1)
         {
             return new CommittedEvent(
@@ -1819,7 +1820,7 @@ namespace WB.Tests.Unit
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 0,
-                payload ?? Mock.Of<ILiteEvent>());
+                payload ?? Mock.Of<IEvent>());
         }
 
         public static Synchronizer Synchronizer(IInterviewsSynchronizer interviewsSynchronizer = null)
@@ -2085,9 +2086,9 @@ namespace WB.Tests.Unit
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionaire);
         }
 
-        public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, ILiteEvent payload = null)
+        public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, IEvent payload = null)
         {
-            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<ILiteEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
+            return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<IEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));
         }
 
         public static NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
@@ -2149,7 +2150,7 @@ namespace WB.Tests.Unit
             return new LiteEventBus(eventReg, eventSt);
         }
 
-        public static UncommittedEvent UncommittedEvent(ILiteEvent payload)
+        public static UncommittedEvent UncommittedEvent(IEvent payload)
         {
             return new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, payload);
         }
@@ -2505,7 +2506,7 @@ namespace WB.Tests.Unit
         public static SynchronizeInterviewEventsCommand SynchronizeInterviewEventsCommand()
         {
             return new SynchronizeInterviewEventsCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1,
-                new ILiteEvent[0], InterviewStatus.Completed, true);
+                new IEvent[0], InterviewStatus.Completed, true);
         }
 
         public static User User()

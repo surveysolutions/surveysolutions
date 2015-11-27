@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.Sourcing
@@ -142,7 +143,7 @@ namespace Ncqrs.Eventing.Sourcing
                 throw new EventNotHandledException(evnt);
         }
 
-        internal protected void ApplyEvent(ILiteEvent evnt)
+        internal protected void ApplyEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
         {
             var eventSequence = GetNextSequence();
             var wrappedEvent = new UncommittedEvent(Guid.NewGuid(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt);

@@ -5,6 +5,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Moq.It;
@@ -55,13 +56,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormaliz
         }
 
         protected static IPublishedEvent<T> CreatePublishableEvent<T>(T payload)
-            where T : ILiteEvent
+            where T : IEvent
         {
             return CreatePublishableEvent<T>(payload, Guid.Empty);
         }
 
         protected static IPublishedEvent<T> CreatePublishableEvent<T>(T payload, Guid eventSourceId)
-            where T: ILiteEvent
+            where T: IEvent
         {
             var publishableEventMock = new Mock<IPublishedEvent<T>>();
             publishableEventMock.Setup(x => x.Payload).Returns(payload);

@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         private void HandleUpdateEvent<TEvent>(IPublishedEvent<TEvent> evnt, Func<TEvent, PdfQuestionnaireView, PdfQuestionnaireView> handle)
-            where TEvent : ILiteEvent
+            where TEvent : IEvent
         {
             try
             {

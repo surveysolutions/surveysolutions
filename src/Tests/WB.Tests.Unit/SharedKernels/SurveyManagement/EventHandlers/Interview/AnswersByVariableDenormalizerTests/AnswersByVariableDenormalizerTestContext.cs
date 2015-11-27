@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.A
 {
     internal class AnswersByVariableDenormalizerTestContext
     {
-        protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, int? eventSequence = null, Guid? eventSourceId = null) where T : class, ILiteEvent
+        protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, int? eventSequence = null, Guid? eventSourceId = null) where T : class, IEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent => publishedEvent.Payload == @event
                 && publishedEvent.EventSourceId == (eventSourceId ?? Guid.Parse("33333333333333333333333333333333"))

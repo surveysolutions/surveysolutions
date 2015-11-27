@@ -16,9 +16,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception : NcqrCompatibleEventDispatcherTestContext
     {
-        private class FirstEventHandler : IEventHandler, IEventHandler<ILiteEvent>
+        private class FirstEventHandler : IEventHandler, IEventHandler<IEvent>
         {
-            public void Handle(IPublishedEvent<ILiteEvent> evnt)
+            public void Handle(IPublishedEvent<IEvent> evnt)
             {
                 throw new NotImplementedException();
             }
@@ -48,9 +48,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var uniqueEventHandlerMock = new Mock<IEnumerable<bool>>();
             var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            secondOldSchoolEventHandlerMock = eventHandlerMock.As<IEventHandler<ILiteEvent>>();
+            secondOldSchoolEventHandlerMock = eventHandlerMock.As<IEventHandler<IEvent>>();
             secondOldSchoolEventHandlerMock
-                .Setup(_ => _.Handle(Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()))
+                .Setup(_ => _.Handle(Moq.It.IsAny<IPublishedEvent<IEvent>>()))
                 .Throws<Exception>();;
 
             eventDispatcher.Register(firstEventHandler);
@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         It should_call_2_event_handlers = () =>
             secondOldSchoolEventHandlerMock.Verify(x => x.Handle(
-                Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()),
+                Moq.It.IsAny<IPublishedEvent<IEvent>>()),
                 Times.Once);
 
         It should_log_catched_exception = () =>
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;
         private static AggregateException aggregateException;
-        private static Mock<IEventHandler<ILiteEvent>> secondOldSchoolEventHandlerMock;
+        private static Mock<IEventHandler<IEvent>> secondOldSchoolEventHandlerMock;
         private static EventHandlerException handledNonCriticalEventHandlerException;
         private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
     }

@@ -23,11 +23,11 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             AssemblyContext.SetupServiceLocator();
         }
 
-        public class ADomainEvent : ILiteEvent
+        public class ADomainEvent : IEvent
         {
         }
 
-        public class AEvent : ILiteEvent
+        public class AEvent : IEvent
         {
         }
 
@@ -66,7 +66,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_a_catch_all_handler_is_register_it_should_be_called_for_all_events()
         {
-            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<IEvent>>();
 
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(), new EventBusSettings(), Mock.Of<ILogger>());
             bus.RegisterHandler(catchAllEventHandler);
@@ -101,9 +101,9 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_a_multiple_catch_all_handler_are_registered_for_they_should_all_been_called()
         {
-            var catchAllEventHandler1 = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
-            var catchAllEventHandler2 = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
-            var catchAllEventHandler3 = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
+            var catchAllEventHandler1 = MockRepository.GenerateMock<IEventHandler<IEvent>>();
+            var catchAllEventHandler2 = MockRepository.GenerateMock<IEventHandler<IEvent>>();
+            var catchAllEventHandler3 = MockRepository.GenerateMock<IEventHandler<IEvent>>();
 
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(), new EventBusSettings(), Mock.Of<ILogger>());
             bus.RegisterHandler(catchAllEventHandler1);
@@ -180,7 +180,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
         [Test]
         public void When_multiple_messages_are_published_at_once_they_all_should_be_published()
         {
-            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<IEvent>>();
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(), new EventBusSettings(), Mock.Of<ILogger>());
             bus.RegisterHandler(catchAllEventHandler);
 
@@ -203,7 +203,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             var eventToPublish = Create.PublishableEvent(eventSourceId: eventSourceToIgnore, payload: new AEvent());
             
-            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<ILiteEvent>>();
+            var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<IEvent>>();
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(),
                 new EventBusSettings()
                 {

@@ -3,15 +3,17 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing
 {
     [TestFixture]
     internal class UncommittedEventStreamTests
     {
-        internal class DummyEvent : ILiteEvent { }
+        internal class DummyEvent : IEvent { }
 
         [SetUp]
         public void SetUp()

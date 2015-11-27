@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.EventBus.Lite;
+﻿using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -13,7 +14,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     /// </remarks>
     /// <typeparam name="TEvent">Type of the payload.</typeparam>
     public interface IPublishedEvent<out TEvent> : IPublishableEvent
-        where TEvent : ILiteEvent
+        where TEvent : WB.Core.Infrastructure.EventBus.IEvent
     {        
         /// <summary>
         /// Gets the payload of the event.
