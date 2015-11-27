@@ -1,4 +1,5 @@
 ﻿using Main.Core.Documents;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using PCLStorage;
@@ -36,6 +37,7 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
             SiaqodbConfigurator.AddDocument("Document", typeof(QuestionnaireDocumentView));
             SiaqodbConfigurator.AddDocument("Model", typeof(QuestionnaireModelView));
+            SiaqodbConfigurator.AddText("JsonEvent", typeof(EventView));
 
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
             
@@ -44,6 +46,8 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
+
+            this.Bind<IEventStore>().To<SiaqodbEventStorage>();
 
             this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
 

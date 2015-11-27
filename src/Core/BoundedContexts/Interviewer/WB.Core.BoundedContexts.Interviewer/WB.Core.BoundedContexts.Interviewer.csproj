@@ -134,6 +134,7 @@
     <Compile Include="Implementation\Services\InterviewerQuestionnaireFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
+    <Compile Include="Implementation\Services\SiaqodbEventStorage.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
     <Compile Include="Views\InterviewGpsCoordinatesView.cs" />
     <Compile Include="Views\InterviewGpsLocationView.cs" />
+    <Compile Include="Views\EventView.cs" />
     <Compile Include="Views\InterviewView.cs" />
     <Compile Include="Views\MvvmcrossTroubleshootingViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
