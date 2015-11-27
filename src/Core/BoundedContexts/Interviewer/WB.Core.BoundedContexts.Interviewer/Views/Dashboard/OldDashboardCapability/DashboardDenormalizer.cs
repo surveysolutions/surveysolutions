@@ -127,26 +127,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
                 }
             }
 
-            var interviewView = new InterviewView
+            var storageInterviewId = interviewId.FormatGuid();
+            var interviewView = this.interviewViewRepository.GetById(storageInterviewId) ?? new InterviewView
             {
-                Id = interviewId.FormatGuid(),
+                Id = storageInterviewId,
                 InterviewId = interviewId,
                 ResponsibleId = responsibleId,
-                QuestionnaireIdentity = questionnaireIdentity,
-                Status = status,
-                AnswersOnPrefilledQuestions = prefilledQuestions.ToArray(),
+                QuestionnaireId = questionnaireIdentity.ToString(),
                 Census = createdOnClient,
-                StartedDateTime = startedDateTime,
-                InterviewerAssignedDateTime = assignedDateTime,
-                RejectedDateTime = rejectedDateTime,
-                CanBeDeleted = canBeDeleted,
-                LastInterviewerOrSupervisorComment = comments,
                 GpsLocation = new InterviewGpsLocationView
                 {
-                    PrefilledQuestionId = prefilledGpsQuestionId,
-                    Coordinates = gpsCoordinates
+                    PrefilledQuestionId = prefilledGpsQuestionId
                 }
             };
+
+            interviewView.Status = status;
+            interviewView.AnswersOnPrefilledQuestions = prefilledQuestions.ToArray();
+            interviewView.StartedDateTime = startedDateTime;
+            interviewView.InterviewerAssignedDateTime = assignedDateTime;
+            interviewView.RejectedDateTime = rejectedDateTime;
+            interviewView.CanBeDeleted = canBeDeleted;
+            interviewView.LastInterviewerOrSupervisorComment = comments;
+            interviewView.GpsLocation.Coordinates = gpsCoordinates;
+            
             await this.interviewViewRepository.StoreAsync(interviewView);
         }
 
@@ -291,7 +294,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapabi
 
                 if (prefilledQuestion != null)
                 {
-                    var questionnaire = this.questionnaireDocumentViewRepository.GetById(interviewView.QuestionnaireIdentity.ToString());
+                    var questionnaire = this.questionnaireDocumentViewRepository.GetById(interviewView.QuestionnaireId);
                     var questionnairePrefilledQuestion = questionnaire.Document.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
                     prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
