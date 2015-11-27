@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -13,7 +11,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class InterviewerCompleteInterviewViewModel : CompleteInterviewViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        readonly IChangeLogManipulator changeLogManipulator;
            
         public InterviewerCompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -21,12 +18,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IMvxMessenger messenger, 
             IStatefulInterviewRepository interviewRepository,
-            InterviewStateViewModel interviewState, 
-            IChangeLogManipulator changeLogManipulator)
+            InterviewStateViewModel interviewState)
             : base(viewModelNavigationService, commandService, principal, messenger, interviewState)
         {
             this.interviewRepository = interviewRepository;
-            this.changeLogManipulator = changeLogManipulator;
         }
 
         public override void Init(string interviewId)
@@ -35,12 +30,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
             this.CompleteComment = statefulInterview.InterviewerCompleteComment;
-        }
-
-        protected override async Task CloseInterviewAsync()
-        {
-            this.changeLogManipulator.CloseDraftRecord(interviewId, principal.CurrentUserIdentity.UserId);
-            await base.CloseInterviewAsync();
         }
     }
 }

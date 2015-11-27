@@ -177,4 +177,13 @@
   <data name="EmptyDevice" xml:space="preserve">
     <value>&lt;b&gt;[EMPTY DEVICE]&lt;/b&gt;</value>
   </data>
+  <data name="GetInterview" xml:space="preserve">
+    <value>Download interview: &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="GetInterviews" xml:space="preserve">
+    <value>Download list of interviews. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+  </data>
+  <data name="InterviewProcessed" xml:space="preserve">
+    <value>&lt;font color="green"'&gt;Interview &lt;b&gt;{0}&lt;/b&gt; successfully processed&lt;/font&gt;</value>
+  </data>
 </root>

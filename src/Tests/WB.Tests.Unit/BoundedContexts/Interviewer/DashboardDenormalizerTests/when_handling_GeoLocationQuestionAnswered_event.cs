@@ -1,7 +1,7 @@
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         It should_set_GPS_location_longitude_to_answered_value = () =>
             dashboardItem.GpsLocationLongitude.ShouldEqual(answerLongitude);
 
-        private static DashboardDenormalizer denormalizer;
+        private static InterviewEventHandler denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> @event;
         private static QuestionnaireDTO dashboardItem;
         private static double answerLatitude = 10;

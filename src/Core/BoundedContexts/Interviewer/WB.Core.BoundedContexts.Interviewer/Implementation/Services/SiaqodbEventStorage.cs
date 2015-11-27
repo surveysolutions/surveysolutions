@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 EventSourceId = evt.EventSourceId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = this.serializer.Serialize(evt.Payload)
+                JsonEvent = this.serializer.Serialize(evt.Payload, TypeSerializationSettings.AllTypes)
             };
         }
 

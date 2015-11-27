@@ -1,11 +1,13 @@
 using System;
-using WB.UI.Interviewer.Implementations.DenormalizerStorage;
+using Cirrious.MvvmCross.Plugins.Sqlite;
 
 namespace WB.UI.Interviewer.ViewModel.Dashboard
 {
     [Obsolete]
-    public class SurveyDto : DenormalizerRow
+    public class SurveyDto
     {
+        [PrimaryKey]
+        public string Id { get; set; }
         public string SurveyTitle { get; set; }
         public string QuestionnaireId { get; set; }
 

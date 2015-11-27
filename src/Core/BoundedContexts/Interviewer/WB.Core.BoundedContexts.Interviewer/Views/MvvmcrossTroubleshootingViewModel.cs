@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -24,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private readonly IInterviewerApplicationUpdater updater;
-        private readonly IBackup backupManager;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICapiInformationService capiInformationService;
@@ -37,7 +35,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISynchronizationService synchronizationService, 
             ILogger logger, 
             IInterviewerApplicationUpdater updater, 
-            IBackup backupManager, 
             IFileSystemAccessor fileSystemAccessor, 
             ICapiInformationService capiInformationService)
         {
@@ -48,7 +45,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.updater = updater;
-            this.backupManager = backupManager;
             this.fileSystemAccessor = fileSystemAccessor;
             this.capiInformationService = capiInformationService;
         }
@@ -94,17 +90,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.checkNewVersionCommand ?? (this.checkNewVersionCommand = new MvxCommand(async () => await this.CheckNewVersion(), () => !IsInProgress)); }
         }
 
-        private IMvxCommand backupCommand;
-        public IMvxCommand BackupCommand
-        {
-            get { return this.backupCommand ?? (this.backupCommand = new MvxCommand(async () => await this.Backup(), () => !IsInProgress)); }
-        }
+        //private IMvxCommand backupCommand;
+        //public IMvxCommand BackupCommand
+        //{
+        //    get { return this.backupCommand ?? (this.backupCommand = new MvxCommand(async () => await this.Backup(), () => !IsInProgress)); }
+        //}
 
-        private IMvxCommand restoreCommand;
-        public IMvxCommand RestoreCommand
-        {
-            get { return this.restoreCommand ?? (this.restoreCommand = new MvxCommand(async () => await this.Restore(), () => !IsInProgress)); }
-        }
+        //private IMvxCommand restoreCommand;
+        //public IMvxCommand RestoreCommand
+        //{
+        //    get { return this.restoreCommand ?? (this.restoreCommand = new MvxCommand(async () => await this.Restore(), () => !IsInProgress)); }
+        //}
 
         private IMvxCommand sendTabletInformationCommand;
         public IMvxCommand SendTabletInformationCommand
@@ -112,59 +108,59 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.sendTabletInformationCommand ?? (this.sendTabletInformationCommand = new MvxCommand(async () => await this.SendTabletInformation(), () => !IsInProgress)); }
         }
 
-        private async Task Backup()
-        {
-            IsInProgress = true;
+        //private async Task Backup()
+        //{
+        //    IsInProgress = true;
 
-            string path = string.Empty;
-            try
-            {
-                path = this.backupManager.Backup();
-            }
-            catch (Exception exception)
-            {
-                logger.Error("Error occured during Backup. ", exception);
-            }
+        //    string path = string.Empty;
+        //    try
+        //    {
+        //        path = this.backupManager.Backup();
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        logger.Error("Error occured during Backup. ", exception);
+        //    }
            
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_BackupErrorMessage);
-            }
-            else
-            {
-                await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.Troubleshooting_BackupWasSaved, path));
-            }
+        //    if (string.IsNullOrWhiteSpace(path))
+        //    {
+        //        await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_BackupErrorMessage);
+        //    }
+        //    else
+        //    {
+        //        await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.Troubleshooting_BackupWasSaved, path));
+        //    }
 
-            IsInProgress = false;
-        }
+        //    IsInProgress = false;
+        //}
 
-        private async Task Restore()
-        {
-            var shouldWeProceedRestore = await userInteractionService.ConfirmAsync(
-                string.Format(InterviewerUIResources.Troubleshooting_RestoreConfirmation, this.backupManager.RestorePath));
+        //private async Task Restore()
+        //{
+        //    var shouldWeProceedRestore = await userInteractionService.ConfirmAsync(
+        //        string.Format(InterviewerUIResources.Troubleshooting_RestoreConfirmation, this.backupManager.RestorePath));
 
-            if (!shouldWeProceedRestore) return;
-            var wasErrorHappened = false;
-            IsInProgress = true;
-            try
-            {
-                this.backupManager.Restore();
+        //    if (!shouldWeProceedRestore) return;
+        //    var wasErrorHappened = false;
+        //    IsInProgress = true;
+        //    try
+        //    {
+        //        this.backupManager.Restore();
 
-                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
-            }
-            catch (Exception exception)
-            {
-                logger.Error("Error occured during Restore. ", exception);
-                wasErrorHappened = true;
+        //        await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        logger.Error("Error occured during Restore. ", exception);
+        //        wasErrorHappened = true;
                 
-            }
-            if (wasErrorHappened)
-            {
-                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestorationErrorMessage);
-            }
+        //    }
+        //    if (wasErrorHappened)
+        //    {
+        //        await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestorationErrorMessage);
+        //    }
 
-            IsInProgress = false;
-        }
+        //    IsInProgress = false;
+        //}
 
         private async Task CheckNewVersion()
         {
