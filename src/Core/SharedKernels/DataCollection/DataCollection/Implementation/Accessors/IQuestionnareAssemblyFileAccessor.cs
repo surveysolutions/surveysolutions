@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
 {
@@ -10,7 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Accessors
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64);
         void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly);
 
+        Task StoreAssemblyAsync(QuestionnaireIdentity  questionnaireIdentity, byte[] assembly);
+
         void RemoveAssembly(Guid questionnaireId, long questionnaireVersion);
+
+        Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity);
 
         string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion);
 

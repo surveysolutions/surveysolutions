@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.ChangeLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -29,13 +30,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
-        private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
         
         private readonly ICapiDataSynchronizationService capiDataSynchronizationService;
         private readonly IInterviewPackageIdsStorage interviewPackageIdsStorage;
         private readonly ICapiCleanUpService capiCleanUpService;
-        private readonly ISerializer serializer;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
@@ -44,51 +42,39 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
         private readonly IPrincipal principal;
-        private readonly IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
         private CancellationTokenSource synchronizationCancellationTokenSource;
         private IMvxMessenger messenger;
+        private readonly IInterviewerQuestionnaireFactory questionnaireFactory;
 
         public SynchronizationViewModel(
             ISynchronizationService synchronizationService,
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
-            IQuestionnaireModelBuilder questionnaireModelBuilder,
-            IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository,
+            IAsyncPlainStorage<InterviewView> interviewViewRepository,
             ICapiDataSynchronizationService capiDataSynchronizationService,
             IInterviewPackageIdsStorage interviewPackageIdsStorage,
             ICapiCleanUpService capiCleanUpService,
-            ISerializer serializer,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ILogger logger,
             IUserInteractionService userInteractionService, 
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             IPasswordHasher passwordHasher,
             IPrincipal principal,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
-            IAsyncPlainStorage<InterviewView> interviewViewRepository,
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository,
-            IMvxMessenger messenger)
+            IMvxMessenger messenger,
+            IInterviewerQuestionnaireFactory questionnaireFactory)
         {
             this.synchronizationService = synchronizationService;
-            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-            this.questionnaireModelBuilder = questionnaireModelBuilder;
-            this.questionnaireModelViewRepository = questionnaireModelViewRepository;
             this.capiDataSynchronizationService = capiDataSynchronizationService;
             this.interviewPackageIdsStorage = interviewPackageIdsStorage;
             this.capiCleanUpService = capiCleanUpService;
-            this.serializer = serializer;
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.logger = logger;
             this.principal = principal;
             this.userInteractionService = userInteractionService;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;
-            this.questionnaireViewRepository = questionnaireViewRepository;
             this.interviewViewRepository = interviewViewRepository;
-            this.questionnaireDocumentRepository = questionnaireDocumentRepository;;
             this.messenger = messenger;
+            this.questionnaireFactory = questionnaireFactory;
 
             this.restCredentials = new RestCredentials()
             {
@@ -97,8 +83,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             };
         }
 
-        private RestCredentials restCredentials;
-        private CancellationToken Token { get { return this.synchronizationCancellationTokenSource.Token; } }
+        private readonly RestCredentials restCredentials;
+        private CancellationToken Token => this.synchronizationCancellationTokenSource.Token;
 
         private SychronizationStatistics statistics;
         public SychronizationStatistics Statistics { get { return statistics; } set { statistics = value; this.RaisePropertyChanged(); } }
@@ -151,10 +137,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.processOperationDescription = value; this.RaisePropertyChanged(); }
         }
 
-        public IMvxCommand CancelSynchronizationCommand
-        {
-            get { return new MvxCommand(this.CancelSynchronizaion); }
-        }
+        public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
 
         bool shouldUpdatePasswordOfInterviewer;
         public async Task SynchronizeAsync()
@@ -273,17 +256,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(this.Token);
 
-            var localCensusQuestionnaireIdentities = this.questionnaireViewRepository.Query(
-                questionnaires => questionnaires.Where(questionnaire => questionnaire.Census)
-                    .Select(questionnaire => questionnaire.Identity)
-                    .ToList());
+            var localCensusQuestionnaireIdentities = this.questionnaireFactory.GetCensusQuestionnaireIdentities();
 
             var notExistingRemoteCensusQuestionnaireIdentities = localCensusQuestionnaireIdentities.Where(
                     questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
             foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
             {
                 await this.DeleteInterviewsByQuestionnaireAsync(censusQuestionnaireIdentity);
-                await this.DeleteQuestionnaireAsync(censusQuestionnaireIdentity);
+                await this.questionnaireFactory.RemoveQuestionnaireAsync(censusQuestionnaireIdentity);
             }
 
             var processedQuestionnaires = 0;
@@ -320,26 +300,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            if (!this.questionnaireAssemblyFileAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version))
+            if (!this.questionnaireFactory.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 
-                this.questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId,
-                    questionnaireIdentity.Version, questionnaireAssembly);
+                await this.questionnaireFactory.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
             
-            if (this.questionnaireViewRepository.GetById(questionnaireIdentity.ToString()) == null)
+            if (!this.questionnaireFactory.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 
-                await this.SaveQuestionnaireAsync(questionnaireIdentity, questionnaireApiView);
+                await this.questionnaireFactory.StoreQuestionnaireAsync(questionnaireIdentity,
+                    questionnaireApiView.QuestionnaireDocument, questionnaireApiView.AllowCensus);
+
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
         }
@@ -436,19 +417,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             });
         }
 
-        private async Task DeleteQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)
-        {
-            await this.questionnaireDocumentRepository.RemoveAsync(questionnaireIdentity.ToString());
-            await this.questionnaireModelViewRepository.RemoveAsync(questionnaireIdentity.ToString());
-            await this.questionnaireViewRepository.RemoveAsync(questionnaireIdentity.ToString());
-
-            await Task.Run(() =>
-            {
-                this.questionnaireAssemblyFileAccessor.RemoveAssembly(questionnaireIdentity.QuestionnaireId,
-                    questionnaireIdentity.Version);
-            });
-        }
-
         private async Task SaveInterviewAsync(InterviewSyncPackageDto package, SynchronizationChunkMeta synchronizationChunkMeta)
         {
             await Task.Run(() =>
@@ -464,33 +432,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.capiCleanUpService.DeleteInterview(chunckDescription.EventSourceId);
             });
-        }
-
-        private async Task SaveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, QuestionnaireApiView questionnaireApiView)
-        {
-            var questionnaireDocumentView = new QuestionnaireDocumentView
-            {
-                Id = questionnaireIdentity.ToString(),
-                Document = this.serializer.Deserialize<QuestionnaireDocument>(questionnaireApiView.QuestionnaireDocument)
-            };
-            
-            var questionnaireView = new QuestionnaireView
-            {
-                Id = questionnaireIdentity.ToString(),
-                Identity = questionnaireIdentity,
-                Census = questionnaireApiView.AllowCensus,
-                Title = questionnaireDocumentView.Document.Title
-            };
-            
-            var questionnaireModelView = new QuestionnaireModelView
-            {
-                Model = this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document),
-                Id = questionnaireIdentity.ToString()
-            };
-
-            await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);
-            await this.questionnaireViewRepository.StoreAsync(questionnaireView);
-            await this.questionnaireModelViewRepository.StoreAsync(questionnaireModelView);
         }
 
         public void CancelSynchronizaion()
