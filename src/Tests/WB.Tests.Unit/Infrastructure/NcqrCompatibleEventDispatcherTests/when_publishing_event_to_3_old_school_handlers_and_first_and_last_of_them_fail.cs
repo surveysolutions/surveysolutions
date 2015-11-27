@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             publishableEvent = Create.PublishableEvent();
 
             var secondEventHandlerMock = new Mock<IEventHandler>();
-            secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<ILiteEvent>>();
+            secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();
 
             eventDispatcher = Create.NcqrCompatibleEventDispatcher();
             eventDispatcher.Register(Setup.FailingOldSchoolEventHandlerHavingUniqueType<int>());
@@ -40,12 +40,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         It should_call_second_event_handler = () =>
             secondOldSchoolEventHandlerMock.Verify(x => x.Handle(
-                Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()),
+                Moq.It.IsAny<IPublishedEvent<IEvent>>()),
                 Times.Once());
 
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;
         private static AggregateException aggregateException;
-        private static Mock<IEventHandler<ILiteEvent>> secondOldSchoolEventHandlerMock;
+        private static Mock<IEventHandler<IEvent>> secondOldSchoolEventHandlerMock;
     }
 }

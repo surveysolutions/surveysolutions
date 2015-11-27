@@ -9,8 +9,10 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormalizerTests
@@ -30,13 +32,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
                             _ => _.GetById(It.IsAny<string>()) == new AccountDocument() { UserName = "nastya" }));
         }
 
-        protected static CommittedEvent CreateCommittedEvent(ILiteEvent payload, Guid eventSourceId, DateTime eventTimeStamp)
+        protected static CommittedEvent CreateCommittedEvent(IEvent payload, Guid eventSourceId, DateTime eventTimeStamp)
         {
             return new CommittedEvent(Guid.NewGuid(), "", Guid.NewGuid(), eventSourceId, 1, eventTimeStamp, 0, payload);
         }
 
         protected static IPublishedEvent<T> CreatePublishedEvent<T>(Guid eventSourceId,T payload, DateTime? timeStamp=null)
-            where T: ILiteEvent
+            where T: IEvent
         {
             var mock = new Mock<IPublishedEvent<T>>();
             mock.Setup(x => x.Payload).Returns(payload);

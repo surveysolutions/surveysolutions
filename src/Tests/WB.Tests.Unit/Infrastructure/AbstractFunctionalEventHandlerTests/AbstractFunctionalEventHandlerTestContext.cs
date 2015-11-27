@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
             return Mock.Of<IReadSideRepositoryEntity>();
         }
 
-        protected static IPublishableEvent CreatePublishableEvent(ILiteEvent payload =null)
+        protected static IPublishableEvent CreatePublishableEvent(IEvent payload =null)
         {
             return Create.PublishableEvent(payload: payload ?? new TestableFunctionalEvent()); 
         }

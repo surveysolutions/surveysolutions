@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         Establish context = () =>
         {
-            statusEvents = new List<ILiteEvent>();
+            statusEvents = new List<IEvent>();
             statusEvents.Add(new InterviewerAssigned(interviewId, Guid.NewGuid(), DateTime.Now));
             statusEvents.Add(new InterviewCompleted(Guid.NewGuid(), DateTime.Now, "comment"));
             statusEvents.Add(new InterviewRestarted(Guid.NewGuid(), DateTime.Now,"rest"));
@@ -73,6 +74,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();
         private static InterviewHistoryView interviewHistoryView;
-        private static List<ILiteEvent> statusEvents;
+        private static List<IEvent> statusEvents;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -7,7 +8,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
 {
-    internal class TestableFunctionalEvent : ILiteEvent { }
+    internal class TestableFunctionalEvent : IEvent { }
 
     internal class TestableFunctionalEventHandler : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IUpdateHandler<IReadSideRepositoryEntity, TestableFunctionalEvent>
     {

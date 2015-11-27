@@ -72,7 +72,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         }
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
-            where TEvent: ILiteEvent
+            where TEvent: WB.Core.Infrastructure.EventBus.IEvent
         {
             var eventDataType = typeof(TEvent);
             var eventHandlerType = handler.GetType();

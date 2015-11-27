@@ -1,11 +1,12 @@
 ﻿using System;
 using Main.Core.Documents;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.Questionnaire
 {
-    public class TemplateImported : ILiteEvent
+    public class TemplateImported : IEvent
     {
         public QuestionnaireDocument Source { get; set; }
         public bool AllowCensusMode { get; set; }

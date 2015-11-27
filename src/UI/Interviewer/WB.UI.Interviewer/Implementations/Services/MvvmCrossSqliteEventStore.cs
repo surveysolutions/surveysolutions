@@ -8,8 +8,10 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using WB.Core.Infrastructure.Backup;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.WriteSide;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
@@ -120,7 +122,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             return new StoredEvent(evt.CommitId, evt.Origin, evt.EventIdentifier, evt.EventSequence, evt.EventTimeStamp, evt.Payload);
         }
 
-        private static ILiteEvent GetObject(string json)
+        private static IEvent GetObject(string json)
         {
             var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
             foreach (var type in new[] { "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked", "UserUnlockedBySupervisor" })
@@ -136,7 +138,7 @@ namespace WB.UI.Interviewer.Implementations.Services
                     TypeNameHandling = TypeNameHandling.All,
                     NullValueHandling = NullValueHandling.Ignore,
                     FloatParseHandling = FloatParseHandling.Decimal
-                }) as ILiteEvent;
+                }) as IEvent;
         }
     }
 }

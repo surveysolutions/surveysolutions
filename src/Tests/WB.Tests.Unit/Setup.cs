@@ -98,9 +98,9 @@ namespace WB.Tests.Unit
         {
             var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
             var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<ILiteEvent>>();
+            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<IEvent>>();
             eventHandlerAsOldSchool
-                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<ILiteEvent>>()))
+                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<IEvent>>()))
                 .Throws<Exception>();
 
             return eventHandlerMock.Object;

@@ -1,9 +1,10 @@
 ﻿using System;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.Synchronization.Events.Sync
 {   
-    public class HandshakeRequested : ILiteEvent
+    public class HandshakeRequested : IEvent
     {
         public HandshakeRequested(Guid userId, string appVersion)
         {
@@ -16,7 +17,7 @@ namespace WB.Core.Synchronization.Events.Sync
         public string AppVersion { get; set; }
     }
 
-    public class PackageRequested : ILiteEvent
+    public class PackageRequested : IEvent
     {
         public PackageRequested(Guid userId, string packageType, string packageId)
         {
@@ -32,7 +33,7 @@ namespace WB.Core.Synchronization.Events.Sync
         public string PackageId { get; set; }
     }
 
-    public class PackageIdsRequested : ILiteEvent
+    public class PackageIdsRequested : IEvent
     {
         public PackageIdsRequested(Guid userId, string packageType, string lastSyncedPackageId, string[] updateFromLastPakage)
         {
@@ -51,7 +52,7 @@ namespace WB.Core.Synchronization.Events.Sync
         public string[] UpdateFromLastPakage { get; set; }
     }
 
-    public class UserLinkedFromDevice : ILiteEvent
+    public class UserLinkedFromDevice : IEvent
     {
         public UserLinkedFromDevice(Guid userId)
         {
@@ -61,7 +62,7 @@ namespace WB.Core.Synchronization.Events.Sync
         public Guid UserId { get; set; }
     }
 
-    public class UserLinkingRequested : ILiteEvent
+    public class UserLinkingRequested : IEvent
     {
         public UserLinkingRequested(Guid userId)
         {
@@ -71,7 +72,7 @@ namespace WB.Core.Synchronization.Events.Sync
         public Guid UserId { get; set; }
     }
 
-    public class TabletRegistered : ILiteEvent
+    public class TabletRegistered : IEvent
     {
         public TabletRegistered(string androidId, string appVersion)
         {

@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.User;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.UserDenorma
                 users ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>());
         }
 
-        protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId) where T : class, ILiteEvent
+        protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId) where T : class, IEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event

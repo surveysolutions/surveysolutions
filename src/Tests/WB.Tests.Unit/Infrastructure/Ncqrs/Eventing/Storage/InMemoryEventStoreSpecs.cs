@@ -8,15 +8,17 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using NUnit.Framework;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {
     [TestFixture]
     internal class InMemoryEventStoreSpecs
     {
-        internal class DummyEvent : ILiteEvent { }
+        internal class DummyEvent : IEvent { }
 
         [SetUp]
         public void SetUp()

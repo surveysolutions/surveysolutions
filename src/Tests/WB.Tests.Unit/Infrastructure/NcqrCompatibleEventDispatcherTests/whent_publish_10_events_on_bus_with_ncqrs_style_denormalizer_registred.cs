@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         Establish context = () =>
         {
             var ncqrsStyleDenormalizerMock = new Mock<IEventHandler>();
-            ncqrsStyleEventHandlerMock = ncqrsStyleDenormalizerMock.As<IEventHandler<ILiteEvent>>();
+            ncqrsStyleEventHandlerMock = ncqrsStyleDenormalizerMock.As<IEventHandler<IEvent>>();
 
             ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher();
             ncqrCompatibleEventDispatcher.Register(ncqrsStyleDenormalizerMock.Object);
@@ -23,9 +23,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         Because of = () => ncqrCompatibleEventDispatcher.Publish(CreatePublishableEvents(10));
 
         It should_regitred_denormalizer_method_handle_be_called_10_times = () =>
-            ncqrsStyleEventHandlerMock.Verify(x => x.Handle(Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()), Times.Exactly(10));
+            ncqrsStyleEventHandlerMock.Verify(x => x.Handle(Moq.It.IsAny<IPublishedEvent<IEvent>>()), Times.Exactly(10));
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;
-        private static Mock<IEventHandler<ILiteEvent>> ncqrsStyleEventHandlerMock;
+        private static Mock<IEventHandler<IEvent>> ncqrsStyleEventHandlerMock;
     }
 }

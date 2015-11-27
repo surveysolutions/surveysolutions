@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -998,7 +999,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             replacementIdDictionary[sourceGroup.PublicKey] = groupId;
 
-            var events = new List<ILiteEvent>();
+            var events = new List<IEvent>();
 
             this.FillGroup(
                 parentGroupId: parentGroupId, 
@@ -1013,7 +1014,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             events.ForEach(this.ApplyEvent);
         }
 
-        private void FillGroup(Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, bool preserveVariableName, Dictionary<Guid, Guid> replacementIdDictionary, List<ILiteEvent> events)
+        private void FillGroup(Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, bool preserveVariableName, Dictionary<Guid, Guid> replacementIdDictionary, List<IEvent> events)
         {
            var groupId = replacementIdDictionary.ContainsKey(sourceGroup.PublicKey) ? replacementIdDictionary[sourceGroup.PublicKey] : Guid.NewGuid();
 
@@ -2348,7 +2349,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
                 replacementIdDictionary[entityToInsert.PublicKey] = pasteItemId;
 
-                var events = new List<ILiteEvent>();
+                var events = new List<IEvent>();
 
                 this.FillGroup(
                     parentGroupId: targetToPasteIn == null ? (Guid?) null : targetToPasteIn.PublicKey,
@@ -4054,7 +4055,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Create clone events
 
-        private IEnumerable<ILiteEvent> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
+        private IEnumerable<IEvent> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions,
             string mask, Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
         {
@@ -4091,7 +4092,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             );
         }
 
-        private IEnumerable<ILiteEvent> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
+        private IEnumerable<IEvent> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId,
             Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital)
         {
@@ -4128,7 +4129,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             );
         }
 
-        private IEnumerable<ILiteEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
+        private IEnumerable<IEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
         {
@@ -4165,7 +4166,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 countOfDecimalPlaces: null);
         }
 
-        private IEnumerable<ILiteEvent> CreateCategoricalMultiAnswersQuestionClonedEvents(
+        private IEnumerable<IEvent> CreateCategoricalMultiAnswersQuestionClonedEvents(
             Guid questionId, 
             string title, 
             string variableName, 
@@ -4219,7 +4220,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 countOfDecimalPlaces: null);
         }
 
-        private IEnumerable<ILiteEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
+        private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, Option[] options, 
             Guid? linkedToQuestionId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
@@ -4256,7 +4257,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 countOfDecimalPlaces: null);
         }
 
-        private IEnumerable<ILiteEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
+        private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, 
             Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
@@ -4283,7 +4284,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             );
         }
 
-        private IEnumerable<ILiteEvent> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, 
+        private IEnumerable<IEvent> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, 
             string variableLabel, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
             Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, int? maxAnswerCount)
         {
@@ -4307,7 +4308,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<ILiteEvent> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
+        private IEnumerable<IEvent> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId,
             int targetIndex, QuestionScope scope, Guid responsibleId)
         {
@@ -4330,7 +4331,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<ILiteEvent> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
+        private IEnumerable<IEvent> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
             string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope)
         {
             yield return
@@ -4378,7 +4379,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 };
         }
 
-        public IEnumerable<ILiteEvent> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
+        public IEnumerable<IEvent> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
             Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
             RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Guid? sourceQuestionnaireId)
         {

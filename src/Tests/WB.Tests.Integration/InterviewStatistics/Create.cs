@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -10,7 +11,7 @@ namespace WB.Tests.Integration.InterviewStatistics
     internal static class Create
     {
         private static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId, DateTime date)
-            where T : class, ILiteEvent
+            where T : class, IEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event 
