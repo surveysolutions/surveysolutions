@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return expression;
 
             var resultExpression = expression;
-            foreach (var macro in macros)
+            foreach (var macro in macros.OrderByDescending(x => x.Name))
             {
                 resultExpression = resultExpression.Replace("$" + macro.Name, macro.Content);
             }
