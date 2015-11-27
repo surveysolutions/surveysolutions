@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
@@ -25,13 +27,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly IExportViewFactory exportViewFactory;
+        private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
 
         public InterviewsExporter(ITransactionManager transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
             IFileSystemAccessor fileSystemAccessor, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
-            IExportViewFactory exportViewFactory, 
+            IExportViewFactory exportViewFactory,
+            InterviewDataExportSettings interviewDataExportSettings,
             ICsvWriter csvWriter)
         {
             this.transactionManager = transactionManager;
@@ -39,47 +43,67 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewDatas = interviewDatas;
             this.exportViewFactory = exportViewFactory;
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
         }
 
         public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure,
-            string basePath, IProgress<int> progress)
+            string basePath, 
+            IProgress<int> progress)
         {
-            List<Guid> interviewIdsToExport =
-             this.transactionManager.ExecuteInQueryTransaction(() =>
-                 this.interviewSummaries.Query(_ =>
-                         _.Where(x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
-                                      x.QuestionnaireVersion == questionnaireExportStructure.Version &&
-                                      !x.IsDeleted)
-                             .OrderBy(x => x.InterviewId)
-                             .Select(x => x.InterviewId).ToList()));
-            DoExport(questionnaireExportStructure, basePath, progress, interviewIdsToExport);
+            Expression<Func<InterviewSummary, bool>> expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
+                                         x.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                                         !x.IsDeleted;
+
+            this.Export(questionnaireExportStructure, basePath, progress, expression);
         }
 
         public void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure,
             string basePath, 
             IProgress<int> progress)
         {
-            List<Guid> interviewIdsToExport =
-               this.transactionManager.ExecuteInQueryTransaction(() =>
-                   this.interviewSummaries.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId && 
-                                                                   x.QuestionnaireVersion == questionnaireExportStructure.Version &&
-                                                                   !x.IsDeleted)
-                                               .Where(x => x.Status == InterviewStatus.ApprovedByHeadquarters)
-                                               .OrderBy(x => x.InterviewId)
-                                               .Select(x => x.InterviewId).ToList()));
+            Expression<Func<InterviewSummary, bool>> expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId && 
+                                         x.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                                         !x.IsDeleted &&
+                                         x.Status == InterviewStatus.ApprovedByHeadquarters;
 
-            DoExport(questionnaireExportStructure, basePath, progress, interviewIdsToExport);
+            this.Export(questionnaireExportStructure, basePath, progress, expression);
+        }
+
+        private void Export(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress,
+            Expression<Func<InterviewSummary, bool>> expression)
+        {
+            int totalInterviewsToExport =
+                this.transactionManager.ExecuteInQueryTransaction(() => this.interviewSummaries.Query(_ => _.Count(expression)));
+
+            int processedCount = 0;
+            while (processedCount < totalInterviewsToExport)
+            {
+                var localProcessedCount = processedCount;
+                List<Guid> interviewIdsToExport = this.transactionManager.ExecuteInQueryTransaction(() =>
+                    this.interviewSummaries.Query(_ => _
+                        .Where(expression)
+                        .OrderBy(x => x.InterviewId)
+                        .Select(x => x.InterviewId)
+                        .Skip(localProcessedCount)
+                        .Take(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery)
+                        .ToList()));
+                if (interviewIdsToExport.Count == 0)
+                    break;
+
+                this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport);
+                processedCount += interviewIdsToExport.Count;
+                progress.Report(processedCount.PercentOf(totalInterviewsToExport));
+            }
         }
 
         private void DoExport(QuestionnaireExportStructure questionnaireExportStructure, 
             string basePath, 
-            IProgress<int> progress, 
             List<Guid> interviewIdsToExport)
         {
             
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress);
+            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -117,8 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void ExportInterviews(List<Guid> interviewIdsToExport,
                                       string basePath,
-                                      QuestionnaireExportStructure questionnaireExportStructure,
-                                      IProgress<int> progress)
+                                      QuestionnaireExportStructure questionnaireExportStructure)
         {
             int totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
@@ -158,10 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
 
                 totalInterviewsProcessed++;
-                progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
-
-            progress.Report(100);
         }
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
