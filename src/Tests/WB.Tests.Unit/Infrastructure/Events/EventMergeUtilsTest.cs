@@ -6,14 +6,16 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.Infrastructure.Events
 {
     [TestFixture]
     internal class EventMergeUtilsTest
     {
-        internal class DummyEvent : ILiteEvent { }
+        internal class DummyEvent : IEvent { }
 
         [SetUp]
         public void SetUp()

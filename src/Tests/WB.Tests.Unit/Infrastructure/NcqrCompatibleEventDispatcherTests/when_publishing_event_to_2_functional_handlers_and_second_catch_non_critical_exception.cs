@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception : NcqrCompatibleEventDispatcherTestContext
     {
-        private class FunctionalEventHandlerEvent : ILiteEvent { }
+        private class FunctionalEventHandlerEvent : IEvent { }
 
         private class FunctionalEventHandler :
             AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideStorage<IReadSideRepositoryEntity>>,

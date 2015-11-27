@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -166,7 +167,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         protected IPublishedEvent<T> CreatePublishableEvent<T>(T payload)
-            where T: ILiteEvent
+            where T: IEvent
         {
             var publishableEventMock = new Mock<IPublishedEvent<T>>();
             publishableEventMock.Setup(x => x.Payload).Returns(payload);

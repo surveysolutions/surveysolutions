@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -60,6 +61,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static Interview interview;
 
-        private static ILiteEvent[] eventsToPublish = new ILiteEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+        private static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
     }
 }

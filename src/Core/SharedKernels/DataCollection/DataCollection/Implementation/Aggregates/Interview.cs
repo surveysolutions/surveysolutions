@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -1547,7 +1548,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
             this.ApplyEvent(isInterviewInvalid
-                ? new InterviewDeclaredInvalid() as ILiteEvent
+                ? new InterviewDeclaredInvalid() as IEvent
                 : new InterviewDeclaredValid());
         }
 
@@ -1734,22 +1735,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     case QuestionType.Numeric:
                         this.ApplyEvent(questionnaire.IsQuestionInteger(questionId)
-                            ? new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, Convert.ToInt32(answer)) as ILiteEvent
-                            : new NumericRealQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as ILiteEvent);
+                            ? new NumericIntegerQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, Convert.ToInt32(answer)) as IEvent
+                            : new NumericRealQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as IEvent);
                         break;
 
                     case QuestionType.SingleOption:
                         this.ApplyEvent(questionnaire.IsQuestionLinked(questionId)
-                            ? new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[])answer) as ILiteEvent
-                            : new SingleOptionQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as ILiteEvent);
+                            ? new SingleOptionLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[])answer) as IEvent
+                            : new SingleOptionQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal)answer) as IEvent);
                         break;
 
                     case QuestionType.MultyOption:
                         this.ApplyEvent(questionnaire.IsQuestionLinked(questionId)
-                            ? new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[][])answer) as ILiteEvent
+                            ? new MultipleOptionsLinkedQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[][])answer) as IEvent
                             : questionnaire.IsQuestionYesNo(questionId)
-                                ? new YesNoQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (AnsweredYesNoOption[])answer) as ILiteEvent
-                                : new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[])answer) as ILiteEvent);
+                                ? new YesNoQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (AnsweredYesNoOption[])answer) as IEvent
+                                : new MultipleOptionsQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (decimal[])answer) as IEvent);
                         break;
                     case QuestionType.Multimedia:
                         this.ApplyEvent(new PictureQuestionAnswered(userId, questionId, rosterVector, synchronizationTime, (string)answer));
@@ -1766,7 +1767,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public void SynchronizeInterviewEvents(Guid userId, Guid questionnaireId, long questionnaireVersion,
-            InterviewStatus interviewStatus, ILiteEvent[] synchronizedEvents, bool createdOnClient)
+            InterviewStatus interviewStatus, IEvent[] synchronizedEvents, bool createdOnClient)
         {
             ThrowIfOtherUserIsResponsible(userId);
 

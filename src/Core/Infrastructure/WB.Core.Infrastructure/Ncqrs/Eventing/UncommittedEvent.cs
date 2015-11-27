@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing
@@ -11,7 +12,7 @@ namespace Ncqrs.Eventing
     [DebuggerDisplay("{Payload.GetType().Name} {EventIdentifier}")]
     public class UncommittedEvent : IUncommittedEvent
     {
-        private readonly ILiteEvent _payload;
+        private readonly WB.Core.Infrastructure.EventBus.IEvent _payload;
         private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
@@ -31,7 +32,7 @@ namespace Ncqrs.Eventing
         /// <summary>
         /// Gets the payload of the event.
         /// </summary>
-        public ILiteEvent Payload
+        public WB.Core.Infrastructure.EventBus.IEvent Payload
         {
             get { return _payload; }
         }
@@ -96,7 +97,7 @@ namespace Ncqrs.Eventing
             _origin = streamOrigin;
         }
 
-        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, int eventSequence, int initialVersionOfEventSource, DateTime eventTimeStamp, ILiteEvent payload)            
+        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, int eventSequence, int initialVersionOfEventSource, DateTime eventTimeStamp, WB.Core.Infrastructure.EventBus.IEvent payload)            
         {
             _payload = payload;
             _initialVersionOfEventSource = initialVersionOfEventSource;

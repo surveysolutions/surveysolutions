@@ -1,11 +1,12 @@
 ﻿using System;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.Sync
 {
     [Serializable]
-    public class NewClientDeviceCreated : ILiteEvent
+    public class NewClientDeviceCreated : IEvent
     {
         public Guid Id { set; get; }
         public DateTime CreationDate { set; get; }

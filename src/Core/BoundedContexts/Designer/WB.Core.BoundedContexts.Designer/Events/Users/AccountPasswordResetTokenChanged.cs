@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.EventBus.Lite;
+﻿using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
 {
@@ -7,7 +8,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
     /// <summary>
     /// The account password reset token changed.
     /// </summary>
-    public class AccountPasswordResetTokenChanged : ILiteEvent
+    public class AccountPasswordResetTokenChanged : IEvent
     {
         #region Public Properties
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 // ReSharper disable once CheckNamespace
@@ -9,7 +10,7 @@ namespace Main.Core.Events.Synchronization
     /// The new device registered
     /// </summary>
     [Serializable]
-    public class NewDeviceRegistered : ILiteEvent
+    public class NewDeviceRegistered : IEvent
     {
         #region PublicProperties
 

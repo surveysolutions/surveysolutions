@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
@@ -90,7 +91,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
         }
 
         private IPublishedEvent<T> CreateEvent<T>(T payload, DateTime? eventTimestamp=null)
-            where T: ILiteEvent
+            where T: IEvent
         {
             var mock= new Mock<IPublishedEvent<T>>();
             mock.Setup(x => x.Payload).Returns(payload);

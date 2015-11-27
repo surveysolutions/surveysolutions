@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
@@ -30,6 +31,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration
 {
@@ -455,7 +457,7 @@ namespace WB.Tests.Integration
 
         public static CommittedEvent CommittedEvent(string origin = null, 
             Guid? eventSourceId = null,
-            ILiteEvent payload = null,
+            IEvent payload = null,
             Guid? eventIdentifier = null, 
             int eventSequence = 1)
         {
@@ -467,7 +469,7 @@ namespace WB.Tests.Integration
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 0,
-                payload ?? Mock.Of<ILiteEvent>());
+                payload ?? Mock.Of<IEvent>());
         }
 
         public static CommittedEventStream CommittedEventStream(Guid eventSourceId, IEnumerable<UncommittedEvent> events)

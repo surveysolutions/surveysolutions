@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         Establish context = () =>
         {
             var secondEventHandlerMock = new Mock<IEventHandler>();
-            secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<ILiteEvent>>();
+            secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();
             ncqrCompatibleEventDispatcher =
                 CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
                 {
@@ -30,11 +30,11 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         It should_not_call_registred_event_handler = () =>
          secondOldSchoolEventHandlerMock.Verify(x => x.Handle(
-             Moq.It.IsAny<IPublishedEvent<ILiteEvent>>()),
+             Moq.It.IsAny<IPublishedEvent<IEvent>>()),
              Times.Never);
 
         private static NcqrCompatibleEventDispatcher ncqrCompatibleEventDispatcher;
         private static Guid ignoredEvenetSource=Guid.NewGuid();
-        private static Mock<IEventHandler<ILiteEvent>> secondOldSchoolEventHandlerMock;
+        private static Mock<IEventHandler<IEvent>> secondOldSchoolEventHandlerMock;
     }
 }

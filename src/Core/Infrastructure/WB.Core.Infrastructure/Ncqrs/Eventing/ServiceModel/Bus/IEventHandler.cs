@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.EventBus.Lite;
+﻿using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -7,7 +8,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
     /// </summary>
     /// <typeparam name="TEvent">Type of event this object can handle.</typeparam>
     public interface IEventHandler<in TEvent>
-        where TEvent : ILiteEvent
+        where TEvent : WB.Core.Infrastructure.EventBus.IEvent
     {
         /// <summary>
         /// Processes provided event. Acual event type could be a subtype of <typeparamref name="TEvent"/>. In such cache,
