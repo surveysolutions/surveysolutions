@@ -33,14 +33,14 @@ namespace WB.Tests.Unit.Infrastructure.AbstractFunctionalEventHandlerTests
         private static Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>> readSideRepositoryWriterMock;
         private static Guid eventSourceId;
 
-        public class TestableFunctionalEventHandlerWhichDeletesUpdatedView : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IUpdateHandler<IReadSideRepositoryEntity, ILiteEvent>
+        public class TestableFunctionalEventHandlerWhichDeletesUpdatedView : AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideRepositoryWriter<IReadSideRepositoryEntity>>, IUpdateHandler<IReadSideRepositoryEntity, TestableFunctionalEvent>
         {
             public TestableFunctionalEventHandlerWhichDeletesUpdatedView(IReadSideRepositoryWriter<IReadSideRepositoryEntity> readSideStorage)
                 : base(readSideStorage) { }
 
             public int CountOfUpdates { get; private set; }
 
-            public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity state, IPublishedEvent<ILiteEvent> @event)
+            public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity state, IPublishedEvent<TestableFunctionalEvent> @event)
             {
                 this.CountOfUpdates++;
                 return null;
