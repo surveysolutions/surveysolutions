@@ -58,31 +58,29 @@ namespace WB.Core.Infrastructure.CommandBus
             public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, commandHandlerConfiguration: null);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, configurer: null);
                 return this;
             }
 
             public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
                 where TCommand : ICommand
             {
-                return Handles(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command), commandHandlerConfiguration: null);
+                return Handles(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command), configurer: null);
             }
 
-            public AggregateSetup<TAggregate> Handles<TCommand>(
-                Func<TCommand, Guid> aggregateRootIdResolver,
-                Action<TCommand, TAggregate> commandHandler)
+            public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand
             {
-                return Handles(aggregateRootIdResolver, commandHandler, null);
+                return Handles(aggregateRootIdResolver, commandHandler, configurer: null);
             }
 
             public AggregateSetup<TAggregate> Handles<TCommand>(
                 Func<TCommand, Guid> aggregateRootIdResolver, 
                 Action<TCommand, TAggregate> commandHandler,
-                Action<CommandHandlerConfiguration<TAggregate>> commandHandlerConfiguration)
+                Action<CommandHandlerConfiguration<TAggregate>> configurer)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isInitializer: false, commandHandlerConfiguration: commandHandlerConfiguration);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: false, configurer: configurer);
                 return this;
             }
 
@@ -110,10 +108,25 @@ namespace WB.Core.Infrastructure.CommandBus
                 return InitializesWith<TCommand>((command, aggregate) => commandHandler(aggregate)(command));
             }
 
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler,
+                Action<CommandHandlerConfiguration<TAggregate>> configurer)
+                where TCommand : TAggregateCommand
+            {
+                return InitializesWith<TCommand>((command, aggregate) => commandHandler(aggregate)(command), configurer);
+            }
+
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Action<TCommand, TAggregate> commandHandler)
                 where TCommand : TAggregateCommand
             {
-                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, commandHandlerConfiguration: null);
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, configurer: null);
+                return this;
+            }
+
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Action<TCommand, TAggregate> commandHandler,
+                Action<CommandHandlerConfiguration<TAggregate>> configurer)
+                where TCommand : TAggregateCommand
+            {
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, configurer: configurer);
                 return this;
             }
 
@@ -126,7 +139,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> Handles<TCommand>(Action<TCommand, TAggregate> commandHandler)
                 where TCommand : TAggregateCommand
             {
-                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, commandHandlerConfiguration: null);
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: false, configurer: null);
                 return this;
             }
         }
@@ -142,7 +155,7 @@ namespace WB.Core.Infrastructure.CommandBus
         private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, 
             Action<TCommand, TAggregate> commandHandler, 
             bool isInitializer,
-            Action<CommandHandlerConfiguration<TAggregate>> commandHandlerConfiguration)
+            Action<CommandHandlerConfiguration<TAggregate>> configurer)
             where TCommand : ICommand
             where TAggregate : IAggregateRoot
         {
@@ -151,11 +164,8 @@ namespace WB.Core.Infrastructure.CommandBus
             if (Handlers.ContainsKey(commandName))
                 throw new ArgumentException(string.Format("Command {0} is already registered.", commandName));
 
-            CommandHandlerConfiguration<TAggregate> configuration = new CommandHandlerConfiguration<TAggregate>();
-            if (commandHandlerConfiguration != null)
-            {
-                commandHandlerConfiguration.Invoke(configuration);
-            }
+            var configuration = new CommandHandlerConfiguration<TAggregate>();
+            configurer?.Invoke(configuration);
 
             Handlers.Add(commandName, new HandlerDescriptor(
                 typeof (TAggregate),
