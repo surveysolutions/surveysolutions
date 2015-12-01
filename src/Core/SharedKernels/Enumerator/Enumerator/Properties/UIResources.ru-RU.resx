@@ -375,7 +375,7 @@
     <value>Ваша учетная запись заблокирована. Обратитесь в службу поддержки по адресу support@mysurvey.solutions.</value>
   </data>
   <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>Но</value>
+    <value>Выпущена новая версия приложения. Обновитесь, пожалуйста.</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Завершить интервью</value>
