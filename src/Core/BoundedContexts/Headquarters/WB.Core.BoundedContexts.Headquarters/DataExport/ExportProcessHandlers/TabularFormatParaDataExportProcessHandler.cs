@@ -58,6 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
         {
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,
                     this.questionnaireReader,
@@ -67,6 +69,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.TransactionManager.ExecuteInQueryTransaction(
                     () =>
                         this.lastPublishedEventPositionForHandlerStorage.GetById(this.interviewParaDataEventHandlerName));
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             EventPosition? eventPosition = null;
             if (interviewDenormalizerProgress != null)
@@ -80,6 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.paraDataAccessor.ClearParaData();
             }
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             var eventSlices = this.eventStore.GetEventsAfterPosition(eventPosition);
             long eventCount = this.eventStore.GetEventsCountAfterPosition(eventPosition);
 
@@ -87,6 +93,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             int persistCount = 0;
             foreach (var eventSlice in eventSlices)
             {
+                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
                 IEnumerable<CommittedEvent> events = eventSlice;
 
                 this.TransactionManager.ExecuteInQueryTransaction(
@@ -105,6 +113,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     persistCount++;
                 }
             }
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             this.paraDataAccessor.ArchiveParaDataExport();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
@@ -47,38 +48,38 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.csvWriter = csvWriter;
         }
 
-        public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure,
-            string basePath, 
-            IProgress<int> progress)
+        public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             Expression<Func<InterviewSummary, bool>> expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
                                          x.QuestionnaireVersion == questionnaireExportStructure.Version &&
                                          !x.IsDeleted;
 
-            this.Export(questionnaireExportStructure, basePath, progress, expression);
+            this.Export(questionnaireExportStructure, basePath, progress, cancellationToken, expression);
         }
 
-        public void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure,
-            string basePath, 
-            IProgress<int> progress)
+        public void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             Expression<Func<InterviewSummary, bool>> expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId && 
                                          x.QuestionnaireVersion == questionnaireExportStructure.Version &&
                                          !x.IsDeleted &&
                                          x.Status == InterviewStatus.ApprovedByHeadquarters;
 
-            this.Export(questionnaireExportStructure, basePath, progress, expression);
+            this.Export(questionnaireExportStructure, basePath, progress, cancellationToken, expression);
         }
 
-        private void Export(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress,
+        private void Export(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken,
             Expression<Func<InterviewSummary, bool>> expression)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             int totalInterviewsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() => this.interviewSummaries.Query(_ => _.Count(expression)));
 
             int processedCount = 0;
             while (processedCount < totalInterviewsToExport)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var localProcessedCount = processedCount;
                 List<Guid> interviewIdsToExport = this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ => _
@@ -91,19 +92,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 if (interviewIdsToExport.Count == 0)
                     break;
 
-                this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport);
+                this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport, cancellationToken);
                 processedCount += interviewIdsToExport.Count;
                 progress.Report(processedCount.PercentOf(totalInterviewsToExport));
             }
         }
 
         private void DoExport(QuestionnaireExportStructure questionnaireExportStructure, 
-            string basePath, 
-            List<Guid> interviewIdsToExport)
+            string basePath, List<Guid> interviewIdsToExport, CancellationToken cancellationToken)
         {
             
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure);
+            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, cancellationToken);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -141,11 +141,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void ExportInterviews(List<Guid> interviewIdsToExport,
                                       string basePath,
-                                      QuestionnaireExportStructure questionnaireExportStructure)
+                                      QuestionnaireExportStructure questionnaireExportStructure,
+                                      CancellationToken cancellationToken)
         {
             int totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var interviewData = this.transactionManager.ExecuteInQueryTransaction(() => this.interviewDatas.GetById(interviewId));
 
                 InterviewDataExportView interviewExportStructure =

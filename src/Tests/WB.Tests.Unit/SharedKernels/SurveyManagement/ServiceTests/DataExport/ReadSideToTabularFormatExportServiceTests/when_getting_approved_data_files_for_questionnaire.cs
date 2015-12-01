@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
@@ -63,7 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.ExportApprovedInterviewsInTabularFormat(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Progress<int>());
+            readSideToTabularFormatExportService.ExportApprovedInterviewsInTabularFormat(
+                new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Progress<int>(), CancellationToken.None);
 
         It should_record_one_completedaction = () =>
           csvWriterMock.Verify(x => x.WriteData(Moq.It.IsAny<string>(), Moq.It.Is<IEnumerable<string[]>>(s => s.Any(c => c.Contains("Completed"))), Moq.It.IsAny<string>()), Times.Once);

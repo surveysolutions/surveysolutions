@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using StatData.Core;
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
         };
 
         Because of = () =>
-            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>());
+            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>(), CancellationToken.None);
 
         private It should_call_write_to_file = () =>
             datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<IDataQuery>()), Times.Once());

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using StatData.Converters;
 using StatData.Core;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -48,22 +49,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress)
+        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles, progress);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
         }
 
-        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress)
+        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress);
+            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
        
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
             string currentDataInfo = string.Empty;
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var questionnaireExportStructure =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
                         this.questionnaireExportStructureWriter.AsVersioned()
@@ -85,7 +88,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 int processdFiles = 0;
                 foreach (var tabFile in dataFiles)
                 {
-                    currentDataInfo = string.Format("filename: {0}", tabFile);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    currentDataInfo = $"filename: {tabFile}";
                     string dataFilePath = this.fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
 
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
@@ -104,11 +109,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 }
                 return result.ToArray();
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception exc)
             {
-                this.logger.Error(
-                    string.Format("Error on data export (questionnaireId:{0}, questionnaireVersion:{1}): ",
-                        questionnaireId, questionnaireVersion), exc);
+                this.logger.Error($"Error on data export (questionnaireId:{questionnaireId}, questionnaireVersion:{questionnaireVersion}): ", exc);
                 this.logger.Error(currentDataInfo);
             }
 
