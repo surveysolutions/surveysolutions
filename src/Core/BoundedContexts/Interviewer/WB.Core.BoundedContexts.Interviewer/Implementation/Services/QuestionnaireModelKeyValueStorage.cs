@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public QuestionnaireModel GetById(string id)
         {
-            return this.questionnaireModelViewRepository.GetById(id).Model;
+            return this.questionnaireModelViewRepository.GetByIdAsync(id).Result.Model;
         }
 
         public void Remove(string id)
