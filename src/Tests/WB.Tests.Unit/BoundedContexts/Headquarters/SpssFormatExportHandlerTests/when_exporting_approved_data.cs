@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
                 tabularFormatExportServiceMock.Verify(
                     x =>
                         x.ExportApprovedInterviewsInTabularFormat(Moq.It.IsAny<QuestionnaireIdentity>(),
-                            Moq.It.IsAny<string>(), Moq.It.IsAny<IProgress<int>>()), Times.Once);
+                            Moq.It.IsAny<string>(), Moq.It.IsAny<IProgress<int>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         private static Mock<ITabularFormatExportService> tabularFormatExportServiceMock=new Mock<ITabularFormatExportService>();
         private static SpssFormatExportHandler spssFormatExportHandler;
