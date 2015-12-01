@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         };
 
         Because of = () =>
-            readSideToTabularFormatExportService.ExportInterviewsInTabularFormat(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Microsoft.Progress<int>());
+            readSideToTabularFormatExportService.ExportInterviewsInTabularFormat(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "", new Microsoft.Progress<int>(), CancellationToken.None);
 
         It should_return_correct_file_name = () =>
             csvWriterMock.Verify(x => x.WriteData(fileName, Moq.It.IsAny<IEnumerable<string[]>>(), Moq.It.IsAny<string>()));

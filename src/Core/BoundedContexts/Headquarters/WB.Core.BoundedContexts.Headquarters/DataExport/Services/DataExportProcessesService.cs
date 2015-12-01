@@ -125,6 +125,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void DeleteDataExport(string processId)
         {
+            this.processes.GetOrNull(processId)?.Cancel();
+
             this.processes.Remove(processId);
         }
 

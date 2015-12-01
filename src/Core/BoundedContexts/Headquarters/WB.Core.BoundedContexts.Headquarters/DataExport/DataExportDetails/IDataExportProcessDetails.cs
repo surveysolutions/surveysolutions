@@ -1,16 +1,9 @@
 ﻿using System;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
-    public static class DataExportProcessDetailsExtensions
-    {
-        public static bool IsQueuedOrRunning(this IDataExportProcessDetails process)
-        {
-            return process.Status == DataExportStatus.Queued || process.Status == DataExportStatus.Running;
-        }
-    }
-
     public interface IDataExportProcessDetails
     {
         string NaturalId { get; }
@@ -18,8 +11,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
         DataExportFormat Format { get; }
         DateTime BeginDate { get; }
 
+        CancellationToken CancellationToken { get; }
+
         DateTime LastUpdateDate { get; set; }
         DataExportStatus Status { get; set; }
         int ProgressInPercents { get; set; }
+
+        void Cancel();
     }
 }

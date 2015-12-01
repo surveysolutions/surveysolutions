@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -9,22 +10,13 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class SpssFormatExportHandler : AbstractDataExportHandler
+    internal class SpssFormatExportHandler : TabBasedFormatExportHandler
     {
-        private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
-        public SpssFormatExportHandler(
-            IFileSystemAccessor fileSystemAccessor,
-            IArchiveUtils archiveUtils,
-            InterviewDataExportSettings interviewDataExportSettings,
-            ITabularFormatExportService tabularFormatExportService,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
-            IDataExportProcessesService dataExportProcessesService
-            ) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
+        public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor, IArchiveUtils archiveUtils, InterviewDataExportSettings interviewDataExportSettings, ITabularFormatExportService tabularFormatExportService, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService, IDataExportProcessesService dataExportProcessesService)
+            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService)
         {
-            this.tabularFormatExportService = tabularFormatExportService;
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
 
@@ -33,62 +25,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         protected override void ExportAllDataIntoDirectory(
             QuestionnaireIdentity questionnaireIdentity,
             string directoryPath,
-            IProgress<int> progress)
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
-            var tabFiles = CreateTabularDataFiles(
-               questionnaireIdentity: questionnaireIdentity,
-               directoryPath: directoryPath,
-               exportApprovedDataOnly: false,
-               progress: progress);
+            var tabFiles = this.CreateAllTabularDataFiles(questionnaireIdentity, directoryPath, progress, cancellationToken);
 
-            this.CreateSpssDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress);
+            this.CreateSpssDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
 
-            DeleteTabularDataFiles(tabFiles);
+            this.DeleteTabularDataFiles(tabFiles, cancellationToken);
         }
 
         protected override void ExportApprovedDataIntoDirectory(
             QuestionnaireIdentity questionnaireIdentity,
             string directoryPath,
-            IProgress<int> progress)
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
-            var tabFiles = CreateTabularDataFiles(
-               questionnaireIdentity: questionnaireIdentity,
-               directoryPath: directoryPath,
-               exportApprovedDataOnly: true,
-               progress: progress);
+            var tabFiles = this.CreateApprovedTabularDataFiles(questionnaireIdentity, directoryPath, progress, cancellationToken);
 
-            this.CreateSpssDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress);
+            this.CreateSpssDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
 
-            DeleteTabularDataFiles(tabFiles);
-        }
-
-        private string[] CreateTabularDataFiles(
-               QuestionnaireIdentity questionnaireIdentity,
-               string directoryPath,
-               bool exportApprovedDataOnly,
-               IProgress<int> progress)
-        {
-            var exportProgress = new Microsoft.Progress<int>();
-
-            exportProgress.ProgressChanged +=
-                (sender, donePercent) => progress.Report(donePercent / 2);
-
-            if (exportApprovedDataOnly)
-            {
-                tabularFormatExportService.ExportApprovedInterviewsInTabularFormat(questionnaireIdentity, directoryPath,
-                    exportProgress);
-            }
-            else
-            {
-                tabularFormatExportService.ExportInterviewsInTabularFormat(questionnaireIdentity, directoryPath,
-                    exportProgress);
-            }
-
-            return fileSystemAccessor.GetFilesInDirectory(directoryPath);
+            this.DeleteTabularDataFiles(tabFiles, cancellationToken);
         }
 
         private void CreateSpssDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,
-            IProgress<int> progress)
+            IProgress<int> progress, CancellationToken cancellationToken)
         {
             var exportProgress = new Microsoft.Progress<int>();
             exportProgress.ProgressChanged +=
@@ -98,15 +59,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 questionnaireIdentity.QuestionnaireId,
                 questionnaireIdentity.Version,
                 tabDataFiles,
-                exportProgress);
-        }
-
-        private void DeleteTabularDataFiles(string[] tabDataFiles)
-        {
-            foreach (var tabDataFile in tabDataFiles)
-            {
-                fileSystemAccessor.DeleteFile(tabDataFile);
-            }
+                exportProgress,
+                cancellationToken);
         }
     }
 }
