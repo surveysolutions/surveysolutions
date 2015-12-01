@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
             
-            if (!this.questionnaireFactory.IsQuestionnaireExists(questionnaireIdentity))
+            if (!await this.questionnaireFactory.IsQuestionnaireExistsAsync(questionnaireIdentity))
             {
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
@@ -373,7 +373,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             foreach (var completedInterview in completedInterviews)
             {
-                var jsonPackageByCompletedInterview = this.interviewFactory.GetPackageByCompletedInterview(completedInterview.InterviewId);
+                var jsonPackageByCompletedInterview = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
                 this.SetProgressOperation(
                     InterviewerUIResources.Synchronization_Upload_Title_Format.FormatString(InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
                     InterviewerUIResources.Synchronization_Upload_Description_Format.FormatString(

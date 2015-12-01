@@ -62,9 +62,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.principal.CurrentUserIdentity.UserId));
         }
 
-        public string GetPackageByCompletedInterview(Guid interviewId)
+        public async Task<string> GetPackageByCompletedInterviewAsync(Guid interviewId)
         {
-            InterviewView interview = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            InterviewView interview = await this.interviewViewRepository.GetByIdAsync(interviewId.FormatGuid());
             AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interviewId);
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewDetailsApiView details)
         {
-            var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
+            var questionnaireView = await this.questionnaireRepository.GetByIdAsync(info.QuestionnaireIdentity.ToString());
 
             var answersOnPrefilledQuestions = details
                 .AnswersOnPrefilledQuestions?

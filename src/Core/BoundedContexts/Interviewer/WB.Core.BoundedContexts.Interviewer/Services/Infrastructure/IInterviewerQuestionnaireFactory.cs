@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 
         List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities();
 
-        bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity);
+        Task<bool> IsQuestionnaireExistsAsync(QuestionnaireIdentity questionnaireIdentity);
 
         bool IsQuestionnaireAssemblyExists(QuestionnaireIdentity questionnaireIdentity);
     }

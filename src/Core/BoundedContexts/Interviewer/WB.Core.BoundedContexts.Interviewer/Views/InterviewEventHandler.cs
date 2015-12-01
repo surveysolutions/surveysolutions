@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            var questionnaireDocumentView = this.questionnaireDocumentViewRepository.GetById(questionnaireIdentity.ToString());
+            var questionnaireDocumentView = this.questionnaireDocumentViewRepository.GetByIdAsync(questionnaireIdentity.ToString()).Result;
 
             if (questionnaireDocumentView == null)
                 return;
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             var storageInterviewId = interviewId.FormatGuid();
-            var interviewView = this.interviewViewRepository.GetById(storageInterviewId) ?? new InterviewView
+            var interviewView = this.interviewViewRepository.GetByIdAsync(storageInterviewId).Result ?? new InterviewView
             {
                 Id = storageInterviewId,
                 InterviewId = interviewId,
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if(!this.IsInterviewCompletedOrRestarted(evnt.Payload.Status))
                 return;
 
-            InterviewView interviewView = this.interviewViewRepository.GetById(evnt.EventSourceId.FormatGuid());
+            InterviewView interviewView = this.interviewViewRepository.GetByIdAsync(evnt.EventSourceId.FormatGuid()).Result;
             if (interviewView == null)
                 return;
 
@@ -264,7 +264,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
-            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            var interviewView = this.interviewViewRepository.GetByIdAsync(interviewId.FormatGuid()).Result;
 
             if (interviewView == null) return;
 
@@ -287,7 +287,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (prefilledQuestion != null)
                 {
-                    var questionnaire = this.questionnaireDocumentViewRepository.GetById(interviewView.QuestionnaireId);
+                    var questionnaire = this.questionnaireDocumentViewRepository.GetByIdAsync(interviewView.QuestionnaireId).Result;
                     var questionnairePrefilledQuestion = questionnaire.Document.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
                     prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));

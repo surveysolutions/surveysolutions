@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public QuestionnaireDocument GetById(string id)
         {
-            return this.questionnaireDocumentViewRepository.GetById(id).Document;
+            return this.questionnaireDocumentViewRepository.GetByIdAsync(id).Result.Document;
         }
 
         public void Remove(string id)
