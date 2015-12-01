@@ -12,4 +12,4 @@
       </withIgnoredExceptions>
     </eventHandlers>
   </eventBus>
-- Rebuild read side on SV/HQ is needed for 5.2.0 version
+- Rebuild read side on SV/HQ/D is needed for 5.3.0 version (added functionality for check readside version, first time rebuild readside is requered)
