@@ -65,6 +65,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(AllDataExportProcessDetails dataExportProcessDetails)
         {
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             List<Guid> interviewIdsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ =>
@@ -73,9 +75,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                             .OrderBy(x => x.InterviewId)
                             .Select(x => x.InterviewId).ToList()));
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             string folderForDataExport = GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire);
 
             this.ClearFolder(folderForDataExport);
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             QuestionnaireExportStructure questionnaire =
                 this.transactionManager.ExecuteInQueryTransaction(() =>
@@ -86,9 +92,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 questionnaire.HeaderToLevelMap.Values.SelectMany(
                     x => x.HeaderItems.Values.Where(h => h.QuestionType == QuestionType.Multimedia)).Select(x=>x.PublicKey).ToArray();
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             int totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
             {
+                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
                 var interviewBinaryFiles = plainFileRepository.GetBinaryFilesForInterview(interviewId);
                 var filesFolderForInterview = this.fileSystemAccessor.CombinePath(folderForDataExport, interviewId.FormatGuid());
 
@@ -128,6 +138,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId,
                     totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             var archiveFilePath =
                 this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessDetails.Questionnaire,
