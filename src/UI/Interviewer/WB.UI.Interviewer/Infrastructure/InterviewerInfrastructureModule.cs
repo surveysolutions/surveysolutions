@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
@@ -38,6 +39,8 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.AddDocument("Document", typeof(QuestionnaireDocumentView));
             SiaqodbConfigurator.AddDocument("Model", typeof(QuestionnaireModelView));
             SiaqodbConfigurator.AddText("JsonEvent", typeof(EventView));
+            SiaqodbConfigurator.SpecifyStoredDateTimeKind(DateTimeKind.Utc);
+            SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof(IPlainStorageEntity));
 
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
             

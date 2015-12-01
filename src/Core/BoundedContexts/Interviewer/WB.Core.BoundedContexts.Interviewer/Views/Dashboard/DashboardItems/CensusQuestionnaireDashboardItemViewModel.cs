@@ -42,9 +42,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private QuestionnaireIdentity questionnaireIdentity;
 
-        public void Init(string questionnaireId)
+        public async void Init(string questionnaireId)
         {
-            var questionnaire = this.questionnaireViewRepository.GetById(questionnaireId);
+            var questionnaire = await this.questionnaireViewRepository.GetByIdAsync(questionnaireId);
 
             this.questionnaireIdentity = questionnaire.Identity;
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);

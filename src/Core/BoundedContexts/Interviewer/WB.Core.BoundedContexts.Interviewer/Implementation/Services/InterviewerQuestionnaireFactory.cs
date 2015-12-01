@@ -109,9 +109,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     .ToList());
         }
 
-        public bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity)
+        public async Task<bool> IsQuestionnaireExistsAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            return this.questionnaireViewRepository.GetById(questionnaireIdentity.ToString()) != null;
+            return await this.questionnaireViewRepository.GetByIdAsync(questionnaireIdentity.ToString()) != null;
         }
 
         public bool IsQuestionnaireAssemblyExists(QuestionnaireIdentity questionnaireIdentity)
