@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
@@ -33,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             InterviewDataExportSettings interviewDataExportSettings,
@@ -66,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.interviewActionsExporter = new InterviewActionsExporter(interviewDataExportSettings, fileSystemAccessor, csvWriter, transactionManager, interviewActionsDataStorage);
         }
 
-        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -81,12 +83,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
-            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
             this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress);
+            cancellationToken.ThrowIfCancellationRequested();
             this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
-        public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -101,8 +105,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
-            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
             this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, exportCommentsProgress);
+            cancellationToken.ThrowIfCancellationRequested();
             this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
