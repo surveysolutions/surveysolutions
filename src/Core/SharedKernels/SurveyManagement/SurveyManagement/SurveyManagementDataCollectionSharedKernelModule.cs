@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
@@ -75,13 +76,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             CommandRegistry
                 .Setup<Questionnaire>()
-                .ResolvesIdFrom<QuestionnaireCommand>           (command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>            (aggregate => aggregate.ImportFromDesigner)
-                .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
-                .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
-                .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire)
-                .Handles<DisableQuestionnaire>                  (aggregate => aggregate.DisableQuestionnaire);
+                .ResolvesIdFrom<QuestionnaireCommand>         (command => command.QuestionnaireId)
+                .InitializesWith<ImportFromDesigner>          (aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator, ImportFromDesigner>())
+                .InitializesWith<ImportFromDesignerForTester> (aggregate => aggregate.ImportFromDesignerForTester)
+                .InitializesWith<ImportFromSupervisor>        (aggregate => aggregate.ImportFromSupervisor)
+                .InitializesWith<RegisterPlainQuestionnaire>  (aggregate => aggregate.RegisterPlainQuestionnaire)
+                .Handles<DeleteQuestionnaire>                 (aggregate => aggregate.DeleteQuestionnaire)
+                .Handles<DisableQuestionnaire>                (aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()
