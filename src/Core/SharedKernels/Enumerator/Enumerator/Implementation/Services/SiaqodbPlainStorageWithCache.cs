@@ -16,12 +16,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public override async Task<TEntity> GetByIdAsync(string id)
         {
-            if (!this.memoryStorage.ContainsKey(id))
-            {
-                this.memoryStorage.Add(id, await base.GetByIdAsync(id));
-            }
+            if (this.memoryStorage.ContainsKey(id)) return this.memoryStorage[id];
 
-            return this.memoryStorage[id];
+            var entity = await base.GetByIdAsync(id);
+            if (entity != null)
+                this.memoryStorage.Add(id, entity);
+
+            return entity;
         }
 
         public override async Task RemoveAsync(IEnumerable<TEntity> entities)
