@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             result.ElementAt(0).References.ElementAt(0).Title.ShouldEqual(questionTitle);
 
         It should_return_first_error_with_IsGroupOfErrors_field_set_in_true = () =>
-            result.ElementAt(0).IsGroupOfErrors.ShouldBeTrue();
+            result.ElementAt(0).IsGroupedMessage.ShouldBeTrue();
 
         It should_return_last_error_with_same_Code_as_input_error_has = () =>
             result.ElementAt(1).Code.ShouldEqual(verificationErrors.ElementAt(1).Code);
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             result.ElementAt(1).References.ElementAt(0).Title.ShouldEqual(groupTitle);
 
         It should_return_last_error_with_IsGroupOfErrors_field_set_in_true = () =>
-            result.ElementAt(1).IsGroupOfErrors.ShouldBeTrue();
+            result.ElementAt(1).IsGroupedMessage.ShouldBeTrue();
 
         It should_return_third_error_with_same_Code_as_input_error_has = () =>
             result.ElementAt(2).Code.ShouldEqual(verificationErrors.ElementAt(2).Code);
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             result.ElementAt(2).References.ElementAt(0).Title.ShouldEqual(questionTitle);
 
         It should_return_third_error_with_IsGroupOfErrors_field_set_in_true = () =>
-            result.ElementAt(2).IsGroupOfErrors.ShouldBeFalse();
+            result.ElementAt(2).IsGroupedMessage.ShouldBeFalse();
 
 
         private static IVerificationErrorsMapper mapper;

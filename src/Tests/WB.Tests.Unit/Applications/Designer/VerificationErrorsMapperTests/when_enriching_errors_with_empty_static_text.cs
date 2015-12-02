@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             result.First().References.Count.ShouldEqual(verificationErrors.First().References.Count());
 
         It should_return_error_with_IsGroupOfErrors_field_set_in_true = () =>
-            result.First().IsGroupOfErrors.ShouldBeTrue();
+            result.First().IsGroupedMessage.ShouldBeTrue();
         
         It should_return_error_that_references_static_text_with_staticTextId = () =>
             result.First().References.First().ItemId.ShouldEqual(staticTextId);
