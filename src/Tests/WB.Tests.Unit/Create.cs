@@ -109,6 +109,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
@@ -605,11 +606,6 @@ namespace WB.Tests.Unit
         public static Identity Identity(Guid id, RosterVector rosterVector)
         {
             return new Identity(id, rosterVector);
-        }
-
-        public static ImportFromDesigner ImportFromDesignerCommand(Guid responsibleId, string base64StringOfAssembly)
-        {
-            return new ImportFromDesigner(responsibleId, new QuestionnaireDocument(), false, base64StringOfAssembly);
         }
 
         public static Interview Interview(Guid? interviewId = null, IQuestionnaireRepository questionnaireRepository = null,
@@ -1415,12 +1411,13 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new QuestionnaireAssemblyImported { Version = version }, eventSourceId: questionnaireId);
         }
 
-        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(Guid? questionnaireId=null)
+        public static QuestionnaireBrowseItem QuestionnaireBrowseItem(Guid? questionnaireId = null, string title = "Questionnaire Browse Item X")
         {
-            return new QuestionnaireBrowseItem()
+            return new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                Version = 1
+                Version = 1,
+                Title = title,
             };
         }
 
@@ -1591,6 +1588,13 @@ namespace WB.Tests.Unit
         public static QuestionnaireModelBuilder QuestionnaireModelBuilder()
         {
             return new QuestionnaireModelBuilder();
+        }
+
+        public static QuestionnaireNameValidator QuestionnaireNameValidator(
+            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+        {
+            return new QuestionnaireNameValidator(
+                questionnaireBrowseItemStorage ?? Stub<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -2211,6 +2215,20 @@ namespace WB.Tests.Unit
             public static DeleteMacro DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
             {
                 return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
+            }
+
+            public static ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
+                Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)")
+            {
+                return new ImportFromDesigner(
+                    responsibleId ?? Guid.NewGuid(),
+                    new QuestionnaireDocument
+                    {
+                        PublicKey = questionnaireId ?? Guid.NewGuid(),
+                        Title = title,
+                    },
+                    false,
+                    base64StringOfAssembly);
             }
 
             public static ImportFromSupervisor ImportFromSupervisor(IQuestionnaireDocument source)
