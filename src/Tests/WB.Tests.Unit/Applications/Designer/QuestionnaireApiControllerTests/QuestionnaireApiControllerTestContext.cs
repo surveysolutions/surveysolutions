@@ -118,11 +118,11 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 IsFilteredCombobox = isFilteredCombobox,
             };
         }
-        internal static VerificationError[] CreateVerificationErrors()
+        internal static VerificationMessage[] CreateVerificationErrors()
         {
-            return new VerificationError[3]
+            return new VerificationMessage[3]
             {
-                new VerificationError
+                new VerificationMessage
                 {
                     Code = "aaa",
                     Message = "aaaa",
@@ -137,7 +137,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                     }
                 }
                 ,
-                new VerificationError
+                new VerificationMessage
                 {
                     Code = "aaa",
                     Message = "aaaa",
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                     }
                 }
                 ,
-                new VerificationError
+                new VerificationMessage
                 {
                     Code = "ccc",
                     Message = "ccccc",

@@ -891,5 +891,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
+        /// </summary>
+        internal static string WB0200_LargeNumberOfRostersIsCreated {
+            get {
+                return ResourceManager.GetString("WB0200_LargeNumberOfRostersIsCreated", resourceCulture);
+            }
+        }
     }
 }
