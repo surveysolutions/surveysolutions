@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using It = Machine.Specifications.It;
@@ -14,8 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-                exception = Catch.Exception(
-                        () => questionnaire.ImportFromDesigner(Create.ImportFromDesignerCommand(responsibleId, string.Empty)));
+            exception = Catch.Exception(
+                () => questionnaire.ImportFromDesigner(Create.Command.ImportFromDesigner(responsibleId: responsibleId, base64StringOfAssembly: string.Empty)));
 
         It should_not_exception_be_null = () =>
             exception.ShouldNotBeNull();
