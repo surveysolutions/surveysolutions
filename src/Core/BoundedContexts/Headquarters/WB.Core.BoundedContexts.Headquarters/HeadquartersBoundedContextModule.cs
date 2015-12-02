@@ -53,9 +53,9 @@ namespace WB.Core.BoundedContexts.Headquarters
                 this.Kernel.RegisterDenormalizer<QuestionnaireFeedDenormalizer>();
             }
 
-            CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, CreateUserCommand>());
-            CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, UnarchiveUserCommand>());
-            CommandRegistry.Configure<User, UnarchiveUserAndUpdateCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator, UnarchiveUserAndUpdateCommand>());
+            CommandRegistry.Configure<User, CreateUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
+            CommandRegistry.Configure<User, UnarchiveUserCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
+            CommandRegistry.Configure<User, UnarchiveUserAndUpdateCommand>(configuration => configuration.ValidatedBy<HeadquarterUserCommandValidator>());
 
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
             this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
