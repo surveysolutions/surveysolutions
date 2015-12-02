@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
-    internal class when_handling_question_answered_event_when_ordered_functionlity_is_enabled : YesNoQuestionViewModelTestsContext
+    internal class when_handling_question_answered_event_when_ordered_functionality_is_enabled : YesNoQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
