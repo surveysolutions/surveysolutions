@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsEndpointValid = true;
             bool isNeedNavigateToRelinkPage = false;
 
-            this.interviewerSettings.SetSyncAddressPoint(this.Endpoint);
+            await this.interviewerSettings.SetEndpointAsync(this.Endpoint);
 
             var restCredentials = new RestCredentials
             {

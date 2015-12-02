@@ -132,16 +132,13 @@ namespace WB.UI.Interviewer
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                 : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
-            
-            const string QuestionnaireAssembliesFolder = "assemblies";
 
             this.kernel = new StandardKernel(
 
                 new NcqrsModule().AsNinject(),
                 new InfrastructureModuleMobile().AsNinject(),
-                new DataCollectionInfrastructureModule(basePath).AsNinject(),
-
-                new InterviewerInfrastructureModule(QuestionnaireAssembliesFolder),
+                new DataCollectionInfrastructureModule(null).AsNinject(),
+                new InterviewerInfrastructureModule(),
 
                 new EnumeratorSharedKernelModule(),
                 new EnumeratorInfrastructureModule(),
@@ -158,7 +155,7 @@ namespace WB.UI.Interviewer
             this.kernel.Load(
                 new AndroidModelModule(),
                 new ErrorReportingModule(pathToTemporaryFolder: basePath),
-                new AndroidDataCollectionSharedKernelModule(basePath: basePath));
+                new AndroidDataCollectionSharedKernelModule());
 
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
