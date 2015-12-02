@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
         private static IVerificationErrorsMapper mapper;
         private static QuestionnaireVerificationError[] verificationErrors;
         private static QuestionnaireDocument document;
-        private static VerificationError[] result;
+        private static VerificationMessage[] result;
         private static string staticTextId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";
     }

@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.UI.Designer.Models
 {
-    public class VerificationError
+    public class VerificationMessage
     {
         public string Code { get; set; }
         public string Message { get; set; }

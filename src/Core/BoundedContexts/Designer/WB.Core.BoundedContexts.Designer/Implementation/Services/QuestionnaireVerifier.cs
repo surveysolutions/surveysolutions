@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal class QuestionnaireVerifier : IQuestionnaireVerifier
+    internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
     {
         private const int MaxExpressionLength = 10000;
         private const int MaxOptionsCountInCascadingQuestion = 15000;
@@ -190,6 +190,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByRostersWithDuplicateVariableName,
                     ErrorsByMacrosWithDuplicateName,
 
+                    VerifyAmountOfRosters,
                     //ErrorsByConditionAndValidationExpressions
                 };
             }

@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
         private static IVerificationErrorsMapper mapper;
         private static QuestionnaireVerificationError[] verificationErrors;
         private static QuestionnaireDocument document;
-        private static VerificationError[] result;
+        private static VerificationMessage[] result;
         private static string questionId = "11111111111111111111111111111111";
         private static string groupId = "22222222222222222222222222222222";
         private static string groupTitle = "Group Title";

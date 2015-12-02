@@ -3,6 +3,7 @@
     public enum VerificationErrorLevel
     {
         General = 0,
-        Critical = 1
+        Critical = 1,
+        Warning = 2
     }
 }
