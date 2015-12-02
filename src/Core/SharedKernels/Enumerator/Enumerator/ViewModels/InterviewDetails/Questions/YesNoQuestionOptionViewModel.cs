@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Tasks;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -55,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.Selected = value;
-                this.RaiseAnswerCommand.Execute();
+                this.RaiseToggleAnswer().WaitAndUnwrapException();
             }
         }
 
@@ -68,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.Selected = !value;
-                this.RaiseAnswerCommand.Execute();
+                this.RaiseToggleAnswer().WaitAndUnwrapException();
             }
         }
 
@@ -89,9 +90,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? AnswerCheckedOrder { get; set; }
 
-        public IMvxCommand RaiseAnswerCommand
+        public async Task RaiseToggleAnswer()
         {
-            get { return new MvxCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this)); }
+            await this.QuestionViewModel.ToggleAnswerAsync(this); 
         }
 
         public IMvxCommand RemoveAnswerCommand
@@ -100,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(() => {
                     this.Selected = null;
-                    this.RaiseAnswerCommand.Execute();
+                    this.RaiseToggleAnswer().WaitAndUnwrapException();
                 });
             }
         }

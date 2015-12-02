@@ -628,7 +628,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_when_ordered_functionlity_is_enabled.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_when_ordered_functionality_is_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_of_another_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_initializing_answered_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_toggling_answer.cs" />
