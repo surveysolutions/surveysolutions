@@ -228,6 +228,8 @@
     <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\with_postgres_db.cs" />
     <Compile Include="PostgreSQLTests\when_storing_entity_into_key_value_storage.cs" />
     <Compile Include="PostgreSQLTests\with_postgres_db.cs" />
     <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
