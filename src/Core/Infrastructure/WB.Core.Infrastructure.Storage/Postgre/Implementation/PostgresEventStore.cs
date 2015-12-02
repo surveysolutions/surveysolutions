@@ -318,7 +318,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 command.CommandText = "select MAX(globalsequence) from events";
 
                 var scalar = command.ExecuteScalar();
-                lastUsedGlobalSequence = scalar is DBNull ? 0 : (long)scalar;
+                lastUsedGlobalSequence = scalar is DBNull ? 0 : Convert.ToInt32(scalar);
             }
         }
     }
