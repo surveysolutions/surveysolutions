@@ -97,8 +97,18 @@ namespace Ncqrs.Eventing
             _origin = streamOrigin;
         }
 
-        public UncommittedEvent(Guid eventIdentifier, Guid eventSourceId, int eventSequence, int initialVersionOfEventSource, DateTime eventTimeStamp, WB.Core.Infrastructure.EventBus.IEvent payload)            
+        public UncommittedEvent(Guid eventIdentifier, 
+            Guid eventSourceId, 
+            int eventSequence, 
+            int initialVersionOfEventSource, 
+            DateTime eventTimeStamp, 
+            WB.Core.Infrastructure.EventBus.IEvent payload)            
         {
+            if (eventTimeStamp.Kind != DateTimeKind.Utc)
+            {
+                throw new ArgumentException($"Cannot create event of type {this.GetType().Name} with non UTC timestamp assigned", nameof(eventTimeStamp));
+            }
+
             _payload = payload;
             _initialVersionOfEventSource = initialVersionOfEventSource;
             _eventSourceId = eventSourceId;
