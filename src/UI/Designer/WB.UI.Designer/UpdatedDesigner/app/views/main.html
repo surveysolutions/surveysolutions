@@ -153,7 +153,7 @@
                     <div class="question-list">
                         <div ng-repeat="error in verificationStatus.errors">
                             <div class="error-message"><span class="error-code">[{{error.code}}]:</span>{{error.message}}</div>
-                            <ul class="verification-items" ng-class="{singleError: !error.isGroupOfErrors}">
+                            <ul class="verification-items" ng-class="{singleError: !error.isGroupedMessage}">
                                 <li class="verification-item-container" ng-repeat="reference in error.references" ng-click="navigateTo(reference)">
                                     <a class="verification-item" href="javascript:void(0);">
                                         <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>

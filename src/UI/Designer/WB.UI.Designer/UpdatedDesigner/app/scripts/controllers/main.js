@@ -152,9 +152,8 @@ angular.module('designerApp')
                     return item.ItemId != itemId;
                 });
                 _.each(errors, function(error) {
-                    if (error.isGroupOfErrors) {
+                    if (error.isGroupedMessage) {
                         error.references = _.filter(error.references, function(reference) {
-
                             return reference.itemId != itemId;
                         });
                     }
@@ -162,7 +161,7 @@ angular.module('designerApp')
 
                 var errorsCount = 0;
                 _.each(errors, function(error) {
-                    if (error.isGroupOfErrors) {
+                    if (error.isGroupedMessage) {
                         _.each(error.references, function(reference) {
                             errorsCount++;
                         });
@@ -172,7 +171,7 @@ angular.module('designerApp')
                 });
 
                 errors = _.filter(errors, function(error) {
-                    return !error.isGroupOfErrors || error.references.length;
+                    return !error.isGroupedMessage || error.references.length;
                 });
 
                 $scope.verificationStatus.errors = errors;
