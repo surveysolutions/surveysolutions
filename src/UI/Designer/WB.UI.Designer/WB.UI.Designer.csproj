@@ -357,8 +357,7 @@
     <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
-    <Compile Include="Models\VerificationError.cs" />
-    <Compile Include="Models\VerificationErrors.cs" />
+    <Compile Include="Models\VerificationMessage.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />

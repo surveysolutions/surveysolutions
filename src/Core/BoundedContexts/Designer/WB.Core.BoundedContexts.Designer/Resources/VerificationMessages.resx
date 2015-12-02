@@ -393,4 +393,7 @@
   <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
     <value>Macro cannot have empty name.</value>
   </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
+  </data>
 </root>

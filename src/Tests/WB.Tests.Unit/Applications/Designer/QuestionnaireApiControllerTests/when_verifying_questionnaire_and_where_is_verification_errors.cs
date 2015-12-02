@@ -61,8 +61,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         private static Mock<IVerificationErrorsMapper> errorsMapperMock;
         private static QuestionnaireVerificationError[] verificationErrors;
         private static QuestionnaireController controller;
-        private static VerificationError[] mappedAndEnrichedVerificationErrors;
-        private static VerificationErrors result;
+        private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
+        private static VerificationResult result;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
     }
 }
