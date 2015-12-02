@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>         (command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>          (aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator, ImportFromDesigner>())
+                .InitializesWith<ImportFromDesigner>          (aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
                 .InitializesWith<ImportFromDesignerForTester> (aggregate => aggregate.ImportFromDesignerForTester)
                 .InitializesWith<ImportFromSupervisor>        (aggregate => aggregate.ImportFromSupervisor)
                 .InitializesWith<RegisterPlainQuestionnaire>  (aggregate => aggregate.RegisterPlainQuestionnaire)

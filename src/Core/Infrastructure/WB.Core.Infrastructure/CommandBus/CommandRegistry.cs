@@ -77,7 +77,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public AggregateSetup<TAggregate> Handles<TCommand>(
                 Func<TCommand, Guid> aggregateRootIdResolver, 
                 Action<TCommand, TAggregate> commandHandler,
-                Action<CommandHandlerConfiguration<TAggregate>> configurer)
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
                 where TCommand : ICommand
             {
                 Register(aggregateRootIdResolver, commandHandler, isInitializer: false, configurer: configurer);
@@ -109,7 +109,7 @@ namespace WB.Core.Infrastructure.CommandBus
             }
 
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Func<TAggregate, Action<TCommand>> commandHandler,
-                Action<CommandHandlerConfiguration<TAggregate>> configurer)
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
                 where TCommand : TAggregateCommand
             {
                 return InitializesWith<TCommand>((command, aggregate) => commandHandler(aggregate)(command), configurer);
@@ -123,7 +123,7 @@ namespace WB.Core.Infrastructure.CommandBus
             }
 
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Action<TCommand, TAggregate> commandHandler,
-                Action<CommandHandlerConfiguration<TAggregate>> configurer)
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
                 where TCommand : TAggregateCommand
             {
                 Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, configurer: configurer);
@@ -155,16 +155,16 @@ namespace WB.Core.Infrastructure.CommandBus
         private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, 
             Action<TCommand, TAggregate> commandHandler, 
             bool isInitializer,
-            Action<CommandHandlerConfiguration<TAggregate>> configurer)
+            Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
             where TCommand : ICommand
             where TAggregate : IAggregateRoot
         {
             string commandName = typeof (TCommand).Name;
 
             if (Handlers.ContainsKey(commandName))
-                throw new ArgumentException(string.Format("Command {0} is already registered.", commandName));
+                throw new ArgumentException($"Command {commandName} is already registered.");
 
-            var configuration = new CommandHandlerConfiguration<TAggregate>();
+            var configuration = new CommandHandlerConfiguration<TAggregate, TCommand>();
             configurer?.Invoke(configuration);
 
             Handlers.Add(commandName, new HandlerDescriptor(
@@ -235,12 +235,15 @@ namespace WB.Core.Infrastructure.CommandBus
             };
         }
 
-        public static void Configure<TAggregate, TCommand>(Action<CommandHandlerConfiguration<TAggregate>> configuration) where TAggregate : IAggregateRoot
+        public static void Configure<TAggregate, TCommand>(Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
+            where TAggregate : IAggregateRoot
+            where TCommand : ICommand
         {
-            CommandHandlerConfiguration<TAggregate> cfg = new CommandHandlerConfiguration<TAggregate>();
-            configuration.Invoke(cfg);
+            var configuration = new CommandHandlerConfiguration<TAggregate, TCommand>();
 
-            Handlers[typeof(TCommand).Name].AppendValidators(cfg.GetValidators());
+            configurer.Invoke(configuration);
+
+            Handlers[typeof(TCommand).Name].AppendValidators(configuration.GetValidators());
         }
     }
 }
