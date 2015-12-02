@@ -906,7 +906,7 @@ namespace WB.Tests.Unit
             Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
         {
             Group group = Create.Group(
-                groupId: rosterId,
+                groupId: rosterId ?? Guid.NewGuid(),
                 title: title,
                 variable: variable,
                 enablementCondition: enablementCondition,
