@@ -140,6 +140,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             if (!position.HasValue)
                 return totalCountOfEvents;
 
+
+
             var eventSlicesAfter = GetEventsAfterPosition(position);
 
             foreach (var eventSlice in eventSlicesAfter)
@@ -202,7 +204,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 previousSliceEventPosition = new EventPosition(eventStorePosition.CommitPosition,
                     eventStorePosition.PreparePosition,
-                    lastHandledEvent.EventSourceId, lastHandledEvent.EventSequence);
+                    lastHandledEvent.EventSourceId, 
+                    lastHandledEvent.EventSequence);
 
                 yield return
                     new EventSlice(eventsInSlice, previousSliceEventPosition.Value, slice.IsEndOfStream);
