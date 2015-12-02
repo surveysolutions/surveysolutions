@@ -84,15 +84,6 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return new NewEditStaticTextView();
         }
 
-        internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors()
-        {
-            return new QuestionnaireVerificationError[2]
-            {
-                new QuestionnaireVerificationError("aaa","aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Question, Guid.NewGuid())}), 
-                new QuestionnaireVerificationError("bbb","bbbb", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.Group, Guid.NewGuid())}), 
-            };
-        }
-
         internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
         {
             return
@@ -116,56 +107,6 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
                 Type = QuestionType.SingleOption,
                 Options = options,
                 IsFilteredCombobox = isFilteredCombobox,
-            };
-        }
-        internal static VerificationMessage[] CreateVerificationErrors()
-        {
-            return new VerificationMessage[3]
-            {
-                new VerificationMessage
-                {
-                    Code = "aaa",
-                    Message = "aaaa",
-                    References = new List<VerificationReference>
-                    {
-                        new VerificationReference
-                        {
-                            Type = QuestionnaireVerificationReferenceType.Question,
-                            ItemId = Guid.NewGuid().FormatGuid(),
-                            Title = "aaaaaaaaaaaaaaaaaaaaaa"
-                        }
-                    }
-                }
-                ,
-                new VerificationMessage
-                {
-                    Code = "aaa",
-                    Message = "aaaa",
-                    References = new List<VerificationReference>
-                    {
-                        new VerificationReference
-                        {
-                            Type = QuestionnaireVerificationReferenceType.Question,
-                            ItemId = Guid.NewGuid().FormatGuid(),
-                            Title = "aaaaaaaaaaaaaaaaaaaaaa"
-                        }
-                    }
-                }
-                ,
-                new VerificationMessage
-                {
-                    Code = "ccc",
-                    Message = "ccccc",
-                    References = new List<VerificationReference>
-                    {
-                        new VerificationReference
-                        {
-                            Type = QuestionnaireVerificationReferenceType.Question,
-                            ItemId = Guid.NewGuid().FormatGuid(),
-                            Title = "ccccccccccccccccc"
-                        }
-                    }
-                }
             };
         }
     }

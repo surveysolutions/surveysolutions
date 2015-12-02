@@ -285,6 +285,7 @@
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
+    <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Code
                     Code = x.Key.Code,
                     Message = x.Key.Message,
                     References = x.SelectMany(g => GetEnrichedReferences(g.References, questionnaireDocument)).ToList(),
-                    IsGroupOfErrors = true
+                    IsGroupedMessage = true
                 }).ToList();
 
             errors.AddRange(verificationErrors
@@ -35,13 +35,13 @@ namespace WB.UI.Designer.Code
                     Code = x.Code,
                     Message = x.Message,
                     References = GetEnrichedReferences(x.References, questionnaireDocument).ToList(),
-                    IsGroupOfErrors = false
+                    IsGroupedMessage = false
                 }));
 
             return errors.OrderBy(x => x.Code).ToArray();
         }
 
-        private IEnumerable<VerificationReference> GetEnrichedReferences(
+        private IEnumerable<VerificationReferenceEnriched> GetEnrichedReferences(
             IEnumerable<QuestionnaireVerificationReference> references,
             QuestionnaireDocument questionnaireDocument)
         {
@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Code
                 if (reference.Type == QuestionnaireVerificationReferenceType.Macro)
                 {
                     var macro = questionnaireDocument.Macros.First(x => x.Key == reference.Id);
-                    yield return new VerificationReference
+                    yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = QuestionnaireVerificationReferenceType.Macro,
@@ -78,7 +78,7 @@ namespace WB.UI.Designer.Code
                 {
                     var group = questionnaireDocument.Find<IGroup>(reference.Id);
 
-                    yield return new VerificationReference
+                    yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Code
                 {
                     var staticText = questionnaireDocument.Find<IStaticText>(reference.Id);
 
-                    yield return new VerificationReference
+                    yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
@@ -103,7 +103,7 @@ namespace WB.UI.Designer.Code
                 {
                     var question = questionnaireDocument.Find<IQuestion>(reference.Id);
 
-                    yield return new VerificationReference
+                    yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
