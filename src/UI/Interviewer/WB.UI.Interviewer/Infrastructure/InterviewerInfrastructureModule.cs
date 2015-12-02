@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -50,6 +51,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
             this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
+            this.Unbind<IPlainInterviewFileStorage>();
+            this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
 

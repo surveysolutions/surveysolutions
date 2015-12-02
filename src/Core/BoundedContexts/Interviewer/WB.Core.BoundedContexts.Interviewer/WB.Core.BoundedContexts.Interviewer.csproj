@@ -121,6 +121,7 @@
     <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs" />
     <Compile Include="ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="Implementation\Services\InterviewerPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewFactory.cs" />
@@ -173,6 +174,8 @@
     <Compile Include="Views\InterviewGpsCoordinatesView.cs" />
     <Compile Include="Views\InterviewGpsLocationView.cs" />
     <Compile Include="Views\EventView.cs" />
+    <Compile Include="Views\InterviewFileView.cs" />
+    <Compile Include="Views\InterviewMultimediaView.cs" />
     <Compile Include="Views\InterviewView.cs" />
     <Compile Include="Views\MvvmcrossTroubleshootingViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
@@ -187,6 +190,7 @@
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\QuestionnaireModelView.cs" />
     <Compile Include="Views\QuestionnaireDocumentView.cs" />
+    <Compile Include="Views\ApplicationSettingsView.cs" />
     <Compile Include="Views\QuestionnaireView.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
     <Compile Include="Views\SychronizationStatistics.cs" />

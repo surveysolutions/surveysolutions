@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly IPasswordHasher passwordHasher;
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
@@ -37,16 +36,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
+        private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
 
         private CancellationTokenSource synchronizationCancellationTokenSource;
 
         public SynchronizationViewModel(
-            ISynchronizationService synchronizationService,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
-            IPlainInterviewFileStorage plainInterviewFileStorage,
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
+            IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
+            ISynchronizationService synchronizationService,
             ILogger logger,
-            IUserInteractionService userInteractionService, 
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IUserInteractionService userInteractionService,
             IPasswordHasher passwordHasher,
             IPrincipal principal,
             IMvxMessenger messenger,
@@ -54,11 +56,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IInterviewerInterviewFactory interviewFactory)
         {
             this.synchronizationService = synchronizationService;
-            this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.logger = logger;
             this.principal = principal;
             this.userInteractionService = userInteractionService;
             this.interviewersPlainStorage = interviewersPlainStorage;
+            this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
+            this.interviewFileViewStorage = interviewFileViewStorage;
             this.passwordHasher = passwordHasher;
             this.interviewViewRepository = interviewViewRepository;
             this.messenger = messenger;
@@ -396,20 +399,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task UploadImagesByCompletedInterview(Guid interviewId)
         {
-            await Task.Run(async () =>
+            var imageViews = this.interviewMultimediaViewStorage.Query(images =>
+                images.Where(image => image.InterviewId == interviewId).ToList());
+
+            foreach (var imageView in imageViews)
             {
-                var interviewImages =  this.plainInterviewFileStorage.GetBinaryFilesForInterview(interviewId);
-                foreach (var image in interviewImages)
-                {
-                    await this.synchronizationService.UploadInterviewImageAsync(
-                        interviewId: image.InterviewId,
-                        fileName: image.FileName,
-                        fileData: image.GetData(),
-                        onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                        token: this.Token);
-                    this.plainInterviewFileStorage.RemoveInterviewBinaryData(image.InterviewId, image.FileName);
-                }
-            });
+                var fileView = await this.interviewFileViewStorage.GetByIdAsync(imageView.FileId);
+                await this.synchronizationService.UploadInterviewImageAsync(
+                    interviewId: imageView.InterviewId,
+                    fileName: imageView.FileName,
+                    fileData: fileView.File,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: this.Token);
+                await this.interviewMultimediaViewStorage.RemoveAsync(imageView.Id);
+                await this.interviewFileViewStorage.RemoveAsync(fileView.Id);
+            }
         }
 
         public void CancelSynchronizaion()
