@@ -23,6 +23,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewData, InterviewOnClientCreated>,
         IUpdateHandler<InterviewData, InterviewStatusChanged>,
+        IUpdateHandler<InterviewData, InterviewReceivedByInterviewer>,
+        IUpdateHandler<InterviewData, InterviewReceivedBySupervisor>,
         IUpdateHandler<InterviewData, SupervisorAssigned>,
         IUpdateHandler<InterviewData, InterviewerAssigned>,
         IUpdateHandler<InterviewData, GroupPropagated>,
@@ -615,6 +617,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewHardDeleted> @event)
         {
             return null;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
+        {
+            state.ReceivedByInterviewer = true;
+            return state;
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
+        {
+            state.ReceivedByInterviewer = false;
+            return state;
         }
     }
 }
