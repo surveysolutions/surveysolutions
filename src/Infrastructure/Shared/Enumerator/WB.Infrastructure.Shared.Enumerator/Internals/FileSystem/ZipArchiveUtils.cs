@@ -30,6 +30,17 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             zip.CreateZip(archiveFile, directory, true, string.Empty);
         }
 
+        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                FastZip zip = new FastZip();
+                zip.CreateZip(memoryStream, sourceDirectory, true, fileFilter, directoryFilter);
+
+                return memoryStream.ToArray();
+            }
+        }
+
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
         {
             using (FileStream fsOut = File.Create(archiveFilePath))

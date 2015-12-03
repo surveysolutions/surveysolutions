@@ -9,6 +9,8 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -18,6 +20,8 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Data.Submit;
+using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.Settings;
 
 namespace WB.UI.Interviewer.Infrastructure
@@ -61,9 +65,16 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-            
-            this.Bind<IQuestionnaireAssemblyFileAccessor>()
-                .To<InterviewerQuestionnaireAssemblyFileAccessor>().InSingletonScope().WithConstructorArgument("folderPath", FileSystem.Current.LocalStorage.Path).WithConstructorArgument("assemblyDirectoryName", this.questionnaireAssembliesFolder);
+
+            var logFolderName = "logs";
+            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory(logFolderName, "errors.log")));
+            this.Bind<IReportSender>().ToConstant(new FileReportSender(AndroidPathUtils.GetPathToFileInLocalSubDirectory(logFolderName, "crashes.log")));
+
+            this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
+
+            this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
+                kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(),
+                    AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
         }
     }
 }

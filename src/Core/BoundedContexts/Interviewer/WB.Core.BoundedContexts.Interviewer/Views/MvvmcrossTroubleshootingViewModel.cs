@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.CapiInformationService;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -25,7 +24,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewerApplicationUpdater updater;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ICapiInformationService capiInformationService;
 
         public MvvmcrossTroubleshootingViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -35,8 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISynchronizationService synchronizationService, 
             ILogger logger, 
             IInterviewerApplicationUpdater updater, 
-            IFileSystemAccessor fileSystemAccessor, 
-            ICapiInformationService capiInformationService)
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
@@ -46,7 +43,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.logger = logger;
             this.updater = updater;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.capiInformationService = capiInformationService;
         }
 
         public void Init()
@@ -235,7 +231,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             string errorMessageHappened = null;
             try
             {
-                pathToInfoArchive = await this.capiInformationService.CreateInformationPackage(tokenSource.Token);
+                //pathToInfoArchive = await this.capiInformationService.CreateInformationPackage(tokenSource.Token);
 
                 if (string.IsNullOrEmpty(pathToInfoArchive) || !this.fileSystemAccessor.IsFileExists(pathToInfoArchive))
                 {

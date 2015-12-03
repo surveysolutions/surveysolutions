@@ -16,5 +16,16 @@ namespace WB.Infrastructure.Shared.Enumerator
 
             return pathToSubfolderInLocalDirectory;
         }
+
+        public static string GetPathToFileInLocalSubDirectory(string subFolderName, string fileName)
+        {
+            var subFolder = GetPathToSubfolderInLocalDirectory(subFolderName);
+
+            return FileSystem.Current.GetFolderFromPathAsync(subFolder)
+                .Result
+                .CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists)
+                .Result
+                .Path;
+        }
     }
 }

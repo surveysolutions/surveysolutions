@@ -34,6 +34,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
