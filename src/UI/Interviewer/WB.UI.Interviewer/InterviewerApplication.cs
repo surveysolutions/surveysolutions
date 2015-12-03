@@ -12,7 +12,6 @@ using Main.Core.Events.File;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -31,16 +30,14 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.Infrastructure.Shared.Enumerator.Ninject;
 using WB.UI.Interviewer.Activities;
-using WB.UI.Interviewer.Backup;
 using WB.UI.Interviewer.EventHandlers;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.Infrastructure.Internals.Crasher;
 using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Attributes;
-using WB.UI.Interviewer.Infrastructure.Logging;
+using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Data.Submit;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Shared.Enumerator;
-using IInfoFileSupplierRegistry = WB.Core.GenericSubdomains.Portable.Services.IInfoFileSupplierRegistry;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Interviewer
@@ -146,19 +143,17 @@ namespace WB.UI.Interviewer
                 new InterviewerUIModule(),
                 
                 new AndroidCoreRegistry(),
-                new AndroidSharedModule(),
-                new AndroidLoggingModule());
+                new AndroidSharedModule());
 
             MvxAndroidSetupSingleton.EnsureSingletonAvailable(this);
             MvxSingleton<MvxAndroidSetupSingleton>.Instance.EnsureInitialized();
             
             this.kernel.Load(
                 new AndroidModelModule(),
-                new ErrorReportingModule(pathToTemporaryFolder: basePath),
                 new AndroidDataCollectionSharedKernelModule());
 
             CrashManager.Initialize(this);
-            CrashManager.AttachSender(() => new FileReportSender("Interviewer", this.kernel.Get<IInfoFileSupplierRegistry>()));
+            CrashManager.AttachSender(() => this.kernel.Get<IReportSender>());
          
             this.kernel.Bind<Context>().ToConstant(this);
 

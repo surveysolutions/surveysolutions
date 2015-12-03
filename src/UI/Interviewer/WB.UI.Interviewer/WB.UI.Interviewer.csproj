@@ -345,13 +345,9 @@
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
-    <Compile Include="CustomControls\TabletInformationReportButton.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Implementations\Services\UpdateProcessor.cs" />
-    <Compile Include="Infrastructure\Logging\AndroidLoggingModule.cs" />
-    <Compile Include="Infrastructure\Logging\ExceptionExtension.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
-    <Compile Include="Backup\FileReportSender.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\EmailReporterAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\GoogleFormReporterAttribute.cs" />
@@ -376,6 +372,7 @@
     <Compile Include="Infrastructure\Internals\Crasher\Utils\Installation.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Utils\PackageManagerWrapper.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Utils\ReportUtils.cs" />
+    <Compile Include="Infrastructure\Logging\FileReportSender.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />

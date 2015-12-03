@@ -112,15 +112,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorReporting\ErrorReportingModule.cs" />
-    <Compile Include="ErrorReporting\Implementation\CapiInformation\CapiInformationService.cs" />
-    <Compile Include="ErrorReporting\Implementation\InfoFileSupplierRegistry\DefaultInfoFileSupplierRegistry.cs" />
-    <Compile Include="ErrorReporting\Implementation\TabletInformation\TabletInformationSender.cs" />
-    <Compile Include="ErrorReporting\Services\CapiInformationService\ICapiInformationService.cs" />
-    <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageCancellationEventArgs.cs" />
-    <Compile Include="ErrorReporting\Services\TabletInformationSender\InformationPackageEventArgs.cs" />
-    <Compile Include="ErrorReporting\Services\TabletInformationSender\ITabletInformationSender.cs" />
-    <Compile Include="EventHandler\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="Implementation\Services\InterviewerPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
@@ -132,6 +123,7 @@
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
+    <Compile Include="Implementation\Services\TroubleshootingService.cs" />
     <Compile Include="LinqUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\InterviewerUIResources.Designer.cs">
@@ -156,6 +148,7 @@
     <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireFactory.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
+    <Compile Include="Services\ITroubleshootingService.cs" />
     <Compile Include="Views\InterviewEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
@@ -186,7 +179,6 @@
     <Compile Include="Views\Dashboard\DashboardViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\PrefilledQuestion.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
-    <Compile Include="Views\InterviewMetaInfo\InterviewMetaInfoInputModel.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
     <Compile Include="Views\QuestionnaireModelView.cs" />
     <Compile Include="Views\QuestionnaireDocumentView.cs" />

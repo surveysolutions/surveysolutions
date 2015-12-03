@@ -76,13 +76,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             get { return ServiceLocator.Current.GetInstance<ILogger>(); }
         }
 
-        public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string folderPath, string assemblyDirectoryName)
+        public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string pathToAssembliesDirectory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.pathToStore = fileSystemAccessor.CombinePath(folderPath, assemblyDirectoryName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToStore))
-                fileSystemAccessor.CreateDirectory(this.pathToStore);
+            this.pathToStore = pathToAssembliesDirectory;
 
             this.backwardCompatibleAccessor = new BackwardCompatibleQuestionnaireAssemblyFileAccessor(this.pathToStore, this.fileSystemAccessor);
         }
