@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Android.App;
@@ -7,15 +8,15 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Droid.Platform;
 using Microsoft.Practices.ServiceLocation;
 using Mono.CSharp;
-using WB.Core.BoundedContexts.Interviewer.ErrorReporting.Services.TabletInformationSender;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
@@ -40,9 +41,9 @@ namespace WB.UI.Interviewer.Activities
             get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
         }
 
-        protected TabletInformationReportButton btnSendTabletInfo
+        protected Button btnSendTabletInfo
         {
-            get { return this.FindViewById<TabletInformationReportButton>(Resource.Id.btnSendTabletInfo); }
+            get { return this.FindViewById<Button>(Resource.Id.btnSendTabletInfo); }
         }
 
         protected Button btnRestore
@@ -107,13 +108,45 @@ namespace WB.UI.Interviewer.Activities
             //this.btnBackup.Click += this.btnBackup_Click;
             //this.btnRestore.Click += this.btnRestore_Click;
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
-            this.btnSendTabletInfo.ProcessFinished += this.btnSendTabletInfo_ProcessFinished;
-            this.btnSendTabletInfo.ProcessCanceled += this.btnSendTabletInfo_ProcessCanceled;
-            this.btnSendTabletInfo.SenderCanceled += this.btnSendTabletInfo_SenderCanceled;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
             this.btnVersion.Click += this.btnVersion_Click;
             this.btnVersion.Text = string.Format("Version: {0}. Check for a new version.", this.interviewerSettings.GetApplicationVersionName());
+
+            this.ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != "IsInProgress") return;
+
+            if (this.ViewModel.IsInProgress)
+                this.ShowProgressDialog();
+            else
+                this.HideProgressDialog();
+        }
+
+        private void HideProgressDialog()
+        {
+            if (this.ProgressDialog == null) return;
+
+            this.ProgressDialog.Hide();
+            this.ProgressDialog.Dispose();
+            this.ProgressDialog = null;
+        }
+
+        private void ShowProgressDialog()
+        {
+            this.ProgressDialog = new ProgressDialog(Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity);
+
+            this.ProgressDialog.SetTitle(InterviewerUIResources.Troubleshooting_Old_InformationPackage);
+            this.ProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+            this.ProgressDialog.SetMessage(InterviewerUIResources.Troubleshooting_Old_CreatingInformationPackage);
+            this.ProgressDialog.SetCancelable(false);
+
+            this.ProgressDialog.SetButton(UIResources.Cancel, this.TabletInformationSenderCanceled);
+
+            this.ProgressDialog.Show();
         }
 
         private async void btnVersion_Click(object sender, EventArgs evnt)
@@ -279,24 +312,19 @@ namespace WB.UI.Interviewer.Activities
         //    alert.Show();
         //}
 
-        private void btnSendTabletInfo_Click(object sender, EventArgs e)
+        private async void btnSendTabletInfo_Click(object sender, EventArgs e)
         {
-            this.PrepareUI();
+            await Task.Run(() =>
+            {
+                this.ViewModel.SendTabletInformationCommand.Execute();
+            });
         }
 
-        void btnSendTabletInfo_ProcessFinished(object sender, EventArgs e)
-        {
-            this.tvSyncResult.Text = InterviewerUIResources.Troubleshooting_Old_InformationPackageIsSuccessfullySent;
-        }
+        protected ProgressDialog ProgressDialog;
 
-        private void btnSendTabletInfo_ProcessCanceled(object sender, InformationPackageCancellationEventArgs e)
+        private void TabletInformationSenderCanceled(object sender, DialogClickEventArgs e)
         {
-            this.tvSyncResult.Text = string.Format(InterviewerUIResources.Troubleshooting_Old_SendingOfInformationPackageIsCanceled, e.Reason);
-        }
-
-        private void btnSendTabletInfo_SenderCanceled(object sender, EventArgs e)
-        {
-            this.tvSyncResult.Text = InterviewerUIResources.Troubleshooting_Old_SendingOfInformationPackageIsCanceling;
+            this.ViewModel.CancelSendingTabletInformationCommand.Execute();
         }
 
         protected override void OnStart()
@@ -332,6 +360,7 @@ namespace WB.UI.Interviewer.Activities
         {
             base.OnDestroy();
 
+            this.ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
             this.llContainer.Click -= this.llContainer_Click;
             this.btnVersion.Click -= this.btnVersion_Click;
 
