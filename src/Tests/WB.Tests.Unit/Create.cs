@@ -168,7 +168,6 @@ namespace WB.Tests.Unit
                 "no comment");
         }
 
-
         public static AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
         {
             return new AnsweredYesNoOption(value, answer);
@@ -222,7 +221,7 @@ namespace WB.Tests.Unit
                 children: children);
         }
 
-        public static  CodeGenerator CodeGenerator(
+        public static CodeGenerator CodeGenerator(
             IMacrosSubstitutionService macrosSubstitutionService = null,
             IExpressionProcessor expressionProcessor = null)
         {
@@ -375,16 +374,16 @@ namespace WB.Tests.Unit
         }
 
         public static EnablementChanges EnablementChanges(
-            List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeDisabled = null, 
-            List<WB.Core.SharedKernels.DataCollection.Identity> groupsToBeEnabled = null,
-            List<WB.Core.SharedKernels.DataCollection.Identity> questionsToBeDisabled = null, 
-            List<WB.Core.SharedKernels.DataCollection.Identity> questionsToBeEnabled = null)
+            List<Identity> groupsToBeDisabled = null, 
+            List<Identity> groupsToBeEnabled = null,
+            List<Identity> questionsToBeDisabled = null, 
+            List<Identity> questionsToBeEnabled = null)
         {
             return new EnablementChanges(
-                groupsToBeDisabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
-                groupsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
-                questionsToBeDisabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>(),
-                questionsToBeEnabled ?? new List<WB.Core.SharedKernels.DataCollection.Identity>());
+                groupsToBeDisabled ?? new List<Identity>(),
+                groupsToBeEnabled ?? new List<Identity>(),
+                questionsToBeDisabled ?? new List<Identity>(),
+                questionsToBeEnabled ?? new List<Identity>());
         }
 
         public static EventContext EventContext()
@@ -750,7 +749,6 @@ namespace WB.Tests.Unit
         {
             return new InterviewExportedDataRecord();
         }
-
 
         public static IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreatedEvent(Guid? interviewId = null, string userId = null,
             string questionnaireId = null, long questionnaireVersion = 0)
