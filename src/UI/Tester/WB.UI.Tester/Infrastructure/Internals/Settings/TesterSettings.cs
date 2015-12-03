@@ -9,7 +9,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
     internal class TesterSettings : IEnumeratorSettings
     {
-        private const string DesignerEndpointParameterName = "DesignerEndpointV10";
+        private const string DesignerEndpointParameterName = "DesignerEndpointV11";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
