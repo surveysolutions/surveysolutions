@@ -46,7 +46,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 Title = questionnaire.Questionnaire.Title,
                 Description = questionnaire.Questionnaire.Description,
                 PublicKey = interview.InterviewId,
-                Status = interview.Status
+                Status = interview.Status,
+                ReceivedByInterviewer = interview.ReceivedByInterviewer
             };
 
             Func<Guid, decimal[], Dictionary<decimal[], string>> getAvailableOptions = (questionId, questionRosterVector) => this.GetAvailableOptions(questionId, questionRosterVector, interview, questionnaireReferenceInfo, questionnaireRosters);

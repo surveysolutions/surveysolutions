@@ -9,6 +9,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewStatus Status { get; set; }
 
+        public bool ReceivedByInterviewer { get; set; }
+
         public UserLight Responsible { get; set; }
 
         public Guid QuestionnairePublicKey { get; set; }

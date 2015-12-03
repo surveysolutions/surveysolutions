@@ -173,6 +173,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestionOrThrow(questionId).QuestionType;
         }
 
+        public QuestionScope GetQuestionScope(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).QuestionScope;
+        }
+
         public AnswerType GetAnswerType(Guid questionId)
         {
             var questionType = GetQuestionType(questionId);
