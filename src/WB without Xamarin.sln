@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6B97CFA4-4A98-412B-80E8-10511E781DCE}"
 EndProject
@@ -110,6 +110,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enumerator", "Enumerator", "{572464F5-0EC9-4ABE-9B6D-C74B6E11C782}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Enumerator", "Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj", "{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WB.Core.SharedKernels.SurveyManagement.FSharp", "Core\SharedKernels\SurveyManagement\SurveyManagement.FSharp\WB.Core.SharedKernels.SurveyManagement.FSharp.fsproj", "{7DBBE63E-968D-4E17-A166-16459B129DC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -268,6 +270,12 @@ Global
 		{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DBBE63E-968D-4E17-A166-16459B129DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBBE63E-968D-4E17-A166-16459B129DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DBBE63E-968D-4E17-A166-16459B129DC7}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBBE63E-968D-4E17-A166-16459B129DC7}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{7DBBE63E-968D-4E17-A166-16459B129DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DBBE63E-968D-4E17-A166-16459B129DC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -317,5 +325,6 @@ Global
 		{689346D7-30AC-420E-BC5B-588CC186A466} = {043CD8AB-573F-4017-AA85-FF34B396455F}
 		{572464F5-0EC9-4ABE-9B6D-C74B6E11C782} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F} = {572464F5-0EC9-4ABE-9B6D-C74B6E11C782}
+		{7DBBE63E-968D-4E17-A166-16459B129DC7} = {F381B2D6-EE18-4DE7-B016-CB1FB3F18FF0}
 	EndGlobalSection
 EndGlobal
