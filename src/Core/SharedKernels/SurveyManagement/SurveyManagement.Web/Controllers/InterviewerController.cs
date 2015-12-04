@@ -31,7 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Create(Guid supervisorId)
         {
-            return this.View(new InterviewerModel() {SupervisorId = supervisorId});
+            var supervisor = this.GetUserById(supervisorId);
+
+            if (supervisor == null) throw new HttpException(404, string.Empty);
+
+            return this.View(new InterviewerModel() {SupervisorId = supervisorId, SupervisorName = supervisor.UserName});
         }
 
         [HttpPost]

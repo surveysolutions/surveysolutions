@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         [Key]
         public Guid SupervisorId { get; set; }
+        public string SupervisorName { get; set; }
     }
 }
