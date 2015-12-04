@@ -28,13 +28,6 @@ namespace WB.UI.Interviewer.Infrastructure
 {
     public class InterviewerInfrastructureModule : NinjectModule
     {
-        private readonly string questionnaireAssembliesFolder;
-
-        public InterviewerInfrastructureModule(string questionnaireAssembliesFolder = "assemblies")
-        {
-            this.questionnaireAssembliesFolder = questionnaireAssembliesFolder;
-        }
-
         public override void Load()
         {
             this.Bind<IDocumentSerializer>().To<SiaqodbSerializer>();
@@ -52,7 +45,9 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
 
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
+            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireModelView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
+            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireDocumentView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
             this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
             this.Unbind<IPlainInterviewFileStorage>();
