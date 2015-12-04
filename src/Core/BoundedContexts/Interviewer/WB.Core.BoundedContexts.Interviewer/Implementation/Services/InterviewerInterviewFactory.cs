@@ -27,6 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireRepository;
         private readonly IAsyncPlainStorage<EventView> eventRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
+        private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly ISerializer serializer;
@@ -37,6 +39,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
             IAsyncPlainStorage<EventView> eventRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
+            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
+            IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository,
             ICommandService commandService,
             IInterviewerPrincipal principal,
             ISerializer serializer,
@@ -46,6 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.questionnaireRepository = questionnaireRepository;
             this.eventRepository = eventRepository;
             this.interviewViewRepository = interviewViewRepository;
+            this.interviewMultimediaViewRepository = interviewMultimediaViewRepository;
+            this.interviewFileViewRepository = interviewFileViewRepository;
             this.commandService = commandService;
             this.principal = principal;
             this.serializer = serializer;
@@ -55,23 +61,44 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task RemoveInterviewAsync(Guid interviewId)
         {
-            var eventViews = this.eventRepository.Query(events => events.Where(evnt => evnt.EventSourceId == interviewId).ToList());
-            await this.eventRepository.RemoveAsync(eventViews);
-
             await this.commandService.ExecuteAsync(new HardDeleteInterview(interviewId,
                 this.principal.CurrentUserIdentity.UserId));
+
+            var eventViews = await Task.Run(() => this.eventRepository.Query(
+                events => events.Where(evnt => evnt.EventSourceId == interviewId).ToList()));
+            await this.eventRepository.RemoveAsync(eventViews);
+
+            await this.RemoveInterviewImagesAsync(interviewId);
+        }
+
+        private async Task RemoveInterviewImagesAsync(Guid interviewId)
+        {
+            var imageViews = this.interviewMultimediaViewRepository.Query(images =>
+                images.Where(image => image.InterviewId == interviewId).ToList());
+
+            foreach (var interviewMultimediaView in imageViews)
+            {
+                await this.interviewFileViewRepository.RemoveAsync(interviewMultimediaView.FileId);
+            }
+            await this.interviewMultimediaViewRepository.RemoveAsync(imageViews);
         }
 
         public async Task<string> GetPackageByCompletedInterviewAsync(Guid interviewId)
         {
             InterviewView interview = await this.interviewViewRepository.GetByIdAsync(interviewId.FormatGuid());
-            AggregateRootEvent[] eventsToSend = await Task.FromResult(this.BuildEventStreamOfLocalChangesToSend(interviewId));
+
+            return await Task.Run(() => this.CreateSyncItem(interview));
+        }
+
+        private string CreateSyncItem(InterviewView interview)
+        {
+            AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interview.InterviewId);
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
 
             var metadata = new InterviewMetaInfo
             {
-                PublicKey = interviewId,
+                PublicKey = interview.InterviewId,
                 ResponsibleId = interview.ResponsibleId,
                 Status = (int)interview.Status,
                 RejectDateTime = interview.RejectedDateTime,
@@ -90,7 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 IsCompressed = true,
                 ItemType = SyncItemType.Interview,
                 MetaInfo = this.compressor.CompressString(this.serializer.Serialize(metadata, TypeSerializationSettings.AllTypes)),
-                RootId = interviewId
+                RootId = interview.InterviewId
             };
 
             return this.serializer.Serialize(syncItem);
