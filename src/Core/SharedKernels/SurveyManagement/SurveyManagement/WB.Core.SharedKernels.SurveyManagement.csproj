@@ -114,12 +114,13 @@
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
+    <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="EventHandler\AnswersByVariableDenormalizer.cs" />
+    <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
     <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
@@ -167,7 +168,6 @@
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
     <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
     <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
@@ -338,7 +338,6 @@
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadView.cs" />
