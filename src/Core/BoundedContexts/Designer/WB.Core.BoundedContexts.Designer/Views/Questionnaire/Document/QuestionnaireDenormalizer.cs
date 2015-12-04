@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -59,7 +60,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         IEventHandler<MacroAdded>,
         IEventHandler<MacroUpdated>,
-        IEventHandler<MacroDeleted>
+        IEventHandler<MacroDeleted>,
+
+        IEventHandler<LookupTableAdded>,
+        IEventHandler<LookupTableUpdated>,
+        IEventHandler<LookupTableDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
@@ -542,6 +547,33 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             document.Macros.Remove(evnt.Payload.MacroId);
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableAdded> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.LookupTables[evnt.Payload.LookupTableId] = "";
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.LookupTables[evnt.Payload.LookupTableId] = evnt.Payload.LookupTableName;
+
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+
+            document.LookupTables.Remove(evnt.Payload.LookupTableId);
+
             this.UpdateQuestionnaire(evnt, document);
         }
     }

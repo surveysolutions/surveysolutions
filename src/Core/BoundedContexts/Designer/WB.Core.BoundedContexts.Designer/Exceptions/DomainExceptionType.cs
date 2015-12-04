@@ -148,6 +148,10 @@
 
         MacroAlreadyExist,
 
-        MacroContentIsEmpty
+        MacroContentIsEmpty,
+
+        LookupTableAlreadyExist,
+
+        LookupTableIsAbsent
     }
 }
