@@ -5,9 +5,10 @@
 
             $scope.isFoldedChapters = false;
             $scope.isFoldedMacros = false;
+            $scope.isFoldedLookupTables = false;
 
             var closeOpenPanelIfAny = function() {
-                if (!($scope.isFoldedChapters || $scope.isFoldedMacros))
+                if (!($scope.isFoldedChapters || $scope.isFoldedMacros || $scope.isFoldedLookupTables))
                     return;
 
                 if ($scope.isFoldedChapters) {
@@ -17,7 +18,16 @@
                 if ($scope.isFoldedMacros) {
                     $rootScope.$broadcast("closeMacrosListRequested", {});
                 }
+                if ($scope.isFoldedLookupTables) {
+                    $rootScope.$broadcast("closeLookupTablesRequested", {});
+                }
             };
+
+            var closeAllPanel = function () {
+                $scope.isFoldedMacros = false;
+                $scope.isFoldedChapters = false;
+                $scope.isFoldedLookupTables = false;
+            }
 
             $scope.unfoldChapters = function () {
                 if ($scope.isFoldedChapters)
@@ -36,12 +46,24 @@
                 $rootScope.$broadcast("openMacrosList", {});
             };
 
+            $scope.unfoldLookupTables = function () {
+                if ($scope.isFoldedLookupTables)
+                    return;
+
+                closeOpenPanelIfAny();
+                $scope.isFoldedLookupTables = true;
+                $rootScope.$broadcast("openLookupTables", {});
+            };
+
             $scope.$on('closeChaptersList', function () {
-                $scope.isFoldedChapters = false;
+                closeAllPanel();
             });
 
             $scope.$on('closeMacrosList', function () {
-                $scope.isFoldedMacros = false;
+                closeAllPanel();
             });
 
+            $scope.$on('closeLookupTables', function () {
+                closeAllPanel();
+            });
         });
