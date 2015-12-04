@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource();
 
-            var backupStream = await Task.FromResult(this.troubleshootingService.GetSystemBackup());
+            var backupStream = await Task.Run(() => this.troubleshootingService.GetSystemBackup());
 
             if (!this.cancellationTokenSource.IsCancellationRequested)
             {
