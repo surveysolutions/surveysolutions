@@ -15,28 +15,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.archiver = archiver;
         }
 
-        public async Task<byte[]> GetSystemBackupAsync()
+        public byte[] GetSystemBackup()
         {
-            return await Task.FromResult(
-                this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path, fileFilter: @"\.log$;\.dll$;\.mdb$;"));
+            return this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path,
+                fileFilter: @"\.log$;\.dll$;\.mdb$;");
         }
 
         public async Task BackupAsync(string backupToFolderPath)
         {
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm")}.ibak";
-            var backupFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
-            var emptyBackupFile = await backupFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
+            var backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
+            var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
 
-            var backup = await this.GetSystemBackupAsync();
+            var backup = await Task.FromResult(this.GetSystemBackup());
             using (var stream = await emptyBackupFile.OpenAsync(FileAccess.ReadAndWrite))
             {
                 stream.Write(backup, 0, backup.Length);
             }
         }
 
-        public async Task RestoreAsync(string backupFilePath)
+        public void Restore(string backupFilePath)
         {
-            await Task.Run(() => this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true));
+            this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true);
         }
     }
 }
