@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<string> GetPackageByCompletedInterviewAsync(Guid interviewId)
         {
             InterviewView interview = await this.interviewViewRepository.GetByIdAsync(interviewId.FormatGuid());
-            AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interviewId);
+            AggregateRootEvent[] eventsToSend = await Task.FromResult(this.BuildEventStreamOfLocalChangesToSend(interviewId));
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
 
