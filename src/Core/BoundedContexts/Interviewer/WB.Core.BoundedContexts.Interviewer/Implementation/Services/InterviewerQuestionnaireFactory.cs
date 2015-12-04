@@ -46,15 +46,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
         {
+            var questionnaireId = questionnaireIdentity.ToString();
+
             var questionnaireDocumentView = new QuestionnaireDocumentView
             {
-                Id = questionnaireIdentity.ToString(),
-                Document = this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument)
+                Id = questionnaireId,
+                Document = await Task.FromResult(this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument))
             };
 
             var questionnaireView = new QuestionnaireView
             {
-                Id = questionnaireIdentity.ToString(),
+                Id = questionnaireId,
                 Identity = questionnaireIdentity,
                 Census = census,
                 Title = questionnaireDocumentView.Document.Title
@@ -62,8 +64,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             var questionnaireModelView = new QuestionnaireModelView
             {
-                Model = await Task.FromResult(this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document)),
-                Id = questionnaireIdentity.ToString()
+                Id = questionnaireId,
+                Model = await Task.FromResult(this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document))
             };
 
             await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);

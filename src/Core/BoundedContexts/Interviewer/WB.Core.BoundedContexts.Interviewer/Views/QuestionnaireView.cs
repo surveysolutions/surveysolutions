@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class QuestionnaireView : IPlainStorageEntity
     {
+        public int OID { get; set; }
         public string Id { get; set; }
         public QuestionnaireIdentity Identity { get; set; }
         public string Title { get; set; }
