@@ -24,8 +24,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
@@ -51,6 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private HashSet<Guid> macroIds = new HashSet<Guid>();
+        private HashSet<Guid> lookupTableIds = new HashSet<Guid>();
+
         private bool wasExpressionsMigrationPerformed = false;
 
         internal void Apply(MacroAdded e)
@@ -65,6 +69,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(MacroDeleted e)
         {
             this.macroIds.Remove(e.MacroId);
+        }
+
+        internal void Apply(LookupTableAdded e)
+        {
+            this.lookupTableIds.Add(e.LookupTableId);
+        }
+
+        internal void Apply(LookupTableUpdated e)
+        {
+        }
+
+        internal void Apply(LookupTableDeleted e)
+        {
+            this.lookupTableIds.Remove(e.LookupTableId);
         }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
@@ -737,7 +755,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 Version = this.Version,
                 WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
                 ReadOnlyUsers = this.readOnlyUsers,
-                MacroIds = this.macroIds
+                MacroIds = this.macroIds,
+                LookupTableIds = this.lookupTableIds
             };
         }
 
@@ -747,6 +766,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.wasExpressionsMigrationPerformed = snapshot.WasExpressionsMigrationPerformed;
             this.readOnlyUsers = snapshot.ReadOnlyUsers;
             this.macroIds = snapshot.MacroIds;
+            this.lookupTableIds = snapshot.LookupTableIds;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
@@ -885,7 +905,43 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
             this.ApplyEvent(new MacroDeleted(command.MacroId, command.ResponsibleId));
         }
-      
+
+        #endregion
+
+        #region Lookup table command handlers
+
+        public void AddLookupTable(AddLookupTable command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            if (this.lookupTableIds.Contains(command.LookupTableId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
+            }
+            this.ApplyEvent(new LookupTableAdded(command.LookupTableId, command.ResponsibleId));
+        }
+        
+        public void UpdateLookupTable(UpdateLookupTable command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            if (!this.lookupTableIds.Contains(command.LookupTableId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
+            }
+            this.ApplyEvent(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.ResponsibleId));
+        }
+        public void DeleteLookupTable(DeleteLookupTable command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            if (!this.lookupTableIds.Contains(command.LookupTableId))
+            {
+                throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
+            }
+            this.ApplyEvent(new LookupTableDeleted(command.LookupTableId, command.ResponsibleId));
+        }
+
         #endregion
 
         #region Group command handlers
