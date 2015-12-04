@@ -51,7 +51,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
-        public void Unzip(string archivedFile, string extractToFolder)
+        public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
             using (ZipFile decompress = ZipFile.Read(archivedFile))
             {

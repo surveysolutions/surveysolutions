@@ -79,14 +79,6 @@
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.2-pre4\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.2-pre4\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Cirrious.CrossCore, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta5\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
       <Private>True</Private>
@@ -316,6 +308,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\FilePickerFragment.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
@@ -333,7 +326,6 @@
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
-    <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
@@ -442,6 +434,10 @@
     <AndroidResource Include="Resources\Layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\filepicker_createfolder.axml" />
+    <AndroidResource Include="Resources\Layout\filepicker_fragment.axml" />
+    <AndroidResource Include="Resources\Layout\filepicker_listitem.axml" />
+    <AndroidResource Include="Resources\Layout\filepicker_mainactivity.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
@@ -627,6 +623,21 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
+    <AndroidResource Include="Resources\menu\filepicker_menu.xml" />
+    <AndroidResource Include="Resources\Values\strings.xml" />
+    <AndroidResource Include="Resources\Drawable\borderless_button.xml" />
+    <AndroidResource Include="Resources\Drawable\filepicker_file.png" />
+    <AndroidResource Include="Resources\Drawable\filepicker_folder.png" />
+    <AndroidResource Include="Resources\Drawable\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\Drawable\filepicker_previous.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_folder.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\filepicker_previous.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_file.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_folder.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

@@ -24,4 +24,10 @@
   <color name="dashboard_synchronization_fail_title">#96F45D28</color>
   <color name="dashboard_border">#ECECEC</color>
   <color name="dashboard_border_shadow">#C2C2C2</color>
+
+
+  <!-- File picker -->
+  <color name="bright_blue">#33B5E5</color>
+  <color name="selection_background_color">#FEBB20</color>
+  <!-- /File picker -->
 </resources>

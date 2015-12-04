@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Android.App;
@@ -29,73 +28,26 @@ namespace WB.UI.Interviewer.Activities
         const string ApplicationFileName = "interviewer.apk";
         const string SyncGetlatestVersion = "/api/InterviewerSync/GetLatestVersion";
 
-        #region find for ui controls from xml
-
-        protected TextView tvSyncResult
-        {
-            get { return this.FindViewById<TextView>(Resource.Id.tvSyncResult); }
-        }
-
-        protected Button btnBackup
-        {
-            get { return this.FindViewById<Button>(Resource.Id.btnBackup); }
-        }
-
-        protected Button btnSendTabletInfo
-        {
-            get { return this.FindViewById<Button>(Resource.Id.btnSendTabletInfo); }
-        }
-
-        protected Button btnRestore
-        {
-            get { return this.FindViewById<Button>(Resource.Id.btnRestore); }
-        }
-
-        protected LinearLayout llContainer
-        {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
-        }
-
-        protected Button btnVersion
-        {
-            get { return this.FindViewById<Button>(Resource.Id.btnVersion); }
-        }
-
+        private FilePickerFragment filePickerFragment;
         protected ProgressDialog progressDialog;
-
-        private ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
-
-        private INetworkService networkService
-        {
-            get { return ServiceLocator.Current.GetInstance<INetworkService>(); }
-        }
-
-        private IInterviewerSettings interviewerSettings
-        {
-            get { return ServiceLocator.Current.GetInstance<IInterviewerSettings>(); }
-        }
-        private ISynchronizationService synchronizationService
-        {
-            get { return ServiceLocator.Current.GetInstance<ISynchronizationService>(); }
-        }
-
-        private ILogger logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
-
         private ProgressDialog progress;
-
         private PendingImplementation.Operation? currentOperation;
-
-        #endregion
-
         private int clickCount = 0;
-
         const int NUMBER_CLICK = 10;
+        
+        protected TextView tvSyncResult => this.FindViewById<TextView>(Resource.Id.tvSyncResult);
+        protected Button btnBackup => this.FindViewById<Button>(Resource.Id.btnBackup);
+        protected Button btnSendTabletInfo => this.FindViewById<Button>(Resource.Id.btnSendTabletInfo);
+        protected Button btnRestore => this.FindViewById<Button>(Resource.Id.btnRestore);
+        protected LinearLayout llContainer => this.FindViewById<LinearLayout>(Resource.Id.llContainer);
+        protected Button btnVersion => this.FindViewById<Button>(Resource.Id.btnVersion);
+
+        private INetworkService networkService => ServiceLocator.Current.GetInstance<INetworkService>();
+        private IInterviewerSettings interviewerSettings => ServiceLocator.Current.GetInstance<IInterviewerSettings>();
+        private ISynchronizationService synchronizationService => ServiceLocator.Current.GetInstance<ISynchronizationService>();
+        private ILogger logger => ServiceLocator.Current.GetInstance<ILogger>();
+
+        protected override int ViewResourceId => Resource.Layout.sync_dialog;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -105,8 +57,31 @@ namespace WB.UI.Interviewer.Activities
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
             
-            //this.btnBackup.Click += this.btnBackup_Click;
-            //this.btnRestore.Click += this.btnRestore_Click;
+            this.btnBackup.Click += delegate
+            {
+                filePickerFragment = new FilePickerFragment(null, null, FilePickerMode.Directory);
+                filePickerFragment.FileSelected += async (sender, path) =>
+                {
+                    filePickerFragment.Dismiss();
+                    await Task.Run(() => this.ViewModel.BackupCommand.Execute(path));
+                };
+                filePickerFragment.Cancel += sender => filePickerFragment.Dismiss();
+                filePickerFragment.Show(FragmentManager, "FilePicker");
+            };
+
+            this.btnRestore.Click += delegate
+            {
+                filePickerFragment = new FilePickerFragment();
+                filePickerFragment.FileSelected += (sender, path) =>
+                {
+                    filePickerFragment.Dismiss();
+
+                    this.ViewModel.RestoreCommand.Execute(path);
+                };
+                filePickerFragment.Cancel += sender => filePickerFragment.Dismiss();
+                filePickerFragment.Show(FragmentManager, "FilePicker");
+            };
+
             this.btnSendTabletInfo.Click += this.btnSendTabletInfo_Click;
             this.tvSyncResult.Click += this.tvSyncResult_Click;
             this.llContainer.Click += this.llContainer_Click;
@@ -118,35 +93,37 @@ namespace WB.UI.Interviewer.Activities
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "IsInProgress") return;
-
-            if (this.ViewModel.IsInProgress)
-                this.ShowProgressDialog();
-            else
-                this.HideProgressDialog();
+            if (e.PropertyName == "IsInProgress")
+            {
+                if (this.ViewModel.IsInProgress)
+                    this.ShowProgressDialog(this.ViewModel.CanCancelProgress);
+                else
+                    this.HideProgressDialog();
+            }
         }
-
+        
         private void HideProgressDialog()
         {
-            if (this.ProgressDialog == null) return;
+            if (this.progressDialog == null) return;
 
-            this.ProgressDialog.Hide();
-            this.ProgressDialog.Dispose();
-            this.ProgressDialog = null;
+            this.progressDialog.Hide();
+            this.progressDialog.Dispose();
+            this.progressDialog = null;
         }
 
-        private void ShowProgressDialog()
+        private void ShowProgressDialog(bool canCancelProcess)
         {
-            this.ProgressDialog = new ProgressDialog(Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity);
+            this.progressDialog = new ProgressDialog(this);
 
-            this.ProgressDialog.SetTitle(InterviewerUIResources.Troubleshooting_Old_InformationPackage);
-            this.ProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            this.ProgressDialog.SetMessage(InterviewerUIResources.Troubleshooting_Old_CreatingInformationPackage);
-            this.ProgressDialog.SetCancelable(false);
+            this.progressDialog.SetTitle(InterviewerUIResources.Troubleshooting_Old_InformationPackage);
+            this.progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+            this.progressDialog.SetMessage(InterviewerUIResources.Troubleshooting_Old_CreatingInformationPackage);
 
-            this.ProgressDialog.SetButton(UIResources.Cancel, this.TabletInformationSenderCanceled);
+            this.progressDialog.SetCancelable(canCancelProcess);
+            if (canCancelProcess)
+                this.progressDialog.SetButton(UIResources.Cancel, this.TabletInformationSenderCanceled);
 
-            this.ProgressDialog.Show();
+            this.progressDialog.Show();
         }
 
         private async void btnVersion_Click(object sender, EventArgs evnt)
@@ -248,70 +225,6 @@ namespace WB.UI.Interviewer.Activities
             }
         }
 
-        //private void btnRestoreConfirmed_Click(object sender, DialogClickEventArgs e)
-        //{
-        //    try
-        //    {
-        //        this.backupManager.Restore();
-
-        //        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        //        alert.SetPositiveButton("OK",  (o, args) =>
-        //        {
-        //            this.StartActivity(new Intent(this, typeof(SplashActivity)));   
-        //        });
-        //        alert.SetTitle("Success");
-        //        alert.SetMessage("Tablet was successfully restored");
-        //        alert.Show();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        //        alert.SetTitle("Restore Error");
-        //        alert.SetMessage(ex.Message + " " + ex.StackTrace);
-        //        alert.Show();
-        //    }
-        //}
-
-        //private void btnRestore_Click(object sender, EventArgs e)
-        //{
-        //    var alertWarningAboutRestore = this.CreateYesNoDialog(this,
-        //       this.btnRestoreConfirmed_Click, this.btnRestoreDeclined_Click,
-        //       InterviewerUIResources.Warning, message: string.Format(InterviewerUIResources.Troubleshooting_Old_AreYouSureYouWantToRestore, this.backupManager.RestorePath));
-
-        //    alertWarningAboutRestore.Show();
-        //}
-
-        //private void btnRestoreDeclined_Click(object sender, DialogClickEventArgs e)
-        //{
-        //}
-
-        //void btnBackup_Click(object sender, EventArgs e)
-        //{
-        //    string path = string.Empty;
-        //    try
-        //    {
-        //        path = this.backupManager.Backup();
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        this.Logger.Error("Error occurred during Backup. ", exception);
-        //    }
-
-        //    var alert = new AlertDialog.Builder(this);
-        //    if (string.IsNullOrWhiteSpace(path))
-        //    {
-        //        alert.SetTitle("Error");
-        //        alert.SetMessage(string.Format("Something went wrong and backup failed to be created."));
-        //    }
-        //    else
-        //    {
-        //        alert.SetTitle("Success");
-        //        alert.SetMessage(string.Format("Backup was saved to {0}", path));
-        //    }
-
-        //    alert.Show();
-        //}
-
         private async void btnSendTabletInfo_Click(object sender, EventArgs e)
         {
             await Task.Run(() =>
@@ -320,40 +233,9 @@ namespace WB.UI.Interviewer.Activities
             });
         }
 
-        protected ProgressDialog ProgressDialog;
-
         private void TabletInformationSenderCanceled(object sender, DialogClickEventArgs e)
         {
             this.ViewModel.CancelSendingTabletInformationCommand.Execute();
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-         
-            this.PrepareUI();
-        }
-
-        public AlertDialog CreateYesNoDialog(Activity activity, EventHandler<DialogClickEventArgs> yesHandler, EventHandler<DialogClickEventArgs> noHandler, string title = null, string message = null)
-        {
-            var builder = new AlertDialog.Builder(activity);
-            builder.SetNegativeButton(UIResources.No, noHandler);
-            builder.SetPositiveButton(UIResources.Yes, yesHandler);
-            builder.SetCancelable(false);
-            if (!string.IsNullOrWhiteSpace(title))
-            {
-                builder.SetTitle(title);
-            }
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                builder.SetMessage(message);
-            }
-            return builder.Create();
-        }
-
-        private void PrepareUI()
-        {
-            this.tvSyncResult.Text = string.Empty;
         }
 
         protected override void OnDestroy()
@@ -412,11 +294,6 @@ namespace WB.UI.Interviewer.Activities
                     break;
             }
             return base.OnOptionsItemSelected(item);
-        }
-
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.sync_dialog; }
         }
     }
 }

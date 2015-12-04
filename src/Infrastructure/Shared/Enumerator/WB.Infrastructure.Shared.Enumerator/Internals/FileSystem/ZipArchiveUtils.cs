@@ -73,12 +73,15 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         }
 
 
-        public void Unzip(string archivedFile, string extractToFolder)
+        public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
-            extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
-            if (!Directory.Exists(extractToFolder))
+            if (!ignoreRootDirectory)
             {
-                Directory.CreateDirectory(extractToFolder);
+                extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
+                if (!Directory.Exists(extractToFolder))
+                {
+                    Directory.CreateDirectory(extractToFolder);
+                }
             }
 
             using (ZipInputStream zipFileStream = new ZipInputStream(File.OpenRead(archivedFile)))

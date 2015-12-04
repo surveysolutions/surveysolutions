@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
@@ -7,7 +6,6 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -50,6 +48,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
+        private bool canCancelProgress;
+        public bool CanCancelProgress
+        {
+            get { return this.canCancelProgress; }
+            set { this.RaiseAndSetIfChanged(ref this.canCancelProgress, value); }
+        }
+
         public IMvxCommand NavigateToLoginCommand
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>()); }
@@ -82,7 +87,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get
             {
                 return this.backupCommand ?? (this.backupCommand =
-                    new MvxCommand(async () => await this.BackupAsync(), () => !this.IsInProgress));
+                    new MvxCommand<string>(async (backupToFolderPath) => await this.BackupAsync(backupToFolderPath), (backupToFolderPath) => !this.IsInProgress));
             }
         }
 
@@ -92,7 +97,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get
             {
                 return this.restoreCommand ?? (this.restoreCommand =
-                    new MvxCommand(async () => await this.RestoreAsync(), () => !this.IsInProgress));
+                    new MvxCommand<string>(async (backupFilePath) => await this.RestoreAsync(backupFilePath), (backupFilePath) => !this.IsInProgress));
             }
         }
 
@@ -101,14 +106,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             => this.cancelSendingTabletInformationCommand ?? (this.cancelSendingTabletInformationCommand = new MvxCommand(this.CancelSendingTabletInformation));
 
 
-        private async Task RestoreAsync()
+        private async Task RestoreAsync(string pathToBackupFile)
         {
-            await this.troubleshootingService.RestoreAsync("");
+            if (await this.userInteractionService.ConfirmAsync(
+                InterviewerUIResources.Troubleshooting_RestoreConfirmation.FormatString(pathToBackupFile),
+                string.Empty, UIResources.Yes, UIResources.No))
+            {
+                this.CanCancelProgress = false;
+                this.IsInProgress = true;
+
+                await this.troubleshootingService.RestoreAsync(pathToBackupFile);
+                this.IsInProgress = false;
+
+                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
+            }
         }
 
-        private async Task BackupAsync()
+        private async Task BackupAsync(string pathToFolder)
         {
-            await this.troubleshootingService.BackupAsync("");
+            this.CanCancelProgress = false;
+            this.IsInProgress = true;
+            await this.troubleshootingService.BackupAsync(pathToFolder);
+            this.IsInProgress = false;
+            await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_BackupWasSaved.FormatString(pathToFolder));
         }
         
         private void CancelSendingTabletInformation()
@@ -119,6 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         
         private async Task SendTabletInformationAsync()
         {
+            this.CanCancelProgress = true;
             this.IsInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource();
 
