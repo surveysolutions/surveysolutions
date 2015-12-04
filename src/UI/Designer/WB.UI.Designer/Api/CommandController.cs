@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -72,10 +74,11 @@ namespace WB.UI.Designer.Api
             }
 
             var commandType = "UpdateLookupTable";
-            ICommand concreteCommand;
+            UpdateLookupTable updateLookupTableCommand;
             try
             {
-                concreteCommand = this.commandDeserializer.Deserialize(commandType, command);
+                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, command);
+                updateLookupTableCommand.FileContent = fileContent;
             }
             catch (Exception e)
             {
@@ -83,7 +86,7 @@ namespace WB.UI.Designer.Api
                 throw;
             }
 
-            return  this.ProcessCommand(concreteCommand, commandType); 
+            return  this.ProcessCommand(updateLookupTableCommand, commandType); 
         }
 
         public HttpResponseMessage Post(CommandExecutionModel model)

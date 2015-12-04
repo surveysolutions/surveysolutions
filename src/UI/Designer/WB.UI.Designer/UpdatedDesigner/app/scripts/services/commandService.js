@@ -30,23 +30,14 @@
                     return commandCall(type, command);
                 };
 
-                commandService.addLookupTable = function (questionnaireId, lookupTable) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "tableId": lookupTable.itemId
-                    };
-                    return commandCall("AddLookupTable", command);
-                };
-
                 commandService.updateLookupTable = function (questionnaireId, lookupTable) {
                     blockUI.start();
 
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "tableId": lookupTable.itemId,
-                        "name": lookupTable.name,
-                        "fileName": lookupTable.fileName,
-                        "fileContent" : "{0}"
+                        "lookupTableId": lookupTable.itemId,
+                        "lookupTableName": lookupTable.name,
+                        "fileName": lookupTable.fileName
                     };
 
                     return Upload.upload({
@@ -59,10 +50,18 @@
                     });
                 };
 
+                commandService.addLookupTable = function (questionnaireId, lookupTable) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": lookupTable.itemId
+                    };
+                    return commandCall("AddLookupTable", command);
+                };
+
                 commandService.deleteLookupTable = function (questionnaireId, itemId) {
                     var command = {
                         "questionnaireId": questionnaireId,
-                        "tableId": itemId
+                        "lookupTableId": itemId
                     };
                     return commandCall("DeleteLookupTable", command);
                 };
@@ -94,33 +93,6 @@
                     };
                     return commandCall("DeleteMacro", command);
                 };
-
-                commandService.addLookupTable = function (questionnaireId, lookupTable) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "lookupTableId": lookupTable.itemId
-                    };
-                    return commandCall("AddLookupTable", command);
-                };
-
-                commandService.updateLookupTable = function (questionnaireId, lookupTable) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "lookupTableId": lookupTable.itemId,
-                        "lookupTableName": lookupTable.name
-                    };
-
-                    return commandCall("UpdateLookupTable", command);
-                };
-
-                commandService.deleteLookupTable = function (questionnaireId, itemId) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "lookupTableId": itemId
-                    };
-                    return commandCall("DeleteLookupTable", command);
-                };
-
 
                 commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
                     return commandCall('CloneQuestionById', {
