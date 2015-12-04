@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.CanCancelProgress = false;
                 this.IsInProgress = true;
 
-                await this.troubleshootingService.RestoreAsync(pathToBackupFile);
+                await Task.Run(() => this.troubleshootingService.Restore(pathToBackupFile));
                 this.IsInProgress = false;
 
                 await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource();
 
-            var backupStream = await this.troubleshootingService.GetSystemBackupAsync();
+            var backupStream = await Task.FromResult(this.troubleshootingService.GetSystemBackup());
 
             if (!this.cancellationTokenSource.IsCancellationRequested)
             {
