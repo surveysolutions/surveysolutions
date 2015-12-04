@@ -24,15 +24,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private readonly IEventTypeResolver eventTypeResolver;
         private static int BatchSize = 4096;
 
-        static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-            MissingMemberHandling = MissingMemberHandling.Ignore,
-            TypeNameHandling = TypeNameHandling.Auto,
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter() }
-        };
+      
 
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
             IEventTypeResolver eventTypeResolver)
@@ -125,7 +117,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     foreach (var @event in eventStream)
                     {
                         var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
-                            JsonSerializerSettings);
+                            EventSerializerSettings.JsonSerializerSettings);
                         var nextSequnce = this.GetNextSequnce();
 
                         writer.StartRow();
@@ -270,7 +262,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
             string eventType = (string) npgsqlDataReader["eventtype"];
             var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
-            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, JsonSerializerSettings) as IEvent;
+            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.JsonSerializerSettings) as IEvent;
 
             var origin = npgsqlDataReader["origin"];
 

@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         public override void Load()
         {
             this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
-            this.Kernel.Bind<IEventStore>().ToMethod(_ => this.Kernel.Get<IStreamableEventStore>());
+            this.Kernel.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IStreamableEventStore>());
             this.Kernel.Bind<IEventStoreApiService>().To<NullIEventStoreApiService>();
         }
 
