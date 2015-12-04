@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public static string GetVariableByQuestionnaireKey(string variableName, string questionnaireVersiondKey)
         {
-            return String.Format("{0}-{1}", variableName, questionnaireVersiondKey);
+            return $"{variableName}-{questionnaireVersiondKey}";
         }
 
         public static string GetVersionedKey(Guid id, long version)
