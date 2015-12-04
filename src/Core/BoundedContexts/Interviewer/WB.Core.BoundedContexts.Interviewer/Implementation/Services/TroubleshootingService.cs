@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
             var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
 
-            var backup = await Task.FromResult(this.GetSystemBackup());
+            var backup = await Task.Run(() => this.GetSystemBackup());
             using (var stream = await emptyBackupFile.OpenAsync(FileAccess.ReadAndWrite))
             {
                 stream.Write(backup, 0, backup.Length);

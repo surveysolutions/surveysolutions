@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -48,29 +49,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var questionnaireId = questionnaireIdentity.ToString();
 
-            var questionnaireDocumentView = new QuestionnaireDocumentView
+            var serializedQuestionnaireDocument = await Task.Run(() => this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            var questionnaireModel = await Task.Run(() => this.questionnaireModelBuilder.BuildQuestionnaireModel(serializedQuestionnaireDocument));
+
+            await this.questionnaireDocumentRepository.StoreAsync(new QuestionnaireDocumentView
             {
                 Id = questionnaireId,
-                Document = await Task.FromResult(this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument))
-            };
-
-            var questionnaireView = new QuestionnaireView
+                Document = serializedQuestionnaireDocument
+            });
+            await this.questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
+            {
+                Id = questionnaireId,
+                Model = questionnaireModel
+            });
+            await this.questionnaireViewRepository.StoreAsync(new QuestionnaireView
             {
                 Id = questionnaireId,
                 Identity = questionnaireIdentity,
                 Census = census,
-                Title = questionnaireDocumentView.Document.Title
-            };
-
-            var questionnaireModelView = new QuestionnaireModelView
-            {
-                Id = questionnaireId,
-                Model = await Task.FromResult(this.questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocumentView.Document))
-            };
-
-            await this.questionnaireDocumentRepository.StoreAsync(questionnaireDocumentView);
-            await this.questionnaireViewRepository.StoreAsync(questionnaireView);
-            await this.questionnaireModelViewRepository.StoreAsync(questionnaireModelView);
+                Title = serializedQuestionnaireDocument.Title
+            });
         }
 
         public async Task RemoveQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity)

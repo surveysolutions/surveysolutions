@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task<TEntity> GetByIdAsync(string id)
         {
-            return await Task.FromResult(this.Query(entities => entities.FirstOrDefault(entity => entity.Id == id)));
+            return await Task.Run(() => this.Query(entities => entities.FirstOrDefault(entity => entity.Id == id)));
         }
 
         public async Task RemoveAsync(string id)
