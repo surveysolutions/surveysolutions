@@ -42,6 +42,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return this.repository.GetById(GetRepositoryId(id, version));
         }
 
+        public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
+        {
+            return this.GetQuestionnaireDocument(identity.QuestionnaireId, identity.Version);
+        }
+
         public void DeleteQuestionnaireDocument(Guid id, long version)
         {
             var document = GetQuestionnaireDocument(id, version);
