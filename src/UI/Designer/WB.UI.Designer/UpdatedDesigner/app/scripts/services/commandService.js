@@ -58,6 +58,32 @@
                     return commandCall("DeleteMacro", command);
                 };
 
+                commandService.addLookupTable = function (questionnaireId, lookupTable) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": lookupTable.itemId
+                    };
+                    return commandCall("AddLookupTable", command);
+                };
+
+                commandService.updateLookupTable = function (questionnaireId, lookupTable) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": lookupTable.itemId,
+                        "lookupTableName": lookupTable.name
+                    };
+
+                    return commandCall("UpdateLookupTable", command);
+                };
+
+                commandService.deleteLookupTable = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": itemId
+                    };
+                    return commandCall("DeleteLookupTable", command);
+                };
+
 
                 commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
                     return commandCall('CloneQuestionById', {

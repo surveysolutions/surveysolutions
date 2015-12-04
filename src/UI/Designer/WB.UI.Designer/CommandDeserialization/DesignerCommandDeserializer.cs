@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -53,7 +54,11 @@ namespace WB.UI.Designer.CommandDeserialization
                     //Macro commands
                     { "AddMacro", typeof (AddMacro) },
                     { "UpdateMacro", typeof (UpdateMacro) },
-                    { "DeleteMacro", typeof (DeleteMacro) }
+                    { "DeleteMacro", typeof (DeleteMacro) },
+                     //Lookup table commands
+                    { "AddLookupTable", typeof (AddLookupTable) },
+                    { "UpdateLookupTable", typeof (UpdateLookupTable) },
+                    { "DeleteLookupTable", typeof (DeleteLookupTable) }
                 };
             }
         }

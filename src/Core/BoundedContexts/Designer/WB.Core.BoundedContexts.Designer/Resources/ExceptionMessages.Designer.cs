@@ -133,6 +133,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table with such is is already exist..
+        /// </summary>
+        internal static string LookupTableAlreadyExist {
+            get {
+                return ResourceManager.GetString("LookupTableAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table with such is is absent..
+        /// </summary>
+        internal static string LookupTableIsAbsent {
+            get {
+                return ResourceManager.GetString("LookupTableIsAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Macro with such is is already exist..
         /// </summary>
         internal static string MacroAlreadyExist {

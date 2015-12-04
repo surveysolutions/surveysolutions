@@ -156,6 +156,9 @@
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityMoveCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireEntityCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommandBase.cs" />
+    <Compile Include="Commands\Questionnaire\LookupTables\AddLookupTable.cs" />
+    <Compile Include="Commands\Questionnaire\LookupTables\DeleteLookupTable.cs" />
+    <Compile Include="Commands\Questionnaire\LookupTables\UpdateLookupTable.cs" />
     <Compile Include="Commands\Questionnaire\Macros\AddMacro.cs" />
     <Compile Include="Commands\Questionnaire\Macros\DeleteMacro.cs" />
     <Compile Include="Commands\Questionnaire\PasteIntoCommand.cs" />
@@ -197,6 +200,9 @@
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
+    <Compile Include="Events\Questionnaire\LookupTables\LookupTableAdded.cs" />
+    <Compile Include="Events\Questionnaire\LookupTables\LookupTableDeleted.cs" />
+    <Compile Include="Events\Questionnaire\LookupTables\LookupTableUpdated.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroAdded.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
@@ -462,6 +468,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\LookupTableView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacroView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\ChapterInfoView.cs" />
@@ -663,6 +670,7 @@
       <LastGenOutput>SharedTemplateV5.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

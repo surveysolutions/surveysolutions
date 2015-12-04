@@ -51,18 +51,18 @@
                     itemId: newId
                 };
 
-                //commandService.addLookupTable($state.params.questionnaireId, newLookupTables).success(function () {
+                commandService.addLookupTable($state.params.questionnaireId, newLookupTables).success(function () {
                     var lookupTables = {};
                     dataBind(lookupTables, newLookupTables);
                     $scope.lookupTables.push(lookupTables);
-                //});
+                });
             };
 
             $scope.saveLookupTable = function(lookupTable, form) {
-                //commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
+                commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
                     form.$setPristine();
-                //});
+                });
             };
 
             $scope.cancel = function(lookupTable, form) {
@@ -78,9 +78,9 @@
 
                 modalInstance.result.then(function(confirmResult) {
                     if (confirmResult === 'ok') {
-                        //commandService.deleteLookupTables($state.params.questionnaireId, lookupTable.itemId).success(function() {
+                        commandService.deleteLookupTable($state.params.questionnaireId, lookupTable.itemId).success(function() {
                             $scope.lookupTables.splice(index, 1);
-                        //});
+                        });
                     }
                 });
             };
