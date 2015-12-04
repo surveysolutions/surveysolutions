@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.GenericSubdomains.Portable;
@@ -27,6 +32,7 @@ namespace WB.UI.Designer.Api
         private readonly ILogger logger;
         private readonly ICommandInflater commandInflater;
         private readonly ICommandPostprocessor commandPostprocessor;
+        private readonly string fileParameterName = "file";
 
         public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandInflater commandPreprocessor, ICommandPostprocessor commandPostprocessor)
         {
@@ -37,11 +43,67 @@ namespace WB.UI.Designer.Api
             this.commandPostprocessor = commandPostprocessor;
         }
 
+        [Route("~/api/command/updateLookupTable")]
+        [HttpPost]
+        public async Task<HttpResponseMessage> UpdateLookupTable()
+        {
+            HttpRequestMessage request = this.Request;
+            if (!request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var provider = new MultipartMemoryStreamProvider();
+            string command;
+            string fileContent;
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                var fileSreamContent = provider.Contents.Single(x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == fileParameterName && x.Headers.ContentDisposition.FileName != null);
+                var commandSreamContent = provider.Contents.Single(x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == "command");
+
+                command = commandSreamContent.ReadAsStringAsync().Result;
+                fileContent = fileSreamContent.ReadAsStringAsync().Result;
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+
+            var commandType = "UpdateLookupTable";
+            ICommand concreteCommand;
+            try
+            {
+                concreteCommand = this.commandDeserializer.Deserialize(commandType, command);
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
+                throw;
+            }
+
+            return  this.ProcessCommand(concreteCommand, commandType); 
+        }
+
         public HttpResponseMessage Post(CommandExecutionModel model)
         {
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(model.Type, model.Command);
+                return this.ProcessCommand(concreteCommand, model.Type);
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(string.Format("Error on command of type ({0}) handling ", model.Type), e);
+                throw;
+            }
+        }
+
+        private HttpResponseMessage ProcessCommand(ICommand concreteCommand, string commandType)
+        {
+            try
+            {
                 this.commandInflater.PrepareDeserializedCommandForExecution(concreteCommand);
 
                 this.commandService.Execute(concreteCommand);
@@ -67,7 +129,7 @@ namespace WB.UI.Designer.Api
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
-                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", model.Type), e);
+                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
                     throw;
                 }
 
