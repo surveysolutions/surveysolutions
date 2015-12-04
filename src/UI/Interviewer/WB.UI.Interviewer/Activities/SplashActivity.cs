@@ -38,14 +38,7 @@ namespace WB.UI.Interviewer.Activities
             #warning remove this a little bit later
             //await this.BackwardCompatibilityWithPotatoidAsync();
 
-            IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
-
-            if (Mvx.Resolve<IPrincipal>().IsAuthenticated)
-            {
-                await viewModelNavigationService.NavigateToDashboardAsync();
-            }
-
-            await viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            await Mvx.Resolve<IViewModelNavigationService>().NavigateToAsync<LoginViewModel>();
         }
 
         //private async Task BackwardCompatibilityWithPotatoidAsync()

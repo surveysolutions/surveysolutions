@@ -125,11 +125,7 @@ namespace WB.UI.Interviewer
             base.OnCreate();
 
             this.RestoreAppState();
-
-            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
-                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
-                : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
-
+            
             this.kernel = new StandardKernel(
 
                 new NcqrsModule().AsNinject(),
