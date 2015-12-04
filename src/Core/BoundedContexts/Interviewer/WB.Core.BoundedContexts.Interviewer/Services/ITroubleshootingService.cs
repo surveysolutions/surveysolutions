@@ -4,8 +4,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ITroubleshootingService
     {
-        Task<byte[]> GetSystemBackupAsync();
+        byte[] GetSystemBackup();
         Task BackupAsync(string backupToFolderPath);
-        Task RestoreAsync(string backupFilePath);
+        void Restore(string backupFilePath);
     }
 }
