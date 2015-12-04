@@ -22,6 +22,8 @@
                 lookupTable.itemId = lookupTableDto.itemId;
                 lookupTable.name = lookupTableDto.name;
                 lookupTable.fileName = lookupTableDto.fileName;
+                lookupTable.file = null;
+                lookupTable.hasUploadedFile = !_.isEmpty(lookupTableDto.fileName);
             };
 
             $scope.loadLookupTables = function () {
@@ -57,8 +59,15 @@
                     $scope.lookupTables.push(lookupTables);
                 });
             };
-
-            $scope.saveLookupTable = function(lookupTable, form) {
+            $scope.fileSelected = function (lookupTable, file, lookupTableForm) {
+                if (_.isUndefined(file) || _.isNull(file)) {
+                    return;
+                }
+                lookupTable.file = file;
+                lookupTable.fileName = lookupTable.file.name;
+                lookupTableForm.$setDirty();
+            }
+            $scope.saveLookupTable = function (lookupTable, form) {
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
                     form.$setPristine();

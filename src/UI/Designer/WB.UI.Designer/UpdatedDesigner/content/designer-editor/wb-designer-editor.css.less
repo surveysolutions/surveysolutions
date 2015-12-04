@@ -241,8 +241,11 @@
             width: calc(~"50%" - (@left-menu-width));
             left: -50%;
             height: 100%;
-            
             .transition(left 0.4s ease);
+
+            .btn[disabled]{
+                color: @selected-panel-grey-color;
+            }
 
             .left-side-panel-content{
                 background: @selected-panel-bg-color;

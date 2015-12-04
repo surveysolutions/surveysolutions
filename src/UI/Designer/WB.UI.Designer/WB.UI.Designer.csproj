@@ -956,6 +956,16 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\protractor.conf.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.flash.swf" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-all.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-all.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-shim.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-shim.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\package.js" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
@@ -1222,6 +1232,11 @@
     <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
     <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\.versions" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\README.md" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

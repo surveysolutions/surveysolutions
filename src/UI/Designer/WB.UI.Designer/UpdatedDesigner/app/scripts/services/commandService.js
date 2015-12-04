@@ -1,8 +1,8 @@
 ﻿(function() {
     angular.module('designerApp')
         .factory('commandService', [
-            '$http', 'blockUI',
-            function ($http, blockUI) {
+            '$http', 'blockUI', 'Upload',
+            function ($http, blockUI, Upload) {
 
                 var urlBase = '../../api/command';
                 var commandService = {};
@@ -28,6 +28,43 @@
 
                 commandService.execute = function(type, command) {
                     return commandCall(type, command);
+                };
+
+                commandService.addLookupTable = function (questionnaireId, lookupTable) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "tableId": lookupTable.itemId
+                    };
+                    return commandCall("AddLookupTable", command);
+                };
+
+                commandService.updateLookupTable = function (questionnaireId, lookupTable) {
+                    blockUI.start();
+
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "tableId": lookupTable.itemId,
+                        "name": lookupTable.name,
+                        "fileName": lookupTable.fileName,
+                        "fileContent" : "{0}"
+                    };
+
+                    return Upload.upload({
+                        url: urlBase + '/UpdateLookupTable',
+                        data: { file: lookupTable.file, "command":  JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
+                    });
+                };
+
+                commandService.deleteLookupTable = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "tableId": itemId
+                    };
+                    return commandCall("DeleteLookupTable", command);
                 };
 
                 commandService.addMacro = function (questionnaireId, macro) {

@@ -7815,6 +7815,9 @@ textarea#edit-group-description {
   -o-transition: left 0.4s ease;
   transition: left 0.4s ease;
 }
+#designer-editor.container section#main .left-side-panel .btn[disabled] {
+  color: #7e898f;
+}
 #designer-editor.container section#main .left-side-panel .left-side-panel-content {
   background: #e5e8ea;
   height: 100%;
