@@ -15,7 +15,7 @@
 <div class="main">
     @Html.Partial("_alerts")
     <div class="page-header">
-        <h2>Create interviewer</h2>
+        <h2>Create interviewer at <a href="@Url.Action("Interviewers", "Supervisor", new { id = Model.SupervisorId})">@(Model.SupervisorName)</a> team</h2>
     </div>
 
 
