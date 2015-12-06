@@ -103,6 +103,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -2141,6 +2142,15 @@ namespace WB.Tests.Unit
                 messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(), HeadquartersPullContext());
         }
 
+        public static InterviewView InterviewView(Guid? prefilledQuestionId = null)
+        {
+            return new InterviewView()
+            {
+                GpsLocation = new InterviewGpsLocationView
+                {
+                    PrefilledQuestionId = prefilledQuestionId
+                }
+            };
         public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name")
         {
             var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName };
@@ -2157,14 +2167,12 @@ namespace WB.Tests.Unit
         }
 
         public static InterviewEventHandler DashboardDenormalizer(
-            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage = null)
+            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
         {
             return new InterviewEventHandler(
-                questionnaireDtoDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                Mock.Of<IReadSideRepositoryWriter<SurveyDto>>(),
-                questionnaireStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                Mock.Of<IPlainQuestionnaireRepository>());
+               interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
+            questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
 
         public static UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email="", string phoneNumber="", string role=null)

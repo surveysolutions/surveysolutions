@@ -396,7 +396,6 @@
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\SpssFormatExportHandlerTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_all_data.cs" />
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_approved_data.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_interview_is_assigned_to_another_responsible_and_delete_interview_package_synchronized.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
@@ -896,12 +895,6 @@
     <Compile Include="Applications\Supervisor\HQSyncControllerTests\when_pushing_data_to_hq.cs" />
     <Compile Include="Applications\Supervisor\HQSyncControllerTests\when_requesting_push_status.cs" />
     <Compile Include="AssemblyContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\CapiDataSynchronizationServiceTestContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_GetItemsForPush_called.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_delete_interview_and_delete_throw_exception.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_broken_interview.cs" />
-    <Compile Include="BoundedContexts\Interviewer\CapiDataSynchronizationServiceTests\when_sync_package_contains_information_about_new_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_answer_is_1_and_mask_has_8_symbols.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_creating_mask_formatter_with_variety_of_symbols.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_FormatValue_called_for_1_and_mask_with_any_sumbol_and_lower_dashes.cs" />
@@ -923,17 +916,6 @@
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_FormatValue_called_for_text__ab___and_mask_with_any_char_and_dashes.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_valid_text.cs" />
-    <Compile Include="BoundedContexts\Interviewer\QuestionnaireBrowseItemDenormalizerTests\QuestionnaireBrowseItemDenormalizerTestContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\QuestionnaireBrowseItemDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
-    <Compile Include="BoundedContexts\Interviewer\QuestionnaireBrowseItemDenormalizerTests\when_QuestionnaireDeleted_event_arrived.cs" />
-    <Compile Include="BoundedContexts\Interviewer\QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived.cs" />
-    <Compile Include="BoundedContexts\Interviewer\QuestionnaireBrowseItemDenormalizerTests\when_TemplateImported_event_arrived_with_not_empty_version.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SyncPackageRestoreServiceTests\SyncPackageRestoreServiceTestContext.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SyncPackageRestoreServiceTests\when_synchronization_item_doesnt_exist.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SyncPackageRestoreServiceTests\when_synchronization_item_exists.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SyncPackageRestoreServiceTests\when_synchronization_item_exists_and_restore_it_called_from_2_separate_thereads.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SyncPackageRestoreServiceTests\when_synchronization_item_exists_but_empty_string.cs" />
-    <Compile Include="BoundedContexts\Interviewer\SyncPackageRestoreServiceTests\when_synchronization_item_exists_but_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\AccountDenormalizerTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__.cs" />
     <Compile Include="BoundedContexts\Designer\AccountDenormalizerTests\when_handling_AccountUpdated_event_and_user_name_equals__ADMIN__.cs" />
@@ -1691,8 +1673,6 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventContextExtenstions.cs" />
     <Compile Include="Execute.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\CapiInformationServiceTestContext.cs" />
-    <Compile Include="GenericSubdomains\ErrorReporting\CapiInformationServiceTests\when_creating_information_package.cs" />
     <Compile Include="GenericSubdomains\Utils\MonadsTests\MonadsTests.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\PasswordHasherTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\PasswordHasherTests\when_hashing__hello_world__password.cs" />
@@ -2183,7 +2163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
-    <Folder Include="GenericSubdomains\Logging\" />
     <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
   </ItemGroup>
