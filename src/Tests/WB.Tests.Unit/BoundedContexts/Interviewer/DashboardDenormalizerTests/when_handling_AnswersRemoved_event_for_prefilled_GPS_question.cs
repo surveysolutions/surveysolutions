@@ -1,12 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.UI.Interviewer.ViewModel.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using it = Moq.It;
 using It = Machine.Specifications.It;
 
@@ -16,30 +16,41 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.QuestionnaireDTO();
-            dashboardItem.GpsLocationQuestionId = "11111111111111111111111111111111";
-            dashboardItem.GpsLocationLatitude = 10;
-            dashboardItem.GpsLocationLongitude = 20;
+            dashboardItem = Create.InterviewView();
+            dashboardItem.GpsLocation = new InterviewGpsLocationView
+            {
+              PrefilledQuestionId  = Guid.Parse("11111111111111111111111111111111"),
+              Coordinates = new InterviewGpsCoordinatesView
+              {
+                  Longitude = 10,
+                  Latitude = 20
+              }
+            };
 
             @event = Create.Event.AnswersRemoved(Create.Identity("11111111111111111111111111111111", RosterVector.Empty)).ToPublishedEvent();
 
-            var questionnaireDtoDocumentStorage = Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(writer
-                => writer.GetById(it.IsAny<string>()) == dashboardItem);
+            var storeAsyncTask = new Task(() => { });
+            storeAsyncTask.Start();
 
-            denormalizer = Create.DashboardDenormalizer(questionnaireDtoDocumentStorage: questionnaireDtoDocumentStorage);
+            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
+            writer.GetByIdAsync(it.IsAny<string>()) == Task.FromResult(dashboardItem));
+
+            Mock.Get(interviewViewStorage)
+                .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))
+                .Callback<InterviewView>((view) => dashboardItem = view)
+                .Returns(storeAsyncTask);
+
+            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage);
         };
 
         Because of = () =>
             denormalizer.Handle(@event);
 
-        It should_clear_GPS_location_latitude = () =>
-            dashboardItem.GpsLocationLatitude.ShouldBeNull();
-
-        It should_clear_GPS_location_longitude = () =>
-            dashboardItem.GpsLocationLongitude.ShouldBeNull();
+        It should_clear_GPS_location = () =>
+            dashboardItem.GpsLocation.Coordinates.ShouldBeNull();
 
         private static InterviewEventHandler denormalizer;
         private static IPublishedEvent<AnswersRemoved> @event;
-        private static QuestionnaireDTO dashboardItem;
+        private static InterviewView dashboardItem;
     }
 }
