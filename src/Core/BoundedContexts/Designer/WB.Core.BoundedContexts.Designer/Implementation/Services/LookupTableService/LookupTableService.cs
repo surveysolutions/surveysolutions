@@ -45,11 +45,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
                 return;
 
-            var lookupTableStoredName = questionnaire.LookupTables[lookupTableId];
-            if (string.IsNullOrEmpty(lookupTableStoredName))
+            var lookupTable = questionnaire.LookupTables[lookupTableId];
+            if (lookupTable==null)
                 return;
 
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTableStoredName);
+            var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTable.TableName);
 
             lookupTableContentStorage.Remove(lookupTableStorageId);
         }
@@ -68,7 +68,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 var rows = new List<LookupTableRow>();
                 while (csvReader.Read())
                 {
-                    var row = new LookupTableRow() {Variables = new Dictionary<string, decimal>()};
+                    var variables = new List<decimal>();
+                    var row = new LookupTableRow();
                     var record = csvReader.CurrentRecord;
 
                     for (int i = 0; i < record.Length; i++)
@@ -80,13 +81,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         }
                         else
                         {
-                            row.Variables.Add(columnName, decimal.Parse(record[i]));
+                            variables.Add(decimal.Parse(record[i]));
                         }
                     }
+
+                    row.Variables = variables.ToArray();
                     rows.Add(row);
                 }
                 result.VariableNames =
-                    csvReader.FieldHeaders.Where(h => h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                    csvReader.FieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
                 result.Rows = rows.ToArray();
             }
             return result;
