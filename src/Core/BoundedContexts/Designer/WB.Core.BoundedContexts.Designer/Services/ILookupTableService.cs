@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -7,6 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string lookupTableName, string fileContent);
         void DeleteLookupTableContent(Guid questionnaireId, Guid lookupTableId);
-        MemoryStream GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
+        LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId);
     }
 }

@@ -282,6 +282,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
+    <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableService.cs" />
     <Compile Include="Services\ILookupTableService.cs" />
