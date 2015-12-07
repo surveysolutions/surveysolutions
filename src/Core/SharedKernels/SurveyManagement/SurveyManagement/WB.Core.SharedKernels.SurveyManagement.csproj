@@ -408,6 +408,7 @@
     <Compile Include="Views\SynchronizationLog\SynchronizationLog.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogItem.cs" />
     <Compile Include="Views\SynchronizationLog\SynchronizationLogType.cs" />
+    <Compile Include="Views\TabletInformation\TabletInformationsView.cs" />
     <Compile Include="Views\TabletInformation\TabletInformationView.cs" />
     <Compile Include="Views\TakeNew\FeaturedAnswerView.cs" />
     <Compile Include="Views\TakeNew\FeaturedQuestionView.cs" />

@@ -1,0 +1,84 @@
+﻿@using System.Web.Optimization
+@using WB.Core.GenericSubdomains.Portable
+@using WB.Core.GenericSubdomains.Utils
+
+@model WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation.TabletInformationView
+
+@{
+    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+@section scripts
+{
+    @Html.Partial("_ListViewStatusesScript")
+
+    @Scripts.Render("~/Scripts/viewmodels/pages/tabletinfo.js")
+
+    <script type="text/javascript">
+        var $packegeUrl = '@Url.Action("DownloadPackages", "TabletReport")';
+
+        var $tabletInfoUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "TabletReportApi", action = "Packages" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
+        var model = new Supervisor.VM.TabletInfo($tabletInfoUrl, responsiblesUrl);
+        ko.applyBindings(model);
+        model.load();
+    </script>
+}
+
+
+@section header
+{
+    <h3 class="sinle-line-header">Tablet information packages</h3>
+}
+
+@section gridnavigation
+{
+    <div class="btn-group">
+        <div class="form-inline">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: filter">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: filter">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section grid
+{
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>Device Id</th>
+            <th>Upload date</th>
+            <th>User Name</th>
+            <th>User Id</th>
+            <th>Size</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach:Items -->
+        <tr>
+            <td data-bind="text: AndroidId"></td>
+            <td data-bind="text: CreationDate"></td>
+            <td data-bind="text: UserName"></td>
+            <td data-bind="text: UserId"></td>
+            <td data-bind="text: Size"></td>
+            <td class="buttons">
+                <div class="btn-group">
+                    <a class="btn btn-info" data-bind="attr: { href: $packegeUrl + '?fileName=' + PackageName() }">
+                        <i class="glyphicon glyphicon-download"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+
+}
