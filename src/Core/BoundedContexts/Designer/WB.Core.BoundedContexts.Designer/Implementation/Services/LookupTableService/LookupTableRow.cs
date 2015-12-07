@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     public class LookupTableRow
     {
         public long RowCode { get; set; }
-        public Dictionary<string, decimal> Variables { get; set; }
+        public decimal[] Variables { get; set; }
     }
 }
