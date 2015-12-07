@@ -5,6 +5,7 @@ using System.Reflection;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -113,7 +114,7 @@ namespace WB.Tests.Integration.EventHandler
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
             typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),
             typeof(IInterviewSynchronizationDtoFactory), typeof(InterviewDataExportSettings),
-            typeof(PdfQuestionTypeConverter)
+            typeof(PdfQuestionTypeConverter), typeof(ILookupTableService)
         };
 
         private static IEnumerable<ParameterInfo> ExcludeExpectedParameters(ParameterInfo[] allParameters)
