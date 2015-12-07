@@ -2,8 +2,10 @@
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Hosting;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -26,7 +28,8 @@ namespace WB.Tests.Unit.Applications.Designer.CommandApiControllerTests
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
                 logger ?? Mock.Of<ILogger>(),
                 commandInflater ?? Mock.Of<ICommandInflater>(),
-                commandPostprocessor ?? Mock.Of<ICommandPostprocessor>());
+                commandPostprocessor ?? Mock.Of<ICommandPostprocessor>(),
+                Mock.Of<ILookupTableService>());
 
             controller.Request = httpRequestMessage ?? new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(httpConfiguration ??  new HttpConfiguration());

@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.LookupTables = questionnaireDocument
                 .LookupTables
-                .Select(x => new LookupTableView { ItemId = x.Key.FormatGuid(), Name = x.Value.FileName })
+                .Select(x => new LookupTableView { ItemId = x.Key.FormatGuid(), Name = x.Value })
                 .OrderBy(x => x.Name)
                 .ToList();
             return questionnaireInfoView;
