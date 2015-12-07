@@ -41,6 +41,8 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.AddText("JsonEvent", typeof(EventView));
             SiaqodbConfigurator.SpecifyStoredDateTimeKind(DateTimeKind.Utc);
             SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof(IPlainStorageEntity));
+            SiaqodbConfigurator.EncryptedDatabase = true;
+            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
 
             this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
             
