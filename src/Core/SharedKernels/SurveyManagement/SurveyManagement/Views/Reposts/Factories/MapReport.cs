@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 {
-    public class MapReport : IViewFactory<MapReportInputModel, MapReportView>
+    internal class MapReport : IMapReport
     {
         private readonly IQueryableReadSideRepositoryReader<MapReportPoint> answersByVariableStorage;
 

@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
 
-        private readonly IViewFactory<MapReportInputModel, MapReportView> mapReport;
+        private readonly IMapReport mapReport;
 
         private readonly IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory;
   
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IHeadquartersTeamsAndStatusesReport headquartersTeamsAndStatusesReport,
             ISupervisorTeamsAndStatusesReport supervisorTeamsAndStatusesReport,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IViewFactory<MapReportInputModel, MapReportView> mapReport, 
+            IMapReport mapReport, 
             IViewFactory<QuestionnaireQuestionInfoInputModel, QuestionnaireQuestionInfoView> questionInforFactory,
             IChartStatisticsViewFactory chartStatisticsViewFactory, 
             IViewFactory<QuantityByInterviewersReportInputModel, QuantityByResponsibleReportView> quantityByInterviewersReport, 

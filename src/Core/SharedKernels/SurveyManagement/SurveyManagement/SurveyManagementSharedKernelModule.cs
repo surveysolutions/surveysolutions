@@ -95,6 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
             this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
+            this.Bind<IMapReport>().To<MapReport>();
 
             this.Unbind<ISupportedVersionProvider>();
             this.Bind<ISupportedVersionProvider>()
