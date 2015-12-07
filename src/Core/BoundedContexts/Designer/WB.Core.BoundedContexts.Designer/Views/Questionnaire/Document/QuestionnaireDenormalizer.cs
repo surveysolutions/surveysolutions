@@ -68,14 +68,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
+        private readonly ILookupTableService lookupTableService;
         private readonly ILogger logger;
 
-        public QuestionnaireDenormalizer(IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
-            IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger)
+        public QuestionnaireDenormalizer(
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
+            IQuestionnaireEntityFactory questionnaireEntityFactory, 
+            ILogger logger, 
+            ILookupTableService lookupTableService)
         {
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
+            this.lookupTableService = lookupTableService;
         }
 
         public override object[] Writers
@@ -563,16 +568,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.LookupTables[evnt.Payload.LookupTableId] = new LookupTable()
-            {
-                FileName = evnt.Payload.LookupTableName
-            };
+            document.LookupTables[evnt.Payload.LookupTableId] = evnt.Payload.LookupTableName;
 
             this.UpdateQuestionnaire(evnt, document);
         }
 
         public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
         {
+            this.lookupTableService.DeleteLookupTableContent(evnt.EventSourceId, evnt.Payload.LookupTableId);
+
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
             document.LookupTables.Remove(evnt.Payload.LookupTableId);

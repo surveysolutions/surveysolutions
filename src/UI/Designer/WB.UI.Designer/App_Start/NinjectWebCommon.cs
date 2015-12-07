@@ -87,6 +87,12 @@ namespace WB.UI.Designer.App_Start
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
 
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                MappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly}
+            };
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
@@ -96,6 +102,8 @@ namespace WB.UI.Designer.App_Start
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, 
                     postgresCacheSize,
                     mappingAssemblies),
+
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
                 new PostresKeyValueModule(postgresCacheSize),
