@@ -66,10 +66,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.interviewerInterviewFactory = interviewFactory;
         }
 
-        public async void Init(string intrerviewId)
+        public void Init(string intrerviewId)
         {
-            var interview = await this.interviewViewRepository.GetByIdAsync(intrerviewId);
-            var questionnaire = await this.questionnaireViewRepository.GetByIdAsync(interview.QuestionnaireId);
+            var interview = this.interviewViewRepository.GetById(intrerviewId);
+            var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
 
             this.InterviewId = interview.InterviewId;
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);

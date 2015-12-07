@@ -14,11 +14,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
         }
 
-        public override async Task<TEntity> GetByIdAsync(string id)
+        public override TEntity GetById(string id)
         {
             if (this.memoryStorage.ContainsKey(id)) return this.memoryStorage[id];
 
-            var entity = await base.GetByIdAsync(id);
+            var entity = base.GetById(id);
             if (entity != null)
                 this.memoryStorage.Add(id, entity);
 

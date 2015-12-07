@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-using PCLStorage;
 using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -20,7 +22,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
-using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Data.Submit;
+using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.Settings;
 
@@ -50,7 +52,9 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
             this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
-            this.Unbind<IPlainInterviewFileStorage>();
+
+            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+            this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
@@ -60,16 +64,25 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-
-            var logFolderName = "logs";
-            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory(logFolderName, "errors.log")));
-            this.Bind<IReportSender>().ToConstant(new FileReportSender(AndroidPathUtils.GetPathToFileInLocalSubDirectory(logFolderName, "crashes.log")));
+            
+            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
 
             this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(),
                     AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
+
+            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
+            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new Dictionary<string, string>()
+            {
+                {
+                    "WB.UI.Capi",
+                    "WB.Core.BoundedContexts.Interviewer"
+                }
+            }));
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
     }
 }

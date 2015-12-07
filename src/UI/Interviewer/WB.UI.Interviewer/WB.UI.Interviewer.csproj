@@ -369,7 +369,6 @@
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
     <Compile Include="InterviewerApplication.cs" />
-    <Compile Include="EventHandlers\AndroidFileStoreDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />

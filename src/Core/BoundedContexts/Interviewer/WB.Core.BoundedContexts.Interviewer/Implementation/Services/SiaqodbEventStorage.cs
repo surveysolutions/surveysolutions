@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: storedEvent.OID,
-                payload: this.GetEventByJsonString(storedEvent.JsonEvent));
+                payload: this.ToEvent(storedEvent.JsonEvent));
         }
 
         private EventView ToStoredEvent(UncommittedEvent evt)
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             };
         }
 
-        private object GetEventByJsonString(string json)
+        private Infrastructure.EventBus.IEvent ToEvent(string json)
         {
             var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
             replaceOldAssemblyNames =
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         current.Replace($"Main.Core.Events.User.{type}, Main.Core",
                             $"Main.Core.Events.User.{type}, WB.Core.SharedKernels.DataCollection"));
 
-            return this.serializer.Deserialize<object>(replaceOldAssemblyNames);
+            return this.serializer.Deserialize<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames);
         }
     }
 }

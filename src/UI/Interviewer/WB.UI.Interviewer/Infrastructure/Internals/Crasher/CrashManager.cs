@@ -89,7 +89,6 @@ namespace WB.UI.Interviewer.Infrastructure.Internals.Crasher
             var sender = valueFactory();
             if (sender == null)
                 throw new NullReferenceException("Could not create instance of " + typeof(T));
-            sender.Initialize(_application);
             _exceptionProcessor.AddReportSender(sender);
         }
 
