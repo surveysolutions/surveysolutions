@@ -40,7 +40,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
 
@@ -49,19 +49,18 @@ namespace WB.UI.Designer.Controllers
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory)
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, ILookupTableService lookupTableService)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
+            this.lookupTableService = lookupTableService;
         }
 
         public ActionResult Clone(Guid id)
@@ -335,21 +334,9 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
-        public FileResult ExportLookupTable(string id)
+        public FileResult ExportLookupTable(Guid id, Guid lookupTableId)
         {
-            var sb = new StringBuilder();
-            using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
-            {
-                csvWriter.WriteRecord(new { rowcode = "write", column1 = "actual", column2 = "data", column3 = "here" });
-            }
-
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.Write(sb.ToString());
-            streamWriter.Flush();
-            memoryStream.Position = 0;
-
-            return File(memoryStream, "text/csv", "lookup_file_name.txt");
+            return File(this.lookupTableService.GetLookupTableContent(id, lookupTableId), "text/csv", "lookup_file_name.txt");
         }
 
         public FileResult ExportOptions()
