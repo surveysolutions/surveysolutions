@@ -69,6 +69,7 @@ namespace WB.UI.Designer.Api
             var provider = new MultipartMemoryStreamProvider();
             string command;
             string fileContent;
+            string fileName;
             try
             {
                 await Request.Content.ReadAsMultipartAsync(provider);
@@ -76,8 +77,10 @@ namespace WB.UI.Designer.Api
                 var fileSreamContent = provider.Contents.Single(x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == fileParameterName && x.Headers.ContentDisposition.FileName != null);
                 var commandSreamContent = provider.Contents.Single(x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == "command");
 
+                fileName = fileSreamContent.Headers.ContentDisposition.FileName;
                 command = commandSreamContent.ReadAsStringAsync().Result;
                 fileContent = fileSreamContent.ReadAsStringAsync().Result;
+
             }
             catch (Exception e)
             {
@@ -89,6 +92,7 @@ namespace WB.UI.Designer.Api
             try
             {
                 updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, command);
+                updateLookupTableCommand.LookupTableFileName = fileName;
             }
             catch (Exception e)
             {

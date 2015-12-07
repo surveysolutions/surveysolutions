@@ -929,7 +929,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableIsAbsent, ExceptionMessages.LookupTableIsAbsent);
             }
-            this.ApplyEvent(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.ResponsibleId));
+            this.ApplyEvent(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
         }
         public void DeleteLookupTable(DeleteLookupTable command)
         {
