@@ -335,6 +335,23 @@ namespace WB.UI.Designer.Controllers
             return commandResult;
         }
 
+        public FileResult ExportLookupTable(string id)
+        {
+            var sb = new StringBuilder();
+            using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
+            {
+                csvWriter.WriteRecord(new { rowcode = "write", column1 = "actual", column2 = "data", column3 = "here" });
+            }
+
+            var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream);
+            streamWriter.Write(sb.ToString());
+            streamWriter.Flush();
+            memoryStream.Position = 0;
+
+            return File(memoryStream, "text/csv", "lookup_file_name.txt");
+        }
+
         public FileResult ExportOptions()
         {
             return
