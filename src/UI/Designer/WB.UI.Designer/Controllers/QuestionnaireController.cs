@@ -336,7 +336,8 @@ namespace WB.UI.Designer.Controllers
 
         public FileResult ExportLookupTable(Guid id, Guid lookupTableId)
         {
-            return File(this.lookupTableService.GetLookupTableContent(id, lookupTableId), "text/csv", "lookup_file_name.txt");
+            var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
         public FileResult ExportOptions()

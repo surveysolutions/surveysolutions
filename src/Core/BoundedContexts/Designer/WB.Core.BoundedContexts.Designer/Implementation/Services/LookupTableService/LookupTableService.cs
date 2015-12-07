@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             lookupTableContentStorage.Remove(lookupTableStorageId);
         }
 
-        public MemoryStream GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
+        public LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
         {
             var questionnaire = this.documentStorage.GetById(questionnaireId);
 
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             streamWriter.Flush();
             memoryStream.Position = 0;
 
-            return memoryStream;
+            return new LookupTableContentFile() {Content = memoryStream, FileName = lookupTable.FileName};
         }
 
         private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
