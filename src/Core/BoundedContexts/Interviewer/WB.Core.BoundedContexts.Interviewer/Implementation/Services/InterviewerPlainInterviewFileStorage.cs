@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             if (imageView == null) return null;
 
-            var fileView = this.fileViewStorage.GetByIdAsync(imageView.FileId).Result;
+            var fileView = this.fileViewStorage.GetById(imageView.FileId);
 
             return fileView?.File;
         }

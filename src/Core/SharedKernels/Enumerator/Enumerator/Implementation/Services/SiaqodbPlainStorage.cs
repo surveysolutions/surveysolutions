@@ -17,14 +17,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.Storage = storage;
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(string id)
+        public virtual TEntity GetById(string id)
         {
-            return await Task.Run(() => this.Query(entities => entities.FirstOrDefault(entity => entity.Id == id)));
+            return this.Query(entities => entities.FirstOrDefault(entity => entity.Id == id));
         }
 
         public async Task RemoveAsync(string id)
         {
-            TEntity entity = await this.GetByIdAsync(id);
+            TEntity entity = await Task.FromResult(this.GetById(id));
 
             await this.RemoveAsync(new[] { entity });
         }
