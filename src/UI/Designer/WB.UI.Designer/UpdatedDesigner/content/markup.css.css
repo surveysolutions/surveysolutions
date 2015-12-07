@@ -7916,6 +7916,17 @@ textarea#edit-group-description {
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li:hover {
   border: 2px solid #d9dde0;
 }
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .drop-box {
+  color: #78838a;
+  border: 2px dashed #78838a;
+  height: 30px;
+  text-align: center;
+  line-height: 26px;
+  display: none;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li.dragover .drop-box {
+  display: block;
+}
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input,
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea {
   display: block;
@@ -7928,6 +7939,11 @@ textarea#edit-group-description {
   border-radius: 0;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[disabled],
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[readonly],
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li fieldset[disabled] .form-control {
+  background: #fff;
 }
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input[type="text"][placeholder],
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea[placeholder] {
@@ -7957,28 +7973,6 @@ textarea#edit-group-description {
   height: 2px;
   width: 275px;
   background: #d9dde0;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .input-group {
-  width: 275px;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .input-group .input-group-addon {
-  border: none;
-  border-color: #fff;
-  border-radius: 0;
-  background: #fff;
-  padding: 0;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .input-group.macros-name .input-group-addon {
-  color: #e004c9;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .input-group.macros-name input {
-  color: #e004c9;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .ace_editor {
-  border: none;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  border-radius: 0;
 }
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a {
   position: absolute;

@@ -326,11 +326,11 @@
         .lookup-tables-panel{
             width: @lookup-tables-panel-width;
 
-             @macroses-panel-padding-left: 20px;
-            @macroses-panel-macros-bg: #fff;
-            @macroses-accent-color: #e004c9;
-            @macroses-border-color: #d9dde0;
-            @macroses-decription-color: #78838a;
+            @lookup-panel-padding-left: 20px;
+            @lookup-panel-table-item-bg: #fff;
+            @lookup-accent-color: #e004c9;
+            @lookup-border-color: #d9dde0;
+            @lookup-drop-box-color: #78838a;
 
              .lookup-tables {
                 height: 100%;
@@ -340,27 +340,42 @@
                     padding: 0;
                     list-style: none;
                     padding-right: 30px;
-                    padding-left: @macroses-panel-padding-left;
+                    padding-left: @lookup-panel-padding-left;
 
                     li {
-                        background: @macroses-panel-macros-bg;
+                        background: @lookup-panel-table-item-bg;
                         margin-bottom: 7px;
                         padding: 5px 10px 5px 10px;
                         .border-left-radius(8px);
                         .border-right-radius(8px);
-                        border: 2px solid @macroses-panel-macros-bg;
+                        border: 2px solid @lookup-panel-table-item-bg;
                         position: relative;
                         z-index: 10;
                         .lucida-console-font();
 
                         &:hover {
-                            border: 2px solid @macroses-border-color;
+                            border: 2px solid @lookup-border-color;
+                        }
+
+                        .drop-box{
+                            @lookup-panel-table-item-border-width: 2px;
+                            @lookup-panel-table-item-height: 30px;
+                            color: @lookup-drop-box-color;
+                            border: @lookup-panel-table-item-border-width dashed @lookup-drop-box-color;
+                            height: @lookup-panel-table-item-height;
+                            text-align: center;
+                            line-height: @lookup-panel-table-item-height - 2*@lookup-panel-table-item-border-width;
+                            display: none;
+                        }
+
+                        &.dragover .drop-box{
+                            display: block;
                         }
 
                         input,textarea {
                             display: block;
                             border: none;
-                            border-color: @macroses-panel-macros-bg;
+                            border-color: @lookup-panel-table-item-bg;
                             box-shadow: none;
                             .arial-font();
                             padding-left: 0;
@@ -368,6 +383,10 @@
                             border-radius: 0;
                             .lucida-console-font();
                             font-size: 14px;
+                        }
+
+                        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+                            background: @lookup-panel-table-item-bg;
                         }
 
                         input[type="text"],
@@ -398,36 +417,7 @@
                         .divider {
                             height: 2px;
                             width: 275px;
-                            background: @macroses-border-color;
-                        }
-
-                        .input-group {
-                            width: 275px;
-                            .input-group-addon {
-                                border: none;
-                                border-color: @macroses-panel-macros-bg;
-                                border-radius: 0;
-                                background: @macroses-panel-macros-bg;
-                                padding: 0;
-                            }
-
-                            &.macros-name {
-                                .input-group-addon {
-                                    color: @macroses-accent-color;
-                                }
-
-                                input {
-                                    
-                                    color: @macroses-accent-color;
-                                }
-                            }
-                        }
-
-                        .ace_editor {
-                            border: none;
-                            margin-bottom: 5px;
-                            margin-top: 5px;
-                            border-radius: 0;
+                            background: @lookup-border-color;
                         }
 
                         a {
@@ -453,7 +443,7 @@
                         }
 
                         button {
-                            background: @macroses-panel-macros-bg;
+                            background: @lookup-panel-table-item-bg;
 
                             &:hover {
                                 background: #e6e6e6;
@@ -463,6 +453,7 @@
                 }
             }
         }
+
         .macros-panel {
             width: @macroses-panel-width;
 
