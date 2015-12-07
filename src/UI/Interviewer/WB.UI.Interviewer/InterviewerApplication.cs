@@ -8,7 +8,11 @@ using WB.UI.Interviewer.Infrastructure.Logging;
 
 namespace WB.UI.Interviewer
 {
-    [Application(Debuggable=true)] 
+#if DEBUG
+    [Application(Debuggable = true)]
+#else
+    [Application(Debuggable = false)]
+#endif
     [Crasher(UseCustomData = false)]
     public class InterviewerApplication : Application
     {
