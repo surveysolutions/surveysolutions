@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
 
         private readonly IUserWebViewFactory userInfoViewFactory;
+        private readonly IUserViewFactory userViewFactory;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
@@ -47,7 +49,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
-            IUserWebViewFactory userInfoViewFactory)
+            IUserWebViewFactory userInfoViewFactory,
+            IUserViewFactory userViewFactory)
             : base(commandService, globalInfo, logger)
         {
 
@@ -58,6 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.userInfoViewFactory = userInfoViewFactory;
             this.syncVersionProvider = syncVersionProvider;
+            this.userViewFactory = userViewFactory;
         }
 
         [HttpGet]
@@ -144,10 +148,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public void PostInfoPackage(TabletInformationPackage tabletInformationPackage)
         {
+            var user = this.userViewFactory.Load(new UserViewInputModel(tabletInformationPackage.AndroidId));
+
             this.tabletInformationService.SaveTabletInformation(
                 content: Convert.FromBase64String(tabletInformationPackage.Content),
                 androidId: tabletInformationPackage.AndroidId,
-                registrationId: tabletInformationPackage.ClientRegistrationId.ToString());
+                registrationId: tabletInformationPackage.ClientRegistrationId.ToString(),
+                user: user);
+
+            //log record
         }
     }
 }

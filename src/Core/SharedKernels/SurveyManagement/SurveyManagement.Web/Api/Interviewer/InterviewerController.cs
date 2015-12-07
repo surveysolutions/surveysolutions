@@ -7,6 +7,7 @@ using System.Web.Http;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 
@@ -23,15 +24,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ISupportedVersionProvider versionProvider;
         private readonly ITabletInformationService tabletInformationService;
+        private readonly IUserViewFactory userViewFactory;
 
         public InterviewerController(
             IFileSystemAccessor fileSystemAccessor,
             ISupportedVersionProvider versionProvider,
-            ITabletInformationService tabletInformationService)
+            ITabletInformationService tabletInformationService,
+            IUserViewFactory userViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.versionProvider = versionProvider;
             this.tabletInformationService = tabletInformationService;
+            this.userViewFactory = userViewFactory;
         }
         
         [HttpGet] 
@@ -68,10 +72,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [Route("tabletInfo")]
         public HttpResponseMessage PostTabletInformation(TabletInformationPackage tabletInformationPackage)
         {
+            var user = this.userViewFactory.Load(new UserViewInputModel(tabletInformationPackage.AndroidId));
+
             this.tabletInformationService.SaveTabletInformation(
                 content: Convert.FromBase64String(tabletInformationPackage.Content),
                 androidId: tabletInformationPackage.AndroidId,
-                registrationId: tabletInformationPackage.ClientRegistrationId.ToString());
+                registrationId: tabletInformationPackage.ClientRegistrationId.ToString(),
+                user: user);
+
+            //log record
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

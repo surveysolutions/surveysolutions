@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Password, cm => cm.Index("User_UserName_Password"));
             Property(x => x.UserName, cm => cm.Index("User_UserName_Password"));
             Property(x => x.LastChangeDate);
-            Property(x => x.DeviceId);
+            Property(x => x.DeviceId, cm => cm.Index("User_DeviceId"));
             Property(x => x.PersonName);
             Property(x => x.PhoneNumber);
             Component(x => x.Supervisor, cmp =>

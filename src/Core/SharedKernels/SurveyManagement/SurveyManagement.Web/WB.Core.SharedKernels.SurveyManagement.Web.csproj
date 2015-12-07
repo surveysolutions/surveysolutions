@@ -211,12 +211,14 @@
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\TabletReportApiController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Filters\LimitsFilterAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
+    <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
@@ -570,6 +572,7 @@
     <EmbeddedResource Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\DetailsReadOnlyQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\TabletReport\PackagesInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
@@ -677,6 +680,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\tabletinfo.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
     <EmbeddedResource Include="Scripts\spin.js" />
     <Content Include="Scripts\spin.min.js" />
