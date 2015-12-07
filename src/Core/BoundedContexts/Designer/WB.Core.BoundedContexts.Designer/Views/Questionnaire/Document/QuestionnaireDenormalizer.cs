@@ -554,7 +554,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.LookupTables[evnt.Payload.LookupTableId] = "";
+            document.LookupTables[evnt.Payload.LookupTableId] = null;
 
             this.UpdateQuestionnaire(evnt, document);
         }
@@ -563,7 +563,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.LookupTables[evnt.Payload.LookupTableId] = evnt.Payload.LookupTableName;
+            document.LookupTables[evnt.Payload.LookupTableId] = new LookupTable()
+            {
+                FileName = evnt.Payload.LookupTableName
+            };
 
             this.UpdateQuestionnaire(evnt, document);
         }
