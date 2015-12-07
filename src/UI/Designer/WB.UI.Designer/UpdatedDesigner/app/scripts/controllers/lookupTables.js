@@ -3,6 +3,7 @@
         function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService) {
             'use strict';
 
+            $scope.downloadLookupFileBaseUrl = '../../Questionnaire/ExportLookupTable/';
             var hideLookupTablesPane = 'ctrl+l';
 
             if (hotkeys.get(hideLookupTablesPane) !== false) {
@@ -70,6 +71,7 @@
             $scope.saveLookupTable = function (lookupTable, form) {
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
+                    lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
                     form.$setPristine();
                 });
             };

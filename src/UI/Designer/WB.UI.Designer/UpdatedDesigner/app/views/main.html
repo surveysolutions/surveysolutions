@@ -142,7 +142,7 @@
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file, lookupTableForm)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="lookupTableForm">
-                                    <a href ng-click="deleteLookupTable($index)" class="btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="table.name" name="name" class="form-control" type="text" />
                                     <div class="divider"></div>
                                     <input placeholder="file name" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text"/>
@@ -156,7 +156,7 @@
                                             <button type="submit" ng-disabled="lookupTableForm.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table, lookupTableForm);$event.stopPropagation()">Save</button>
                                             <button type="button" class="btn lighter-hover" ng-click="cancel(table, lookupTableForm);$event.stopPropagation()">Cancel</button>
                                         </div>
-                                        <button class="btn btn-default pull-right" type="button" ng-show="table.hasUploadedFile">Download file</button>
+                                        <a href="{{downloadLookupFileBaseUrl + table.itemId}}"  ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" >Download file</a>
                                         <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file, lookupTableForm);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">Select file</button>
                                     </div>
                                 </ng-form>

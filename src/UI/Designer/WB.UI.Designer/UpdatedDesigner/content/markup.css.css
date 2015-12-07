@@ -7974,7 +7974,7 @@ textarea#edit-group-description {
   width: 275px;
   background: #d9dde0;
 }
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a {
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a.delete-btn {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -7987,7 +7987,7 @@ textarea#edit-group-description {
   -moz-opacity: 0.3;
   opacity: 0.3;
 }
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a:hover {
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a.delete-btn:hover {
   filter: alpha(opacity=100);
   -webkit-opacity: 1;
   -moz-opacity: 1;
@@ -7997,10 +7997,12 @@ textarea#edit-group-description {
   margin-left: -6px;
   margin-right: -6px;
 }
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li button {
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn {
   background: #fff;
 }
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li button:hover {
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button:hover,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn:hover {
   background: #e6e6e6;
 }
 #designer-editor.container section#main .macros-panel {

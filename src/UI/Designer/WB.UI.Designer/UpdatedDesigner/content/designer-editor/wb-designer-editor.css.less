@@ -243,11 +243,11 @@
             height: 100%;
             .transition(left 0.4s ease);
 
-            .btn[disabled]{
+            .btn[disabled] {
                 color: @selected-panel-grey-color;
             }
 
-            .left-side-panel-content{
+            .left-side-panel-content {
                 background: @selected-panel-bg-color;
                 height: 100%;
                 position: relative;
@@ -289,7 +289,7 @@
                 left: @chapters-panel-width;
             }
 
-             &.lookup-tables .foldback-region{
+            &.lookup-tables .foldback-region {
                 left: @lookup-tables-panel-width;
             }
 
@@ -323,7 +323,7 @@
             }
         }
 
-        .lookup-tables-panel{
+        .lookup-tables-panel {
             width: @lookup-tables-panel-width;
 
             @lookup-panel-padding-left: 20px;
@@ -332,7 +332,7 @@
             @lookup-border-color: #d9dde0;
             @lookup-drop-box-color: #78838a;
 
-             .lookup-tables {
+            .lookup-tables {
                 height: 100%;
 
                 ul {
@@ -357,7 +357,7 @@
                             border: 2px solid @lookup-border-color;
                         }
 
-                        .drop-box{
+                        .drop-box {
                             @lookup-panel-table-item-border-width: 2px;
                             @lookup-panel-table-item-height: 30px;
                             color: @lookup-drop-box-color;
@@ -368,11 +368,11 @@
                             display: none;
                         }
 
-                        &.dragover .drop-box{
+                        &.dragover .drop-box {
                             display: block;
                         }
 
-                        input,textarea {
+                        input, textarea {
                             display: block;
                             border: none;
                             border-color: @lookup-panel-table-item-bg;
@@ -385,7 +385,7 @@
                             font-size: 14px;
                         }
 
-                        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+                        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
                             background: @lookup-panel-table-item-bg;
                         }
 
@@ -420,7 +420,7 @@
                             background: @lookup-border-color;
                         }
 
-                        a {
+                        a.delete-btn {
                             @delete-button-position: 10px;
                             @delete-button-size: 15px;
                             position: absolute;
@@ -440,13 +440,13 @@
                         .actions {
                             margin-left: -6px;
                             margin-right: -6px;
-                        }
 
-                        button {
-                            background: @lookup-panel-table-item-bg;
+                            button, a.btn {
+                                background: @lookup-panel-table-item-bg;
 
-                            &:hover {
-                                background: #e6e6e6;
+                                &:hover {
+                                    background: #e6e6e6;
+                                }
                             }
                         }
                     }
@@ -492,7 +492,7 @@
                             }
                         }
 
-                        input,textarea {
+                        input, textarea {
                             display: block;
                             border: none;
                             border-color: @macroses-panel-macros-bg;
@@ -542,6 +542,7 @@
 
                         .input-group {
                             width: 275px;
+
                             .input-group-addon {
                                 border: none;
                                 border-color: @macroses-panel-macros-bg;
@@ -556,7 +557,6 @@
                                 }
 
                                 input {
-                                    
                                     color: @macroses-accent-color;
                                 }
                             }
@@ -601,8 +601,6 @@
                     }
                 }
             }
-
-           
         }
 
         .chapter-panel {
@@ -619,12 +617,11 @@
                     margin: 0;
                     padding: 0;
                     //overflow: hidden;
-
                     h3 {
                         padding-left: 18px;
                     }
 
-                    .chapters-list{
+                    .chapters-list {
                         margin-left: 18px;
                     }
 
@@ -848,7 +845,7 @@ li.chapter-panel-item {
                 padding: 10px 0;
                 .border-right-radius(4px);
 
-                span{
+                span {
                     display: block;
                     width: 100%;
                     height: 100%;
@@ -884,7 +881,7 @@ li.chapter-panel-item {
             > .inner {
                 background-color: @chapter-item-selected-color;
 
-                > .handler span{
+                > .handler span {
                     background: @chapter-item-selected-color url(../i/chapter-list-li-dots.png) center no-repeat;
                 }
             }
@@ -895,7 +892,7 @@ li.chapter-panel-item {
                 > .inner {
                     background-color: @chapter-item-selected-color;
 
-                    > .handler span{
+                    > .handler span {
                         background-color: @chapter-item-selected-color;
                     }
                 }
@@ -916,7 +913,7 @@ li.chapter-panel-item {
                 background-color: @chapter-item-selected-color;
                 .border-right-radius(4px);
 
-                > .handler span{
+                > .handler span {
                     background: @chapter-item-selected-color url(../i/chapter-list-li-dots.png) center no-repeat;
                     .border-right-radius(4px);
                 }
