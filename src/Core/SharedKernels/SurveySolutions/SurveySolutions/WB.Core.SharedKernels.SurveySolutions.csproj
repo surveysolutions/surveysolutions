@@ -60,7 +60,6 @@
     <Compile Include="Documents\IQuestionnaireDocument.cs" />
     <Compile Include="Documents\IStaticText.cs" />
     <Compile Include="Documents\IView.cs" />
-    <Compile Include="Documents\LookupTable.cs" />
     <Compile Include="Documents\Macro.cs" />
     <Compile Include="Documents\NumericQuestionUtils.cs" />
     <Compile Include="Documents\Option.cs" />

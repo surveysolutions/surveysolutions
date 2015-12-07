@@ -21,7 +21,7 @@ namespace Main.Core.Documents
             this.IsPublic = false;
             this.SharedPersons = new List<Guid>();
             this.Macros = new Dictionary<Guid, Macro>();
-            this.LookupTables = new Dictionary<Guid, LookupTable>();
+            this.LookupTables = new Dictionary<Guid, string>();
         }
 
         public string Id { get; set; }
@@ -30,7 +30,7 @@ namespace Main.Core.Documents
 
         public Dictionary<Guid, Macro> Macros { get; set; }
 
-        public Dictionary<Guid, LookupTable> LookupTables { get; set; }
+        public Dictionary<Guid, string> LookupTables { get; set; }
 
         public DateTime? CloseDate { get; set; }
 

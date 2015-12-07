@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(),
                 questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
-                logger ?? Mock.Of<ILogger>());
+                logger ?? Mock.Of<ILogger>(), Mock.Of<ILookupTableService>());
         }
 
         protected static T GetEntityById<T>(QuestionnaireDocument document, Guid entityId)

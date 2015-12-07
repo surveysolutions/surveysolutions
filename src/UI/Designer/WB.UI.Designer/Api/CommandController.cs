@@ -7,12 +7,15 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
@@ -35,14 +38,22 @@ namespace WB.UI.Designer.Api
         private readonly ICommandInflater commandInflater;
         private readonly ICommandPostprocessor commandPostprocessor;
         private readonly string fileParameterName = "file";
+        private readonly ILookupTableService lookupTableService;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger, ICommandInflater commandPreprocessor, ICommandPostprocessor commandPostprocessor)
+        public CommandController(
+            ICommandService commandService, 
+            ICommandDeserializer commandDeserializer, 
+            ILogger logger, 
+            ICommandInflater commandPreprocessor,
+            ICommandPostprocessor commandPostprocessor, 
+            ILookupTableService lookupTableService)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.commandPostprocessor = commandPostprocessor;
+            this.lookupTableService = lookupTableService;
         }
 
         [Route("~/api/command/updateLookupTable")]
@@ -78,7 +89,6 @@ namespace WB.UI.Designer.Api
             try
             {
                 updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, command);
-                updateLookupTableCommand.FileContent = fileContent;
             }
             catch (Exception e)
             {
@@ -86,9 +96,12 @@ namespace WB.UI.Designer.Api
                 throw;
             }
 
+            this.lookupTableService.SaveLookupTableContent(updateLookupTableCommand.QuestionnaireId,
+                updateLookupTableCommand.LookupTableId, updateLookupTableCommand.LookupTableName, fileContent);
+
             return  this.ProcessCommand(updateLookupTableCommand, commandType); 
         }
-
+        
         public HttpResponseMessage Post(CommandExecutionModel model)
         {
             try
