@@ -54,6 +54,56 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             lookupTableContentStorage.Remove(lookupTableStorageId);
         }
 
+        public MemoryStream GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
+        {
+            var questionnaire = this.documentStorage.GetById(questionnaireId);
+
+            if (questionnaire == null)
+                throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
+
+            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
+                throw new ArgumentException($"lookup table with id {lookupTableId} is missing");
+
+            var lookupTable = questionnaire.LookupTables[lookupTableId];
+            if (lookupTable == null)
+                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
+
+            var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTable.TableName);
+
+            var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
+
+            if (lookupTableContent == null)
+                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
+
+            var sb = new StringBuilder();
+            using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
+            {
+                csvWriter.WriteField(ROWCODE);
+                foreach (var variableName in lookupTableContent.VariableNames)
+                {
+                    csvWriter.WriteField(variableName);
+                }
+                csvWriter.NextRecord();
+                foreach (var lookupTableRow in lookupTableContent.Rows)
+                {
+                    csvWriter.WriteField(lookupTableRow.RowCode);
+                    foreach (var variable in lookupTableRow.Variables)
+                    {
+                        csvWriter.WriteField(variable);
+                    }
+                    csvWriter.NextRecord();
+                }
+            }
+
+            var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream);
+            streamWriter.Write(sb.ToString());
+            streamWriter.Flush();
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
+
         private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
         {
             return $"{questionnaireId.FormatGuid()}-{lookupTableName}";
