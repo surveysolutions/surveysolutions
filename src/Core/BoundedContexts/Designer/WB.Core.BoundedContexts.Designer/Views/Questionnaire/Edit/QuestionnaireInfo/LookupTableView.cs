@@ -4,5 +4,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     {
         public string ItemId { get; set; }
         public string Name { get; set; }
+        public string FileName { get; set; }
     }
 }
