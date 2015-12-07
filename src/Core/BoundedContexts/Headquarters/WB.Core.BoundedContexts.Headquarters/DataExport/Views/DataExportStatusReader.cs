@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 p =>
                     p.Format == dataFormat &&
                     p.Type == dataType &&
-                    (p.QuestionnaireIdentity != null ||
+                    (p.QuestionnaireIdentity == null ||
                      p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
         }
 
