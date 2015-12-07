@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -42,18 +43,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
         {
             string FileId = Guid.NewGuid().FormatGuid();
-            this.fileViewStorage.StoreAsync(new InterviewFileView
+
+            new Task(async () =>
             {
-                Id = FileId,
-                File = data
-            }).Wait();
-            this.imageViewStorage.StoreAsync(new InterviewMultimediaView
-            {
-                Id = Guid.NewGuid().FormatGuid(),
-                InterviewId = interviewId,
-                FileId = FileId,
-                FileName = fileName
-            }).Wait();
+                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                {
+                    Id = FileId,
+                    File = data
+                }).ContinueWith(async x =>
+                    await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
+                    {
+                        Id = Guid.NewGuid().FormatGuid(),
+                        InterviewId = interviewId,
+                        FileId = FileId,
+                        FileName = fileName
+                    }));
+            }).Start();
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
