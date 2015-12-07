@@ -142,7 +142,7 @@ namespace WB.Tests.Unit
             return new AccountDocument() { UserName = userName };
         }
 
-        public static AllDataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        public static AllDataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new AllDataExportProcessDetails(
                 DataExportFormat.Tabular,
@@ -185,7 +185,7 @@ namespace WB.Tests.Unit
             return new AnswerToStringService();
         }
 
-        public static ApprovedDataExportProcessDetails ApprovedDataExportProcess(QuestionnaireIdentity? questionnaireIdentity = null)
+        public static ApprovedDataExportProcessDetails ApprovedDataExportProcess(QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new ApprovedDataExportProcessDetails(
                 DataExportFormat.Tabular,
@@ -329,15 +329,9 @@ namespace WB.Tests.Unit
             return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(supervisorId), "", ""); 
         }
 
-        public static DashboardDenormalizer DashboardDenormalizer(
-            IReadSideRepositoryWriter<QuestionnaireDTO> questionnaireDtoDocumentStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStorage = null)
+        public static UserLight UserLight(Guid? userId = null)
         {
-            return new DashboardDenormalizer(
-                questionnaireDtoDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireDTO>>(),
-                Mock.Of<IReadSideRepositoryWriter<SurveyDto>>(),
-                questionnaireStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                Mock.Of<IPlainQuestionnaireRepository>());
+            return new UserLight(userId ?? Guid.NewGuid(), "test");
         }
 
         public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
@@ -2151,6 +2145,8 @@ namespace WB.Tests.Unit
                     PrefilledQuestionId = prefilledQuestionId
                 }
             };
+        }
+
         public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name")
         {
             var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName };

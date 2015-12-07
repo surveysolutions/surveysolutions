@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
             
-            if (!await this.questionnaireFactory.IsQuestionnaireExistsAsync(questionnaireIdentity))
+            if (!this.questionnaireFactory.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
@@ -404,7 +404,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             foreach (var imageView in imageViews)
             {
-                var fileView = await this.interviewFileViewStorage.GetByIdAsync(imageView.FileId);
+                var fileView = await Task.FromResult(this.interviewFileViewStorage.GetById(imageView.FileId));
                 await this.synchronizationService.UploadInterviewImageAsync(
                     interviewId: imageView.InterviewId,
                     fileName: imageView.FileName,

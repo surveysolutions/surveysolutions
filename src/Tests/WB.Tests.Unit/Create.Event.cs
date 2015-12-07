@@ -44,7 +44,6 @@ using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.OldDashboardCapability;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Interviews;

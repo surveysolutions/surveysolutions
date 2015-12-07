@@ -30,17 +30,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewStorage =
                 Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>(storage
-                    => storage.GetByIdAsync(questionnaireId) == Task.FromResult(new QuestionnaireDocumentView()
+                    => storage.GetById(questionnaireId) == new QuestionnaireDocumentView()
                     {
                         Id = questionnaireId,
                         Document = questionnaireDocument
-                    }));
+                    });
 
             var storeAsyncTask = new Task(() => { });
             storeAsyncTask.Start();
 
             var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer =>
-            writer.GetByIdAsync(it.IsAny<string>()) == Task.FromResult(dashboardItem));
+            writer.GetById(it.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
                 .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))

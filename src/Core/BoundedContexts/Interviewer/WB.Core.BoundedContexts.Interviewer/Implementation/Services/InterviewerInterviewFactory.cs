@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<string> GetPackageByCompletedInterviewAsync(Guid interviewId)
         {
-            InterviewView interview = await this.interviewViewRepository.GetByIdAsync(interviewId.FormatGuid());
+            InterviewView interview = await Task.FromResult(this.interviewViewRepository.GetById(interviewId.FormatGuid()));
 
             return await Task.Run(() => this.CreateSyncItem(interview));
         }
@@ -143,7 +143,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewDetailsApiView details)
         {
-            var questionnaireView = await this.questionnaireRepository.GetByIdAsync(info.QuestionnaireIdentity.ToString());
+            var questionnaireView = await Task.FromResult(this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString()));
 
             var answersOnPrefilledQuestions = details
                 .AnswersOnPrefilledQuestions?
