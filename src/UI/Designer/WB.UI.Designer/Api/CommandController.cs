@@ -77,7 +77,7 @@ namespace WB.UI.Designer.Api
                 var fileSreamContent = provider.Contents.Single(x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == fileParameterName && x.Headers.ContentDisposition.FileName != null);
                 var commandSreamContent = provider.Contents.Single(x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == "command");
 
-                fileName = fileSreamContent.Headers.ContentDisposition.FileName;
+                fileName = fileSreamContent.Headers.ContentDisposition.FileName.Trim('"');
                 command = commandSreamContent.ReadAsStringAsync().Result;
                 fileContent = fileSreamContent.ReadAsStringAsync().Result;
 
