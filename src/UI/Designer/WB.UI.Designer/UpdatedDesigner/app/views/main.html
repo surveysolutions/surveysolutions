@@ -156,7 +156,7 @@
                                             <button type="submit" ng-disabled="lookupTableForm.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table, lookupTableForm);$event.stopPropagation()">Save</button>
                                             <button type="button" class="btn lighter-hover" ng-click="cancel(table, lookupTableForm);$event.stopPropagation()">Cancel</button>
                                         </div>
-                                        <a href="{{downloadLookupFileBaseUrl + table.itemId}}"  ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" >Download file</a>
+                                        <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}"  ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" >Download file</a>
                                         <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file, lookupTableForm);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">Select file</button>
                                     </div>
                                 </ng-form>
