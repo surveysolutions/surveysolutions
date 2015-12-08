@@ -23,7 +23,7 @@ using Ncqrs.Spec;
 using NHibernate;
 using NSubstitute;
 using Quartz;
-
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
@@ -2284,6 +2284,21 @@ namespace WB.Tests.Unit
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
             {
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
+            }
+
+            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            {
+                return new AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+            }
+
+            public static DeleteLookupTable DeleteLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            {
+                return new DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
+            }
+
+            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            {
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, "table","file");
             }
         }
 
