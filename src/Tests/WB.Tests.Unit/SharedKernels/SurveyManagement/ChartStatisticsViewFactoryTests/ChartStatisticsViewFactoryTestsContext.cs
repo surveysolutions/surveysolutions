@@ -11,8 +11,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
     {
         protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader = null)
         {
-            return new ChartStatisticsViewFactory(
-                statisticsReader ?? Stub<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>.WithNotEmptyValues);
+            return null;
+            //return new ChartStatisticsViewFactory(
+            //    statisticsReader ?? Stub<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>.WithNotEmptyValues);
         }
 
         protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(int count)

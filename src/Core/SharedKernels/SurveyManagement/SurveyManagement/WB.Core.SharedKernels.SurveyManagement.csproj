@@ -113,6 +113,7 @@
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
+    <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
+    <Compile Include="Views\Interview\CumulativeReportStatusChange.cs" />
     <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
     <Compile Include="Views\Interview\InterviewInformation.cs" />
     <Compile Include="Views\Interview\InterviewerInterviewsFactory.cs" />
@@ -324,6 +326,7 @@
     <Compile Include="Views\Interview\InterviewQuestionComment.cs" />
     <Compile Include="Views\Interview\InterviewQuestionView.cs" />
     <Compile Include="Views\Interview\InterviewSummary.cs" />
+    <Compile Include="Views\Interview\LastInterviewStatus.cs" />
     <Compile Include="Views\Interview\QuestionAnswer.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByDateAndTemplate.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />

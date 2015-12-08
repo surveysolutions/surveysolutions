@@ -9,6 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
+    [Ignore("KP-6434, TLK")]
     internal class when_statistics_filter_could_not_find_questionnaire : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>
