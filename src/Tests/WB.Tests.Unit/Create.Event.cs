@@ -26,6 +26,7 @@ using Quartz;
 
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -760,6 +761,32 @@ namespace WB.Tests.Unit
                 {
                     return new designer::Main.Core.Events.Questionnaire.TemplateImported { Source = questionnaireDocument };
                 }
+            }
+
+            public static IPublishedEvent<LookupTableAdded> LookupTableAdded(Guid questionnaireId, Guid entityId)
+            {
+                return new LookupTableAdded
+                {
+                    LookupTableId = entityId
+                }.ToPublishedEvent(eventSourceId: questionnaireId);
+            }
+
+            public static IPublishedEvent<LookupTableDeleted> LookupTableDeleted(Guid questionnaireId, Guid entityId)
+            {
+                return new LookupTableDeleted
+                {
+                    LookupTableId = entityId
+                }.ToPublishedEvent(eventSourceId: questionnaireId);
+            }
+
+            public static IPublishedEvent<LookupTableUpdated> LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
+            {
+                return new LookupTableUpdated
+                {
+                    LookupTableId = entityId,
+                    LookupTableName = name,
+                    LookupTableFileName = fileName
+                }.ToPublishedEvent(eventSourceId: questionnaireId);
             }
         }
     }
