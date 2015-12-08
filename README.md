@@ -13,3 +13,8 @@
     </eventHandlers>
   </eventBus>
 - Rebuild read side on SV/HQ/D is needed for 5.3.0 version (added functionality for check readside version, first time rebuild readside is requered)
+
+
+
+5.4.0
+HQ/SV: increase read side version, we postponed it because of test limits

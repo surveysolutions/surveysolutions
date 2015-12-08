@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewSummary == null)
                 return null;
 
-            return new InverviewChangeStateHistoryView()
+            return new InverviewChangeStateHistoryView
             {
                 HistoryItems = interviewSummary.StatusHistory.Select(x => new HistoryItemView()
                 {
