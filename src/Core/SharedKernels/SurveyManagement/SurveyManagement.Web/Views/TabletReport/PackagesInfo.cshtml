@@ -57,7 +57,7 @@
             <th>Upload date</th>
             <th>User Name</th>
             <th>User Id</th>
-            <th>Size</th>
+            <th>Size(bytes)</th>
             <th></th>
         </tr>
         </thead>
@@ -68,7 +68,7 @@
             <td data-bind="text: CreationDate"></td>
             <td data-bind="text: UserName"></td>
             <td data-bind="text: UserId"></td>
-            <td data-bind="text: Size"></td>
+            <td data-bind="text: Size().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')"></td> 
             <td class="buttons">
                 <div class="btn-group">
                     <a class="btn btn-info" data-bind="attr: { href: $packegeUrl + '?fileName=' + PackageName() }">

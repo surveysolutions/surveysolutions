@@ -509,7 +509,6 @@
     <EmbeddedResource Include="Views\Survey\Interviews.cshtml" />
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <EmbeddedResource Include="Views\Shared\_alerts.cshtml" />
     <EmbeddedResource Include="Views\Shared\_ListViewPagingScript.cshtml" />
