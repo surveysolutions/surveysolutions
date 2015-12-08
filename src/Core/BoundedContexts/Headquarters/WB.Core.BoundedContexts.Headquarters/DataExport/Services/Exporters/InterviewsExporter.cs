@@ -75,35 +75,37 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             int totalInterviewsToExport =
                 this.transactionManager.ExecuteInQueryTransaction(() => this.interviewSummaries.Query(_ => _.Count(expression)));
 
-            int processedCount = 0;
-            while (processedCount < totalInterviewsToExport)
+            List<Guid> interviewIdsToExport = new List<Guid>();
+            while (interviewIdsToExport.Count < totalInterviewsToExport)
             {
+                var ids = this.transactionManager.ExecuteInQueryTransaction(() =>
+                   this.interviewSummaries.Query(_ => _
+                       .Where(expression)
+                       .OrderBy(x => x.InterviewId)
+                       .Select(x => x.InterviewId)
+                       .Skip(interviewIdsToExport.Count)
+                       .Take(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery)
+                       .ToList()));
+                if (ids.Count == 0) break;
+
                 cancellationToken.ThrowIfCancellationRequested();
-
-                var localProcessedCount = processedCount;
-                List<Guid> interviewIdsToExport = this.transactionManager.ExecuteInQueryTransaction(() =>
-                    this.interviewSummaries.Query(_ => _
-                        .Where(expression)
-                        .OrderBy(x => x.InterviewId)
-                        .Select(x => x.InterviewId)
-                        .Skip(localProcessedCount)
-                        .Take(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery)
-                        .ToList()));
-                if (interviewIdsToExport.Count == 0)
-                    break;
-
-                this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport, cancellationToken);
-                processedCount += interviewIdsToExport.Count;
-                progress.Report(processedCount.PercentOf(totalInterviewsToExport));
+                interviewIdsToExport.AddRange(ids);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport, progress, cancellationToken);
+            progress.Report(100);
         }
 
         private void DoExport(QuestionnaireExportStructure questionnaireExportStructure, 
-            string basePath, List<Guid> interviewIdsToExport, CancellationToken cancellationToken)
+            string basePath, 
+            List<Guid> interviewIdsToExport, 
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, cancellationToken);
+            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, progress, cancellationToken);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -139,10 +141,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
-        private void ExportInterviews(List<Guid> interviewIdsToExport,
-                                      string basePath,
-                                      QuestionnaireExportStructure questionnaireExportStructure,
-                                      CancellationToken cancellationToken)
+        private void ExportInterviews(List<Guid> interviewIdsToExport, 
+            string basePath, QuestionnaireExportStructure questionnaireExportStructure, IProgress<int> progress, CancellationToken cancellationToken)
         {
             int totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
@@ -184,6 +184,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
 
                 totalInterviewsProcessed++;
+                progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
             }
         }
 
