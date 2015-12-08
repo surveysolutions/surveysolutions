@@ -106,6 +106,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	}
    
 <#
+	LookupTablesDefenitions(LookupTables);
 	QuestionsStateDefenitions(Model.Questions);
 #>
 	//groups

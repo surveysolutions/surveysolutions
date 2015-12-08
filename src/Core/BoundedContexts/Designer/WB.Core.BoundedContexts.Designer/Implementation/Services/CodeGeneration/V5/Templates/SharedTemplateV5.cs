@@ -867,6 +867,69 @@ this.Write(">(rosters);\r\n\t\t}\r\n\t}\r\n");
 	}
 }
 
+void LookupTablesDefenitions(List<LookupTableTemplateModel> lookupTables)
+{
+	foreach (var table in lookupTables) 
+	{
+
+        
+        #line default
+        #line hidden
+        
+        #line 137 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write("\tpublic static Dictionary<decimal, ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
+
+        
+        #line default
+        #line hidden
+        
+        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write("> ");
+
+        
+        #line default
+        #line hidden
+        
+        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
+
+        
+        #line default
+        #line hidden
+        
+        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(" \r\n\t{\r\n\t\tget { return LookupTables.");
+
+        
+        #line default
+        #line hidden
+        
+        #line 140 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
+
+        
+        #line default
+        #line hidden
+        
+        #line 140 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+this.Write("; }\r\n\t}\r\n");
+
+        
+        #line default
+        #line hidden
+        
+        #line 142 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+
+	}
+}
+
         
         #line default
         #line hidden

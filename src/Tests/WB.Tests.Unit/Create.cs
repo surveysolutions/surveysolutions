@@ -225,11 +225,24 @@ namespace WB.Tests.Unit
 
         public static CodeGenerator CodeGenerator(
             IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null)
+            IExpressionProcessor expressionProcessor = null,
+            ILookupTableService lookupTableService = null)
         {
             return new CodeGenerator(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                lookupTableService ?? Mock.Of<ILookupTableService>());
+        }
+
+        public static QuestionnaireExecutorTemplateModelFactory QuestionnaireExecutorTemplateModelFactory(
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            IExpressionProcessor expressionProcessor = null,
+            ILookupTableService lookupTableService = null)
+        {
+            return new QuestionnaireExecutorTemplateModelFactory(
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                lookupTableService ?? Mock.Of<ILookupTableService>());
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
