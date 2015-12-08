@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ICommandService commandService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
-
+        private readonly ILookupTableService lookupTableService;
         public AdminController(
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
@@ -45,7 +45,9 @@ namespace WB.UI.Designer.Controllers
             IStringCompressor zipUtils,
             ICommandService commandService,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            ISerializer serializer, IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory)
+            ISerializer serializer, 
+            IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory, 
+            ILookupTableService lookupTableService)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -55,6 +57,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.serializer = serializer;
             this.accountListViewFactory = accountListViewFactory;
+            this.lookupTableService = lookupTableService;
         }
 
         [HttpGet]
@@ -70,10 +73,15 @@ namespace WB.UI.Designer.Controllers
 
             if (uploadFile != null && uploadFile.ContentLength > 0)
             {
-                var document = this.zipUtils.DecompressGZip<QuestionnaireDocument>(uploadFile.InputStream);
+                var document = this.zipUtils.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(uploadFile.InputStream);
                 if (document != null)
                 {
-                    this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
+                    this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document.QuestionnaireDocument));
+                    foreach (var lookupTable in document.LookupTables)
+                    {
+                        this.lookupTableService.SaveLookupTableContent(document.QuestionnaireDocument.PublicKey,
+                            lookupTable.Key, document.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName, lookupTable.Value);
+                    }
                     return this.RedirectToAction("Index", "Questionnaire");
                 }
             }
@@ -93,7 +101,12 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireView == null)
                 return null;
 
-            return new FileStreamResult(this.zipUtils.Compress(this.serializer.Serialize(questionnaireView.Source)), "application/octet-stream")
+            var questionnaireDocumentWithLookUpTables = new QuestionnaireDocumentWithLookUpTables()
+            {
+                QuestionnaireDocument = questionnaireView.Source,
+                LookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id)
+            };
+            return new FileStreamResult(this.zipUtils.Compress(this.serializer.Serialize(questionnaireDocumentWithLookUpTables)), "application/octet-stream")
             {
                 FileDownloadName = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName())
             };

@@ -61,6 +61,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (questionnaire == null)
                 throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
 
+            return GetLookupTableContentFileImpl(questionnaire, lookupTableId);
+        }
+
+        public Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId)
+        {
+            var questionnaire = this.documentStorage.GetById(questionnaireId);
+
+            if (questionnaire == null)
+                throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
+
+            var result = new Dictionary<Guid, string>();
+
+            foreach (var lookupTable in questionnaire.LookupTables)
+            {
+                result.Add(lookupTable.Key, this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content);
+            }
+            return result;
+        }
+
+        private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
+        {
             if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
                 throw new ArgumentException($"lookup table with id {lookupTableId} is missing");
 
@@ -68,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTable == null)
                 throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
 
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTable.TableName);
+            var lookupTableStorageId = GetLookupTableStorageId(questionnaire.PublicKey, lookupTable.TableName);
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
 
@@ -95,15 +116,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 }
             }
 
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.Write(sb.ToString());
-            streamWriter.Flush();
-            memoryStream.Position = 0;
-
-            return new LookupTableContentFile() {Content = memoryStream, FileName = lookupTable.FileName};
+            return new LookupTableContentFile() { Content = sb.ToString(), FileName = lookupTable.FileName };
         }
-
         private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
         {
             return $"{questionnaireId.FormatGuid()}-{lookupTableName}";
