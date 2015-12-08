@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq.Expressions;
+
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -13,6 +16,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         public ExpressionLocation()
         {
+        }
+
+        public ExpressionLocation(ExpressionLocationItemType itemType = ExpressionLocationItemType.Question, ExpressionLocationType expressionType = ExpressionLocationType.General, Guid? id = null)
+        {
+            this.ItemType = itemType;
+            this.ExpressionType = this.ExpressionType;
+            this.Id = id ?? Guid.Empty;
         }
 
         public ExpressionLocation(string stringValue)

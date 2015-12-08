@@ -20,14 +20,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private readonly IExpressionProcessor expressionProcessor;
 
         private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        private const string privateFieldsPrefix = "@__";
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
+        private readonly ILookupTableService lookupTableService;
 
         public QuestionnaireExecutorTemplateModelFactory(
             IMacrosSubstitutionService macrosSubstitutionService, 
-            IExpressionProcessor expressionProcessor)
+            IExpressionProcessor expressionProcessor, 
+            ILookupTableService lookupTableService)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.expressionProcessor = expressionProcessor;
+            this.lookupTableService = lookupTableService;
         }
 
         public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
@@ -144,7 +148,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             template.StructuralDependencies = structuralDependencies;
             template.ConditionsPlayOrder = listOfOrderedContitions.ToList();
             template.VariableNames = variableNames;
+            template.LookupTables = this.BuildLookupTableModels(questionnaire).ToList();
             return template;
+        }
+
+        private IEnumerable<LookupTableTemplateModel> BuildLookupTableModels(QuestionnaireDocument questionnaire)
+        {
+            foreach (var table in questionnaire.LookupTables)
+            {
+                var lookupTableData = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, table.Key);
+                var tableName = table.Value.TableName;
+                var tableTemplateModel = new LookupTableTemplateModel
+                {
+                    TableName = tableName.ToCamelCase(),
+                    TypeName = tableName.ToPascalCase(),
+                    TableNameField = privateFieldsPrefix + tableName.ToCamelCase(),
+                    Rows = lookupTableData.Rows,
+                    VariableNames = lookupTableData.VariableNames
+                };
+                yield return tableTemplateModel;
+            }
         }
 
         private void BuildStructures(QuestionnaireDocument questionnaireDoc,

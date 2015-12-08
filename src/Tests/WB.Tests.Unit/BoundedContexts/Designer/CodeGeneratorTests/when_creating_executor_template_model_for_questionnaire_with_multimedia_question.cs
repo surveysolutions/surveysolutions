@@ -41,11 +41,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     },
                 });
 
-            generator = Create.CodeGenerator();
+            executorTemplateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
         };
 
         Because of = () =>
-            templateModel = generator.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
+            templateModel = executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
                     additionInterfaces: new string[0],
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             return templateModel.AllQuestions.Single(x => x.Id == id);
         }
 
-        private static CodeGenerator generator;
+        private static QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
         private static QuestionnaireExecutorTemplateModel templateModel;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid chapterId = Guid.Parse("11111111111111111111111111111111");

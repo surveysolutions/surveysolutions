@@ -39,11 +39,13 @@ namespace WB.Tests.Integration
     {
         public static CodeGenerator CodeGenerator(
         IMacrosSubstitutionService macrosSubstitutionService = null,
-        IExpressionProcessor expressionProcessor = null)
+        IExpressionProcessor expressionProcessor = null,
+            ILookupTableService lookupTableService = null)
         {
             return new CodeGenerator(
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                lookupTableService ?? Mock.Of<ILookupTableService>());
         }
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
