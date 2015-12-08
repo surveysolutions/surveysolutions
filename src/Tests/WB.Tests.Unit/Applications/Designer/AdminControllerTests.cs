@@ -136,7 +136,8 @@ namespace WB.Tests.Unit.Applications.Designer
                 commandService ?? CommandServiceMock.Object,
                 questionnaireViewFactory ?? questionnaireViewFactoryMock.Object,
                 Mock.Of<ISerializer>(_ => _.Serialize(Moq.It.IsAny<QuestionnaireDocument>())==""),
-                Mock.Of<IViewFactory<AccountListViewInputModel, AccountListView>>());
+                Mock.Of<IViewFactory<AccountListViewInputModel, AccountListView>>(),
+                Mock.Of<ILookupTableService>());
         }
 
         protected Mock<ICommandService> CommandServiceMock;

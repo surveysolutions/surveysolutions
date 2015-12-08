@@ -10,11 +10,13 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables
             Guid questionnaireId,
             Guid lookupTableId,
             Guid responsibleId,
-            string lookupTableName)
+            string lookupTableName,
+            string lookupTableFileName)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
             this.LookupTableId = lookupTableId;
             this.LookupTableName = lookupTableName;
+            this.LookupTableFileName = lookupTableFileName;
         }
 
         public Guid LookupTableId { get; private set; }

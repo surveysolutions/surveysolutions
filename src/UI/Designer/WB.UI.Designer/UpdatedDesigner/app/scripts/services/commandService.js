@@ -37,7 +37,7 @@
                         "questionnaireId": questionnaireId,
                         "lookupTableId": lookupTable.itemId,
                         "lookupTableName": lookupTable.name,
-                        "fileName": lookupTable.fileName
+                        "lookupTableFileName": lookupTable.fileName
                     };
 
                     return Upload.upload({
