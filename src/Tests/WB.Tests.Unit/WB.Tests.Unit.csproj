@@ -472,6 +472,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_on_hard_deleted_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_does_not_exist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_which_is_roster_size_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_supervisor_integer_question_and_interviewer_received_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
@@ -639,6 +640,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\YesNoQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewExportedCommentariesDenormalizerTests\InterviewExportedCommentariesDenormalizerNunitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_unapproved_by_headquarters_event_recived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewReceivedBySupervisor_event_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewReceivedByInterviewer_event_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_multi_option_question.cs" />
@@ -651,6 +654,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_and_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\MapReportDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_answer_removed_from_gps_qestion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_gps_question_answered.cs" />
