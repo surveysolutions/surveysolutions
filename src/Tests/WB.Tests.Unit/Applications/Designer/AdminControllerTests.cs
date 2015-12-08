@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Web;
@@ -18,6 +19,7 @@ using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
+using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Applications.Designer
@@ -53,8 +55,13 @@ namespace WB.Tests.Unit.Applications.Designer
             file.Setup(x => x.ContentLength).Returns((int)inputStream.Length);
             file.Setup(x => x.InputStream).Returns(inputStream);
 
-            this.ZipUtilsMock.Setup(x => x.DecompressGZip<QuestionnaireDocument>(file.Object.InputStream))
-                        .Returns(new QuestionnaireDocument());
+            this.ZipUtilsMock.Setup(
+                x => x.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(file.Object.InputStream))
+                .Returns(new QuestionnaireDocumentWithLookUpTables()
+                {
+                    LookupTables = new Dictionary<Guid, string>(),
+                    QuestionnaireDocument = new QuestionnaireDocument()
+                });
             this.UserHelperMock.Setup(x => x.WebUser.UserId).Returns(Guid.NewGuid);
 
             // act
