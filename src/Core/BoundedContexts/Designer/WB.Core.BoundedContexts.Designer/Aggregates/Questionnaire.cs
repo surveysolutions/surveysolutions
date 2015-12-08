@@ -931,6 +931,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             this.ApplyEvent(new LookupTableUpdated(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
         }
+
         public void DeleteLookupTable(DeleteLookupTable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
