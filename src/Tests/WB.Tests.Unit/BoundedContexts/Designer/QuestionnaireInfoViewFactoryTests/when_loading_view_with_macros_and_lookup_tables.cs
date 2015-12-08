@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTests
 {
-    internal class when_loading_view_with_macros : QuestionnaireInfoViewFactoryContext
+    internal class when_loading_view_with_macros_and_lookup_tables : QuestionnaireInfoViewFactoryContext
     {
         Establish context = () =>
         {
@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
 
             var questionnaireDocument = Create.QuestionnaireDocument();
             questionnaireDocument.Macros = macros;
+            questionnaireDocument.LookupTables = lookupTables;
 
             var questionnaireDocumentReaderMock = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(
                   x => x.GetById(questionnaireId) == questionnaireDocument);
@@ -42,6 +43,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
 
         It should_contains_all_macroses_from_questionnaire = () =>
             view.Macros.Select(x => x.ItemId).ShouldContainOnly(macro1Id.FormatGuid(), macro2Id.FormatGuid(), macro3Id.FormatGuid(), macro4Id.FormatGuid());
+
+        It should_contains_all_lookups_from_questionnaire = () =>
+            view.LookupTables.Select(x => x.ItemId).ShouldContainOnly(lookupTable1Id.FormatGuid(), lookupTable2Id.FormatGuid());
 
         It should_first_element_match_macro_with_id_macro4Id = () =>
         {
@@ -82,12 +86,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
         private static Guid macro3Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid macro4Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
+        private static Guid lookupTable1Id = Guid.Parse("1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static Guid lookupTable2Id = Guid.Parse("2BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
         private static Dictionary<Guid, Macro> macros = new Dictionary<Guid, Macro>
         {
             { macro1Id, Create.Macro("2. second", "content2", "description2") },
             { macro2Id, Create.Macro("3. third", "content3", "description3") },
             { macro3Id, Create.Macro("4. fourth", "content4", "description4") },
             { macro4Id, Create.Macro("1. first", "content1", "description1") }
+        };
+
+        private static Dictionary<Guid, LookupTable> lookupTables = new Dictionary<Guid, LookupTable>
+        {
+            { lookupTable1Id, Create.LookupTable()},
+            { lookupTable2Id, Create.LookupTable()}
         };
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";

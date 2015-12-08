@@ -2309,5 +2309,10 @@ namespace WB.Tests.Unit
                 action.Invoke();
             }
         }
+
+        public static LookupTable LookupTable()
+        {
+            return new LookupTable() {FileName = "name", TableName = "table"};
+        }
     }
 }
