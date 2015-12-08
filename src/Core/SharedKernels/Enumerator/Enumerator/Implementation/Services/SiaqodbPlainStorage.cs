@@ -54,20 +54,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
-            ITransaction transaction = this.Storage.BeginTransaction();
-            try
-            {
+            //ITransaction transaction = this.Storage.BeginTransaction();
+            //try
+            //{
                 foreach (var entity in entities.Where(entity => entity != null))
                 {
-                    await this.Storage.StoreObjectAsync(entity, transaction);
+                    await this.Storage.StoreObjectAsync(entity/*, transaction*/);
                 }
 
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-            }
+            //    await transaction.CommitAsync();
+            //}
+            //catch
+            //{
+            //    await transaction.RollbackAsync();
+            //}
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
