@@ -10,6 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
+    [Ignore("KP-6434, TLK")]
     internal class when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_null_from_and_on_day_after : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>

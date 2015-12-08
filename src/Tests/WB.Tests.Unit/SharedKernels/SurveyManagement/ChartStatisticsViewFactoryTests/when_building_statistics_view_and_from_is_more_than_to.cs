@@ -8,6 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
+    [Ignore("KP-6434, TLK")]
     internal class when_building_statistics_view_and_from_is_more_than_to : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>

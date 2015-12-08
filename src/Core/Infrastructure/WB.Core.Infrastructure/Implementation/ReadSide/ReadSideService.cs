@@ -234,6 +234,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                                 Status = writer.GetReadableStatus()
                             }),
                 WarningEventHandlerErrors = ReverseList(exceptionsByEventHandlersWhichShouldBeIgnored)
+                    .Take(10)
                     .Select(error => new ReadSideRepositoryWriterError()
                     {
                         ErrorTime = error.Item1,
@@ -241,6 +242,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         InnerException = GetFullUnwrappedExceptionText(error.Item3.InnerException)
                     }),
                 RebuildErrors = ReverseList(criticalRebuildReadSideExceptions)
+                    .Take(10)
                     .Select(error => new ReadSideRepositoryWriterError()
                     {
                         ErrorTime = error.Item1,
