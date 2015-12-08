@@ -214,6 +214,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExecutorTemplateModelFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
@@ -245,6 +246,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LookupTablesTemplateV5.tt</DependentUpon>
+    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -679,7 +685,12 @@
       <LastGenOutput>SharedTemplateV5.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
