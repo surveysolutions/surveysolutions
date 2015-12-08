@@ -214,6 +214,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\LookupTableTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExecutorTemplateModelFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
@@ -245,12 +246,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LookupTablesTemplateV5.tt</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -687,7 +689,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
   </ItemGroup>

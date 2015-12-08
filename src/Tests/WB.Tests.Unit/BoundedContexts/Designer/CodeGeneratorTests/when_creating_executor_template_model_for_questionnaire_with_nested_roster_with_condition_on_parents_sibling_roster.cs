@@ -47,11 +47,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     })
                 });
 
-            generator = Create.CodeGenerator();
+            executorTemplateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
         };
 
         Because of = () =>
-            templateModel = generator.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
+            templateModel = executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
                     additionInterfaces: new string[0],
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             return templateModel.RostersGroupedByScope.Single(r => r.Value.RostersInScope.Any(x => x.Id == id)).Value;
         }
 
-        private static CodeGenerator generator;
+        private static QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
         private static QuestionnaireExecutorTemplateModel templateModel;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid r2Id = Guid.Parse("11111111111111111111111111111111");

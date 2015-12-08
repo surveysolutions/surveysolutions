@@ -15,9 +15,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
 
-        public CodeGenerator(IMacrosSubstitutionService macrosSubstitutionService, IExpressionProcessor expressionProcessor)
+        public CodeGenerator(
+            IMacrosSubstitutionService macrosSubstitutionService, 
+            IExpressionProcessor expressionProcessor,
+            ILookupTableService lookupTableService)
         {
-            executorTemplateModelFactory = new QuestionnaireExecutorTemplateModelFactory(macrosSubstitutionService, expressionProcessor);
+            executorTemplateModelFactory = new QuestionnaireExecutorTemplateModelFactory(
+                macrosSubstitutionService, 
+                expressionProcessor, 
+                lookupTableService);
         }
 
         private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
@@ -55,16 +61,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             //generating partial classes
             GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
             GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
-            GenerateLookupTableClasses(questionnaireTemplateStructure, generatedClasses);
+            GenerateLookupTableClasses(questionnaireTemplateStructure.LookupTables, generatedClasses);
 
             return generatedClasses;
         }
 
         private void GenerateLookupTableClasses(
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, 
+            List<LookupTableTemplateModel> lookupTables, 
             Dictionary<string, string> generatedClasses)
         {
-            
+            var lookupTablesTemplate = new LookupTablesTemplateV5(lookupTables);
+            var fileName = new ExpressionLocation(ExpressionLocationItemType.LookupTable).ToString();
+            generatedClasses.Add(fileName, lookupTablesTemplate.TransformText());
         }
 
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)

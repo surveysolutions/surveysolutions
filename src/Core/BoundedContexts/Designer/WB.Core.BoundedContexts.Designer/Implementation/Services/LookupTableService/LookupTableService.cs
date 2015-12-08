@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -54,6 +52,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             lookupTableContentStorage.Remove(lookupTableStorageId);
         }
 
+        public LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId)
+        {
+            var questionnaire = this.documentStorage.GetById(questionnaireId);
+
+            if (questionnaire == null)
+                throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
+
+            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
+                throw new ArgumentException($"lookup table with id {lookupTableId} is missing");
+
+            var lookupTable = questionnaire.LookupTables[lookupTableId];
+            if (lookupTable == null)
+                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
+
+            var lookupTableStorageId = GetLookupTableStorageId(questionnaire.PublicKey, lookupTable.TableName);
+
+            var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
+
+            if (lookupTableContent == null)
+                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
+
+            return lookupTableContent;
+        }
+
         public LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId)
         {
             var questionnaire = this.documentStorage.GetById(questionnaireId);
@@ -82,19 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
-            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
-                throw new ArgumentException($"lookup table with id {lookupTableId} is missing");
-
-            var lookupTable = questionnaire.LookupTables[lookupTableId];
-            if (lookupTable == null)
-                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
-
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaire.PublicKey, lookupTable.TableName);
-
-            var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
-
-            if (lookupTableContent == null)
-                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
+            var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
 
             var sb = new StringBuilder();
             using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
@@ -116,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 }
             }
 
-            return new LookupTableContentFile() { Content = sb.ToString(), FileName = lookupTable.FileName };
+            return new LookupTableContentFile() { Content = sb.ToString(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
         }
         private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
         {
