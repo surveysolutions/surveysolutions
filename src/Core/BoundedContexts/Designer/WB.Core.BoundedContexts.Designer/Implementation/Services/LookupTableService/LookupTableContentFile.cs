@@ -5,6 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     public class LookupTableContentFile
     {
         public string FileName { get; set; }
-        public MemoryStream Content { get; set; }
+        public string Content { get; set; }
     }
 }

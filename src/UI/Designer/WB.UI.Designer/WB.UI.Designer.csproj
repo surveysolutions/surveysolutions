@@ -284,6 +284,7 @@
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
+    <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
