@@ -15,12 +15,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public ActionResult Packages()
-        {
-            return this.View(this.tabletInformationService.GetAllTabletInformationPackages());
-        }
-
-        [Authorize(Roles = "Administrator")]
         public ActionResult DownloadPackages(string fileName)
         {
             return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip",

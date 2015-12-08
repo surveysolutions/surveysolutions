@@ -73,11 +73,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
 
             var tabletInfo = new TabletInformationView(fileName, separatedValues[0], separatedValues[1], fileCreationTime, fileSize);
 
-            if (separatedValues.Length == 4)
+            if (separatedValues.Length == 4 && !string.IsNullOrEmpty(separatedValues[3]))
             {
-                var usefInfo = separatedValues[3].Split(USERDELIMITER);
-                tabletInfo.UserName = usefInfo[0];
-                tabletInfo.UserId = Guid.Parse(usefInfo[1]);
+                var userInfo = separatedValues[3].Split(USERDELIMITER);
+                if (userInfo.Length == 2)
+                {
+                    Guid userId;
+                    if (Guid.TryParse(userInfo[1], out userId))
+                    {
+                        tabletInfo.UserId = userId;
+                        tabletInfo.UserName = userInfo[0];
+                    }
+                }
             }
 
             return tabletInfo;
