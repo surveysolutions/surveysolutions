@@ -61,7 +61,7 @@ namespace WB.UI.Interviewer.Activities
         private async Task BackwardCompatibilityAsync()
         {
             var settings = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            if (settings.GetById("settings") != null) return;
+            if (settings.Query(setting => setting.FirstOrDefault()) != null) return;
             
             await RestoreApplicationSettingsAsync();
             await RestoreInterviewerAsync();
@@ -79,6 +79,7 @@ namespace WB.UI.Interviewer.Activities
             var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database"));
             var oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
             SiaqodbConfigurator.EncryptedDatabase = true;
+            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
             if (oldInterviewer != null)
             {
                 await interviewersRepository.StoreAsync(oldInterviewer);
