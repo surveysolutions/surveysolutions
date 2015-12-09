@@ -186,7 +186,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 Parallel.ForEach(batchIds,
                    new ParallelOptions
                    {
-                       CancellationToken = cancellationToken
+                       CancellationToken = cancellationToken,
+                       MaxDegreeOfParallelism = 200
                    },
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
