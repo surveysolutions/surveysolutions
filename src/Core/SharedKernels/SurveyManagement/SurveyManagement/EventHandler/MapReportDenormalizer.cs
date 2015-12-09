@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Writers => new object[] { this.mapItems };
 
-        public override object[] Readers => new object[] { this.interviewBriefStorage };
+        public override object[] Readers => new object[] { this.interviewBriefStorage, this.questionsInfo };
 
         public MapReportDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
             IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfo, 
