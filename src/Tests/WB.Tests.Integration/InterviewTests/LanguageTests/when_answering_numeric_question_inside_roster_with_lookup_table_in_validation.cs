@@ -46,11 +46,11 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 Setup.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
 
                 var assetsTitles = new[]
-                                   {
-                                       Create.FixedRosterTitle(1, "TV"),
-                                       Create.FixedRosterTitle(2, "Microwave"),
-                                       Create.FixedRosterTitle(3, "Cleaner")
-                                   };
+                {
+                    Create.FixedRosterTitle(1, "TV"),
+                    Create.FixedRosterTitle(2, "Microwave"),
+                    Create.FixedRosterTitle(3, "Cleaner")
+                };
                 var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new[]
                 {
                     Create.Chapter(children: new IComposite[]

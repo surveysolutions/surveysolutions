@@ -58,10 +58,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 Id = questionnaire.PublicKey
             }.ToString(), transformText);
 
+            if (codeGenerationSettings.IsLookupTablesFeatureSupported)
+            {
+                GenerateLookupTableClasses(questionnaireTemplateStructure.LookupTables, generatedClasses);
+            }
+
             //generating partial classes
             GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
             GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
-            GenerateLookupTableClasses(questionnaireTemplateStructure.LookupTables, generatedClasses);
 
             return generatedClasses;
         }
@@ -91,7 +95,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
                     areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList");
+                    rosterType: "RosterRowList",
+                    isLookupTablesFeatureSupported: false);
 
             if (version.Major == 10)
                 return new CodeGenerationSettings(
@@ -106,7 +111,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
                     },
                     areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList");
+                    rosterType: "RosterRowList",
+                    isLookupTablesFeatureSupported: false);
             return new CodeGenerationSettings(
                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
                    additionInterfaces: new[] { "IInterviewExpressionStateV5" },
@@ -121,7 +127,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                    },
                    areRosterServiceVariablesPresent: true,
-                   rosterType: "RosterRowList");
+                   rosterType: "RosterRowList",
+                   isLookupTablesFeatureSupported: true);
         }
 
         private static void GenerateRostersPartialClasses(
@@ -145,8 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
 
-                        generatedClasses.Add(
-                            new ExpressionLocation
+                        generatedClasses.Add(new ExpressionLocation
                             {
                                 ItemType = ExpressionLocationItemType.Question,
                                 ExpressionType = ExpressionLocationType.Condition,
@@ -191,8 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
 
-                        generatedClasses.Add(
-                            new ExpressionLocation
+                        generatedClasses.Add(new ExpressionLocation
                             {
                                 ItemType = ExpressionLocationItemType.Group,
                                 ExpressionType = ExpressionLocationType.Condition,
@@ -213,8 +218,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                           false,
                           rosterTemplateModel.VariableName);
 
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
+                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
                         generatedClasses.Add(
                             new ExpressionLocation
@@ -290,8 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         false,
                         groupTemplateModel.VariableName);
 
-                    var methodTemplate =
-                        new ExpressionMethodTemplate(expressionMethodModel);
+                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
                     generatedClasses.Add(
                         new ExpressionLocation
