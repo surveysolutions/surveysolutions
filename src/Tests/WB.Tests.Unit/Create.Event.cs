@@ -259,6 +259,15 @@ namespace WB.Tests.Unit
                     questionnaireVersion ?? 1);
             }
 
+            public static InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(
+                Guid? questionnaireId = null, long? questionnaireVersion = null)
+            {
+                return new InterviewFromPreloadedDataCreated(
+                    Guid.NewGuid(),
+                    questionnaireId ?? Guid.NewGuid(),
+                    questionnaireVersion ?? 1);
+            }
+
             public static InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
             {
                 return new InterviewReceivedByInterviewer();

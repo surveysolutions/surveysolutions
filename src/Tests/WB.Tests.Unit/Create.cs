@@ -108,6 +108,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
@@ -234,17 +235,6 @@ namespace WB.Tests.Unit
                 lookupTableService ?? Mock.Of<ILookupTableService>());
         }
 
-        public static QuestionnaireExecutorTemplateModelFactory QuestionnaireExecutorTemplateModelFactory(
-            IMacrosSubstitutionService macrosSubstitutionService = null,
-            IExpressionProcessor expressionProcessor = null,
-            ILookupTableService lookupTableService = null)
-        {
-            return new QuestionnaireExecutorTemplateModelFactory(
-                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? Mock.Of<ILookupTableService>());
-        }
-
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
             Guid? eventIdentifier = null, int eventSequence = 1)
         {
@@ -342,9 +332,13 @@ namespace WB.Tests.Unit
             return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(supervisorId), "", ""); 
         }
 
-        public static UserLight UserLight(Guid? userId = null)
+        public static InterviewEventHandler DashboardDenormalizer(
+            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
         {
-            return new UserLight(userId ?? Guid.NewGuid(), "test");
+            return new InterviewEventHandler(
+               interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
+            questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
 
         public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
@@ -796,6 +790,12 @@ namespace WB.Tests.Unit
             return interviewQuestion;
         }
 
+        public static InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
+        {
+            return new InterviewReferencesDenormalizer(
+                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+        }
+
         public static IPublishedEvent<InterviewRejectedByHQ> InterviewRejectedByHQEvent(Guid? interviewId = null, string userId = null, string comment = null)
         {
             return ToPublishedEvent(new InterviewRejectedByHQ(userId: GetGuidIdByStringId(userId), comment: comment), eventSourceId: interviewId);
@@ -964,6 +964,17 @@ namespace WB.Tests.Unit
                 false);
         }
 
+        public static InterviewView InterviewView(Guid? prefilledQuestionId = null)
+        {
+            return new InterviewView()
+            {
+                GpsLocation = new InterviewGpsLocationView
+                {
+                    PrefilledQuestionId = prefilledQuestionId
+                }
+            };
+        }
+
         public static KeywordsProvider KeywordsProvider()
         {
             return new KeywordsProvider(Create.SubstitutionService());
@@ -991,6 +1002,11 @@ namespace WB.Tests.Unit
             return new LiteEventRegistry();
         }
 
+        public static LookupTable LookupTable()
+        {
+            return new LookupTable() {FileName = "name", TableName = "table"};
+        }
+
         public static Macro Macro(string name, string content = null, string description = null)
         {
             return new Macro
@@ -1004,36 +1020,6 @@ namespace WB.Tests.Unit
         public static MacrosSubstitutionService MacrosSubstitutionService()
         {
             return new MacrosSubstitutionService();
-        }
-
-        public static QuestionnaireVerificationError VerificationError(string code, string message, VerificationErrorLevel level, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
-        {
-            return new QuestionnaireVerificationError(code, message, level, questionnaireVerificationReferences);
-        }
-
-        public static QuestionnaireVerificationReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
-        {
-            return new QuestionnaireVerificationReference(type, id ?? Guid.NewGuid());
-        }
-
-        public static VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
-        {
-            return new VerificationReferenceEnriched
-            {
-                Type = type,
-                ItemId = id.FormatGuid(),
-                Title = title
-            };
-        }
-
-        public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
-        {
-            return new VerificationMessage
-            {
-                Code = code,
-                Message = message,
-                References = references.ToList()
-            };
         }
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1575,6 +1561,17 @@ namespace WB.Tests.Unit
         public static QuestionnaireDTO QuestionnaireDTO()
         {
             return new QuestionnaireDTO();
+        }
+
+        public static QuestionnaireExecutorTemplateModelFactory QuestionnaireExecutorTemplateModelFactory(
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            IExpressionProcessor expressionProcessor = null,
+            ILookupTableService lookupTableService = null)
+        {
+            return new QuestionnaireExecutorTemplateModelFactory(
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                lookupTableService ?? Mock.Of<ILookupTableService>());
         }
 
         public static QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
@@ -2149,17 +2146,6 @@ namespace WB.Tests.Unit
                 messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(), HeadquartersPullContext());
         }
 
-        public static InterviewView InterviewView(Guid? prefilledQuestionId = null)
-        {
-            return new InterviewView()
-            {
-                GpsLocation = new InterviewGpsLocationView
-                {
-                    PrefilledQuestionId = prefilledQuestionId
-                }
-            };
-        }
-
         public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name")
         {
             var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName };
@@ -2175,13 +2161,9 @@ namespace WB.Tests.Unit
             return user;
         }
 
-        public static InterviewEventHandler DashboardDenormalizer(
-            IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        public static UserLight UserLight(Guid? userId = null)
         {
-            return new InterviewEventHandler(
-               interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-            questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
+            return new UserLight(userId ?? Guid.NewGuid(), "test");
         }
 
         public static UserPreloadingDataRecord UserPreloadingDataRecord(string login = "test", string supervisor = "", string password = "test", string email="", string phoneNumber="", string role=null)
@@ -2227,6 +2209,36 @@ namespace WB.Tests.Unit
             return new UserPreloadingVerificationError();
         }
 
+        public static QuestionnaireVerificationError VerificationError(string code, string message, VerificationErrorLevel level, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        {
+            return new QuestionnaireVerificationError(code, message, level, questionnaireVerificationReferences);
+        }
+
+        public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
+        {
+            return new VerificationMessage
+            {
+                Code = code,
+                Message = message,
+                References = references.ToList()
+            };
+        }
+
+        public static QuestionnaireVerificationReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
+        {
+            return new QuestionnaireVerificationReference(type, id ?? Guid.NewGuid());
+        }
+
+        public static VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
+        {
+            return new VerificationReferenceEnriched
+            {
+                Type = type,
+                ItemId = id.FormatGuid(),
+                Title = title
+            };
+        }
+
         public static YesNoAnswer YesNoAnswer(Guid questionId, decimal[] rosterVector)
         {
             return new YesNoAnswer(questionId, rosterVector);
@@ -2247,6 +2259,11 @@ namespace WB.Tests.Unit
 
         internal static class Command
         {
+            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            {
+                return new AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+            }
+
             public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
             {
                 return new AddMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
@@ -2263,6 +2280,11 @@ namespace WB.Tests.Unit
                     rosterVector: rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
                     answerTime: answerTime ?? DateTime.UtcNow,
                     answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
+            }
+
+            public static DeleteLookupTable DeleteLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            {
+                return new DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
             }
 
             public static DeleteMacro DeleteMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
@@ -2294,24 +2316,14 @@ namespace WB.Tests.Unit
                 return new LinkUserToDevice(userId, deviceId);
             }
 
-            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
-            {
-                return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
-            }
-
-            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
-            {
-                return new AddLookupTable(questionnaireId, lookupTableId, responsibleId);
-            }
-
-            public static DeleteLookupTable DeleteLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
-            {
-                return new DeleteLookupTable(questionnaireId, lookupTableId, responsibleId);
-            }
-
             public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
             {
                 return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, "table","file");
+            }
+
+            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
+            {
+                return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
         }
 
@@ -2321,11 +2333,6 @@ namespace WB.Tests.Unit
             {
                 action.Invoke();
             }
-        }
-
-        public static LookupTable LookupTable()
-        {
-            return new LookupTable() {FileName = "name", TableName = "table"};
         }
     }
 }

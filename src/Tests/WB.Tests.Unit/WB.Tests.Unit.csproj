@@ -654,6 +654,9 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_unapproved_by_headquarters_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewReceivedBySupervisor_event_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewReceivedByInterviewer_event_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewCreated_event.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewFromPreloadedDataCreated_event.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewOnClientCreated_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_received_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_export_structure_from_questionnaire_with_multi_option_question.cs" />
@@ -2179,7 +2182,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
-    <Folder Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewsChartDenormalizerTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
   </ItemGroup>
   <ItemGroup>
