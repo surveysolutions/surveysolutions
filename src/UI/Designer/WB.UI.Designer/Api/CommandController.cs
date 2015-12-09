@@ -31,7 +31,7 @@ namespace WB.UI.Designer.Api
         private readonly ILogger logger;
         private readonly ICommandInflater commandInflater;
         private readonly ICommandPostprocessor commandPostprocessor;
-        private readonly string fileParameterName = "file";
+       
         private readonly ILookupTableService lookupTableService;
 
         public CommandController(
@@ -54,38 +54,37 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public async Task<HttpResponseMessage> UpdateLookupTable()
         {
-            HttpRequestMessage request = this.Request;
-            if (!request.Content.IsMimeMultipartContent())
+            var commandType = "UpdateLookupTable";
+            string fileParameterName = "file";
+            string commandParameterName = "command";
+
+            if (!this.Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
             var provider = new MultipartMemoryStreamProvider();
-
-            var commandType = "UpdateLookupTable";
+            
             UpdateLookupTable updateLookupTableCommand;
             try
             {
                 await Request.Content.ReadAsMultipartAsync(provider);
 
-                var fileSreamContent =
-                    provider.Contents.FirstOrDefault(
-                        x =>
-                            x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == fileParameterName &&
-                            x.Headers.ContentDisposition.FileName != null);
-                var commandSreamContent =
-                    provider.Contents.Single(
-                        x => x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == "command");
+                var fileSreamContent = provider.Contents.Single(x =>
+                            x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == fileParameterName);
+
+                
+                var commandSreamContent = provider.Contents.Single(x => 
+                            x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == commandParameterName);
 
 
-                var command = commandSreamContent.ReadAsStringAsync().Result;
-                updateLookupTableCommand =
-                    (UpdateLookupTable) this.commandDeserializer.Deserialize(commandType, command);
+                var command = await commandSreamContent.ReadAsStringAsync();
+                updateLookupTableCommand = (UpdateLookupTable) this.commandDeserializer.Deserialize(commandType, command);
 
                 if (fileSreamContent != null)
                 {
                     var fileName = fileSreamContent.Headers.ContentDisposition.FileName.Trim('"');
-                    var fileContent = fileSreamContent.ReadAsStringAsync().Result;
+                    var fileContent = await fileSreamContent.ReadAsStringAsync();
 
                     this.lookupTableService.SaveLookupTableContent(updateLookupTableCommand.QuestionnaireId,
                         updateLookupTableCommand.LookupTableId, updateLookupTableCommand.LookupTableName, fileContent);
