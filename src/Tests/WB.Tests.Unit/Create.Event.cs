@@ -278,7 +278,8 @@ namespace WB.Tests.Unit
                 return new InterviewReceivedBySupervisor();
             }
 
-            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(Guid interviewId, 
+            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
+                Guid interviewId, 
                 InterviewStatus status, 
                 string comment = "hello",
                 Guid? eventId = null)
