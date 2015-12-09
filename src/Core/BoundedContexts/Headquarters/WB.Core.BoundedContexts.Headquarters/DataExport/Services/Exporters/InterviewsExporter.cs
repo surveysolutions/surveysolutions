@@ -182,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             foreach (var batchIds in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
-                Dictionary<Guid, InterviewExportedDataRecord> exportBulk = new Dictionary<Guid, InterviewExportedDataRecord>();
+                ConcurrentBag<InterviewExportedDataRecord> exportBulk = new ConcurrentBag<InterviewExportedDataRecord>();
                 Parallel.ForEach(batchIds,
                    new ParallelOptions
                    {
@@ -192,12 +192,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
                        InterviewExportedDataRecord exportedData = this.ExportSingleInterview(questionnaireExportStructure, interviewId);
-                       exportBulk.Add(interviewId, exportedData);
+                       exportBulk.Add(exportedData);
                        Interlocked.Increment(ref totalInterviewsProcessed);
                        progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
                    });
 
-                this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.Values.ToList());
+                this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
             }
 
             progress.Report(100);
@@ -206,6 +206,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private void WriteInterviewDataToCsvFile(string basePath, 
             QuestionnaireExportStructure questionnaireExportStructure,
             List<InterviewExportedDataRecord> interviewsToDump)
+        {
+            var exportBulk = ConvertInterviewsToWriteBulk(interviewsToDump);
+            this.WriteCsv(basePath, questionnaireExportStructure, exportBulk);
+        }
+
+        private static Dictionary<string, List<string[]>> ConvertInterviewsToWriteBulk(List<InterviewExportedDataRecord> interviewsToDump)
         {
             Dictionary<string, List<string[]>> exportBulk = new Dictionary<string, List<string[]>>();
 
@@ -220,11 +226,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                             exportBulk.Add(levelName, new List<string[]>());
                         }
 
-                        exportBulk[levelName].Add(dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile));
+                        exportBulk[levelName].Add(dataByLevel.EmptyIfNull()
+                            .Split(ExportFileSettings.SeparatorOfExportedDataFile));
                     }
                 }
             }
-          
+            return exportBulk;
+        }
+
+        private void WriteCsv(string basePath, QuestionnaireExportStructure questionnaireExportStructure, Dictionary<string, List<string[]>> exportBulk)
+        {
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath,
