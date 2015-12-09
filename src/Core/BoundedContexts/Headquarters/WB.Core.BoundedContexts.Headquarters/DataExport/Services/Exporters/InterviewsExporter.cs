@@ -112,15 +112,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         .OrderBy(x => x.InterviewId)
                         .Select(x => x.InterviewId)
                         .Skip(interviewIdsToExport.Count)
-                        .Take(10000)
+                        .Take(20000)
                         .ToList()));
                 if (ids.Count == 0) break;
 
                 cancellationToken.ThrowIfCancellationRequested();
                 interviewIdsToExport.AddRange(ids);
-                this.logger.Info($"Received {interviewIdsToExport.Count:n} interview interview ids.");
+                this.logger.Info($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
             }
-            this.logger.Info($"Starting export of {interviewIdsToExport.Count:n} interviews. Took {idsWatch.Elapsed:c} to receive list of ids.");
+
+            this.logger.Info($"Starting export of {interviewIdsToExport.Count:n0} interviews. Took {idsWatch.Elapsed:c} to receive list of ids.");
             
             cancellationToken.ThrowIfCancellationRequested();
             this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport, progress, cancellationToken);
@@ -170,8 +171,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
-        private static object lockObject = new Object();
-
         private void ExportInterviews(List<Guid> interviewIdsToExport, 
             string basePath, 
             QuestionnaireExportStructure questionnaireExportStructure, 
@@ -211,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath,
                     this.CreateFormatDataFileName(level.LevelName));
 
-                if (interviewsToDump.ContainsKey(level.LevelName))
+                if (interviewsToDump.ContainsKey(level.LevelName) && interviewsToDump[level.LevelName] != null)
                 {
                     this.csvWriter.WriteData(dataByTheLevelFilePath,
                         interviewsToDump[level.LevelName],
