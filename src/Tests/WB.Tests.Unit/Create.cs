@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -138,6 +139,38 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
+
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        {
+            return new FixedRosterTitle(value, title);
+        }
+
+        public static LookupTable LookupTable(string tableName)
+        {
+            return new LookupTable
+            {
+                TableName = tableName
+            };
+        }
+
+        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
+        {
+            return new LookupTableContent
+            {
+                VariableNames = variableNames,
+                Rows = rows
+            };
+        }
+
+        public static LookupTableRow LookupTableRow(long rowcode, decimal[] values)
+        {
+            return new LookupTableRow
+            {
+                RowCode = rowcode,
+                Variables = values
+            };
+        }
+
         public static AccountDocument AccountDocument(string userName="")
         {
             return new AccountDocument() { UserName = userName };
@@ -232,7 +265,7 @@ namespace WB.Tests.Unit
             return new CodeGenerator(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? Mock.Of<ILookupTableService>());
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
@@ -1193,6 +1226,19 @@ namespace WB.Tests.Unit
             };
         }
 
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                IsInteger = false,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression
+            };
+        }
+
         public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, string variableName="var1")
         {
@@ -1595,7 +1641,28 @@ namespace WB.Tests.Unit
             return new QuestionnaireExecutorTemplateModelFactory(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? Mock.Of<ILookupTableService>());
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
+        }
+
+
+        public static CodeGenerationSettings CodeGenerationSettings()
+        {
+            return new CodeGenerationSettings(
+                abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
+                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+                namespaces: new[]
+                {
+                    "WB.Core.SharedKernels.DataCollection.V2",
+                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V4",
+                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5",
+                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
+                },
+                areRosterServiceVariablesPresent: true,
+                rosterType: "RosterRowList",
+                isLookupTablesFeatureSupported: true);
         }
 
         public static QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
@@ -1714,10 +1781,17 @@ namespace WB.Tests.Unit
             return new RoslynExpressionProcessor();
         }
 
-        public static Group Roster(Guid? rosterId = null, string title = "Roster X", string variable = "roster_var", string enablementCondition = null,
-            string[] fixedTitles = null, IEnumerable<IComposite> children = null,
+        public static Group Roster(
+            Guid? rosterId = null, 
+            string title = "Roster X", 
+            string variable = "roster_var", 
+            string enablementCondition = null,
+            string[] fixedTitles = null, 
+            IEnumerable<IComposite> children = null,
             RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-            Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
+            Guid? rosterSizeQuestionId = null, 
+            Guid? rosterTitleQuestionId = null,
+            FixedRosterTitle[] fixedRosterTitles = null)
         {
             Group group = Create.Group(
                 groupId: rosterId,
@@ -1730,7 +1804,16 @@ namespace WB.Tests.Unit
             group.RosterSizeSource = rosterSizeSourceType;
 
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
-                group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+            {
+                if (fixedRosterTitles == null)
+                {
+                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                }
+                else
+                {
+                    group.FixedRosterTitles = fixedRosterTitles;
+                }
+            }
 
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
