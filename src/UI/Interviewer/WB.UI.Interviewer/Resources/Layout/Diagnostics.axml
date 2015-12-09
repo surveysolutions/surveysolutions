@@ -22,7 +22,7 @@
     android:orientation="vertical">
       <TextView
               style="@style/Diagnostics_Section_Title"
-              local:MvxBind="Text  Localization('Diagnostics_Share_Title');" />
+              local:MvxBind="Text  Localization('Diagnostics_Share_Title'); Click ShareDeviceTechnicalInformationCommand" />
       <TextView
                style="@style/Diagnostics_Section_Description"
                local:MvxBind="Html Localization('Diagnostics_Share_Description')" />

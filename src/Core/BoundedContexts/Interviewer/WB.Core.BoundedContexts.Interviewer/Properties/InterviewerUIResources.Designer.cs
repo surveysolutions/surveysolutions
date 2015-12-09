@@ -668,6 +668,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Share information to...
+        /// </summary>
+        public static string Share_to_Title {
+            get {
+                return ResourceManager.GetString("Share_to_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Synchronization_Cancel {

@@ -11,35 +11,12 @@ namespace WB.UI.Interviewer.Activities
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
     public class DiagnosticsActivity : BaseActivity<DiagnosticsViewModel>
     {
-        /*public override async void OnBackPressed()
-        {
-            await this.ViewModel.NavigateToPreviousViewModelAsync();
-        }*/
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-        }
-
-      /*  public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            this.MenuInflater.Inflate(Resource.Menu.diagnostics, menu);
-            
-
-            return base.OnCreateOptionsMenu(menu);
-        }*/
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-        /*    switch (item.ItemId)
-            {
-                case Resource.Id.menu_troubleshooting:
-                    this.ViewModel.NavigateToTroubleshootingCommand.Execute();
-                    break;
-            }*/
-            return base.OnOptionsItemSelected(item);
         }
 
         protected override int ViewResourceId

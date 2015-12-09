@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         string GetDeviceId();
         string GetApplicationVersionName();
+        string GetDeviceTechnicalInformation();
         int GetApplicationVersionCode();
         Task SetEndpointAsync(string endpoint);
         Task SetHttpResponseTimeoutAsync(int timeout);
