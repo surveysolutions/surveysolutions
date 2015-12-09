@@ -118,8 +118,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 cancellationToken.ThrowIfCancellationRequested();
                 interviewIdsToExport.AddRange(ids);
+                this.logger.Info($"Received {interviewIdsToExport.Count:n} interview interview ids.");
             }
-            this.logger.Info($"Exporting {interviewIdsToExport.Count:n} interviews. Took {idsWatch.Elapsed:c} to receive list.");
+            this.logger.Info($"Starting export of {interviewIdsToExport.Count:n} interviews. Took {idsWatch.Elapsed:c} to receive list of ids.");
             
             cancellationToken.ThrowIfCancellationRequested();
             this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport, progress, cancellationToken);
