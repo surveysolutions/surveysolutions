@@ -30,6 +30,12 @@ namespace WB.Core.GenericSubdomains.Portable
             return dictionary.ContainsKey(key) ? dictionary[key] : null;
         }
 
+        public static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+            where TValue : struct
+        {
+            return dictionary.ContainsKey(key) ? dictionary[key] : null as TValue?;
+        }
+
         public static TValue GetOrNull<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
