@@ -452,4 +452,40 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Assigned on {0}</value>
   </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>All collected data will be saved as backup file on this device. if you want to restore data place .zip file to "Restore" folder</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Backup all gathered infromation</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>The will check for the newer version on HQ server</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Version: {0}. Check for a new version</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>Restore backed up data</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>Restore backed up data</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>All application and interview data will be collected to a single archive. this can take up to 10 minutes.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Collect and send to HQ all tablet infromation</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Share all technical information</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
 </root>

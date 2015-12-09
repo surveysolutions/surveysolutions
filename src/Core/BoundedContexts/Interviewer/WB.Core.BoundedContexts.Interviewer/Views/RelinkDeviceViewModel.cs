@@ -51,6 +51,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.ReturnBackAsync(), () => !this.IsInProgress); }
         }
 
+        public IMvxCommand NavigateToDiagnosticsPageCommand
+        {
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>(), () => !this.IsInProgress); }
+        }
+
         public IMvxCommand NavigateToTroubleshootingCommand
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>(), () => !this.IsInProgress); }

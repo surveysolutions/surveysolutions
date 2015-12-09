@@ -8,6 +8,9 @@
       android:id="@+id/menu_troubleshooting"
       local:showAsAction="never" />
   <item
+  android:id="@+id/menu_diagnostics"
+  local:showAsAction="never" />
+  <item
       android:id="@+id/menu_signout"
       local:showAsAction="never" />
 </menu>

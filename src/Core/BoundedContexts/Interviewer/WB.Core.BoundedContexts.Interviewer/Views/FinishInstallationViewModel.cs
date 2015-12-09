@@ -99,6 +99,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.signInCommand ?? (this.signInCommand = new MvxCommand(async () => await this.SignInAsync(), () => !IsInProgress)); }
         }
 
+        public IMvxCommand NavigateToDiagnosticsPageCommand
+        {
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
+        }
         public IMvxCommand NavigateToTroubleshootingPageCommand
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }

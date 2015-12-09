@@ -290,6 +290,105 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All collected data will be saved as backup file on this device. if you want to restore data place .zip file to &quot;Restore&quot; folder.
+        /// </summary>
+        public static string Diagnostics_Backup_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Backup_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup all gathered infromation.
+        /// </summary>
+        public static string Diagnostics_Backup_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Backup_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The will check for the newer version on HQ server.
+        /// </summary>
+        public static string Diagnostics_CheckVersion_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_CheckVersion_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: {0}. Check for a new version.
+        /// </summary>
+        public static string Diagnostics_CheckVersion_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_CheckVersion_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore backed up data.
+        /// </summary>
+        public static string Diagnostics_Restore_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Restore_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore backed up data.
+        /// </summary>
+        public static string Diagnostics_Restore_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Restore_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All application and interview data will be collected to a single archive. this can take up to 10 minutes..
+        /// </summary>
+        public static string Diagnostics_Send_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Send_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collect and send to HQ all tablet infromation.
+        /// </summary>
+        public static string Diagnostics_Send_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Send_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app.
+        /// </summary>
+        public static string Diagnostics_Share_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Share_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share all technical information.
+        /// </summary>
+        public static string Diagnostics_Share_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Share_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Diagnostics_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
@@ -367,6 +466,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string MenuItem_Title_Dashboard {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string MenuItem_Title_Diagnostics {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Diagnostics", resourceCulture);
             }
         }
         
