@@ -27,14 +27,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly string[] actionFileColumns = { "InterviewId", "Action", "Originator", "Role", "Date", "Time" };
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
-        private readonly ITransactionManager transactionManager;
+        private readonly ITransactionManagerProvider transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
 
 
         public InterviewActionsExporter(InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor, 
             ICsvWriter csvWriter, 
-            ITransactionManager transactionManager, IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage)
+            ITransactionManagerProvider transactionManager, IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
 
-            var totalActionsToExportCount = this.transactionManager
+            var totalActionsToExportCount = this.transactionManager.GetTransactionManager()
                                                 .ExecuteInQueryTransaction(() => 
                                                     this.interviewActionsDataStorage.Query(_ => _.Where(whereClauseForAction)
                                                                                                  .SelectMany(x => x.InterviewCommentedStatuses)
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 var skipAtCurrentIteration = skip;
 
-                var chunk = this.transactionManager.ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction, skipAtCurrentIteration));
+                var chunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction, skipAtCurrentIteration));
 
                 this.csvWriter.WriteData(actionFilePath, chunk, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
                 skip = skip + this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;

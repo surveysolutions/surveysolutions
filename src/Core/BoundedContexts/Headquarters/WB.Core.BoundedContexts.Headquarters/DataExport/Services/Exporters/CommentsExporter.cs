@@ -25,14 +25,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly string dataFileExtension = "tab";
         private readonly string commentsFileName = "interview_comments";
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
-        private readonly ITransactionManager transactionManager;
+        private readonly ITransactionManagerProvider transactionManager;
 
         public CommentsExporter(
             InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
-            ITransactionManager transactionManager)
+            ITransactionManagerProvider transactionManager)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
 
             var countOfAllRecords =
-                this.transactionManager
+                this.transactionManager.GetTransactionManager()
                     .ExecuteInQueryTransaction(() => this.interviewCommentariesStorage.Query(_ => _.Where(whereClauseForComments).SelectMany(x => x.Commentaries).Count()));
 
             int skip = 0;
@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 var skipAtCurrentIteration = skip;
 
-                string[][] exportComments = this.transactionManager
+                string[][] exportComments = this.transactionManager.GetTransactionManager()
                                                 .ExecuteInQueryTransaction(
                                                      () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, skipAtCurrentIteration, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
 

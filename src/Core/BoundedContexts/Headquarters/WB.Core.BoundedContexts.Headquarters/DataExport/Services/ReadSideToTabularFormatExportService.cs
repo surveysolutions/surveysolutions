@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
 
-        private readonly ITransactionManager transactionManager;
+        private readonly ITransactionManagerProvider transactionManager;
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
@@ -43,7 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IExportViewFactory exportViewFactory, 
-            ITransactionManager transactionManager, 
+            ILogger logger,
+            ITransactionManagerProvider transactionManager, 
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -56,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 fileSystemAccessor, 
                 interviewDatas, 
                 exportViewFactory,
+                logger,
                 interviewDataExportSettings, 
                 csvWriter);
 
@@ -115,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-              this.transactionManager
+              this.transactionManager.GetTransactionManager()
                   .ExecuteInQueryTransaction(
                       () =>
                           this.questionnaireExportStructureStorage.AsVersioned()
@@ -170,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-             this.transactionManager
+             this.transactionManager.GetTransactionManager()
                  .ExecuteInQueryTransaction(() =>
                          this.questionnaireExportStructureStorage.AsVersioned()
                              .Get(questionnaireId.FormatGuid(), questionnaireVersion));
