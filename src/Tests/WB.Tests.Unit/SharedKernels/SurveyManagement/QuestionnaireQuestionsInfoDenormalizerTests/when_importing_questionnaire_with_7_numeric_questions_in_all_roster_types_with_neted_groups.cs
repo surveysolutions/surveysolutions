@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionsInf
             questionsInfo.ShouldNotBeNull();
 
         It should_create_one_view_with_id_equal_to_combination_of_questionnaireId_and_event_sequence = () =>
-          questionsInfoId.ShouldEqual(RepositoryKeysHelper.GetVersionedKey(questionnaireId, evnt.EventSequence));
+          questionsInfoId.ShouldEqual(new QuestionnaireIdentity(questionnaireId, evnt.EventSequence).ToString());
 
         It should_contains_all_numeric_keys_and_corresponding_variables_in_stored_view = () =>
             questionsInfo.QuestionIdToVariableMap.ShouldContain(
