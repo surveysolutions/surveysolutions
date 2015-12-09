@@ -488,4 +488,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Share information to..</value>
+  </data>
 </root>

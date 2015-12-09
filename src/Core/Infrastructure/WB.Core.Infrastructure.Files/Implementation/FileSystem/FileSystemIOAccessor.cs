@@ -54,6 +54,24 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public long GetDirectorySize(string path)
+        {
+            long size = 0;
+            // Add file sizes.
+            var filesInDirectory = GetFilesInDirectory(path);
+            foreach (var file in filesInDirectory)
+            {
+                size += GetFileSize(file);
+            }
+            // Add subdirectory sizes.
+            var nestedDirectories = GetDirectoriesInDirectory(path);
+            foreach (var nestedDirectory in nestedDirectories)
+            {
+                size += GetDirectorySize(nestedDirectory);
+            }
+            return (size);
+        }
+
         public DateTime GetCreationTime(string filePath)
         {
             if (!this.IsFileExists(filePath))
