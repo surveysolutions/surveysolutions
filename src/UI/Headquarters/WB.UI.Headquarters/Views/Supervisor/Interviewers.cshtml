@@ -7,24 +7,21 @@
 
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
 @{
-    Layout = "~/Views/Shared/_NoFilterListViewLayout.cshtml";
-    ViewBag.Title = string.Format("{0}: Interviewers", Model.UserName);
+    Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
+    ViewBag.Title = "Interviewers";
 }
 
 @section scripts
 {
-    @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviewers.js")
     <script type="text/javascript">
+        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Interviewers", "Supervisor", new { }, Request.Url.Scheme))';
+        var $interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})';
+        var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})', $commandExecutionUrl);
-            model.GetFilterMethod = function () {
-                return {
-                    SupervisorId: '@Model.SupervisorId',
-                    ShowOnlyNotConnectedToDevice: @Model.ShowOnlyNotConnectedToDevice.ToString().ToLower()
-                    };
-            };
+            var model = new Supervisor.VM.Interviewers($interviewersApiUrl, $interviewersPageUrl, $supervisorsUrl, $commandExecutionUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -33,18 +30,7 @@
 
 @section header
 {
-    <h2 class="sinle-line-header">
-        @Model.UserName
-
-        @if (!Model.ShowOnlyNotConnectedToDevice)
-        {
-            <small>interviewers</small>
-        }
-        else
-        {
-            <small>interviewers not linked to device</small>
-        }
-    </h2>
+    <h3 class="sinle-line-header">Interviewers</h3>
 }
 
 @section gridnavigation
@@ -53,9 +39,9 @@
         <div class="form-inline">
             @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
             {
-                <a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new {supervisorId = Model.SupervisorId, area = string.Empty})">
+                @*<a class="btn btn-default" href="@Url.Action("Create", "Interviewer", new {supervisorId = Model.SupervisorId, area = string.Empty})">
                     <i class="glyphicon glyphicon-user"></i> Create
-                </a>
+                </a>*@
                 if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
                     <button type="button" class="btn btn-default" data-bind="disable: IsNothingSelected, click: $root.archiveInterviewers">Archive</button>
@@ -73,11 +59,53 @@
         </div>
     </div>
     <div class="btn-group pull-right">
-        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model.SupervisorId })">
+@*        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model.SupervisorId })">
             <i class="glyphicon glyphicon glyphicon-book"></i> Archived interviewers
-        </a>
+        </a>*@
     </div>
 }
+
+
+@section filters
+{
+
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Supervisor</h4>
+            <p class="list-group-item-text">
+                <div class="input-group">
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    </div>
+                </div>
+            </p>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Connected to device status</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: ShowOnlyNotConnectedToDevice" class="form-control">
+                    <option value="">Any</option>
+                    <option value="true">Connected</option>
+                    <option value="false">Not connected</option>
+                </select>
+            </p>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Archive status</h4>
+            <p class="list-group-item-text">
+                <select data-bind="value: ShowOnlyArchived" class="form-control">
+                    <option value="false">Active users</option>
+                    <option value="true">Archived users</option>
+                </select>
+            </p>
+        </li>
+    </ul>
+
+}
+
 
 @section grid
 {
@@ -87,8 +115,9 @@
                 @if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
                     <th>
-                        <input type="checkbox" data-bind="click: $root.selectAll($element)" />
-                    </th>}
+                        <input type="checkbox" data-bind="click: $root.selectAll($element)"/>
+                    </th>
+                }
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>

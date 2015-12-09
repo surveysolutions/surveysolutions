@@ -27,13 +27,16 @@ namespace WB.UI.Headquarters.Controllers
                               ILogger logger,
                               IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher,
-                              IIdentityManager identityManager)
+                              IIdentityManager identityManager,
+                              ITeamViewFactory teamViewFactory)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
             this.IdentityManager = identityManager;
+            this.teamViewFactory = teamViewFactory;
         }
 
         protected readonly IIdentityManager IdentityManager;
+        private readonly ITeamViewFactory teamViewFactory;
 
         public ActionResult Create()
         {
@@ -135,17 +138,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Interviewers(InterviewersFilter filter)
         {
-            var supervisor = this.GetUserById(filter.Id);
-            if (supervisor == null)
-                throw new HttpException(404, string.Empty);
-
-            InterviewersModel pageModel = new InterviewersModel()
-            {
-                SupervisorId = supervisor.PublicKey,
-                UserName = supervisor.UserName,
-                ShowOnlyNotConnectedToDevice = filter.ShowOnlyNotConnectedToDevice
-            };
-
+            InterviewersModel pageModel = new InterviewersModel();
             return this.View(pageModel);
         }
     }
