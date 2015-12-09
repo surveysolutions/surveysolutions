@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 new TestInMemoryWriter<InterviewData>(),
                 Mock.Of<IExportViewFactory>(x => x.CreateQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<long>()) == questionnaireExportStructure),
                 Mock.Of<ILogger>(),
-                Mock.Of<ITransactionManagerProvider>(),
+                Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == questionnaireExportStructure)
                 );
