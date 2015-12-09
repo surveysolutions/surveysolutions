@@ -55,6 +55,11 @@
                     @MainMenu.Observers
                 </a>
             </li>
+            <li class="@(page == MenuItem.ApiUsers ? "active" : "")">
+                <a href="@Url.Action("Index", "ApiUser", new {area = string.Empty})">
+                    @MainMenu.ApiUsers
+                </a>
+            </li>
             <li class="@(page == MenuItem.UserBatchUpload ? "active" : "")">
                 <a href="@Url.Action("UserBatchUploads", "BatchUserUpload", new { area = string.Empty })">
                     @MainMenu.UserBatchUpload

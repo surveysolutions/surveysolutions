@@ -55,6 +55,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: observerUser, role: UserRoles.Observer);
         }
 
+        protected void CreateApiWriterUser(UserModel observerUser)
+        {
+            CreateUser(user: observerUser, role: UserRoles.APIWriter);
+        }
+
         protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
             this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
