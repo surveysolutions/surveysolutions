@@ -96,25 +96,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             cancellationToken.ThrowIfCancellationRequested();
 
             int totalInterviewsToExport =
-                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewSummaries.Query(_ => _.Count(expression)));
+                this.transactionManager.GetTransactionManager()
+                    .ExecuteInQueryTransaction(() => this.interviewSummaries.Query(_ => _.Count(expression)));
 
+            this.logger.Info("Receiving interview Ids to export");
             List<Guid> interviewIdsToExport = new List<Guid>();
+
+            Stopwatch idsWatch = new Stopwatch();
+            idsWatch.Start();
             while (interviewIdsToExport.Count < totalInterviewsToExport)
             {
                 var ids = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                   this.interviewSummaries.Query(_ => _
-                       .Where(expression)
-                       .OrderBy(x => x.InterviewId)
-                       .Select(x => x.InterviewId)
-                       .Skip(interviewIdsToExport.Count)
-                       .Take(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery)
-                       .ToList()));
+                    this.interviewSummaries.Query(_ => _
+                        .Where(expression)
+                        .OrderBy(x => x.InterviewId)
+                        .Select(x => x.InterviewId)
+                        .Skip(interviewIdsToExport.Count)
+                        .Take(10000)
+                        .ToList()));
                 if (ids.Count == 0) break;
 
                 cancellationToken.ThrowIfCancellationRequested();
                 interviewIdsToExport.AddRange(ids);
             }
-
+            this.logger.Info($"Exporting {interviewIdsToExport.Count:n} interviews. Took {idsWatch.Elapsed:c} to receive list.");
+            
             cancellationToken.ThrowIfCancellationRequested();
             this.DoExport(questionnaireExportStructure, basePath, interviewIdsToExport, progress, cancellationToken);
         }
