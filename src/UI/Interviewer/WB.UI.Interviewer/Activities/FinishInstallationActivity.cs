@@ -46,6 +46,7 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -59,6 +60,9 @@ namespace WB.UI.Interviewer.Activities
 
                 case Resource.Id.menu_troubleshooting:
                     this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
+                    break;
+                case Resource.Id.menu_diagnostics:
+                    this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
             }
             return base.OnOptionsItemSelected(item);
