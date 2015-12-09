@@ -12,6 +12,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -38,14 +39,14 @@ namespace WB.Tests.Integration
     internal static class Create
     {
         public static CodeGenerator CodeGenerator(
-        IMacrosSubstitutionService macrosSubstitutionService = null,
-        IExpressionProcessor expressionProcessor = null,
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            IExpressionProcessor expressionProcessor = null,
             ILookupTableService lookupTableService = null)
         {
             return new CodeGenerator(
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? Mock.Of<ILookupTableService>());
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
@@ -332,9 +333,16 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
-            string[] fixedTitles = null, IEnumerable<IComposite> children = null, RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-            Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
+        public static Group Roster(Guid? id = null, 
+            string title = "Roster X",
+            string variable = null, 
+            string enablementCondition = null,
+            string[] fixedTitles = null, 
+            IEnumerable<IComposite> children = null, 
+            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            Guid? rosterSizeQuestionId = null,
+            Guid? rosterTitleQuestionId = null,
+            FixedRosterTitle[] fixedRosterTitles = null)
         {
             Group group = Create.Group(
                 id: id,
@@ -346,7 +354,16 @@ namespace WB.Tests.Integration
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType;
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
-                group.RosterFixedTitles = fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"};
+            {
+                if (fixedRosterTitles == null)
+                {
+                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                }
+                else
+                {
+                    group.FixedRosterTitles = fixedRosterTitles;
+                }
+            }
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
 
@@ -506,6 +523,35 @@ namespace WB.Tests.Integration
             };
         }
 
-       
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        {
+            return new FixedRosterTitle(value, title);
+        }
+
+        public static LookupTable LookupTable(string tableName)
+        {
+            return new LookupTable
+            {
+                TableName = tableName
+            };
+        }
+
+        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
+        {
+            return new LookupTableContent
+            {
+                VariableNames = variableNames,
+                Rows = rows
+            };
+        }
+
+        public static LookupTableRow LookupTableRow(long rowcode, decimal [] values)
+        {
+            return new LookupTableRow
+                   {
+                       RowCode = rowcode,
+                       Variables = values
+            };
+        }
     }
 }
