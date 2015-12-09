@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All collected data will be saved as backup file on this device. if you want to restore data place .zip file to &quot;Restore&quot; folder.
+        ///   Looks up a localized string similar to All collected data will be saved as backup file on this device..
         /// </summary>
         public static string Diagnostics_Backup_Description {
             get {
@@ -308,7 +308,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The will check for the newer version on HQ server.
+        ///   Looks up a localized string similar to We will check for the newer version on HQ server.
         /// </summary>
         public static string Diagnostics_CheckVersion_Description {
             get {
@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All application and interview data will be collected to a single archive. this can take up to 10 minutes..
+        ///   Looks up a localized string similar to All application and interview data will be collected to a single archive. This can take up to 10 minutes..
         /// </summary>
         public static string Diagnostics_Send_Description {
             get {
