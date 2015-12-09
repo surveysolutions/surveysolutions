@@ -477,6 +477,9 @@
     <Content Include="Views\BatchUserUpload\UserCreationProcessDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserBatchUploads.cshtml" />
     <Content Include="Views\Shared\_EditorLayout.cshtml" />
+    <Content Include="Views\ApiUser\Create.cshtml" />
+    <Content Include="Views\ApiUser\Edit.cshtml" />
+    <Content Include="Views\ApiUser\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -548,6 +551,7 @@
     <Compile Include="Controllers\BatchUserUploadController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
+    <Compile Include="Controllers\ApiUserController.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />

@@ -122,6 +122,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return GetUsers(data, UserRoles.Observer);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public UserListView ApiUsers(UsersListViewModel data)
+        {
+            return GetUsers(data, UserRoles.APIWriter);
+        }
+
         private UserListView GetUsers(UsersListViewModel data, UserRoles role, bool archived = false)
         {
             var input = new UserListViewInputModel

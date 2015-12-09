@@ -61,7 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                 var all = _.Where(u => u.IsArchived == archived);
                 if (!string.IsNullOrWhiteSpace(searchBy))
                 {
-                    all = all.Where(x => x.UserName.Contains(searchBy) || x.Email.Contains(searchBy));
+                    var searchByToLower = searchBy.ToLower();
+                    all = all.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
                 }
 
                 if (showOnlyNotConnectedToDevice)
