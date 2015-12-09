@@ -56,7 +56,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable",
-                    abstractConditionalLevelClassName: "AbstractConditionalLevel"), true);
+                    abstractConditionalLevelClassName: "AbstractConditionalLevel",
+                    isLookupTablesFeatureSupported: true), true);
 
         It should_variable_r2n1_be_accesible_for_nested_roster = () =>
             GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);

@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable",
-                    abstractConditionalLevelClassName: "AbstractConditionalLevel"), true);
+                    abstractConditionalLevelClassName: "AbstractConditionalLevel",
+                    isLookupTablesFeatureSupported: true), true);
 
         It should_generate_model_for_multimedia_question = () =>
             GetQuestion(multimediaId).ShouldNotBeNull();
