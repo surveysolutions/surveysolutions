@@ -40,37 +40,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView Interviewers(InterviewersListViewModel data)
-        {
-            return GetInterviewers(data, archived: false);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView ArchivedInterviewers(InterviewersListViewModel data)
-        {
-            return GetInterviewers(data, archived: true);
-        }
-
-        private InterviewersView GetInterviewers(InterviewersListViewModel data, bool archived)
+        public InterviewersView Interviewers(InterviewersListViewModel filter)
         {
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                ? data.SupervisorId
-                : this.GlobalInfo.GetCurrentUser().Id;
-
-            if (viewerId == null) return null;
+            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
 
             var input = new InterviewersInputModel
             {
-                Page = data.PageIndex,
-                PageSize = data.PageSize,
-                ViewerId = viewerId.Value,
-                Orders = data.SortOrder,
-                SearchBy = data.SearchBy,
-                Archived = archived,
-                ShowOnlyNotConnectedToDevice = data.ShowOnlyNotConnectedToDevice
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                ViewerId = viewerId,
+                SupervisorId = filter.SupervisorId,
+                Orders = filter.SortOrder,
+                SearchBy = filter.SearchBy,
+                Archived = filter.ShowOnlyArchived,
+                ShowOnlyNotConnectedToDevice = filter.ShowOnlyNotConnectedToDevice.GetValueOrDefault()
             };
 
             return this.interviewersFactory.Load(input);

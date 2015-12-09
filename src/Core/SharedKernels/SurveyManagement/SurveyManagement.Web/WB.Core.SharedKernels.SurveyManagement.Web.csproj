@@ -681,6 +681,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\interviewers.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\tabletinfo.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
     <EmbeddedResource Include="Scripts\spin.js" />

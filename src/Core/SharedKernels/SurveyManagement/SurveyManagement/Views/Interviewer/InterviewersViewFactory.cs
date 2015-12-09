@@ -44,9 +44,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                 return Enumerable.Empty<UserDocument>().AsQueryable();
 
             if (viewer.IsHq())
-                return this.GetTeamMembersForHeadquarter(input.Archived);
+                return this.GetTeamMembersForHeadquarter(input);
 
-            bool isSupervisor = viewer.Roles.Any(role => role == UserRoles.Supervisor);
+            if (viewer.IsAdmin())
+                return this.GetTeamMembersForHeadquarter(input);
+
+            bool isSupervisor = viewer.IsSupervisor();
+
+            if (isSupervisor && input.SupervisorId.HasValue && viewer.PublicKey != input.SupervisorId.Value)
+                return Enumerable.Empty<UserDocument>().AsQueryable();
+
             if (isSupervisor)
                 return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy, input.Archived, input.ShowOnlyNotConnectedToDevice);
 
@@ -79,9 +86,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
             return userDocuments.AsQueryable();
         }
 
-        protected IQueryable<UserDocument> GetTeamMembersForHeadquarter(bool archived)
+        protected IQueryable<UserDocument> GetTeamMembersForHeadquarter(InterviewersInputModel input)
         {
-            var result = this.users.Query(_ => _.Where(user => user.IsArchived == archived && user.Roles.Any(role => role == UserRoles.Operator) ||
+            var result = this.users.Query(_ => _.Where(user => user.IsArchived == input.Archived && user.Roles.Any(role => role == UserRoles.Operator) ||
                 user.Roles.Any(role => role == UserRoles.Supervisor)).ToList()
                 );
             return result.AsQueryable();
