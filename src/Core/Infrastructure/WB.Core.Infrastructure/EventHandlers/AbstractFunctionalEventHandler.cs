@@ -120,9 +120,9 @@ namespace WB.Core.Infrastructure.EventHandlers
             return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
         }
 
-        public string Name { get { return this.GetType().Name; } }
+        public string Name => this.GetType().Name;
 
-        public virtual object[] Writers { get { return new object[] { this.readSideStorage }; } }
+        public virtual object[] Writers => new object[] { this.readSideStorage };
 
         public virtual void CleanWritersByEventSource(Guid eventSourceId)
         {
