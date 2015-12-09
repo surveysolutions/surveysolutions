@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -16,7 +17,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<AnswersRemoved>
     {
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfo;
         private readonly IReadSideRepositoryWriter<MapReportPoint> mapItems;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
 
@@ -25,15 +26,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public override object[] Readers => new object[] { this.interviewBriefStorage };
 
         public MapReportDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
-            IPlainQuestionnaireRepository questionnaireRepository,
+            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfo, 
             IReadSideRepositoryWriter<MapReportPoint> mapItems)
         {
             if (interviewBriefStorage == null) throw new ArgumentNullException(nameof(interviewBriefStorage));
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
+            if (questionsInfo == null) throw new ArgumentNullException(nameof(questionsInfo));
             if (mapItems == null) throw new ArgumentNullException(nameof(mapItems));
 
             this.interviewBriefStorage = interviewBriefStorage;
-            this.questionnaireRepository = questionnaireRepository;
+            this.questionsInfo = questionsInfo;
             this.mapItems = mapItems;
         }
 
@@ -75,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             }
         }
 
-        public void HandleSingleRemove(Guid interviewId, Guid questionId, decimal[] propagationVector)
+        private void HandleSingleRemove(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
             InterviewSummary interviewSummary = this.interviewBriefStorage.GetById(interviewId);
             if (interviewSummary == null) return;
@@ -91,11 +92,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetVariableNameForQuestion(Guid questionId, QuestionnaireIdentity questionnaireId)
         {
-            QuestionnaireDocument questionnaireDocument = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireId);
-            IQuestion question = questionnaireDocument.Find<IQuestion>(questionId);
-
-            string variableName = question.StataExportCaption;
-            return variableName;
+            var questionnaireQuestionsInfo = this.questionsInfo.GetById(questionnaireId.ToString());
+            return questionnaireQuestionsInfo.QuestionIdToVariableMap[questionId];
         }
     }
 }
