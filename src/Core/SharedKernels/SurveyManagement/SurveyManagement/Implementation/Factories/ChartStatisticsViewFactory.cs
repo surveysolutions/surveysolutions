@@ -73,28 +73,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private QuestionnaireStatisticsForChart GetOldSchoolStatsForDate(Guid questionnaireId, long questionnaireVersion, DateTime date)
         {
-            return new QuestionnaireStatisticsForChart
-            {
-                CreatedCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.Created),
-                SupervisorAssignedCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.SupervisorAssigned),
-                InterviewerAssignedCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.InterviewerAssigned),
-                CompletedCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.Completed),
-                ApprovedBySupervisorCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.ApprovedBySupervisor),
-                RejectedBySupervisorCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.RejectedBySupervisor),
-                ApprovedByHeadquartersCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.ApprovedByHeadquarters),
-                RejectedByHeadquartersCount = this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.RejectedByHeadquarters),
-                OtherStatusesCount = 0, // TODO: this.GetOldSchoolCountForDateAndStatus(questionnaireId, questionnaireVersion, date, InterviewStatus.),
-            };
-        }
-
-        private int GetOldSchoolCountForDateAndStatus(Guid questionnaireId, long questionnaireVersion, DateTime date, InterviewStatus status)
-        {
-            return this.cumulativeReportStatusChangeStorage.Query(_ => _
+            Dictionary<InterviewStatus, int> countsForStatuses = this.cumulativeReportStatusChangeStorage.Query(_ => _
                 .Where(change => change.QuestionnaireId == questionnaireId)
                 .Where(change => change.QuestionnaireVersion == questionnaireVersion)
                 .Where(change => change.Date <= date)
-                .Where(change => change.Status == status)
-                .Sum(change => (int?) change.ChangeValue) ?? 0); // https://nhibernate.jira.com/browse/NH-2130
+                .GroupBy(change => change.Status)
+                .Select(grouping => new { Status = grouping.Key, Count = grouping.Sum(change => (int?)change.ChangeValue) ?? 0 })
+                .ToDictionary(x => x.Status, x => x.Count));
+
+            return new QuestionnaireStatisticsForChart
+            {
+                CreatedCount = countsForStatuses.GetOrDefault(InterviewStatus.Created) ?? 0,
+                SupervisorAssignedCount = countsForStatuses.GetOrDefault(InterviewStatus.SupervisorAssigned) ?? 0,
+                InterviewerAssignedCount = countsForStatuses.GetOrDefault(InterviewStatus.InterviewerAssigned) ?? 0,
+                CompletedCount = countsForStatuses.GetOrDefault(InterviewStatus.Completed) ?? 0,
+                ApprovedBySupervisorCount = countsForStatuses.GetOrDefault(InterviewStatus.ApprovedBySupervisor) ?? 0,
+                RejectedBySupervisorCount = countsForStatuses.GetOrDefault(InterviewStatus.RejectedBySupervisor) ?? 0,
+                ApprovedByHeadquartersCount = countsForStatuses.GetOrDefault(InterviewStatus.ApprovedByHeadquarters) ?? 0,
+                RejectedByHeadquartersCount = countsForStatuses.GetOrDefault(InterviewStatus.RejectedByHeadquarters) ?? 0,
+            };
         }
 
         private static ChartStatisticsView CreateChartStatisticsView(Dictionary<DateTime, QuestionnaireStatisticsForChart> range, DateTime start, DateTime stop, DateTime dataStart)
