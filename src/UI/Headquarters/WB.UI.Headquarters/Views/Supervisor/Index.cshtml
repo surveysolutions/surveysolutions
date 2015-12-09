@@ -103,7 +103,7 @@
             <td>
                 @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
-                    <a data-bind="attr: { href: $interviewersUrl + '/' + UserId() }, text: InterviewersCount()"></a>
+                    <a data-bind="attr: { href: $interviewersUrl + '?SupervisorId=' + UserId() }, text: InterviewersCount()"></a>
                 }
                 else
                 {
