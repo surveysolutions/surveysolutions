@@ -454,16 +454,16 @@
     <value>Назначено {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>All collected data will be saved as backup file on this device. if you want to restore data place .zip file to "Restore" folder</value>
+    <value>Все собранные данные будут сохраненны как резервная копия на этом устройстве.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
     <value>Создать резервную копию собранной информации</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>The will check for the newer version on HQ server</value>
+    <value>Мы проверим наличие новой версии на сервере Хедквотера</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
-    <value>Версия: {0}. Проверить новую версию</value>
+    <value>Версия: {0}. Проверить наличие новой версии</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
     <value>Востановить данные из бекапа</value>
@@ -472,18 +472,24 @@
     <value>Востановить данные из бекапа</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
-    <value>All application and interview data will be collected to a single archive. this can take up to 10 minutes.</value>
+    <value>Все собранные данные и информация о приложении будут собранны в единый архив. Операция может занять до 10 минут.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Collect and send to HQ all tablet infromation</value>
+    <value>Собрать и отправить на Хедквотер информацию о приложении</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app</value>
+    <value>Информация будет собранна в текстовом виде. Она может быть отправленна по электроннй почте, google hangouts или любому другому приложению по обмену сообщениями</value>
   </data>
   <data name="Diagnostics_Share_Title" xml:space="preserve">
     <value>Поделится технической информацией через</value>
   </data>
   <data name="Diagnostics_Title" xml:space="preserve">
     <value>Диагностика</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Диагностика</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Поделится информацией через..</value>
   </data>
 </root>

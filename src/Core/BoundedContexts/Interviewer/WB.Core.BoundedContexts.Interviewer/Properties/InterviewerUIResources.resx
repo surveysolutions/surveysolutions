@@ -453,13 +453,13 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Assigned on {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>All collected data will be saved as backup file on this device. if you want to restore data place .zip file to "Restore" folder</value>
+    <value>All collected data will be saved as backup file on this device.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
     <value>Backup all gathered infromation</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>The will check for the newer version on HQ server</value>
+    <value>We will check for the newer version on HQ server</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
     <value>Version: {0}. Check for a new version</value>
@@ -471,7 +471,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Restore backed up data</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
-    <value>All application and interview data will be collected to a single archive. this can take up to 10 minutes.</value>
+    <value>All application and interview data will be collected to a single archive. This can take up to 10 minutes.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
     <value>Collect and send to HQ all tablet infromation</value>
