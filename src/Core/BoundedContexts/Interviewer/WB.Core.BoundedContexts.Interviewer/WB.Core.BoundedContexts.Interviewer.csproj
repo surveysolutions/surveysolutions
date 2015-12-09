@@ -149,6 +149,7 @@
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ITroubleshootingService.cs" />
+    <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\InterviewEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="Views\InterviewFileView.cs" />
     <Compile Include="Views\InterviewMultimediaView.cs" />
     <Compile Include="Views\InterviewView.cs" />
-    <Compile Include="Views\MvvmcrossTroubleshootingViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardItems\CensusQuestionnaireDashboardItemViewModel.cs" />
     <Compile Include="Views\Dashboard\DashboardInformation.cs" />
     <Compile Include="Views\Dashboard\DashboardInterviewStatus.cs" />
