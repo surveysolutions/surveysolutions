@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionsInf
             denormalizer.Handle(evnt);
 
         It should_view_with_id_equal_to_combination_of_questionnaireid_and_version_be_stored = () =>
-            questionnaireQuestionsInfoWriter.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, 2)));
+            questionnaireQuestionsInfoWriter.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireQuestionsInfo>(), new QuestionnaireIdentity(evnt.EventSourceId, 2).ToString()));
 
         private static Guid questionnaireId = Guid.Parse("33332222111100000000111122223333");
         private static QuestionnaireQuestionsInfoDenormalizer denormalizer;
