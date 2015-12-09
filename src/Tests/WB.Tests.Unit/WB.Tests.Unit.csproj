@@ -337,6 +337,10 @@
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\Designer\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
+    <Compile Include="Applications\Headquarters\ApiUserControllerTests\ApiUserControllerTestContext.cs" />
+    <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user.cs" />
+    <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user_and_user_does_not_exist.cs" />
+    <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_creating_api_user.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
