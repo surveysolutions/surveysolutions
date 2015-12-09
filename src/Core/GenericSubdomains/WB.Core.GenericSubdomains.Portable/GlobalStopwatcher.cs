@@ -32,6 +32,11 @@ namespace WB.Core.GenericSubdomains.Portable
                 get { return this.stopwatch.ElapsedMilliseconds; }
             }
 
+            public TimeSpan ElapsedTimeSpan
+            {
+                get { return this.stopwatch.Elapsed; }
+            }
+
             public int MeasuresCount { get; private set; }
 
             public void Start()
