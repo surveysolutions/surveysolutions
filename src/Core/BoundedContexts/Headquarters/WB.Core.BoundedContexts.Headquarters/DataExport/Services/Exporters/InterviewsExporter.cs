@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -181,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             foreach (var batchIds in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
-                Dictionary<string, List<string[]>> exportBulk = new Dictionary<string, List<string[]>>();
+                ConcurrentDictionary<string, List<string[]>> exportBulk = new ConcurrentDictionary<string, List<string[]>>();
                 Parallel.ForEach(batchIds,
                    new ParallelOptions
                    {
@@ -203,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void WriteInterviewDataToCsvFile(string basePath, 
             QuestionnaireExportStructure questionnaireExportStructure,
-            Dictionary<string, List<string[]>> interviewsToDump)
+            ConcurrentDictionary<string, List<string[]>> interviewsToDump)
         {
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
@@ -221,7 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
             Guid interviewId,
-             Dictionary<string, List<string[]>> exportBulk)
+             ConcurrentDictionary<string, List<string[]>> exportBulk)
         {
             var interviewData =
                 this.transactionManager.GetTransactionManager()
@@ -242,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 {
                     if (!exportBulk.ContainsKey(levelName))
                     {
-                        exportBulk.Add(levelName, new List<string[]>());
+                        exportBulk.TryAdd(levelName, new List<string[]>());
                     }
 
                     exportBulk[levelName].Add(dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile));
