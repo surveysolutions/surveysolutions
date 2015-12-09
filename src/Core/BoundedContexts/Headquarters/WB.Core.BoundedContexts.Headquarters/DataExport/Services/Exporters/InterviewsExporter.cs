@@ -182,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             foreach (var batchIds in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
-                ConcurrentDictionary<string, List<string[]>> exportBulk = new ConcurrentDictionary<string, List<string[]>>();
+                Dictionary<Guid, InterviewExportedDataRecord> exportBulk = new Dictionary<Guid, InterviewExportedDataRecord>();
                 Parallel.ForEach(batchIds,
                    new ParallelOptions
                    {
@@ -190,13 +190,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    },
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
-                       this.ExportSingleInterview(questionnaireExportStructure, interviewId, exportBulk);
-
+                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(questionnaireExportStructure, interviewId);
+                       exportBulk.Add(interviewId, exportedData);
                        Interlocked.Increment(ref totalInterviewsProcessed);
                        progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
                    });
 
-                this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk);
+                this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.Values.ToList());
             }
 
             progress.Report(100);
@@ -204,25 +204,42 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void WriteInterviewDataToCsvFile(string basePath, 
             QuestionnaireExportStructure questionnaireExportStructure,
-            ConcurrentDictionary<string, List<string[]>> interviewsToDump)
+            List<InterviewExportedDataRecord> interviewsToDump)
         {
+            Dictionary<string, List<string[]>> exportBulk = new Dictionary<string, List<string[]>>();
+
+            foreach (var interviewExportedDataRecord in interviewsToDump)
+            {
+                foreach (var levelName in interviewExportedDataRecord.Data.Keys)
+                {
+                    foreach (var dataByLevel in interviewExportedDataRecord.Data[levelName])
+                    {
+                        if (!exportBulk.ContainsKey(levelName))
+                        {
+                            exportBulk.Add(levelName, new List<string[]>());
+                        }
+
+                        exportBulk[levelName].Add(dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile));
+                    }
+                }
+            }
+          
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath,
                     this.CreateFormatDataFileName(level.LevelName));
 
-                if (interviewsToDump.ContainsKey(level.LevelName) && interviewsToDump[level.LevelName] != null)
+                if (exportBulk.ContainsKey(level.LevelName))
                 {
                     this.csvWriter.WriteData(dataByTheLevelFilePath,
-                        interviewsToDump[level.LevelName],
+                        exportBulk[level.LevelName],
                         ExportFileSettings.SeparatorOfExportedDataFile.ToString());
                 }
             }
         }
 
-        private void ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
-            Guid interviewId,
-             ConcurrentDictionary<string, List<string[]>> exportBulk)
+        private InterviewExportedDataRecord ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
+            Guid interviewId)
         {
             var interviewData =
                 this.transactionManager.GetTransactionManager()
@@ -232,26 +249,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure,
                     interviewData);
 
-            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(
-                interviewExportStructure, questionnaireExportStructure.QuestionnaireId,
-                questionnaireExportStructure.Version);
+            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure);
 
-
-            foreach (var levelName in exportedData.Data.Keys)
-            {
-                foreach (var dataByLevel in exportedData.Data[levelName])
-                {
-                    if (!exportBulk.ContainsKey(levelName))
-                    {
-                        exportBulk.TryAdd(levelName, new List<string[]>());
-                    }
-
-                    exportBulk[levelName].Add(dataByLevel.Split(ExportFileSettings.SeparatorOfExportedDataFile));
-                }
-            }
+            return exportedData;
         }
 
-        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid questionnaireId, long questionnaireVersion)
+        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView)
         {
             var interviewData = new Dictionary<string, string[]>();
 
@@ -276,13 +279,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     recordsByLevel.Add(string.Join(stringSeparator,
                             parametersToConcatenate.Select(v => v.Replace(stringSeparator, ""))));
                 }
+
                 interviewData.Add(interviewDataExportLevelView.LevelName, recordsByLevel.ToArray());
             }
             var interviewExportedData = new InterviewExportedDataRecord
             {
                 InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion,
                 Data = interviewData,
             };
 

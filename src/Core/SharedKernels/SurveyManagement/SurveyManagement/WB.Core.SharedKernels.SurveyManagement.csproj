@@ -139,7 +139,6 @@
     <Compile Include="Implementation\Services\InterviewPreconditionsServiceSettings.cs" />
     <Compile Include="Implementation\Services\SurveyManagementInterviewCommandValidator.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataRecord.cs" />
-    <Compile Include="Mappings\InterviewExportedDataMap.cs" />
     <Compile Include="Mappings\InterviewFeedEntryMap.cs" />
     <Compile Include="Mappings\InterviewResponsibleMap.cs" />
     <Compile Include="Mappings\InterviewStatusesMap.cs" />
