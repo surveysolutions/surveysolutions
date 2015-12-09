@@ -332,6 +332,17 @@ namespace WB.Tests.Unit
             return new CreateUserCommand(Guid.NewGuid(), userName, "pass", "e@g.com", new[] { role }, false, false, Create.UserLight(supervisorId), "", ""); 
         }
 
+        public static CumulativeChartDenormalizer CumulativeChartDenormalizer(
+            IReadSideKeyValueStorage<LastInterviewStatus> lastStatusesStorage = null,
+            IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null)
+        {
+            return new CumulativeChartDenormalizer(
+                lastStatusesStorage ?? Mock.Of<IReadSideKeyValueStorage<LastInterviewStatus>>(),
+                cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
+                interviewReferencesStorage ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+        }
+
         public static InterviewEventHandler DashboardDenormalizer(
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -790,6 +801,14 @@ namespace WB.Tests.Unit
             return interviewQuestion;
         }
 
+        public static InterviewReferences InterviewReferences(Guid? questionnaireId = null, long? questionnaireVersion = null)
+        {
+            return new InterviewReferences(
+                Guid.NewGuid(),
+                questionnaireId ?? Guid.NewGuid(),
+                questionnaireVersion ?? 301);
+        }
+
         public static InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
         {
             return new InterviewReferencesDenormalizer(
@@ -978,6 +997,11 @@ namespace WB.Tests.Unit
         public static KeywordsProvider KeywordsProvider()
         {
             return new KeywordsProvider(Create.SubstitutionService());
+        }
+
+        public static LastInterviewStatus LastInterviewStatus(InterviewStatus status = InterviewStatus.ApprovedBySupervisor)
+        {
+            return new LastInterviewStatus("entry-id", status);
         }
 
         public static LinkedMultiOptionQuestionModel LinkedMultiOptionQuestionModel(Guid? questionId = null, Guid? linkedToQuestionId =null)
