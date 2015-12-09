@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
-    public class InterviewDetailsForChart : IView
+    public class InterviewReferences : IView
     {
         public Guid InterviewId { get; set; }
         public Guid QuestionnaireId { get; set; }
