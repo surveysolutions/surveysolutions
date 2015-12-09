@@ -75,10 +75,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Id = user.PublicKey,
                 Email = user.Email,
-                IsLocked = user.IsLockedByHQ,
-                UserName = user.UserName,
-                PersonName = user.PersonName,
-                PhoneNumber = user.PhoneNumber
+                IsLocked = user.IsLockedByHQ
             });
         }
 
@@ -93,9 +90,7 @@ namespace WB.UI.Headquarters.Controllers
                 var user = this.GetUserById(model.Id);
                 if (user != null)
                 {
-                    var isAdmin = Roles.IsUserInRole(user.UserName, UserRoles.Administrator.ToString());
-
-                    if (!isAdmin)
+                    if (!user.IsAdmin())
                     {
                         this.UpdateAccount(user, model);
                         this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
