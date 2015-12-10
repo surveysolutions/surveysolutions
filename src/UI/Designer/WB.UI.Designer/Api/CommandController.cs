@@ -63,7 +63,7 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var multipartStreamProvider = new MultipartMemoryStreamProvider();
+            var multipartStreamProvider = new MultipartMemoryStreamProvider(); 
             
             UpdateLookupTable updateLookupTableCommand;
             try
@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Api
                 var multipartContents = multipartStreamProvider.Contents.Select(x => new
                 {
                     ContentType = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
-                    ContentName = x.Headers.ContentDisposition.FileName.Trim('"'),
+                    ContentName = (x.Headers.ContentDisposition.FileName ?? "").Trim('"'),
                     Content = x.ReadAsStringAsync().Result
                 }).ToList();
 
@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Api
 
                 updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent.Content);
 
-                if (fileStreamContent != null)
+                if (fileStreamContent.Content != null)
                 {
                     this.lookupTableService.SaveLookupTableContent(
                         updateLookupTableCommand.QuestionnaireId,

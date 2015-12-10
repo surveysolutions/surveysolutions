@@ -105,7 +105,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             foreach (var lookupTable in questionnaire.LookupTables)
             {
-                result.Add(lookupTable.Key, this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content);
+                result.Add(lookupTable.Key,
+                    System.Text.Encoding.UTF8.GetString(
+                        this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content));
             }
             return result;
         }
@@ -114,8 +116,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
 
-            var sb = new StringBuilder();
-            using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
+            var memoryStream = new MemoryStream();
+            using (var csvWriter = new CsvWriter(new StreamWriter(memoryStream), this.CreateCsvConfiguration()))
             {
                 csvWriter.WriteField(ROWCODE);
                 foreach (var variableName in lookupTableContent.VariableNames)
@@ -134,7 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 }
             }
 
-            return new LookupTableContentFile() { Content = sb.ToString(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
+            return new LookupTableContentFile() { Content = memoryStream.ToArray(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
         }
         private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
         {
@@ -144,25 +146,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private LookupTableContent CreateLookupTableContent(string fileContent)
         {
             var result = new LookupTableContent();
-            var csvReader = new CsvReader(new StringReader(fileContent), this.CreateCsvConfiguration());
 
-            if (csvReader.FieldHeaders.Length > MAX_COLS_COUNT)
-            {
-                throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "Too mamy columns");
-            }
-
-            var indexOfRowcodeColumn = csvReader.FieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
-
-            if (indexOfRowcodeColumn < 0)
-            {
-                throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "No rowcode");
-            }
-
-            using (csvReader)
+            using (var csvReader = new CsvReader(new StringReader(fileContent), this.CreateCsvConfiguration()))
             {
                 var rows = new List<LookupTableRow>();
                 while (csvReader.Read())
                 {
+                    if (csvReader.FieldHeaders.Length > MAX_COLS_COUNT)
+                    {
+                        throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "Too mamy columns");
+                    }
+
+                    var indexOfRowcodeColumn = csvReader.FieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
+
+                    if (indexOfRowcodeColumn < 0)
+                    {
+                        throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "No rowcode");
+                    }
+
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
                     var record = csvReader.CurrentRecord;
