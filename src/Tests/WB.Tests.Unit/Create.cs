@@ -834,13 +834,13 @@ namespace WB.Tests.Unit
             return interviewQuestion;
         }
 
-        public static InterviewReferences InterviewReferences(Guid? questionnaireId = null, long? questionnaireVersion = null)
-        {
-            return new InterviewReferences(
+        public static InterviewReferences InterviewReferences(
+            Guid? questionnaireId = null,
+            long? questionnaireVersion = null) 
+            => new InterviewReferences(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 301);
-        }
 
         public static InterviewReferencesDenormalizer InterviewReferencesDenormalizer()
         {

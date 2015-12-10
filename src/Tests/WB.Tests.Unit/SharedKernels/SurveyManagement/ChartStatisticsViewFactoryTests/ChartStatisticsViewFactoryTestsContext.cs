@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using it = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
     internal class ChartStatisticsViewFactoryTestsContext
     {
-        protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader = null)
-        {
-            return null;
-            //return new ChartStatisticsViewFactory(
-            //    statisticsReader ?? Stub<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>.WithNotEmptyValues);
-        }
+        protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(StatisticsGroupedByDateAndTemplate statistics = null)
+            => new ChartStatisticsViewFactory(
+                Mock.Of<IOldschoolChartStatisticsDataProvider>(_
+                    => _.GetStatisticsInOldFormat(It.IsAny<Guid>(), It.IsAny<long>()) == (statistics ?? new StatisticsGroupedByDateAndTemplate())));
 
         protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(int count)
         {
