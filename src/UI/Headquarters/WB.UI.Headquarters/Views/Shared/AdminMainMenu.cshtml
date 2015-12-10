@@ -50,6 +50,11 @@
                     @MainMenu.Headquarters
                 </a>
             </li>
+            <li class="@(page == MenuItem.Interviewers ? "active" : "")">
+                <a href="@Url.Action("Interviewers", "Supervisor", new {area = string.Empty})">
+                    @MainMenu.Interviewers
+                </a>
+            </li>
             <li class="@(page == MenuItem.Observers ? "active" : "")">
                 <a href="@Url.Action("Index", "Observer", new {area = string.Empty})">
                     @MainMenu.Observers

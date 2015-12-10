@@ -45,6 +45,11 @@
                     @MainMenu.Supervisors
                 </a>
             </li>
+            <li class="@(page == MenuItem.Interviewers ? "active" : "")">
+                <a href="@Url.Action("Interviewers", "Supervisor", new {area = string.Empty})">
+                    @MainMenu.Interviewers
+                </a>
+            </li>
             <li class="@(page == MenuItem.UserBatchUpload ? "active" : "")">
                 <a href="@Url.Action("UserBatchUploads", "BatchUserUpload", new {area = string.Empty})">
                     @MainMenu.UserBatchUpload
