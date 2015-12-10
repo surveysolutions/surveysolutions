@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    new ParallelOptions
                    {
                        CancellationToken = cancellationToken,
-                       MaxDegreeOfParallelism = 200
+                       MaxDegreeOfParallelism = this.interviewDataExportSettings.InterviewsExportParallelTasksLimit
                    },
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
