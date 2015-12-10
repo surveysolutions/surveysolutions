@@ -637,6 +637,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_folder.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
+    <AndroidResource Include="Resources\menu\diagnostics.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">

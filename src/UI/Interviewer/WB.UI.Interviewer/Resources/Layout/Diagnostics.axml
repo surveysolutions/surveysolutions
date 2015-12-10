@@ -13,10 +13,10 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Click CountClicksCommand; Text Localization('Diagnostics_Title')" />
+        local:MvxBind="Text Localization('Diagnostics_Title')" />
   </android.support.v7.widget.Toolbar>
-  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-            local:MvxBind="ShowProgress IsInProgress" />
+  <!--<ProgressBar style="@style/Interview_Question_Progress_Indicator"
+            local:MvxBind="ShowProgress IsInProgress" /-->>
   <LinearLayout style="@style/Troubleshooting_Container">
     <LinearLayout style="@style/Diagnostics_Section"
     android:orientation="vertical">
