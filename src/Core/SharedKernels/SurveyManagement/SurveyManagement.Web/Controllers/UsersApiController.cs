@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator")]
         public UserListView ApiUsers(UsersListViewModel data)
         {
-            return GetUsers(data, UserRoles.APIWriter);
+            return GetUsers(data, UserRoles.ApiUser);
         }
 
         private UserListView GetUsers(UsersListViewModel data, UserRoles role, bool archived = false)
