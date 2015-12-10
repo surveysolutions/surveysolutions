@@ -63,40 +63,44 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var provider = new MultipartMemoryStreamProvider();
+            var multipartStreamProvider = new MultipartMemoryStreamProvider();
             
             UpdateLookupTable updateLookupTableCommand;
             try
             {
-                await Request.Content.ReadAsMultipartAsync(provider);
+                await this.Request.Content.ReadAsMultipartAsync(multipartStreamProvider);
 
-                var fileSreamContent = provider.Contents.Single(x =>
-                            x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == fileParameterName);
-
-                
-                var commandSreamContent = provider.Contents.Single(x => 
-                            x.Headers.ContentDisposition.Name.Replace("\"", string.Empty) == commandParameterName);
-
-
-                var command = await commandSreamContent.ReadAsStringAsync();
-                updateLookupTableCommand = (UpdateLookupTable) this.commandDeserializer.Deserialize(commandType, command);
-
-                if (fileSreamContent != null)
+                var multipartContents = multipartStreamProvider.Contents.Select(x => new
                 {
-                    var fileName = fileSreamContent.Headers.ContentDisposition.FileName.Trim('"');
-                    var fileContent = await fileSreamContent.ReadAsStringAsync();
+                    ContentType = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
+                    ContentName = x.Headers.ContentDisposition.FileName.Trim('"'),
+                    Content = x.ReadAsStringAsync().Result
+                }).ToList();
 
-                    this.lookupTableService.SaveLookupTableContent(updateLookupTableCommand.QuestionnaireId,
-                        updateLookupTableCommand.LookupTableId, updateLookupTableCommand.LookupTableName, fileContent);
+                var fileStreamContent = multipartContents.Single(x => x.ContentType == fileParameterName);
+                var commandContent = multipartContents.Single(x => x.ContentType == commandParameterName);
 
-                    updateLookupTableCommand.LookupTableFileName = fileName;
+                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent.Content);
+
+                if (fileStreamContent != null)
+                {
+                    this.lookupTableService.SaveLookupTableContent(
+                        updateLookupTableCommand.QuestionnaireId,
+                        updateLookupTableCommand.LookupTableId,
+                        updateLookupTableCommand.LookupTableName,
+                        fileStreamContent.Content);
+
+                    updateLookupTableCommand.LookupTableFileName = fileStreamContent.ContentName;
                 }
-
+            }
+            catch (FormatException)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Resources.QuestionnaireController.SelectTabFile);
             }
             catch (Exception e)
             {
                 this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
 
             return this.ProcessCommand(updateLookupTableCommand, commandType);
