@@ -150,6 +150,24 @@
   <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
     <value>File with no data can not be loaded</value>
   </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>Value {0} can not be parsed as decimal number. Column {1}, row {2}.</value>
+  </data>
+  <data name="LookupTables_empty_header_are_not_allowed" xml:space="preserve">
+    <value>Empty headers are not allowed</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>Mandatory rowcode column is missing</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>Value {0} can not be parsed as long integer number. Column {1}, row {2}.</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>Too many columns in uploaded file. Max coumns count is {0}</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>Max rows count limit ({0} rows) was exceeded.</value>
+  </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Macro with such is is already exist.</value>
   </data>

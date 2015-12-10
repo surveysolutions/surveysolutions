@@ -97,10 +97,10 @@ namespace WB.UI.Designer.Api
             {
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Resources.QuestionnaireController.SelectTabFile);
             }
-            catch (Exception e)
+            catch (ArgumentException e)
             {
                 this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e);
             }
 
             return this.ProcessCommand(updateLookupTableCommand, commandType);

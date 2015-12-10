@@ -160,6 +160,60 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value {0} can not be parsed as decimal number. Column {1}, row {2}..
+        /// </summary>
+        internal static string LookupTables_data_value_cannot_be_parsed {
+            get {
+                return ResourceManager.GetString("LookupTables_data_value_cannot_be_parsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty headers are not allowed.
+        /// </summary>
+        internal static string LookupTables_empty_header_are_not_allowed {
+            get {
+                return ResourceManager.GetString("LookupTables_empty_header_are_not_allowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mandatory rowcode column is missing.
+        /// </summary>
+        internal static string LookupTables_rowcode_column_is_mandatory {
+            get {
+                return ResourceManager.GetString("LookupTables_rowcode_column_is_mandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value {0} can not be parsed as long integer number. Column {1}, row {2}..
+        /// </summary>
+        internal static string LookupTables_rowcode_value_cannot_be_parsed {
+            get {
+                return ResourceManager.GetString("LookupTables_rowcode_value_cannot_be_parsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many columns in uploaded file. Max coumns count is {0}.
+        /// </summary>
+        internal static string LookupTables_too_many_columns {
+            get {
+                return ResourceManager.GetString("LookupTables_too_many_columns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max rows count limit ({0} rows) was exceeded..
+        /// </summary>
+        internal static string LookupTables_too_many_rows {
+            get {
+                return ResourceManager.GetString("LookupTables_too_many_rows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Macro with such is is already exist..
         /// </summary>
         internal static string MacroAlreadyExist {
