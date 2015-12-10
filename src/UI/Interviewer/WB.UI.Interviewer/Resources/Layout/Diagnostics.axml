@@ -17,53 +17,74 @@
   </android.support.v7.widget.Toolbar>
   <!--<ProgressBar style="@style/Interview_Question_Progress_Indicator"
             local:MvxBind="ShowProgress IsInProgress" /-->>
-  <LinearLayout style="@style/Troubleshooting_Container">
-    <LinearLayout style="@style/Diagnostics_Section"
-    android:orientation="vertical">
-      <TextView
-              style="@style/Diagnostics_Section_Title"
-              local:MvxBind="Text  Localization('Diagnostics_Share_Title'); Click ShareDeviceTechnicalInformationCommand" />
-      <TextView
-               style="@style/Diagnostics_Section_Description"
-               local:MvxBind="Html Localization('Diagnostics_Share_Description')" />
-    </LinearLayout>
-    <View style="@style/Interview_Question_Divider" />
-    <LinearLayout style="@style/Diagnostics_Section"
-   android:orientation="vertical">
-      <TextView
+  <ScrollView
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/login_page_footer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay"
+        android:gravity="center"
+        android:fillViewport="true">
+    <LinearLayout style="@style/Troubleshooting_Container">
+      <LinearLayout style="@style/Diagnostics_Section"
+     android:orientation="vertical">
+        <TextView
            style="@style/Diagnostics_Section_Title"
-           local:MvxBind="Text  Localization('Diagnostics_Send_Title');" />
-      <TextView
-                style="@style/Diagnostics_Section_Description"
-                local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
-    </LinearLayout>
-    <View style="@style/Interview_Question_Divider" />
-    <LinearLayout style="@style/Diagnostics_Section"
-android:orientation="vertical">
-      <TextView
-        style="@style/Diagnostics_Section_Title"
-        local:MvxBind="Text  Localization('Diagnostics_Backup_Title');" />
-      <TextView
-                style="@style/Diagnostics_Section_Description"
-                local:MvxBind="Html Localization('Diagnostics_Backup_Description')" />
-    </LinearLayout>
-    <View style="@style/Interview_Question_Divider" />
-    <LinearLayout style="@style/Diagnostics_Section"
-    android:orientation="vertical" local:MvxBind="Visible IsRestoreVisible;">
-      <TextView
-        style="@style/Diagnostics_Section_Title"
-        local:MvxBind="Text Localization('Troubleshooting_Restore_Title');   
+           local:MvxBind="Text  Localization('Diagnostics_TestConnection_Title');" />
+        <TextView
+                  style="@style/Diagnostics_Section_Description"
+                  local:MvxBind="Html Localization('Diagnostics_TestConnection_Description')" />
+      </LinearLayout>
+      <View style="@style/Interview_Question_Divider" />
+      <LinearLayout style="@style/Diagnostics_Section"
+      android:orientation="vertical">
+        <TextView
+                style="@style/Diagnostics_Section_Title"
+                local:MvxBind="Text  Localization('Diagnostics_Share_Title'); Click ShareDeviceTechnicalInformationCommand" />
+        <TextView
+                 style="@style/Diagnostics_Section_Description"
+                 local:MvxBind="Html Localization('Diagnostics_Share_Description')" />
+      </LinearLayout>
+      <View style="@style/Interview_Question_Divider" />
+      <LinearLayout style="@style/Diagnostics_Section"
+     android:orientation="vertical">
+        <TextView
+             style="@style/Diagnostics_Section_Title"
+             local:MvxBind="Text  Localization('Diagnostics_Send_Title');" />
+        <TextView
+                  style="@style/Diagnostics_Section_Description"
+                  local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
+      </LinearLayout>
+      <View style="@style/Interview_Question_Divider" />
+      <LinearLayout style="@style/Diagnostics_Section"
+  android:orientation="vertical">
+        <TextView
+          style="@style/Diagnostics_Section_Title"
+          local:MvxBind="Text  Localization('Diagnostics_Backup_Title');" />
+        <TextView
+                  style="@style/Diagnostics_Section_Description"
+                  local:MvxBind="Html Localization('Diagnostics_Backup_Description')" />
+      </LinearLayout>
+      <View style="@style/Interview_Question_Divider" />
+      <LinearLayout style="@style/Diagnostics_Section"
+      android:orientation="vertical" local:MvxBind="Visible IsRestoreVisible;">
+        <TextView
+          style="@style/Diagnostics_Section_Title"
+          local:MvxBind="Text Localization('Troubleshooting_Restore_Title');   
          Visible IsRestoreVisible;" />
-      <TextView
-                style="@style/Diagnostics_Section_Description"
-                local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
+        <TextView
+                  style="@style/Diagnostics_Section_Description"
+                  local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
+      </LinearLayout>
+      <View style="@style/Interview_Question_Divider" />
+      <LinearLayout style="@style/Diagnostics_Section"
+      android:orientation="vertical">
+        <TextView
+             style="@style/Diagnostics_Section_Title"
+             local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), Version);" />
+      </LinearLayout>
+
     </LinearLayout>
-    <View style="@style/Interview_Question_Divider" />
-    <LinearLayout style="@style/Diagnostics_Section"
-    android:orientation="vertical">
-      <TextView
-           style="@style/Diagnostics_Section_Title"
-           local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), Version);" />
-    </LinearLayout>
-  </LinearLayout>
+  </ScrollView>
+
 </LinearLayout>

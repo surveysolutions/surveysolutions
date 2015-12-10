@@ -380,6 +380,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We will test connection with our server and it&apos;s speed.
+        /// </summary>
+        public static string Diagnostics_TestConnection_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_TestConnection_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test internet connection.
+        /// </summary>
+        public static string Diagnostics_TestConnection_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TestConnection_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Diagnostics.
         /// </summary>
         public static string Diagnostics_Title {
