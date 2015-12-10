@@ -39,13 +39,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 .Where(change => change.QuestionnaireVersion == questionnaireVersion)
                 .Max(change => change.Date));
 
+            Dictionary<InterviewStatus, Dictionary<DateTime, int>> countsByStatusAndDate =
+                this.GetCountsForQuestionnaireGroupedByStatusAndDate(questionnaireId, questionnaireVersion);
+
+            return GetStatisticsInOldFormat(minDate, maxDate, countsByStatusAndDate);
+        }
+
+        private static StatisticsGroupedByDateAndTemplate GetStatisticsInOldFormat(DateTime minDate, DateTime maxDate,
+            Dictionary<InterviewStatus, Dictionary<DateTime, int>> countsByStatusAndDate)
+        {
             var result = new StatisticsGroupedByDateAndTemplate();
 
             DateTime date = minDate;
             while (date <= maxDate)
             {
-                result.StatisticsByDate.Add(date,
-                    this.GetOldSchoolStatsForDate(questionnaireId, questionnaireVersion, date));
+                result.StatisticsByDate.Add(
+                    date,
+                    new QuestionnaireStatisticsForChart
+                    {
+                        CreatedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.Created, date, countsByStatusAndDate),
+                        SupervisorAssignedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.SupervisorAssigned, date, countsByStatusAndDate),
+                        InterviewerAssignedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.InterviewerAssigned, date, countsByStatusAndDate),
+                        CompletedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.Completed, date, countsByStatusAndDate), 
+                        ApprovedBySupervisorCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.ApprovedBySupervisor, date, countsByStatusAndDate),
+                        RejectedBySupervisorCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.RejectedBySupervisor, date, countsByStatusAndDate),
+                        ApprovedByHeadquartersCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.ApprovedByHeadquarters, date, countsByStatusAndDate),
+                        RejectedByHeadquartersCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.RejectedByHeadquarters, date, countsByStatusAndDate),
+                    });
 
                 date = date.AddDays(1);
             }
@@ -53,27 +73,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return result;
         }
 
-        private QuestionnaireStatisticsForChart GetOldSchoolStatsForDate(Guid questionnaireId, long questionnaireVersion, DateTime date)
+        private Dictionary<InterviewStatus, Dictionary<DateTime, int>> GetCountsForQuestionnaireGroupedByStatusAndDate(Guid questionnaireId, long questionnaireVersion)
         {
-            Dictionary<InterviewStatus, int> countsForStatuses = this.cumulativeReportStatusChangeStorage.Query(_ => _
+            var rawCountsByStatusAndDate = this.cumulativeReportStatusChangeStorage.Query(_ => _
                 .Where(change => change.QuestionnaireId == questionnaireId)
                 .Where(change => change.QuestionnaireVersion == questionnaireVersion)
-                .Where(change => change.Date <= date)
-                .GroupBy(change => change.Status)
-                .Select(grouping => new { Status = grouping.Key, Count = grouping.Sum(change => (int?)change.ChangeValue) ?? 0 })
-                .ToDictionary(x => x.Status, x => x.Count));
+                .GroupBy(change => new {change.Status, change.Date})
+                .Select(grouping => new
+                {
+                    Status = grouping.Key.Status,
+                    Date = grouping.Key.Date,
+                    Count = grouping.Sum(change => (int?) change.ChangeValue) ?? 0, // https://nhibernate.jira.com/browse/NH-2130
+                }));
 
-            return new QuestionnaireStatisticsForChart
+            var countsByStatusAndDate = new Dictionary<InterviewStatus, Dictionary<DateTime, int>>();
+
+            foreach (var countForStatusAndDate in rawCountsByStatusAndDate)
             {
-                CreatedCount = countsForStatuses.GetOrDefault(InterviewStatus.Created) ?? 0,
-                SupervisorAssignedCount = countsForStatuses.GetOrDefault(InterviewStatus.SupervisorAssigned) ?? 0,
-                InterviewerAssignedCount = countsForStatuses.GetOrDefault(InterviewStatus.InterviewerAssigned) ?? 0,
-                CompletedCount = countsForStatuses.GetOrDefault(InterviewStatus.Completed) ?? 0,
-                ApprovedBySupervisorCount = countsForStatuses.GetOrDefault(InterviewStatus.ApprovedBySupervisor) ?? 0,
-                RejectedBySupervisorCount = countsForStatuses.GetOrDefault(InterviewStatus.RejectedBySupervisor) ?? 0,
-                ApprovedByHeadquartersCount = countsForStatuses.GetOrDefault(InterviewStatus.ApprovedByHeadquarters) ?? 0,
-                RejectedByHeadquartersCount = countsForStatuses.GetOrDefault(InterviewStatus.RejectedByHeadquarters) ?? 0,
-            };
+                countsByStatusAndDate.Add(countForStatusAndDate.Status, countForStatusAndDate.Date, countForStatusAndDate.Count);
+            }
+
+            return countsByStatusAndDate;
+        }
+
+        private static int GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus status, DateTime date,
+            Dictionary<InterviewStatus, Dictionary<DateTime, int>> countsByStatusAndDate)
+        {
+            return
+                countsByStatusAndDate
+                    .GetOrNull(status)?
+                    .Where(pair => pair.Key <= date)
+                    .Sum(pair => pair.Value)
+                ?? 0;
         }
     }
 }
