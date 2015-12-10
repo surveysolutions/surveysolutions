@@ -497,4 +497,19 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
     <value>Test internet connection</value>
   </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Data archive is ready</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Scope:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>When generated:</value>
+  </data>
 </root>

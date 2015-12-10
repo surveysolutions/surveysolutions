@@ -326,6 +326,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Diagnostics_Delete {
+            get {
+                return ResourceManager.GetString("Diagnostics_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore backed up data.
         /// </summary>
         public static string Diagnostics_Restore_Description {
@@ -340,6 +349,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Diagnostics_Restore_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_Restore_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string Diagnostics_Send {
+            get {
+                return ResourceManager.GetString("Diagnostics_Send", resourceCulture);
             }
         }
         
@@ -376,6 +394,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Diagnostics_Share_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_Share_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data archive is ready.
+        /// </summary>
+        public static string Diagnostics_TabletInformationReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TabletInformationReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scope:.
+        /// </summary>
+        public static string Diagnostics_TabletInformationScope_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TabletInformationScope_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When generated:.
+        /// </summary>
+        public static string Diagnostics_TabletInformationWhenGenerated_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TabletInformationWhenGenerated_Title", resourceCulture);
             }
         }
         

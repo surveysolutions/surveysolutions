@@ -185,6 +185,7 @@
     <Compile Include="Views\ApplicationSettingsView.cs" />
     <Compile Include="Views\QuestionnaireView.cs" />
     <Compile Include="Views\RelinkDeviceViewModel.cs" />
+    <Compile Include="Views\SendTabletInformationViewModel.cs" />
     <Compile Include="Views\SychronizationStatistics.cs" />
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />
