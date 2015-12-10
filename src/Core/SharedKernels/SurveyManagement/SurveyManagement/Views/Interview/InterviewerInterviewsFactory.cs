@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -19,19 +20,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly InterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
+        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             InterviewSynchronizationDtoFactory synchronizationDtoFactory,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
-            IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory)
+            IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory,
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.synchronizationDtoFactory = synchronizationDtoFactory;
             this.interviewDataRepository = interviewDataRepository;
             this.interviewStatusesFactory = interviewStatusesFactory;
+            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
         }
 
         public IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId)
@@ -47,7 +51,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             }).Items.Where(questionnaire => questionnaire.IsDeleted);
 
             return inProgressInterviews.Where(
-                interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion))
+                interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
+                && !this.incomingSyncPackagesQueue.HasPackagesByInterviewId(interview.InterviewId))
                 .Select(interview => new InterviewInformation()
                 {
                     Id = interview.InterviewId,

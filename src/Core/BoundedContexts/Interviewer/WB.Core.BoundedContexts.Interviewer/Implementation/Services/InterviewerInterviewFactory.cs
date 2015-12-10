@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ISerializer serializer;
         private readonly IStringCompressor compressor;
         private readonly IEventStore eventStore;
+        private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
 
         public InterviewerInterviewFactory(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -45,7 +47,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerPrincipal principal,
             ISerializer serializer,
             IStringCompressor compressor,
-            IEventStore eventStore)
+            IEventStore eventStore,
+            IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRepository = eventRepository;
@@ -57,12 +60,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.serializer = serializer;
             this.compressor = compressor;
             this.eventStore = eventStore;
+            this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
         }
 
         public async Task RemoveInterviewAsync(Guid interviewId)
         {
             await this.commandService.ExecuteAsync(new HardDeleteInterview(interviewId,
                 this.principal.CurrentUserIdentity.UserId));
+
+            this.aggregateRootRepositoryWithCache.CleanCache();
 
             var eventViews = await Task.Run(() => this.eventRepository.Query(
                 events => events.Where(evnt => evnt.EventSourceId == interviewId).ToList()));

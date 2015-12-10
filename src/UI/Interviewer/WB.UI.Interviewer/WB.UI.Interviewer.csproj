@@ -337,6 +337,7 @@
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
+    <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Implementations\Services\UpdateProcessor.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
@@ -369,8 +370,6 @@
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
     <Compile Include="InterviewerApplication.cs" />
-    <Compile Include="FileStorage\FileStorageService.cs" />
-    <Compile Include="FileStorage\IFileStorageService.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
