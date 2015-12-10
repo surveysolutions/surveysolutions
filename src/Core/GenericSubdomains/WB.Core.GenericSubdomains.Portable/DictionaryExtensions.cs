@@ -6,6 +6,11 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class DictionaryExtensions
     {
+        public static void Add<TKey1, TKey2, TValue>(this Dictionary<TKey1, Dictionary<TKey2, TValue>> dictionary, TKey1 key1, TKey2 key2, TValue value)
+        {
+            dictionary.GetOrAdd(key1).Add(key2, value);
+        }
+
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
             where TValue : new()
         {
