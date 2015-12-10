@@ -2,8 +2,8 @@
 {
     public class InterviewersListViewModel : UsersListViewModel
     {
-        public bool? ShowOnlyNotConnectedToDevice { get; set; }
+        public bool? ConnectedToDevice { get; set; }
 
-        public bool ShowOnlyArchived { get; set; }
+        public bool Archived { get; set; }
     }
 }

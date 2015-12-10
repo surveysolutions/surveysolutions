@@ -8,6 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
         public Guid ViewerId {get; set; }
         public Guid? SupervisorId {get; set; }
         public bool Archived { get; set; }
-        public bool ShowOnlyNotConnectedToDevice { get; set; }
+        public bool? ConnectedToDevice { get; set; }
     }
 }

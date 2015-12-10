@@ -19,8 +19,8 @@
     }
     self.SelectedSupervisor = ko.observable();
 
-    self.ShowOnlyArchived = ko.observable();
-    self.ShowOnlyNotConnectedToDevice = ko.observable('');
+    self.Archived = ko.observable();
+    self.ConnectedToDevice = ko.observable('');
     self.SearchBy = ko.observable('');
 
     self.load = function() {
@@ -88,21 +88,41 @@
 
         var supervisorId = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserId
 
-        //self.Url.query['supervisorId'] = supervisorId;
-        //self.Url.query['showOnlyArchived'] = self.ShowOnlyArchived() || "";
-        //self.Url.query['showOnlyNotConnectedToDevice'] = self.ShowOnlyNotConnectedToDevice() || "";
-        //self.Url.query['searchBy'] = self.SearchBy() || "";
+        self.Url.query['supervisorId'] = supervisorId;
+        self.Url.query['archived'] = self.Archived() || "";
+        self.Url.query['connectedToDevice'] = self.ConnectedToDevice() || "";
+        self.Url.query['searchBy'] = self.SearchBy() || "";
 
-        //if (Modernizr.history) {
-        //    window.history.pushState({}, "Interviews", self.Url.toString());
-        //}
+        if (Modernizr.history) {
+            window.history.pushState({}, "Interviews", self.Url.toString());
+        }
 
         return {
             SupervisorId: supervisorId,
-            ShowOnlyArchived: self.ShowOnlyArchived,
-            ShowOnlyNotConnectedToDevice: self.ShowOnlyNotConnectedToDevice,
+            Archived: self.Archived,
+            ConnectedToDevice: self.ConnectedToDevice,
             SearchBy: self.SearchBy
         };
+    };
+
+    self.load = function () {
+
+        if (self.QueryString['supervisorId']) {
+            self.SelectedSupervisor({ UserId: self.QueryString['supervisorId'] });
+        }
+
+        self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
+
+        self.Url.query['supervisorId'] = self.QueryString['supervisorId'] || "";
+        self.Url.query['archived'] = self.QueryString['archived'] || "";
+        self.Url.query['connectedToDevice'] = self.QueryString['connectedToDevice'] || "";
+        self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
+
+        self.SelectedSupervisor.subscribe(self.filter);
+        self.Archived.subscribe(self.filter);
+        self.ConnectedToDevice.subscribe(self.filter);
+
+        self.search();
     };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Interviewers, Supervisor.VM.ListView);

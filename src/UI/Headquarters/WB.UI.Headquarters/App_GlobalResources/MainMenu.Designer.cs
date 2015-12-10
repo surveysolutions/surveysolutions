@@ -106,6 +106,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewers.
+        /// </summary>
+        internal static string Interviewers {
+            get {
+                return ResourceManager.GetString("Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviews.
         /// </summary>
         internal static string Interviews {
