@@ -545,7 +545,7 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static LookupTableRow LookupTableRow(long rowcode, decimal [] values)
+        public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
         {
             return new LookupTableRow
                    {

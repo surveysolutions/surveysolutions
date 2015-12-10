@@ -152,6 +152,8 @@
 
         LookupTableAlreadyExist,
 
-        LookupTableIsAbsent
+        LookupTableIsAbsent,
+
+        EmptyLookupTable
     }
 }

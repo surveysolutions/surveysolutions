@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
+using CsQuery.ExtensionMethods;
+
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
+
+using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -19,6 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
+        private const int MAX_ROWS_COUNT = 5000;
+        private const int MAX_COLS_COUNT = 11;
 
         public LookupTableService(IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage, IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
         {
@@ -137,19 +145,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             var result = new LookupTableContent();
             var csvReader = new CsvReader(new StringReader(fileContent), this.CreateCsvConfiguration());
+
+            if (csvReader.FieldHeaders.Length > MAX_COLS_COUNT)
+            {
+                throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "Too mamy columns");
+            }
+
+            var indexOfRowcodeColumn = csvReader.FieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
+
+            if (indexOfRowcodeColumn < 0)
+            {
+                throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "No rowcode");
+            }
+
             using (csvReader)
             {
                 var rows = new List<LookupTableRow>();
                 while (csvReader.Read())
                 {
-                    var variables = new List<decimal>();
+                    var variables = new List<decimal?>();
                     var row = new LookupTableRow();
                     var record = csvReader.CurrentRecord;
 
                     for (int i = 0; i < record.Length; i++)
                     {
-                        var columnName = csvReader.FieldHeaders[i];
-                        if (columnName.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase))
+                        if (i == indexOfRowcodeColumn)
                         {
                             row.RowCode = long.Parse(record[i]);
                         }
@@ -162,8 +182,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     row.Variables = variables.ToArray();
                     rows.Add(row);
                 }
-                result.VariableNames =
-                    csvReader.FieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                if (rows.Count == 0)
+                {
+                    throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, ExceptionMessages.LookupTables_cant_has_empty_content);
+                }
+                if (rows.Count > 5000)
+                {
+                    throw new QuestionnaireException(DomainExceptionType.EmptyLookupTable, "To many rows");
+                }
+                result.VariableNames = csvReader.FieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
                 result.Rows = rows.ToArray();
             }
             return result;
