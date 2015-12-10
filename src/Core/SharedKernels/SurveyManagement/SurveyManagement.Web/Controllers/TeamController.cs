@@ -55,9 +55,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: observerUser, role: UserRoles.Observer);
         }
 
-        protected void CreateApiWriterUser(UserModel observerUser)
+        protected void CreateApiWriterUser(UserModel apiUser)
         {
-            CreateUser(user: observerUser, role: UserRoles.APIWriter);
+            CreateUser(user: apiUser, role: UserRoles.ApiUser);
         }
 
         protected void UpdateAccount(UserView user, UserEditModel editModel)
