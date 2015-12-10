@@ -3,9 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Preferences;
-using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Tester.Properties;
-using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Activities
 {
@@ -19,8 +17,6 @@ namespace WB.UI.Tester.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
-            var settings = Mvx.Resolve<TesterSettings>();
-
             base.OnCreate(bundle);
             this.AddPreferencesFromResource(Resource.Xml.preferences);
 
@@ -33,8 +29,9 @@ namespace WB.UI.Tester.Activities
             this.SetPreferenceTitleAndSummary("GpsReceiveTimeoutSec", TesterUIResources.Prefs_GpsReceiveTimeoutSecTitle, TesterUIResources.Prefs_GpsReceiveTimeoutSecSummary);
             this.SetPreferenceTitleAndSummary("version", TesterUIResources.Prefs_VersionTitle, string.Empty);
             this.SetPreferenceTitleAndSummary("dev_settings_category", TesterUIResources.Prefs_ConnectionSettings, string.Empty);
-            this.SetPreferenceTitleAndSummary("DesignerEndpointV11", TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
+            this.SetPreferenceTitleAndSummary("DesignerEndpointV11", TesterUIResources.Prefs_DesignerEndPointTitle, TesterUIResources.Prefs_DesignerEndPointSummary);
             this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
+
 
             this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
           

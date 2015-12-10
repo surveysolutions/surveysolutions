@@ -38,7 +38,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 return null;
             return question.Comments.Last().Text;
         }
-
         public InterviewSynchronizationDto BuildFrom(InterviewData interview,
             Guid userId, InterviewStatus status, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
         {
