@@ -151,6 +151,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File with no data can not be loaded.
+        /// </summary>
+        internal static string LookupTables_cant_has_empty_content {
+            get {
+                return ResourceManager.GetString("LookupTables_cant_has_empty_content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Macro with such is is already exist..
         /// </summary>
         internal static string MacroAlreadyExist {

@@ -33,9 +33,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var userId = Guid.NewGuid();
 
                 var lookupTableContent = Create.LookupTableContent(new [] {"min", "max"},
-                    Create.LookupTableRow(1, new decimal[] { 1.15m, 10}),
-                    Create.LookupTableRow(2, new decimal[] { 1, 10}),
-                    Create.LookupTableRow(3, new decimal[] { 1, 10})
+                    Create.LookupTableRow(1, new decimal?[] { 1.15m, 10}),
+                    Create.LookupTableRow(2, new decimal?[] { 1, 10}),
+                    Create.LookupTableRow(3, new decimal?[] { 1, 10})
                 );
 
                 var lookupTableServiceMock = new Mock<ILookupTableService>();
