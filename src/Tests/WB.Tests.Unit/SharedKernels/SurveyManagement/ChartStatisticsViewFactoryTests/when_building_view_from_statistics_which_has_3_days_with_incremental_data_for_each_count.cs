@@ -11,7 +11,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    [Ignore("KP-6434, TLK")]
     internal class when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>
@@ -32,9 +31,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 },
             });
 
-            var statsStorage = Mock.Of<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>(_
-                => _.GetById(Moq.It.IsAny<string>()) == statistics);
-
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
@@ -44,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 To = new DateTime(2014, 8, 22),
             };
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statsStorage);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: statistics);
         };
 
         Because of = () => view = chartStatisticsViewFactory.Load(input);

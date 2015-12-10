@@ -10,7 +10,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
-    [Ignore("KP-6434, TLK")]
     internal class when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status : ChartStatisticsViewFactoryTestsContext
     {
         Establish context = () =>
@@ -52,9 +51,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 },
             });
 
-            var statsStorage = Mock.Of<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>(_
-                => _.GetById(Moq.It.IsAny<string>()) == statistics);
-
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
@@ -64,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 To = new DateTime(2014, 8, 22),
             };
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statsStorage);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: statistics);
         };
 
         Because of = () =>
