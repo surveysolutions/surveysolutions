@@ -21,7 +21,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService
 {
-    internal class LookupTableService: ILookupTableService
+    internal class LookupTableService : ILookupTableService
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 return;
 
             var lookupTable = questionnaire.LookupTables[lookupTableId];
-            if (lookupTable==null)
+            if (lookupTable == null)
                 return;
 
             var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTable.TableName);
@@ -156,22 +156,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 {
                     if (csvReader.FieldHeaders.Length > MAX_COLS_COUNT)
                     {
-                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_columns, MAX_COLS_COUNT));
-            }
+                        throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_columns, MAX_COLS_COUNT));
+                    }
 
-            if (csvReader.FieldHeaders.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new ArgumentException(ExceptionMessages.LookupTables_empty_header_are_not_allowed);
+                    if (csvReader.FieldHeaders.Any(string.IsNullOrWhiteSpace))
+                    {
+                        throw new ArgumentException(ExceptionMessages.LookupTables_empty_header_are_not_allowed);
                     }
 
                     var indexOfRowcodeColumn = csvReader.FieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
 
                     if (indexOfRowcodeColumn < 0)
                     {
-                throw new ArgumentException(ExceptionMessages.LookupTables_rowcode_column_is_mandatory);
+                        throw new ArgumentException(ExceptionMessages.LookupTables_rowcode_column_is_mandatory);
                     }
 
-                int rowCurrentRowNumber = 1;
+                    int rowCurrentRowNumber = 1;
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
                     var record = csvReader.CurrentRecord;
@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
-               
+
                 result.VariableNames = csvReader.FieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
                 result.Rows = rows.ToArray();
             }
