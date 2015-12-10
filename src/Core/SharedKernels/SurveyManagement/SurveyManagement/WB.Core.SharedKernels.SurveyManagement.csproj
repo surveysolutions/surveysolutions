@@ -112,6 +112,8 @@
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
+    <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />
+    <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
