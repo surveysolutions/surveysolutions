@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.Applications.Designer
             file.Setup(x => x.InputStream).Returns(inputStream);
 
             this.ZipUtilsMock.Setup(
-                x => x.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(file.Object.InputStream))
+                x => x.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(It.IsAny<Stream>()))
                 .Returns(new QuestionnaireDocumentWithLookUpTables()
                 {
                     LookupTables = new Dictionary<Guid, string>(),
