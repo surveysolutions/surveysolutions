@@ -79,7 +79,6 @@
     <Compile Include="Implementation\InMemoryPlainStorageAccessor.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
     <Compile Include="Implementation\Storage\InMemoryCachedSnapshotStore.cs" />
-    <Compile Include="Implementation\WriteSide\WriteSideCleanerRegistry.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="EventBus\Lite\ILiteEventHandler.cs" />
@@ -141,6 +140,7 @@
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\InMemoryEventStore.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\ISnapshotStoreWithCache.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\ISnapshotStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IStreamableEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\NullSnapshotStore.cs" />
@@ -182,8 +182,7 @@
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
     <Compile Include="Transactions\TransactionManagerExtensions.cs" />
-    <Compile Include="WriteSide\IWriteSideCleaner.cs" />
-    <Compile Include="WriteSide\IWriteSideCleanerRegistry.cs" />
+    <Compile Include="WriteSide\IAggregateRootRepositoryWithCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
