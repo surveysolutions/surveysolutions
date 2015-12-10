@@ -54,8 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 SupervisorId = filter.SupervisorId,
                 Orders = filter.SortOrder,
                 SearchBy = filter.SearchBy,
-                Archived = filter.ShowOnlyArchived,
-                ShowOnlyNotConnectedToDevice = filter.ShowOnlyNotConnectedToDevice.GetValueOrDefault()
+                Archived = filter.Archived,
+                ConnectedToDevice = filter.ConnectedToDevice
             };
 
             return this.interviewersFactory.Load(input);

@@ -6,8 +6,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public Guid SupervisorId { get; set; }
 
-        public bool? ShowOnlyNotConnectedToDevice { get; set; } 
+        public bool? ConnectedToDevice { get; set; } 
 
-        public bool ShowOnlyArchived { get; set; } 
+        public bool Archived { get; set; } 
     }
 }

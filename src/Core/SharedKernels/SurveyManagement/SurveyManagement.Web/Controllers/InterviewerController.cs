@@ -31,6 +31,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public ActionResult Create(Guid supervisorId)
         {
+            if (!this.GlobalInfo.IsAdministrator && !this.GlobalInfo.IsHeadquarter)
+                throw new ArgumentException("Only Headquarter or Admin can create interviewers");
+
             var supervisor = this.GetUserById(supervisorId);
 
             if (supervisor == null) throw new HttpException(404, string.Empty);
