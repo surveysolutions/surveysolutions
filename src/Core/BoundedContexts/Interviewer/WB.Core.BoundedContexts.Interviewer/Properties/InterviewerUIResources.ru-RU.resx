@@ -492,4 +492,10 @@
   <data name="Share_to_Title" xml:space="preserve">
     <value>Поделится информацией через..</value>
   </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Мы проверим интернет соединение с нашим сервером и его скорость</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Проверить интернет соединение</value>
+  </data>
 </root>
