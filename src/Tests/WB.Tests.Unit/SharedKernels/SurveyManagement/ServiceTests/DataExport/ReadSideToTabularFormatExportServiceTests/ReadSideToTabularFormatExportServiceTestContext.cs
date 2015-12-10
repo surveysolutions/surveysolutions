@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         {
             return new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(_ => _.OpenCsvWriter(
-                                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),new InterviewDataExportSettings("",false,10000, 100),
+                                    It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),new InterviewDataExportSettings("",false,10000, 100,1),
                 interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
                 interviewCommentaries??new TestInMemoryWriter<InterviewCommentaries>(),
                 new TestInMemoryWriter<InterviewSummary>(), 
