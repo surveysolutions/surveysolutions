@@ -31,19 +31,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
-            ITransaction transaction = this.Storage.BeginTransaction();
-            try
+            foreach (var entity in entities.Where(entity => entity != null))
             {
-                foreach (var entity in entities.Where(entity => entity != null))
-                {
-                    await this.Storage.DeleteAsync(entity, transaction);
-                }
-
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
+                await this.Storage.DeleteAsync(entity);
             }
         }
 
@@ -54,20 +44,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
-            //ITransaction transaction = this.Storage.BeginTransaction();
-            //try
-            //{
-                foreach (var entity in entities.Where(entity => entity != null))
-                {
-                    await this.Storage.StoreObjectAsync(entity/*, transaction*/);
-                }
-
-            //    await transaction.CommitAsync();
-            //}
-            //catch
-            //{
-            //    await transaction.RollbackAsync();
-            //}
+            foreach (var entity in entities.Where(entity => entity != null))
+            {
+                await this.Storage.StoreObjectAsync(entity);
+            }
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)

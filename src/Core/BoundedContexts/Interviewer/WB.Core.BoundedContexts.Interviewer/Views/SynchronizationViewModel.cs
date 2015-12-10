@@ -306,12 +306,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
 
-            var localInterviews = this.interviewViewRepository.Query(
-                    interviews => interviews.Where(interview => !interview.Census).ToList());
+            var localInterviews = await Task.FromResult(this.interviewViewRepository.Query(interviews => interviews.ToList()));
 
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
 
-            var localInterviewIdsToRemove = localInterviewIds.Where(interviewId => !remoteInterviewIds.Contains(interviewId)).ToList();
+            var localInterviewsToRemove = localInterviews.Where(
+                interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
+
+            var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId).ToList();
 
             var remoteInterviewsToCreate = remoteInterviews.Where(interview => !localInterviewIds.Contains(interview.Id)).ToList();
              
