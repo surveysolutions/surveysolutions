@@ -15,8 +15,7 @@
         style="@style/ToolbarTitle"
         local:MvxBind="Text Localization('Diagnostics_Title')" />
   </android.support.v7.widget.Toolbar>
-  <!--<ProgressBar style="@style/Interview_Question_Progress_Indicator"
-            local:MvxBind="ShowProgress IsInProgress" /-->>
+
   <ScrollView
         android:layout_alignParentTop="true"
         android:layout_above="@+id/login_page_footer"
@@ -50,11 +49,47 @@
      android:orientation="vertical">
         <TextView
              style="@style/Diagnostics_Section_Title"
-             local:MvxBind="Text  Localization('Diagnostics_Send_Title');" />
+             local:MvxBind="Text Localization('Diagnostics_Send_Title'); Click TabletInformation.SendTabletInformationCommand" />
         <TextView
                   style="@style/Diagnostics_Section_Description"
                   local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
+
+        <LinearLayout style="@style/Diagnostics_SubSection"
+     android:orientation="vertical" local:MvxBind="Visible TabletInformation.Visible;" >
+          <TextView
+               style="@style/Diagnostics_Subsection_Title"
+               local:MvxBind="Text Localization('Diagnostics_TabletInformationReady_Title')" />
+          <TextView
+          style="@style/Diagnostics_Section_Description"
+          local:MvxBind="Text Localization('Diagnostics_TabletInformationWhenGenerated_Title')" />
+
+          <TextView
+   style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text TabletInformation.WhenGenerated" />
+          <TextView
+                 style="@style/Diagnostics_Section_Description"
+                 local:MvxBind="Text Localization('Diagnostics_TabletInformationScope_Title')" />
+          <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text TabletInformation.Scope" />
+
+          <RelativeLayout
+                  style="@style/Diagnostic_FormContainer">
+
+            <Button
+              style="@style/Diagnostics_Green_Button" android:id="@+id/Diagnostics_send_button"
+              local:MvxBind="Text Localization('Diagnostics_Send');" />
+
+            <Button
+                style="@style/Diagnostic_Transparent_Button"
+                android:layout_toRightOf="@+id/Diagnostics_send_button"
+                local:MvxBind="Text Localization('Diagnostics_Delete');" />
+          </RelativeLayout>
+
+        </LinearLayout>
       </LinearLayout>
+      <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+           local:MvxBind="ShowProgress TabletInformation.IsInProgress" />
       <View style="@style/Interview_Question_Divider" />
       <LinearLayout style="@style/Diagnostics_Section"
   android:orientation="vertical">
