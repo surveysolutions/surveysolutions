@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task RaiseToggleAnswer()
         {
-            await this.QuestionViewModel.ToggleAnswerAsync(this); 
+            await this.QuestionViewModel.ToggleAnswerAsync(this).ConfigureAwait(false); 
         }
 
         public IMvxCommand RemoveAnswerCommand
