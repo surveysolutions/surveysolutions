@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.GenericSubdomains.Portable
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
 
 @{
@@ -21,6 +22,29 @@
 
     <form class="form-horizontal" method="POST">
         @Html.AntiForgeryToken()
+
+        @if (Model.SupervisorName.IsNullOrEmpty())
+        {
+            @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js")
+
+            <div class="form-group">
+                @Html.LabelFor(x => x.SupervisorId, new {@class = "col-sm-2 control-label"})
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                        <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                            <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(x => x.SupervisorId)
+                </div>
+                <div class="col-sm-4">
+                    @Html.ValidationMessageFor(x => x.SupervisorId, null, new {@class = "help-block"})
+                </div>
+            </div>
+        }
+
         @{
             this.Html.RenderPartial("UserCreateForm");
         }

@@ -174,4 +174,10 @@
   <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
     <value>Is locked by Supervisor</value>
   </data>
+  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+    <value>Supervisor is required</value>
+  </data>
+  <data name="SupervisorFieldName" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
 </root>
