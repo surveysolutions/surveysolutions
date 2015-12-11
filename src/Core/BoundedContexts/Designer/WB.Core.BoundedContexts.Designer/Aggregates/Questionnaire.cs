@@ -1022,53 +1022,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private Guid? GetIdOrReturnSameId(Dictionary<Guid, Guid> replacementIdDictionary, Guid? id)
+        private static Guid? GetIdOrReturnSameId(Dictionary<Guid, Guid> replacementIdDictionary, Guid? id)
         {
             if (!id.HasValue)
                 return null;
 
             return replacementIdDictionary.ContainsKey(id.Value) ? replacementIdDictionary[id.Value] : id;
-        }
-
-        public void CloneGroup(Guid groupId, Guid responsibleId, Guid sourceGroupId, int targetIndex)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
-            this.ThrowDomainExceptionIfGroupDoesNotExist(sourceGroupId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-
-            var sourceGroup = this.innerDocument.FirstOrDefault<IGroup>(group => group.PublicKey == sourceGroupId);
-
-            var numberOfCopiedItems = sourceGroup.Children.TreeToEnumerable(x => x.Children).Count();
-            var numberOfItemsInChapter = this.innerDocument.GetChapterOfItemById(sourceGroupId)
-                                                           .Children
-                                                           .TreeToEnumerable(x => x.Children)
-                                                           .Count();
-            
-            if ((numberOfCopiedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
-            {
-                throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
-            }
-
-            var parentGroupId = sourceGroup.GetParent() == null ? (Guid?)null : sourceGroup.GetParent().PublicKey;
-            Dictionary<Guid, Guid> replacementIdDictionary = ((IComposite)sourceGroup).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
-
-            replacementIdDictionary[sourceGroup.PublicKey] = groupId;
-
-            var events = new List<IEvent>();
-
-            this.FillGroup(
-                parentGroupId: parentGroupId, 
-                responsibleId: responsibleId,
-                sourceGroup: sourceGroup, 
-                sourceQuestionnaireId: this.EventSourceId,
-                targetIndex: targetIndex,
-                preserveVariableName: false,
-                replacementIdDictionary: replacementIdDictionary,
-                events: events);
-
-            events.ForEach(this.ApplyEvent);
         }
 
         private void FillGroup(Guid? parentGroupId, Guid responsibleId, IGroup sourceGroup, Guid sourceQuestionnaireId,int targetIndex, bool preserveVariableName, Dictionary<Guid, Guid> replacementIdDictionary, List<IEvent> events)
@@ -1464,23 +1423,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        public void CloneQuestionById(Guid questionId, Guid responsibleId, Guid targetId)
-        {
-            this.ThrowDomainExceptionIfQuestionAlreadyExists(targetId);
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-
-            IQuestion question = this.GetQuestion(questionId);
-            
-            this.innerDocument.ConnectChildrenWithParent();
-            IComposite parentGroup = question.GetParent();
-            this.ThrowIfChapterHasMoreThanAllowedLimit(question.PublicKey);
-            
-            var questionCloned = GetQuestionClonedEvent(question, targetId, this.EventSourceId, parentGroup.PublicKey, parentGroup.Children.IndexOf(question) + 1, false, responsibleId);
-
-            this.ApplyEvent(questionCloned);
-        }
-
-        private QuestionCloned GetQuestionClonedEvent(IQuestion question, Guid targetId, Guid sourceQuestionnaireId, Guid parentGroupId, int targetIndex, bool preserveVariableName, Guid responsibleId)
+        private static QuestionCloned GetQuestionClonedEvent(IQuestion question, Guid targetId, Guid sourceQuestionnaireId, Guid parentGroupId, int targetIndex, bool preserveVariableName, Guid responsibleId)
         {
             var asTextQuestion = question as TextQuestion;
             var asMultioptions = question as IMultyOptionsQuestion;
@@ -1525,29 +1468,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder : null);
 
             return questionCloned;
-        }
-
-        public void CloneStaticText(Guid entityId, Guid sourceEntityId, Guid responsibleId)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-
-            this.ThrowDomainExceptionIfEntityDoesNotExists(sourceEntityId);
-            this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
-
-            this.innerDocument.ConnectChildrenWithParent();
-
-            var staticText = this.innerDocument.Find<IStaticText>(sourceEntityId);
-            var parentOfStaticText = staticText.GetParent();
-
-            this.ApplyEvent(new StaticTextCloned()
-            {
-                EntityId = entityId,
-                ParentId = parentOfStaticText.PublicKey,
-                SourceEntityId = sourceEntityId,
-                TargetIndex = parentOfStaticText.Children.IndexOf(staticText) + 1,
-                Text = staticText.Text,
-                ResponsibleId = responsibleId
-            });
         }
 
         public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestionCommand command)
@@ -2366,7 +2286,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Question cannot be pasted here."));
 
-                var questionCloned = this.GetQuestionClonedEvent(entityToInsertAsQuestion, pasteItemId, sourceDocument.PublicKey,
+                var questionCloned = GetQuestionClonedEvent(entityToInsertAsQuestion, pasteItemId, sourceDocument.PublicKey,
                     targetToPasteIn.PublicKey,
                     targetIndex, true, responsibleId);
 
