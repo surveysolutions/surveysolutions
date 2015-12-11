@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
-        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public CensusQuestionnaireDashboardItemViewModel(
@@ -29,28 +28,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger,
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository)
         {
             this.commandService = commandService;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;
-            this.questionnaireViewRepository = questionnaireViewRepository;
             this.interviewViewRepository = interviewViewRepository;
         }
 
         private QuestionnaireIdentity questionnaireIdentity;
 
-        public void Init(string questionnaireId)
+        public void Init(QuestionnaireView questionnaire)
         {
-            var questionnaire = this.questionnaireViewRepository.GetById(questionnaireId);
-
             this.questionnaireIdentity = questionnaire.Identity;
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
 
             var countInterviewsFromCurrentQuestionnare = this.interviewViewRepository.Query(
-                interviews => interviews.Count(interview => interview.QuestionnaireId == questionnaireId));
+                interviews => interviews.Count(interview => interview.QuestionnaireId == questionnaire.Id));
 
             this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
         }
