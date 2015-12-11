@@ -68,7 +68,6 @@
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a ng-click="editChapter(chapter);$event.stopPropagation();">Edit</a></li>
-                                        <li><a ng-click="cloneChapter(chapter.itemId);$event.stopPropagation();">Clone</a></li>
                                         <li><a ng-click="copyRef(chapter);">Copy</a></li>
                                         <li>
                                             <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();">Paste after</a>

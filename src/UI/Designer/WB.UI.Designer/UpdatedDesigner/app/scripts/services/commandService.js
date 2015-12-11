@@ -94,32 +94,6 @@
                     return commandCall("DeleteMacro", command);
                 };
 
-                commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
-                    return commandCall('CloneQuestionById', {
-                        questionId: itemIdToClone,
-                        targetId: newId,
-                        questionnaireId: questionnaireId
-                    });
-                };
-
-                commandService.cloneStaticText = function (questionnaireId, itemIdToClone, newId) {
-                    return commandCall('CloneStaticText', {
-                        sourceEntityId: itemIdToClone,
-                        entityId: newId,
-                        questionnaireId: questionnaireId
-                    });
-                };
-
-                commandService.cloneGroup = function (questionnaireId, groupIdToClone, targetIndex, newId) {
-
-                    return commandCall('CloneGroup', {
-                        sourceGroupId: groupIdToClone,
-                        targetIndex: targetIndex,
-                        groupId: newId,
-                        questionnaireId: questionnaireId
-                    });
-                };
-
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question, shouldGetOptionsOnServer) {
 
                     var command = {

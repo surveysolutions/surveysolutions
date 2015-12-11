@@ -52,24 +52,6 @@
                 });
             };
 
-            $rootScope.cloneChapter = function (chapterId) {
-                var idToClone = chapterId || $state.params.itemId;
-                var newId = utilityService.guid();
-                var chapter = _.find($scope.questionnaire.chapters, { itemId: idToClone });
-                var targetIndex = _.indexOf($scope.questionnaire.chapters, chapter) + 1;
-
-                commandService.cloneGroup($state.params.questionnaireId, idToClone, targetIndex, newId).success(function () {
-                    var newChapter = {
-                        title: chapter.title,
-                        itemId: newId,
-                        itemType: "Chapter"
-                    };
-                    $scope.questionnaire.chapters.splice(targetIndex, 0, newChapter);
-                    $rootScope.$emit('chapterCloned');
-                    $state.go('questionnaire.chapter.group', { chapterId: newId, itemId: newId });
-                });
-            };
-
             $scope.deleteChapter = function (chapter) {
                 var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
