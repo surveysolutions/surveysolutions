@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             foreach (var censusQuestionnireView in censusQuestionnireViews)
             {
                 var censusQuestionnaireDashboardItem = this.interviewViewModelFactory.GetNew<CensusQuestionnaireDashboardItemViewModel>();
-                censusQuestionnaireDashboardItem.Init(censusQuestionnireView.Id);
+                censusQuestionnaireDashboardItem.Init(censusQuestionnireView);
                 yield return censusQuestionnaireDashboardItem;
             }
         }
