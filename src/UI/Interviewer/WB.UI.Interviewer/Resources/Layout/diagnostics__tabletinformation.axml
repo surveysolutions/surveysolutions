@@ -47,6 +47,4 @@
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
        local:MvxBind="ShowProgress TabletInformation.IsInProgress" />
-  <View
-      style="@style/Interview_Question_Divider" />
 </LinearLayout>

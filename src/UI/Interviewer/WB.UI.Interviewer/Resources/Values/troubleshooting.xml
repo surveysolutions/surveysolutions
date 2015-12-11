@@ -7,14 +7,6 @@
     <item name="android:fillViewport">true</item>
   </style>
 
-  <style name="Troubleshooting_Container" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">match_parent</item>
-    <item name="android:gravity">center</item>
-    <item name="android:orientation">vertical</item>
-    <item name="android:padding">@dimen/Login_Button_padding</item>
-  </style>
-
   <style name="Troubleshooting_Button" parent="AppTheme">
     <item name="android:layout_width">@dimen/Troubleshooting_Element_width</item>
     <item name="android:layout_height">wrap_content</item>
@@ -22,11 +14,19 @@
     <item name="android:layout_marginBottom">@dimen/Troubleshooting_Button_marginBottom</item>
   </style>
 
+  <style name="Diagnostic_Container" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:gravity">center</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
   <style name="Diagnostics_Section">
     <item name="android:layout_weight">1</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
+    <item name="android:background">@drawable/diagnostics_section_default</item>
   </style>
   <style name="Diagnostics_TitleSection">
     <item name="android:layout_weight">1</item>
@@ -35,6 +35,7 @@
     <item name="android:orientation">vertical</item>
     <item name="android:clickable">true</item>
     <item name="android:padding">@dimen/Troubleshooting_padding</item>
+    <item name="android:background">@drawable/diagnostics_section_layout_border</item>
   </style>
   <style name="Diagnostics_SubSection">
     <item name="android:layout_height">wrap_content</item>
