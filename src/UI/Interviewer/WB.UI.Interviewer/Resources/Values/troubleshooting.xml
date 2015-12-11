@@ -22,17 +22,26 @@
     <item name="android:layout_marginBottom">@dimen/Troubleshooting_Button_marginBottom</item>
   </style>
 
-
   <style name="Diagnostics_Section">
     <item name="android:layout_weight">1</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
-    <item name="android:padding">@dimen/Troubleshooting_padding</item>
+    <item name="android:orientation">vertical</item>
   </style>
-  <style name="Diagnostics_SubSection">
+  <style name="Diagnostics_TitleSection">
     <item name="android:layout_weight">1</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:clickable">true</item>
+    <item name="android:padding">@dimen/Troubleshooting_padding</item>
+  </style>
+  <style name="Diagnostics_SubSection">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:paddingLeft">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
   <style name="Diagnostics_Section_Title">
     <item name="android:layout_height">wrap_content</item>
@@ -42,6 +51,7 @@
     <item name="android:textSize">@dimen/textsize_16</item>
     <item name="android:singleLine">false</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:clickable">true</item>
   </style>
   <style name="Diagnostics_Section_Description">
     <item name="android:fontFamily">Arial</item>
