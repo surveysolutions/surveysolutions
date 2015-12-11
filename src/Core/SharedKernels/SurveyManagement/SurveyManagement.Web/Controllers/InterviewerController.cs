@@ -134,8 +134,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var user = this.GetUserById(id);
 
-            return this.RedirectToAction("Interviewers", "Supervisor",
-                new {id = user.Supervisor == null ? user.PublicKey : user.Supervisor.Id});
+            return this.RedirectToAction("Index", "Interviewers",
+                new {supervisorId = user.Supervisor == null ? user.PublicKey : user.Supervisor.Id});
         }
     }
 }

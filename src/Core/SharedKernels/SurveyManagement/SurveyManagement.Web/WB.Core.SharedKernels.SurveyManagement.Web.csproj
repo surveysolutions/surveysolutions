@@ -209,6 +209,7 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\InterviewersController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TabletReportApiController.cs" />
@@ -556,7 +557,6 @@
     <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
     <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
-    <EmbeddedResource Include="Views\Interviewer\Archived.cshtml" />
     <EmbeddedResource Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
     <None Include="Scripts\spin.min.js.map">
       <DependentUpon>spin.min.js</DependentUpon>
@@ -574,6 +574,7 @@
     <EmbeddedResource Include="Views\TabletReport\PackagesInfo.cshtml" />
     <EmbeddedResource Include="Views\Shared\ApiUserCreateForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\ApiUserEditForm.cshtml" />
+    <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

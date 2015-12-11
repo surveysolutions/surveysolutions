@@ -27,16 +27,13 @@ namespace WB.UI.Headquarters.Controllers
                               ILogger logger,
                               IUserViewFactory userViewFactory,
                               IPasswordHasher passwordHasher,
-                              IIdentityManager identityManager,
-                              ITeamViewFactory teamViewFactory)
+                              IIdentityManager identityManager)
             : base(commandService, globalInfo, logger, userViewFactory, passwordHasher)
         {
             this.IdentityManager = identityManager;
-            this.teamViewFactory = teamViewFactory;
         }
 
         protected readonly IIdentityManager IdentityManager;
-        private readonly ITeamViewFactory teamViewFactory;
 
         public ActionResult Create()
         {
@@ -133,13 +130,6 @@ namespace WB.UI.Headquarters.Controllers
             
             this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
             return this.RedirectToAction("Index");
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Interviewers(InterviewersFilter filter)
-        {
-            InterviewersModel pageModel = new InterviewersModel();
-            return this.View(pageModel);
         }
     }
 }
