@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 Page = filter.PageIndex,
                 PageSize = filter.PageSize,
                 ViewerId = viewerId,
-                SupervisorId = filter.SupervisorId,
+                SupervisorName = filter.SupervisorName,
                 Orders = filter.SortOrder,
                 SearchBy = filter.SearchBy,
                 Archived = filter.Archived,
