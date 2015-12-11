@@ -159,6 +159,9 @@
   <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
     <value>Mandatory rowcode column is missing</value>
   </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Rowcode values must be unique</value>
+  </data>
   <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
     <value>Value {0} can not be parsed as long integer number. Column {1}, row {2}.</value>
   </data>
