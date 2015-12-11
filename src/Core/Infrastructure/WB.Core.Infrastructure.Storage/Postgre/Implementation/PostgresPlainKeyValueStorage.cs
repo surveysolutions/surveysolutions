@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         private readonly PostgresPlainStorageSettings connectionSettings;
 
         public PostgresPlainKeyValueStorage(IPlainSessionProvider plainSessionProvider, PostgresPlainStorageSettings connectionSettings)
-            : base(plainSessionProvider, connectionSettings.ConnectionString)
+            : base(connectionSettings.ConnectionString)
         {
             this.connectionSettings = connectionSettings;
         }
