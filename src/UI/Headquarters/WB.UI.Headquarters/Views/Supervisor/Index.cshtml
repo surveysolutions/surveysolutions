@@ -10,9 +10,9 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-        var $interviewersUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty})';
+        var $interviewersUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty})';
         var $editUrl = '@Url.Action("Edit", "Supervisor", new { area = string.Empty })';
-        var $connectedToDeviceUrl = '@Url.Action("Interviewers", "Supervisor", new { area = string.Empty })';
+        var $connectedToDeviceUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty })';
         var $putInShoesUrl = '@Url.Action("ObservePerson", "Account", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "DeleteSupervisor" })';
         $(function () {
@@ -93,7 +93,7 @@
             <td>
                 @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
-                    <a data-bind="attr:{href: $connectedToDeviceUrl + '/' + UserId() + '?ShowOnlyNotConnectedToDevice=true'}, text: NotConnectedToDeviceInterviewersCount"></a>
+                    <a data-bind="attr:{href: $connectedToDeviceUrl + '?supervisorId=' + UserId() + '&connectedToDevice=true'}, text: NotConnectedToDeviceInterviewersCount"></a>
                 }
                 else
                 {
@@ -103,7 +103,7 @@
             <td>
                 @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                 {
-                    <a data-bind="attr: { href: $interviewersUrl + '?SupervisorId=' + UserId() }, text: InterviewersCount()"></a>
+                    <a data-bind="attr: { href: $interviewersUrl + '?supervisorId=' + UserId() }, text: InterviewersCount()"></a>
                 }
                 else
                 {

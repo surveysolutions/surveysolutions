@@ -3,7 +3,10 @@
 @using WB.Core.GenericSubdomains.Utils
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Headquarters.Code
+@using WB.Core.SharedKernels.SurveyManagement.Web.Resources
+
+
+
 
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewersModel
 @{
@@ -15,7 +18,7 @@
 {
     @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/interviewers.js")
     <script type="text/javascript">
-        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Interviewers", "Supervisor", new { }, Request.Url.Scheme))';
+        var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new { }, Request.Url.Scheme))';
         var $interviewersApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "Interviewers"})';
         var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
@@ -121,10 +124,7 @@
                 {
                     <th>Supervisor</th>
                 } 
-                @if (LegacyOptions.SupervisorFunctionsEnabled)
-                {
-                    <th>Connected to device</th>
-                }
+                <th>Connected to device</th>
                 @if (User.IsInRole("Administrator"))
                 {
                     <th></th>
@@ -151,10 +151,7 @@
                 {
                     <td data-bind="text: SupervisorName()"></td>
                 }
-                @if (LegacyOptions.SupervisorFunctionsEnabled)
-                {
-                    <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
-                }
+                <td data-bind="text: DeviceId() == null ? 'No': 'Yes'"></td>
                 @if (User.IsInRole("Administrator"))
                 {
                     <td class="interviewers-list-actions-column">

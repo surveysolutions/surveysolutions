@@ -49,7 +49,7 @@
     </div>
 </div>
     <div class="btn-group pull-right">
-        <a class="btn btn-default" href="@Url.Action("Archived", "Interviewer", new { area = string.Empty, id = Model })">
+        <a class="btn btn-default" href="@Url.Action("Index", "Interviewers", new { area = string.Empty, supervisorId = Model, Archived = true })">
             Archived interviewers
         </a>
     </div>
