@@ -2448,5 +2448,14 @@ namespace WB.Tests.Unit
             return new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
+
+        public static LookupTableService LookupTableService(
+            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+        {
+            return new LookupTableService(
+                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
+                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+        }
     }
 }
