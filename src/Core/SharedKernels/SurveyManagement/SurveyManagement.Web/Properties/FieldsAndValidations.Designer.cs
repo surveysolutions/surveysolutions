@@ -205,11 +205,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor is required.
+        /// </summary>
+        public static string RequiredSupervisorErrorMessage {
+            get {
+                return ResourceManager.GetString("RequiredSupervisorErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name is required.
         /// </summary>
         public static string RequiredUserNameErrorMessage {
             get {
                 return ResourceManager.GetString("RequiredUserNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor.
+        /// </summary>
+        public static string SupervisorFieldName {
+            get {
+                return ResourceManager.GetString("SupervisorFieldName", resourceCulture);
             }
         }
         

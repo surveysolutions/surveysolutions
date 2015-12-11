@@ -28,17 +28,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Create(Guid supervisorId)
-        {
-            if (!this.GlobalInfo.IsAdministrator && !this.GlobalInfo.IsHeadquarter)
-                throw new ArgumentException("Only Headquarter or Admin can create interviewers");
 
-            var supervisor = this.GetUserById(supervisorId);
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public ActionResult Create(Guid? supervisorId)
+        {
+            if (!supervisorId.HasValue)
+                return this.View(new InterviewerModel());
+
+            var supervisor = this.GetUserById(supervisorId.Value);
 
             if (supervisor == null) throw new HttpException(404, string.Empty);
 
-            return this.View(new InterviewerModel() {SupervisorId = supervisorId, SupervisorName = supervisor.UserName});
+            return this.View(new InterviewerModel() {SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName});
         }
 
         [HttpPost]
@@ -72,15 +73,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Index()
         {
             return this.View(this.GlobalInfo.GetCurrentUser().Id);
-        }
-
-        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
-        public ActionResult Archived(Guid id)
-        {
-            var supervisor = this.GetUserById(id);
-            if (supervisor == null)
-                throw new HttpException(404, string.Empty);
-            return this.View(supervisor);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
