@@ -162,7 +162,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 }
                 catch (NpgsqlException npgsqlException)
                 {
-                    connection.Open();
                     if (npgsqlException.Code == MissingTableErrorCode)
                     {
                         this.CreateRelations(connection);
