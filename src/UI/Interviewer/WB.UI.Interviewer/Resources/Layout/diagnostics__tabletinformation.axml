@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+  <LinearLayout style="@style/Diagnostics_TitleSection"  local:MvxBind="Click TabletInformation.SendTabletInformationCommand" >
+    <TextView
+         style="@style/Diagnostics_Section_Title"
+         local:MvxBind="Text Localization('Diagnostics_Send_Title')" />
+    <TextView
+              style="@style/Diagnostics_Section_Description"
+              local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
+  </LinearLayout>
+  <LinearLayout style="@style/Diagnostics_SubSection"
+     android:orientation="vertical" local:MvxBind="Visible TabletInformation.IsTabletInformationPackageBuild;" >
+    <TextView
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Text Localization('Diagnostics_TabletInformationReady_Title')" />
+    <TextView
+    style="@style/Diagnostics_Section_Description"
+    local:MvxBind="Text Localization('Diagnostics_TabletInformationWhenGenerated_Title')" />
+
+    <TextView
+   style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text TabletInformation.WhenGenerated" />
+    <TextView
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_TabletInformationScope_Title')" />
+    <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text TabletInformation.Scope" />
+
+    <RelativeLayout
+            style="@style/Diagnostic_FormContainer">
+
+      <Button
+        style="@style/Diagnostics_Green_Button" android:id="@+id/Diagnostics_send_button"
+        local:MvxBind="Text Localization('Diagnostics_Send');" />
+
+      <Button
+          style="@style/Diagnostic_Transparent_Button"
+          android:layout_toRightOf="@+id/Diagnostics_send_button"
+          local:MvxBind="Text Localization('Diagnostics_Delete'); Click TabletInformation.DeleteTabletInformationCommand" />
+    </RelativeLayout>
+
+  </LinearLayout>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+       local:MvxBind="ShowProgress TabletInformation.IsInProgress" />
+  <View
+      style="@style/Interview_Question_Divider" />
+</LinearLayout>
