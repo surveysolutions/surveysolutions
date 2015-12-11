@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                 return this.GetTeamMembersForHeadquarter(input);
 
             bool isSupervisor = viewer.IsSupervisor();
-            if (isSupervisor && input.SupervisorId.HasValue && viewer.PublicKey != input.SupervisorId.Value)
+            if (isSupervisor && !input.SupervisorName.IsNullOrEmpty() && viewer.UserName != input.SupervisorName)
                 return Enumerable.Empty<UserDocument>().AsQueryable();
 
             if (isSupervisor)
@@ -99,9 +99,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                     all = all.Where(user => (user.DeviceId != null) == input.ConnectedToDevice.Value);
                 }
 
-                if (input.SupervisorId.HasValue)
+                if (!input.SupervisorName.IsNullOrEmpty())
                 {
-                    all = all.Where(user => user.Supervisor.Id == input.SupervisorId.Value);
+                    all = all.Where(user => user.Supervisor.Name == input.SupervisorName);
                 }
                 
                 return all.ToList();

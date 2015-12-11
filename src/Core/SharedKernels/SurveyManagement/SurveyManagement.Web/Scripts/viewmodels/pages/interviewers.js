@@ -23,10 +23,6 @@
     self.ConnectedToDevice = ko.observable('');
     self.SearchBy = ko.observable('');
 
-    self.load = function() {
-        self.search();
-    };
-
     self.archiveUser = function (userViewItem) {
         self.sendUserCommands([userViewItem], archiveUserCommad);
     };
@@ -86,9 +82,9 @@
 
     self.GetFilterMethod = function () {
 
-        var supervisorId = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserId
+        var supervisorName = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserName
 
-        self.Url.query['supervisorId'] = supervisorId;
+        self.Url.query['supervisor'] = supervisorName;
         self.Url.query['archived'] = self.Archived() || "";
         self.Url.query['connectedToDevice'] = self.ConnectedToDevice() || "";
         self.Url.query['searchBy'] = self.SearchBy() || "";
@@ -98,7 +94,7 @@
         }
 
         return {
-            SupervisorId: supervisorId,
+            SupervisorName: supervisorName,
             Archived: self.Archived,
             ConnectedToDevice: self.ConnectedToDevice,
             SearchBy: self.SearchBy
@@ -107,13 +103,15 @@
 
     self.load = function () {
 
-        if (self.QueryString['supervisorId']) {
-            self.SelectedSupervisor({ UserId: self.QueryString['supervisorId'] });
+        if (self.QueryString['supervisor']) {
+            self.SelectedSupervisor({ UserName: self.QueryString['supervisor'] });
         }
 
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
+        self.Archived(self.QueryString['archived']);
+        self.ConnectedToDevice(self.QueryString['connectedToDevice']);
 
-        self.Url.query['supervisorId'] = self.QueryString['supervisorId'] || "";
+        self.Url.query['supervisor'] = self.QueryString['supervisor'] || "";
         self.Url.query['archived'] = self.QueryString['archived'] || "";
         self.Url.query['connectedToDevice'] = self.QueryString['connectedToDevice'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";

@@ -21,6 +21,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult Index(InterviewersFilter filter)
         {
+            this.ViewBag.ActivePage = MenuItem.Interviewers;
+
             InterviewersModel pageModel = new InterviewersModel();
             return this.View(pageModel);
         }
