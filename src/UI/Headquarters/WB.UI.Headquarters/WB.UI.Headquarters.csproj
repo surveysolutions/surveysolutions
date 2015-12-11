@@ -436,7 +436,6 @@
     <Content Include="Views\Supervisor\Create.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
-    <Content Include="Views\Supervisor\Interviewers.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
