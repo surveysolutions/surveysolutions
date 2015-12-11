@@ -16,7 +16,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public PostgresReadSideKeyValueStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
             PostgreConnectionSettings connectionSettings)
-            : base(sessionProvider, connectionSettings.ConnectionString)
+            : base(connectionSettings.ConnectionString)
         {
             this.sessionProvider = sessionProvider;
         }

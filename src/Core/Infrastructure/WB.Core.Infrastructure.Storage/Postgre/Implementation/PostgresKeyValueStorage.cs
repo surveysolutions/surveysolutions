@@ -9,13 +9,11 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal abstract class PostgresKeyValueStorage<TEntity> where TEntity: class
     {
-        private readonly ISessionProvider sessionProvider;
         private readonly string connectionString;
         private readonly string tableName = typeof(TEntity).Name.Pluralize();
 
-        public PostgresKeyValueStorage(ISessionProvider sessionProvider, string connectionString)
+        public PostgresKeyValueStorage(string connectionString)
         {
-            this.sessionProvider = sessionProvider;
             this.connectionString = connectionString;
             EnshureTableExists();
         }
