@@ -2,9 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -51,13 +54,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private DateTime whenGenerated;
 
+        private bool isPackageBuild;
 
-        private bool visible;
-
-        public bool IsTabletInformationPackageBuild
+        public bool IsPackageBuild
         {
-            get { return this.visible; }
-            set { this.RaiseAndSetIfChanged(ref this.visible, value); }
+            get { return this.isPackageBuild; }
+            set { this.RaiseAndSetIfChanged(ref this.isPackageBuild, value); }
+        }
+
+        private bool isPackageSendingAttemptCompleted;
+
+        public bool IsPackageSendingAttemptCompleted
+        {
+            get { return this.isPackageSendingAttemptCompleted; }
+            set { this.RaiseAndSetIfChanged(ref this.isPackageSendingAttemptCompleted, value); }
+        }
+
+        private string packageSendingAttemptResponceText;
+
+        public string PackageSendingAttemptResponceText
+        {
+            get { return this.packageSendingAttemptResponceText; }
+            set { this.RaiseAndSetIfChanged(ref this.packageSendingAttemptResponceText, value); }
         }
 
         private bool isInProgress;
@@ -68,9 +86,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
-        private async Task SendTabletInformation()
+        private byte[] informationPackageContent = null;
+        private async Task CreateTabletInformation()
         {
-            // this.CanCancelProgress = true;
+            this.IsPackageSendingAttemptCompleted = false;
             this.IsInProgress = true;
             var cancellationTokenSource = new CancellationTokenSource();
 
@@ -78,28 +97,45 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (!cancellationTokenSource.IsCancellationRequested)
             {
-                this.IsTabletInformationPackageBuild = true;
+                this.IsPackageBuild = true;
                 this.Scope = FileSizeUtils.SizeSuffix(backupStream.Length);
                 this.WhenGenerated = DateTime.Now;
-                /*    if (await this.userInteractionService.ConfirmAsync(
-                   string.Format(InterviewerUIResources.Troubleshooting_Old_InformationPackageSizeWarningFormat,
-                       FileSizeUtils.SizeSuffix(backupStream.Length)), string.Empty, UIResources.Yes, UIResources.Cancel))
-                {
-                    try
-                    {
-                        await this.synchronizationService.SendTabletInformationAsync(
-                                Convert.ToBase64String(backupStream), cancellationTokenSource.Token);
-                        await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent);
-                    }
-                    catch (SynchronizationException ex)
-                    {
-                        this.logger.Error("Error when sending tablet info. ", ex);
-                        await userInteractionService.AlertAsync(ex.Message, InterviewerUIResources.Warning);
-                    }
-                }*/
+                this.informationPackageContent = backupStream;
             }
 
             this.IsInProgress = false;
+        }
+
+        private async Task SendTabletInformation()
+        {
+            this.IsInProgress = true;
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            try
+            {
+                await this.synchronizationService.SendTabletInformationAsync(
+                    Convert.ToBase64String(this.informationPackageContent), cancellationTokenSource.Token);
+                this.PackageSendingAttemptResponceText =
+                    InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
+            }
+            catch (SynchronizationException ex)
+            {
+                this.logger.Error("Error when sending tablet info. ", ex);
+                this.PackageSendingAttemptResponceText = ex.Message;
+            }
+            this.IsPackageSendingAttemptCompleted = true;
+            this.IsPackageBuild = false;
+            this.IsInProgress = false;
+        }
+
+        private void DeleteTabletInformation()
+        {
+            this.IsPackageBuild = false;
+        }
+
+        public IMvxCommand CreateTabletInformationCommand
+        {
+            get { return new MvxCommand(async () => await this.CreateTabletInformation()); }
         }
 
         public IMvxCommand SendTabletInformationCommand
@@ -110,11 +146,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxCommand DeleteTabletInformationCommand
         {
             get { return new MvxCommand(DeleteTabletInformation); }
-        }
-
-        private void DeleteTabletInformation()
-        {
-            this.IsTabletInformationPackageBuild = false;
         }
     }
 }
