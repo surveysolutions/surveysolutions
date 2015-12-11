@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
+        private readonly ILogger logger;
 
         private readonly ITransactionManagerProvider transactionManager;
         private readonly CommentsExporter commentsExporter;
@@ -50,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
+            this.logger = logger;
             this.transactionManager = transactionManager;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
@@ -87,10 +89,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
             this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken);
+            this.logger.Info($"Interviews are exported. Starting export of comments. Questionnaire {questionnaireIdentity}");
             cancellationToken.ThrowIfCancellationRequested();
             this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress);
+            this.logger.Info($"Comments are exported. Starting export of interview actions. Questionnaire {questionnaireIdentity}");
             cancellationToken.ThrowIfCancellationRequested();
             this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
+            this.logger.Info($"Export process is finished are exported. Starting export of interview actions.Questionnaire {questionnaireIdentity}");
         }
 
         public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
