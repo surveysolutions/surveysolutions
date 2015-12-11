@@ -402,6 +402,9 @@
     <AndroidResource Include="Resources\Layout\Diagnostics.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+	  <AndroidResource Include="Resources\Layout\diagnostics__tabletinformation.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Layout\sync_dialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>

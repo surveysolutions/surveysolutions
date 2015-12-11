@@ -54,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private bool visible;
 
-        public bool Visible
+        public bool IsTabletInformationPackageBuild
         {
             get { return this.visible; }
             set { this.RaiseAndSetIfChanged(ref this.visible, value); }
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (!cancellationTokenSource.IsCancellationRequested)
             {
-                this.Visible = true;
+                this.IsTabletInformationPackageBuild = true;
                 this.Scope = FileSizeUtils.SizeSuffix(backupStream.Length);
                 this.WhenGenerated = DateTime.Now;
                 /*    if (await this.userInteractionService.ConfirmAsync(
@@ -107,5 +107,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.SendTabletInformation()); }
         }
 
+        public IMvxCommand DeleteTabletInformationCommand
+        {
+            get { return new MvxCommand(DeleteTabletInformation); }
+        }
+
+        private void DeleteTabletInformation()
+        {
+            this.IsTabletInformationPackageBuild = false;
+        }
     }
 }
