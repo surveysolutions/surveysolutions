@@ -168,11 +168,8 @@
     <Compile Include="Commands\Questionnaire\PasteIntoCommand.cs" />
     <Compile Include="Commands\Questionnaire\PasteAfterCommand.cs" />
     <Compile Include="Commands\Questionnaire\Macros\UpdateMacro.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\CloneStaticTextCommand.cs" />
     <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\CloneQuestionByIdCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
