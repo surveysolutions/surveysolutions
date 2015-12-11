@@ -1,13 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -20,6 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IInterviewerSettings interviewerSettings;
+        private bool isRestoreVisible;
 
         public DiagnosticsViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
@@ -45,12 +40,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.isRestoreVisible; }
             set { this.isRestoreVisible = value; this.RaisePropertyChanged(); }
         }
-        private bool isRestoreVisible;
 
         public string Version { get; set; }
+
         public SendTabletInformationViewModel TabletInformation { get; set; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
+
         public IMvxCommand NavigateToDashboardCommand
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>()); }
@@ -60,10 +56,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get { return new MvxCommand(async () => await this.SignOut()); }
         }
+
         public IMvxCommand NavigateToLoginCommand
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>()); }
         }
+
         public bool IsAuthenticated => this.principal.IsAuthenticated;
 
         private void ShareDeviceTechnicalInformation()
@@ -71,7 +69,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.externalAppLauncher.LaunchShareAction(InterviewerUIResources.Share_to_Title,
                 this.interviewerSettings.GetDeviceTechnicalInformation());
         }
-
 
         private async Task SignOut()
         {
