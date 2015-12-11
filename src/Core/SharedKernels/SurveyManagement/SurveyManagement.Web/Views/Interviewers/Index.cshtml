@@ -24,7 +24,7 @@
         var $editUrl = '@Url.Action("Edit", "Interviewer", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
-            var model = new Supervisor.VM.Interviewers($interviewersApiUrl, $interviewersPageUrl, $supervisorsUrl, $commandExecutionUrl);
+            var model = new Supervisor.VM.Interviewers($interviewersApiUrl, $commandExecutionUrl, $interviewersPageUrl, $supervisorsUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -48,8 +48,8 @@
 
                 if (User.IsInRole(UserRoles.Administrator.ToString()))
                 {
-                    <button type="button" class="btn btn-default" data-bind="visible: !Archived(), disable: IsNothingSelected, click: $root.archiveInterviewers">Archive</button>
-                    <button type="button" class="btn btn-default" data-bind="visible: Archived(), disable: IsNothingSelected, click: $root.unarchiveInterviewers">Unarchive</button>
+                    <button type="button" class="btn btn-default" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">Archive</button>
+                    <button type="button" class="btn btn-default" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">Unarchive</button>
                 }
             }
 

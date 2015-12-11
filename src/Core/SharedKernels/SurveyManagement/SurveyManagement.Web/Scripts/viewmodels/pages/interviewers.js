@@ -1,4 +1,4 @@
-﻿Supervisor.VM.Interviewers = function (listViewUrl, interviewersPageUrl, supervisorsUrl, commandExecutionUrl) {
+﻿Supervisor.VM.Interviewers = function (listViewUrl, commandExecutionUrl, interviewersPageUrl, supervisorsUrl) {
     Supervisor.VM.Interviewers.superclass.constructor.apply(this, arguments);
 
     var archiveUserCommad = "ArchiveUserCommad";
@@ -19,7 +19,7 @@
     }
     self.SelectedSupervisor = ko.observable();
 
-    self.Archived = ko.observable();
+    self.Archived = ko.observable(false);
     self.ConnectedToDevice = ko.observable('');
     self.SearchBy = ko.observable('');
 
@@ -84,7 +84,7 @@
 
         var supervisorName = _.isUndefined(self.SelectedSupervisor()) ? null : self.SelectedSupervisor().UserName
 
-        self.Url.query['supervisor'] = supervisorName;
+        self.Url.query['supervisor'] = supervisorName || "";
         self.Url.query['archived'] = self.Archived() || "";
         self.Url.query['connectedToDevice'] = self.ConnectedToDevice() || "";
         self.Url.query['searchBy'] = self.SearchBy() || "";
@@ -103,7 +103,7 @@
 
     self.load = function () {
 
-        if (self.QueryString['supervisor']) {
+        if (self.QueryString['supervisor'] != null) {
             self.SelectedSupervisor({ UserName: self.QueryString['supervisor'] });
         }
 
