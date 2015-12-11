@@ -16,16 +16,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class SendTabletInformationViewModel : BaseViewModel
     {
         private readonly ITroubleshootingService troubleshootingService;
-        private readonly IUserInteractionService userInteractionService;
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
 
         public SendTabletInformationViewModel(ITroubleshootingService troubleshootingService,
-            IUserInteractionService userInteractionService, ISynchronizationService synchronizationService,
+            ISynchronizationService synchronizationService,
             ILogger logger)
         {
             this.troubleshootingService = troubleshootingService;
-            this.userInteractionService = userInteractionService;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
         }
@@ -87,6 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
 
         private byte[] informationPackageContent = null;
+
         private async Task CreateTabletInformation()
         {
             this.IsPackageSendingAttemptCompleted = false;
@@ -108,6 +107,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SendTabletInformation()
         {
+            if (this.IsInProgress)
+                return;
+
             this.IsInProgress = true;
             var cancellationTokenSource = new CancellationTokenSource();
 
