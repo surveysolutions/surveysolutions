@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IStringCompressor compressor;
         private readonly IEventStore eventStore;
         private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
+        private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
 
         public InterviewerInterviewFactory(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -48,7 +49,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ISerializer serializer,
             IStringCompressor compressor,
             IEventStore eventStore,
-            IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache)
+            IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
+            ISnapshotStoreWithCache snapshotStoreWithCache)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.eventRepository = eventRepository;
@@ -61,6 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.compressor = compressor;
             this.eventStore = eventStore;
             this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
+            this.snapshotStoreWithCache = snapshotStoreWithCache;
         }
 
         public async Task RemoveInterviewAsync(Guid interviewId)
@@ -69,6 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.principal.CurrentUserIdentity.UserId));
 
             this.aggregateRootRepositoryWithCache.CleanCache();
+            this.snapshotStoreWithCache.CleanCache();
 
             var eventViews = await Task.Run(() => this.eventRepository.Query(
                 events => events.Where(evnt => evnt.EventSourceId == interviewId).ToList()));
