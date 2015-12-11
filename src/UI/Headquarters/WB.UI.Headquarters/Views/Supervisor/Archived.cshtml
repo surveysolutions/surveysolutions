@@ -10,7 +10,7 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-        var $interviewersUrl = '@Url.Action("Archived", "Interviewer", new { area = string.Empty })';
+        var $interviewersUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchivedSupervisors" })', $commandExecutionUrl);
@@ -73,7 +73,7 @@
                 <td>
                     @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                     {
-                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
+                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '?Archived=true&supervisor=' + UserName() }">
                             <i class="glyphicon glyphicon-user"></i> @Archived.Interviewers
                         </a>
                     }
