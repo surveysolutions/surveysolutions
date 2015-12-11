@@ -151,12 +151,25 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "SELECT COUNT(*) FROM events";
+                try
+                {
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT COUNT(*) FROM events";
 
-                var scalar = command.ExecuteScalar();
-                return scalar is DBNull ? 0 : Convert.ToInt32(scalar);
+                    var scalar = command.ExecuteScalar();
+                    return scalar is DBNull ? 0 : Convert.ToInt32(scalar);
+                }
+                catch (NpgsqlException npgsqlException)
+                {
+                    connection.Open();
+                    if (npgsqlException.Code == MissingTableErrorCode)
+                    {
+                        this.CreateRelations(connection);
+                        return CountOfAllEvents();
+                    }
+                    throw;
+                }
             }
         }
 
