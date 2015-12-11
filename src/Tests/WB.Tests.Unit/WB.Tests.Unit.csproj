@@ -441,11 +441,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireChangeHistoryFactoryTests\when_load_questionnaire_history.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TemplateImported_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoFactoryTests\when_getting_all_broken_dependencies_after_group_deleting.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_providing_existing_targetId.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_and_source_not_present.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText_without_permissions_to_edit_questionnaire.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_numeric_integer_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_cloned_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_moving_group_to_anoter_group_and_combined_depth_more_than_10.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_group_to_11_level_of_depth.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_by_fixed_values_and_fixed_titles_have_dublicates.cs" />
@@ -812,7 +807,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_questionnaire_changing_event_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonFromQuestionnaireRemoved_recived.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireListViewDenormalizerTests\when_SharedPersonToQuestionnaireAdded_received.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CloneStaticTextTests\when_cloning_StaticText.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_deleted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_rejected_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_interview_status_changed.cs" />
@@ -1032,7 +1026,6 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_exists.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_is_absent.cs" />
-    <Compile Include="BoundedContexts\Designer\CloneGroupTests\when_cloning_roster_group.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\when_getting_ordered_list_by_condition_dependency.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\CodeGenerationTestsContext.cs" />
@@ -1164,8 +1157,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_updating_question_setting_to_cascade_from_non_existing_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_updating_question_with_cascading_options_setting_linked_and_cascading.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CascadigOptions\when_updating_question_with_empty_cascading_options.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_numeric_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\Clone\when_cloning_text_list_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\ConstructorTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\DeleteQuestionTests.cs" />
@@ -1205,20 +1196,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_group_referencing_text_list_question_as_roster_size_source.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_adding_roster_under_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_changing_roster_group_to_simple_group_but_question_inside_group_is_used_as_link_and_group_inside_other_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_datetime_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_geo_position_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_multimedia_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_multioptions_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_numeric_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_qr_barcode_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_roster_by_fixed_titles_and_text_question_inside_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_roster_by_question_and_roster_title_question_inside_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_single_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_static_text.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_text_list_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_chapter_with_text_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning_text_question_by_id.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_cloning__the_same_question_by_id_twice_with_the_same_id.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_group_inside_roster_with_linked_source_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_group_under_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_deleting_question_and_question_is_referenced_as_roster_size_question.cs" />
