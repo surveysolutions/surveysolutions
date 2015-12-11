@@ -39,6 +39,7 @@
   <style name="Diagnostics_SubSection">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
+    <item name="android:orientation">vertical</item>
     <item name="android:paddingLeft">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
