@@ -178,6 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IProgress<int> progress, 
             CancellationToken cancellationToken)
         {
+            int totalInterviewsProcessed = 0;
             foreach (var batchIds in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
                 ConcurrentBag<InterviewExportedDataRecord> exportBulk = new ConcurrentBag<InterviewExportedDataRecord>();
@@ -191,7 +192,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                        cancellationToken.ThrowIfCancellationRequested();
                        InterviewExportedDataRecord exportedData = this.ExportSingleInterview(questionnaireExportStructure, interviewId);
                        exportBulk.Add(exportedData);
-                       progress.Report(exportBulk.Count.PercentOf(interviewIdsToExport.Count));
+
+                       Interlocked.Increment(ref totalInterviewsProcessed);
+                       progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
                    });
 
                 this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
