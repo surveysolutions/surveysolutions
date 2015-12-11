@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
@@ -88,14 +90,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
-            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken);
-            this.logger.Info($"Interviews are exported. Starting export of comments. Questionnaire {questionnaireIdentity}");
-            cancellationToken.ThrowIfCancellationRequested();
-            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress);
-            this.logger.Info($"Comments are exported. Starting export of interview actions. Questionnaire {questionnaireIdentity}");
-            cancellationToken.ThrowIfCancellationRequested();
-            this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
-            this.logger.Info($"Export process is finished are exported. Starting export of interview actions.Questionnaire {questionnaireIdentity}");
+            Stopwatch exportWatch = new Stopwatch();
+            exportWatch.Start(); 
+            Task.WaitAll(new[] {
+                Task.Run(() => this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress), cancellationToken),
+                Task.Run(() => this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress), cancellationToken)
+            }, cancellationToken);
+            exportWatch.Stop();
+
+            this.logger.Info($"Export with all steps (Interviews, Comments, Actions) finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
         }
 
         public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
