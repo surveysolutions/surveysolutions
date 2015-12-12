@@ -72,8 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 exportStructureForLevel =>
                     new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
                         exportStructureForLevel.LevelName,
-                        this.BuildRecordsForHeader(interview, exportStructureForLevel),
-                        interview.InterviewId.FormatGuid())).ToArray();
+                        this.BuildRecordsForHeader(interview, exportStructureForLevel))).ToArray();
 
             return new InterviewDataExportView(interview.InterviewId, 
                 interview.QuestionnaireId,

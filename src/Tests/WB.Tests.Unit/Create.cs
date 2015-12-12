@@ -759,7 +759,7 @@ namespace WB.Tests.Unit
 
         public static InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
         {
-            return new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records, interviewId.FormatGuid());
+            return new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
         }
 
         public static InterviewDataExportRecord InterviewDataExportRecord(
