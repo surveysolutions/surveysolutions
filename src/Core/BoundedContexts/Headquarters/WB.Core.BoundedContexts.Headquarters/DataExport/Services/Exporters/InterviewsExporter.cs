@@ -231,6 +231,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     }
                 }
             }
+
             return exportBulk;
         }
 
@@ -253,7 +254,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private InterviewExportedDataRecord ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
             Guid interviewId)
         {
-            var interviewData =
+            InterviewData interviewData =
                 this.transactionManager.GetTransactionManager()
                     .ExecuteInQueryTransaction(() => this.interviewDatas.GetById(interviewId));
 
@@ -268,7 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView)
         {
-            var interviewData = new Dictionary<string, string[]>();
+            var interviewData = new Dictionary<string, string[]>(); // file name, array of rows
 
             var stringSeparator = ExportFileSettings.SeparatorOfExportedDataFile.ToString();
             foreach (var interviewDataExportLevelView in interviewDataExportView.Levels)
@@ -294,6 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 interviewData.Add(interviewDataExportLevelView.LevelName, recordsByLevel.ToArray());
             }
+
             var interviewExportedData = new InterviewExportedDataRecord
             {
                 InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
