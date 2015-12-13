@@ -69,11 +69,13 @@
 @section filters
 {
     <ul class="list-group">
+    @if (User.IsInRole(UserRoles.Headquarter.ToString()) || User.IsInRole(UserRoles.Administrator.ToString()))
+    {
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Supervisor</h4>
             <p class="list-group-item-text">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
                     <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
@@ -81,6 +83,7 @@
                 </div>
             </p>
         </li>
+    }
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Connected to device</h4>
             <p class="list-group-item-text">

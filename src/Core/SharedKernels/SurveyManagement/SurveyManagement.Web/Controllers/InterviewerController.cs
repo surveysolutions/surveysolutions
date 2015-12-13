@@ -69,11 +69,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(model);
         }
 
-        [Authorize(Roles = "Administrator, Supervisor")]
-        public ActionResult Index()
-        {
-            return this.View(this.GlobalInfo.GetCurrentUser().Id);
-        }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
@@ -122,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Back(Guid id)
         {
             if (!(this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator))
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "Interviewers");
 
             var user = this.GetUserById(id);
 

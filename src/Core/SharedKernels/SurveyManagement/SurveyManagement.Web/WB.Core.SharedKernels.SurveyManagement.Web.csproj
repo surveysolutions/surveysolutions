@@ -522,7 +522,6 @@
     <EmbeddedResource Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Edit.cshtml" />
-    <EmbeddedResource Include="Views\Interviewer\Index.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
