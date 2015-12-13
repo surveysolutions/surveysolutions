@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Create(Guid? supervisorId)
         {
             if (!supervisorId.HasValue)
-                return this.View(new InterviewerModel());
+                return this.View(new InterviewerModel() { IsShowSupervisorSelector = true });
 
             var supervisor = this.GetUserById(supervisorId.Value);
 
