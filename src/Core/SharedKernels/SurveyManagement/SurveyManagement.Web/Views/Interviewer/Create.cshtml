@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using WB.Core.GenericSubdomains.Portable
+@using WebGrease.Css.Ast
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
 
 @{
@@ -8,9 +9,17 @@
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/create-interviewer.js")
     @Scripts.Render("~/validate")
     <script type="text/javascript">
         $('#umbrella').hide();
+
+        var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+        $(document).ready(function () {
+            var model = new Supervisor.VM.CreateInterviewer($supervisorsUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
     </script>
 }
 <div class="main">
@@ -23,12 +32,13 @@
     <form class="form-horizontal" method="POST">
         @Html.AntiForgeryToken()
 
-        @if (Model.SupervisorName.IsNullOrEmpty())
-        {
-            @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js")
+        @Html.HiddenFor(x => x.IsShowSupervisorSelector)
 
+
+        @if (Model.IsShowSupervisorSelector)
+        {
             <div class="form-group">
-                @Html.LabelFor(x => x.SupervisorId, new {@class = "col-sm-2 control-label"})
+                @Html.LabelFor(x => x.SupervisorId, new { @class = "col-sm-2 control-label required" })
                 <div class="col-sm-2">
                     <div class="input-group">
                         <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
@@ -37,7 +47,7 @@
                             <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                         </div>
                     </div>
-                    @Html.HiddenFor(x => x.SupervisorId)
+                    @Html.HiddenFor(x => x.SupervisorId, new { data_bind = "value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId" })
                 </div>
                 <div class="col-sm-4">
                     @Html.ValidationMessageFor(x => x.SupervisorId, null, new {@class = "help-block"})

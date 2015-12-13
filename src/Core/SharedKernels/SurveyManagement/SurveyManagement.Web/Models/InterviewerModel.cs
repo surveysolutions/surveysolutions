@@ -12,5 +12,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public Guid SupervisorId { get; set; }
 
         public string SupervisorName { get; set; }
+
+        public bool IsShowSupervisorSelector { get; set; }
     }
 }
