@@ -335,7 +335,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downloading, please Wait....
+        ///   Looks up a localized string similar to Downloading, please wait....
         /// </summary>
         public static string Diagnostics_DownloadingPleaseWait {
             get {
