@@ -419,9 +419,6 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
-  </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
   </data>

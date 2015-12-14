@@ -256,21 +256,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return new MvxCommand(async () => await this.NavigateToDiagnosticsAsync()); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingPageCommand
-        {
-            get { return new MvxCommand(async () => await this.NavigateToTroubleshootingAsync()); }
-        }
-
         private async Task NavigateToDiagnosticsAsync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
-        }
-
-        private async Task NavigateToTroubleshootingAsync()
-        {
-            this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>();
         }
 
         private async Task SignOutAsync()
