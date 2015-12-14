@@ -425,6 +425,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saved data found:.
+        /// </summary>
+        public static string Diagnostics_RestoreReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_RestoreReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send.
         /// </summary>
         public static string Diagnostics_Send {
