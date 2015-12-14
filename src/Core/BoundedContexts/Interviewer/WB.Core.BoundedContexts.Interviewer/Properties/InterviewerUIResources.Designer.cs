@@ -668,15 +668,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
-        /// </summary>
-        public static string MenuItem_Title_Troubleshooting {
-            get {
-                return ResourceManager.GetString("MenuItem_Title_Troubleshooting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No network. Check your network settings.
         /// </summary>
         public static string NoNetwork {

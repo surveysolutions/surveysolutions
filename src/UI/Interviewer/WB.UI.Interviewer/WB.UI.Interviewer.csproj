@@ -315,7 +315,6 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Activities\TroubleshootingActivity.cs" />
     <Compile Include="AndroidDataCollectionSharedKernelModule.cs" />
     <Compile Include="AndroidSharedModule.cs" />
     <Compile Include="Bootstrap\ColorPluginBootstrap.cs" />
@@ -403,9 +402,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\diagnostics__tabletinformation.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\sync_dialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\SyncLogin.axml">
@@ -605,12 +601,14 @@
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_layout_border.xml" />
-    <AndroidResource Include="Resources\Values\troubleshooting.xml" />
+    <AndroidResource Include="Resources\Values\diagnostics.xml" />
     <AndroidResource Include="Resources\Values\relink.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\troubleshooting.xml" />
-    <AndroidResource Include="Resources\menu\relink.xml" />
+    <AndroidResource Include="Resources\menu\relink.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\menu\finish.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
     <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
