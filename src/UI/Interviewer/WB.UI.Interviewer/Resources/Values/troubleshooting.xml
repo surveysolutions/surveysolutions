@@ -45,7 +45,7 @@
   </style>
   <style name="Diagnostics_Section_Title">
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:fontFamily">@string/font_fontFamily_medium</item>
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textSize">@dimen/textsize_16</item>
