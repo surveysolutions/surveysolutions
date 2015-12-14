@@ -7,8 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -84,7 +82,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
-        private byte[] informationPackageContent = null;
+        private byte[] informationPackageContent;
 
         private async Task CreateTabletInformation()
         {

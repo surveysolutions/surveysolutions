@@ -66,16 +66,8 @@
                     style="@style/Diagnostics_Section_Description"
                     local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
         </LinearLayout>
-      </LinearLayout>CheckVersionCommand
-      <LinearLayout style="@style/Diagnostics_Section">
-        <LinearLayout style="@style/Diagnostics_TitleSection" android:orientation="vertical">
-          <TextView
-               style="@style/Diagnostics_Section_Title"
-               local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), Version); Click CheckVersionCommand" />
-        </LinearLayout>
-        <ProgressBar style="@style/Interview_Question_Progress_Indicator"
-             local:MvxBind="ShowProgress IsVersionCheckInProgress" />
       </LinearLayout>
+      <include layout="@layout/diagnostics__check_new_version" />
     </LinearLayout>
   </ScrollView>
 
