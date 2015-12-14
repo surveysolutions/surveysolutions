@@ -33,9 +33,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:clickable">true</item>
     <item name="android:padding">@dimen/Troubleshooting_padding</item>
-    <item name="android:background">@drawable/diagnostics_section_layout_border</item>
   </style>
   <style name="Diagnostics_SubSection">
     <item name="android:layout_height">wrap_content</item>
@@ -54,6 +52,7 @@
     <item name="android:singleLine">false</item>
     <item name="android:textStyle">bold</item>
     <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/transparent_input_button</item>
   </style>
   <style name="Diagnostics_Section_Description">
     <item name="android:fontFamily">Arial</item>

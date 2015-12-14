@@ -34,10 +34,10 @@
         </LinearLayout>
       </LinearLayout>
       <LinearLayout style="@style/Diagnostics_Section">
-        <LinearLayout style="@style/Diagnostics_TitleSection" local:MvxBind="Click ShareDeviceTechnicalInformationCommand">
+        <LinearLayout style="@style/Diagnostics_TitleSection">
           <TextView
                   style="@style/Diagnostics_Section_Title"
-                  local:MvxBind="Text  Localization('Diagnostics_Share_Title')" />
+                  local:MvxBind="Text Localization('Diagnostics_Share_Title'); Click ShareDeviceTechnicalInformationCommand" />
           <TextView
                    style="@style/Diagnostics_Section_Description"
                    local:MvxBind="Html Localization('Diagnostics_Share_Description')" />
@@ -68,11 +68,10 @@
         </LinearLayout>
       </LinearLayout>CheckVersionCommand
       <LinearLayout style="@style/Diagnostics_Section">
-        <LinearLayout style="@style/Diagnostics_TitleSection" local:MvxBind="Click CheckVersionCommand"
-        android:orientation="vertical">
+        <LinearLayout style="@style/Diagnostics_TitleSection" android:orientation="vertical">
           <TextView
                style="@style/Diagnostics_Section_Title"
-               local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), Version);" />
+               local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), Version); Click CheckVersionCommand" />
         </LinearLayout>
         <ProgressBar style="@style/Interview_Question_Progress_Indicator"
              local:MvxBind="ShowProgress IsVersionCheckInProgress" />
