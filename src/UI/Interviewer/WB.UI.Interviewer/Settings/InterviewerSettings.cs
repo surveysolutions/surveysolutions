@@ -90,6 +90,12 @@ namespace WB.UI.Interviewer.Settings
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 
+        public string GetExternalStorageDirectory()
+        {
+            return this.fileSystemAccessor.CombinePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
+                "CAPI");
+        }
+
         public async Task SetEndpointAsync(string endpoint)
         {
             await this.SaveCurrentSettings(settings =>
