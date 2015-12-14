@@ -221,9 +221,6 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Выход</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Устранение проблем</value>
-  </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
   </data>
