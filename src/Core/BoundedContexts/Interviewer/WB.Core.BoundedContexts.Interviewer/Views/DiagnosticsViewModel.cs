@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IExternalAppLauncher externalAppLauncher;
+        private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ISynchronizationService synchronizationService;
         private readonly IUserInteractionService userInteractionService;
@@ -29,19 +29,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public DiagnosticsViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IInterviewerSettings interviewerSettings, 
-            IExternalAppLauncher externalAppLauncher,
             SendTabletInformationViewModel sendTabletInformationViewModel, 
             ISynchronizationService synchronizationService, 
-            ILogger logger, IUserInteractionService userInteractionService)
+            ILogger logger, IUserInteractionService userInteractionService, 
+            ITabletDiagnosticService tabletDiagnosticService)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
-            this.externalAppLauncher = externalAppLauncher;
             this.TabletInformation = sendTabletInformationViewModel;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
+            this.tabletDiagnosticService = tabletDiagnosticService;
         }
 
         public void Init()
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void ShareDeviceTechnicalInformation()
         {
-            this.externalAppLauncher.LaunchShareAction(InterviewerUIResources.Share_to_Title,
+            this.tabletDiagnosticService.LaunchShareAction(InterviewerUIResources.Share_to_Title,
                 this.interviewerSettings.GetDeviceTechnicalInformation());
         }
 
@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                 UIResources.Yes,
                                 UIResources.Cancel))
                     {
-                        await Task.Run(() => this.externalAppLauncher.UpdateTheApp(this.interviewerSettings.Endpoint));
+                        await Task.Run(() => this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint));
                     }
             }
             catch (Exception ex)
