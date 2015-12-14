@@ -335,6 +335,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading, please Wait....
+        /// </summary>
+        public static string Diagnostics_DownloadingPleaseWait {
+            get {
+                return ResourceManager.GetString("Diagnostics_DownloadingPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        /// </summary>
+        public static string Diagnostics_NewVersionAvaliable_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_NewVersionAvaliable_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version number:.
+        /// </summary>
+        public static string Diagnostics_NewVersionNumber_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_NewVersionNumber_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Diagnostics_No {
+            get {
+                return ResourceManager.GetString("Diagnostics_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore backed up data.
         /// </summary>
         public static string Diagnostics_Restore_Description {
@@ -448,6 +484,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Diagnostics_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Diagnostics_Update {
+            get {
+                return ResourceManager.GetString("Diagnostics_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of application..
+        /// </summary>
+        public static string Diagnostics_YouHaveTheLatestVersionOfApplication {
+            get {
+                return ResourceManager.GetString("Diagnostics_YouHaveTheLatestVersionOfApplication", resourceCulture);
             }
         }
         
