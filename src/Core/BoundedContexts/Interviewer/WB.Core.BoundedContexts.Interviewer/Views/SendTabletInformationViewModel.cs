@@ -17,7 +17,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
 
-        public SendTabletInformationViewModel(ITroubleshootingService troubleshootingService,
+        private string scope;
+        private DateTime whenGenerated;
+        private bool isPackageBuild;
+        private bool isPackageSendingAttemptCompleted;
+        private string packageSendingAttemptResponceText;
+        private bool isInProgress;
+        private byte[] informationPackageContent;
+
+        public SendTabletInformationViewModel(
+            ITroubleshootingService troubleshootingService,
             ISynchronizationService synchronizationService,
             ILogger logger)
         {
@@ -36,8 +45,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private string scope;
-
         public DateTime WhenGenerated
         {
             get { return this.whenGenerated; }
@@ -48,17 +55,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private DateTime whenGenerated;
-
-        private bool isPackageBuild;
-
         public bool IsPackageBuild
         {
             get { return this.isPackageBuild; }
             set { this.RaiseAndSetIfChanged(ref this.isPackageBuild, value); }
         }
-
-        private bool isPackageSendingAttemptCompleted;
 
         public bool IsPackageSendingAttemptCompleted
         {
@@ -66,23 +67,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isPackageSendingAttemptCompleted, value); }
         }
 
-        private string packageSendingAttemptResponceText;
-
         public string PackageSendingAttemptResponceText
         {
             get { return this.packageSendingAttemptResponceText; }
             set { this.RaiseAndSetIfChanged(ref this.packageSendingAttemptResponceText, value); }
         }
 
-        private bool isInProgress;
-
         public bool IsInProgress
         {
             get { return this.isInProgress; }
             set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
-
-        private byte[] informationPackageContent;
 
         private async Task CreateTabletInformation()
         {

@@ -20,6 +20,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ILogger logger;
 
         private bool isVersionCheckInProgress;
+        private bool isNewVersionAvaliable;
+        private int latestApplicationVersion;
+        private string checkNewVersionResult;
 
         public CheckNewVersionViewModel(ISynchronizationService synchronizationService, IUserInteractionService userInteractionService, IInterviewerSettings interviewerSettings, ITabletDiagnosticService tabletDiagnosticService, ILogger logger)
         {
@@ -37,6 +40,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isVersionCheckInProgress, value); }
         }
 
+        public bool IsNewVersionAvaliable
+        {
+            get { return this.isNewVersionAvaliable; }
+            set { this.RaiseAndSetIfChanged(ref this.isNewVersionAvaliable, value); }
+        }
+
+        public int LatestApplicationVersion
+        {
+            get { return this.latestApplicationVersion; }
+            set { this.RaiseAndSetIfChanged(ref this.latestApplicationVersion, value); }
+        }
+
+        public string CheckNewVersionResult
+        {
+            get { return this.checkNewVersionResult; }
+            set { this.RaiseAndSetIfChanged(ref this.checkNewVersionResult, value); }
+        }
+
         public string Version { get; set; }
 
         public IMvxCommand CheckVersionCommand
@@ -44,34 +65,73 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.CheckVersion()); }
         }
 
-        private async Task CheckVersion()
+        public IMvxCommand UpdateApplicationCommand
         {
-            if (this.IsVersionCheckInProgress)
-                return;
+            get { return new MvxCommand(async () => await this.UpdateApplication()); }
+        }
+
+        private async Task UpdateApplication()
+        {
+            this.IsNewVersionAvaliable = false;
             this.IsVersionCheckInProgress = true;
             try
             {
-                var newVersionAvailableOrNullIfThrow =
-                    (await
-                        this.synchronizationService.GetLatestApplicationVersionAsync(token: default(CancellationToken)))
-                        .Value > this.interviewerSettings.GetApplicationVersionCode();
-                if (newVersionAvailableOrNullIfThrow)
-                    if (
-                        await
-                            this.userInteractionService.ConfirmAsync(
-                                "New version exists. Would you like to download and update application?", string.Empty,
-                                UIResources.Yes,
-                                UIResources.Cancel))
-                    {
-                        await Task.Run(() => this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint));
-                    }
+                this.CheckNewVersionResult =
+                        InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
+                await Task.Run(() => this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint));
+
+                this.CheckNewVersionResult = null;
             }
             catch (Exception ex)
             {
-                this.logger.Error("Error when sending tablet info. ", ex);
-                await userInteractionService.AlertAsync(ex.Message, InterviewerUIResources.Warning);
+                this.logger.Error("Error when updating", ex);
+                this.CheckNewVersionResult = ex.Message;
             }
             this.IsVersionCheckInProgress = false;
+        }
+
+        private async Task CheckVersion()
+        {
+            this.IsNewVersionAvaliable = false;
+            this.CheckNewVersionResult = null;
+            this.IsVersionCheckInProgress = true;
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            var versionFromServer = await
+                this.synchronizationService.GetLatestApplicationVersionAsync(cancellationTokenSource.Token);
+            try
+            {
+                if (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
+                    {
+                        this.IsNewVersionAvaliable = true;
+                        this.LatestApplicationVersion = versionFromServer.Value;
+                    }
+                    else
+                    {
+                        this.CheckNewVersionResult =
+                            InterviewerUIResources.Diagnostics_YouHaveTheLatestVersionOfApplication;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.Error("Error when checking for update", ex);
+                this.CheckNewVersionResult = ex.Message;
+            }
+
+            this.IsVersionCheckInProgress = false;
+        }
+
+        private void RejectUpdateApplication()
+        {
+            this.IsNewVersionAvaliable = false;
+        }
+
+        public IMvxCommand RejectUpdateApplicationCommand
+        {
+            get { return new MvxCommand(RejectUpdateApplication); }
         }
     }
 }
