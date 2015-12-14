@@ -465,10 +465,10 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Version: {0}. Check for a new version</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Restore backed up data</value>
+    <value>By restoring saved data you will replace all current assigments on theis device</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>Restore backed up data</value>
+    <value>RESTORE</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
     <value>All application and interview data will be collected to a single archive. This can take up to 10 minutes.</value>
@@ -529,5 +529,17 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
     <value>You have the latest version of application.</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>When Saved:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Backup file location:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Data saved</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Scope:</value>
   </data>
 </root>

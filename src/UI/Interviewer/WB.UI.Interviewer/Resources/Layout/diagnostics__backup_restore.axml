@@ -10,12 +10,41 @@
               style="@style/Diagnostics_Section_Description"
               local:MvxBind="Text Localization('Diagnostics_Backup_Description'); Click BackupRestore.IncreaseClicksCountOnDescriptionPanelCommand" />
   </LinearLayout>
+
+
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible BackupRestore.IsBackupCreated;" >
+    <TextView
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Text Localization('Diagnostics_BackupReady_Title')" />
+    <TextView
+    style="@style/Diagnostics_Section_Description"
+    local:MvxBind="Text Localization('Diagnostics_BackupFileLocation_Title')" />
+
+    <TextView
+   style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text BackupRestore.BackupLocation" />
+    <TextView
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BackupDate_Title')" />
+    <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text BackupRestore.BackupCreationDate" />
+
+    <TextView
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BackupScope_Title')" />
+    <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text BackupRestore.BackupScope" />
+
+  </LinearLayout>
+
   <LinearLayout style="@style/Diagnostics_TitleSection" local:MvxBind="Visible BackupRestore.IsRestoreVisible;">
+    <Button
+    style="@style/Login_Singin_Button"
+    local:MvxBind="Text Localization('Diagnostics_Restore_Title'); Click BackupRestore.RestoreCommand" />
     <TextView
-      style="@style/Diagnostics_Section_Title"
-      local:MvxBind="Text Localization('Diagnostics_Restore_Title'); Click BackupRestore.RestoreCommand;" />
-    <TextView
-              style="@style/Diagnostics_Section_Description"
+              style="@style/Diagnostics_Section_Description_Warning"
               local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
   </LinearLayout>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"

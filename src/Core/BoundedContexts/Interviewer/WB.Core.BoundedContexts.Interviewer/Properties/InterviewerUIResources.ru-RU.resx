@@ -531,4 +531,16 @@
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
     <value>У вас установленна последняя версия приложения.</value>
   </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Когда сохранены:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Путь к файлу с бекапом:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Данные сохранены</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Объем:</value>
+  </data>
 </root>
