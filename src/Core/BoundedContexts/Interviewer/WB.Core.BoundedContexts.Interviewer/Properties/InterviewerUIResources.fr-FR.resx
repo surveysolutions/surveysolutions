@@ -225,9 +225,6 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Se déconnecter</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Dépannage</value>
-  </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>Aucune connexion. Vérifiez vos paramètres sans fil et réseaux</value>
   </data>
