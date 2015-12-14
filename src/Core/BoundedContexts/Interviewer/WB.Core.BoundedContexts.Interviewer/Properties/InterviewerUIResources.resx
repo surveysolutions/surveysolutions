@@ -513,7 +513,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>When generated:</value>
   </data>
   <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
-    <value>Downloading, please Wait...</value>
+    <value>Downloading, please wait...</value>
   </data>
   <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
     <value>New version exists. Would you like to download and update application?</value>
