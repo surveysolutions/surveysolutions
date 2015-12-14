@@ -640,9 +640,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
     <AndroidResource Include="Resources\menu\diagnostics.xml" />
-    <AndroidResource Include="Resources\Drawable\diagnostics_section_layout_border.xml" />
     <AndroidResource Include="Resources\Drawable\diagnostics_section_default.xml" />
-    <AndroidResource Include="Resources\Drawable\diagnostics_section_pressed.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
