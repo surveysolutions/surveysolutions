@@ -149,6 +149,7 @@
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ITroubleshootingService.cs" />
+    <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\DiagnosticsViewModel.cs" />
     <Compile Include="Views\InterviewEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
