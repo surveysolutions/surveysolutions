@@ -44,29 +44,7 @@
         </LinearLayout>
       </LinearLayout>
       <include layout="@layout/diagnostics__tabletinformation" />
-      <LinearLayout style="@style/Diagnostics_Section">
-        <LinearLayout style="@style/Diagnostics_TitleSection"
-    android:orientation="vertical">
-          <TextView
-            style="@style/Diagnostics_Section_Title"
-            local:MvxBind="Text  Localization('Diagnostics_Backup_Title');" />
-          <TextView
-                    style="@style/Diagnostics_Section_Description"
-                    local:MvxBind="Html Localization('Diagnostics_Backup_Description')" />
-        </LinearLayout>
-      </LinearLayout>
-      <LinearLayout style="@style/Diagnostics_Section" local:MvxBind="Visible IsRestoreVisible;">
-        <LinearLayout style="@style/Diagnostics_TitleSection"
-        android:orientation="vertical">
-          <TextView
-            style="@style/Diagnostics_Section_Title"
-            local:MvxBind="Text Localization('Diagnostics_Restore_Title');   
-         Visible IsRestoreVisible;" />
-          <TextView
-                    style="@style/Diagnostics_Section_Description"
-                    local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
-        </LinearLayout>
-      </LinearLayout>
+      <include layout="@layout/diagnostics__backup_restore" />
       <include layout="@layout/diagnostics__check_new_version" />
     </LinearLayout>
   </ScrollView>

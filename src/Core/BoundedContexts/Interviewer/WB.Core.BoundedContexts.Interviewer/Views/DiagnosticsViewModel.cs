@@ -15,14 +15,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
 
-        private bool isRestoreVisible;
-
         public DiagnosticsViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IInterviewerSettings interviewerSettings, 
             ITabletDiagnosticService tabletDiagnosticService,
             SendTabletInformationViewModel sendTabletInformationViewModel,
-            CheckNewVersionViewModel checkNewVersion)
+            CheckNewVersionViewModel checkNewVersion,
+            BackupRestoreViewModel backupRestore)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -30,22 +29,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.TabletInformation = sendTabletInformationViewModel;
             this.CheckNewVersion = checkNewVersion;
-        }
-
-        public void Init()
-        {
-            IsRestoreVisible = false;
-        }
-
-        public bool IsRestoreVisible
-        {
-            get { return this.isRestoreVisible; }
-            set { this.isRestoreVisible = value; this.RaisePropertyChanged(); }
+            this.BackupRestore = backupRestore;
         }
 
         public SendTabletInformationViewModel TabletInformation { get; set; }
 
         public CheckNewVersionViewModel CheckNewVersion { get; set; }
+
+        public BackupRestoreViewModel BackupRestore { get; set; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
 
