@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -105,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
             UserDocument responsible = this.users.GetById(userId);
-            var questionnarie = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var questionnarie = this.GetQuestionnarie(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie.Questionnaire)
             {
@@ -121,6 +122,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             };
 
             return interviewSummary;
+        }
+
+        private static Dictionary<string, QuestionnaireDocumentVersioned> questionnaireCache = new Dictionary<string, QuestionnaireDocumentVersioned>();
+
+        private QuestionnaireDocumentVersioned GetQuestionnarie(Guid questionnaireId, long questionnaireVersion)
+        {
+            string key = questionnaireId.ToString() + questionnaireVersion.ToString();
+            if (questionnaireCache.ContainsKey(key))
+                return questionnaireCache[key];
+
+            var questionare = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            questionnaireCache[key] = questionare;
+            return questionare;
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
