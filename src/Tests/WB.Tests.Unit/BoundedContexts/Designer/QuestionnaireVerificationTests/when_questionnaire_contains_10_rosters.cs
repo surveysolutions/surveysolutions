@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
+    [Ignore("Warnings are disabled")]
     internal class when_questionnaire_contains_10_rosters : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
