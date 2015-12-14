@@ -225,9 +225,6 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Terminar sessão</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Solução de problemas</value>
-  </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>Não há rede. Verifique suas configurações de rede</value>
   </data>
