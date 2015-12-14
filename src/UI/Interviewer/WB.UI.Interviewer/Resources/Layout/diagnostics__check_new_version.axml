@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+  <LinearLayout style="@style/Diagnostics_TitleSection" android:orientation="vertical">
+    <TextView
+         style="@style/Diagnostics_Section_Title"
+         local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), CheckNewVersion.Version); Click CheckNewVersion.CheckVersionCommand" />
+  </LinearLayout>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+       local:MvxBind="ShowProgress CheckNewVersion.IsVersionCheckInProgress" />
+</LinearLayout>
