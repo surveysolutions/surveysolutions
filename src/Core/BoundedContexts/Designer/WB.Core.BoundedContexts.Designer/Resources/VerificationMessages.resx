@@ -396,4 +396,10 @@
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
+  <data name="WB0029_LookupWithTheSameVariableNameAlreadyExists" xml:space="preserve">
+    <value>Lookup with the same variable name already exists.</value>
+  </data>
+  <data name="WB0026_NameForLookupTableIsNotUnique" xml:space="preserve">
+    <value>Another Lookup table with the same name already exists.</value>
+  </data>
 </root>
