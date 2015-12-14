@@ -3,7 +3,5 @@
     public interface IExternalAppLauncher
     {
         void LaunchMapsWithTargetLocation(double latitude, double longitude);
-        void LaunchShareAction(string title, string info);
-        void UpdateTheApp(string url);
     }
 }
