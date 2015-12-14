@@ -26,6 +26,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private string backupLocation;
         private DateTime backupCreationDate;
         private string backupScope;
+        private string restoreLocation;
+        private DateTime restoreCreationDate;
+        private string restoreScope;
 
         public BackupRestoreViewModel(
             ITroubleshootingService troubleshootingService, 
@@ -73,6 +76,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.backupScope = value; this.RaisePropertyChanged(); }
         }
 
+        public string RestoreLocation
+        {
+            get { return this.restoreLocation; }
+            set { this.restoreLocation = value; this.RaisePropertyChanged(); }
+        }
+
+        public DateTime RestoreCreationDate
+        {
+            get { return this.restoreCreationDate; }
+            set { this.restoreCreationDate = value; this.RaisePropertyChanged(); }
+        }
+
+        public string RestoreScope
+        {
+            get { return this.restoreScope; }
+            set { this.restoreScope = value; this.RaisePropertyChanged(); }
+        }
+
         public IMvxCommand BackupCommand
         {
             get { return new MvxCommand(async () => await BackupAsync()); }
@@ -92,9 +113,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     clicksCountOnDescriptionPanel++;
                     if (this.clicksCountOnDescriptionPanel > 10)
                     {
-                        this.IsRestoreVisible = true;
-                        this.IsBackupCreated = false;
                         this.clicksCountOnDescriptionPanel = 0;
+
+                        var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Restore");
+                        var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(pathToFolder);
+                        if (filesInRestoreFolder.Any())
+                        {
+                            this.IsRestoreVisible = true;
+                            this.IsBackupCreated = false;
+                            this.RestoreLocation = filesInRestoreFolder[0];
+                            this.RestoreScope = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(RestoreLocation));
+                            this.RestoreCreationDate = this.fileSystemAccessor.GetCreationTime(RestoreLocation);
+                        }
                     }
                 });
             }
@@ -103,6 +133,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private async Task BackupAsync()
         {
             this.IsBackupCreated = false;
+            this.IsRestoreVisible = false;
             this.IsBackupInProgress = true;
             var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Backup");
             var createdFileName = await this.troubleshootingService.BackupAsync(pathToFolder);
@@ -115,17 +146,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task RestoreAsync()
         {
-             var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Restore");
-            var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(pathToFolder);
-            if (!filesInRestoreFolder.Any())
-                return;
             if (await this.userInteractionService.ConfirmAsync(
-                InterviewerUIResources.Troubleshooting_RestoreConfirmation.FormatString(filesInRestoreFolder[0]),
+                InterviewerUIResources.Troubleshooting_RestoreConfirmation.FormatString(this.RestoreLocation),
                 string.Empty, UIResources.Yes, UIResources.No))
             {
                 this.IsBackupInProgress = true;
 
-                await Task.Run(() => this.troubleshootingService.Restore(filesInRestoreFolder[0]));
+                await Task.Run(() => this.troubleshootingService.Restore(this.RestoreLocation));
                 this.IsBackupInProgress = false;
 
                 await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
