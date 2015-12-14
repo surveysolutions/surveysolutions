@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -20,7 +21,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private bool isRestoreVisible;
         private bool isBackupInProgress;
+        private bool isBackupCreated;
         private int clicksCountOnDescriptionPanel;
+        private string backupLocation;
+        private DateTime backupCreationDate;
+        private string backupScope;
 
         public BackupRestoreViewModel(
             ITroubleshootingService troubleshootingService, 
@@ -38,10 +43,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.isRestoreVisible = value; this.RaisePropertyChanged(); }
         }
 
+        public bool IsBackupCreated
+        {
+            get { return this.isBackupCreated; }
+            set { this.isBackupCreated = value; this.RaisePropertyChanged(); }
+        }
+
         public bool IsBackupInProgress
         {
             get { return this.isBackupInProgress; }
             set { this.isBackupInProgress = value; this.RaisePropertyChanged(); }
+        }
+
+        public string BackupLocation
+        {
+            get { return this.backupLocation; }
+            set { this.backupLocation = value; this.RaisePropertyChanged(); }
+        }
+
+        public DateTime BackupCreationDate
+        {
+            get { return this.backupCreationDate; }
+            set { this.backupCreationDate = value; this.RaisePropertyChanged(); }
+        }
+
+        public string BackupScope
+        {
+            get { return this.backupScope; }
+            set { this.backupScope = value; this.RaisePropertyChanged(); }
         }
 
         public IMvxCommand BackupCommand
@@ -64,6 +93,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     if (this.clicksCountOnDescriptionPanel > 10)
                     {
                         this.IsRestoreVisible = true;
+                        this.IsBackupCreated = false;
                         this.clicksCountOnDescriptionPanel = 0;
                     }
                 });
@@ -72,11 +102,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task BackupAsync()
         {
-            var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(),"Backup");
+            this.IsBackupCreated = false;
             this.IsBackupInProgress = true;
+            var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Backup");
             var createdFileName = await this.troubleshootingService.BackupAsync(pathToFolder);
             this.IsBackupInProgress = false;
-            await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_BackupWasSaved.FormatString(createdFileName));
+            this.IsBackupCreated = true;
+            this.BackupLocation = createdFileName;
+            this.BackupCreationDate=DateTime.Now;
+            this.BackupScope= FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(createdFileName));
         }
 
         private async Task RestoreAsync()

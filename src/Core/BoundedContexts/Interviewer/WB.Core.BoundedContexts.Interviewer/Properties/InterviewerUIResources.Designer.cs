@@ -308,6 +308,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When Saved:.
+        /// </summary>
+        public static string Diagnostics_BackupDate_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupDate_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup file location:.
+        /// </summary>
+        public static string Diagnostics_BackupFileLocation_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupFileLocation_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data saved.
+        /// </summary>
+        public static string Diagnostics_BackupReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scope:.
+        /// </summary>
+        public static string Diagnostics_BackupScope_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupScope_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We will check for the newer version on HQ server.
         /// </summary>
         public static string Diagnostics_CheckVersion_Description {
@@ -371,7 +407,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore backed up data.
+        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on theis device.
         /// </summary>
         public static string Diagnostics_Restore_Description {
             get {
@@ -380,7 +416,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore backed up data.
+        ///   Looks up a localized string similar to RESTORE.
         /// </summary>
         public static string Diagnostics_Restore_Title {
             get {
