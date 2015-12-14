@@ -439,6 +439,7 @@
     <AndroidResource Include="Resources\Layout\filepicker_fragment.axml" />
     <AndroidResource Include="Resources\Layout\filepicker_listitem.axml" />
     <AndroidResource Include="Resources\Layout\filepicker_mainactivity.axml" />
+    <AndroidResource Include="Resources\Layout\diagnostics__check_new_version.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\ErrorScreen.axml">

@@ -190,6 +190,7 @@
     <Compile Include="Views\SynchronizationStatus.cs" />
     <Compile Include="Views\SynchronizationViewModel.cs" />
     <Compile Include="Views\TroubleshootingViewModel.cs" />
+    <Compile Include="Views\CheckNewVersionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
