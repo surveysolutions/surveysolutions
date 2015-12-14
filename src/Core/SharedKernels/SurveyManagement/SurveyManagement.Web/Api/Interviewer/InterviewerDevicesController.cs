@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -17,7 +18,7 @@ using WB.Core.Synchronization.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth]
+    [ApiBasicAuth(new[] { UserRoles.Operator })]
     [RoutePrefix("api/interviewer/v1/devices")]
     [ProtobufJsonSerializer]
     public class InterviewerDevicesController : ApiController

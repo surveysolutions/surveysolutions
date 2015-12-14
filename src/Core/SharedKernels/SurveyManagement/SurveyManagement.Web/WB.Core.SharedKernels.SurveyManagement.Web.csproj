@@ -219,6 +219,8 @@
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
+    <Compile Include="Models\Api\AssignChangeApiModel.cs" />
+    <Compile Include="Models\Api\StatusChangeApiModel.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="Models\Api\BatchUploadModel.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,7 +25,7 @@ using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth]
+    [ApiBasicAuth(new[] { UserRoles.Operator })]
     [RoutePrefix("api/interviewer/v1/interviews")]
     [ProtobufJsonSerializer]
     public class InterviewerInterviewsController : ApiController
