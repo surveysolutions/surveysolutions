@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ITabletDiagnosticService tabletDiagnosticService;
 
         private bool isRestoreVisible;
         private bool isBackupInProgress;
@@ -32,12 +33,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public BackupRestoreViewModel(
             ITroubleshootingService troubleshootingService, 
-            IUserInteractionService userInteractionService, IInterviewerSettings interviewerSettings, IFileSystemAccessor fileSystemAccessor)
+            IUserInteractionService userInteractionService, 
+            IInterviewerSettings interviewerSettings, 
+            IFileSystemAccessor fileSystemAccessor, 
+            ITabletDiagnosticService tabletDiagnosticService)
         {
             this.troubleshootingService = troubleshootingService;
             this.userInteractionService = userInteractionService;
             this.interviewerSettings = interviewerSettings;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.tabletDiagnosticService = tabletDiagnosticService;
         }
 
         public bool IsRestoreVisible
@@ -155,7 +160,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await Task.Run(() => this.troubleshootingService.Restore(this.RestoreLocation));
                 this.IsBackupInProgress = false;
 
-                await userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoredSuccessfully);
+                this.tabletDiagnosticService.RestartTheApp();
             }
         }
     }

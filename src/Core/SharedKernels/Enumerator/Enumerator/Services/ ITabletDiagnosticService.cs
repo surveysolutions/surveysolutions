@@ -4,5 +4,6 @@
     {
         void LaunchShareAction(string title, string info);
         void UpdateTheApp(string url);
+        void RestartTheApp();
     }
 }
