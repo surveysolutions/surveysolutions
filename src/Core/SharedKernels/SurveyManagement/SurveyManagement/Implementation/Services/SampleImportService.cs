@@ -125,7 +125,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             if (bigTemplate == null || questionnaireExportStructure == null || questionnaireRosterStructure == null)
             {
                 result.SetErrorMessage("Questionnaire is absent");
-                //this.preLoadingStatuses.Store(result, id);
                 return;
             }
 
@@ -134,24 +133,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     questionnaireRosterStructure, bigTemplateObject.Questionnaire);
 
             result.SetStatusMessage("Data parsing");
-            //this.preLoadingStatuses.Store(result, id);
-
             var interviewForCreate = preloadedDataDtoCreator(preloadedDataService);
 
             if (interviewForCreate == null)
             {
                 result.SetErrorMessage("Data parsing error");
-                //this.preLoadingStatuses.Store(result, id);
                 return;
             }
 
-            int errorCountOccuredOnInterviewsCreaition = 0;
+            int errorCountOccuredOnInterviewsCreation = 0;
             bool interviewLimitReached = false;
             DateTime startTime = DateTime.Now;
             int totalInterviewsProcessed = 0;
 
             var commandInvoker = ServiceLocator.Current.GetInstance<ICommandService>();
-            
+
+//            foreach (var preloadedDataRecord in interviewForCreate)
+//            {
+//                this.CreatePreloadedInterview(preloadedDataRecord, version, id, responsibleHeadquarterId, responsibleSupervisorId, commandInvoker, bigTemplate, ref errorCountOccuredOnInterviewsCreaition);
+//            
+//                Interlocked.Increment(ref totalInterviewsProcessed);
+//                result.SetStatusMessage(string.Format(
+//                        @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",
+//                        totalInterviewsProcessed,
+//                        interviewForCreate.Length,
+//                        DateTime.Now - startTime,
+//                        CalculateEstimatedTime(totalInterviewsProcessed, interviewForCreate.Length, startTime, DateTime.Now)));
+//            }
+
             var cancellationToken = new CancellationToken();
 
             Parallel.ForEach(interviewForCreate,
@@ -160,10 +169,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     CancellationToken = cancellationToken,
                     MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit
                 },
-                preloadedDataRecord => {
+                (preloadedDataRecord, loopState) => {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    this.CreatePreloadedInterview(preloadedDataRecord, version, id, responsibleHeadquarterId, responsibleSupervisorId, commandInvoker, bigTemplate, ref errorCountOccuredOnInterviewsCreaition);
+                    try
+                    { 
+                        this.CreatePreloadedInterview(preloadedDataRecord, version, responsibleHeadquarterId, responsibleSupervisorId, commandInvoker, bigTemplate);
+                    }
+                    catch(InterviewException interviewException)
+                    {
+                        Logger.Error(interviewException.Message, interviewException);
+
+                        if (interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
+                        {
+                            loopState.Stop();
+                            interviewLimitReached = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e.Message, e);
+
+                        Interlocked.Increment(ref errorCountOccuredOnInterviewsCreation);
+                    }
 
                     Interlocked.Increment(ref totalInterviewsProcessed);
                     result.SetStatusMessage(string.Format(
@@ -172,11 +200,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         interviewForCreate.Length,
                         DateTime.Now - startTime,
                         CalculateEstimatedTime(totalInterviewsProcessed, interviewForCreate.Length, startTime, DateTime.Now)));
-
-                    //this.preLoadingStatuses.Store(result, id);
                 });
 
-            if (errorCountOccuredOnInterviewsCreaition > 0)
+            if (errorCountOccuredOnInterviewsCreation > 0)
             {
                 if (interviewLimitReached)
                 {
@@ -185,19 +211,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 else
                 {
                     result.SetErrorMessage(string.Format("Error{0} occurred during interview creation",
-                        errorCountOccuredOnInterviewsCreaition == 1 ? "" : "s"));
+                        errorCountOccuredOnInterviewsCreation == 1 ? "" : "s"));
                 }
             }
             else
+            {
                 result.CompleteProcess();
-
-            //this.preLoadingStatuses.Store(result, id);
+            }
         }
 
-        private void CreatePreloadedInterview(PreloadedDataRecord preloadedDataRecord,long version, string id, Guid responsibleHeadquarterId,
+        private void CreatePreloadedInterview(PreloadedDataRecord preloadedDataRecord,
+            long version, 
+            Guid responsibleHeadquarterId,
             Guid? responsibleSupervisorId,
-            ICommandService commandInvoker, QuestionnaireDocument bigTemplate,
-            ref int errorCountOccuredOnInterviewsCreation)
+            ICommandService commandInvoker,
+            QuestionnaireDocument questionnaireDocument)
         {
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
             ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
@@ -207,23 +235,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 Guid responsibleId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
 
                 commandInvoker.Execute(
-                    new CreateInterviewWithPreloadedData(Guid.NewGuid(), responsibleHeadquarterId,
-                        bigTemplate.PublicKey, version,
+                    new CreateInterviewWithPreloadedData(Guid.NewGuid(), 
+                        responsibleHeadquarterId,
+                        questionnaireDocument.PublicKey, 
+                        version,
                         preloadedDataRecord.PreloadedDataDto,
                         DateTime.UtcNow,
                         responsibleId));
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.Message, e);
-
-                errorCountOccuredOnInterviewsCreation ++;
-                var interviewException = e as InterviewException;
-                if (interviewException != null &&
-                    interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
-                {
-                    throw new ArgumentException("interviewLimitReached");
-                }
             }
             finally
             {
