@@ -390,7 +390,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Implementations\Services\InterviewerApplicationUpdater.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="Activities\SplashActivity.cs" />

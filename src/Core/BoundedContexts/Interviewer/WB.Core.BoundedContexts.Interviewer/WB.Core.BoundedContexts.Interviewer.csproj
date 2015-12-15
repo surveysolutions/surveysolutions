@@ -158,7 +158,6 @@
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalOption.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedItem.cs" />
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
-    <Compile Include="Services\IInterviewerApplicationUpdater.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\GpsCoordinatesViewModel.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\QuestionnaireDTO.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\SurveyDTO.cs" />

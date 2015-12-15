@@ -10,8 +10,6 @@ namespace WB.UI.Interviewer.Ninject
         public override void Load()
         {
             this.Bind<IViewModelNavigationService>().To<ViewModelNavigationService>();
-
-            this.Bind<IInterviewerApplicationUpdater>().To<InterviewerApplicationUpdater>();
         }
     }
 }
