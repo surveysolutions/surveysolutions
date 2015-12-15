@@ -16,7 +16,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    internal class when_answer_on_integer_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question : InterviewTestsContext
+    internal class when_answer_on_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question : InterviewTestsContext
     {
         Establish context = () =>
         {
