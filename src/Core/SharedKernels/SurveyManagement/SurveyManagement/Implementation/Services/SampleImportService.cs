@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -85,7 +86,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
         public SampleCreationStatus GetSampleCreationStatus(string id)
         {
-            return preLoadingStatuses[id];
+            if (preLoadingStatuses.ContainsKey(id))
+                return preLoadingStatuses[id];
+
+            return new SampleCreationStatus() { StatusMessage = "Import not found or completed." };
         }
 
         void CreateInterviewInternal(Guid questionnaireId,
@@ -195,6 +199,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             ICommandService commandInvoker, QuestionnaireDocument bigTemplate,
             ref int errorCountOccuredOnInterviewsCreation)
         {
+            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+            ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
+
             try
             {
                 Guid responsibleId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
@@ -217,6 +224,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 {
                     throw new ArgumentException("interviewLimitReached");
                 }
+            }
+            finally
+            {
+                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
             }
         }
 
