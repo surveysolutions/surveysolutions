@@ -918,7 +918,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
             }
-            this.ApplyEvent(new LookupTableAdded(command.LookupTableId, command.ResponsibleId));
+            this.ApplyEvent(new LookupTableAdded(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
         }
         
         public void UpdateLookupTable(UpdateLookupTable command)

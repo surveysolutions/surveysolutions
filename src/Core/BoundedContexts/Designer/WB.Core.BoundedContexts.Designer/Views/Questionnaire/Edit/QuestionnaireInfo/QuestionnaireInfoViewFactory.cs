@@ -100,8 +100,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                         new LookupTableView
                         {
                             ItemId = x.Key.FormatGuid(),
-                            Name = x.Value == null ? "" : x.Value.TableName,
-                            FileName = x.Value == null ? "" : x.Value.FileName
+                            Name = x.Value.TableName ?? "",
+                            FileName = x.Value.FileName ?? ""
                         })
                 .OrderBy(x => x.Name)
                 .ToList();

@@ -7,12 +7,18 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables
     {
         public LookupTableAdded() { }
 
-        public LookupTableAdded(Guid lookupTableId, Guid responsibleId)
+        public LookupTableAdded(Guid lookupTableId, string lookupTableName, string lookupTableFileName, Guid responsibleId)
         {
             this.LookupTableId = lookupTableId;
+            this.LookupTableName = lookupTableName;
+            this.LookupTableFileName = lookupTableFileName;
             this.ResponsibleId = responsibleId;
         }
 
         public Guid LookupTableId { get; set; }
+
+        public string LookupTableName { get; set; }
+
+        public string LookupTableFileName { get; set; }
     }
 }
