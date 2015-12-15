@@ -133,10 +133,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<SupervisorAssigned> @event)
         {
-            var interviewSummary = interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return AddCommentedStatus(
                 @event.EventIdentifier,
                 interviewStatuses,
