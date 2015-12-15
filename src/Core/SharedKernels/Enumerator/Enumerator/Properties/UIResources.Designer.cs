@@ -640,6 +640,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Interviewer_Diagnostics {
+            get {
+                return ResourceManager.GetString("Interviewer_Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Interviewer_RelinkDevice_Cancel {
