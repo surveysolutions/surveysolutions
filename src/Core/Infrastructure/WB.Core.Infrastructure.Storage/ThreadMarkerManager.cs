@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Threading;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.Infrastructure.Storage
 {
     public static class ThreadMarkerManager
     {
-        private static readonly HashSet<int> NoTransactionMarkedThreads = new HashSet<int>();
-        private static readonly HashSet<int> IsolatedThreads = new HashSet<int>();
+        private static readonly ConcurrentHashSet<int> NoTransactionMarkedThreads = new ConcurrentHashSet<int>();
+        private static readonly ConcurrentHashSet<int> IsolatedThreads = new ConcurrentHashSet<int>();
 
         public static void MarkCurrentThreadAsNoTransactional()
         {
