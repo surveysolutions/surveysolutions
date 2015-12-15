@@ -97,10 +97,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsVersionCheckInProgress = true;
             var cancellationTokenSource = new CancellationTokenSource();
 
-            var versionFromServer = await
-                this.synchronizationService.GetLatestApplicationVersionAsync(cancellationTokenSource.Token);
             try
             {
+                var versionFromServer = await
+                    this.synchronizationService.GetLatestApplicationVersionAsync(cancellationTokenSource.Token);
+
                 if (!cancellationTokenSource.IsCancellationRequested)
                 {
                     if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
