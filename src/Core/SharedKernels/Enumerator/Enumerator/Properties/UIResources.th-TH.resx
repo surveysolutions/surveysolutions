@@ -325,9 +325,6 @@
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>ถ้าคุณเข้าใช้เครื่องนี้ ข้อมูลทั้งหมดในเครื่องเก่าจะสูญหาย</value>
   </data>
-  <data name="Interviewer_Troubleshooting" xml:space="preserve">
-    <value>การแก้ไขปัญหา</value>
-  </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>ลองเข้าสู่ระบบแบบออนไลน์</value>
   </data>
