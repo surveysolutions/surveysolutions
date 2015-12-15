@@ -19,20 +19,18 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             : base(connectionSettings.ConnectionString)
         {
             this.sessionProvider = sessionProvider;
+
+            this.EnshureTableExists();
         }
 
         protected override object ExecuteScalar(IDbCommand command)
         {
-            this.EnshureTableExists();
-
             this.EnlistInTransaction(command);
             return command.ExecuteScalar();
         }
 
         protected override int ExecuteNonQuery(IDbCommand command)
         {
-            this.EnshureTableExists();
-
             this.EnlistInTransaction(command);
             return command.ExecuteNonQuery();
         }
