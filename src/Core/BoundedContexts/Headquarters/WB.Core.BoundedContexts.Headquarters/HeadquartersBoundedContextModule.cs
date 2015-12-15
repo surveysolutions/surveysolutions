@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -34,12 +35,15 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
-        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, ExportSettings exportSettings, InterviewDataExportSettings interviewDataExportSettings)
+        private readonly SampleImportSettings sampleImportSettings;
+
+        public HeadquartersBoundedContextModule(bool supervisorFunctionsEnabled, UserPreloadingSettings userPreloadingSettings, ExportSettings exportSettings, InterviewDataExportSettings interviewDataExportSettings, SampleImportSettings sampleImportSettings)
         {
             this.supervisorFunctionsEnabled = supervisorFunctionsEnabled;
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.sampleImportSettings = sampleImportSettings;
         }
 
         public override void Load()
@@ -63,6 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
+            this.Bind<SampleImportSettings>().ToConstant(sampleImportSettings);
 
             this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
             this.Bind<ExportSettings>().ToConstant(this.exportSettings);
