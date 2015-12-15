@@ -7940,6 +7940,9 @@ textarea#edit-group-description {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
 }
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input.table-name {
+  width: 275px;
+}
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[disabled],
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[readonly],
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li fieldset[disabled] .form-control {

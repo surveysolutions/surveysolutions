@@ -232,6 +232,7 @@
         @macroses-panel-width: 85%;
         @chapters-panel-width: 75%;
         @lookup-tables-panel-width: 75%;
+        @divider-width: 275px;
 
         .left-side-panel {
             position: absolute;
@@ -385,6 +386,10 @@
                             font-size: 14px;
                         }
 
+                        input.table-name{
+                            width: @divider-width;
+                        }
+
                         .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
                             background: @lookup-panel-table-item-bg;
                         }
@@ -416,7 +421,7 @@
 
                         .divider {
                             height: 2px;
-                            width: 275px;
+                            width: @divider-width;
                             background: @lookup-border-color;
                         }
 
@@ -532,7 +537,7 @@
 
                         .divider {
                             height: 2px;
-                            width: 275px;
+                            width: @divider-width;
                             background: @macroses-border-color;
                         }
 
@@ -541,7 +546,7 @@
                         }
 
                         .input-group {
-                            width: 275px;
+                            width: @divider-width;
 
                             .input-group-addon {
                                 border: none;

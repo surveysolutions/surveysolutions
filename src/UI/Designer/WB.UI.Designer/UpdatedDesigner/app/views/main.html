@@ -142,7 +142,7 @@
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file, lookupTableForm)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="lookupTableForm">
                                     <a href ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
-                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="table.name" name="name" class="form-control" type="text" />
+                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="table.name" name="name" class="form-control table-name" type="text" />
                                     <div class="divider"></div>
                                     <input placeholder="file name" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text"/>
                                     
