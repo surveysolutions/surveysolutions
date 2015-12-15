@@ -160,7 +160,7 @@ namespace WB.UI.Interviewer
             bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
 
-        protected override IList<Assembly> AndroidViewAssemblies
+        protected override IEnumerable<Assembly> AndroidViewAssemblies
         {
             get
             {
@@ -173,14 +173,13 @@ namespace WB.UI.Interviewer
             }
         }
 
-        protected override Assembly[] GetViewModelAssemblies()
+        protected override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
                 typeof(AndroidCoreRegistry).Assembly,
                 typeof(LoginViewModel).Assembly,
-
-            }).ToArray();
+            });
         }
     }
 }

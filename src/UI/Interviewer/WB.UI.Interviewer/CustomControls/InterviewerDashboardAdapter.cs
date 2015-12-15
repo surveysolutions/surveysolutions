@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
-using Cirrious.MvvmCross.Droid.Support.RecyclerView;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 
 namespace WB.UI.Interviewer.CustomControls
