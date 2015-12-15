@@ -200,9 +200,6 @@
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>Якщо ви повторно зв'яжите цей пристрою&lt;br&gt;всі дані на старом пристрої буде втрачено</value>
   </data>
-  <data name="Interviewer_Troubleshooting" xml:space="preserve">
-    <value>Вирішення проблем</value>
-  </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Спробуйте увійти онлайн</value>
   </data>

@@ -676,15 +676,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
-        /// </summary>
-        public static string Interviewer_Troubleshooting {
-            get {
-                return ResourceManager.GetString("Interviewer_Troubleshooting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Try to sign in online.
         /// </summary>
         public static string Interviewer_TryOnlineLogin {
