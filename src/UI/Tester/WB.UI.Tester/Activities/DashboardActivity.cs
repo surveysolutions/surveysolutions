@@ -3,7 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Cirrious.MvvmCross.Droid.Support.RecyclerView;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
