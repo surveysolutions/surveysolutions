@@ -169,11 +169,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty headers are not allowed.
+        ///   Looks up a localized string similar to Headers with the same name are not allowed.
         /// </summary>
-        internal static string LookupTables_empty_header_are_not_allowed {
+        internal static string LookupTables_duplicating_headers_are_not_allowed {
             get {
-                return ResourceManager.GetString("LookupTables_empty_header_are_not_allowed", resourceCulture);
+                return ResourceManager.GetString("LookupTables_duplicating_headers_are_not_allowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty or invalid headers are not allowed.
+        /// </summary>
+        internal static string LookupTables_empty_or_invalid_header_are_not_allowed {
+            get {
+                return ResourceManager.GetString("LookupTables_empty_or_invalid_header_are_not_allowed", resourceCulture);
             }
         }
         

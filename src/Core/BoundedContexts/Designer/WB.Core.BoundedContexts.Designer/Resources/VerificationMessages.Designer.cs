@@ -270,6 +270,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table has invalid name..
+        /// </summary>
+        internal static string WB0024_LookupHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0024_LookupHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table cannot have empty name..
+        /// </summary>
+        internal static string WB0025_LookupHasEmptyName {
+            get {
+                return ResourceManager.GetString("WB0025_LookupHasEmptyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Another Lookup table with the same name already exists..
         /// </summary>
         internal static string WB0026_NameForLookupTableIsNotUnique {
@@ -311,6 +329,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
                 return ResourceManager.GetString("WB0030_PrefilledQuestionCantBeInsideOfRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table has invalid column headers.
+        /// </summary>
+        internal static string WB0031_LookupTableHasInvalidHeaders {
+            get {
+                return ResourceManager.GetString("WB0031_LookupTableHasInvalidHeaders", resourceCulture);
             }
         }
         
@@ -415,6 +442,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table has too many columns.
+        /// </summary>
+        internal static string WB0043_LookupTableMoreThan11Columns {
+            get {
+                return ResourceManager.GetString("WB0043_LookupTableMoreThan11Columns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table has too many rows.
+        /// </summary>
+        internal static string WB0044_LookupTableMoreThan5000Rows {
+            get {
+                return ResourceManager.GetString("WB0044_LookupTableMoreThan5000Rows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question has option(s) with empty value..
         /// </summary>
         internal static string WB0045_QuestionHasOptionsWithEmptyValue {
@@ -429,6 +474,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
                 return ResourceManager.GetString("WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table has not unique rowcode values.
+        /// </summary>
+        internal static string WB0047_LookupTableNotUniqueRowcodeValues {
+            get {
+                return ResourceManager.GetString("WB0047_LookupTableNotUniqueRowcodeValues", resourceCulture);
             }
         }
         

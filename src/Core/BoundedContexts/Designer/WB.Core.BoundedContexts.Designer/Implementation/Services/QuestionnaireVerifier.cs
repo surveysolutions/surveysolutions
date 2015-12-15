@@ -8,6 +8,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
+
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -84,6 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
+        private readonly ILookupTableService lookupTableService;
 
         private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
@@ -95,7 +98,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IKeywordsProvider keywordsProvider,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
             IDesignerEngineVersionService engineVersionService,
-            IMacrosSubstitutionService macrosSubstitutionService)
+            IMacrosSubstitutionService macrosSubstitutionService, 
+            ILookupTableService lookupTableService)
         {
             this.expressionProcessor = expressionProcessor;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -104,6 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
             this.macrosSubstitutionService = macrosSubstitutionService;
+            this.lookupTableService = lookupTableService;
         }
 
         private IEnumerable<Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>>> AtomicVerifiers
@@ -183,6 +188,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
                     MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
+
+                    LookupVerifier(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName, VerificationErrorLevel.Critical),
+                    LookupVerifier(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName, VerificationErrorLevel.Critical),
+                    LookupVerifier(LookupTableHasInvalidHeaders, "WB0031", VerificationMessages.WB0031_LookupTableHasInvalidHeaders, VerificationErrorLevel.Critical),
+                    LookupVerifier(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
+                    LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
+                    LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues, VerificationErrorLevel.Critical),
+
                     VerifyGpsPrefilledQuestions,
                     ErrorsByLinkedQuestions,
                     ErrorsByQuestionsWithSubstitutions,
@@ -521,12 +534,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
-            Func<LookupTable, QuestionnaireDocument, bool> hasError, string code, string message)
+            Func<LookupTable, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
         {
             return (questionnaire, state) => questionnaire
                     .LookupTables
                     .Where(entity => hasError(entity.Value, questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateLookupReference(entity.Key)));
+                    .Select(entity => new QuestionnaireVerificationError(code, message, level, CreateLookupReference(entity.Key)));
+        }
+
+        private Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
+            Func<LookupTable, LookupTableContent, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
+        {
+            return (questionnaire, state) => questionnaire
+                    .LookupTables
+                    .Where(entity => hasError(entity.Value, lookupTableService.GetLookupTableContent(questionnaire.PublicKey, entity.Key), questionnaire))
+                    .Select(entity => new QuestionnaireVerificationError(code, message, level, CreateLookupReference(entity.Key)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
@@ -600,6 +622,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool MacroHasInvalidName(Macro macro, QuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(macro.Name);
+        }
+
+        private static bool LookupTableHasEmptyName(LookupTable table, QuestionnaireDocument questionnaire)
+        {
+            return string.IsNullOrWhiteSpace(table.TableName);
+        }
+        
+        private static bool LookupTableHasInvalidName(LookupTable table, QuestionnaireDocument questionnaire)
+        {
+            return !IsVariableNameValid(table.TableName);
+        }
+
+        private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, QuestionnaireDocument questionnaire)
+        {
+            return !tableContent.VariableNames.All(IsVariableNameValid);
+        }
+
+        private static bool LookupTableMoreThan10Columns(LookupTable table, LookupTableContent tableContent, QuestionnaireDocument questionnaire)
+        {
+            return tableContent.VariableNames.Count() > 10;
+        }
+
+        private static bool LookupTableMoreThan5000Rows(LookupTable table, LookupTableContent tableContent, QuestionnaireDocument questionnaire)
+        {
+            return tableContent.Rows.Count() > 5000;
+        }
+
+        private static bool LookupTableNotUniqueRowcodeValues(LookupTable table, LookupTableContent tableContent, QuestionnaireDocument questionnaire)
+        {
+            return tableContent.Rows.Select(x => x.RowCode).Distinct().Count() != tableContent.Rows.Count();
         }
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)

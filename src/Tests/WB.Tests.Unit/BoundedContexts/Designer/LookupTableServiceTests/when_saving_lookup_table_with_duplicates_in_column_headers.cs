@@ -1,17 +1,19 @@
-﻿using System;
+using System;
+
 using Machine.Specifications;
+
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
 {
-    internal class when_saving_lookup_table_with_columns_without_headers
+    internal class when_saving_lookup_table_with_duplicates_in_column_headers
     {
         Establish context = () =>
         {
             fileContent =
-                $"next{_}header{_}is{_}missing{_}{_}{_end}" +
-                $"1{_}2{_}3{_}4{_}5{_end}";
+                $"same_name{_}row{_}code{_}same_name{_end}" +
+                $"1{_}2{_}3{_}4{_end}";
 
             lookupTableService = Create.LookupTableService();
         };
@@ -27,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
             exception.ShouldBeOfExactType<ArgumentException>();
 
         It should_throw_ArgumentException1 = () =>
-            ((ArgumentException)exception).Message.ShouldEqual(ExceptionMessages.LookupTables_empty_or_invalid_header_are_not_allowed);
+            ((ArgumentException)exception).Message.ShouldEqual(ExceptionMessages.LookupTables_duplicating_headers_are_not_allowed);
 
         private static Exception exception;
 

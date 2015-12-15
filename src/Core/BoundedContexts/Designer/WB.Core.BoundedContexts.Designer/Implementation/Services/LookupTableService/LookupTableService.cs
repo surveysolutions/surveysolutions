@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 using CsQuery.ExtensionMethods;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -18,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
+        private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
         private const int MAX_ROWS_COUNT = 5000;
@@ -154,17 +157,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
 
-                if (csvReader.FieldHeaders.Length > MAX_COLS_COUNT)
+                var fieldHeaders = csvReader.FieldHeaders.Select(x => x.Trim()).ToArray();
+
+                if (fieldHeaders.Length > MAX_COLS_COUNT)
                 {
                     throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_columns, MAX_COLS_COUNT));
                 }
 
-                if (csvReader.FieldHeaders.Any(string.IsNullOrWhiteSpace))
+                if (fieldHeaders.Any(IsVariableNameInvalid))
                 {
-                    throw new ArgumentException(ExceptionMessages.LookupTables_empty_header_are_not_allowed);
+                    throw new ArgumentException(ExceptionMessages.LookupTables_empty_or_invalid_header_are_not_allowed);
                 }
 
-                var indexOfRowcodeColumn = csvReader.FieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
+                if (fieldHeaders.Distinct().Count() != fieldHeaders.Length)
+                {
+                    throw new ArgumentException(ExceptionMessages.LookupTables_duplicating_headers_are_not_allowed);
+                }
+
+                var indexOfRowcodeColumn = fieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
 
                 if (indexOfRowcodeColumn < 0)
                 {
@@ -194,7 +204,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                             decimal variable;
                             if (!decimal.TryParse(record[i], out variable))
                             {
-                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], csvReader.FieldHeaders[i], rowCurrentRowNumber));
+                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
                             }
                             variables.Add(variable);
                         }
@@ -215,10 +225,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_rowcode_values_must_be_unique);
                 }
 
-                result.VariableNames = csvReader.FieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                result.VariableNames = fieldHeaders.Where(h => !h.Equals(ROWCODE, StringComparison.InvariantCultureIgnoreCase)).ToArray();
                 result.Rows = rows.ToArray();
             }
             return result;
+        }
+
+        private static bool IsVariableNameInvalid(string variableName)
+        {
+            if (string.IsNullOrEmpty(variableName))
+                return true;
+
+            if (variableName.Length > 32)
+                return true;
+
+            return !VariableNameRegex.IsMatch(variableName);
         }
 
         private CsvConfiguration CreateCsvConfiguration()
