@@ -157,7 +157,7 @@
     <value>Synchronization failed.  Sync package with id '{0}' was not found on server. Please contact developers.</value>
   </data>
   <data name="InvalidUserRole" xml:space="preserve">
-    <value>Synchronization failed. Your account does not have an interviewer role. Please contact your supervisor.</value>
+    <value>Your account does not have a role permitting this operation.</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>Server is on the maintenance mode now. Sorry for the inconvenience. Please, try again later.</value>

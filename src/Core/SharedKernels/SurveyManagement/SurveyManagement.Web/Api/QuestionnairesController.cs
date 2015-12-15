@@ -1,30 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    [RoutePrefix("apis/v1/questionnaires")]
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [RoutePrefix("api/v1/questionnaires")]
+    [ApiBasicAuth(new[] { UserRoles.ApiUser }, TreatPasswordAsPlain = true)]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
-
+        private readonly IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory;
 
         public QuestionnairesController(ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory)
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
+            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory)
             :base(logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
+            this.allInterviewsViewFactory = allInterviewsViewFactory;
         }
 
         [HttpGet]
@@ -64,6 +69,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public IEnumerable<string> QuestionnairesStatuses()
         {
             return Enum.GetNames(typeof(InterviewStatus));
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/{version:long}/interviews")]
+        public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
+        {
+            var input = new AllInterviewsInputModel
+            {
+                Page = this.CheckAndRestrictOffset(offset),
+                PageSize = this.CheckAndRestrictLimit(limit),
+                QuestionnaireId = id,
+                QuestionnaireVersion = version
+            };
+
+            var interviews = this.allInterviewsViewFactory.Load(input);
+
+            return new InterviewApiView(interviews);
         }
     }
 }

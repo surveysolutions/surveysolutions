@@ -43,27 +43,27 @@
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.CrossCore, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta5\lib\net45\Cirrious.CrossCore.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\net45\Cirrious.CrossCore.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.CrossCore.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta5\lib\net45\Cirrious.CrossCore.Wpf.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\net45\Cirrious.CrossCore.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta5\lib\net45\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Localization, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta5\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Test.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Tests.4.0.0-beta5\lib\net45\Cirrious.MvvmCross.Test.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Tests.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.Test.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta5\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -138,7 +138,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.4.0.0-beta5\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.4.0.0-beta7\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -2148,7 +2148,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_filtered_with_not_empty_params.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interviews_with_not_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_interviews_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_all_is_ok.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />

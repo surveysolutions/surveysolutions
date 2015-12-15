@@ -7,8 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -16,16 +14,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class SendTabletInformationViewModel : BaseViewModel
     {
         private readonly ITroubleshootingService troubleshootingService;
-        private readonly IUserInteractionService userInteractionService;
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
 
-        public SendTabletInformationViewModel(ITroubleshootingService troubleshootingService,
-            IUserInteractionService userInteractionService, ISynchronizationService synchronizationService,
+        private string scope;
+        private DateTime whenGenerated;
+        private bool isPackageBuild;
+        private bool isPackageSendingAttemptCompleted;
+        private string packageSendingAttemptResponceText;
+        private bool isInProgress;
+        private byte[] informationPackageContent;
+
+        public SendTabletInformationViewModel(
+            ITroubleshootingService troubleshootingService,
+            ISynchronizationService synchronizationService,
             ILogger logger)
         {
             this.troubleshootingService = troubleshootingService;
-            this.userInteractionService = userInteractionService;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
         }
@@ -40,8 +45,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private string scope;
-
         public DateTime WhenGenerated
         {
             get { return this.whenGenerated; }
@@ -52,17 +55,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private DateTime whenGenerated;
-
-        private bool isPackageBuild;
-
         public bool IsPackageBuild
         {
             get { return this.isPackageBuild; }
             set { this.RaiseAndSetIfChanged(ref this.isPackageBuild, value); }
         }
-
-        private bool isPackageSendingAttemptCompleted;
 
         public bool IsPackageSendingAttemptCompleted
         {
@@ -70,15 +67,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isPackageSendingAttemptCompleted, value); }
         }
 
-        private string packageSendingAttemptResponceText;
-
         public string PackageSendingAttemptResponceText
         {
             get { return this.packageSendingAttemptResponceText; }
             set { this.RaiseAndSetIfChanged(ref this.packageSendingAttemptResponceText, value); }
         }
-
-        private bool isInProgress;
 
         public bool IsInProgress
         {
@@ -86,7 +79,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
         }
 
-        private byte[] informationPackageContent = null;
         private async Task CreateTabletInformation()
         {
             this.IsPackageSendingAttemptCompleted = false;
@@ -108,6 +100,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SendTabletInformation()
         {
+            if (this.IsInProgress)
+                return;
+
             this.IsInProgress = true;
             var cancellationTokenSource = new CancellationTokenSource();
 

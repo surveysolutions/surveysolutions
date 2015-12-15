@@ -55,10 +55,6 @@ namespace WB.UI.Interviewer.ViewModel
             get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingPageCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
-        }
         public IMvxCommand NavigateToDiagnosticsPageCommand
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }

@@ -11,7 +11,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -43,13 +44,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemViewFactory = null
-            )
+            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemViewFactory = null,
+            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null)
         {
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                questionnaireBrowseItemViewFactory ?? Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>());
+                questionnaireBrowseItemViewFactory ?? Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
+                allInterviewsViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>());
         }
 
         protected static InterviewsController CreateInterviewsController(
@@ -60,7 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             return new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
-                interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>());
+                interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
+                Mock.Of<ICommandService>(),
+                Mock.Of<IGlobalInfoProvider>(),
+                Mock.Of<IUserViewFactory>());
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(

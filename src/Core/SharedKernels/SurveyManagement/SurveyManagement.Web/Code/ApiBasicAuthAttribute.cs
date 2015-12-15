@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
@@ -13,8 +14,10 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
+using System.Collections.Generic;
+using System.Web.Http;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
@@ -22,6 +25,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
         private readonly Func<string, string, bool> isUserValid;
+        private readonly IEnumerable<UserRoles> roles = new UserRoles[] {};
+        private bool treatPasswordAsPlain = false;
 
         private IUserViewFactory userViewFactory
         {
@@ -38,18 +43,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
         }
 
-        internal static string[] SplitString(string original)
+        private IPasswordHasher passwordHasher
         {
-            return string.IsNullOrEmpty(original) ? new string[0] : original.Split(',');
+            get { return ServiceLocator.Current.GetInstance<IPasswordHasher>(); }
         }
 
-        public ApiBasicAuthAttribute() : this(Membership.ValidateUser)
+        public bool TreatPasswordAsPlain
+        {
+            get
+            {
+                return this.treatPasswordAsPlain;
+            }
+            set
+            {
+                this.treatPasswordAsPlain = value;
+            }
+        }
+
+        public ApiBasicAuthAttribute(UserRoles[] roles) : this(Membership.ValidateUser, roles)
         {
         }
 
-        internal ApiBasicAuthAttribute(Func<string, string, bool> isUserValid)
+        internal ApiBasicAuthAttribute(Func<string, string, bool> isUserValid, IEnumerable<UserRoles> roles)
         {
             this.isUserValid = isUserValid;
+            this.roles = roles;
         }
 
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -61,7 +79,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             }
 
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
-            if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, basicCredentials.Password))
+
+
+
+            if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, treatPasswordAsPlain ? this.passwordHasher.Hash(basicCredentials.Password):basicCredentials.Password))
             {
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
@@ -77,9 +98,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                     return;
                 }
 
-                if (!userInfo.Roles.Contains(UserRoles.Operator))
+                if (!userInfo.Roles.Intersect(this.roles).Any())
                 {
-                    this.RespondWithMessageThatUserIsNotAnInterviewer(actionContext);
+                    this.RespondWithMessageThatUserIsNoPermittedRole(actionContext);
                     return;
                 }
             }
@@ -144,9 +165,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = TabletSyncMessages.Maintenance };
         }
 
-        private void RespondWithMessageThatUserIsNotAnInterviewer(HttpActionContext actionContext)
+        private void RespondWithMessageThatUserIsNoPermittedRole(HttpActionContext actionContext)
         {
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = TabletSyncMessages.InvalidUserRole };
         }
+
     }
 }
