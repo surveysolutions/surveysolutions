@@ -5,7 +5,7 @@
   <LinearLayout style="@style/Diagnostics_TitleSection">
     <TextView
       style="@style/Diagnostics_Section_Title"
-      local:MvxBind="Text  Localization('Diagnostics_Backup_Title'); Click BackupRestore.BackupCommand" />
+      local:MvxBind="Text  Localization('Diagnostics_Backup_Title'); Click BackupRestore.BackupCommand; UnderlinePressed ." />
     <TextView
               style="@style/Diagnostics_Section_Description"
               local:MvxBind="Text Localization('Diagnostics_Backup_Description'); Click BackupRestore.IncreaseClicksCountOnDescriptionPanelCommand" />

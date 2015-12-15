@@ -4,7 +4,7 @@
   <LinearLayout style="@style/Diagnostics_TitleSection">
     <TextView
          style="@style/Diagnostics_Section_Title"
-         local:MvxBind="Text Localization('Diagnostics_Send_Title'); Click TabletInformation.CreateTabletInformationCommand" />
+         local:MvxBind="Text Localization('Diagnostics_Send_Title'); Click TabletInformation.CreateTabletInformationCommand;  UnderlinePressed ." />
     <TextView
               style="@style/Diagnostics_Section_Description"
               local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
