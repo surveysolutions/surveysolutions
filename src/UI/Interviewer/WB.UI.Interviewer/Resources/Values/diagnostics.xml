@@ -19,7 +19,9 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:padding">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingLeft">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
   <style name="Diagnostics_SubSection">
     <item name="android:layout_height">wrap_content</item>
@@ -30,7 +32,7 @@
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
   <style name="Diagnostics_Section_Title">
-    <item name="android:layout_height">wrap_content</item>
+   <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:fontFamily">@string/font_fontFamily_medium</item>
     <item name="android:textColor">@color/btn_default</item>
@@ -38,7 +40,8 @@
     <item name="android:singleLine">false</item>
     <item name="android:textStyle">bold</item>
     <item name="android:clickable">true</item>
-    <item name="android:background">@drawable/transparent_input_button</item>
+    <item name="android:paddingTop">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
   <style name="Diagnostics_Section_Description">
     <item name="android:fontFamily">Arial</item>

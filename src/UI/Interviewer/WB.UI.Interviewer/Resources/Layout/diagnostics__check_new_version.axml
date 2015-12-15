@@ -5,7 +5,7 @@
     <LinearLayout style="@style/Diagnostics_TitleSection">
       <TextView
            style="@style/Diagnostics_Section_Title"
-           local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), CheckNewVersion.Version); Click CheckNewVersion.CheckVersionCommand" />
+           local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), CheckNewVersion.Version); Click CheckNewVersion.CheckVersionCommand;  UnderlinePressed ." />
     </LinearLayout>
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible CheckNewVersion.IsNewVersionAvaliable;" >
     <TextView

@@ -244,6 +244,7 @@
     <Compile Include="CustomBindings\TextViewSideBarPrefillQuestionBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewTextFormattedBinding.cs" />
+    <Compile Include="CustomBindings\TextViewUnderlinePressedBinding.cs" />
     <Compile Include="CustomBindings\ViewActivatedBinding.cs" />
     <Compile Include="CustomBindings\ViewBackgroundDrawableBinding.cs" />
     <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />

@@ -27,7 +27,7 @@
         <LinearLayout style="@style/Diagnostics_TitleSection">
           <TextView
              style="@style/Diagnostics_Section_Title"
-             local:MvxBind="Text  Localization('Diagnostics_TestConnection_Title');" />
+             local:MvxBind="Text  Localization('Diagnostics_TestConnection_Title'); UnderlinePressed ." />
           <TextView
                     style="@style/Diagnostics_Section_Description"
                     local:MvxBind="Html Localization('Diagnostics_TestConnection_Description')" />
@@ -37,7 +37,7 @@
         <LinearLayout style="@style/Diagnostics_TitleSection">
           <TextView
                   style="@style/Diagnostics_Section_Title"
-                  local:MvxBind="Text Localization('Diagnostics_Share_Title'); Click ShareDeviceTechnicalInformationCommand" />
+                  local:MvxBind="Text Localization('Diagnostics_Share_Title'); Click ShareDeviceTechnicalInformationCommand;  UnderlinePressed ." />
           <TextView
                    style="@style/Diagnostics_Section_Description"
                    local:MvxBind="Html Localization('Diagnostics_Share_Description')" />
