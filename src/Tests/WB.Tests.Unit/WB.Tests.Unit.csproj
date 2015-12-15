@@ -496,6 +496,9 @@
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster_with_empty_value.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_and_questionnaire_does_not_exist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question_on_hard_deleted_interview.cs" />
@@ -1808,7 +1811,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_answer_has_3_values.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_and_previous_answer_has_3_values_and_new_answer_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_without_previous_answer_and_new_answer_is_the_same.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_has_only_chaned_values.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_has_only_changed_values.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_is_not_the_same.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_with_incorrect_roster_vector.cs" />
@@ -1830,7 +1833,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_numeric.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_textlist.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_question_increases_roster_with_nested_fixed_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_integer_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_textlist_question_increases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_multy_option_question_increases_roster_size.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_applying_synchronization_metadata_on_created_interviews.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_cancelling_interview_by_hq_synchronization.cs" />
