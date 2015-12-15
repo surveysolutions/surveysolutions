@@ -35,6 +35,7 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -183,6 +184,10 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
                 WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
                 WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10));
+
+            var sampleImportSettings = new SampleImportSettings(
+                WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(10));
+
             kernel.Load(
                 eventStoreModule,
                 new SurveyManagementSharedKernelModule(basePath, isDebug,
@@ -191,7 +196,7 @@ namespace WB.UI.Headquarters
                     LegacyOptions.SupervisorFunctionsEnabled,
                     interviewCountLimit),
                 new HeadquartersBoundedContextModule(LegacyOptions.SupervisorFunctionsEnabled, userPreloadingSettings, exportSettings,
-                    interviewDataExportSettings));
+                    interviewDataExportSettings, sampleImportSettings));
 
 
             kernel.Bind<ISettingsProvider>().To<SettingsProvider>();
