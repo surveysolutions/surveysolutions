@@ -383,4 +383,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
 </root>

@@ -324,9 +324,6 @@ Pode criar ou editar seus questionários em Survey Solutions Designer</value>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>Se você vincular novamente a este dispositivo &lt;br/&gt; todos os dados no antigo será perdidos</value>
   </data>
-  <data name="Interviewer_Troubleshooting" xml:space="preserve">
-    <value>Solução de problemas</value>
-  </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Tente o login on-line</value>
   </data>

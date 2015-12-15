@@ -75,7 +75,7 @@
                 android:id="@+id/LoginPage_troubleshooting_button"
                 android:layout_toRightOf="@+id/LoginPage_singin_button"
                 android:layout_below="@+id/LoginPage_password"
-                local:MvxBind="Click NavigateToTroubleshootingPageCommand; Text Localization('Interviewer_Troubleshooting');" />
+                local:MvxBind="Click NavigateToDiagnosticsPageCommand; Text Localization('Interviewer_Diagnostics');" />
           </RelativeLayout>
         </LinearLayout>
       </ScrollView>

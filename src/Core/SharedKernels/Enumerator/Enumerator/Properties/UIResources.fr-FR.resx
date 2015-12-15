@@ -317,9 +317,6 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>Si vous liez votre compte à ce nouvel appareil&lt;br&gt;toutes les données sur votre ancien appareil seront supprimées</value>
   </data>
-  <data name="Interviewer_Troubleshooting" xml:space="preserve">
-    <value>Dépannage</value>
-  </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Essayez de vous connecter en ligne</value>
   </data>
