@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
            questionnaire.LookupTables.ContainsKey(entityId).ShouldBeTrue();
 
         It should_add_empty_lookup_table = () =>
-           questionnaire.LookupTables[entityId].ShouldBeNull();
+           questionnaire.LookupTables[entityId].TableName.ShouldBeNull();
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

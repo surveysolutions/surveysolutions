@@ -16,5 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables
         }
 
         public Guid LookupTableId { get; private set; }
+        public string LookupTableName { get; set; }
+        public string LookupTableFileName { get; set; }
     }
 }
