@@ -572,7 +572,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
-            document.LookupTables[evnt.Payload.LookupTableId] = new LookupTable()
+            document.LookupTables[evnt.Payload.LookupTableId] = new LookupTable
             {
                 TableName = evnt.Payload.LookupTableName,
                 FileName = evnt.Payload.LookupTableFileName
