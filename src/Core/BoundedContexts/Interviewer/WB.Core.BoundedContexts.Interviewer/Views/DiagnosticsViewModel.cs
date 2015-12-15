@@ -12,38 +12,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IExternalAppLauncher externalAppLauncher;
+        private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
-        private bool isRestoreVisible;
 
         public DiagnosticsViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IInterviewerSettings interviewerSettings, 
-            IExternalAppLauncher externalAppLauncher,
-            SendTabletInformationViewModel sendTabletInformationViewModel)
+            ITabletDiagnosticService tabletDiagnosticService,
+            SendTabletInformationViewModel sendTabletInformationViewModel,
+            CheckNewVersionViewModel checkNewVersion,
+            BackupRestoreViewModel backupRestore)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
-            this.externalAppLauncher = externalAppLauncher;
+            this.tabletDiagnosticService = tabletDiagnosticService;
             this.TabletInformation = sendTabletInformationViewModel;
+            this.CheckNewVersion = checkNewVersion;
+            this.BackupRestore = backupRestore;
         }
-
-        public void Init()
-        {
-            Version = this.interviewerSettings.GetApplicationVersionName();
-            IsRestoreVisible = false;
-        }
-
-        public bool IsRestoreVisible
-        {
-            get { return this.isRestoreVisible; }
-            set { this.isRestoreVisible = value; this.RaisePropertyChanged(); }
-        }
-
-        public string Version { get; set; }
 
         public SendTabletInformationViewModel TabletInformation { get; set; }
+
+        public CheckNewVersionViewModel CheckNewVersion { get; set; }
+
+        public BackupRestoreViewModel BackupRestore { get; set; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
 
@@ -66,7 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void ShareDeviceTechnicalInformation()
         {
-            this.externalAppLauncher.LaunchShareAction(InterviewerUIResources.Share_to_Title,
+            this.tabletDiagnosticService.LaunchShareAction(InterviewerUIResources.Share_to_Title,
                 this.interviewerSettings.GetDeviceTechnicalInformation());
         }
 

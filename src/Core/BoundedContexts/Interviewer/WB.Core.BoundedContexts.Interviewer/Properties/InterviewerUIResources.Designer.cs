@@ -308,6 +308,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When Saved:.
+        /// </summary>
+        public static string Diagnostics_BackupDate_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupDate_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup file location:.
+        /// </summary>
+        public static string Diagnostics_BackupFileLocation_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupFileLocation_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data saved.
+        /// </summary>
+        public static string Diagnostics_BackupReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scope:.
+        /// </summary>
+        public static string Diagnostics_BackupScope_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupScope_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We will check for the newer version on HQ server.
         /// </summary>
         public static string Diagnostics_CheckVersion_Description {
@@ -335,7 +371,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore backed up data.
+        ///   Looks up a localized string similar to Downloading, please wait....
+        /// </summary>
+        public static string Diagnostics_DownloadingPleaseWait {
+            get {
+                return ResourceManager.GetString("Diagnostics_DownloadingPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        /// </summary>
+        public static string Diagnostics_NewVersionAvaliable_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_NewVersionAvaliable_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version number:.
+        /// </summary>
+        public static string Diagnostics_NewVersionNumber_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_NewVersionNumber_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Diagnostics_No {
+            get {
+                return ResourceManager.GetString("Diagnostics_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on theis device.
         /// </summary>
         public static string Diagnostics_Restore_Description {
             get {
@@ -344,11 +416,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore backed up data.
+        ///   Looks up a localized string similar to RESTORE.
         /// </summary>
         public static string Diagnostics_Restore_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_Restore_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved data found:.
+        /// </summary>
+        public static string Diagnostics_RestoreReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_RestoreReady_Title", resourceCulture);
             }
         }
         
@@ -448,6 +529,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Diagnostics_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Diagnostics_Update {
+            get {
+                return ResourceManager.GetString("Diagnostics_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of application..
+        /// </summary>
+        public static string Diagnostics_YouHaveTheLatestVersionOfApplication {
+            get {
+                return ResourceManager.GetString("Diagnostics_YouHaveTheLatestVersionOfApplication", resourceCulture);
             }
         }
         
@@ -565,15 +664,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string MenuItem_Title_SignOut {
             get {
                 return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
-        /// </summary>
-        public static string MenuItem_Title_Troubleshooting {
-            get {
-                return ResourceManager.GetString("MenuItem_Title_Troubleshooting", resourceCulture);
             }
         }
         

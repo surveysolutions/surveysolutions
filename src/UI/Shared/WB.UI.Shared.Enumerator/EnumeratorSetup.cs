@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Android.Content;
@@ -13,8 +14,8 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
-using Cirrious.MvvmCross.Droid.Support.RecyclerView;
 using Cirrious.MvvmCross.Views;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
@@ -114,24 +115,15 @@ namespace WB.UI.Shared.Enumerator
             base.FillTargetFactories(registry);
         }
 
-        protected override IList<Assembly> AndroidViewAssemblies
-        {
-            get
-            {
-                var toReturn = base.AndroidViewAssemblies;
+        protected override IEnumerable<Assembly> AndroidViewAssemblies => 
+            base.AndroidViewAssemblies.Union(new[] {
+                typeof (FlowLayout).Assembly,
+                typeof (MvxRecyclerView).Assembly,
+                typeof (DrawerLayout).Assembly,
+                typeof (SwitchCompat).Assembly
+            });
 
-                // Add assemblies with other views we use.  When the XML is inflated
-                // MvvmCross knows about the types and won't complain about them.  This
-                // speeds up inflation noticeably.
-                toReturn.Add(typeof(FlowLayout).Assembly);
-                toReturn.Add(typeof(MvxRecyclerView).Assembly);
-                toReturn.Add(typeof(DrawerLayout).Assembly);
-                toReturn.Add(typeof(SwitchCompat).Assembly);
-                return toReturn;
-            }
-        }
-
-        protected override Assembly[] GetViewModelAssemblies()
+        protected override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return new[]
             {

@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using Android.App;
 using Android.Content;
 using Cirrious.CrossCore;
@@ -23,14 +25,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             var mapIntent = new Intent(Intent.ActionView, geoUri);
 
             this.CurrentActivity.StartActivity(mapIntent);
-        }
-
-        public void LaunchShareAction(string title, string info)
-        {
-            var shareIntent = new Intent(Intent.ActionSend);
-            shareIntent.PutExtra(Intent.ExtraText, info);
-            shareIntent.SetType("text/plain");
-            this.CurrentActivity.StartActivity(Intent.CreateChooser(shareIntent, title));
         }
     }
 }

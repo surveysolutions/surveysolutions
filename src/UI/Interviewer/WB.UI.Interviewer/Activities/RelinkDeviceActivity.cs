@@ -32,8 +32,6 @@ namespace WB.UI.Interviewer.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.relink, menu);
 
-            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
-
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
@@ -41,9 +39,6 @@ namespace WB.UI.Interviewer.Activities
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_troubleshooting:
-                    this.ViewModel.NavigateToTroubleshootingCommand.Execute();
-                    break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;

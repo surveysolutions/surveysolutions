@@ -270,6 +270,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Another Lookup table with the same name already exists..
+        /// </summary>
+        internal static string WB0026_NameForLookupTableIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0026_NameForLookupTableIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string WB0027_QuestionnaireHaveAutopropagatedGroups {
@@ -284,6 +293,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0028_QuestionnaireHaveAutopropagatedQuestions {
             get {
                 return ResourceManager.GetString("WB0028_QuestionnaireHaveAutopropagatedQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup with the same variable name already exists..
+        /// </summary>
+        internal static string WB0029_LookupWithTheSameVariableNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("WB0029_LookupWithTheSameVariableNameAlreadyExists", resourceCulture);
             }
         }
         

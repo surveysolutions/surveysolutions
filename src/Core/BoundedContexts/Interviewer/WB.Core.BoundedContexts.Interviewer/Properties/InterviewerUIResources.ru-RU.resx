@@ -221,9 +221,6 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Выход</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Устранение проблем</value>
-  </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
     <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
   </data>
@@ -499,18 +496,51 @@
     <value>Проверить интернет соединение</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="Diagnostics_Send" xml:space="preserve">
-    <value>Send</value>
+    <value>Отправить</value>
   </data>
   <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
-    <value>Data archive is ready</value>
+    <value>Архив готов</value>
   </data>
   <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
-    <value>Scope:</value>
+    <value>Объем:</value>
   </data>
   <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
-    <value>When generated:</value>
+    <value>Когда созданн:</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Загружаем, пожалуйста подождите...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>Существует более новая версия. Вы хотите загрузить и обновить приложение?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Версия:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>У вас установленна последняя версия приложения.</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Когда сохранены:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Путь к файлу с бекапом:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Данные сохранены</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Объем:</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Сохраненные данные найденны:</value>
   </data>
 </root>

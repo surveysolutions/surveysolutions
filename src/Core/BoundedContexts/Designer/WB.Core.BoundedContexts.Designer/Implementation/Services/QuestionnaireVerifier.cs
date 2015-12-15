@@ -189,9 +189,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ErrorsByQuestionsWithDuplicateVariableName,
                     ErrorsByRostersWithDuplicateVariableName,
                     ErrorsByMacrosWithDuplicateName,
+                    ErrorsByLookupTablesWithDuplicateName,
+                    ErrorsByLookupTablesWithDuplicateVariableName,
 
-                    VerifyAmountOfRosters,
-                    //ErrorsByConditionAndValidationExpressions
+                    VerifyAmountOfRosters
                 };
             }
         }
@@ -517,6 +518,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Macros
                     .Where(entity => hasError(entity.Value, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateMacrosReference(entity.Key)));
+        }
+
+        private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
+            Func<LookupTable, QuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) => questionnaire
+                    .LookupTables
+                    .Where(entity => hasError(entity.Value, questionnaire))
+                    .Select(entity => new QuestionnaireVerificationError(code, message, VerificationErrorLevel.General, CreateLookupReference(entity.Key)));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
@@ -1137,16 +1147,71 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                 group.Select(e => CreateMacrosReference(e.Key))));
         }
 
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByLookupTablesWithDuplicateName(QuestionnaireDocument questionnaire, VerificationState state)
+        {
+            return questionnaire
+                    .LookupTables
+                    .Where(x => !string.IsNullOrEmpty(x.Value.TableName))
+                    .GroupBy(x => x.Value.TableName, StringComparer.InvariantCultureIgnoreCase)
+                    .Where(group => group.Count() > 1)
+                    .Select(group =>
+                            new QuestionnaireVerificationError(
+                                "WB0026",
+                                VerificationMessages.WB0026_NameForLookupTableIsNotUnique,
+                                VerificationErrorLevel.Critical,
+                                group.Select(e => CreateLookupReference(e.Key))));
+        }
+
+        private static IEnumerable<QuestionnaireVerificationError> ErrorsByLookupTablesWithDuplicateVariableName(
+            QuestionnaireDocument questionnaire, VerificationState state)
+        {
+            var rosterVariableNameMappedOnRosters = questionnaire
+                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase)
+                .ToDictionary(r => r.Key, r => r.ToArray());
+
+            var questionsVariableNamesMappedOnQuestions = questionnaire.Find<IQuestion>(q => true)
+                 .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
+                 .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
+                 .ToDictionary(r => r.Key, r => r.ToArray());
+
+            var lookupTablesNames = questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
+                .Select(x => new { LookupTableName = x.Value.TableName, LookupTableId = x.Key })
+                .GroupBy(x => x.LookupTableName, StringComparer.InvariantCultureIgnoreCase)
+                .ToDictionary(x => x.Key, x => x.Select(l => l.LookupTableId));
+
+            foreach (var lookup in lookupTablesNames)
+            {
+                if (rosterVariableNameMappedOnRosters.ContainsKey(lookup.Key))
+                    yield return
+                        new QuestionnaireVerificationError("WB0029",
+                            VerificationMessages.WB0029_LookupWithTheSameVariableNameAlreadyExists,
+                            VerificationErrorLevel.Critical,
+                            CreateReference(rosterVariableNameMappedOnRosters[lookup.Key].First()),
+                            CreateLookupReference(lookup.Value.First()));
+
+                if (questionsVariableNamesMappedOnQuestions.ContainsKey(lookup.Key))
+                    yield return
+                        new QuestionnaireVerificationError("WB0029",
+                            VerificationMessages.WB0029_LookupWithTheSameVariableNameAlreadyExists,
+                            VerificationErrorLevel.Critical,
+                            CreateReference(questionsVariableNamesMappedOnQuestions[lookup.Key].First()),
+                            CreateLookupReference(lookup.Value.First()));
+            }
+        }
+
         private static IEnumerable<QuestionnaireVerificationError> ErrorsByRostersWithDuplicateVariableName(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
-            var rosterVariableNameMappedOnRosters = questionnaire.Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase).ToDictionary(r => r.Key, r => r.ToArray());
+            var rosterVariableNameMappedOnRosters = questionnaire
+                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                .GroupBy(s => s.VariableName, StringComparer.InvariantCultureIgnoreCase)
+                .ToDictionary(r => r.Key, r => r.ToArray());
 
             var questionsVariableNamesMappedOnQuestions = questionnaire.Find<IQuestion>(q => true)
-             .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-             .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
-             .ToDictionary(r => r.Key, r => r.ToArray());
+                 .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
+                 .GroupBy(s => s.StataExportCaption, StringComparer.InvariantCultureIgnoreCase)
+                 .ToDictionary(r => r.Key, r => r.ToArray());
 
             foreach (var rosterVariableNameMappedOnRoster in rosterVariableNameMappedOnRosters)
             {
@@ -1166,7 +1231,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     VerificationErrorLevel.Critical,
                     rosterVariableNameMappedOnRoster.Value.Select(CreateReference).ToArray());
             }
-
         }
 
         private IEnumerable<QuestionnaireVerificationError> ErrorsByQuestionsWithSubstitutions(
@@ -1214,6 +1278,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static QuestionnaireVerificationReference CreateMacrosReference(Guid macroId)
         {
             return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Macro, macroId);
+        }
+
+        private static QuestionnaireVerificationReference CreateLookupReference(Guid tableId)
+        {
+            return new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.LookupTable, tableId);
         }
 
         private static QuestionnaireVerificationReference CreateReference(IComposite entity)

@@ -419,9 +419,6 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
-  </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
   </data>
@@ -465,10 +462,10 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Version: {0}. Check for a new version</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Restore backed up data</value>
+    <value>By restoring saved data you will replace all current assigments on theis device</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>Restore backed up data</value>
+    <value>RESTORE</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
     <value>All application and interview data will be collected to a single archive. This can take up to 10 minutes.</value>
@@ -511,5 +508,38 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
     <value>When generated:</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Downloading, please wait...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>New version exists. Would you like to download and update application?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Version number:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>You have the latest version of application.</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>When Saved:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Backup file location:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Data saved</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Scope:</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Saved data found:</value>
   </data>
 </root>

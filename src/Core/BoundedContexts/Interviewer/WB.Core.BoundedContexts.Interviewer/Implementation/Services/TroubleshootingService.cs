@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 fileFilter: @"\.log$;\.dll$;\.mdb$;");
         }
 
-        public async Task BackupAsync(string backupToFolderPath)
+        public async Task<string> BackupAsync(string backupToFolderPath)
         {
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm")}.ibak";
             var backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 stream.Write(backup, 0, backup.Length);
             }
+            return emptyBackupFile.Path;
         }
 
         public void Restore(string backupFilePath)

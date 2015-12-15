@@ -228,9 +228,6 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>ออกจากระบบ</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>การแก้ไขปัญหา</value>
-  </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>ไม่สามารถใช้งานเครือข่ายได้ กรุณาตรวจสอบการตั้งค่าเครือข่าย</value>
   </data>

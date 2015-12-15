@@ -95,11 +95,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingPageCommand
-        {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
-        }
-
         public async void Init()
         {
             InterviewerIdentity currentInterviewer =
