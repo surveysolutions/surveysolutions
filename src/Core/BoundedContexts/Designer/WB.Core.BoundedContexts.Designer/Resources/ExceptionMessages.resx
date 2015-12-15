@@ -153,8 +153,8 @@
   <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
     <value>Value {0} can not be parsed as decimal number. Column {1}, row {2}.</value>
   </data>
-  <data name="LookupTables_empty_header_are_not_allowed" xml:space="preserve">
-    <value>Empty headers are not allowed</value>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Empty or invalid headers are not allowed</value>
   </data>
   <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
     <value>Mandatory rowcode column is missing</value>
@@ -185,5 +185,8 @@
   </data>
   <data name="ShouldCascadeFromExistingQuestion" xml:space="preserve">
     <value>Question to cascade from should exist in questionnaire.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Headers with the same name are not allowed</value>
   </data>
 </root>
