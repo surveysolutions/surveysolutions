@@ -47,5 +47,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             promptInstall.AddFlags(ActivityFlags.NewTask);
             Application.Context.StartActivity(promptInstall);
         }
+
+        public void RestartTheApp()
+        {
+            Intent intent = this.CurrentActivity.PackageManager.GetLaunchIntentForPackage(this.CurrentActivity.PackageName);
+            intent.AddFlags(ActivityFlags.ClearTop);
+            Application.Context.StartActivity(intent);
+        }
     }
 }
