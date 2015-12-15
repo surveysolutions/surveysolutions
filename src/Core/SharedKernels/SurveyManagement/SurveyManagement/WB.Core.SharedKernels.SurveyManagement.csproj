@@ -397,6 +397,7 @@
     <Compile Include="Views\Revalidate\InterviewTroubleshootView.cs" />
     <Compile Include="Views\SampleImport\ImportResult.cs" />
     <Compile Include="Views\SampleImport\SampleCreationStatus.cs" />
+    <Compile Include="Views\SampleImport\SampleImportSettings.cs" />
     <Compile Include="Views\SampleImport\TempFileImportData.cs" />
     <Compile Include="Views\Supervisor\ISupervisorsViewFactory.cs" />
     <Compile Include="Views\Supervisor\SupervisorsInputModel.cs" />
