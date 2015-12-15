@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             ISubstitutionService substitutionService = null, 
             IKeywordsProvider keywordsProvider = null, 
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
-            IMacrosSubstitutionService macrosSubstitutionService = null)
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            ILookupTableService lookupTableService = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -39,13 +40,19 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
             var substitutionServiceInstance = new SubstitutionService();
 
+            var lookupTableServiceMock = new Mock<ILookupTableService>(MockBehavior.Default)
+                                         {
+                                             DefaultValue = DefaultValue.Mock
+                                         };
+
             return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, 
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, 
                 new DesignerEngineVersionService(),
-                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService());
+                macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
+                lookupTableService ?? lookupTableServiceMock.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

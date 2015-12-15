@@ -402,4 +402,22 @@
   <data name="WB0026_NameForLookupTableIsNotUnique" xml:space="preserve">
     <value>Another Lookup table with the same name already exists.</value>
   </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>Lookup table has invalid name.</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>Lookup table cannot have empty name.</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>Lookup table has invalid column headers</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>Lookup table has too many columns</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+    <value>Lookup table has too many rows</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>Lookup table has not unique rowcode values</value>
+  </data>
 </root>

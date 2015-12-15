@@ -359,6 +359,7 @@
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_rowcode_column.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_columns_without_headers.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_12_columns.cs" />
+    <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_duplicates_in_column_headers.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_integer_rowcode_value.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_unique_rowcode_values.cs" />
     <Compile Include="BoundedContexts\Designer\MacrosSubstitutionServiceTests\when_inlining_macroses_in_expression.cs" />
@@ -405,6 +406,12 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_in_which_3_static_texts_have_same_id_and_2_rosters_have_same_other_id.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_in_which_particular_question_and_group_have_same_id.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_lookup_tables_with_same_name_as_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_lookup_tables_with_same_name_as_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_lookup_table_with_11_headers.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_lookup_table_with_5001_rows.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_lookup_table_with_invalid_headers.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_two_lookup_tables_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_two_macro_with_same_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_3_macros_having_same_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_cascading_single_option_question_referencing_not_existing_cascade_from_question.cs" />
