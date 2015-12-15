@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
@@ -19,7 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth]
+    [ApiBasicAuth(new[] { UserRoles.Operator })]
     [RoutePrefix("api/interviewer/v1/questionnaires")]
     [ProtobufJsonSerializer]
     public class InterviewerQuestionnairesController : ApiController

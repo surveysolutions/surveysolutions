@@ -13,6 +13,7 @@ namespace WB.UI.Shared.Enumerator
             this.Bind<IUserInterfaceStateService>().To<UserInterfaceStateService>();
 
             this.Bind<IExternalAppLauncher>().To<ExternalAppLauncher>();
+            this.Bind<ITabletDiagnosticService>().To<TabletDiagnosticService>();
         }
     }
 }

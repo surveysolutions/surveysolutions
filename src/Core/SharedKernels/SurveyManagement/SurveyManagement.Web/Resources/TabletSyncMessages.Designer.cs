@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization failed. Your account does not have an interviewer role. Please contact your supervisor..
+        ///   Looks up a localized string similar to Your account does not have a role permitting this operation..
         /// </summary>
         internal static string InvalidUserRole {
             get {

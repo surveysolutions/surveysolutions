@@ -9,12 +9,12 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
-    internal class when_intervews_controller_interviews_with_not_empty_params : ApiTestContext
+    internal class when_questionnaires_controller_interviews_with_not_empty_params : ApiTestContext
     {
         private Establish context = () =>
         {
             allInterviewsViewFactory = new Mock<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>();
-            controller = CreateInterviewsController(allInterviewsViewViewFactory : allInterviewsViewFactory.Object);
+            controller = CreateQuestionnairesController(allInterviewsViewFactory: allInterviewsViewFactory.Object);
         };
 
         Because of = () =>
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             allInterviewsViewFactory.Verify(x => x.Load(Moq.It.IsAny<AllInterviewsInputModel>()), Times.Once());
 
         private static InterviewApiView actionResult;
-        private static InterviewsController controller;
+        private static QuestionnairesController controller;
 
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 1;

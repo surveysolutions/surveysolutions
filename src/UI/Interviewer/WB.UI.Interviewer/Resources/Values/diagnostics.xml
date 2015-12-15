@@ -1,19 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="Troubleshooting_ScrollableContainer" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">match_parent</item>
-    <item name="android:gravity">center</item>
-    <item name="android:fillViewport">true</item>
-  </style>
-
-  <style name="Troubleshooting_Button" parent="AppTheme">
-    <item name="android:layout_width">@dimen/Troubleshooting_Element_width</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:padding">@dimen/Login_Button_padding</item>
-    <item name="android:layout_marginBottom">@dimen/Troubleshooting_Button_marginBottom</item>
-  </style>
-
   <style name="Diagnostic_Container" parent="AppTheme">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">match_parent</item>
@@ -33,9 +19,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:clickable">true</item>
     <item name="android:padding">@dimen/Troubleshooting_padding</item>
-    <item name="android:background">@drawable/diagnostics_section_layout_border</item>
   </style>
   <style name="Diagnostics_SubSection">
     <item name="android:layout_height">wrap_content</item>
@@ -47,13 +31,14 @@
   </style>
   <style name="Diagnostics_Section_Title">
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_width">wrap_content</item>
     <item name="android:fontFamily">@string/font_fontFamily_medium</item>
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textSize">@dimen/textsize_16</item>
     <item name="android:singleLine">false</item>
     <item name="android:textStyle">bold</item>
     <item name="android:clickable">true</item>
+    <item name="android:background">@drawable/transparent_input_button</item>
   </style>
   <style name="Diagnostics_Section_Description">
     <item name="android:fontFamily">Arial</item>
@@ -62,6 +47,9 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:textSize">@dimen/textsize_14</item>
+  </style>
+  <style name="Diagnostics_Section_Description_Warning"  parent="Diagnostics_Section_Description">
+    <item name="android:textColor">@color/errorTextColor</item>
   </style>
   <style name="Diagnostics_Subsection_Title" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>

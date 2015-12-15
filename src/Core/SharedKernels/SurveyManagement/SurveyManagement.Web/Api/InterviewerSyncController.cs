@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
-using WB.Core.GenericSubdomains.Portable.Implementation;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        [ApiBasicAuth]
+        [ApiBasicAuth(new[] {UserRoles.Operator})]
         [Obsolete]
         public HttpResponseMessage GetHandshakePackage(string clientId, string androidId, Guid? clientRegistrationId, int version = 0)
         {
@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        [ApiBasicAuth]
+        [ApiBasicAuth(new[] { UserRoles.Operator })]
         public bool CheckExpectedDevice(string deviceId)
         {
             var interviewerInfo = userInfoViewFactory.Load(new UserWebViewInputModel(this.GlobalInfo.GetCurrentUser().Name, null));
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        [ApiBasicAuth]
+        [ApiBasicAuth(new[] { UserRoles.Operator })]
         public HttpResponseMessage GetHandshakePackage(HandshakePackageRequest request)
         {
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotAcceptable)
@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        [ApiBasicAuth]
+        [ApiBasicAuth(new[] { UserRoles.Operator })]
         public HttpResponseMessage PostFile(PostFileRequest request)
         {
             plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
-        [ApiBasicAuth]
+        [ApiBasicAuth(new[] { UserRoles.Operator })]
         public HttpResponseMessage PostPackage(PostPackageRequest request)
         {
             this.incomingSyncPackagesQueue.Enqueue(interviewId: request.InterviewId, item: request.SynchronizationPackage);
@@ -112,6 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
         {
             string pathToFile = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
@@ -136,6 +137,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public bool CheckNewVersion(int versionCode)
         {
             string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
@@ -146,6 +148,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public void PostInfoPackage(TabletInformationPackage tabletInformationPackage)
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(tabletInformationPackage.AndroidId));

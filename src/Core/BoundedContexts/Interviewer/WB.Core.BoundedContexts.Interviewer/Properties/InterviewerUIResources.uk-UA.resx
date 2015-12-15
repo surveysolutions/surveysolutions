@@ -225,9 +225,6 @@
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Вийти</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Виправлення неполадок</value>
-  </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>Немає мережи. Перевірте налаштування мережі</value>
   </data>

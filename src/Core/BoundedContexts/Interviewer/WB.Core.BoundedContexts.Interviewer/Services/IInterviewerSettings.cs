@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         string GetApplicationVersionName();
         string GetDeviceTechnicalInformation();
         int GetApplicationVersionCode();
+        string GetExternalStorageDirectory();
         Task SetEndpointAsync(string endpoint);
         Task SetHttpResponseTimeoutAsync(int timeout);
         Task SetGpsResponseTimeoutAsync(int timeout);
