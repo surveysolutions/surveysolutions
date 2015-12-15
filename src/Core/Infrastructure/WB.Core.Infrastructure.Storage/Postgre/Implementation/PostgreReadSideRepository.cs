@@ -22,17 +22,17 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             this.sessionProvider = sessionProvider;
         }
 
-        public int Count()
+        public virtual int Count()
         {
             return this.sessionProvider.GetSession().QueryOver<TEntity>().RowCount();
         }
 
-        public TEntity GetById(string id)
+        public virtual TEntity GetById(string id)
         {
             return this.sessionProvider.GetSession().Get<TEntity>(id);
         }
 
-        public void Remove(string id)
+        public virtual void Remove(string id)
         {
             var session = this.sessionProvider.GetSession();
 
@@ -44,7 +44,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             session.Delete(entity);
         }
 
-        public void Store(TEntity entity, string id)
+        public virtual void Store(TEntity entity, string id)
         {
             ISession session = this.sessionProvider.GetSession();
 
@@ -58,7 +58,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             session.SaveOrUpdate(null, entity, id);
         }
 
-        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
             using (ISession session = sessionFactory.OpenSession())
@@ -86,7 +86,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             ISession session = this.sessionProvider.GetSession();
 
@@ -95,7 +95,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             session.Delete(string.Format("from {0} e", entityName));
         }
 
-        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        public virtual TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
             return query.Invoke(this.sessionProvider.GetSession().Query<TEntity>());
         }
