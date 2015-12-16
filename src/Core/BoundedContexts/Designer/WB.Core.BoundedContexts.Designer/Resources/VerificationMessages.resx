@@ -420,4 +420,7 @@
   <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
     <value>Lookup table has not unique rowcode values</value>
   </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>Lookup table cannot be empty</value>
+  </data>
 </root>

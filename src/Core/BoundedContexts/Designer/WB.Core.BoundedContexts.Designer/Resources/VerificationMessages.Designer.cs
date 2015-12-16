@@ -487,6 +487,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table cannot be empty.
+        /// </summary>
+        internal static string WB0048_LookupHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0048_LookupHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Barcode question cannot be filled by supervisor..
         /// </summary>
         internal static string WB0049_QRBarcodeQuestionIsSupervisorQuestion {
