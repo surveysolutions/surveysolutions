@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.SurveySolutions;
+﻿using System;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
@@ -8,6 +9,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
             this.Levels = levels;
         }
+
+        public Guid InterviewId { get; set; }
 
         public InterviewDataExportLevelView[] Levels { get; set; }
 
