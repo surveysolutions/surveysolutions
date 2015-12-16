@@ -191,6 +191,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     LookupVerifier(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName, VerificationErrorLevel.Critical),
+                    LookupVerifier(LookupTableHasEmptyContent, "WB0048", VerificationMessages.WB0048_LookupHasEmptyContent, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasInvalidHeaders, "WB0031", VerificationMessages.WB0031_LookupTableHasInvalidHeaders, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
                     LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
@@ -534,11 +535,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
-            Func<LookupTable, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
+            Func<Guid, LookupTable, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
         {
             return (questionnaire, state) => questionnaire
                     .LookupTables
-                    .Where(entity => hasError(entity.Value, questionnaire))
+                    .Where(entity => hasError(entity.Key, entity.Value, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, level, CreateLookupReference(entity.Key)));
         }
 
@@ -626,14 +627,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !IsVariableNameValid(macro.Name);
         }
 
-        private static bool LookupTableHasEmptyName(LookupTable table, QuestionnaireDocument questionnaire)
+        private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(table.TableName);
         }
         
-        private static bool LookupTableHasInvalidName(LookupTable table, QuestionnaireDocument questionnaire)
+        private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
+        }
+
+        private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
+        {
+            var lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, tableId);
+            return lookupTableContent == null;
         }
 
         private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, QuestionnaireDocument questionnaire)

@@ -14,7 +14,6 @@
                 if ($scope.isFoldedChapters) {
                     $rootScope.$broadcast("closeChaptersListRequested", {});
                 }
-
                 if ($scope.isFoldedMacros) {
                     $rootScope.$broadcast("closeMacrosListRequested", {});
                 }

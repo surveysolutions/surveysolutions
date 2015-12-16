@@ -7166,6 +7166,9 @@ textarea {
 .icon-macro {
   background-position: 0 -388px;
 }
+.icon-lookup {
+  background-position: 0 -413px;
+}
 .icon-error.icon-numeric {
   background-position: -30px 0;
 }
@@ -7201,6 +7204,9 @@ textarea {
 }
 .icon-error.icon-macro {
   background-position: -30px -388px;
+}
+.icon-error.icon-lookup {
+  background-position: -30px -413px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7788,13 +7794,13 @@ textarea#edit-group-description {
   text-decoration: none;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-chapters {
-  background: url(i/chapter-panel-btn.png) 0 19px no-repeat;
+  background: url(i/designer-left-icons.png) 0 0 no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-macroses {
-  background: url(i/macro-panel-btn.png) center center no-repeat;
+  background: url(i/designer-left-icons.png) 0 -200px no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-lookupTables {
-  background: url(i/macro-panel-btn.png) center center no-repeat;
+  background: url(i/designer-left-icons.png) 0 -250px no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a:hover {
   background-color: #dbdfe2;
