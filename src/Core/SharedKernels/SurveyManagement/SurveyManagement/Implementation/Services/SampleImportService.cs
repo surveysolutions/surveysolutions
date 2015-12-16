@@ -150,8 +150,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
 //            foreach (var preloadedDataRecord in interviewForCreate)
 //            {
-//                this.CreatePreloadedInterview(preloadedDataRecord, version, id, responsibleHeadquarterId, responsibleSupervisorId, commandInvoker, bigTemplate, ref errorCountOccuredOnInterviewsCreaition);
-//            
+//                try
+//                { 
+//                    this.CreatePreloadedInterview(preloadedDataRecord, version, responsibleHeadquarterId, responsibleSupervisorId, commandInvoker, bigTemplate);
+//                }
+//                catch(InterviewException interviewException)
+//                {
+//                    Logger.Error(interviewException.Message, interviewException);
+//                
+//                    if (interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
+//                    {
+//                        interviewLimitReached = true;
+//                        break;
+//                    }
+//                }
+//                catch (Exception e)
+//                {
+//                    Logger.Error(e.Message, e);
+//                
+//                    Interlocked.Increment(ref errorCountOccuredOnInterviewsCreation);
+//                }
+//
 //                Interlocked.Increment(ref totalInterviewsProcessed);
 //                result.SetStatusMessage(string.Format(
 //                        @"Processed {0} interview(s) out of {1}. Spent time: {2:d\.hh\:mm\:ss}. Total estimated time: {3:d\.hh\:mm\:ss}.",
@@ -182,8 +201,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 
                         if (interviewException.ExceptionType == InterviewDomainExceptionType.InterviewLimitReached)
                         {
-                            loopState.Stop();
                             interviewLimitReached = true;
+                            loopState.Stop();
                         }
                     }
                     catch (Exception e)
@@ -227,11 +246,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             ICommandService commandInvoker,
             QuestionnaireDocument questionnaireDocument)
         {
-            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-            ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
-
-            try
-            {
+//            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+//            ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
+//
+//            try
+//            {
                 Guid responsibleId = preloadedDataRecord.SupervisorId ?? responsibleSupervisorId.Value;
 
                 commandInvoker.Execute(
@@ -242,12 +261,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         preloadedDataRecord.PreloadedDataDto,
                         DateTime.UtcNow,
                         responsibleId));
-            }
-            finally
-            {
-                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-            }
+//            }
+//            finally
+//            {
+//                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+//                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
+//            }
         }
 
         private static TimeSpan CalculateEstimatedTime(int interviewIndex, int totalInterviews, DateTime startTime, DateTime currentTime)

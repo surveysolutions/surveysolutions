@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -297,7 +298,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            return Monads.Maybe(() => this.users.GetById(responsibleId).UserName) ?? unknown;
+            var userDocument = this.users.GetById(responsibleId);
+            var userName = userDocument?.UserName;
+            return userName ?? this.unknown;
         }
 
         private InterviewStatuses CreateInterviewStatuses(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
