@@ -144,6 +144,9 @@
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="IsolatedThreadExtensions.cs" />
     <Compile Include="Postgre\Implementation\PostgresEventStore.cs" />
+    <Compile Include="Postgre\NhExtensions\CustomPostgreSQL82Dialect.cs" />
+    <Compile Include="Postgre\NhExtensions\NpgsqlDriverExtended.cs" />
+    <Compile Include="Postgre\NhExtensions\NpgsqlExtendedSqlType.cs" />
     <Compile Include="Postgre\PostgresWriteSideModule.cs" />
     <Compile Include="ThreadMarkerManager.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />

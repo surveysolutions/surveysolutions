@@ -766,8 +766,10 @@ namespace WB.Tests.Unit
             Guid interviewId,
             params ExportedQuestion[] questions)
         {
-            return new InterviewDataExportRecord("test", new string[0], new string[0],
-                questions, new string [0]);
+            return new InterviewDataExportRecord("test", new string[0], new string[0], new string [0])
+            {
+                Answers = questions.Select(x => string.Join("\n", x)).ToArray() 
+            };
         }
 
         public static InterviewDataExportView InterviewDataExportView(

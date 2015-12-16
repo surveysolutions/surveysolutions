@@ -64,14 +64,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 var records = interviewDataExportView.GetAsRecords().ToList();
 
-                this.exportRecords.BulkStore(Enumerable
-                    .Zip(records, records.Select((record, index) => GenerateRecordId(interviewId, index)), Tuple.Create)
-                    .ToList());
-
-                //this.dataExportRecords.Store(interviewDataExportView, interviewId);
+                foreach (var record in records)
+                {
+                    this.exportRecords.Store(record, record.Id);
+                }
             }
         }
-
-        private static string GenerateRecordId(Guid interviewId, int index) => $"{interviewId}${index}";
     }
 }
