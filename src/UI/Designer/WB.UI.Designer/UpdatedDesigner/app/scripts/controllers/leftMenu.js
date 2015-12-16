@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('LeftMenuCtrl',
-        function ($rootScope, $scope) {
+        function ($rootScope, $scope, utilityService) {
             'use strict';
 
             $scope.isFoldedChapters = false;
@@ -54,6 +54,15 @@
                 $scope.isFoldedLookupTables = true;
                 $rootScope.$broadcast("openLookupTables", {});
             };
+
+
+            $scope.$on('openLookupTables', function () {
+                $scope.isFoldedLookupTables = true;
+            });
+
+            $scope.$on('openMacrosList', function () {
+                $scope.isFoldedMacros = true;
+            });
 
             $scope.$on('closeChaptersList', function () {
                 closeAllPanel();

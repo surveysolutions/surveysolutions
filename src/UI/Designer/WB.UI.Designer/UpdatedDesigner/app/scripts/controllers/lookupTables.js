@@ -102,11 +102,16 @@
             };
 
             $scope.$on('openLookupTables', function (scope, params) {
+
+                $rootScope.$broadcast("closeChaptersListRequested", {});
+                $rootScope.$broadcast("closeMacrosListRequested", {});
+
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {
                     setTimeout(function () { utilityService.focus("focusLookupTable" + params.focusOn); }, 500);
                 }
             });
+
 
             $scope.$on('closeLookupTablesRequested', function () {
                 $scope.foldback();

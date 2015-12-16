@@ -545,10 +545,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
             Func<LookupTable, LookupTableContent, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
         {
-            return (questionnaire, state) => questionnaire
-                    .LookupTables
-                    .Where(entity => hasError(entity.Value, lookupTableService.GetLookupTableContent(questionnaire.PublicKey, entity.Key), questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, level, CreateLookupReference(entity.Key)));
+            return (questionnaire, state) => 
+                from lookupTable in questionnaire.LookupTables
+                let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
+                where lookupTableContent != null
+                where hasError(lookupTable.Value, lookupTableContent, questionnaire)
+                select new QuestionnaireVerificationError(code, message, level, CreateLookupReference(lookupTable.Key));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(

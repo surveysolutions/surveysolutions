@@ -79,9 +79,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
 
-            if (lookupTableContent == null)
-                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
-
             return lookupTableContent;
         }
 
