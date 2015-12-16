@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Text;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
@@ -119,9 +120,38 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             }
         }
 
+        public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
+        {
+            var unzippedFiles = new List<UnzippedFile>();
+            using (ZipInputStream zipFileStream = new ZipInputStream(zipStream))
+            {
+                ZipEntry zipFileOrDirectory;
+                while ((zipFileOrDirectory = zipFileStream.GetNextEntry()) != null)
+                {
+                    if (!zipFileOrDirectory.IsFile) continue;
+
+                    var unzippedFileStream = new MemoryStream();
+                    zipFileStream.CopyTo(unzippedFileStream);
+                    unzippedFiles.Add(new UnzippedFile
+                    {
+                        FileName = zipFileOrDirectory.Name,
+                        FileStream = unzippedFileStream
+                    });
+                }
+            }
+
+            return unzippedFiles;
+        }
+
         public bool IsZipFile(string filePath)
         {
             var zip = new ZipFile(filePath);
+            return zip.TestArchive(true);
+        }
+
+        public bool IsZipStream(Stream zipStream)
+        {
+            var zip = new ZipFile(zipStream);
             return zip.TestArchive(true);
         }
 

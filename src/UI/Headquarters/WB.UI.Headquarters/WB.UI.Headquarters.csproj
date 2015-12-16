@@ -66,6 +66,10 @@
       <HintPath>..\..\..\..\packages\Common.Logging.NLog40.3.3.0\lib\net40\Common.Logging.NLog40.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CsvHelper.2.13.5.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -288,6 +292,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\batch-user-creation.js" />
+    <Content Include="Scripts\pages\import-interviews.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -548,9 +553,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BatchUserUploadController.cs" />
+    <Compile Include="Controllers\InterviewImportService.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Controllers\IInterviewImportService.cs" />
+    <Compile Include="Controllers\InterviewImportStatus.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
@@ -558,6 +566,7 @@
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
+    <Compile Include="Controllers\TypeExtensions.cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />

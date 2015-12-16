@@ -21,14 +21,17 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IPreloadedDataRepository preloadedDataRepository;
         readonly Func<ISampleImportService> sampleImportServiceFactory;
+        private readonly IInterviewImportService interviewImportService;
 
         public InterviewsApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
-            IPreloadedDataRepository preloadedDataRepository, Func<ISampleImportService> sampleImportServiceFactory)
+            IPreloadedDataRepository preloadedDataRepository, Func<ISampleImportService> sampleImportServiceFactory,
+            IInterviewImportService interviewImportService)
             : base(commandService, globalInfo, logger)
         {
             this.preloadedDataRepository = preloadedDataRepository;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
+            this.interviewImportService = interviewImportService;
         }
 
         [ObserverNotAllowedApi]
@@ -89,6 +92,31 @@ namespace WB.UI.Headquarters.Controllers
                     ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
                 }
             }).Start();
+        }
+
+        [HttpGet]
+        public InterviewImportStatusApiView GetImportInterviewsStatus()
+        {
+            var status = this.interviewImportService.Status;
+            return new InterviewImportStatusApiView
+            {
+                QuestionnaireTitle = status.QuestionnaireTitle,
+                IsInProgress = status.IsInProgress,
+                TotalInterviewsCount = status.TotalInterviewsCount,
+                CreatedInterviewsCount = status.CreatedInterviewsCount,
+                EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
+                ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss")
+            };
+        }
+
+        public class InterviewImportStatusApiView
+        {
+            public string QuestionnaireTitle { get; set; }
+            public bool IsInProgress { get; set; }
+            public int TotalInterviewsCount { get; set; }
+            public int CreatedInterviewsCount { get; set; }
+            public string ElapsedTime { get; set; }
+            public string EstimatedTime { get; set; }
         }
     }
 }
