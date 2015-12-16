@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             InterviewStatus.ApprovedByHeadquarters,
             InterviewStatus.ApprovedBySupervisor,
             InterviewStatus.Completed,
-            InterviewStatus.Created,
             InterviewStatus.SupervisorAssigned
         };
 
