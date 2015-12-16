@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using CsvHelper.Configuration;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Remotion.Linq.Parsing.ExpressionTreeVisitors.MemberBindings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -387,6 +390,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
 
+            dynamic a = new {a = "", b = 1};
+            a["fdg"] = "";
+            foreach (var property in a.GetType().GetProperties())
+            {
+                var prop = new CsvPropertyMap(property);
+            }
             return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question);
         }
 
