@@ -13,7 +13,7 @@
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible And(BandwidthTest.IsConnectionAbsent, BandwidthTest.IsBandwidthTested);" >
     <TextView
          style="@style/Diagnostics_Subsection_Title"
-         local:MvxBind="Html Localization('Diagnostics_BandwidthTestConnectionAbsent_Title')" />
+         local:MvxBind="Html BandwidthTest.ConnectionDescription" />
   </LinearLayout>
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible And(Not(BandwidthTest.IsConnectionAbsent), BandwidthTest.IsBandwidthTested);" >
     <TextView
