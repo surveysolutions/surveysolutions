@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -36,9 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         It should__first_record_have_1_answers = () =>
             result.Levels[0].Records[0].Questions.Length.ShouldEqual(2);
-
-        It should_first_record_id_equals_0 = () =>
-            result.Levels[0].Records[0].RecordId.ShouldEqual(result.Levels[0].Records[0].InterviewId.FormatGuid());
 
         It should_first_parent_ids_be_empty = () =>
            result.Levels[0].Records[0].ParentRecordIds.ShouldBeEmpty();

@@ -74,10 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                         exportStructureForLevel.LevelName,
                         this.BuildRecordsForHeader(interview, exportStructureForLevel))).ToArray();
 
-            return new InterviewDataExportView(interview.InterviewId, 
-                interview.QuestionnaireId,
-                interview.QuestionnaireVersion,
-                interviewDataExportLevelViews);
+            return new InterviewDataExportView(interviewDataExportLevelViews);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
@@ -120,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     };
                 }
 
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
+                dataRecords.Add(new InterviewDataExportRecord(recordId, referenceValues, parentRecordIds,
                     this.GetQuestionsForExport(dataByLevel, headerStructureForLevel), systemVariableValues));
             }
 
