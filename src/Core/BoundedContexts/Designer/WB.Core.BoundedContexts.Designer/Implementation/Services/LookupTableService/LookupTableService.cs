@@ -110,6 +110,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return result;
         }
 
+        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId)
+        {
+            var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
+
+            var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, sourceLookupTableName);
+
+            this.lookupTableContentStorage.Store(content, lookupTableStorageId);
+        }
+
         private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
             var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
