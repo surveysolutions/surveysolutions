@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         public IList<InterviewDataExportRecord> Records { get; private set; }
 
-        public static InterviewDataExportView CreateFromRecords(List<InterviewDataExportRecord> records)
+        public static InterviewDataExportView CreateFromRecords(IList<InterviewDataExportRecord> records)
         {
             Guid interviewId = records.Select(record => record.InterviewId).Distinct().Single();
 
