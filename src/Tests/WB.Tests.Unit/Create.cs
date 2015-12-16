@@ -2369,7 +2369,7 @@ namespace WB.Tests.Unit
         {
             public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
             {
-                return new AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+                return new AddLookupTable(questionnaireId,null, null, lookupTableId, responsibleId);
             }
 
             public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
