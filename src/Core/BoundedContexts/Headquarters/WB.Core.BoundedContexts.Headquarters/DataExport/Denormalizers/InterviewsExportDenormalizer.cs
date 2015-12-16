@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             this.exportRecords = exportRecords;
         }
 
-        public override object[] Writers => new object[] { this.dataExportRecords };
+        public override object[] Writers => new object[] { this.exportRecords };
         public override object[] Readers => new object[] { this.interviewDatas, this.questionnaireExportStructures, this.interviewReferences };
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
