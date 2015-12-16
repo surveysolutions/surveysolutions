@@ -12,7 +12,9 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Storage;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
@@ -100,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        private List<CreateInterviewCommand> ReadInterviewsFromCsv(QuestionnaireIdentity questionnaireIdentity, Stream csvFileStream,
+        private List<CreateInterviewWithPreloadedData> ReadInterviewsFromCsv(QuestionnaireIdentity questionnaireIdentity, Stream csvFileStream,
             List<IQuestion> prefilledQuestions)
         {
             var csvRow = this.GetInterviewCsvRowProperties(prefilledQuestions);
@@ -108,7 +110,7 @@ namespace WB.UI.Headquarters.Controllers
             var dynamicTypeOfAnswersOnPrefilledQuestions = csvRow.ToDynamicType();
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
-            List<CreateInterviewCommand> interviewViews;
+            List<CreateInterviewWithPreloadedData> interviewViews;
             using (var csvReader = new CsvReader(new StreamReader(csvFileStream)))
             {
                 csvReader.Configuration.AutoMap(dynamicTypeOfAnswersOnPrefilledQuestions);
@@ -117,15 +119,17 @@ namespace WB.UI.Headquarters.Controllers
                 csvReader.Configuration.ReadingExceptionCallback = (exception, reader) => { };
 
                 interviewViews = csvReader.GetRecords(dynamicTypeOfAnswersOnPrefilledQuestions)
-                    .Select((dynamic importedInterview) => new CreateInterviewCommand(
+                    .Select((dynamic importedInterview) => new CreateInterviewWithPreloadedData(
                         interviewId: Guid.NewGuid(),
                         userId: headquartersId,
                         questionnaireId: questionnaireIdentity.QuestionnaireId,
-                        questionnaireVersion: questionnaireIdentity.Version,
+                        version: questionnaireIdentity.Version,
                         supervisorId: GetSupervisorIdByName(importedInterview.supervisor),
                         answersTime: DateTime.UtcNow,
-                        answersToFeaturedQuestions:
-                            this.GetAnswersOnPrefilledQuestions(prefilledQuestions, TypeExtensions.ToDictionary(importedInterview))))
+                        preloadedDataDto: new PreloadedDataDto(new []
+                        {
+                            new PreloadedLevelDto(RosterVector.Empty, this.GetAnswersOnPrefilledQuestions(prefilledQuestions, TypeExtensions.ToDictionary(importedInterview)))
+                        })))
                     .ToList();
             }
             return interviewViews;
