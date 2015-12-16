@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -59,9 +60,26 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
+        {
+            zipStream.Seek(0, SeekOrigin.Begin);
+            return ZipFile.Read(zipStream)
+                .Entries.Where(x => !x.IsDirectory)
+                .Select(x => new UnzippedFile
+                {
+                    FileName = x.FileName,
+                    FileStream = x.InputStream
+                });
+        }
+
         public bool IsZipFile(string filePath)
         {
             return ZipFile.IsZipFile(filePath);
+        }
+
+        public bool IsZipStream(Stream zipStream)
+        {
+            return ZipFile.IsZipFile(zipStream, false);
         }
 
         public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)

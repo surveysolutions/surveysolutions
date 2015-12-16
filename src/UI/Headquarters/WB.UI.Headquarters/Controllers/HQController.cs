@@ -1,12 +1,37 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using Microsoft.CSharp.RuntimeBinder;
+using Microsoft.Practices.ServiceLocation;
+using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
+using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -26,6 +51,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using Binder = System.Reflection.Binder;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -42,6 +68,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IInterviewImportService interviewImportService;
 
         public HQController(ICommandService commandService, IGlobalInfoProvider provider, ILogger logger,
             IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView> takeNewInterviewViewFactory,
@@ -52,7 +79,8 @@ namespace WB.UI.Headquarters.Controllers
             IPreloadedDataVerifier preloadedDataVerifier,
             IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IInterviewImportService interviewImportService)
             : base(commandService, provider, logger)
         {
             this.takeNewInterviewViewFactory = takeNewInterviewViewFactory;
@@ -62,6 +90,7 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.interviewImportService = interviewImportService;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
         }
@@ -122,18 +151,12 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View("BatchUpload", model);
             }
 
-            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
-            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
+            var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
 
-            //clean up for security reasons
-            if (preloadedMetadata == null)
-            {
-                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
-            }
+            this.interviewImportService.ImportInterviews(questionnaireIdentity, model.File.InputStream);
 
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
-
-            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title,  preloadedMetadata));
+            return this.RedirectToAction("BatchUpload",
+                new {id = questionnaireIdentity.QuestionnaireId, version = questionnaireIdentity.Version});
         }
 
         [HttpPost]
