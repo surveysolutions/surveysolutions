@@ -129,6 +129,7 @@
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
     <Compile Include="DataExport\DataExportDetails\AbstractDataExportProcessDetails.cs" />
     <Compile Include="DataExport\DataExportDetails\DataExportProcessDetailsExtensions.cs" />
+    <Compile Include="DataExport\Denormalizers\InterviewsExportDenormalizer.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\TabBasedFormatExportHandler.cs" />
     <Compile Include="DataExport\ExportSettings.cs" />
     <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />

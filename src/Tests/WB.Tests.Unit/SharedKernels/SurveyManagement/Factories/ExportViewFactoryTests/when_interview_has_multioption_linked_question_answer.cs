@@ -39,8 +39,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().Questions.First();
-            exportedQuestion.QuestionType.ShouldEqual(QuestionType.MultyOption);
-            exportedQuestion.QuestionId.ShouldEqual(multyOptionLinkedQuestionId);
             exportedQuestion.Answers.Length.ShouldEqual(2);
             exportedQuestion.Answers.SequenceEqual(new[] {"2", ""}).ShouldBeTrue();
         };
