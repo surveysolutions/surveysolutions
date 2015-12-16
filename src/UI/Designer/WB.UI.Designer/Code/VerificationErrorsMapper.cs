@@ -59,6 +59,18 @@ namespace WB.UI.Designer.Code
                     };
                     continue;
                 }
+                if (reference.Type == QuestionnaireVerificationReferenceType.LookupTable)
+                {
+                    var lookupTable = questionnaireDocument.LookupTables.First(x => x.Key == reference.Id);
+                    yield return new VerificationReferenceEnriched
+                    {
+                        ItemId = reference.Id.FormatGuid(),
+                        Type = QuestionnaireVerificationReferenceType.LookupTable,
+                        Variable = lookupTable.Value.TableName,
+                        Title = lookupTable.Value.FileName
+                    };
+                    continue;
+                }
                 var item = questionnaireDocument.Find<IComposite>(reference.Id);
                 var parent = item;
                 while (parent != null)
