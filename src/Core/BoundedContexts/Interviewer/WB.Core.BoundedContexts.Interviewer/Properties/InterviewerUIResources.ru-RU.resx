@@ -490,10 +490,10 @@
     <value>Поделится информацией через..</value>
   </data>
   <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>Мы проверим интернет соединение с нашим сервером и его скорость</value>
+    <value>Мы проверим скорость соеденения с нашим сервером</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Проверить интернет соединение</value>
+    <value>Проверить скорость соеденения с сервером</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -542,5 +542,23 @@
   </data>
   <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
     <value>Сохраненные данные найденны:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Соединение с интернетом отсутствует&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Соединение &lt;font color="red"&gt;плохое&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Соединение хорошее</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Тип соединения:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Имя сети:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Пинг:</value>
   </data>
 </root>

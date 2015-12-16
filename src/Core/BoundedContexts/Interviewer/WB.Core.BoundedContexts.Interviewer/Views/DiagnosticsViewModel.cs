@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ITabletDiagnosticService tabletDiagnosticService,
             SendTabletInformationViewModel sendTabletInformationViewModel,
             CheckNewVersionViewModel checkNewVersion,
-            BackupRestoreViewModel backupRestore)
+            BackupRestoreViewModel backupRestore,
+            BandwidthTestViewModel bandwidthTest)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.TabletInformation = sendTabletInformationViewModel;
             this.CheckNewVersion = checkNewVersion;
             this.BackupRestore = backupRestore;
+            this.BandwidthTest = bandwidthTest;
         }
 
         public SendTabletInformationViewModel TabletInformation { get; set; }
@@ -37,6 +39,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public CheckNewVersionViewModel CheckNewVersion { get; set; }
 
         public BackupRestoreViewModel BackupRestore { get; set; }
+
+        public BandwidthTestViewModel BandwidthTest { get; set; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
 

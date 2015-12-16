@@ -23,16 +23,7 @@
         android:gravity="center"
         android:fillViewport="true">
     <LinearLayout style="@style/Diagnostic_Container">
-      <LinearLayout style="@style/Diagnostics_Section">
-        <LinearLayout style="@style/Diagnostics_TitleSection">
-          <TextView
-             style="@style/Diagnostics_Section_Title"
-             local:MvxBind="Text  Localization('Diagnostics_TestConnection_Title'); UnderlinePressed ." />
-          <TextView
-                    style="@style/Diagnostics_Section_Description"
-                    local:MvxBind="Html Localization('Diagnostics_TestConnection_Description')" />
-        </LinearLayout>
-      </LinearLayout>
+      <include layout="@layout/diagnostics__test_bandwidth_to_server" />
       <LinearLayout style="@style/Diagnostics_Section">
         <LinearLayout style="@style/Diagnostics_TitleSection">
           <TextView
