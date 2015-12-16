@@ -13,6 +13,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -57,15 +59,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewViewFactory = null,
-            IInterviewDetailsViewFactory interviewDetailsView = null)
+            IInterviewDetailsViewFactory interviewDetailsView = null,
+            ICommandService commandService = null,
+            IGlobalInfoProvider globalInfoProvider = null,
+            IUserViewFactory userViewFactory = null)
         {
-            return new InterviewsController(
+            var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
-                Mock.Of<ICommandService>(),
-                Mock.Of<IGlobalInfoProvider>(),
-                Mock.Of<IUserViewFactory>());
+                commandService ?? Mock.Of<ICommandService>(),
+                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>());
+
+            controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
+            controller.Request.SetConfiguration(new HttpConfiguration());
+
+            return controller;
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(
