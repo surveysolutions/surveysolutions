@@ -244,7 +244,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 var supervisorName = CheckAndGetSupervisorNameForLevel(topLevelRow, supervisorNameIndex);
                 result.Add(new PreloadedDataRecord
                 {
-                    PreloadedDataDto = new PreloadedDataDto(rowId, levels.ToArray()),
+                    PreloadedDataDto = new PreloadedDataDto(levels.ToArray()),
                     SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
                 });
             }
@@ -266,7 +266,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 result.Add(
                     new PreloadedDataRecord
                     {
-                        PreloadedDataDto = new PreloadedDataDto(Guid.NewGuid().FormatGuid(), new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
+                        PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
                         SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
                     });
             }
