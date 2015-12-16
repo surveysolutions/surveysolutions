@@ -89,6 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.IsBandwidthTested = true;
                 this.IsConnectionAbsent = true;
+                this.ConnectionDescription = InterviewerUIResources.Diagnostics_BandwidthTestConnectionAbsent_Title;
                 return;
             }
 
@@ -122,9 +123,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.NetworkName = this.networkService.GetNetworkName();
 
                 this.IsConnectionAbsent = time.Count == 0;
-                this.ConnectionDescription = time.Count == pingAttempCount
-                    ? InterviewerUIResources.Diagnostics_BandwidthTestConnectionOK_Title
-                    : InterviewerUIResources.Diagnostics_BandwidthTestConnectionNotOK_Title;
+                this.ConnectionDescription = this.IsConnectionAbsent
+                    ? this.ConnectionDescription =
+                        InterviewerUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title
+                    : (time.Count == pingAttempCount
+                        ? InterviewerUIResources.Diagnostics_BandwidthTestConnectionOK_Title
+                        : InterviewerUIResources.Diagnostics_BandwidthTestConnectionNotOK_Title);
             });
             
             this.IsInProgress = false;
