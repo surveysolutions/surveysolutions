@@ -492,7 +492,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>We will test connection with our server and it's speed</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Test internet connection</value>
+    <value>Test bandwidth to server</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
     <value>Delete</value>
@@ -541,5 +541,23 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
     <value>Saved data found:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Connection is OK</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Connection type:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Network name:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Connection is &lt;font color="red"&gt;not good&lt;/font&gt;</value>
   </data>
 </root>
