@@ -54,7 +54,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<IViewFactory<SampleUploadViewInputModel, SampleUploadView>>(),
                 new InterviewDataExportSettings("", false,10000,100,1),
-                Mock.Of<IQuestionnaireBrowseViewFactory>());
+                Mock.Of<IQuestionnaireBrowseViewFactory>(),
+                Mock.Of<IInterviewImportService>());
         }
     }
 }
