@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         IEventHandler<InterviewStatusChanged>
     {
         private readonly IReadSideKeyValueStorage<InterviewDataExportView> dataExportRecords;
+        private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructures;
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
@@ -33,13 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             IReadSideKeyValueStorage<InterviewData> interviewDatas,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructures,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences,
-            IExportViewFactory exportViewFactory)
+            IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
         {
             this.dataExportRecords = dataExportRecords;
             this.interviewDatas = interviewDatas;
             this.questionnaireExportStructures = questionnaireExportStructures;
             this.interviewReferences = interviewReferences;
             this.exportViewFactory = exportViewFactory;
+            this.exportRecords = exportRecords;
         }
 
         public override object[] Writers => new object[] { this.dataExportRecords };
@@ -49,16 +52,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             if (this.GenerateExportForStatuses.Contains(evnt.Payload.Status))
             {
-                var interviewReference = this.interviewReferences.GetById(evnt.EventSourceId);
+                var interviewId = evnt.EventSourceId;
+
+                var interviewReference = this.interviewReferences.GetById(interviewId);
 
                 var questionnaireExportStructure = this.questionnaireExportStructures.AsVersioned().Get(interviewReference.QuestionnaireId.FormatGuid(),
                     interviewReference.QuestionnaireVersion);
 
                 InterviewDataExportView interviewDataExportView =
-                    this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(evnt.EventSourceId));
+                    this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(interviewId));
 
-                this.dataExportRecords.Store(interviewDataExportView, evnt.EventSourceId);
+                var records = interviewDataExportView.GetAsRecords().ToList();
+
+                this.exportRecords.BulkStore(Enumerable
+                    .Zip(records, records.Select((record, index) => GenerateRecordId(interviewId, index)), Tuple.Create)
+                    .ToList());
+
+                //this.dataExportRecords.Store(interviewDataExportView, interviewId);
             }
         }
+
+        private static string GenerateRecordId(Guid interviewId, int index) => $"{interviewId}${index}";
     }
 }

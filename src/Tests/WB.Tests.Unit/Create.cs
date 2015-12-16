@@ -776,7 +776,7 @@ namespace WB.Tests.Unit
             long questionnaireVersion = 1, 
             params InterviewDataExportLevelView[] levels)
         {
-            return new InterviewDataExportView(levels);
+            return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), levels);
         }
 
         public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, string origin = null, Guid? interviewId = null)
