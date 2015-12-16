@@ -792,10 +792,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IExpressionProcessor expressionProcessor;
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider variableNameValidator;
+        private readonly ILookupTableService lookupTableService;
 
         #endregion
 
-        public Questionnaire(IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IClock clock, IExpressionProcessor expressionProcessor, ISubstitutionService substitutionService, IKeywordsProvider variableNameValidator)
+        public Questionnaire(
+            IQuestionnaireEntityFactory questionnaireEntityFactory, 
+            ILogger logger, 
+            IClock clock, 
+            IExpressionProcessor expressionProcessor, 
+            ISubstitutionService substitutionService, 
+            IKeywordsProvider variableNameValidator, 
+            ILookupTableService lookupTableService)
         {
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
@@ -803,6 +811,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.expressionProcessor = expressionProcessor;
             this.substitutionService = substitutionService;
             this.variableNameValidator = variableNameValidator;
+            this.lookupTableService = lookupTableService;
         }
 
         #region Questionnaire command handlers
@@ -851,6 +860,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 clonedDocument.SharedPersons.Clear();
             }
+
+            foreach (var lookupTable in document.LookupTables)
+            {
+                var lookupTableName = lookupTable.Value.TableName;
+
+                if (!string.IsNullOrWhiteSpace(lookupTableName))
+                {
+                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.EventSourceId);
+                }
+            }
+
 
             ApplyEvent(new QuestionnaireCloned
             {

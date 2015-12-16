@@ -100,7 +100,7 @@ namespace WB.UI.Designer.Api
             catch (ArgumentException e)
             {
                 this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
             return this.ProcessCommand(updateLookupTableCommand, commandType);
