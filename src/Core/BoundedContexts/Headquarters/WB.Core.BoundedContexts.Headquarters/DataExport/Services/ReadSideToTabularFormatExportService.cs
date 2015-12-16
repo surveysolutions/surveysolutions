@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
@@ -57,22 +58,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.transactionManager = transactionManager;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
-            this.interviewsExporter = new InterviewsExporter(transactionManager, 
-                interviewSummaries, 
-                fileSystemAccessor, 
-                interviewDatas, 
-                exportViewFactory,
-                logger,
-                interviewDataExportSettings, 
-                csvWriter);
+            this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
-            this.commentsExporter = new CommentsExporter(interviewDataExportSettings, 
-                fileSystemAccessor, 
-                csvWriter, 
-                interviewCommentariesStorage,
-                transactionManager);
+            this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
 
-            this.interviewActionsExporter = new InterviewActionsExporter(interviewDataExportSettings, fileSystemAccessor, csvWriter, transactionManager, interviewActionsDataStorage);
+            this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
         }
 
         public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)

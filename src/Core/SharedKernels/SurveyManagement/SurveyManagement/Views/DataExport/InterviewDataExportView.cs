@@ -1,8 +1,9 @@
 ﻿using System;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
-    public class InterviewDataExportView
+    public class InterviewDataExportView : IReadSideRepositoryEntity
     {
         public InterviewDataExportView(Guid interviewId, Guid templateId, long templateVersion, InterviewDataExportLevelView[] levels)
         {

@@ -69,9 +69,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_first_record_has_one_question = () =>
           GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions.Length.ShouldEqual(1);
 
-        It should_first_record_has_question_with_id_of_questionInsideRosterGroupId = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions[0].QuestionId.ShouldEqual(questionInsideRosterGroupId);
-
         It should_first_record_has_question_with_one_answer = () =>
           GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
 
@@ -83,9 +80,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         It should_second_record_has_one_question = () =>
           GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions.Length.ShouldEqual(1);
-
-        It should_second_record_has_question_with_id_of_questionInsideRosterGroupId = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].QuestionId.ShouldEqual(questionInsideRosterGroupId);
 
         It should_second_record_has_question_with_one_answer = () =>
           GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].Answers.Length.ShouldEqual(1);
