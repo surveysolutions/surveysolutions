@@ -12,5 +12,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
         LookupTableContent GetLookupTableContent(Guid questionnaireId, Guid lookupTableId);
         LookupTableContentFile GetLookupTableContentFile(Guid questionnaireId, Guid lookupTableId);
         Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId);
+        void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId);
     }
 }

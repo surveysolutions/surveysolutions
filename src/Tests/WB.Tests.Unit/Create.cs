@@ -1498,7 +1498,8 @@ namespace WB.Tests.Unit
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
                 Create.SubstitutionService(),
-                Create.KeywordsProvider());
+                Create.KeywordsProvider(),
+                Mock.Of<ILookupTableService>());
         }
 
         public static IPublishedEvent<QuestionnaireAssemblyImported> QuestionnaireAssemblyImported(Guid questionnaireId, long version)
