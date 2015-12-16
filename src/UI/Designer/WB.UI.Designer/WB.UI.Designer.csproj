@@ -473,6 +473,7 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\i\designer-left-icons.png" />
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
     <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
     <Content Include="UpdatedDesigner\vendor\angular-ui-tree\protractor.conf.js" />
