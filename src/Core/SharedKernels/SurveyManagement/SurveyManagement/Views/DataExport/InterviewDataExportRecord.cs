@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
-    public class InterviewDataExportRecord 
+    public class InterviewDataExportRecord : IReadSideRepositoryEntity
     {
         public InterviewDataExportRecord(string recordId, 
             string[] referenceValues, 
@@ -23,6 +24,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         public string RecordId { get; set; }
 
         public string[] ParentRecordIds { get; set; }
+
+        public Guid InterviewId { get; set; }
 
         public string LevelName { get; set; }
 

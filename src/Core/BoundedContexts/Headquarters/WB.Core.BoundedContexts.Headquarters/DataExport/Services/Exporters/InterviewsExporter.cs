@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IReadSideKeyValueStorage<InterviewDataExportView> exportViews;
+        private readonly IQueryableReadSideRepositoryReader<InterviewDataExportRecord> exportRecords;
         private readonly ICsvWriter csvWriter;
 
         public InterviewsExporter(ITransactionManagerProvider transactionManager, 
@@ -47,7 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings,
             IReadSideKeyValueStorage<InterviewDataExportView> exportViews, 
-            ICsvWriter csvWriter)
+            ICsvWriter csvWriter,
+            IQueryableReadSideRepositoryReader<InterviewDataExportRecord> exportRecords)
         {
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
@@ -58,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.exportViews = exportViews;
             this.csvWriter = csvWriter;
+            this.exportRecords = exportRecords;
         }
 
         public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -257,9 +260,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private InterviewExportedDataRecord ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
             Guid interviewId)
         {
-            InterviewDataExportView interviewExportStructure =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.exportViews.GetById(interviewId));
+            List<InterviewDataExportRecord> records
+                = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(()
+                    => this.exportRecords.Query(_ => _.Where(record => record.InterviewId == interviewId).ToList()));
+
+            var interviewExportStructure = InterviewDataExportView.CreateFromRecords(records);
+
+            //InterviewDataExportView interviewExportStructure =
+            //    this.transactionManager.GetTransactionManager()
+            //        .ExecuteInQueryTransaction(() => this.exportViews.GetById(interviewId));
 
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);
 
