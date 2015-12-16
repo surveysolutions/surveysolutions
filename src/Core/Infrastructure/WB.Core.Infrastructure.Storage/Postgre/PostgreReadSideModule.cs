@@ -28,7 +28,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 {
     public class PostgresReadSideModule : NinjectModule
     {
-        internal const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
+        public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
         private readonly IEnumerable<Assembly> mappingAssemblies;

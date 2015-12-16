@@ -8,12 +8,15 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
+using NHibernate;
+using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -39,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IReadSideKeyValueStorage<InterviewDataExportView> exportViews;
         private readonly IQueryableReadSideRepositoryReader<InterviewDataExportRecord> exportRecords;
         private readonly ICsvWriter csvWriter;
+        private readonly ISessionFactory sessionFactory;
 
         public InterviewsExporter(ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
@@ -49,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             InterviewDataExportSettings interviewDataExportSettings,
             IReadSideKeyValueStorage<InterviewDataExportView> exportViews, 
             ICsvWriter csvWriter,
+            [Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory,
             IQueryableReadSideRepositoryReader<InterviewDataExportRecord> exportRecords)
         {
             this.transactionManager = transactionManager;
@@ -60,6 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.exportViews = exportViews;
             this.csvWriter = csvWriter;
+            this.sessionFactory = sessionFactory;
             this.exportRecords = exportRecords;
         }
 
@@ -260,15 +266,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private InterviewExportedDataRecord ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
             Guid interviewId)
         {
-            List<InterviewDataExportRecord> records
-                = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(()
-                    => this.exportRecords.Query(_ => _.Where(record => record.InterviewId == interviewId).ToList()));
+            IList<InterviewDataExportRecord> records = null;
+            using (var session = this.sessionFactory.OpenStatelessSession())
+            {
+               records = session.QueryOver<InterviewDataExportRecord>()
+                    .Where(x => x.InterviewId == interviewId)
+                    .List<InterviewDataExportRecord>();
+            }
 
             var interviewExportStructure = InterviewDataExportView.CreateFromRecords(records);
-
-            //InterviewDataExportView interviewExportStructure =
-            //    this.transactionManager.GetTransactionManager()
-            //        .ExecuteInQueryTransaction(() => this.exportViews.GetById(interviewId));
 
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);
 
