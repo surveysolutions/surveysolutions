@@ -147,6 +147,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(QuestionnaireCloned e)
         {
             this.innerDocument = e.QuestionnaireDocument;
+            if (e.QuestionnaireDocument.Macros != null)
+            {
+                this.macroIds = e.QuestionnaireDocument.Macros.Select(x => x.Key).ToHashSet();
+            }
+            if (e.QuestionnaireDocument.LookupTables != null)
+            {
+                this.lookupTableIds = e.QuestionnaireDocument.LookupTables.Select(x => x.Key).ToHashSet();
+            }
         }
 
         private void Apply(GroupCloned e)
