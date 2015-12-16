@@ -261,12 +261,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 this.transactionManager.GetTransactionManager()
                     .ExecuteInQueryTransaction(() => this.exportViews.GetById(interviewId));
 
-            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure);
+            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);
 
             return exportedData;
         }
 
-        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView)
+        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid interviewId)
         {
             var interviewData = new Dictionary<string, string[]>(); // file name, array of rows
 
@@ -297,7 +297,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             var interviewExportedData = new InterviewExportedDataRecord
             {
-                InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
+                InterviewId = interviewId.FormatGuid(),
                 Data = interviewData,
             };
 
