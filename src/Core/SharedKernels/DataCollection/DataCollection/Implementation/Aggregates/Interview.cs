@@ -664,7 +664,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var newAnswer in answersToFeaturedQuestions)
             {
                 string key = ConversionHelper.ConvertIdAndRosterVectorToString(newAnswer.Key, EmptyRosterVector);
-
+                    
                 interviewChangeStructures.State.AnswersSupportedInExpressions[key] = newAnswer.Value;
                 interviewChangeStructures.State.AnsweredQuestions.Add(key);
             }

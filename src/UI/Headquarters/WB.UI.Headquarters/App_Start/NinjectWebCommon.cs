@@ -46,6 +46,7 @@ using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
@@ -229,6 +230,9 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
 
             kernel.Bind<IPasswordPolicy>().ToMethod(_ => PasswordPolicyFactory.CreatePasswordPolicy()).InSingletonScope();
+
+            kernel.Unbind<IInterviewImportService>();
+            kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
 
             return kernel;
         }
