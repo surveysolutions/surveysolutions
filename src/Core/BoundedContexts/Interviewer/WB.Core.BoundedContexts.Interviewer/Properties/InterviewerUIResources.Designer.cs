@@ -371,6 +371,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;font color=&quot;red&quot;&gt;No connection with our server&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection type:.
         /// </summary>
         public static string Diagnostics_BandwidthTestConnectionType_Title {
