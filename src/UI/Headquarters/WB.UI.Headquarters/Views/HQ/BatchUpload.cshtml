@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <div class="container" data-bind="if: !canImportInterviews()"  style="display: none;">
+    <div class="container" data-bind="visible: !canImportInterviews()"  style="display: none;">
         <div class="jumbotron">
             <h2 data-bind="text: status.questionnaireTitle"></h2>
             <p>Import interviews is in progress, please wait until current operation is finished</p>

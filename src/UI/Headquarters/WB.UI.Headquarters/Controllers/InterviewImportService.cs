@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IUserViewFactory userViewFactory;
         private readonly IArchiveUtils archiver;
+        private readonly SampleImportSettings sampleImportSettings;
 
         private readonly ConcurrentDictionary<string, Guid> supervisorCache = new ConcurrentDictionary<string, Guid>();
 
@@ -35,13 +37,15 @@ namespace WB.UI.Headquarters.Controllers
             ICommandService commandService,
             IGlobalInfoProvider globalInfoProvider,
             IUserViewFactory userViewFactory,
-            IArchiveUtils archiver)
+            IArchiveUtils archiver,
+            SampleImportSettings sampleImportSettings)
         {
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
             this.commandService = commandService;
             this.globalInfoProvider = globalInfoProvider;
             this.userViewFactory = userViewFactory;
             this.archiver = archiver;
+            this.sampleImportSettings = sampleImportSettings;
         }
 
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, Stream zipOrCsvFileStream)
@@ -49,14 +53,14 @@ namespace WB.UI.Headquarters.Controllers
             if (this.Status.IsInProgress)
                 throw new Exception("Import interviews is in progress. Wait until current operation is finished.");
 
-            //if (this.archiver.IsZipStream(zipOrCsvFileStream))
-            //{
-            //    var unzippedFiles = this.archiver.UnzipStream(zipOrCsvFileStream);
-            //    if (unzippedFiles == null || !unzippedFiles.Any())
-            //        throw new Exception("Zip file does not contains file with interviews to import.");
+            if (this.archiver.IsZipStream(zipOrCsvFileStream))
+            {
+                var unzippedFiles = this.archiver.UnzipStream(zipOrCsvFileStream);
+                if (unzippedFiles == null || !unzippedFiles.Any())
+                    throw new Exception("Zip file does not contains file with interviews to import.");
 
-            //    zipOrCsvFileStream = unzippedFiles.FirstOrDefault().FileStream;
-            //}
+                zipOrCsvFileStream = unzippedFiles.FirstOrDefault().FileStream;
+            }
 
             this.Status.IsInProgress = true;
             this.Status.StartedDateTime = DateTime.Now;
@@ -73,13 +77,10 @@ namespace WB.UI.Headquarters.Controllers
 
             Task.Run(() =>
             {
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
-
                 try
                 {
                     Parallel.ForEach(createInterviewCommands,
-                        new ParallelOptions {MaxDegreeOfParallelism = 10},
+                        new ParallelOptions {MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit},
                         (createInterviewCommand) =>
                         {
 
@@ -95,9 +96,6 @@ namespace WB.UI.Headquarters.Controllers
                 finally
                 {
                     this.Status.IsInProgress = false;
-
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
                 }
             });
         }
