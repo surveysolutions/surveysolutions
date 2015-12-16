@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
@@ -7,12 +8,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         public InterviewDataExportRecord(string recordId, 
             string[] referenceValues, 
             string[] parentLevelIds,
-            ExportedQuestion[] questions, 
+            IEnumerable<ExportedQuestion> questions, 
             string[] systemVariableValues)
         {
             this.RecordId = recordId;
             this.ParentRecordIds = parentLevelIds;
-            this.Questions = questions;
+            this.Questions = new List<ExportedQuestion>(questions);
             this.ReferenceValues = referenceValues;
             this.SystemVariableValues = systemVariableValues;
         }
@@ -29,6 +30,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         public string[] SystemVariableValues { set; get; }
 
-        public ExportedQuestion[] Questions { get; set; }
+        public IList<ExportedQuestion> Questions { get; set; }
     }
 }

@@ -120,6 +120,7 @@
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
+    <Compile Include="Mappings\InterviewDataExportViewMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />

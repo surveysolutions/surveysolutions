@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
            GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].RecordId.ShouldEqual("0");
 
         It should_first_record_has_one_question = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions.Count().ShouldEqual(1);
 
         It should_first_record_has_question_with_one_answer = () =>
           GetLevel(result, new[] { rosterSizeQuestionId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
            GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].RecordId.ShouldEqual("1");
 
         It should_second_record_has_one_question = () =>
-          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions.Length.ShouldEqual(1);
+          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions.Count().ShouldEqual(1);
 
         It should_second_record_has_question_with_one_answer = () =>
           GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].Answers.Length.ShouldEqual(1);
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
          GetLevel(result, new[] { rosterSizeQuestionId }).Records[1].Questions[0].Answers[0].ShouldEqual(someAnswer);
 
         It should_have_one_question_on_top_level = () =>
-            GetLevel(result, new Guid[0]).Records[0].Questions.Length.ShouldEqual(1);
+            GetLevel(result, new Guid[0]).Records[0].Questions.Count().ShouldEqual(1);
 
         It should_have_five_columns_for_question_on_top_level = () =>
             GetLevel(result, new Guid[0]).Records[0].Questions[0].Answers.Length.ShouldEqual(5);
