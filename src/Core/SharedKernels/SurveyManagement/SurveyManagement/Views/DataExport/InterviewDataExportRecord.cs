@@ -1,38 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
     public class InterviewDataExportRecord : IReadSideRepositoryEntity
     {
+        protected InterviewDataExportRecord()
+        {
+        }
+
         public InterviewDataExportRecord(string recordId, 
             string[] referenceValues, 
             string[] parentLevelIds,
-            IEnumerable<ExportedQuestion> questions, 
             string[] systemVariableValues)
         {
             this.RecordId = recordId;
             this.ParentRecordIds = parentLevelIds;
-            this.Questions = new List<ExportedQuestion>(questions);
             this.ReferenceValues = referenceValues;
             this.SystemVariableValues = systemVariableValues;
         }
 
-        public Guid Id { get; set; }
+        public virtual string Id { get; set; }
+        public virtual string RecordId { get; set; }
+        public virtual Guid InterviewId{ get; set; }
+        public virtual string LevelName { get; set; }
+        public virtual string[] ParentRecordIds { get; set; }
+        public virtual string[] ReferenceValues { get; set; }
+        public virtual string[] SystemVariableValues { set; get; }
+        public virtual string[] Answers { get; set; }
 
-        public string RecordId { get; set; }
-
-        public string[] ParentRecordIds { get; set; }
-
-        public Guid InterviewId { get; set; }
-
-        public string LevelName { get; set; }
-
-        public string[] ReferenceValues { get; set; }
-
-        public string[] SystemVariableValues { set; get; }
-
-        public IList<ExportedQuestion> Questions { get; set; }
+        public virtual IList<ExportedQuestion> GetQuestions() => this.Answers.Select(x => new ExportedQuestion {Answers = x.Split('\n')}).ToList();
     }
 }

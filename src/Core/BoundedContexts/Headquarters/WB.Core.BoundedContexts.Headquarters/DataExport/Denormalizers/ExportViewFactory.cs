@@ -117,8 +117,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     };
                 }
 
-                dataRecords.Add(new InterviewDataExportRecord(recordId, referenceValues, parentRecordIds,
-                    this.GetQuestionsForExport(dataByLevel, headerStructureForLevel), systemVariableValues));
+                string[][] questionsForExport = this.GetQuestionsForExport(dataByLevel, headerStructureForLevel);
+
+                dataRecords.Add(new InterviewDataExportRecord(recordId, 
+                    referenceValues, 
+                    parentRecordIds,
+                    systemVariableValues)
+                {
+                    Answers = questionsForExport.Select(x => string.Join("\n", x)).ToArray()
+                });
+
             }
 
             return dataRecords.ToArray();
@@ -179,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return string.Empty;
         }
 
-        private ExportedQuestion[] GetQuestionsForExport(InterviewLevel interviewLevel,
+        private string[][] GetQuestionsForExport(InterviewLevel interviewLevel,
             HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<ExportedQuestion>();
@@ -203,7 +211,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 result.Add(exportedQuestion);
             }
-            return result.ToArray();
+            return result.Select(x => x.Answers).ToArray();
         }
 
         private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)

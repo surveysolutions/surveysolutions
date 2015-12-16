@@ -38,14 +38,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         public IEnumerable<InterviewDataExportRecord> GetAsRecords()
         {
+            int index = 0;
             foreach (var level in this.Levels)
                 foreach (var record in level.Records)
                 {
                     record.InterviewId = this.InterviewId;
                     record.LevelName = level.LevelName;
+                    record.Id = GenerateRecordId(this.InterviewId, index++);
 
                     yield return record;
                 }
         }
+
+        private static string GenerateRecordId(Guid interviewId, int index) => $"{interviewId}${index}";
     }
 }

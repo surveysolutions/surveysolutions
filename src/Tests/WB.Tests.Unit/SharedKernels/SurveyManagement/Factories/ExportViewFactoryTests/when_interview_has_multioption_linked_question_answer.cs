@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_put_answers_to_export_in_appropriate_order = () =>
         {
             InterviewDataExportLevelView first = result.Levels.First();
-            var exportedQuestion = first.Records.First().Questions.First();
+            var exportedQuestion = first.Records.First().GetQuestions().First();
             exportedQuestion.Answers.Length.ShouldEqual(2);
             exportedQuestion.Answers.SequenceEqual(new[] {"2", ""}).ShouldBeTrue();
         };

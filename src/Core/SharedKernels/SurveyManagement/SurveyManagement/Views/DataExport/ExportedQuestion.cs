@@ -34,7 +34,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         }
 
         private QuestionType QuestionType { get; }
-        public string[] Answers { get; set; }
+
+        public virtual int Id { get; protected set; }
+        public virtual string[] Answers { get; set; }
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
