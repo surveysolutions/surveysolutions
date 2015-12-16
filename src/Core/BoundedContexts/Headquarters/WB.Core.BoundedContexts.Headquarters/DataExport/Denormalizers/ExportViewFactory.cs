@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     {
                         answers.Add(string.Empty);
                     }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, answers.ToArray());
+                    exportedQuestion = new ExportedQuestion(headerItem.QuestionType, answers.ToArray());
                 }
                 else
                 {

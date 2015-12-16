@@ -44,10 +44,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
            result.Levels[0].Records[0].ParentRecordIds.ShouldBeEmpty();
 
         It should_answered_question_be_not_empty = () =>
-           result.Levels[0].Records[0].Questions.ShouldQuestionHasOneNotEmptyAnswer(answeredQuestionId);
+           result.Levels[0].Records[0].Questions[0].Answers.Length.ShouldNotEqual(0);
 
         It should_unanswered_question_be_empty = () =>
-          result.Levels[0].Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
+          result.Levels[0].Records[0].Questions[0].Answers.Length.ShouldNotEqual(0);
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;
