@@ -399,50 +399,56 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             try
             {
-                areViewsBeingRebuiltNow = true;
-
-                errors.Clear();
-
-                try
+                using (GlobalStopwatcher.Scope("Rebuild read side"))
                 {
-                    this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                    areViewsBeingRebuiltNow = true;
 
-                    if (skipEvents == 0)
-                    {
-                        this.CleanUpWritersForHandlers(handlers, isPartialRebuild);
-                    }
-
-                    if (!isPartialRebuild)
-                    {
-                        this.CleanReadSideVersion();
-                    }
+                    errors.Clear();
 
                     try
                     {
-                        this.EnableWritersCacheForHandlers(handlers);
+                        this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
 
-                        this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
+                        if (skipEvents == 0)
+                        {
+                            this.CleanUpWritersForHandlers(handlers, isPartialRebuild);
+                        }
+
+                        if (!isPartialRebuild)
+                        {
+                            this.CleanReadSideVersion();
+                        }
+
+                        try
+                        {
+                            this.EnableWritersCacheForHandlers(handlers);
+
+                            this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
+                                skipEventsCount: skipEvents, handlers: handlers);
+                        }
+                        finally
+                        {
+                            this.DisableWritersCacheForHandlers(handlers);
+
+                            if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
+                                this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
+                        }
+
+                        if (!isPartialRebuild)
+                        {
+                            this.StoreReadSideVersion();
+                        }
                     }
                     finally
                     {
-                        this.DisableWritersCacheForHandlers(handlers);
-
-                        if(!isPartialRebuild && this.postgresReadSideBootstraper != null)
-                            this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
+                        this.transactionManagerProviderManager.UnpinTransactionManager();
                     }
 
-                    if (!isPartialRebuild)
-                    {
-                        this.StoreReadSideVersion();
-                    }
+                    UpdateStatusMessage(isPartialRebuild
+                        ? "Rebuild specific views succeeded."
+                        : "Rebuild all views succeeded.");
+                    logger.Info(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
                 }
-                finally
-                {
-                    this.transactionManagerProviderManager.UnpinTransactionManager();
-                }
-
-                UpdateStatusMessage(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
-                logger.Info(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
             }
             catch (OperationCanceledException exception)
             {
@@ -458,6 +464,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             finally
             {
                 areViewsBeingRebuiltNow = false;
+                this.logger.Info(GlobalStopwatcher.GetMeasureDetails());
+                GlobalStopwatcher.Reset();
             }
         }
 
@@ -617,22 +625,25 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             foreach (ICacheableRepositoryWriter writer in writers)
             {
-                UpdateStatusMessage(string.Format(
-                    "Disabling cache in repository writer for entity {0}.",
-                    GetStorageEntityName(writer)));
+                using (GlobalStopwatcher.Scope($"Disable cache for {GetStorageEntityName(writer)}"))
+                {
+                    UpdateStatusMessage($"Disabling cache in repository writer for entity {GetStorageEntityName(writer)}.");
 
-                try
-                {
-                    this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
-                    writer.DisableCache();
-                    this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
-                }
-                catch (Exception exception)
-                {
-                    this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
-                    string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", GetStorageEntityName(writer));
-                    this.SaveErrorForStatusReport(message, exception);
-                    UpdateStatusMessage(message);
+                    try
+                    {
+                        this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                        writer.DisableCache();
+                        this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+                    }
+                    catch (Exception exception)
+                    {
+                        this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                        string message =
+                            string.Format("Failed to disable cache and store data to repository for writer {0}.",
+                                GetStorageEntityName(writer));
+                        this.SaveErrorForStatusReport(message, exception);
+                        UpdateStatusMessage(message);
+                    }
                 }
             }
 
@@ -757,7 +768,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private static void UpdateStatusMessage(string newMessage)
         {
-            statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
+            statusMessage = $"{DateTime.Now}: {newMessage}";
         }
 
         private static string GetStorageEntityName(IReadSideStorage writer)
