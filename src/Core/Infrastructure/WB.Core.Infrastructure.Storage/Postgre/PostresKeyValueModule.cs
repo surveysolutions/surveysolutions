@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using System;
+using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
 using WB.Core.Infrastructure.FileSystem;
@@ -22,39 +23,25 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         public override void Load()
         {
-            this.Kernel.Bind(typeof (EsentCachedKeyValueStorageProvider<>)).ToSelf();
-            
-            this.Kernel.Bind(typeof (IReadSideKeyValueStorage<>))
+            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
                 .ToMethod(GetReadSideKeyValueStorage)
                 .InSingletonScope();
 
-            this.Kernel.Bind(typeof (IPlainKeyValueStorage<>))
+            this.Kernel.Bind(typeof(IPlainKeyValueStorage<>))
                 .To(typeof(PostgresPlainKeyValueStorage<>));
         }
 
-        protected object GetReadSideKeyValueStorage(IContext context)
+        private static object GetReadSideKeyValueStorage(IContext context)
         {
-            var genericProvider = this.Kernel.Get(
-                typeof (EsentCachedKeyValueStorageProvider<>).MakeGenericType(context.GenericArguments[0])) as
-                IProvider;
+            object keyValueStorage = context.Kernel.GetService(typeof(PostgresReadSideKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
+            var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
 
-            if (genericProvider==null)
-                return null;
-            return genericProvider.Create(context);
-        }
+            Type cachingKeyValueStorageType = typeof(EsentCachedReadSideStorage<>).MakeGenericType(context.GenericArguments[0]);
 
-        private class EsentCachedKeyValueStorageProvider<TEntity> : Provider<IReadSideKeyValueStorage<TEntity>>
-            where TEntity : class, IReadSideRepositoryEntity
-        {
-            protected override IReadSideKeyValueStorage<TEntity> CreateInstance(IContext context)
-            {
-                var postgresReadSideKeyValueStorage = new PostgresReadSideKeyValueStorage<TEntity>(
-                    context.Kernel.Get<ISessionProvider>(PostgresReadSideModule.SessionProviderName),
-                                                        context.Kernel.Get<PostgreConnectionSettings>());
-                var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
+            object cachingKeyValueStorage = Activator.CreateInstance(cachingKeyValueStorageType,
+                keyValueStorage, fileSystemAccessor, cacheSettings);
 
-                return new EsentCachedKeyValueStorage<TEntity>(postgresReadSideKeyValueStorage, fileSystemAccessor, cacheSettings);
-            }
+            return cachingKeyValueStorage;
         }
     }
 }

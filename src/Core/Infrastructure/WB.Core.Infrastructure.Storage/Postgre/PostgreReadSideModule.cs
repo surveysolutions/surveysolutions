@@ -156,7 +156,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             object postgresWriter = context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
             var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
 
-            Type cachedWriterType = typeof(EsentCachedReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]);
+            Type cachedWriterType = typeof(EsentCachedReadSideStorage<>).MakeGenericType(context.GenericArguments[0]);
 
             object cachingWriter = Activator.CreateInstance(cachedWriterType,
                 postgresWriter, fileSystemAccessor, cacheSettings);
