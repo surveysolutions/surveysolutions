@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Microsoft.Isam.Esent.Interop;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -213,26 +214,20 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         private void MoveEntitiesFromEsentToStorage()
         {
-            while (this.esentCache.Count > 0)
+            var bulks = this
+                .esentCache
+                .Select(pair => Tuple.Create(Deserialize(pair.Value), pair.Key))
+                .Batch(this.memoryCacheSettings.MaxCountOfEntitiesInOneStoreOperation)
+                .Select(bulk => bulk.ToList());
+
+            foreach (var bulk in bulks)
             {
-                var bulk = this
-                    .esentCache
-                    .Select(pair => Tuple.Create(Deserialize(pair.Value), pair.Key))
-                    .Take(this.memoryCacheSettings.MaxCountOfEntitiesInOneStoreOperation)
-                    .ToList();
-
                 this.storage.BulkStore(bulk);
-
-                foreach (var tuple in bulk)
-                {
-                    this.esentCache.Remove(tuple.Item2);
-                }
             }
 
-            // TODO: maybe use fast esent clean here:
-            //this.esentCache.Dispose();
-            //PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
-            //this.esentCache = new PersistentDictionary<string, string>(collectionFolder);
+            this.esentCache.Dispose();
+            PersistentDictionaryFile.DeleteFiles(this.esentCacheFolder);
+            this.esentCache = new PersistentDictionary<string, string>(this.esentCacheFolder);
         }
 
         public void Dispose()
