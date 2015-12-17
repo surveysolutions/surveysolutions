@@ -57,11 +57,11 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.archiver.IsZipStream(zipOrCsvFileStream))
             {
-                var unzippedFiles = this.archiver.UnzipStream(zipOrCsvFileStream);
-                if (unzippedFiles == null || !unzippedFiles.Any())
-                    throw new Exception("Zip file does not contains file with interviews to import.");
+                var unzippedFiles = this.archiver.UnzipStream(zipOrCsvFileStream).ToList();
 
-                zipOrCsvFileStream = unzippedFiles.FirstOrDefault().FileStream;
+                zipOrCsvFileStream = unzippedFiles.FirstOrDefault()?.FileStream;
+                if (zipOrCsvFileStream == null)
+                    throw new Exception("Zip file does not contains file with interviews.");
             }
 
             this.Status.IsInProgress = true;

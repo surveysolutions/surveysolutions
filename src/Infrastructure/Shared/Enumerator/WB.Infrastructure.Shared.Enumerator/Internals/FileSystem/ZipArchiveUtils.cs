@@ -122,7 +122,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
         {
-            var unzippedFiles = new List<UnzippedFile>();
+            zipStream.Seek(0, SeekOrigin.Begin);
             using (ZipInputStream zipFileStream = new ZipInputStream(zipStream))
             {
                 ZipEntry zipFileOrDirectory;
@@ -132,15 +132,14 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
                     var unzippedFileStream = new MemoryStream();
                     zipFileStream.CopyTo(unzippedFileStream);
-                    unzippedFiles.Add(new UnzippedFile
+                    unzippedFileStream.Seek(0, SeekOrigin.Begin);
+                    yield return new UnzippedFile
                     {
                         FileName = zipFileOrDirectory.Name,
                         FileStream = unzippedFileStream
-                    });
+                    };
                 }
             }
-
-            return unzippedFiles;
         }
 
         public bool IsZipFile(string filePath)

@@ -9,13 +9,25 @@
 
 @section scripts
 {
-    @Scripts.Render("~/validate", "~/Scripts/pages/import-interviews.js")
+    @Scripts.Render("~/Scripts/knockout.validation.js", "~/Scripts/viewmodels/pages/interview/custom.js", "~/Scripts/pages/import-interviews.js")
     <script type="text/javascript">
     $(function () {
         var $importInterviewsStatusUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus" })';
-        var model = new Supervisor.VM.ImportInterviews('@Model.QuestionnaireId', '@Model.QuestionnaireVersion', $importInterviewsStatusUrl);
+        var $importInterviewsUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewsApi", action = "ImportInterviews" })';
+        var model = new Supervisor.VM.ImportInterviews('@Model.QuestionnaireId', '@Model.QuestionnaireVersion', $importInterviewsStatusUrl, $importInterviewsUrl);
+        var isViewModelValid = function () {
+            if (!model.isValid()) {
+                model.errors.showAllMessages();
+                return false;
+            } else {
+                return true;
+            };
+        };
+
+        model.load(isViewModelValid);
+
+        ko.validation.group(model);
         ko.applyBindings(model);
-        model.load();
     });
     </script>
 }
@@ -56,21 +68,15 @@
             </div>
         }
         <div>
-            @using (Html.BeginForm("SampleBatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
-            {
-                @Html.AntiForgeryToken()
-
-                @Html.HiddenFor(x => x.QuestionnaireId)
-                @Html.HiddenFor(x => x.QuestionnaireVersion)
+            <form id="importByPrefilledQuestionsForm">
                 <br/>
-                <div class="control-group">
-                    <div class="controls">
-                        @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".tab, .txt, .zip"})
-                        @Html.ValidationMessageFor(x => x.File)
-                    </div>
+                <div class="form-group" data-bind="validationElement: fileWithInterviews">
+                        <div class="input-group">
+                            <input class="form-control" type="file" name="uploadedFiles" accept=".tab, .txt, .zip" data-bind="value: fileWithInterviews" />
+                        </div>
                 </div>
-                <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload"/>
-            }
+                <input type="submit" class="btn btn-primary" value="@BatchUpload.Upload" data-bind="click: importInterviews" />
+            </form>
         </div>
 
         <h3>@BatchUpload.AdvancedMode</h3>
