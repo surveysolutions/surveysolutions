@@ -11,13 +11,13 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> readSideStorage;
-        private readonly ReadSideStoreMemoryCacheSettings settings;
+        private readonly ReadSideCacheSettings settings;
 
         private bool isCacheEnabled = false;
 
         protected readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
 
-        public MemoryCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, ReadSideStoreMemoryCacheSettings settings)
+        public MemoryCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, ReadSideCacheSettings settings)
         {
             this.readSideStorage = readSideStorage;
             this.settings = settings;
@@ -137,7 +137,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         private void ReduceCache()
         {
-            var bulk = this.cache.Keys.Take(this.settings.MaxCountOfEntitiesInOneStoreOperation).ToList();
+            var bulk = this.cache.Keys.Take(this.settings.StoreOperationBulkSize).ToList();
             this.StoreBulkEntitiesToRepository(bulk);
         }
 
@@ -161,7 +161,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         private bool IsCacheLimitReached()
         {
-            return this.cache.Count >= this.settings.MaxCountOfCachedEntities;
+            return this.cache.Count >= this.settings.CacheSizeInEntities;
         }
     }
 }
