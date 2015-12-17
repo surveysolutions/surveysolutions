@@ -1,9 +1,11 @@
-﻿namespace WB.Core.SharedKernels.Enumerator.Services
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface ITabletDiagnosticService
     {
         void LaunchShareAction(string title, string info);
-        void UpdateTheApp(string url);
+        Task UpdateTheApp(string url);
         void RestartTheApp();
     }
 }
