@@ -177,7 +177,8 @@
         @selected-panel-bg-color: #e5e8ea; //#dbdfe2;// #f1f2f3;
         @selected-panel-border-color: #dbdfe2;
         @selected-panel-grey-color: #7e898f;
-
+        @leftpanel-accent-color: #e004c9;
+        
         #left-menu {
             position: absolute;
             left: 0;
@@ -388,6 +389,7 @@
 
                         input.table-name{
                             width: @divider-width;
+                            color: @leftpanel-accent-color;
                         }
 
                         .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
@@ -445,6 +447,7 @@
                         .actions {
                             margin-left: -6px;
                             margin-right: -6px;
+                            position: relative;
 
                             button, a.btn {
                                 background: @lookup-panel-table-item-bg;
@@ -453,6 +456,21 @@
                                     background: #e6e6e6;
                                 }
                             }
+
+                            .permanent-actions{
+                                background: @lookup-panel-table-item-bg;
+                                -webkit-box-shadow: -30px 1px 25px 0px  @lookup-panel-table-item-bg;
+                                -moz-box-shadow: -30px 1px 25px 0px  @lookup-panel-table-item-bg;
+                                box-shadow: -30px 1px 25px 0px  @lookup-panel-table-item-bg;
+                                bottom: 5px;
+                                position: absolute;
+                                right: 0;
+                                padding-left: 5px;
+                            }  
+                            
+                            &.dirty .permanent-actions{
+                                position: static;
+                            }                          
                         }
                     }
                 }
@@ -464,7 +482,7 @@
 
             @macroses-panel-padding-left: 20px;
             @macroses-panel-macros-bg: #fff;
-            @macroses-accent-color: #e004c9;
+            
             @macroses-border-color: #d9dde0;
             @macroses-decription-color: #78838a;
 
@@ -558,11 +576,11 @@
 
                             &.macros-name {
                                 .input-group-addon {
-                                    color: @macroses-accent-color;
+                                    color: @leftpanel-accent-color;
                                 }
 
                                 input {
-                                    color: @macroses-accent-color;
+                                    color: @leftpanel-accent-color;
                                 }
                             }
                         }
