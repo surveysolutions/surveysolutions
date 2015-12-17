@@ -34,11 +34,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string lookupTableName, string fileContent)
         {
-            var lookupTableContent = this.CreateLookupTableContent(fileContent);
+            var lookupTableContent = string.IsNullOrWhiteSpace(fileContent) 
+                ? this.GetLookupTableContent(questionnaireId, lookupTableId) 
+                : this.CreateLookupTableContent(fileContent);
+
+            if (lookupTableContent == null)
+            {
+                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_cant_has_empty_content));
+            }
+
             var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableName);
 
             DeleteLookupTableContent(questionnaireId, lookupTableId);
-            
+
             this.lookupTableContentStorage.Store(lookupTableContent, lookupTableStorageId);
         }
 
