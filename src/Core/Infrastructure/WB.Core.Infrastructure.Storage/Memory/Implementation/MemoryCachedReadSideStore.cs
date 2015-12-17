@@ -92,6 +92,14 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             }
         }
 
+        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var item in bulk)
+            {
+                Store(item.Item1, item.Item2);
+            }
+        }
+
         private TEntity GetByIdUsingCache(string id)
         {
             if (cache.ContainsKey(id))
