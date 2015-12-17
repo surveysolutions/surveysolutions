@@ -189,8 +189,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         private void RemoveFromCache(string id)
         {
-            this.memoryCache.Remove(id);
-            this.esentCache.Remove(id);
+            this.memoryCache[id] = null;
         }
 
         private void StoreToCache(TEntity entity, string id)
@@ -198,7 +197,6 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             try
             {
                 this.memoryCache[id] = entity;
-                this.esentCache[id] = Serialize(entity);
             }
             finally
             {
@@ -222,7 +220,14 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             {
                 TEntity entity = this.memoryCache[entityId];
 
-                this.esentCache[entityId] = Serialize(entity);
+                if (entity == null)
+                {
+                    this.esentCache.Remove(entityId);
+                }
+                else
+                {
+                    this.esentCache[entityId] = Serialize(entity);
+                }
 
                 this.memoryCache.Remove(entityId);
             }
