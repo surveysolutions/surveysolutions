@@ -89,8 +89,6 @@ namespace WB.UI.Designer.Api
                         updateLookupTableCommand.LookupTableId,
                         updateLookupTableCommand.LookupTableName,
                         fileStreamContent.Content);
-
-                    updateLookupTableCommand.LookupTableFileName = fileStreamContent.ContentName;
                 }
             }
             catch (FormatException)
