@@ -159,16 +159,18 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         private TEntity GetByIdUsingCache(string id)
         {
-            TEntity entityFromCache = this.GetFromCache(id);
+            return this.GetFromCache(id);
 
-            if (entityFromCache != null)
-                return entityFromCache;
 
-            var entity = this.readSideStorage.GetById(id);
 
-            this.cache[id] = Serialize(entity);
+            //if (entityFromCache != null)
+            //    return entityFromCache;
 
-            return entity;
+            //var entity = this.readSideStorage.GetById(id);
+
+            //this.cache[id] = Serialize(entity);
+
+            //return entity;
         }
 
         private TEntity GetFromCache(string id)
@@ -249,7 +251,8 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
                     TypeNameHandling = TypeNameHandling.Auto,
                     DefaultValueHandling = DefaultValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 };
             }
         }
