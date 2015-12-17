@@ -14,21 +14,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 {
-    internal class EsentCachedKeyValueStorage<TEntity> : EsentCachedReadSideStore<TEntity>,
-        IReadSideKeyValueStorage<TEntity> where TEntity : class, IReadSideRepositoryEntity
-    {
-        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
-            : base(storage, fileSystemAccessor, cacheSettings) {}
-    }
-
-    internal class EsentCachedReadSideRepositoryWriter<TEntity> : EsentCachedReadSideStore<TEntity>,
-        IReadSideRepositoryWriter<TEntity> where TEntity : class, IReadSideRepositoryEntity
-    {
-        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
-            : base(storage, fileSystemAccessor, cacheSettings) {}
-    }
-
-    internal class EsentCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
+    internal class EsentCachedReadSideStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> storage;
@@ -40,7 +26,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         private PersistentDictionary<string, string> esentCache;
         private readonly string esentCacheFolder;
 
-        public EsentCachedReadSideStore(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
+        public EsentCachedReadSideStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
         {
             this.storage = storage;
             this.cacheSettings = cacheSettings;

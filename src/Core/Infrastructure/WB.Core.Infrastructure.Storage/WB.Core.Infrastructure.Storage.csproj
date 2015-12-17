@@ -144,7 +144,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Esent\Implementation\EsentCachedReadSideStore.cs" />
+    <Compile Include="Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="EventSerializerSettings.cs" />
     <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
