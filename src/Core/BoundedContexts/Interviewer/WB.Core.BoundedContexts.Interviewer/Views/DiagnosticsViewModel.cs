@@ -2,6 +2,7 @@
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToDashboardCommand
         {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>()); }
         }
 
         public IMvxCommand SignOutCommand
