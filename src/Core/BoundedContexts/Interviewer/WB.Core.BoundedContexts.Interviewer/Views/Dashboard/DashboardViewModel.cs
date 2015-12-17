@@ -59,11 +59,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.principal.CurrentUserIdentity.UserId);
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
-                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0))
+                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0)
+                || (CurrentDashboardStatus == DashboardInterviewStatus.Rejected && this.RejectedInterviewsCount == 0))
             {
                 this.CurrentDashboardStatus = DashboardInterviewStatus.New;
             }
-
 
             this.RefreshTab();
 
