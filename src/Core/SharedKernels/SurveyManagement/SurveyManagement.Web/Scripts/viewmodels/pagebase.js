@@ -139,6 +139,55 @@
         });
     };
 
+    self.SendRequestWithFiles = function (requestUrl, args, onSuccess, onDone) {
+
+        if (!self.IsAjaxComplete()) {
+            self.CheckForRequestComplete();
+            return;
+        }
+
+        self.IsAjaxComplete(false);
+
+        var requestHeaders = {};
+        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+        var formData = new FormData();
+        for (var argumentName in args) {
+            formData.append(argumentName, args[argumentName]);
+        }
+
+        $.ajax({
+            url: requestUrl,
+            type: 'post',
+            data: formData,
+            headers: requestHeaders,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                onSuccess(data);
+            }
+        }).fail(function (jqXhr, textStatus, errorThrown) {
+            if (jqXhr.status === 403) {
+                if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                    self.ShowError(input.settings.messages.forbiddenMessage);
+                }
+                else {
+                    self.ShowError(jqXhr.responseText);
+                }
+            } else {
+                self.ShowError(input.settings.messages.unhandledExceptionMessage);
+            }
+        }).always(function () {
+            self.IsPageLoaded(true);
+            self.IsAjaxComplete(true);
+            if (!_.isUndefined(onDone)) {
+                onDone();
+            }
+        });
+    };
+
     self.SendCommand = function(command, onSuccess, onDone) {
         self.SendRequest(commandExecutionUrl, command, function (data) {
             self.HideAllAlerts();

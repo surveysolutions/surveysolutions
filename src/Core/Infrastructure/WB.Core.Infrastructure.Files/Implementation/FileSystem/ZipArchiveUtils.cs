@@ -63,20 +63,18 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
         {
             zipStream.Seek(0, SeekOrigin.Begin);
-
-            var unzippedFiles = new List<UnzippedFile>();
+            
             foreach (var zipEntry in ZipFile.Read(zipStream).Entries.Where(x => !x.IsDirectory))
             {
                 var unzippedFileStream = new MemoryStream();
                 zipEntry.Extract(unzippedFileStream);
                 unzippedFileStream.Seek(0, SeekOrigin.Begin);
-                unzippedFiles.Add(new UnzippedFile
+                yield return new UnzippedFile
                 {
                     FileName = zipEntry.FileName,
                     FileStream = unzippedFileStream
-                });
+                };
             }
-            return unzippedFiles;
         }
 
         public bool IsZipFile(string filePath)

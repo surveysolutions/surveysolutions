@@ -136,32 +136,6 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult SampleBatchUpload(BatchUploadModel model)
-        {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-            
-            if (!this.ModelState.IsValid)
-            {
-                return this.View("BatchUpload", model);
-            }
-
-            if (User.Identity.IsObserver())
-            {
-                this.Error("You cannot perform any operation in observer mode.");
-                return this.View("BatchUpload", model);
-            }
-
-            var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
-
-            this.interviewImportService.ImportInterviews(questionnaireIdentity, model.File.InputStream);
-
-            return this.RedirectToAction("BatchUpload",
-                new {id = questionnaireIdentity.QuestionnaireId, version = questionnaireIdentity.Version});
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
         public ActionResult PanelBatchUpload(BatchUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
