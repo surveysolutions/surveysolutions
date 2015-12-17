@@ -16,8 +16,8 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     internal class EsentCachedKeyValueStorage<TEntity> : EsentCachedReadSideStore<TEntity>,
         IReadSideKeyValueStorage<TEntity> where TEntity : class, IReadSideRepositoryEntity
     {
-        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
-            : base(readSideStorage, fileSystemAccessor, memoryCacheSettings) {}
+        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
+            : base(storage, fileSystemAccessor, memoryCacheSettings) {}
     }
 
     internal class EsentCachedReadSideRepositoryWriter<TEntity> : EsentCachedReadSideStore<TEntity>,
@@ -25,43 +25,17 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     {
         private readonly IReadSideRepositoryWriter<TEntity> writer;
 
-        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
-            : base(readSideStorage, fileSystemAccessor, memoryCacheSettings)
+        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
+            : base(storage, fileSystemAccessor, memoryCacheSettings)
         {
-            this.writer = readSideStorage;
-        }
-
-        //protected override void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
-        //{
-        //    var entitiesToStore = new List<Tuple<TEntity, string>>();
-        //    foreach (var entityId in bulk)
-        //    {
-        //        var entity = cache[entityId];
-        //        if (entity == null)
-        //        {
-        //            this.writer.Remove(entityId);
-        //        }
-        //        else
-        //        {
-        //            entitiesToStore.Add(Tuple.Create(entity, entityId));
-        //        }
-
-        //        cache.Remove(entityId);
-        //    }
-
-        //    this.writer.BulkStore(entitiesToStore);
-        //}
-
-        public override void BulkStore(List<Tuple<TEntity, string>> bulk)
-        {
-            this.writer.BulkStore(bulk);
+            this.writer = storage;
         }
     }
 
     internal class EsentCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly IReadSideStorage<TEntity> readSideStorage;
+        private readonly IReadSideStorage<TEntity> storage;
         private readonly ReadSideStoreMemoryCacheSettings memoryCacheSettings;
 
         private bool isCacheUsed = false;
@@ -70,9 +44,9 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         private PersistentDictionary<string, string> esentCache;
         private readonly string esentCacheFolder;
 
-        public EsentCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
+        public EsentCachedReadSideStore(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
         {
-            this.readSideStorage = readSideStorage;
+            this.storage = storage;
             this.memoryCacheSettings = memoryCacheSettings;
 
             this.esentCacheFolder = Path.Combine(@"C:\Projects\AppDatas\HQSV\Temp\Esent", typeof(TEntity).Name);
@@ -93,13 +67,13 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         }
 
         public string GetReadableStatus()
-            => $"{this.readSideStorage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "memory + ESENT" : "disabled")}  |  cached {this.memoryCache.Count}, {this.esentCache.Count}";
+            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "memory + ESENT" : "disabled")}  |  cached {this.memoryCache.Count}, {this.esentCache.Count}";
 
         public Type ViewType => typeof(TEntity);
 
         public bool IsCacheEnabled => this.isCacheUsed;
 
-        public void Clear() => (this.readSideStorage as IReadSideRepositoryCleaner)?.Clear();
+        public void Clear() => (this.storage as IReadSideRepositoryCleaner)?.Clear();
 
         public void EnableCache()
         {
@@ -110,17 +84,9 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public void DisableCache()
         {
-            this.ReduceMemoryCache(leaveEntities: 0);
+            this.MoveEntitiesFromMemoryToEsent(leaveEntities: 0);
 
-            while (this.esentCache.Count > 0)
-            {
-                this.StoreBulkEntitiesToRepository(this.esentCache.Keys.ToList());
-
-                // TODO: maybe use fast esent clean here:
-                //this.esentCache.Dispose();
-                //PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
-                //this.esentCache = new PersistentDictionary<string, string>(collectionFolder);
-            }
+            this.MoveEntitiesFromEsentToStorage();
 
             this.isCacheUsed = false;
         }
@@ -133,7 +99,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             }
             else
             {
-                return this.readSideStorage.GetById(id);
+                return this.storage.GetById(id);
             }
         }
 
@@ -145,7 +111,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             }
             else
             {
-                this.readSideStorage.Remove(id);
+                this.storage.Remove(id);
             }
         }
 
@@ -157,15 +123,20 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             }
             else
             {
-                this.readSideStorage.Store(view, id);
+                this.storage.Store(view, id);
             }
         }
 
-        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            foreach (var tuple in bulk)
+            if (this.isCacheUsed)
             {
-                Store(tuple.Item1, tuple.Item2);
+                bulk.ForEach(tuple
+                    => this.StoreToCache(tuple.Item1, tuple.Item2));
+            }
+            else
+            {
+                this.storage.BulkStore(bulk);
             }
         }
 
@@ -216,11 +187,11 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         {
             if (this.memoryCache.Count >= this.memoryCacheSettings.MaxCountOfCachedEntities)
             {
-                this.ReduceMemoryCache(leaveEntities: this.memoryCache.Count / 2);
+                this.MoveEntitiesFromMemoryToEsent(leaveEntities: this.memoryCache.Count / 2);
             }
         }
 
-        private void ReduceMemoryCache(int leaveEntities)
+        private void MoveEntitiesFromMemoryToEsent(int leaveEntities)
         {
             var entityIdsToRemoveFromCache = this.memoryCache.Keys.Skip(leaveEntities).ToList();
 
@@ -241,19 +212,28 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             }
         }
 
-        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> entityIds)
+        private void MoveEntitiesFromEsentToStorage()
         {
-            foreach (var entityId in entityIds)
+            while (this.esentCache.Count > 0)
             {
-                TEntity entity = this.GetFromCache(entityId);
+                var bulk = this
+                    .esentCache
+                    .Select(pair => Tuple.Create(Deserialize(pair.Value), pair.Key))
+                    .Take(this.memoryCacheSettings.MaxCountOfEntitiesInOneStoreOperation)
+                    .ToList();
 
-                if (entity != null)
+                this.storage.BulkStore(bulk);
+
+                foreach (var tuple in bulk)
                 {
-                    this.readSideStorage.Store(entity, entityId);
+                    this.esentCache.Remove(tuple.Item2);
                 }
-
-                this.esentCache.Remove(entityId);
             }
+
+            // TODO: maybe use fast esent clean here:
+            //this.esentCache.Dispose();
+            //PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
+            //this.esentCache = new PersistentDictionary<string, string>(collectionFolder);
         }
 
         public void Dispose()
