@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
@@ -29,6 +30,7 @@ using WB.Core.Infrastructure.Files;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -132,6 +134,8 @@ namespace WB.UI.Headquarters
             };
 
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+            string esentCacheFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Cache.Folder"] ?? @"Temp\EsentCache");
+            var cacheSettings = new ReadSideCacheSettings(esentCacheFolder, postgresCacheSize, postgresCacheSize / 2);
 
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
@@ -147,9 +151,9 @@ namespace WB.UI.Headquarters
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-
-                new PostresKeyValueModule(postgresCacheSize),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, mappingAssemblies));
+                new PostresKeyValueModule(cacheSettings),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies)
+            );
 
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
