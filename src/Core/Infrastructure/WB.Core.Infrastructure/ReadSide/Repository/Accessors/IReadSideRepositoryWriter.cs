@@ -12,6 +12,5 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
     public interface IReadSideRepositoryWriter<TEntity> : IReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        void BulkStore(List<Tuple<TEntity, string>> bulk);
     }
 }
