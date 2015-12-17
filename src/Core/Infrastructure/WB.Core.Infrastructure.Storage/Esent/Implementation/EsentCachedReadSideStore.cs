@@ -131,8 +131,10 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         {
             if (this.isCacheUsed)
             {
-                bulk.ForEach(tuple
-                    => this.StoreToCache(tuple.Item1, tuple.Item2));
+                foreach (var tuple in bulk)
+                {
+                    this.StoreToCache(tuple.Item1, tuple.Item2);
+                }
             }
             else
             {
@@ -149,9 +151,6 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
                 string value;
                 if (!this.esentCache.TryGetValue(id, out value))
-                    return null;
-
-                if (value == null)
                     return null;
 
                 var entity = Deserialize(value);
