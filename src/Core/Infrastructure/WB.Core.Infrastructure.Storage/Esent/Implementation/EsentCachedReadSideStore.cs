@@ -17,27 +17,22 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     internal class EsentCachedKeyValueStorage<TEntity> : EsentCachedReadSideStore<TEntity>,
         IReadSideKeyValueStorage<TEntity> where TEntity : class, IReadSideRepositoryEntity
     {
-        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
-            : base(storage, fileSystemAccessor, memoryCacheSettings) {}
+        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
+            : base(storage, fileSystemAccessor, cacheSettings) {}
     }
 
     internal class EsentCachedReadSideRepositoryWriter<TEntity> : EsentCachedReadSideStore<TEntity>,
         IReadSideRepositoryWriter<TEntity> where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly IReadSideRepositoryWriter<TEntity> writer;
-
-        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
-            : base(storage, fileSystemAccessor, memoryCacheSettings)
-        {
-            this.writer = storage;
-        }
+        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
+            : base(storage, fileSystemAccessor, cacheSettings) {}
     }
 
     internal class EsentCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> storage;
-        private readonly ReadSideStoreMemoryCacheSettings memoryCacheSettings;
+        private readonly ReadSideCacheSettings cacheSettings;
 
         private bool isCacheUsed = false;
 
@@ -45,12 +40,12 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         private PersistentDictionary<string, string> esentCache;
         private readonly string esentCacheFolder;
 
-        public EsentCachedReadSideStore(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
+        public EsentCachedReadSideStore(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
         {
             this.storage = storage;
-            this.memoryCacheSettings = memoryCacheSettings;
+            this.cacheSettings = cacheSettings;
 
-            this.esentCacheFolder = Path.Combine(@"C:\Projects\AppDatas\HQSV\Temp\Esent", typeof(TEntity).Name);
+            this.esentCacheFolder = Path.Combine(cacheSettings.EsentCacheFolder, typeof(TEntity).Name);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.esentCacheFolder))
             {
@@ -185,7 +180,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         private void ReduceMemoryCacheIfNeeded()
         {
-            if (this.memoryCache.Count >= this.memoryCacheSettings.MaxCountOfCachedEntities)
+            if (this.memoryCache.Count >= this.cacheSettings.CacheSizeInEntities)
             {
                 this.MoveEntitiesFromMemoryToEsent(leaveEntities: this.memoryCache.Count / 2);
             }
@@ -217,7 +212,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             var bulks = this
                 .esentCache
                 .Select(pair => Tuple.Create(Deserialize(pair.Value), pair.Key))
-                .Batch(this.memoryCacheSettings.MaxCountOfEntitiesInOneStoreOperation)
+                .Batch(this.cacheSettings.StoreOperationBulkSize)
                 .Select(bulk => bulk.ToList());
 
             foreach (var bulk in bulks)

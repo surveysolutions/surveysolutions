@@ -13,11 +13,11 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 {
     public class PostresKeyValueModule : NinjectModule
     {
-        private static int memoryCacheSizePerEntity;
+        private static ReadSideCacheSettings cacheSettings;
 
-        public PostresKeyValueModule(int memoryCacheSizePerEntity)
+        public PostresKeyValueModule(ReadSideCacheSettings cacheSettings)
         {
-            PostresKeyValueModule.memoryCacheSizePerEntity = memoryCacheSizePerEntity;
+            PostresKeyValueModule.cacheSettings = cacheSettings;
         }
 
         public override void Load()
@@ -52,12 +52,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                     context.Kernel.Get<ISessionProvider>(PostgresReadSideModule.SessionProviderName),
                                                         context.Kernel.Get<PostgreConnectionSettings>());
                 var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
-                var readSideStoreMemoryCacheSettings = new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2);
 
-                return new EsentCachedKeyValueStorage<TEntity>(
-                    postgresReadSideKeyValueStorage,
-                    fileSystemAccessor,
-                    readSideStoreMemoryCacheSettings);
+                return new EsentCachedKeyValueStorage<TEntity>(postgresReadSideKeyValueStorage, fileSystemAccessor, cacheSettings);
             }
         }
     }
