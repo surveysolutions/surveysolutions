@@ -52,7 +52,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         //    this.writer.BulkStore(entitiesToStore);
         //}
 
-        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public override void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             this.writer.BulkStore(bulk);
         }
@@ -158,6 +158,14 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             else
             {
                 this.readSideStorage.Store(view, id);
+            }
+        }
+
+        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
             }
         }
 

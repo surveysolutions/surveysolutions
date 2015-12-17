@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             this.writer.BulkStore(entitiesToStore);
         }
 
-        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public override void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             this.writer.BulkStore(bulk);
         }

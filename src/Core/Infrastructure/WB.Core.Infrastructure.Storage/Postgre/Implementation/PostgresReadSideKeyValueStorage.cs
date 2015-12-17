@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
-using NHibernate;
 using Ninject;
-using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
