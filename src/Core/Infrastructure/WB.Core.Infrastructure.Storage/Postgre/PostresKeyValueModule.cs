@@ -51,11 +51,13 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 var postgresReadSideKeyValueStorage = new PostgresReadSideKeyValueStorage<TEntity>(
                     context.Kernel.Get<ISessionProvider>(PostgresReadSideModule.SessionProviderName),
                                                         context.Kernel.Get<PostgreConnectionSettings>());
-                IFileSystemAccessor fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
+                var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
+                var readSideStoreMemoryCacheSettings = new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2);
 
                 return new EsentCachedKeyValueStorage<TEntity>(
                     postgresReadSideKeyValueStorage,
-                    fileSystemAccessor);
+                    fileSystemAccessor,
+                    readSideStoreMemoryCacheSettings);
             }
         }
     }

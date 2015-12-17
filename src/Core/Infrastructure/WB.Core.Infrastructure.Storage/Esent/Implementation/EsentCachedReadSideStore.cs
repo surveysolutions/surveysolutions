@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Esent.Implementation
@@ -15,8 +16,8 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     internal class EsentCachedKeyValueStorage<TEntity> : EsentCachedReadSideStore<TEntity>,
         IReadSideKeyValueStorage<TEntity> where TEntity : class, IReadSideRepositoryEntity
     {
-        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor)
-            : base(readSideStorage, fileSystemAccessor) { }
+        public EsentCachedKeyValueStorage(IReadSideStorage<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
+            : base(readSideStorage, fileSystemAccessor, memoryCacheSettings) {}
     }
 
     internal class EsentCachedReadSideRepositoryWriter<TEntity> : EsentCachedReadSideStore<TEntity>,
@@ -24,8 +25,8 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
     {
         private readonly IReadSideRepositoryWriter<TEntity> writer;
 
-        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor)
-            : base(readSideStorage, fileSystemAccessor)
+        public EsentCachedReadSideRepositoryWriter(IReadSideRepositoryWriter<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
+            : base(readSideStorage, fileSystemAccessor, memoryCacheSettings)
         {
             this.writer = readSideStorage;
         }
@@ -61,83 +62,86 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> readSideStorage;
+        private readonly ReadSideStoreMemoryCacheSettings memoryCacheSettings;
 
-        private bool isCacheEnabled = false;
+        private bool isCacheUsed = false;
 
-        private PersistentDictionary<string, string> cache;
-        private readonly string collectionFolder;
+        private readonly Dictionary<string, TEntity> memoryCache = new Dictionary<string, TEntity>();
+        private PersistentDictionary<string, string> esentCache;
+        private readonly string esentCacheFolder;
 
-        public EsentCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor)
+        public EsentCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, IFileSystemAccessor fileSystemAccessor, ReadSideStoreMemoryCacheSettings memoryCacheSettings)
         {
             this.readSideStorage = readSideStorage;
+            this.memoryCacheSettings = memoryCacheSettings;
 
-            string collectionName = typeof(TEntity).Name;
-            this.collectionFolder = Path.Combine(@"C:\Projects\AppDatas\HQSV\Temp\Esent", collectionName);
+            this.esentCacheFolder = Path.Combine(@"C:\Projects\AppDatas\HQSV\Temp\Esent", typeof(TEntity).Name);
 
-            if (!fileSystemAccessor.IsDirectoryExists(this.collectionFolder))
+            if (!fileSystemAccessor.IsDirectoryExists(this.esentCacheFolder))
             {
-                fileSystemAccessor.CreateDirectory(this.collectionFolder);
+                fileSystemAccessor.CreateDirectory(this.esentCacheFolder);
             }
 
-            if (!fileSystemAccessor.IsWritePermissionExists(this.collectionFolder))
+            if (!fileSystemAccessor.IsWritePermissionExists(this.esentCacheFolder))
             {
                 throw new ArgumentException(
-                    $"Error initializing ESENT persistent dictionary because there are problems with write access to folder {this.collectionFolder}");
+                    $"Error initializing ESENT persistent dictionary because there are problems with write access to folder {this.esentCacheFolder}");
             }
 
-            this.cache = new PersistentDictionary<string, string>(collectionFolder);
+            PersistentDictionaryFile.DeleteFiles(this.esentCacheFolder);
+            this.esentCache = new PersistentDictionary<string, string>(this.esentCacheFolder);
         }
+
+        public string GetReadableStatus()
+            => $"{this.readSideStorage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "memory + ESENT" : "disabled")}  |  cached {this.memoryCache.Count}, {this.esentCache.Count}";
+
+        public Type ViewType => typeof(TEntity);
+
+        public bool IsCacheEnabled => this.isCacheUsed;
+
+        public void Clear() => (this.readSideStorage as IReadSideRepositoryCleaner)?.Clear();
 
         public void EnableCache()
         {
-            this.isCacheEnabled = true;
+            this.isCacheUsed = true;
+
+            // TODO: fill esent cache with data from actual storage
         }
 
         public void DisableCache()
         {
-            while (this.cache.Any())
+            this.ReduceMemoryCache(leaveEntities: 0);
+
+            while (this.esentCache.Count > 0)
             {
-                this.StoreBulkEntitiesToRepository(this.cache.Keys.ToList());
+                this.StoreBulkEntitiesToRepository(this.esentCache.Keys.ToList());
+
+                // TODO: maybe use fast esent clean here:
+                //this.esentCache.Dispose();
+                //PersistentDictionaryFile.DeleteFiles(this.collectionFolder);
+                //this.esentCache = new PersistentDictionary<string, string>(collectionFolder);
             }
 
-            this.isCacheEnabled = false;
-        }
-
-        public string GetReadableStatus()
-        {
-            int cachedEntities = this.cache.Count;
-            return string.Format("{0}  |  cache {1}  |  cached {2}",
-                this.readSideStorage.GetReadableStatus(),
-                this.isCacheEnabled ? "enabled" : "disabled",
-                cachedEntities);
-        }
-
-        public Type ViewType
-        {
-            get { return typeof(TEntity); }
-        }
-
-        public bool IsCacheEnabled { get { return this.isCacheEnabled; } }
-
-        public void Clear()
-        {
-            var readSideRepositoryCleaner = this.readSideStorage as IReadSideRepositoryCleaner;
-            if(readSideRepositoryCleaner!=null)
-                readSideRepositoryCleaner.Clear();
+            this.isCacheUsed = false;
         }
 
         public TEntity GetById(string id)
         {
-            return this.isCacheEnabled
-                ? this.GetByIdUsingCache(id)
-                : this.readSideStorage.GetById(id);
+            if (this.isCacheUsed)
+            {
+                return this.GetFromCache(id);
+            }
+            else
+            {
+                return this.readSideStorage.GetById(id);
+            }
         }
 
         public void Remove(string id)
         {
-            if (this.isCacheEnabled)
+            if (this.isCacheUsed)
             {
-                this.RemoveUsingCache(id);
+                this.RemoveFromCache(id);
             }
             else
             {
@@ -147,9 +151,9 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public void Store(TEntity view, string id)
         {
-            if (this.isCacheEnabled)
+            if (this.isCacheUsed)
             {
-                this.StoreUsingCache(view, id);
+                this.StoreToCache(view, id);
             }
             else
             {
@@ -157,67 +161,85 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             }
         }
 
-        private TEntity GetByIdUsingCache(string id)
-        {
-            return this.GetFromCache(id);
-
-
-
-            //if (entityFromCache != null)
-            //    return entityFromCache;
-
-            //var entity = this.readSideStorage.GetById(id);
-
-            //this.cache[id] = Serialize(entity);
-
-            //return entity;
-        }
-
         private TEntity GetFromCache(string id)
         {
-            string value;
-            if (this.cache.TryGetValue(id, out value))
-                return value != null ? Deserialize(value) : null;
-            else
-                return null;
+            try
+            {
+                if (this.memoryCache.ContainsKey(id))
+                    return this.memoryCache[id];
+
+                string value;
+                if (!this.esentCache.TryGetValue(id, out value))
+                    return null;
+
+                if (value == null)
+                    return null;
+
+                var entity = Deserialize(value);
+
+                this.memoryCache[id] = entity;
+
+                return entity;
+            }
+            finally
+            {
+                this.ReduceMemoryCacheIfNeeded();
+            }
         }
 
-        private static TEntity Deserialize(string value)
+        private void RemoveFromCache(string id)
         {
-            return JsonConvert.DeserializeObject<TEntity>(value, JsonSerializerSettings);
+            this.memoryCache.Remove(id);
+            this.esentCache.Remove(id);
         }
 
-        private void RemoveUsingCache(string id)
+        private void StoreToCache(TEntity entity, string id)
         {
-            this.cache.Remove(id);
-            this.readSideStorage.Remove(id);
+            try
+            {
+                this.memoryCache[id] = entity;
+                this.esentCache[id] = Serialize(entity);
+            }
+            finally
+            {
+                this.ReduceMemoryCacheIfNeeded();
+            }
         }
 
-        private void StoreUsingCache(TEntity entity, string id)
+        private void ReduceMemoryCacheIfNeeded()
         {
-            this.cache[id] = Serialize(entity);
+            if (this.memoryCache.Count >= this.memoryCacheSettings.MaxCountOfCachedEntities)
+            {
+                this.ReduceMemoryCache(leaveEntities: this.memoryCache.Count / 2);
+            }
         }
 
-        private static string Serialize(TEntity entity)
+        private void ReduceMemoryCache(int leaveEntities)
         {
-            return JsonConvert.SerializeObject(entity, Formatting.None, JsonSerializerSettings);
+            var entityIdsToRemoveFromCache = this.memoryCache.Keys.Skip(leaveEntities).ToList();
+
+            foreach (string entityId in entityIdsToRemoveFromCache)
+            {
+                TEntity entity = this.memoryCache[entityId];
+
+                this.esentCache[entityId] = Serialize(entity);
+
+                this.memoryCache.Remove(entityId);
+            }
         }
 
-        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
+        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> entityIds)
         {
-            foreach (var entityId in bulk)
+            foreach (var entityId in entityIds)
             {
                 TEntity entity = this.GetFromCache(entityId);
-                if (entity == null)
-                {
-                    this.readSideStorage.Remove(entityId);
-                }
-                else
+
+                if (entity != null)
                 {
                     this.readSideStorage.Store(entity, entityId);
                 }
 
-                this.cache.Remove(entityId);
+                this.esentCache.Remove(entityId);
             }
         }
 
@@ -232,29 +254,27 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             if (disposing)
             {
                 // free managed resources
-                if (this.cache != null)
+                if (this.esentCache != null)
                 {
-                    this.cache.Dispose();
-                    this.cache = null;
+                    this.esentCache.Dispose();
+                    this.esentCache = null;
                 }
 
                 // free native resources if there are any.
             }
         }
 
-        private static JsonSerializerSettings JsonSerializerSettings
+        private static TEntity Deserialize(string value) => JsonConvert.DeserializeObject<TEntity>(value, JsonSerializerSettings);
+
+        private static string Serialize(TEntity entity) => JsonConvert.SerializeObject(entity, Formatting.None, JsonSerializerSettings);
+
+        private static JsonSerializerSettings JsonSerializerSettings => new JsonSerializerSettings
         {
-            get
-            {
-                return new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                };
-            }
-        }
+            TypeNameHandling = TypeNameHandling.Auto,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+        };
     }
 }

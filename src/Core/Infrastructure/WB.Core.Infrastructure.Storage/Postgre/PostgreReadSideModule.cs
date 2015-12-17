@@ -154,14 +154,13 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         private static object GetReadSideRepositoryWriter(IContext context)
         {
             object postgresWriter = context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
-            object fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
-
-            //return postgresWriter;
+            var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
+            var readSideStoreMemoryCacheSettings = new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2);
 
             Type cachedWriterType = typeof(EsentCachedReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]);
 
             object cachingWriter = Activator.CreateInstance(cachedWriterType,
-                postgresWriter, fileSystemAccessor);
+                postgresWriter, fileSystemAccessor, readSideStoreMemoryCacheSettings);
 
             return cachingWriter;
         }
