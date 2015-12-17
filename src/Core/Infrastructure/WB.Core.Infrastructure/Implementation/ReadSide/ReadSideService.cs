@@ -113,20 +113,22 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (this.cachedReadSideDatabaseVersion.HasValue)
                 return this.cachedReadSideDatabaseVersion.Value;
 
+            ReadSideVersion readSideDatabaseVersion = null;
             try
             {
                 this.transactionManagerProviderManager.GetTransactionManager().BeginQueryTransaction();
-
-                ReadSideVersion readSideDatabaseVersion = this.readSideVersionStorage.GetById(ReadSideVersion.IdOfCurrent);
-
+                readSideDatabaseVersion = this.readSideVersionStorage.GetById(ReadSideVersion.IdOfCurrent);
                 this.cachedReadSideDatabaseVersion = readSideDatabaseVersion?.Version;
-
-                return readSideDatabaseVersion?.Version;
             }
+            /*catch (Exception)
+            {
+            }*/
             finally
             {
                 this.transactionManagerProviderManager.GetTransactionManager().RollbackQueryTransaction();
             }
+
+            return readSideDatabaseVersion?.Version;
         }
 
         #endregion // IReadSideStatusService implementation
@@ -409,7 +411,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     if (skipEvents == 0)
                     {
-                        this.CleanUpWritersForHandlers(handlers, isPartialRebuild);
+                        if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
+                            this.postgresReadSideBootstraper.ReCreateViewDatabase();
+
+                        this.CleanUpWritersForHandlers(handlers);
                     }
 
                     if (!isPartialRebuild)
@@ -467,18 +472,22 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             this.cachedReadSideDatabaseVersion = null;
 
-            try
-            {
-                this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
-                this.readSideVersionStorage.Remove(ReadSideVersion.IdOfCurrent);
-                this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
-            }
-            catch
-            {
-                this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
-                throw;
-            }
+            var readSideVersionStorageAsCleaner = this.readSideVersionStorage as IReadSideRepositoryCleaner;
 
+            if (readSideVersionStorageAsCleaner != null)
+            {
+                try
+                {
+                    this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                    readSideVersionStorageAsCleaner.Clear();
+                    this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+                }
+                catch
+                {
+                    this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                    throw;
+                }
+            }
             UpdateStatusMessage("Read side version cleaned");
         }
 
@@ -559,13 +568,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         }
 
 
-        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers, bool isPartiallyRebuild)
+        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
         {
             var cleaners = handlers.SelectMany(x=>x.Writers.OfType<IReadSideRepositoryCleaner>())
                   .Distinct()
                   .ToArray();
-
-            if(!isPartiallyRebuild && this.postgresReadSideBootstraper != null) this.postgresReadSideBootstraper.ReCreateViewDatabase();
 
             foreach (var readSideRepositoryCleaner in cleaners)
             {
