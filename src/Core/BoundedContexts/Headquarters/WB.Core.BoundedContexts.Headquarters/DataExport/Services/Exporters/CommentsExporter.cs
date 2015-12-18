@@ -27,6 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
         private readonly ITransactionManagerProvider transactionManager;
 
+        protected CommentsExporter()
+        {
+        }
+
         public CommentsExporter(
             InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
