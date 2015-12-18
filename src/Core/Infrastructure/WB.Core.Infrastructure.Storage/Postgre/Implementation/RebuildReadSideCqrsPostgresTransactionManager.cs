@@ -2,12 +2,17 @@ using System;
 using System.Data;
 using System.Threading;
 using NHibernate;
+using Ninject;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class RebuildReadSideCqrsPostgresTransactionManager : ICqrsPostgresTransactionManager, IDisposable
     {
         private int startedCommandTransactions;
+
+        public RebuildReadSideCqrsPostgresTransactionManager([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
+        {
+        }
 
         public void BeginCommandTransaction()
         {
