@@ -766,8 +766,10 @@ namespace WB.Tests.Unit
             Guid interviewId,
             params ExportedQuestion[] questions)
         {
-            return new InterviewDataExportRecord(interviewId, "test", new string[0], new string[0],
-                questions, new string [0]);
+            return new InterviewDataExportRecord("test", new string[0], new string[0], new string [0])
+            {
+                Answers = questions.Select(x => string.Join("\n", x)).ToArray() 
+            };
         }
 
         public static InterviewDataExportView InterviewDataExportView(
@@ -776,8 +778,7 @@ namespace WB.Tests.Unit
             long questionnaireVersion = 1, 
             params InterviewDataExportLevelView[] levels)
         {
-            return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion, levels);
+            return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), levels);
         }
 
         public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, string origin = null, Guid? interviewId = null)

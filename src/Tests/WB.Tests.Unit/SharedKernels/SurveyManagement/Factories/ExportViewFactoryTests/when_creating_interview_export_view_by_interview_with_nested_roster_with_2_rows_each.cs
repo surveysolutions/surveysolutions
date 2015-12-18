@@ -6,7 +6,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -69,18 +68,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         It should_fourth_record_id_equals_1 = () =>
            GetLevel(result, new[] { rosterId, nestedRosterId }).Records[3].RecordId.ShouldEqual("1");
-
-        It should_first_rosters_record_parent_ids_contains_1_parent_id_equal_to_interviewId_and_parent_roster_record_id = () =>
-          GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].ParentRecordIds.ShouldEqual(new string[] {  "0", GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].InterviewId.FormatGuid() });
-
-        It should_second_rosters_record_parent_ids_contains_2_parent_ids_interviewId_and_parent_roster_record_id = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[1].ParentRecordIds.ShouldEqual(new string[] { "0", GetLevel(result, new[] { rosterId, nestedRosterId }).Records[1].InterviewId.FormatGuid()});
-
-        It should_third_rosters_record_parent_ids_contains_2_parent_ids_interviewId_and_parent_roster_record_id = () =>
-          GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].ParentRecordIds.ShouldEqual(new string[] { "1", GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].InterviewId.FormatGuid()});
-
-        It should_fourth_rosters_record_parent_ids_contains_2_parent_ids_interviewId_and_parent_roster_record_id = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[3].ParentRecordIds.ShouldEqual(new string[] { "1", GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].InterviewId.FormatGuid()});
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {

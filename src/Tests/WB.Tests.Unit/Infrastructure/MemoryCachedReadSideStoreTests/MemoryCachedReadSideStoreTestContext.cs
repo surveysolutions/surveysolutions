@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         {
             return new MemoryCachedReadSideStore<ReadSideRepositoryEntity>(
                 readSideStorage ?? Mock.Of<IReadSideStorage<ReadSideRepositoryEntity>>(),
-                new ReadSideStoreMemoryCacheSettings(256, 128));
+                new ReadSideCacheSettings(null, 256, 128));
         }
     }
     internal class ReadSideRepositoryEntity : IReadSideRepositoryEntity

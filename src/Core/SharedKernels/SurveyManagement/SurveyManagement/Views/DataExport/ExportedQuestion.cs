@@ -15,16 +15,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         {
         }
 
-        public ExportedQuestion(Guid questionId, QuestionType questionType, string[] answers)
+        public ExportedQuestion(QuestionType questionType, string[] answers)
         {
-            this.QuestionId = questionId;
             this.QuestionType = questionType;
             this.Answers = answers;
         }
 
         public ExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
         {
-            this.QuestionId = question.Id;
             this.QuestionType = header.QuestionType;
             this.Answers = this.GetAnswers(question, header);
 
@@ -35,9 +33,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                         this.Answers.Length, header.ColumnNames.Length));
         }
 
-        public Guid QuestionId { get; set; }
-        public QuestionType QuestionType { get; set; }
-        public string[] Answers { get; set; }
+        private QuestionType QuestionType { get; }
+
+        public virtual int Id { get; protected set; }
+        public virtual string[] Answers { get; set; }
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {

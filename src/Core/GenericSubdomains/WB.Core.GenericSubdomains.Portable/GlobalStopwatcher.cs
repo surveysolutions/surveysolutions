@@ -65,16 +65,23 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static void DumpToDebug()
         {
+            Debug.WriteLine(GetMeasureDetails());
+        }
+
+        public static string GetMeasureDetails()
+        {
             var lines = new List<string>();
 
             lines.Add("=====   Start of Global Stopwatcher Dump   =====");
             lines.AddRange(
                 stopwatches
                     .OrderByDescending(pair => pair.Value.ElapsedMilliseconds)
-                    .Select((pair, index) => string.Format("{0}. {1}ms, {2} measures - {3}", index + 1, pair.Value.ElapsedMilliseconds, pair.Value.MeasuresCount, pair.Key)));
+                    .Select(
+                        (pair, index) =>
+                            $"{index + 1}. {pair.Value.ElapsedTimeSpan:c}, {pair.Value.MeasuresCount} measures - {pair.Key}"));
             lines.Add("=====    End of Global Stopwatcher Dump    =====");
 
-            Debug.WriteLine(string.Join(Environment.NewLine, lines));
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }
