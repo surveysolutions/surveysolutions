@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition has syntax error..
+        ///   Looks up a localized string similar to Validation condition has a syntax error..
         /// </summary>
         internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has syntax error..
+        ///   Looks up a localized string similar to Enabling condition has a syntax error..
         /// </summary>
         internal static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition references nonexistent question..
+        ///   Looks up a localized string similar to Validation condition references a nonexistent question..
         /// </summary>
         internal static string WB0004_CustomValidationExpressionReferencesNotExistingQuestion {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition references nonexistent question..
+        ///   Looks up a localized string similar to Enabling condition references a nonexistent question..
         /// </summary>
         internal static string WB0005_CustomEnablementConditionReferencesNotExistingQuestion {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references nonexistent question..
+        ///   Looks up a localized string similar to Linked question references a nonexistent question..
         /// </summary>
         internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references question of not supported type..
+        ///   Looks up a localized string similar to Linked question references a question type that is not supported..
         /// </summary>
         internal static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
             get {
@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references question not under roster..
+        ///   Looks up a localized string similar to Linked question references a question not in a roster..
         /// </summary>
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution references nonexistent question..
+        ///   Looks up a localized string similar to Question with title substitution references a nonexistent question..
         /// </summary>
         internal static string WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution references question of not supported type..
+        ///   Looks up a localized string similar to Question with title substitution references a question type that is not supported..
         /// </summary>
         internal static string WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution cannot reference questions from deeper roster level..
+        ///   Looks up a localized string similar to Question with title substitution cannot reference questions from a deeper roster level..
         /// </summary>
         internal static string WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
             get {
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has options count less than max number of answers..
+        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s options..
         /// </summary>
         internal static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -324,7 +324,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefilled questions cannot be inside of roster..
+        ///   Looks up a localized string similar to Prefilled questions cannot be inside a roster..
         /// </summary>
         internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
