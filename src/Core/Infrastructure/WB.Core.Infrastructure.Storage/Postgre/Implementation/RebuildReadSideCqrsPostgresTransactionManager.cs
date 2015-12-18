@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Threading;
 using NHibernate;
 using Ninject;
 
@@ -7,59 +8,29 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
     internal class RebuildReadSideCqrsPostgresTransactionManager : ICqrsPostgresTransactionManager, IDisposable
     {
-        private readonly ISessionFactory sessionFactory;
-
-        private Lazy<ISession> lazyCommandSession;
-
-        private bool triedToBeginCommandTransaction;
+        private int startedCommandTransactions;
 
         public RebuildReadSideCqrsPostgresTransactionManager([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
         {
-            this.sessionFactory = sessionFactory;
         }
 
         public void BeginCommandTransaction()
         {
-            this.triedToBeginCommandTransaction = true;
-
-            if (this.lazyCommandSession != null)
-                throw new InvalidOperationException();
-
-            this.lazyCommandSession = new Lazy<ISession>(() => this.sessionFactory.OpenSession());
+            Interlocked.Increment(ref this.startedCommandTransactions);
         }
 
         public void CommitCommandTransaction()
         {
-            if (this.lazyCommandSession == null)
-                throw new InvalidOperationException();
-
-            if (this.lazyCommandSession.IsValueCreated)
-            {
-                this.lazyCommandSession.Value.Flush();
-                this.lazyCommandSession.Value.Close();
-            }
-
-            this.lazyCommandSession = null;
-
-            this.triedToBeginCommandTransaction = false;
+            Interlocked.Decrement(ref this.startedCommandTransactions);
         }
 
         public void RollbackCommandTransaction()
         {
-            if (!this.triedToBeginCommandTransaction)
-                throw new InvalidOperationException();
+            bool isAnythingToRollback = this.startedCommandTransactions > 0;
+            if (!isAnythingToRollback)
+                throw new InvalidOperationException($"{this.startedCommandTransactions} command transactions are started. Nothing to rollback.");
 
-            if (this.lazyCommandSession != null)
-            {
-                if (this.lazyCommandSession.IsValueCreated)
-                {
-                    this.lazyCommandSession.Value.Close();
-                }
-
-                this.lazyCommandSession = null;
-            }
-
-            this.triedToBeginCommandTransaction = false;
+            Interlocked.Decrement(ref this.startedCommandTransactions);
         }
 
         public void BeginQueryTransaction()
@@ -74,29 +45,13 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public ISession GetSession()
         {
-            if (this.lazyCommandSession == null)
-                throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance.");
-
-            return this.lazyCommandSession.Value;
+            throw new NotSupportedException("Sessions are not allowed during read side rebuild because everything is built to ESENT cache.");
         }
 
-        public bool IsQueryTransactionStarted
-        {
-            get { return false; }
-        }
+        public bool IsQueryTransactionStarted => false;
 
         public void Dispose()
         {
-            if (this.lazyCommandSession != null)
-            {
-                if (this.lazyCommandSession.IsValueCreated)
-                {
-                    this.lazyCommandSession.Value.Dispose();
-                }
-
-                this.lazyCommandSession = null;
-            }
-
             GC.SuppressFinalize(this);
         }
 

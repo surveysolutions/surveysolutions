@@ -41,6 +41,18 @@
     <Reference Include="Castle.Core">
       <HintPath>..\..\..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Esent.Collections, Version=1.9.3.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Database.Collections.Generic.1.9.3.2\lib\net40\Esent.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Esent.Interop, Version=1.9.3.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ManagedEsent.1.9.3.2\lib\net40\Esent.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Esent.Isam, Version=1.9.3.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.Database.Isam.1.9.3.2\lib\net40\Esent.Isam.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EventStore.ClientAPI, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EventStore.Client.3.3.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
@@ -133,6 +145,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="EventSerializerSettings.cs" />
     <Compile Include="EventStore\EventStoreSettings.cs" />
     <Compile Include="EventStore\EventStoreWriteSideModule.cs" />
@@ -146,12 +159,15 @@
     <Compile Include="IsolatedThreadExtensions.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Postgre\Implementation\PostgresEventStore.cs" />
+    <Compile Include="Postgre\NhExtensions\CustomPostgreSQL82Dialect.cs" />
+    <Compile Include="Postgre\NhExtensions\NpgsqlDriverExtended.cs" />
+    <Compile Include="Postgre\NhExtensions\NpgsqlExtendedSqlType.cs" />
     <Compile Include="Postgre\PostgresWriteSideModule.cs" />
+    <Compile Include="ReadSideCacheSettings.cs" />
     <Compile Include="ThreadMarkerManager.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
     <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
-    <Compile Include="Memory\Implementation\ReadSideStoreMemoryCacheSettings.cs" />
     <Compile Include="NinjectExtensions.cs" />
     <Compile Include="Postgre\Implementation\DatabaseManagement.cs" />
     <Compile Include="Postgre\Implementation\ICqrsPostgresTransactionManager.cs" />

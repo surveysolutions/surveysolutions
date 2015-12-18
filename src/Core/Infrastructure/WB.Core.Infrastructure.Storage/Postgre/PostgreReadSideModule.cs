@@ -23,23 +23,25 @@ using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Storage.Esent.Implementation;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
     public class PostgresReadSideModule : NinjectModule
     {
-        internal const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
+        public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
         private readonly IEnumerable<Assembly> mappingAssemblies;
-        private static int memoryCacheSizePerEntity;
+        private static ReadSideCacheSettings cacheSettings;
 
-        public PostgresReadSideModule(string connectionString, int memoryCacheSizePerEntity,
+        public PostgresReadSideModule(string connectionString, ReadSideCacheSettings cacheSettings,
             IEnumerable<Assembly> mappingAssemblies)
         {
             this.connectionString = connectionString;
             this.mappingAssemblies = mappingAssemblies;
-            PostgresReadSideModule.memoryCacheSizePerEntity = memoryCacheSizePerEntity;
+            PostgresReadSideModule.cacheSettings = cacheSettings;
         }
 
         public override void Load()
@@ -152,13 +154,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         private static object GetReadSideRepositoryWriter(IContext context)
         {
             object postgresWriter = context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
+            var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
 
-            //return postgresWriter;
-
-            Type cachedWriterType = typeof(MemoryCachedReadSideRepositoryWriter<>).MakeGenericType(context.GenericArguments[0]);
+            Type cachedWriterType = typeof(EsentCachedReadSideStorage<>).MakeGenericType(context.GenericArguments[0]);
 
             object cachingWriter = Activator.CreateInstance(cachedWriterType,
-                postgresWriter, new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2));
+                postgresWriter, fileSystemAccessor, cacheSettings);
 
             return cachingWriter;
         }

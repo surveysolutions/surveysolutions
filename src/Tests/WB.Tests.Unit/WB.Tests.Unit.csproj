@@ -717,11 +717,13 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_template_imported_event_recived_with_version_set.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\InterviewActionsExporterTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\when_exporting_approved_interviews.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\CommentsExporterTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\when_creating_and_getting_metadata_for_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_contains_2_invalid_and_1valid_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\SupervisorsViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_need_sort_by_interviewers.cs" />
@@ -753,7 +755,6 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_beginning_command_transaction.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_beginning_query_transaction.cs" />
-    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_commiting_command_transaction_which_was_not_started.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_commiting_command_transaction_which_was_started.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_command_transaction_which_was_not_started.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_command_transaction_which_was_started.cs" />
@@ -870,7 +871,7 @@
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\TabularDataToExternalStatPackageExportServiceTests\when_creating_and_getting_spss_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\TabularDataToExternalStatPackageExportServiceTests\when_creating_and_getting_stata_data_files_for_questionnaire.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_data_files_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\when_getting_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\DeleteQuestionnaireServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_disabled_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DeleteQuestionnaireServiceTests\when_delete_questionnaire_and_one_interview.cs" />
