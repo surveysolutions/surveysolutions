@@ -225,14 +225,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (removedQuestionId != this.referencedQuestionId)
                 return;
-            var optionToRemove =
-                this.Options.SingleOrDefault(option => option.RosterVector.SequenceEqual(removedQuestionRosterVector));
 
-            if (optionToRemove != null)
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {
-                this.mainThreadDispatcher.RequestMainThreadAction(() => this.Options.Remove(optionToRemove));
-                this.RaisePropertyChanged(() => this.HasOptions);
-            }
+                //please DO NOT move query for the option to delete outside RequestMainThreadAction. 
+                //mvvmcross executes this code in UI theread with some delay
+                //The movement could cause inconsistency and "Collection was modified; enumeration operation may not execute" exception
+                var optionToRemove =
+                    this.Options.SingleOrDefault(
+                        option => option.RosterVector.SequenceEqual(removedQuestionRosterVector));
+
+                if (optionToRemove != null)
+                {
+                    this.Options.Remove(optionToRemove);
+
+                    this.RaisePropertyChanged(() => this.HasOptions);
+                }
+            });
         }
 
         private void ReferencedQuestionAnswered(object sender, EventArgs e)
