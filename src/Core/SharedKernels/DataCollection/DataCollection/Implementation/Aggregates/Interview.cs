@@ -4127,7 +4127,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in state.GetAllLinkedMultipleOptionsAnswers())
+            var allLinkedMultipleOptionsAnswers = state.GetAllLinkedMultipleOptionsAnswers();
+
+            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers)
             {
                 var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
                 RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
