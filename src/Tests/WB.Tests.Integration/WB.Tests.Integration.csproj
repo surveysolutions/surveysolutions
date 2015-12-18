@@ -223,6 +223,7 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_getting_roster_limit.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
