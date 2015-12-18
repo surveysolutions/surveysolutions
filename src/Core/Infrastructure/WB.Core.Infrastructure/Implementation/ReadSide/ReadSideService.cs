@@ -334,8 +334,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (atomicEventHandlers.Length != handlers.Length)
             {
                 var message =
-                    "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are {0}" +
-                    string.Join((string) ",", (IEnumerable<string>) handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name));
+                    "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are " +
+                    string.Join(",", handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name));
 
                 UpdateStatusMessage(message);
 
@@ -352,15 +352,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
-                        UpdateStatusMessage(string.Format("Cleaning views for {0} and event source {1}", cleanerName, eventSourceId));
+                        UpdateStatusMessage($"Cleaning views for {cleanerName} and event source {eventSourceId}");
                         atomicEventHandler.CleanWritersByEventSource(eventSourceId);
-                        UpdateStatusMessage(string.Format("Views for {0} and event source {1} was cleaned.", cleanerName, eventSourceId));
+                        UpdateStatusMessage($"Views for {cleanerName} and event source {eventSourceId} was cleaned.");
                     }
                 }
 
                 try
                 {
-                    this.EnableWritersCacheForHandlers(handlers);
+                    EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
 
                     foreach (var eventSourceId in eventSourceIds)
@@ -421,7 +421,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                         try
                         {
-                            this.EnableWritersCacheForHandlers(handlers);
+                            EnableWritersCacheForHandlers(handlers);
 
                             this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
                                 skipEventsCount: skipEvents, handlers: handlers);
@@ -519,16 +519,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
         }
 
-        private bool IsWriteSideEmpty()
-        {
-            return this.eventStore.CountOfAllEvents() == 0;
-        }
+        private bool IsWriteSideEmpty() => this.eventStore.CountOfAllEvents() == 0;
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
         {
             if (skipEventsCount > 0)
             {
-                UpdateStatusMessage(string.Format("Skipping {0} events.", skipEventsCount));
+                UpdateStatusMessage($"Skipping {skipEventsCount} events.");
             }
 
             return this.GetEventStream().Skip(skipEventsCount);
@@ -581,7 +578,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 var cleanerName = this.CreateViewName(readSideRepositoryCleaner);
 
-                UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
+                UpdateStatusMessage($"Deleting views for {cleanerName}");
 
                 try
                 {
@@ -595,11 +592,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     throw;
                 }
 
-                UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
+                UpdateStatusMessage($"Views for {cleanerName} were deleted.");
             }
         }
 
-        private void EnableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
+        private static void EnableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
@@ -617,37 +614,38 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private void DisableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
-            UpdateStatusMessage("Disabling cache in repository writers.");
-
-            var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
-             .Distinct()
-             .ToArray();
-
-            foreach (ICacheableRepositoryWriter writer in writers)
+            using (GlobalStopwatcher.Scope("Disable cache"))
             {
-                using (GlobalStopwatcher.Scope($"Disable cache for {GetStorageEntityName(writer)}"))
-                {
-                    UpdateStatusMessage($"Disabling cache in repository writer for entity {GetStorageEntityName(writer)}.");
+                UpdateStatusMessage("Disabling cache in repository writers.");
 
-                    try
+                var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
+                    .Distinct()
+                    .ToArray();
+
+                foreach (ICacheableRepositoryWriter writer in writers)
+                {
+                    using (GlobalStopwatcher.Scope($"Disable cache for {GetStorageEntityName(writer)}"))
                     {
-                        this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
-                        writer.DisableCache();
-                        this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
-                    }
-                    catch (Exception exception)
-                    {
-                        this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
-                        string message =
-                            string.Format("Failed to disable cache and store data to repository for writer {0}.",
-                                GetStorageEntityName(writer));
-                        this.SaveErrorForStatusReport(message, exception);
-                        UpdateStatusMessage(message);
+                        UpdateStatusMessage($"Disabling cache in repository writer for entity {GetStorageEntityName(writer)}.");
+
+                        try
+                        {
+                            this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                            writer.DisableCache();
+                            this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+                        }
+                        catch (Exception exception)
+                        {
+                            this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                            string message = $"Failed to disable cache and store data to repository for writer {GetStorageEntityName(writer)}.";
+                            this.SaveErrorForStatusReport(message, exception);
+                            UpdateStatusMessage(message);
+                        }
                     }
                 }
-            }
 
-            UpdateStatusMessage("Cache in repository writers disabled.");
+                UpdateStatusMessage("Cache in repository writers disabled.");
+            }
         }
 
         private void RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
@@ -680,7 +678,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 ThrowIfShouldStopViewsRebuilding();
 
                 string eventTypeName = @event.Payload.GetType().Name;
-                UpdateStatusMessage(string.Format("Publishing event {0} {1}. ", this.processedEventsCount + 1, eventTypeName));
+                UpdateStatusMessage($"Publishing event {this.processedEventsCount + 1} {eventTypeName}. ");
 
                 EventHandlerExceptionDelegate eventHandlerExceptionDelegate = (nonCriticalEventHandlerException) =>
                 {
@@ -713,19 +711,16 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 if (this.FailedEventsCount >= maxAllowedFailedEvents)
                 {
-                    var message = string.Format("Failed to rebuild read side. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
+                    var message = $"Failed to rebuild read side. Too many events failed: {this.FailedEventsCount}. Last processed event count: {this.processedEventsCount}";
                     UpdateStatusMessage(message);
                     this.logger.Error(message);
                     throw new OperationCanceledException(message);
                 }
 
-                UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
-                    this.processedEventsCount, 
-                    eventTypeName, 
-                    @event.EventSourceId));
+                UpdateStatusMessage($"Done publishing event {this.processedEventsCount}, {eventTypeName}. EventSourceId: {@event.EventSourceId:N}. Waiting for next event or stream end...");
             }
 
-            this.logger.Info(String.Format("Rebuild of read side finished successfully. Processed {0} events, failed {1}", this.processedEventsCount, this.FailedEventsCount));
+            this.logger.Info($"Rebuild of read side finished successfully. Processed {this.processedEventsCount} events, failed {this.FailedEventsCount}");
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
@@ -759,7 +754,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 shouldStopViewsRebuilding = false;
 
-                const string stopRequestMessage = "Views rebuilding stopped by request.";
+                const string stopRequestMessage = "Read side rebuild stopped by request.";
 
                 UpdateStatusMessage(stopRequestMessage);
                 throw new OperationCanceledException(stopRequestMessage);

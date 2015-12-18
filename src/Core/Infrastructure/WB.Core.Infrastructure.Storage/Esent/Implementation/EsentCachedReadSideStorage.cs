@@ -40,8 +40,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
             if (!fileSystemAccessor.IsWritePermissionExists(this.esentCacheFolder))
             {
-                throw new ArgumentException(
-                    $"Error initializing ESENT persistent dictionary because there are problems with write access to folder {this.esentCacheFolder}");
+                throw new ArgumentException($"Error initializing ESENT persistent dictionary because there are problems with write access to folder {this.esentCacheFolder}");
             }
 
             PersistentDictionaryFile.DeleteFiles(this.esentCacheFolder);
