@@ -20,6 +20,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
+using NHibernate;
 using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
@@ -1774,7 +1775,7 @@ namespace WB.Tests.Unit
 
         public static RebuildReadSideCqrsPostgresTransactionManager RebuildReadSideCqrsPostgresTransactionManager()
         {
-            return new RebuildReadSideCqrsPostgresTransactionManager();
+            return new RebuildReadSideCqrsPostgresTransactionManager(Mock.Of<ISessionFactory>());
         }
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor()
