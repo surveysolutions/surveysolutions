@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent[lookupTableClassName].ShouldContain("public class Price");
 
         It should_generate_class_constructor_for_Price = () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public Price(decimal rowcode, double min,double max)");
+            generatedClassContent[lookupTableClassName].ShouldContain("public Price(decimal rowcode, double? min,double? max)");
 
         It should_generate_lookup_table_price = () =>
             generatedClassContent[lookupTableClassName].ShouldContain("public static Dictionary<decimal, Price> price");
