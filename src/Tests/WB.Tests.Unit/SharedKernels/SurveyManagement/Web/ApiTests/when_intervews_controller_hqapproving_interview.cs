@@ -15,6 +15,7 @@ using System.Net;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -22,8 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
     {
         private Establish context = () =>
         {
-            var allInterviewsViewFactory =
-                Mock.Of<IInterviewDetailsViewFactory>(x => x.GetInterviewDetails(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid?>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<InterviewDetailsFilter?>()) == CreateInterviewDetailsView(interviewId));
+            var interviewReferences =
+               Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(
+                   y => y.GetById(Moq.It.IsAny<string>()) == new InterviewReferences(interviewId, Guid.NewGuid(), 1));
 
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(
@@ -36,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 
             commandService = new Mock<ICommandService>();
 
-            controller = CreateInterviewsController(interviewDetailsView :allInterviewsViewFactory, commandService : commandService.Object, globalInfoProvider : globalInfoProvider, userViewFactory: userViewFactory);
+            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, globalInfoProvider : globalInfoProvider, userViewFactory: userViewFactory);
         };
 
         Because of = () =>

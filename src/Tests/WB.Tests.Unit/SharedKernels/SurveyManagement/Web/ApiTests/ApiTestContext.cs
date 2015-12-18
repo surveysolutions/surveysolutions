@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using System.Net.Http;
 using System.Web.Http;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -62,7 +63,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             IInterviewDetailsViewFactory interviewDetailsView = null,
             ICommandService commandService = null,
             IGlobalInfoProvider globalInfoProvider = null,
-            IUserViewFactory userViewFactory = null)
+            IUserViewFactory userViewFactory = null,
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null)
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
@@ -70,7 +72,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>());
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
 
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(new HttpConfiguration());
