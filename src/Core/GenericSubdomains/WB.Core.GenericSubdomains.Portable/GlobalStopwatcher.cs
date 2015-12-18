@@ -78,7 +78,7 @@ namespace WB.Core.GenericSubdomains.Portable
                     .OrderByDescending(pair => pair.Value.ElapsedMilliseconds)
                     .Select(
                         (pair, index) =>
-                            $"{index + 1}. {pair.Value.ElapsedMilliseconds}ms, {pair.Value.MeasuresCount} measures - {pair.Key}"));
+                            $"{index + 1}. {pair.Value.ElapsedTimeSpan:c}, {pair.Value.MeasuresCount} measures - {pair.Key}"));
             lines.Add("=====    End of Global Stopwatcher Dump    =====");
 
             return string.Join(Environment.NewLine, lines);
