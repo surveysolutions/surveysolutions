@@ -405,43 +405,36 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     errors.Clear();
 
+                    if (skipEvents == 0)
+                    {
+                        this.CleanUpWritersForHandlers(handlers, isPartialRebuild);
+                    }
+
+                    if (!isPartialRebuild)
+                    {
+                        this.CleanReadSideVersion();
+                    }
+
                     try
                     {
+                        EnableWritersCacheForHandlers(handlers);
                         this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
 
-                        if (skipEvents == 0)
-                        {
-                            this.CleanUpWritersForHandlers(handlers, isPartialRebuild);
-                        }
-
-                        if (!isPartialRebuild)
-                        {
-                            this.CleanReadSideVersion();
-                        }
-
-                        try
-                        {
-                            EnableWritersCacheForHandlers(handlers);
-
-                            this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
-                                skipEventsCount: skipEvents, handlers: handlers);
-                        }
-                        finally
-                        {
-                            this.DisableWritersCacheForHandlers(handlers);
-
-                            if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
-                                this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
-                        }
-
-                        if (!isPartialRebuild)
-                        {
-                            this.StoreReadSideVersion();
-                        }
+                        this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
+                            skipEventsCount: skipEvents, handlers: handlers);
                     }
                     finally
                     {
                         this.transactionManagerProviderManager.UnpinTransactionManager();
+                        this.DisableWritersCacheForHandlers(handlers);
+
+                        if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
+                            this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
+                    }
+
+                    if (!isPartialRebuild)
+                    {
+                        this.StoreReadSideVersion();
                     }
 
                     UpdateStatusMessage(isPartialRebuild
