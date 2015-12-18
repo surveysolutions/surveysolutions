@@ -19,39 +19,38 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
-    internal class when_intervews_controller_hqrejecting_interview : ApiTestContext
+    internal class when_intervews_controller_hqunapproving_interview : ApiTestContext
     {
         private Establish context = () =>
         {
             var interviewReferences =
-                Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(
-                    y => y.GetById(Moq.It.IsAny<string>()) == new InterviewReferences(interviewId, Guid.NewGuid(), 1));
+               Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(
+                   y => y.GetById(Moq.It.IsAny<string>()) == new InterviewReferences(interviewId, Guid.NewGuid(), 1));
 
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(
                     c =>
                         c.Load(Moq.It.IsAny<UserViewInputModel>()) ==
                         new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Operator}});
-
             var globalInfoProvider =
                 Mock.Of<IGlobalInfoProvider>(
                     g => g.GetCurrentUser() == new UserLight() {Id = executorId });
 
             commandService = new Mock<ICommandService>();
 
-            controller = CreateInterviewsController(commandService : commandService.Object, globalInfoProvider : globalInfoProvider, userViewFactory: userViewFactory, interviewReferences: interviewReferences);
+            controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, globalInfoProvider : globalInfoProvider, userViewFactory: userViewFactory);
         };
 
         Because of = () =>
         {
-            httpResponseMessage = controller.HQReject(new StatusChangeApiModel() {Id = interviewId});
+            httpResponseMessage = controller.HQUnapprove(new StatusChangeApiModel() {Id = interviewId});
         };
 
         It should_return_OK_status_code = () =>
             httpResponseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
 
         It should_execute_AssignInterviewerCommand_with_specified_UserId = () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<HqRejectInterviewCommand>(cp => cp.InterviewId == interviewId), Moq.It.IsAny<string>()));
+            commandService.Verify(command => command.Execute(Moq.It.Is<UnapproveByHeadquartersCommand>(cp => cp.InterviewId == interviewId), Moq.It.IsAny<string>()));
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid responsibleId = Guid.Parse("22111111111111111111111111111111");
