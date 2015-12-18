@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     var questionnaireItem = questionnaireDocumentStorage.GetById(itemId);
                     return questionnaireItem != null && !questionnaireItem.IsDeleted;
                 case QuestionnaireItemType.Macro:
+                case QuestionnaireItemType.LookupTable:
                     return false;
             }
             return false;
