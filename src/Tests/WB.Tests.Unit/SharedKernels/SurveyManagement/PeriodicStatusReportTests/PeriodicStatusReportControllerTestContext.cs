@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(
                     _ =>
                         _.Load(Moq.It.IsAny<AllUsersAndQuestionnairesInputModel>()) ==
-                        new AllUsersAndQuestionnairesView() {Questionnaires = new TemplateViewItem[0]}));
+                        new AllUsersAndQuestionnairesView() {Questionnaires = new TemplateViewItem[0]}), Mock.Of<IUserViewFactory>());
         }
     }
 }

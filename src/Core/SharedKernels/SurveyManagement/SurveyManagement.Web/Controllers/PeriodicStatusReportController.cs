@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -17,6 +18,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class PeriodicStatusReportController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+
+        private readonly IUserViewFactory userViewFactory;
 
         private readonly PeriodiceReportType[] reportTypesWhichShouldBeReroutedToCustomStatusController =
         {
@@ -46,11 +49,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IGlobalInfoProvider globalInfo,
             ILogger logger,
             IViewFactory<AllUsersAndQuestionnairesInputModel,
-            AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory
-            )
+            AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory, 
+            IUserViewFactory userViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.userViewFactory = userViewFactory;
         }
 
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
@@ -67,6 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 supervisorId: supervisorId);
 
             model.ReportTypes = quantityReportTypes;
+            model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("PeriodicStatusReport", model);
         }
@@ -108,6 +113,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 supervisorId: supervisorId);
 
             model.ReportTypes = speedReportTypes;
+            model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("PeriodicStatusReport", model);
         }
@@ -178,6 +184,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             return string.Empty;
+        }
+
+        private string GetSupervisorName(Guid? supervisorId)
+        {
+            if (!supervisorId.HasValue)
+                return null;
+
+            var userView =this.userViewFactory.Load(new UserViewInputModel(supervisorId.Value));
+            return userView?.UserName;
         }
     }
 }
