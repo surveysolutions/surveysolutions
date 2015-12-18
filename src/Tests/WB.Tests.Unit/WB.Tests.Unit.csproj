@@ -741,7 +741,6 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_3_old_school_handlers_and_first_and_last_of_them_fail.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_beginning_command_transaction.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_beginning_query_transaction.cs" />
-    <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_commiting_command_transaction_which_was_not_started.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_commiting_command_transaction_which_was_started.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_command_transaction_which_was_not_started.cs" />
     <Compile Include="Infrastructure\RebuildReadSideCqrsPostgresTransactionManagerTests\when_rolling_back_command_transaction_which_was_started.cs" />
