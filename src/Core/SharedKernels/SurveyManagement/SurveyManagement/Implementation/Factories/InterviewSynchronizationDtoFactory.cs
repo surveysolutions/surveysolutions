@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
@@ -16,14 +16,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
-        private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
+        private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
 
-        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
-           IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory)
+        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures, IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository)
         {
-            if (questionnriePropagationStructures == null) throw new ArgumentNullException("questionnriePropagationStructures");
+            if (questionnriePropagationStructures == null) throw new ArgumentNullException(nameof(questionnriePropagationStructures));
+            if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
+
             this.questionnriePropagationStructures = questionnriePropagationStructures;
-            this.interviewStatusesFactory = interviewStatusesFactory;
+            this.interviewsRepository = interviewsRepository;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             return result;
         }
 
-        private string GetLastComment(InterviewQuestion question)
+        private static string GetLastComment(InterviewQuestion question)
         {
             if (question.Comments == null || !question.Comments.Any())
                 return null;
@@ -91,11 +92,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             if (!interviewerAssignedDateTime.HasValue)
             {
-                var interviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel {InterviewId = interview.InterviewId});
-                if (interviewStatuses != null)
+                var interviewStatusChangeHistory = this.interviewsRepository.GetById(new ChangeStatusInputModel {InterviewId = interview.InterviewId}.InterviewId);
+
+                var commentedStatusHistroyViews = interviewStatusChangeHistory?
+                    .InterviewCommentedStatuses
+                    .Where(i => i.Status.ConvertToInterviewStatus().HasValue)
+                    .Select(x => new CommentedStatusHistroyView
+                    {
+                        Comment = x.Comment,
+                        Date = x.Timestamp,
+                        Status = x.Status.ConvertToInterviewStatus().Value,
+                        Responsible = x.StatusChangeOriginatorName
+                    })
+                    .ToList();
+
+                if (commentedStatusHistroyViews != null)
                 {
                     var interviewerAssignedStatus =
-                        interviewStatuses.StatusHistory.OrderBy(interviewStatus => interviewStatus.Date).LastOrDefault(
+                        commentedStatusHistroyViews.OrderBy(interviewStatus => interviewStatus.Date).LastOrDefault(
                             interviewStatus => interviewStatus.Status == InterviewStatus.InterviewerAssigned);
 
                     if (interviewerAssignedStatus != null)
