@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Common.Logging;
 using NHibernate;
 using Ninject;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -35,38 +34,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IExportViewFactory exportViewFactory;
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
-        private readonly IReadSideKeyValueStorage<InterviewDataExportView> exportViews;
-        private readonly IQueryableReadSideRepositoryReader<InterviewDataExportRecord> exportRecords;
         private readonly ICsvWriter csvWriter;
         private readonly ISessionFactory sessionFactory;
 
         public InterviewsExporter(ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            IFileSystemAccessor fileSystemAccessor, 
-            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
-            IExportViewFactory exportViewFactory,
+            IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
-            InterviewDataExportSettings interviewDataExportSettings,
-            IReadSideKeyValueStorage<InterviewDataExportView> exportViews, 
+            InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter,
-            [Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory,
-            IQueryableReadSideRepositoryReader<InterviewDataExportRecord> exportRecords)
+            [Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
         {
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.interviewDatas = interviewDatas;
-            this.exportViewFactory = exportViewFactory;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
-            this.exportViews = exportViews;
             this.csvWriter = csvWriter;
             this.sessionFactory = sessionFactory;
-            this.exportRecords = exportRecords;
         }
 
         public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -202,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    },
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
-                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(questionnaireExportStructure, interviewId);
+                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(interviewId);
                        exportBulk.Add(exportedData);
 
                        Interlocked.Increment(ref totalInterviewsProcessed);
@@ -263,8 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
-        private InterviewExportedDataRecord ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
-            Guid interviewId)
+        private InterviewExportedDataRecord ExportSingleInterview(Guid interviewId)
         {
             IList<InterviewDataExportRecord> records = null;
             using (var session = this.sessionFactory.OpenStatelessSession())
