@@ -215,12 +215,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         }
                         else
                         {
-                            decimal variable;
-                            if (!decimal.TryParse(record[i], out variable))
+                            if (string.IsNullOrWhiteSpace(record[i]))
                             {
-                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
+                                variables.Add(null);
                             }
-                            variables.Add(variable);
+                            else
+                            {
+                                decimal variable;
+                                if (!decimal.TryParse(record[i], out variable))
+                                {
+                                    throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
+                                }
+                                variables.Add(variable);
+                            }
                         }
                     }
                     rowCurrentRowNumber++;
