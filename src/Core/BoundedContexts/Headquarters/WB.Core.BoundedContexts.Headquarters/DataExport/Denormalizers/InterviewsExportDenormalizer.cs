@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
     public class InterviewsExportDenormalizer : BaseDenormalizer,
         IEventHandler<InterviewStatusChanged>
     {
-        private readonly IReadSideKeyValueStorage<InterviewDataExportView> dataExportRecords;
         private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructures;
@@ -30,13 +29,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             InterviewStatus.SupervisorAssigned
         };
 
-        public InterviewsExportDenormalizer(IReadSideKeyValueStorage<InterviewDataExportView> dataExportRecords,
-            IReadSideKeyValueStorage<InterviewData> interviewDatas,
+        public InterviewsExportDenormalizer(IReadSideKeyValueStorage<InterviewData> interviewDatas,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructures,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences,
-            IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
+            IExportViewFactory exportViewFactory, 
+            IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
         {
-            this.dataExportRecords = dataExportRecords;
             this.interviewDatas = interviewDatas;
             this.questionnaireExportStructures = questionnaireExportStructures;
             this.interviewReferences = interviewReferences;
