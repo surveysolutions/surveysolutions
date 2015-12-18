@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			foreach (var row in table.Rows) 
 			{
 #>
-			{<#= row.RowCode #>m, new <#= table.TypeName#>(<#= row.RowCode #>m, <#= string.Join(",",  row.Variables) #>)  },
+			{<#= row.RowCode #>m, new <#= table.TypeName#>(<#= row.RowCode #>m, <#= string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) ) #>)  },
 <# 
 			}
 #>
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 #>
 	public class <#= table.TypeName#>
 	{
-		public <#= table.TypeName#>(decimal rowcode, <#= string.Join(",",  table.VariableNames.Select(variableName =>"double " + variableName)) #>)
+		public <#= table.TypeName#>(decimal rowcode, <#= string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName)) #>)
 		{
 			this.rowcode = rowcode;
 <#
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		foreach (var variableName in table.VariableNames) 
 		{
 #>
-		public double <#= variableName #> { get; private set;}	
+		public double? <#= variableName #> { get; private set;}	
 <# 
 		}
 #>
