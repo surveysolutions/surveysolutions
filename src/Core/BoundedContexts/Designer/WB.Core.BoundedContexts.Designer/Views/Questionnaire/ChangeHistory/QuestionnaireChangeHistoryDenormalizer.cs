@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -65,7 +66,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         IEventHandler<MacroAdded>,
         IEventHandler<MacroUpdated>,
-        IEventHandler<MacroDeleted>
+        IEventHandler<MacroDeleted>,
+
+        IEventHandler<LookupTableAdded>,
+        IEventHandler<LookupTableUpdated>,
+        IEventHandler<LookupTableDeleted>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
@@ -460,6 +465,50 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
+        public void Handle(IPublishedEvent<LookupTableAdded> evnt)
+        {
+            AddOrUpdateLookupTableState(evnt.EventSourceId, evnt.Payload.LookupTableId, string.Empty);
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Add,
+               QuestionnaireItemType.LookupTable,
+               evnt.Payload.LookupTableId,
+               "Empty lookup table added",
+               evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableUpdated> evnt)
+        {
+            AddOrUpdateLookupTableState(evnt.EventSourceId, evnt.Payload.LookupTableId, evnt.Payload.LookupTableName);
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.LookupTable,
+               evnt.Payload.LookupTableId,
+               evnt.Payload.LookupTableName,
+               evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
+        {
+            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+            var lookupTableName = questionnaire.LookupState.ContainsKey(evnt.Payload.LookupTableId)
+                ? questionnaire.LookupState[evnt.Payload.LookupTableId]
+                : "";
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Delete,
+               QuestionnaireItemType.LookupTable,
+               evnt.Payload.LookupTableId,
+               lookupTableName,
+               evnt.EventSequence);
+
+            questionnaire.LookupState.Remove(evnt.Payload.LookupTableId);
+            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
         public void Handle(IPublishedEvent<MacroAdded> evnt)
         {
             AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.MacroId, string.Empty);
@@ -628,7 +677,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                         s.GroupsState[id] = title;
                 });
         }
-        
+
+        private void AddOrUpdateLookupTableState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.LookupState[id] = title);
+        }
+
         private void AddOrUpdateMacroState(Guid questionnaireId, Guid itemId, string itemTitle)
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,

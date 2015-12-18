@@ -142,15 +142,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty macro with no name added.
-        /// </summary>
-        public static string EmptyMacroAdded {
-            get {
-                return ResourceManager.GetString("EmptyMacroAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to  from.
         /// </summary>
         public static string from {
@@ -178,6 +169,60 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table.
+        /// </summary>
+        public static string LookupTable {
+            get {
+                return ResourceManager.GetString("LookupTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table &quot;{0}&quot; updated.
+        /// </summary>
+        public static string LookupTable_Deleted {
+            get {
+                return ResourceManager.GetString("LookupTable_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty lookup table with no name added.
+        /// </summary>
+        public static string LookupTable_EmptyTableAdded {
+            get {
+                return ResourceManager.GetString("LookupTable_EmptyTableAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table with no name deleted.
+        /// </summary>
+        public static string LookupTable_EmptyTableDeleted {
+            get {
+                return ResourceManager.GetString("LookupTable_EmptyTableDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table with no name updated.
+        /// </summary>
+        public static string LookupTable_EmptyTableUpdated {
+            get {
+                return ResourceManager.GetString("LookupTable_EmptyTableUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table &quot;{0}&quot; updated.
+        /// </summary>
+        public static string LookupTable_Updated {
+            get {
+                return ResourceManager.GetString("LookupTable_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Macro.
         /// </summary>
         public static string Macro {
@@ -189,18 +234,45 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macro &quot;{0}&quot; deleted.
         /// </summary>
-        public static string MacroDeleted {
+        public static string Macro_Deleted {
             get {
-                return ResourceManager.GetString("MacroDeleted", resourceCulture);
+                return ResourceManager.GetString("Macro_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty macro with no name added.
+        /// </summary>
+        public static string Macro_EmptyMacroAdded {
+            get {
+                return ResourceManager.GetString("Macro_EmptyMacroAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Macro with no name deleted.
+        /// </summary>
+        public static string Macro_EmptyMacroDeleted {
+            get {
+                return ResourceManager.GetString("Macro_EmptyMacroDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Macro with no name upfated.
+        /// </summary>
+        public static string Macro_EmptyMacroUpdated {
+            get {
+                return ResourceManager.GetString("Macro_EmptyMacroUpdated", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Macro &quot;{0}&quot; updated.
         /// </summary>
-        public static string MacroUpdated {
+        public static string Macro_Updated {
             get {
-                return ResourceManager.GetString("MacroUpdated", resourceCulture);
+                return ResourceManager.GetString("Macro_Updated", resourceCulture);
             }
         }
         
