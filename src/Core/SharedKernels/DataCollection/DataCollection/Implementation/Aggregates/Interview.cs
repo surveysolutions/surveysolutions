@@ -164,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     {
                         this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(question.Id, questionRosterVector, (long)question.Answer);
                     }
-                    if (question.Answer is decimal)
+                    if (question.Answer is decimal || question.Answer is double)
                     {
                         this.ExpressionProcessorStatePrototype.UpdateNumericRealAnswer(question.Id, questionRosterVector, Convert.ToDouble(question.Answer));
                         this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(question.Id, questionRosterVector, Convert.ToDecimal(question.Answer));
