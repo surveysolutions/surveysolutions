@@ -45,7 +45,14 @@
 @section header
 {
 
-    <h3 data-bind="text: ReportTypeName"></h3>
+    <h3>
+        <span data-bind="text: ReportTypeName"></span>
+        @if (Model.SupervisorId.HasValue)
+    {<text>
+        @PeriodicStatusReport.By @Model.SupervisorName
+    </text>
+        }
+    </h3>
 }
 
 @section actionbar
