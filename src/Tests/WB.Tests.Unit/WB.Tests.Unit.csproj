@@ -703,8 +703,9 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_template_imported_event_recived_with_version_set.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\InterviewActionsExporterTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\when_exporting_approved_interviews.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_approved_data_files_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\when_creating_and_getting_metadata_for_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />

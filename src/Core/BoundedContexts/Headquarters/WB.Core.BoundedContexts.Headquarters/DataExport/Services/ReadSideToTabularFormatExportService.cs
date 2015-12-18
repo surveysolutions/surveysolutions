@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,8 +19,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -41,13 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
-            ICsvWriter csvWriter,
-            InterviewDataExportSettings interviewDataExportSettings,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
-            IExportViewFactory exportViewFactory, 
+            ICsvWriter csvWriter, 
             ILogger logger,
             ITransactionManagerProvider transactionManager, 
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
