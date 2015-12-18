@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many columns in uploaded file. Max coumns count is {0}.
+        ///   Looks up a localized string similar to Too many columns in uploaded file. Max columns count is {0}.
         /// </summary>
         internal static string LookupTables_too_many_columns {
             get {
