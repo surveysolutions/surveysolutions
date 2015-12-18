@@ -1,8 +1,11 @@
-﻿using Ninject;
+﻿using System;
+using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -11,49 +14,34 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 {
     public class PostresKeyValueModule : NinjectModule
     {
-        private static int memoryCacheSizePerEntity;
+        private static ReadSideCacheSettings cacheSettings;
 
-        public PostresKeyValueModule(int memoryCacheSizePerEntity)
+        public PostresKeyValueModule(ReadSideCacheSettings cacheSettings)
         {
-            PostresKeyValueModule.memoryCacheSizePerEntity = memoryCacheSizePerEntity;
+            PostresKeyValueModule.cacheSettings = cacheSettings;
         }
 
         public override void Load()
         {
-            this.Kernel.Bind(typeof (MemoryCachedKeyValueStorageProvider<>)).ToSelf();
-
-            this.Kernel.Bind(typeof (IReadSideKeyValueStorage<>))
+            this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
                 .ToMethod(GetReadSideKeyValueStorage)
                 .InSingletonScope();
 
-            this.Kernel.Bind(typeof (IPlainKeyValueStorage<>))
+            this.Kernel.Bind(typeof(IPlainKeyValueStorage<>))
                 .To(typeof(PostgresPlainKeyValueStorage<>));
         }
 
-        protected object GetReadSideKeyValueStorage(IContext context)
+        private static object GetReadSideKeyValueStorage(IContext context)
         {
-            var genericProvider = this.Kernel.Get(
-                typeof (MemoryCachedKeyValueStorageProvider<>).MakeGenericType(context.GenericArguments[0])) as
-                IProvider;
+            object keyValueStorage = context.Kernel.GetService(typeof(PostgresReadSideKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
+            var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
 
-            if(genericProvider==null)
-                return null;
-            return genericProvider.Create(context);
-        }
+            Type cachingKeyValueStorageType = typeof(EsentCachedReadSideStorage<>).MakeGenericType(context.GenericArguments[0]);
 
-        private class MemoryCachedKeyValueStorageProvider<TEntity> : Provider<IReadSideKeyValueStorage<TEntity>>
-            where TEntity : class, IReadSideRepositoryEntity
-        {
-            protected override IReadSideKeyValueStorage<TEntity> CreateInstance(IContext context)
-            {
-                var esentKeyValueStorage = new PostgresReadSideKeyValueStorage<TEntity>(
-                    context.Kernel.Get<ISessionProvider>(PostgresReadSideModule.SessionProviderName),
-                                                        context.Kernel.Get<PostgreConnectionSettings>());
+            object cachingKeyValueStorage = Activator.CreateInstance(cachingKeyValueStorageType,
+                keyValueStorage, fileSystemAccessor, cacheSettings);
 
-                return new MemoryCachedKeyValueStorage<TEntity>(
-                    esentKeyValueStorage,
-                    new ReadSideStoreMemoryCacheSettings(memoryCacheSizePerEntity, memoryCacheSizePerEntity / 2));
-            }
+            return cachingKeyValueStorage;
         }
     }
 }

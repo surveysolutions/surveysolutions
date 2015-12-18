@@ -4,6 +4,7 @@ using System.Globalization;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests;
 using It = Machine.Specifications.It;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideRepositoryWriterTests
         Establish context = () =>
         {
             batchedWriter = new Mock<IReadSideRepositoryWriter<ReadSideRepositoryEntity>>();
-            memoryWriter = new MemoryCachedReadSideRepositoryWriter<ReadSideRepositoryEntity>(batchedWriter.Object, new ReadSideStoreMemoryCacheSettings(256, 128));
+            memoryWriter = new MemoryCachedReadSideRepositoryWriter<ReadSideRepositoryEntity>(batchedWriter.Object, new ReadSideCacheSettings(null, 256, 128));
 
             memoryWriter.EnableCache();
             for (int i = 0; i < 255; i++)

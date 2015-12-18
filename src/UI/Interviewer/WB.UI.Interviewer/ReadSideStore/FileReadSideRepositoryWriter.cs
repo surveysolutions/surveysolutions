@@ -55,6 +55,14 @@ namespace WB.UI.Interviewer.ReadSideStore
             return this.memcache[id];
         }
 
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
+            }
+        }
+
         public void Remove(string id)
         {
             if (this.memcache.ContainsKey(id))
