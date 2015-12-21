@@ -17,15 +17,15 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         {
             var readSideStorageMock=new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
             readSideRepositoryCleanerMock = readSideStorageMock.As<IReadSideRepositoryCleaner>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
         };
         Because of = () =>
-            memoryCachedReadSideStore.Clear();
+            memoryCachedReadSideStorage.Clear();
 
         It should_call_clear_of_IReadSideStorage = () =>
             readSideRepositoryCleanerMock.Verify(x => x.Clear(), Times.Once);
         
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideRepositoryCleaner> readSideRepositoryCleanerMock;
     }
 }

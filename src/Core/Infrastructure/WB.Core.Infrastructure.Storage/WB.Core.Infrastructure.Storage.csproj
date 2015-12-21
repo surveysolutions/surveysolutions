@@ -166,9 +166,7 @@
     <Compile Include="Postgre\PostgresWriteSideModule.cs" />
     <Compile Include="ReadSideCacheSettings.cs" />
     <Compile Include="ThreadMarkerManager.cs" />
-    <Compile Include="Memory\Implementation\MemoryCachedReadSideRepositoryWriter.cs" />
-    <Compile Include="Memory\Implementation\MemoryCachedReadSideStore.cs" />
-    <Compile Include="Memory\Implementation\MemoryCachedKeyValueStorage.cs" />
+    <Compile Include="Memory\Implementation\MemoryCachedReadSideStorage.cs" />
     <Compile Include="NinjectExtensions.cs" />
     <Compile Include="Postgre\Implementation\DatabaseManagement.cs" />
     <Compile Include="Postgre\Implementation\ICqrsPostgresTransactionManager.cs" />
