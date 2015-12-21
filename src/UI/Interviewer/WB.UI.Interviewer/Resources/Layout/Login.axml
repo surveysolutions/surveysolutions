@@ -28,55 +28,58 @@
         android:gravity="center"
         android:fillViewport="true">
       <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:orientation="vertical"
+          android:gravity="center">
         <ImageView
             style="@style/Login_Logo"
             android:id="@+id/LoginPage_logo" />
-        <TextView
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+          <TextView
             style="@style/Login_ErrorMessage"
             android:id="@+id/LoginPage_error_message"
             android:layout_width="wrap_content"
-            local:MvxBind="Text ErrorMessage; Visible Or(Not(IsUserValid), IsOnlineLoginButtonVisible)"/>
-        <RelativeLayout
-            style="@style/Login_FormContainer"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_above="@+id/login_page_screen_bottom">
+            local:MvxBind="Text ErrorMessage; Visible Or(Not(IsUserValid), IsOnlineLoginButtonVisible)" />
           <EditText
-              style="@style/Login_Login_Editor"
-              android:id="@+id/LoginPage_login"
-              android:singleLine="true"
-              android:inputType="textVisiblePassword|textNoSuggestions"
-              local:MvxBind="Text UserName; Enabled False; BackgroundStyle ValidationStyleBackground(True);" />
+            style="@style/Login_Login_Editor"
+            android:id="@+id/LoginPage_login"
+            android:singleLine="true"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            local:MvxBind="Text UserName; Enabled False; BackgroundStyle ValidationStyleBackground(True);" />
           <EditText
-              style="@style/Login_Password_Editor"
-              android:id="@+id/LoginPage_password"
-              android:layout_below="@+id/LoginPage_login"
-              android:singleLine="true"
-              android:inputType="textPassword"
-              local:MvxBind="Text Password; 
+            style="@style/Login_Password_Editor"
+            android:id="@+id/LoginPage_password"
+            android:layout_below="@+id/LoginPage_login"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            local:MvxBind="Text Password; 
                 Hint Localization('PasswordHint'); 
                 BackgroundStyle ValidationStyleBackground(IsUserValid);
                 FocusValueChanged SignInCommand; " />
-          <Button
+          <LinearLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="left">
+            <Button
               style="@style/Login_Singin_Button"
               android:id="@+id/LoginPage_singin_button"
               android:layout_below="@+id/LoginPage_password"
               local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
-        
-          <Button
+
+            <Button
               style="@style/Login_OnlineSingin_Button"
-              android:id="@+id/LoginPage_Online_Login_button" 
-              android:layout_toRightOf="@+id/LoginPage_singin_button"               
+              android:id="@+id/LoginPage_Online_Login_button"
+              android:layout_toRightOf="@+id/LoginPage_singin_button"
               android:layout_below="@+id/LoginPage_password"
               local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;" />
-        
-   
-        </RelativeLayout>
+          </LinearLayout>
+        </LinearLayout>
+
+
       </LinearLayout>
     </ScrollView>
   </RelativeLayout>
