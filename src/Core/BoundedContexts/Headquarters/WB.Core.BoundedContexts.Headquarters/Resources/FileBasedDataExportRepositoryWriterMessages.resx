@@ -141,4 +141,7 @@
   <data name="Administrator" xml:space="preserve">
     <value>Administrator</value>
   </data>
+  <data name="ApiUser" xml:space="preserve">
+    <value>Api User</value>
+  </data>
 </root>
