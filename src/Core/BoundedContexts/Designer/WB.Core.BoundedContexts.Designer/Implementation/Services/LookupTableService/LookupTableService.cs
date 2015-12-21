@@ -186,7 +186,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
                 var fieldHeaders = csvReader.FieldHeaders.Select(x => x.Trim()).ToArray();
 
-                if (fieldHeaders.Length > MAX_COLS_COUNT)
+                var amountOfHeaders = fieldHeaders.Length;
+
+                if (amountOfHeaders > MAX_COLS_COUNT)
                 {
                     throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_columns, MAX_COLS_COUNT));
                 }
@@ -196,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_empty_or_invalid_header_are_not_allowed);
                 }
 
-                if (fieldHeaders.Distinct().Count() != fieldHeaders.Length)
+                if (fieldHeaders.Distinct().Count() != amountOfHeaders)
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_duplicating_headers_are_not_allowed);
                 }
@@ -215,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     var row = new LookupTableRow();
                     var record = csvReader.CurrentRecord;
 
-                    for (int i = 0; i < record.Length; i++)
+                    for (int i = 0; i < amountOfHeaders; i++)
                     {
                         if (i == indexOfRowcodeColumn)
                         {
@@ -284,7 +286,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private CsvConfiguration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER };
+            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
         }
     }
 }
