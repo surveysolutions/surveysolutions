@@ -744,7 +744,7 @@
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_and_bus_does_not_have_any_subscriptions.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_two_handlers_were_subscribed_on_same_event.cs" />
     <Compile Include="Infrastructure\LiteEventBusTests\when_publishing_event_after_handler_was_subscribed_on_different_event.cs" />
-    <Compile Include="Infrastructure\MemoryCachedReadSideRepositoryWriterTests\when_inserting_last_item_in_store.cs" />
+    <Compile Include="Infrastructure\MemoryCachedReadSideStorageTests\when_inserting_last_item_in_store.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\MemoryCachedReadSideStoreTestContext.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_Clear_called.cs" />
     <Compile Include="Infrastructure\MemoryCachedReadSideStoreTests\when_disable_cache_is_called.cs" />
