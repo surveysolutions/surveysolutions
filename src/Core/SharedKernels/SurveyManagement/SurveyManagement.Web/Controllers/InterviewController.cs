@@ -67,6 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     });
 
             this.ViewBag.ActivePage = MenuItem.Docs;
+            this.ViewBag.InterviewId = id;
 
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
