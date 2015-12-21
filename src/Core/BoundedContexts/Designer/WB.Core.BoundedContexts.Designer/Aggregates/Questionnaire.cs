@@ -865,12 +865,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 var lookupTableName = lookupTable.Value.TableName;
 
-                if (!string.IsNullOrWhiteSpace(lookupTableName))
+                if (!this.lookupTableService.IsLookupTableEmpty(document.PublicKey, lookupTable.Key, lookupTableName))
                 {
-                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.EventSourceId);
+                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.EventSourceId, lookupTable.Key);
                 }
             }
-
 
             ApplyEvent(new QuestionnaireCloned
             {
