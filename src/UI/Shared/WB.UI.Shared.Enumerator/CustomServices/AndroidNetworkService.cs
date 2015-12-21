@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return cm.ActiveNetworkInfo;
         }
 
-        public string GetNetworkTypeName()
+        public string GetNetworkType()
         {
             return this.GetNetworkInfo().TypeName;
         }
