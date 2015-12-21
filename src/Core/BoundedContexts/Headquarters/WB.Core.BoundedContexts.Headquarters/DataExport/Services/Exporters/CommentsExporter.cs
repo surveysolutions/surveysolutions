@@ -195,6 +195,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     return FileBasedDataExportRepositoryWriterMessages.Headquarter;
                 case UserRoles.Administrator:
                     return FileBasedDataExportRepositoryWriterMessages.Administrator;
+                case UserRoles.ApiUser:
+                    return FileBasedDataExportRepositoryWriterMessages.ApiUser;
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }
