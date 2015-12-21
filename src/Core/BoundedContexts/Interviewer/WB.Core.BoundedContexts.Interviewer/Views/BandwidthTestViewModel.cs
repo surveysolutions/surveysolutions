@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
@@ -14,7 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly INetworkService networkService;
         private readonly IRestService restService;
-        private readonly int pingAttempCount = 5;
+        private readonly int countOfPingAttemps = 5;
         
         private bool isConnectionAbsent;
         private bool isBandwidthTested;
@@ -94,43 +95,41 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             this.IsInProgress = true;
-
-            await Task.Run(async () =>
-            {
-                var time = new List<double>();
-                for (int i = 0; i < pingAttempCount; i++)
-                {
-                    var beforeTime = DateTime.Now;
-                    try
-                    {
-                        await this.restService.GetAsync(string.Empty);
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                    var afterTime = DateTime.Now;
-                    var timeDifference = afterTime - beforeTime;
-                    time.Add(timeDifference.TotalMilliseconds);
-                }
-
-                if (time.Any())
-                {
-                    this.Ping = (int)time.Average() + "ms";
-                }
-
-                this.ConnectionType = this.networkService.GetNetworkTypeName();
-                this.NetworkName = this.networkService.GetNetworkName();
-
-                this.IsConnectionAbsent = time.Count == 0;
-                this.ConnectionDescription = this.IsConnectionAbsent
-                    ? this.ConnectionDescription =
-                        InterviewerUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title
-                    : (time.Count == pingAttempCount
-                        ? InterviewerUIResources.Diagnostics_BandwidthTestConnectionOK_Title
-                        : InterviewerUIResources.Diagnostics_BandwidthTestConnectionNotOK_Title);
-            });
             
+            var pingsInMilliseconds = new List<double>();
+            int countOfFailedPingAttemps = 0;
+            for (int pingIndex = 0; pingIndex < this.countOfPingAttemps; pingIndex++)
+            {
+                try
+                {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    await this.restService.GetAsync(string.Empty);
+                    stopwatch.Stop();
+                    pingsInMilliseconds.Add(stopwatch.ElapsedMilliseconds);
+                }
+                catch
+                {
+                    countOfFailedPingAttemps++;
+                }
+            }
+
+            if (pingsInMilliseconds.Any())
+            {
+                this.Ping = (int) pingsInMilliseconds.Average() + "ms";
+            }
+
+            this.ConnectionType = this.networkService.GetNetworkType();
+            this.NetworkName = this.networkService.GetNetworkName();
+
+            this.IsConnectionAbsent = countOfFailedPingAttemps == this.countOfPingAttemps;
+            this.ConnectionDescription = this.IsConnectionAbsent
+                ? this.ConnectionDescription =
+                    InterviewerUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title
+                : (countOfFailedPingAttemps == 0
+                    ? InterviewerUIResources.Diagnostics_BandwidthTestConnectionOK_Title
+                    : InterviewerUIResources.Diagnostics_BandwidthTestConnectionNotOK_Title);
+
             this.IsInProgress = false;
             this.IsBandwidthTested = true;
         }
