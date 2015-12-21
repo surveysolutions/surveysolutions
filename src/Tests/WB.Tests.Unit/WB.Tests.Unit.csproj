@@ -358,10 +358,12 @@
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_5001_rows.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_data.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_without_rowcode_column.cs" />
+    <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_bigger_or_smaller_anount_of_data_columns_than_in_header.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_columns_without_headers.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_12_columns.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_decimal_rowcode_that_can_be_converted_to_long.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_duplicates_in_column_headers.cs" />
+    <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_convertable_to_integer_rowcode_value.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_decimal_data_value.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_integer_rowcode_value.cs" />
     <Compile Include="BoundedContexts\Designer\LookupTableServiceTests\when_saving_lookup_table_with_non_unique_rowcode_values.cs" />
