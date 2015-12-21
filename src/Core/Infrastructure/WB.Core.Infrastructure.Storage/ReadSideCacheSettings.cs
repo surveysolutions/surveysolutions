@@ -9,6 +9,8 @@ namespace WB.Core.Infrastructure.Storage
             this.EsentCacheFolder = esentCacheFolder;
         }
 
+        public bool EnableEsentCache { get; } = true;
+
         public string EsentCacheFolder { get; private set; }
         public int CacheSizeInEntities { get; private set; }
         public int StoreOperationBulkSize { get; private set; }

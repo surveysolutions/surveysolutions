@@ -159,6 +159,7 @@
     <Compile Include="IsolatedThreadExtensions.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Postgre\Implementation\PostgresEventStore.cs" />
+    <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
     <Compile Include="Postgre\NhExtensions\CustomPostgreSQL82Dialect.cs" />
     <Compile Include="Postgre\NhExtensions\NpgsqlDriverExtended.cs" />
     <Compile Include="Postgre\NhExtensions\NpgsqlExtendedSqlType.cs" />
@@ -178,7 +179,7 @@
     <Compile Include="Postgre\Implementation\PostgresPlainStorageRepository.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideKeyValueStorage.cs" />
     <Compile Include="Postgre\Implementation\NoTransactionCqrsPostgresTransactionManager.cs" />
-    <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManager.cs" />
+    <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions.cs" />
     <Compile Include="Postgre\Implementation\PostgresReadSideBootstraper.cs" />
     <Compile Include="Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
