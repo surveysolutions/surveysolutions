@@ -462,7 +462,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Version: {0}. Check for a new version</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>By restoring saved data you will replace all current assigments on theis device</value>
+    <value>By restoring saved data you will replace all current assigments on this device</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
     <value>RESTORE</value>
