@@ -46,6 +46,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         public override void Load()
         {
+            this.Bind<ReadSideCacheSettings>().ToConstant(cacheSettings);
+
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
@@ -66,7 +68,16 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             
             this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManagerWithSessions>().ToSelf();
             this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions>().ToSelf();
-            this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
+
+            this.Kernel
+                .Bind<TransactionManagerProvider>()
+                .ToConstructor(constructor => new TransactionManagerProvider(
+                    constructor.Inject<Func<CqrsPostgresTransactionManager>>(),
+                    constructor.Inject<Func<NoTransactionCqrsPostgresTransactionManager>>(),
+                    constructor.Inject<RebuildReadSideCqrsPostgresTransactionManagerWithSessions>(),
+                    constructor.Inject<RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions>(),
+                    constructor.Inject<ReadSideCacheSettings>()))
+                .InSingletonScope();
 
             this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>()).Named(SessionProviderName);
             this.Kernel.Bind<ITransactionManager>().ToMethod(context => context.Kernel.Get<CqrsPostgresTransactionManager>());
