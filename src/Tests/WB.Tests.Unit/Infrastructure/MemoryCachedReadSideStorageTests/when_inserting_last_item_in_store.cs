@@ -9,15 +9,15 @@ using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideRepositoryWriterTests
+namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStorageTests
 {
-    [Subject(typeof(MemoryCachedReadSideRepositoryWriter<>))]
+    [Subject(typeof(MemoryCachedReadSideStorage<>))]
     internal class when_inserting_last_item_in_store
     {
         Establish context = () =>
         {
             batchedWriter = new Mock<IReadSideRepositoryWriter<ReadSideRepositoryEntity>>();
-            memoryWriter = new MemoryCachedReadSideRepositoryWriter<ReadSideRepositoryEntity>(batchedWriter.Object, new ReadSideCacheSettings(null, 256, 128));
+            memoryWriter = new MemoryCachedReadSideStorage<ReadSideRepositoryEntity>(batchedWriter.Object, new ReadSideCacheSettings(null, 256, 128));
 
             memoryWriter.EnableCache();
             for (int i = 0; i < 255; i++)
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideRepositoryWriterTests
         It should_push_data_to_store = () => 
             batchedWriter.Verify(x => x.BulkStore(Moq.It.IsAny<List<Tuple<ReadSideRepositoryEntity, string>>>()), Times.Once);
 
-        static MemoryCachedReadSideRepositoryWriter<ReadSideRepositoryEntity> memoryWriter;
+        static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryWriter;
         static Mock<IReadSideRepositoryWriter<ReadSideRepositoryEntity>> batchedWriter;
     }
 }

@@ -16,12 +16,12 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
-            memoryCachedReadSideStore.EnableCache();
-            memoryCachedReadSideStore.Store(view, id);
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage.EnableCache();
+            memoryCachedReadSideStorage.Store(view, id);
         };
         Because of = () =>
-            result = memoryCachedReadSideStore.GetById(id);
+            result = memoryCachedReadSideStorage.GetById(id);
 
         It should_never_call_GetById_of_IReadSideStorage = () =>
             readSideStorageMock.Verify(x => x.GetById(id), Times.Never);
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         It should_return_cached_result = () =>
            result.ShouldEqual(view);
 
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
         private static string id = "id_view";
         private static ReadSideRepositoryEntity view = new ReadSideRepositoryEntity();

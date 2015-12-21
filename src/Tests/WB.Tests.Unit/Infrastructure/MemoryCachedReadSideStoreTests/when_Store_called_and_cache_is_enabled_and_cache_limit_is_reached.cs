@@ -16,27 +16,27 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
-            memoryCachedReadSideStore.EnableCache();
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage.EnableCache();
 
             for (int i = 0; i < MaxCountOfCachedEntities-1; i++)
             {
-                memoryCachedReadSideStore.Store(new ReadSideRepositoryEntity(), id + i);
+                memoryCachedReadSideStorage.Store(new ReadSideRepositoryEntity(), id + i);
             }
         };
         Because of = () =>
-            memoryCachedReadSideStore.Store(new ReadSideRepositoryEntity(), last_id);
+            memoryCachedReadSideStorage.Store(new ReadSideRepositoryEntity(), last_id);
 
         It should_call_Store_of_IReadSideStorage_16_times = () =>
             readSideStorageMock.Verify(x => x.Store(Moq.It.IsAny<ReadSideRepositoryEntity>(), Moq.It.IsAny<string>()), Times.Exactly(MaxCountOfEntitiesInOneStoreOperation));
 
         It should_return_readable_status = () =>
-            memoryCachedReadSideStore.GetReadableStatus().ShouldEqual("  |  cache enabled  |  cached 128");
+            memoryCachedReadSideStorage.GetReadableStatus().ShouldEqual("  |  cache enabled  |  cached 128");
 
         It should_return_view_type_ReadSideRepositoryEntity = () =>
-            memoryCachedReadSideStore.ViewType.ShouldEqual(typeof(ReadSideRepositoryEntity));
+            memoryCachedReadSideStorage.ViewType.ShouldEqual(typeof(ReadSideRepositoryEntity));
 
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
         private static string id = "id";
         private static string last_id = "last_id";

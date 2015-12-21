@@ -16,20 +16,20 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
-            memoryCachedReadSideStore.EnableCache();
-            memoryCachedReadSideStore.Store(view, id);
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage.EnableCache();
+            memoryCachedReadSideStorage.Store(view, id);
         };
         Because of = () =>
-             memoryCachedReadSideStore.Remove(id);
+             memoryCachedReadSideStorage.Remove(id);
 
         It should_once_call_Remove_of_IReadSideStorage = () =>
             readSideStorageMock.Verify(x => x.Remove(id), Times.Once);
 
         It should_delete_view_from_cache = () =>
-           memoryCachedReadSideStore.GetById(id).ShouldBeNull();
+           memoryCachedReadSideStorage.GetById(id).ShouldBeNull();
 
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
         private static string id = "id_view";
         private static ReadSideRepositoryEntity view = new ReadSideRepositoryEntity();

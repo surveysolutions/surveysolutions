@@ -7,19 +7,19 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 {
-    internal class MemoryCachedReadSideStore<TEntity> : IReadSideStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
+    internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly IReadSideStorage<TEntity> readSideStorage;
+        private readonly IReadSideStorage<TEntity> storage;
         private readonly ReadSideCacheSettings settings;
 
         private bool isCacheEnabled = false;
 
         protected readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
 
-        public MemoryCachedReadSideStore(IReadSideStorage<TEntity> readSideStorage, ReadSideCacheSettings settings)
+        public MemoryCachedReadSideStorage(IReadSideStorage<TEntity> storage, ReadSideCacheSettings settings)
         {
-            this.readSideStorage = readSideStorage;
+            this.storage = storage;
             this.settings = settings;
         }
 
@@ -42,7 +42,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         {
             int cachedEntities = this.cache.Count;
             return string.Format("{0}  |  cache {1}  |  cached {2}",
-                this.readSideStorage.GetReadableStatus(),
+                this.storage.GetReadableStatus(),
                 this.isCacheEnabled ? "enabled" : "disabled",
                 cachedEntities);
         }
@@ -56,7 +56,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         public void Clear()
         {
-            var readSideRepositoryCleaner = readSideStorage as IReadSideRepositoryCleaner;
+            var readSideRepositoryCleaner = this.storage as IReadSideRepositoryCleaner;
             if(readSideRepositoryCleaner!=null)
                 readSideRepositoryCleaner.Clear();
         }
@@ -65,7 +65,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         {
             return this.isCacheEnabled
                 ? this.GetByIdUsingCache(id)
-                : readSideStorage.GetById(id);
+                : this.storage.GetById(id);
         }
 
         public void Remove(string id)
@@ -76,7 +76,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             }
             else
             {
-                readSideStorage.Remove(id);
+                this.storage.Remove(id);
             }
         }
 
@@ -88,7 +88,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             }
             else
             {
-                readSideStorage.Store(view, id);
+                this.storage.Store(view, id);
             }
         }
 
@@ -105,7 +105,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
             if (cache.ContainsKey(id))
                 return cache[id];
 
-            var entity = readSideStorage.GetById(id);
+            var entity = this.storage.GetById(id);
 
             cache[id] = entity;
 
@@ -117,7 +117,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         private void RemoveUsingCache(string id)
         {
             this.cache.Remove(id);
-            this.readSideStorage.Remove(id);
+            this.storage.Remove(id);
         }
 
         private void StoreUsingCache(TEntity entity, string id)
@@ -143,20 +143,25 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
         {
+            var entitiesToStore = new List<Tuple<TEntity, string>>();
+
             foreach (var entityId in bulk)
             {
                 var entity = cache[entityId];
+
                 if (entity == null)
                 {
-                    readSideStorage.Remove(entityId);
+                    this.storage.Remove(entityId);
                 }
                 else
                 {
-                    readSideStorage.Store(entity, entityId);
+                    entitiesToStore.Add(Tuple.Create(entity, entityId));
                 }
 
                 cache.Remove(entityId);
             }
+
+            this.storage.BulkStore(entitiesToStore);
         }
 
         private bool IsCacheLimitReached()

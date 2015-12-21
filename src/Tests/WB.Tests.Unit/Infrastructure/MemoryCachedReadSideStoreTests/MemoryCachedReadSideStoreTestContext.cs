@@ -12,12 +12,12 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
 {
-    [Subject(typeof(MemoryCachedReadSideStore<>))]
+    [Subject(typeof(MemoryCachedReadSideStorage<>))]
     internal class MemoryCachedReadSideStoreTestContext
     {
-        protected static MemoryCachedReadSideStore<ReadSideRepositoryEntity> CreateMemoryCachedReadSideStore(IReadSideStorage<ReadSideRepositoryEntity> readSideStorage =null)
+        protected static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> CreateMemoryCachedReadSideStore(IReadSideStorage<ReadSideRepositoryEntity> readSideStorage =null)
         {
-            return new MemoryCachedReadSideStore<ReadSideRepositoryEntity>(
+            return new MemoryCachedReadSideStorage<ReadSideRepositoryEntity>(
                 readSideStorage ?? Mock.Of<IReadSideStorage<ReadSideRepositoryEntity>>(),
                 new ReadSideCacheSettings(null, 256, 128));
         }
