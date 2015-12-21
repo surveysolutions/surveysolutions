@@ -1125,7 +1125,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckTextQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1144,7 +1144,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckNumericRealQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion, this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1165,7 +1165,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.QRBarcode);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1186,7 +1186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             this.ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.Multimedia);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -1201,7 +1201,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckNumericIntegerQuestionInvariants(questionId, rosterVector, answer, questionnaire, answeredQuestion,
                 this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (currentState, question) => question == answeredQuestion
@@ -1225,7 +1225,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckMultipleOptionQuestionInvariants(questionId, rosterVector, selectedValues, questionnaire, answeredQuestion,
                 this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer =
                 (currentState, question) => question == answeredQuestion
@@ -1246,7 +1246,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckYesNoQuestionInvariants(command.Question, command.AnsweredOptions, questionnaire, this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(command.Question.Id, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             AnsweredYesNoOption[] answer = command.AnsweredOptions.ToArray();
 
@@ -1272,7 +1272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckLinkedMultiOptionQuestionInvariants(questionId, rosterVector, selectedRosterVectors, questionnaire, answeredQuestion);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
             var answeredLinkedQuestions = selectedRosterVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
@@ -1296,7 +1296,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckDateTimeQuestionInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1314,7 +1314,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckSingleOptionQuestionInvariants(questionId, rosterVector, selectedValue, questionnaire, answeredQuestion,
                 this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1333,7 +1333,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             CheckTextListInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState, answers);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             Func<IReadOnlyInterviewStateDependentOnAnswers, Identity, object> getAnswer = (currentState, question) => question == answeredQuestion ?
                 answers :
@@ -1355,7 +1355,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             CheckGpsCoordinatesInvariants(questionId, rosterVector, questionnaire, answeredQuestion, this.interviewState);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             var expressionProcessorState = this.PrepareExpressionProcessorStateForCalculations();
 
@@ -1385,7 +1385,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
 
             this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
             var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedRosterVector);
@@ -1416,7 +1416,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             IInterviewExpressionStateV5 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -1458,7 +1458,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
@@ -1469,7 +1469,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
         }
@@ -1480,7 +1480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             this.ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
-            this.ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(questionId, questionnaire);
+            this.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
         }
@@ -3733,10 +3733,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (this.wasHardDeleted)
                 throw new InterviewException(string.Format("Interview {0} status is hard deleted.", EventSourceId), InterviewDomainExceptionType.InterviewHardDeleted);
         }
-        protected void ThrowIfInterviewReceivedByInterviewerAndWeTryModifyItOnServer(Guid questionId, IQuestionnaire questionnaire)
+        protected void ThrowIfInterviewReceivedByInterviewer()
         {
-            var questionScope = questionnaire.GetQuestionScope(questionId);
-            if (this.receivedByInterviewer && questionScope != QuestionScope.Interviewer)
+            if (this.receivedByInterviewer) 
                 throw new InterviewException($"Cann't modify Interview {this.EventSourceId} on server, because it received by interviewer.");
         }
 
