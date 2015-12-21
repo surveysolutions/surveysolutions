@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using CsQuery.ExtensionMethods;
+using CsQuery.ExtensionMethods.Internal;
+
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
@@ -43,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_cant_has_empty_content));
             }
 
-            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableName);
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableId);
 
             DeleteLookupTableContent(questionnaireId, lookupTableId);
 
@@ -64,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTable == null)
                 return;
 
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTable.TableName);
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableId);
 
             lookupTableContentStorage.Remove(lookupTableStorageId);
         }
@@ -83,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTable == null)
                 throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
 
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaire.PublicKey, lookupTable.TableName);
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaire.PublicKey, lookupTableId);
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
 
@@ -111,20 +113,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             foreach (var lookupTable in questionnaire.LookupTables)
             {
-                result.Add(lookupTable.Key,
-                    System.Text.Encoding.UTF8.GetString(
-                        this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content));
+                result.Add(lookupTable.Key, System.Text.Encoding.UTF8.GetString(this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content));
             }
             return result;
         }
 
-        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId)
+        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId, Guid newLookupTableId)
         {
             var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
 
-            var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, sourceLookupTableName);
+            var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
 
             this.lookupTableContentStorage.Store(content, lookupTableStorageId);
+        }
+
+        public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string lookupTableName)
+        {
+            if (string.IsNullOrWhiteSpace(lookupTableName))
+            {
+                return true;
+            }
+
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, tableId);
+
+            return this.lookupTableContentStorage.GetById(lookupTableStorageId) == null;
         }
 
         private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
@@ -153,9 +165,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             return new LookupTableContentFile() { Content = memoryStream.ToArray(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
         }
-        private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
+
+        private string GetLookupTableStorageId(Guid questionnaireId, Guid lookupTableId)
         {
-            return $"{questionnaireId.FormatGuid()}-{lookupTableName}";
+            return $"{questionnaireId.FormatGuid()}-{lookupTableId.FormatGuid()}";
         }
 
         private LookupTableContent CreateLookupTableContent(string fileContent)
@@ -188,7 +201,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_duplicating_headers_are_not_allowed);
                 }
 
-                var indexOfRowcodeColumn = fieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
+                var indexOfRowcodeColumn = fieldHeaders.Select(x => x.ToLower()).ToList().IndexOf(ROWCODE.ToLower());
 
                 if (indexOfRowcodeColumn < 0)
                 {
@@ -206,8 +219,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     {
                         if (i == indexOfRowcodeColumn)
                         {
-                            long rowcode;
-                            if (!long.TryParse(record[i], out rowcode))
+                            decimal rowcodeAsDecumal;
+                            if (!decimal.TryParse(record[i], out rowcodeAsDecumal))
+                            {
+                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
+                            }
+                            long rowcode = (long)rowcodeAsDecumal;
+                            var isParcedDecimalValueConvertableToInteger = (decimal)rowcode == rowcodeAsDecumal;
+                            if (!isParcedDecimalValueConvertableToInteger)
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }
@@ -222,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                             else
                             {
                                 decimal variable;
-                                if (!decimal.TryParse(record[i], out variable))
+                                if (!decimal.TryParse(record[i], NumberStyles.Float, CultureInfo.InvariantCulture, out variable))
                                 {
                                     throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
                                 }

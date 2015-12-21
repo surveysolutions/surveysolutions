@@ -188,7 +188,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
                     MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
-
+                    
+                    LookupVerifier(LookupTableNameIsKeyword, "WB0052", VerificationMessages.WB0052_LookupNameIsKeyword, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasEmptyContent, "WB0048", VerificationMessages.WB0048_LookupHasEmptyContent, VerificationErrorLevel.Critical),
@@ -635,6 +636,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
+        }
+
+        private bool LookupTableNameIsKeyword(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
+        {
+            return keywordsProvider.GetAllReservedKeywords().Contains(table.TableName.ToLower());
         }
 
         private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)

@@ -1,15 +1,23 @@
 using System;
 using Machine.Specifications;
+
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 
+using It = Machine.Specifications.It;
+
 namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
 {
-    internal class when_saving_lookup_table_without_data
+    internal class when_saving_lookup_table_with_non_decimal_data_value
     {
         Establish context = () =>
         {
-            fileContent = $"no{_}row{_}code{_}column{_end}";
+            fileContent =
+                $"no{_}rowcode{_}column{_end}" +
+                $"1{_}2{_}3{_end}" +
+                $"2{_}3{_}4{_end}" +
+                $"3{_}4{_}not_decimal{_end}" +
+                $"4{_}56{_}3{_end}";
 
             lookupTableService = Create.LookupTableService();
         };
@@ -25,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
             exception.ShouldBeOfExactType<ArgumentException>();
 
         It should_throw_ArgumentException1 = () =>
-            ((ArgumentException)exception).Message.ShouldEqual(ExceptionMessages.LookupTables_cant_has_empty_content);
+            ((ArgumentException)exception).Message.ShouldEqual(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, "not_decimal", "column", 3));
 
         private static Exception exception;
 

@@ -315,7 +315,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup with the same variable name already exists..
+        ///   Looks up a localized string similar to Lookup table with the same variable name already exists..
         /// </summary>
         internal static string WB0029_LookupWithTheSameVariableNameAlreadyExists {
             get {
@@ -519,6 +519,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table name cannot be a reserved word..
+        /// </summary>
+        internal static string WB0052_LookupNameIsKeyword {
+            get {
+                return ResourceManager.GetString("WB0052_LookupNameIsKeyword", resourceCulture);
             }
         }
         
