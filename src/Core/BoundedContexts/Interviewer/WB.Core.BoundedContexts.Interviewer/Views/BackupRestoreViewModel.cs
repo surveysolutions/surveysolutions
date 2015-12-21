@@ -5,6 +5,7 @@ using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -19,6 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
+        private readonly ILogger logger;
 
         private bool isRestoreVisible;
         private bool isBackupInProgress;
@@ -36,13 +38,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IUserInteractionService userInteractionService, 
             IInterviewerSettings interviewerSettings, 
             IFileSystemAccessor fileSystemAccessor, 
-            ITabletDiagnosticService tabletDiagnosticService)
+            ITabletDiagnosticService tabletDiagnosticService, 
+            ILogger logger)
         {
             this.troubleshootingService = troubleshootingService;
             this.userInteractionService = userInteractionService;
             this.interviewerSettings = interviewerSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletDiagnosticService = tabletDiagnosticService;
+            this.logger = logger;
         }
 
         public bool IsRestoreVisible
@@ -140,13 +144,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsBackupCreated = false;
             this.IsRestoreVisible = false;
             this.IsBackupInProgress = true;
-            var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Backup");
-            var createdFileName = await this.troubleshootingService.BackupAsync(pathToFolder);
+            try
+            {
+                var pathToFolder =
+                    this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Backup");
+                var createdFileName = await this.troubleshootingService.BackupAsync(pathToFolder);
+
+                this.BackupLocation = createdFileName;
+                this.BackupCreationDate = DateTime.Now;
+                this.BackupScope = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(createdFileName));
+                this.IsBackupCreated = true;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e.Message, e);
+                this.IsBackupCreated = false;
+                await this.userInteractionService.AlertAsync(e.Message);
+            }
             this.IsBackupInProgress = false;
-            this.IsBackupCreated = true;
-            this.BackupLocation = createdFileName;
-            this.BackupCreationDate=DateTime.Now;
-            this.BackupScope= FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(createdFileName));
         }
 
         private async Task RestoreAsync()
@@ -156,11 +171,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 string.Empty, UIResources.Yes, UIResources.No))
             {
                 this.IsBackupInProgress = true;
+                try
+                {
+                    await Task.Run(() => this.troubleshootingService.Restore(this.RestoreLocation));
+                    this.tabletDiagnosticService.RestartTheApp();
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error(e.Message, e);
+                    await this.userInteractionService.AlertAsync(e.Message);
+                }
 
-                await Task.Run(() => this.troubleshootingService.Restore(this.RestoreLocation));
                 this.IsBackupInProgress = false;
-
-                this.tabletDiagnosticService.RestartTheApp();
             }
         }
     }
