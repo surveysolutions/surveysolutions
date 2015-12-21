@@ -69,6 +69,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -140,38 +141,6 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
-
-        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
-        {
-            return new FixedRosterTitle(value, title);
-        }
-
-        public static LookupTable LookupTable(string tableName)
-        {
-            return new LookupTable
-            {
-                TableName = tableName
-            };
-        }
-
-        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
-        {
-            return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
-        }
-
-        public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
-        {
-            return new LookupTableRow
-            {
-                RowCode = rowcode,
-                Variables = values
-            };
-        }
-
         public static AccountDocument AccountDocument(string userName="")
         {
             return new AccountDocument() { UserName = userName };
@@ -256,6 +225,27 @@ namespace WB.Tests.Unit
                 title: title,
                 groupId: chapterId,
                 children: children);
+        }
+
+
+        public static CodeGenerationSettings CodeGenerationSettings()
+        {
+            return new CodeGenerationSettings(
+                abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
+                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+                namespaces: new[]
+                {
+                    "WB.Core.SharedKernels.DataCollection.V2",
+                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V4",
+                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5",
+                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
+                },
+                areRosterServiceVariablesPresent: true,
+                rosterType: "RosterRowList",
+                isLookupTablesFeatureSupported: true);
         }
 
         public static CodeGenerator CodeGenerator(
@@ -456,6 +446,11 @@ namespace WB.Tests.Unit
         public static FileSystemIOAccessor FileSystemIOAccessor()
         {
             return new FileSystemIOAccessor();
+        }
+
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        {
+            return new FixedRosterTitle(value, title);
         }
 
         public static GenerationResult GenerationResult(bool success=false)
@@ -1061,9 +1056,44 @@ namespace WB.Tests.Unit
             return new LiteEventRegistry();
         }
 
+        public static LookupTable LookupTable(string tableName)
+        {
+            return new LookupTable
+            {
+                TableName = tableName
+            };
+        }
+
         public static LookupTable LookupTable()
         {
             return new LookupTable() {FileName = "name", TableName = "table"};
+        }
+
+        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
+        {
+            return new LookupTableContent
+            {
+                VariableNames = variableNames,
+                Rows = rows
+            };
+        }
+
+        public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
+        {
+            return new LookupTableRow
+            {
+                RowCode = rowcode,
+                Variables = values
+            };
+        }
+
+        public static LookupTableService LookupTableService(
+            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+        {
+            return new LookupTableService(
+                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
+                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)
@@ -1228,19 +1258,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
-        {
-            return new NumericQuestion
-            {
-                QuestionType = QuestionType.Numeric,
-                PublicKey = id ?? Guid.NewGuid(),
-                StataExportCaption = variable,
-                IsInteger = false,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
-            };
-        }
-
         public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, string variableName="var1")
         {
@@ -1293,6 +1310,19 @@ namespace WB.Tests.Unit
                 sourceQuestionId : GetQuestionnaireItemId(sourceQuestionId),
                 targetIndex : 0
             ));
+        }
+
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                IsInteger = false,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression
+            };
         }
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
@@ -1647,27 +1677,6 @@ namespace WB.Tests.Unit
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
-
-        public static CodeGenerationSettings CodeGenerationSettings()
-        {
-            return new CodeGenerationSettings(
-                abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
-                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
-                namespaces: new[]
-                {
-                    "WB.Core.SharedKernels.DataCollection.V2",
-                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V4",
-                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5",
-                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
-                },
-                areRosterServiceVariablesPresent: true,
-                rosterType: "RosterRowList",
-                isLookupTablesFeatureSupported: true);
-        }
-
         public static QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
         {
             return new QuestionnaireExportStructure
@@ -1704,6 +1713,12 @@ namespace WB.Tests.Unit
                 GroupKey = GetQuestionnaireItemParentId(targetGroupId),
                 TargetIndex = targetIndex ?? 0
             }, Guid.Parse(questionnaireId??Guid.NewGuid().ToString()));
+        }
+
+        public static QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        {
+            return new QuestionnaireKeyValueStorage(
+                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
 
         public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)
@@ -1755,34 +1770,24 @@ namespace WB.Tests.Unit
         }
 
         public static QuestionnaireVerificationError QuestionnaireVerificationError()
-        {
-            return new QuestionnaireVerificationError("ee", "mm", VerificationErrorLevel.General);
-        }
+            => new QuestionnaireVerificationError("ee", "mm", VerificationErrorLevel.General);
 
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
-        {
-            return new QuestionnaireView(new QuestionnaireDocument() {CreatedBy = createdBy ?? Guid.NewGuid()});
-        }
+            => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid( )});
 
         public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
-        {
-            return new QuestionnaireView(questionnaireDocument);
-        }
+            => new QuestionnaireView(questionnaireDocument);
+
+        private static ReadSideCacheSettings ReadSideCacheSettings()
+            => new ReadSideCacheSettings("folder", 128, 8);
 
         public static ReadSideSettings ReadSideSettings()
-        {
-            return new ReadSideSettings(readSideVersion: 0);
-        }
+            => new ReadSideSettings(readSideVersion: 0);
 
-        public static RebuildReadSideCqrsPostgresTransactionManager RebuildReadSideCqrsPostgresTransactionManager()
-        {
-            return new RebuildReadSideCqrsPostgresTransactionManager(Mock.Of<ISessionFactory>());
-        }
+        public static RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions RebuildReadSideCqrsPostgresTransactionManager()
+            => new RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions();
 
-        public static RoslynExpressionProcessor RoslynExpressionProcessor()
-        {
-            return new RoslynExpressionProcessor();
-        }
+        public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
         public static Group Roster(
             Guid? rosterId = null, 
@@ -2219,9 +2224,11 @@ namespace WB.Tests.Unit
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
         {
             return new TransactionManagerProvider(
-                transactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
-                noTransactionTransactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
-                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>());
+                transactionManagerFactory ?? Mock.Of<Func<ICqrsPostgresTransactionManager>>(),
+                noTransactionTransactionManagerFactory ?? Mock.Of<Func<ICqrsPostgresTransactionManager>>(),
+                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
+                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
+                Create.ReadSideCacheSettings());
         }
 
         public static IPublishedEvent<UnapprovedByHeadquarters> UnapprovedByHeadquartersEvent(Guid? interviewId = null, string userId = null, string comment = null)
@@ -2443,21 +2450,6 @@ namespace WB.Tests.Unit
             {
                 action.Invoke();
             }
-        }
-
-        public static QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
-        {
-            return new QuestionnaireKeyValueStorage(
-                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
-        }
-
-        public static LookupTableService LookupTableService(
-            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
-        {
-            return new LookupTableService(
-                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
         }
     }
 }

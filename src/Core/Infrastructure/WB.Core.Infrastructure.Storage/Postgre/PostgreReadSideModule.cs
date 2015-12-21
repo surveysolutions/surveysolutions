@@ -64,7 +64,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             this.Kernel.Bind<Func<CqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresTransactionManager>());
             this.Kernel.Bind<Func<NoTransactionCqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<NoTransactionCqrsPostgresTransactionManager>());
             
-            this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManager>().ToSelf();
+            this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManagerWithSessions>().ToSelf();
+            this.Kernel.Bind<RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions>().ToSelf();
             this.Kernel.Bind<TransactionManagerProvider>().ToSelf().InSingletonScope();
 
             this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>()).Named(SessionProviderName);
