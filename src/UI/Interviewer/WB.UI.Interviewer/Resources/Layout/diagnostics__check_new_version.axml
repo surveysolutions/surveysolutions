@@ -11,18 +11,17 @@
     <TextView
          style="@style/Diagnostics_Subsection_Title"
          local:MvxBind="Text Localization('Diagnostics_NewVersionAvaliable_Title')" />
-    <RelativeLayout
+    <LinearLayout
             style="@style/Diagnostic_FormContainer">
 
       <Button
-        style="@style/Diagnostics_Green_Button" android:id="@+id/Diagnostics_send_button"
+        style="@style/Diagnostics_Green_Button"
         local:MvxBind="Text Localization('Diagnostics_Update'); Click CheckNewVersion.UpdateApplicationCommand" />
 
       <Button
-          style="@style/Diagnostic_Transparent_Button"
-          android:layout_toRightOf="@+id/Diagnostics_send_button"
+          style="@style/Diagnostic_Transparent_Button" 
           local:MvxBind="Text Localization('Diagnostics_No'); Click CheckNewVersion.RejectUpdateApplicationCommand" />
-    </RelativeLayout>
+    </LinearLayout>
 
   </LinearLayout>
   <LinearLayout style="@style/Diagnostics_SubSection"  local:MvxBind="Visible IsStringNotEmpty(CheckNewVersion.CheckNewVersionResult)" >
