@@ -19,6 +19,7 @@
   <dimen name="Troubleshooting_padding">36dp</dimen>
   <dimen name="Diagnostics_Title_padding">15dp</dimen>
   <dimen name="Diagnostics_Description_LineSpacing">6dp</dimen>
+  <dimen name="Diagnostics_SubsectionValue_padding">10dp</dimen>
   <dimen name="Troubleshooting_Element_width">320dp</dimen>
   <dimen name="Troubleshooting_Button_marginBottom">16dp</dimen>
 
