@@ -7,15 +7,13 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
 {
-    internal class when_adding_lookup_table_which_already_exists : QuestionnaireTestsContext
+    internal class when_updating_lookup_table_which_invalid_variable_name : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
-            questionnaire.AddLookupTable(Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId));
-
-            addLookupTable = Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+            updateLookupTable = Create.Command.UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName: "$some,invalid%name");
 
             eventContext = new EventContext();
         };
@@ -27,16 +25,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.AddLookupTable(addLookupTable));
+            exception = Catch.Exception(() => questionnaire.UpdateLookupTable(updateLookupTable));
 
         It should_throw_questionnaire_exception = () =>
             exception.ShouldBeOfExactType(typeof(QuestionnaireException));
 
-        It should_throw_exception_with_type_LookupTableAlreadyExist = () =>
-            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.LookupTableAlreadyExist);
+        It should_throw_exception_with_type_LookupTableIsAbsent = () =>
+            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.VariableNameSpecialCharacters);
 
         private static Exception exception;
-        private static AddLookupTable addLookupTable;
+        private static UpdateLookupTable updateLookupTable;
         private static Questionnaire questionnaire;
         private static readonly Guid responsibleId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
