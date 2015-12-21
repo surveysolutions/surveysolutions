@@ -15,11 +15,12 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
     [Subject(typeof(MemoryCachedReadSideStorage<>))]
     internal class MemoryCachedReadSideStoreTestContext
     {
-        protected static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> CreateMemoryCachedReadSideStore(IReadSideStorage<ReadSideRepositoryEntity> readSideStorage =null)
+        protected static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> CreateMemoryCachedReadSideStore(
+            IReadSideStorage<ReadSideRepositoryEntity> readSideStorage = null, int cacheSizeInEntities = 1024, int storeOperationBulkSize = 512)
         {
             return new MemoryCachedReadSideStorage<ReadSideRepositoryEntity>(
                 readSideStorage ?? Mock.Of<IReadSideStorage<ReadSideRepositoryEntity>>(),
-                new ReadSideCacheSettings(null, 256, 128));
+                new ReadSideCacheSettings(null, cacheSizeInEntities, storeOperationBulkSize));
         }
     }
     internal class ReadSideRepositoryEntity : IReadSideRepositoryEntity

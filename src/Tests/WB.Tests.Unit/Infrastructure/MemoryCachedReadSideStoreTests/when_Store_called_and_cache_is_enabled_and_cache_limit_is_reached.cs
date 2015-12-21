@@ -16,7 +16,8 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object,
+                cacheSizeInEntities: MaxCountOfCachedEntities, storeOperationBulkSize: MaxCountOfEntitiesInOneStoreOperation);
             memoryCachedReadSideStorage.EnableCache();
 
             for (int i = 0; i < MaxCountOfCachedEntities-1; i++)
@@ -27,8 +28,8 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Because of = () =>
             memoryCachedReadSideStorage.Store(new ReadSideRepositoryEntity(), last_id);
 
-        It should_call_Store_of_IReadSideStorage_16_times = () =>
-            readSideStorageMock.Verify(x => x.Store(Moq.It.IsAny<ReadSideRepositoryEntity>(), Moq.It.IsAny<string>()), Times.Exactly(MaxCountOfEntitiesInOneStoreOperation));
+        It should_call_BulkStore_of_IReadSideStorage_once = () =>
+            readSideStorageMock.Verify(x => x.BulkStore(Moq.It.IsAny<List<Tuple<ReadSideRepositoryEntity, string>>>()), Times.Once);
 
         It should_return_readable_status = () =>
             memoryCachedReadSideStorage.GetReadableStatus().ShouldEqual("  |  cache enabled  |  cached 128");
