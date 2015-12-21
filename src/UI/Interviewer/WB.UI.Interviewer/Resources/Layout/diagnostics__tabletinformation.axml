@@ -26,18 +26,15 @@
     <TextView
   style="@style/Diagnostics_Subsection_Value"
   local:MvxBind="Text TabletInformation.Scope" />
-    <RelativeLayout
-            style="@style/Diagnostic_FormContainer">
-
+    <LinearLayout style="@style/Diagnostic_FormContainer">
       <Button
-        style="@style/Diagnostics_Green_Button" android:id="@+id/Diagnostics_send_button"
+        style="@style/Diagnostics_Green_Button"
         local:MvxBind="Text Localization('Diagnostics_Send'); Click TabletInformation.SendTabletInformationCommand" />
 
       <Button
-          style="@style/Diagnostic_Transparent_Button"
-          android:layout_toRightOf="@+id/Diagnostics_send_button"
+          style="@style/Diagnostic_Transparent_Button" 
           local:MvxBind="Text Localization('Diagnostics_Delete'); Click TabletInformation.DeleteTabletInformationCommand" />
-    </RelativeLayout>
+    </LinearLayout>
 
   </LinearLayout>
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible TabletInformation.IsPackageSendingAttemptCompleted;" >
