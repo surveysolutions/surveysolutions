@@ -695,6 +695,10 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_and_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\MapReportDenormalizerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_answer_removed_from_gps_qestion.cs" />
