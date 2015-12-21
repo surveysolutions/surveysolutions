@@ -6,13 +6,11 @@ using Ninject;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class RebuildReadSideCqrsPostgresTransactionManager : ICqrsPostgresTransactionManager, IDisposable
+    internal class RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions : ICqrsPostgresTransactionManager, IDisposable
     {
         private int startedCommandTransactions;
 
-        public RebuildReadSideCqrsPostgresTransactionManager([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
-        {
-        }
+        public RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions() {}
 
         public void BeginCommandTransaction()
         {
@@ -55,7 +53,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             GC.SuppressFinalize(this);
         }
 
-        ~RebuildReadSideCqrsPostgresTransactionManager()
+        ~RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions()
         {
             this.Dispose();
         }
