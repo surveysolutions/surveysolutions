@@ -74,8 +74,8 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center</item>
-    <item name="android:orientation">vertical</item>
-    <item name="android:paddingTop">@dimen/Troubleshooting_padding</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingTop">@dimen/Diagnostics_Description_LineSpacing</item>
   </style>
   <style name="Diagnostics_Green_Button" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
@@ -85,7 +85,6 @@
     <item name="android:background">@drawable/group_completed</item>
   </style>
   <style name="Diagnostic_Transparent_Button" parent="Login_Button">
-    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:background">@drawable/transparent_input_button</item>
