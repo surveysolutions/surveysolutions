@@ -696,6 +696,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_filtering_by_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
