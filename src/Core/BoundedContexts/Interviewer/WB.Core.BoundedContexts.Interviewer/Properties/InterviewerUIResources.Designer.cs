@@ -524,7 +524,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app.
+        ///   Looks up a localized string similar to All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app.
         /// </summary>
         public static string Diagnostics_Share_Description {
             get {

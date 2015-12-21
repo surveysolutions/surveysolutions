@@ -474,7 +474,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Collect and send to HQ all tablet infromation</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app</value>
+    <value>All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app</value>
   </data>
   <data name="Diagnostics_Share_Title" xml:space="preserve">
     <value>Share all technical information</value>
