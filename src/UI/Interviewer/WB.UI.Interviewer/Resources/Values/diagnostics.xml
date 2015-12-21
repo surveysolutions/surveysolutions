@@ -58,10 +58,9 @@
   <style name="Diagnostics_Subsection_Title" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:textSize">@dimen/textsize_20</item>
-    <item name="android:fontFamily">Roboto</item>
-    <item name="android:paddingTop">@dimen/Troubleshooting_padding</item>
-    <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
+    <item name="android:textSize">@dimen/textsize_30</item>
+    <item name="android:fontFamily">Roboto Light</item>
+    <item name="android:paddingBottom">@dimen/Diagnostics_Title_padding</item>
   </style>
   <style name="Diagnostics_Subsection_Value" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
