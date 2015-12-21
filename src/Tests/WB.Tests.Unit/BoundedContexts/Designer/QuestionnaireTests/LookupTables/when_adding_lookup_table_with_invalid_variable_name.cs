@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
 {
-    internal class when_adding_lookup_table_which_already_exists : QuestionnaireTestsContext
+    internal class when_adding_lookup_table_with_invalid_variable_name : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
 
             questionnaire.AddLookupTable(Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId));
 
-            addLookupTable = Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+            addLookupTable = Create.Command.AddLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName: "if");
 
             eventContext = new EventContext();
         };
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
             exception.ShouldBeOfExactType(typeof(QuestionnaireException));
 
         It should_throw_exception_with_type_LookupTableAlreadyExist = () =>
-            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.LookupTableAlreadyExist);
+            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.VariableNameShouldNotMatchWithKeywords);
 
         private static Exception exception;
         private static AddLookupTable addLookupTable;
