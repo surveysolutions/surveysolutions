@@ -183,10 +183,10 @@
     <Compile Include="Postgre\Implementation\PostgreReadSideRepository.cs" />
     <Compile Include="Postgre\Implementation\TransactionManagerProvider.cs" />
     <Compile Include="Postgre\PostgreConnectionSettings.cs" />
-    <Compile Include="Postgre\PostgreReadSideModule.cs" />
+    <Compile Include="Postgre\PostgresReadSideModule.cs" />
     <Compile Include="Postgre\PostgresPlainStorageModule.cs" />
     <Compile Include="Postgre\PostgresPlainStorageSettings.cs" />
-    <Compile Include="Postgre\PostresKeyValueModule.cs" />
+    <Compile Include="Postgre\PostgresKeyValueModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

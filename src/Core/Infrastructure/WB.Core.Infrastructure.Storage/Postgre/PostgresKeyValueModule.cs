@@ -12,13 +12,13 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
-    public class PostresKeyValueModule : NinjectModule
+    public class PostgresKeyValueModule : NinjectModule
     {
         private static ReadSideCacheSettings cacheSettings;
 
-        public PostresKeyValueModule(ReadSideCacheSettings cacheSettings)
+        public PostgresKeyValueModule(ReadSideCacheSettings cacheSettings)
         {
-            PostresKeyValueModule.cacheSettings = cacheSettings;
+            PostgresKeyValueModule.cacheSettings = cacheSettings;
         }
 
         public override void Load()
