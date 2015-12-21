@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 
             Property(x => x.RecordId);
             Property(x => x.LevelName);
-            Property(x => x.InterviewId);
+            Property(x => x.InterviewId, clm => clm.Index("Export_Record_InterviewId_indx"));
 
             Property(x => x.ParentRecordIds, pm =>
             {
