@@ -397,7 +397,7 @@
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
   <data name="WB0029_LookupWithTheSameVariableNameAlreadyExists" xml:space="preserve">
-    <value>Lookup with the same variable name already exists.</value>
+    <value>Lookup table with the same variable name already exists.</value>
   </data>
   <data name="WB0026_NameForLookupTableIsNotUnique" xml:space="preserve">
     <value>Another Lookup table with the same name already exists.</value>
@@ -422,5 +422,8 @@
   </data>
   <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
     <value>Lookup table cannot be empty</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Lookup table name cannot be a reserved word.</value>
   </data>
 </root>
