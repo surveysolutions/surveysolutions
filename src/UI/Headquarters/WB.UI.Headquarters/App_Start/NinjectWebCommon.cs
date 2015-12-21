@@ -147,12 +147,12 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new SurveyManagementDataCollectionSharedKernelModule(usePlainQuestionnaireRepository: false, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new PostresKeyValueModule(cacheSettings),
+                new PostgresKeyValueModule(cacheSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies)
             );
 

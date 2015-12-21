@@ -135,13 +135,13 @@ namespace WB.UI.Supervisor.App_Start
                 new NLogLoggingModule(),
                 new SurveyManagementDataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
+                new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, readSideMaps),
                 new FileInfrastructureModule(),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new PostresKeyValueModule(cacheSettings),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             kernel.Bind<ISettingsProvider>().To<SupervisorSettingsProvider>();
