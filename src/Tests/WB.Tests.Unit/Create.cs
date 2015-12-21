@@ -2224,8 +2224,8 @@ namespace WB.Tests.Unit
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
         {
             return new TransactionManagerProvider(
-                transactionManagerFactory ?? Mock.Of<Func<ICqrsPostgresTransactionManager>>(),
-                noTransactionTransactionManagerFactory ?? Mock.Of<Func<ICqrsPostgresTransactionManager>>(),
+                transactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
+                noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
                 Create.ReadSideCacheSettings());
