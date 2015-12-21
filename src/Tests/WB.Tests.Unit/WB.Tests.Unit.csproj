@@ -383,11 +383,13 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MacroUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireInfoViewFactoryTests\when_loading_view_with_macros_and_lookup_tables.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_adding_lookup_table.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_adding_lookup_table_with_invalid_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_updating_lookup_table.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_deleting_lookup_table.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_adding_lookup_table_which_already_exists.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_adding_lookup_table_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_updating_lookup_table_which_doesnt_exists.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_updating_lookup_table_which_invalid_variable_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_updating_lookup_table_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_deleting_lookup_table_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\LookupTables\when_deleting_lookup_table_which_doesnt_exists.cs" />

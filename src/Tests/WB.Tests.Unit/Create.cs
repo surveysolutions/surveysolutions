@@ -2376,9 +2376,9 @@ namespace WB.Tests.Unit
 
         internal static class Command
         {
-            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
-                return new AddLookupTable(questionnaireId,null, null, lookupTableId, responsibleId);
+                return new AddLookupTable(questionnaireId, lookupTableName, null, lookupTableId, responsibleId);
             }
 
             public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
@@ -2433,9 +2433,9 @@ namespace WB.Tests.Unit
                 return new LinkUserToDevice(userId, deviceId);
             }
 
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, "table","file");
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName,"file");
             }
 
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
