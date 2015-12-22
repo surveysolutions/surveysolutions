@@ -47,6 +47,7 @@
     self.totalEvents = ko.observable('-');
     self.processedEvents = ko.observable('-');
     self.failedEvents = ko.observable('-');
+    self.progress = ko.observable('-');
     self.speed = ko.observable('-');
     self.timeSpent = ko.observable('-');
     self.estimatedTime = ko.observable('-');
@@ -90,6 +91,7 @@
             self.totalEvents(data.EventPublishingDetails.TotalEvents);
             self.processedEvents(data.EventPublishingDetails.ProcessedEvents);
             self.failedEvents(data.EventPublishingDetails.FailedEvents);
+            self.progress(data.EventPublishingDetails.ProgressInPercents.toFixed(2));
             self.speed(data.EventPublishingDetails.Speed);
             self.timeSpent(moment.duration(data.EventPublishingDetails.TimeSpent).format("HH:mm:ss"));
             self.estimatedTime(moment.duration(data.EventPublishingDetails.EstimatedTime).format("HH:mm:ss"));

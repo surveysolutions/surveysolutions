@@ -25,14 +25,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private int totalEventsToRebuildCount = 0;
 
-        private int FailedEventsCount
-        {
-            get { return errors.Count; }
-        }
+        private int FailedEventsCount => errors.Count;
 
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
-        private DateTime lastRebuildDate = DateTime.Now;
+        private DateTime? lastRebuildDate = null;
+        private readonly Stopwatch republishStopwatch = new Stopwatch();
 
         private int maxAllowedFailedEvents = 100;
 
@@ -189,17 +187,17 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             int republishedEventsCount = this.processedEventsCount - this.skippedEventsCount;
 
-            TimeSpan republishTimeSpent = this.AreViewsBeingRebuiltNow() ? DateTime.Now - this.lastRebuildDate : TimeSpan.Zero;
+            TimeSpan republishTimeSpent = this.republishStopwatch.Elapsed;
 
             int speedInEventsPerMinute = (int)(
                 republishTimeSpent.TotalSeconds == 0
-                ? 0
-                : 60L * republishedEventsCount / republishTimeSpent.TotalSeconds);
+                    ? 0
+                    : 60L*republishedEventsCount/republishTimeSpent.TotalSeconds);
 
             TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
                 republishedEventsCount == 0
-                ? 0
-                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
+                    ? 0
+                    : republishTimeSpent.TotalMilliseconds/republishedEventsCount*this.totalEventsToRebuildCount);
 
 
             var criticalRebuildReadSideExceptions = errors.Where(error => IsCriticalException(error.Item3)).ToList();
@@ -214,16 +212,15 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 CurrentRebuildStatus = statusMessage,
                 LastRebuildDate = this.lastRebuildDate,
-                EventPublishingDetails = new ReadSideEventPublishingDetails()
+                EventPublishingDetails = new ReadSideEventPublishingDetails
                 {
                     ProcessedEvents = republishedEventsCount,
-                    EstimatedTime = estimatedTotalRepublishTime,
+                    EstimatedTime = this.AreViewsBeingRebuiltNow() ? estimatedTotalRepublishTime : null as TimeSpan?,
                     FailedEvents = this.FailedEventsCount,
                     SkippedEvents = this.skippedEventsCount,
                     Speed = speedInEventsPerMinute,
                     TimeSpent = republishTimeSpent,
-                    TotalEvents = this.totalEventsToRebuildCount
-
+                    TotalEvents = this.totalEventsToRebuildCount,
                 },
                 StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
                     .SelectMany(x => x.Writers.OfType<IReadSideStorage>())
@@ -364,6 +361,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                    this.republishStopwatch.Restart();
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
@@ -373,6 +371,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 finally
                 {
+                    this.republishStopwatch.Stop();
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
                 }
@@ -424,12 +423,14 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         EnableWritersCacheForHandlers(handlers);
                         this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                        this.republishStopwatch.Restart();
 
                         this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
                             skipEventsCount: skipEvents, handlers: handlers);
                     }
                     finally
                     {
+                        this.republishStopwatch.Stop();
                         this.transactionManagerProviderManager.UnpinTransactionManager();
                         this.DisableWritersCacheForHandlers(handlers);
 
@@ -663,6 +664,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             UpdateStatusMessage("Determining count of events to be republished.");
 
             this.lastRebuildDate = DateTime.Now;
+
             UpdateStatusMessage("Acquiring first portion of events.");
 
             DateTime republishStarted = DateTime.Now;
