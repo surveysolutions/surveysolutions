@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class SendTabletInformationViewModel : BaseViewModel
     {
-        private readonly ITroubleshootingService troubleshootingService;
+        private readonly IBackupRestoreService backupRestoreService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
@@ -28,12 +28,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private byte[] informationPackageContent;
 
         public SendTabletInformationViewModel(
-            ITroubleshootingService troubleshootingService,
+            IBackupRestoreService backupRestoreService,
             ISynchronizationService synchronizationService,
             ILogger logger, 
             IUserInteractionService userInteractionService)
         {
-            this.troubleshootingService = troubleshootingService;
+            this.backupRestoreService = backupRestoreService;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             try
             {
-                var backupStream = await this.troubleshootingService.GetSystemBackupAsync();
+                var backupStream = await this.backupRestoreService.GetSystemBackupAsync();
                 this.IsPackageBuild = true;
                 this.Scope = FileSizeUtils.SizeSuffix(backupStream.Length);
                 this.WhenGenerated = DateTime.Now;

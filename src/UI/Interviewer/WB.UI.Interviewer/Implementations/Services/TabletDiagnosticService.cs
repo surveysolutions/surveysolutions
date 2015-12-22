@@ -1,17 +1,30 @@
-﻿using System;
-using System.IO;
+using System;
+//using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.UI.Shared.Enumerator.CustomServices
+namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class TabletDiagnosticService: ITabletDiagnosticService
     {
+        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        public TabletDiagnosticService(
+            IInterviewerSettings interviewerSettings, 
+            IFileSystemAccessor fileSystemAccessor)
+        {
+            this.interviewerSettings = interviewerSettings;
+            this.fileSystemAccessor = fileSystemAccessor;
+        }
+
         private Activity CurrentActivity
         {
             get { return Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity; }
@@ -30,12 +43,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             var applicationFileName = "interviewer.apk";
 
             string pathTofile =
-                Path.Combine(
-                    Path.Combine(global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, "download"),
+                fileSystemAccessor.CombinePath(this.fileSystemAccessor.CombinePath(this.interviewerSettings.ExternalStorageDirectory, "download"),
                     applicationFileName);
             // generate unique name instead of delete
-            if (File.Exists(pathTofile))
-                File.Delete(pathTofile);
+            if (this.fileSystemAccessor.IsFileExists(pathTofile))
+                this.fileSystemAccessor.DeleteFile(pathTofile);
 
             var client = new WebClient();
             var uri = new Uri(new Uri(url), "/api/InterviewerSync/GetLatestVersion");

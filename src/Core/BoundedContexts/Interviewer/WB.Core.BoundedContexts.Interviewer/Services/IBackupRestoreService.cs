@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
-    public interface ITroubleshootingService
+    public interface IBackupRestoreService
     {
         Task<byte[]> GetSystemBackupAsync();
         Task<string> BackupAsync(string backupToFolderPath);

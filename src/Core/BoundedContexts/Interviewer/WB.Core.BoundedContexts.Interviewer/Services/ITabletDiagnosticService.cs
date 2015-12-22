@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace WB.Core.SharedKernels.Enumerator.Services
+namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ITabletDiagnosticService
     {

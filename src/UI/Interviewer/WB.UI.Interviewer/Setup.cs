@@ -22,6 +22,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Hybrid.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -34,6 +35,8 @@ using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
+using WB.UI.Interviewer.Infrastructure.Internals.Crasher;
+using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
@@ -130,7 +133,8 @@ namespace WB.UI.Interviewer
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
             this.InitDashboard(kernel, cqrsEventBus);
-
+            
+            CrashManager.AttachSender(() => new FileReportSender(kernel.Get<IFileSystemAccessor>().CombinePath(kernel.Get<IInterviewerSettings>().CrushFolder, "crashes.log")));
             return kernel;
         }
 
