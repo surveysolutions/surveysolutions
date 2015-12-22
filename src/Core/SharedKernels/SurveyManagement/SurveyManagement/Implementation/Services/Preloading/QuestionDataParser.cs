@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 case QuestionType.GpsCoordinates:
                     try
                     {
-                        parsedValue = GeoPosition.ParseProperty(answer, this.CutVariableNameFromColumnName(columnName));
+                        parsedValue = GeoPosition.ParseProperty(answer, this.ExtractValueFromColumnName(columnName));
                         return ValueParsingResult.OK;
                     }
                     catch (Exception)
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     if (multyOption == null)
                         return ValueParsingResult.QuestionTypeIsIncorrect;
 
-                    string columnEncodedValue = CutVariableNameFromColumnName(columnName);
+                    string columnEncodedValue = ExtractValueFromColumnName(columnName);
                     decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
 
                     if (!columnValue.HasValue)
@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 if (!string.IsNullOrEmpty(answerTuple.Item2))
                 {
-                    string columnEncodedValue = CutVariableNameFromColumnName(answerTuple.Item1);
+                    string columnEncodedValue = ExtractValueFromColumnName(answerTuple.Item1);
                     decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
 
                     int answerIndex = int.Parse(answerTuple.Item2);
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             foreach (var answerTuple in answersWithColumnName)
             {
-                string columnEncodedValue = CutVariableNameFromColumnName(answerTuple.Item1);
+                string columnEncodedValue = ExtractValueFromColumnName(answerTuple.Item1);
                 decimal? columnValue = DecimalToHeaderConverter.ToValue(columnEncodedValue);
 
                 int answerIndex = int.Parse(answerTuple.Item2);
@@ -249,7 +249,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             foreach (var answerWithColumnName in answersWithColumnName)
             {
-                var propertyName = this.CutVariableNameFromColumnName(answerWithColumnName.Item1);
+                var propertyName = this.ExtractValueFromColumnName(answerWithColumnName.Item1);
                 var typedValue = GeoPosition.ParseProperty(answerWithColumnName.Item2, propertyName);
 
                 switch (propertyName)
@@ -274,11 +274,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return result;
         }
 
-        private string CutVariableNameFromColumnName(string columnName)
+        private string ExtractValueFromColumnName(string columnName)
         {
-            if (!columnName.Contains("_"))
-                return columnName;
-            return columnName.Substring(columnName.IndexOf("_") + 1).ToLower();
+            if(columnName.Contains("__"))
+                return columnName.Substring(columnName.LastIndexOf("__") + 2).ToLower();
+            
+            //support of old format is disabled
+            /*else if(columnName.Contains("_"))
+                return columnName.Substring(columnName.LastIndexOf("_") + 1).ToLower();*/
+
+            return columnName;
         }
 
         private decimal[] GetAnswerOptionsAsValues(IQuestion question)

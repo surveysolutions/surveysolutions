@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "gps_Altitude"},
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "gps__Altitude"},
                 new string[][] { new string[] { "1", "3" } },
                 "questionnaire.csv");
 
