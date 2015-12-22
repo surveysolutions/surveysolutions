@@ -192,12 +192,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             int speedInEventsPerMinute = (int)(
                 republishTimeSpent.TotalSeconds == 0
                     ? 0
-                    : 60L*republishedEventsCount/republishTimeSpent.TotalSeconds);
+                    : 60L * republishedEventsCount / republishTimeSpent.TotalSeconds);
 
             TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
                 republishedEventsCount == 0
                     ? 0
-                    : republishTimeSpent.TotalMilliseconds/republishedEventsCount*this.totalEventsToRebuildCount);
+                    : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
 
 
             var criticalRebuildReadSideExceptions = errors.Where(error => IsCriticalException(error.Item3)).ToList();
