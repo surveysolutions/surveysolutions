@@ -28,32 +28,33 @@ using WB.Core.Infrastructure.Storage.Esent.Implementation;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
-    public class PostgresReadSideModule : NinjectModule
+    public class PostgresReadSideModule : PostgresModuleWithCache
     {
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
         private readonly IEnumerable<Assembly> mappingAssemblies;
-        private static ReadSideCacheSettings cacheSettings;
 
-        public PostgresReadSideModule(string connectionString, ReadSideCacheSettings cacheSettings,
-            IEnumerable<Assembly> mappingAssemblies)
+        public PostgresReadSideModule(string connectionString, ReadSideCacheSettings cacheSettings, IEnumerable<Assembly> mappingAssemblies)
+            : base(cacheSettings)
         {
             this.connectionString = connectionString;
             this.mappingAssemblies = mappingAssemblies;
-            PostgresReadSideModule.cacheSettings = cacheSettings;
         }
+
+        protected override object GetPostgresReadSideStorage(IContext context)
+            => context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
 
         public override void Load()
         {
-            this.Bind<ReadSideCacheSettings>().ToConstant(cacheSettings);
+            base.Load();
 
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
 
             this.Kernel.Bind(typeof(PostgreReadSideRepository<>)).ToSelf().InSingletonScope();
-            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(GetReadSideRepositoryWriter).InSingletonScope(); 
+            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideStorageWrappedWithCache).InSingletonScope(); 
             
             this.Kernel.Bind<ISessionFactory>()
                        .ToMethod(kernel => this.BuildSessionFactory())
@@ -161,19 +162,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             };
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
-        }
-
-        private static object GetReadSideRepositoryWriter(IContext context)
-        {
-            object postgresWriter = context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
-            var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
-
-            Type cachedWriterType = typeof(EsentCachedReadSideStorage<>).MakeGenericType(context.GenericArguments[0]);
-
-            object cachingWriter = Activator.CreateInstance(cachedWriterType,
-                postgresWriter, fileSystemAccessor, cacheSettings);
-
-            return cachingWriter;
         }
     }
 }
