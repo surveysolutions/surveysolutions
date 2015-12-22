@@ -1,47 +1,31 @@
-﻿using System;
-using Ninject;
+﻿using System.Linq;
 using Ninject.Activation;
-using Ninject.Modules;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Esent.Implementation;
 using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
-    public class PostgresKeyValueModule : NinjectModule
+    public class PostgresKeyValueModule : PostgresModuleWithCache
     {
-        private static ReadSideCacheSettings cacheSettings;
-
         public PostgresKeyValueModule(ReadSideCacheSettings cacheSettings)
-        {
-            PostgresKeyValueModule.cacheSettings = cacheSettings;
-        }
+            : base(cacheSettings) {}
+
+        protected override object GetPostgresReadSideStorage(IContext context)
+            => context.Kernel.GetService(typeof(PostgresReadSideKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
 
         public override void Load()
         {
+            base.Load();
+
             this.Kernel.Bind(typeof(IReadSideKeyValueStorage<>))
-                .ToMethod(GetReadSideKeyValueStorage)
+                .ToMethod(this.GetReadSideStorageWrappedWithCache)
                 .InSingletonScope();
 
             this.Kernel.Bind(typeof(IPlainKeyValueStorage<>))
                 .To(typeof(PostgresPlainKeyValueStorage<>));
-        }
-
-        private static object GetReadSideKeyValueStorage(IContext context)
-        {
-            object keyValueStorage = context.Kernel.GetService(typeof(PostgresReadSideKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
-            var fileSystemAccessor = context.Kernel.Get<IFileSystemAccessor>();
-
-            Type cachingKeyValueStorageType = typeof(EsentCachedReadSideStorage<>).MakeGenericType(context.GenericArguments[0]);
-
-            object cachingKeyValueStorage = Activator.CreateInstance(cachingKeyValueStorageType,
-                keyValueStorage, fileSystemAccessor, cacheSettings);
-
-            return cachingKeyValueStorage;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         }
 
         public string GetReadableStatus()
-            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "memory + ESENT" : "disabled")}  |  cached {this.memoryCache.Count}, {this.esentCache.Count}";
+            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "memory + ESENT" : "disabled")}  |  cached {this.memoryCache.Count:N0}, {this.esentCache.Count:N0}";
 
         public Type ViewType => typeof(TEntity);
 
