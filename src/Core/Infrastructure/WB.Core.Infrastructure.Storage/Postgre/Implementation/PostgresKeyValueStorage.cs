@@ -155,7 +155,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public string GetReadableStatus()
         {
-            return "Postgres Key/Value :/";
+            return "Postgres K/V :/";
         }
 
         protected void EnshureTableExists()
