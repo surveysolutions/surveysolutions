@@ -39,20 +39,11 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         }
 
         public string GetReadableStatus()
-        {
-            int cachedEntities = this.cache.Count;
-            return string.Format("{0}  |  cache {1}  |  cached {2}",
-                this.storage.GetReadableStatus(),
-                this.isCacheEnabled ? "enabled" : "disabled",
-                cachedEntities);
-        }
+            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheEnabled ? "enabled" : "disabled")}  |  cached (ESENT): {this.cache.Count}";
 
-        public Type ViewType
-        {
-            get { return typeof(TEntity); }
-        }
+        public Type ViewType => typeof(TEntity);
 
-        public bool IsCacheEnabled { get { return this.isCacheEnabled; } }
+        public bool IsCacheEnabled => this.isCacheEnabled;
 
         public void Clear()
         {
