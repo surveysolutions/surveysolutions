@@ -90,12 +90,6 @@ namespace WB.UI.Interviewer.Settings
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 
-        public string GetExternalStorageDirectory()
-        {
-            return this.fileSystemAccessor.CombinePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                "CAPI");
-        }
-
         public async Task SetEndpointAsync(string endpoint)
         {
             await this.SaveCurrentSettings(settings =>
@@ -126,6 +120,50 @@ namespace WB.UI.Interviewer.Settings
             {
                 settings.CommunicationBufferSize = bufferSize;
             });
+        }
+
+        public string ExternalStorageDirectory
+        {
+            get
+            {
+                var externalFolder =
+                    this.fileSystemAccessor.CombinePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
+                        "Interviewer");
+
+                this.CreateFolderIfNeeded(externalFolder);
+
+                return externalFolder;
+            }
+        }
+
+        public string BackupFolder
+        {
+            get
+            {
+                var backupFolder= this.fileSystemAccessor.CombinePath(this.ExternalStorageDirectory, "Backup");
+                CreateFolderIfNeeded(backupFolder);
+                return backupFolder;
+            }
+        }
+
+        public string RestoreFolder
+        {
+            get
+            {
+                var restoreFolder = this.fileSystemAccessor.CombinePath(this.ExternalStorageDirectory, "Restore");
+                CreateFolderIfNeeded(restoreFolder);
+                return restoreFolder;
+            }
+        }
+
+        public string CrushFolder
+        {
+            get
+            {
+                var crushFolder = this.fileSystemAccessor.CombinePath(this.ExternalStorageDirectory, "Logs");
+                CreateFolderIfNeeded(crushFolder);
+                return crushFolder;
+            }
         }
 
         private async Task SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
@@ -161,6 +199,12 @@ namespace WB.UI.Interviewer.Settings
         {
             return
                 FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(FileSystem.Current.LocalStorage.Path));
+        }
+
+        private void CreateFolderIfNeeded(string folder)
+        {
+            if (!this.fileSystemAccessor.IsDirectoryExists(folder))
+                this.fileSystemAccessor.CreateDirectory(folder);
         }
     }
 }

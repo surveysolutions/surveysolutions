@@ -84,12 +84,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
         }
 
-        private SendTabletInformationViewModel CreateSendTabletInformationViewModel(ITroubleshootingService troubleshootingService=null,
+        private SendTabletInformationViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
             ISynchronizationService synchronizationService = null)
         {
             return
                 new SendTabletInformationViewModel(
-                    troubleshootingService ?? Mock.Of<ITroubleshootingService>(_ => _.GetSystemBackupAsync() == Task.FromResult(new byte[0])),
+                    backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.GetSystemBackupAsync() == Task.FromResult(new byte[0])),
                     synchronizationService ?? Mock.Of<ISynchronizationService>(), Mock.Of<ILogger>(), Mock.Of<IUserInteractionService>());
         }
     }

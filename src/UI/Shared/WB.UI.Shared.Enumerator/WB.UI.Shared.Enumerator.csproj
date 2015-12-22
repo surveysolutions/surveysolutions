@@ -261,7 +261,6 @@
     <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
-    <Compile Include="CustomServices\TabletDiagnosticService.cs" />
     <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />

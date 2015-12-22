@@ -104,7 +104,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.th-TH.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\ ITabletDiagnosticService.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />

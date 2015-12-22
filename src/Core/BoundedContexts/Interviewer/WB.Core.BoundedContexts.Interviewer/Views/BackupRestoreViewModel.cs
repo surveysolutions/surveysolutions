@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class BackupRestoreViewModel : BaseViewModel
     {
-        private readonly ITroubleshootingService troubleshootingService;
+        private readonly IBackupRestoreService backupRestoreService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -34,14 +34,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private string restoreScope;
 
         public BackupRestoreViewModel(
-            ITroubleshootingService troubleshootingService, 
+            IBackupRestoreService backupRestoreService, 
             IUserInteractionService userInteractionService, 
             IInterviewerSettings interviewerSettings, 
             IFileSystemAccessor fileSystemAccessor, 
             ITabletDiagnosticService tabletDiagnosticService, 
             ILogger logger)
         {
-            this.troubleshootingService = troubleshootingService;
+            this.backupRestoreService = backupRestoreService;
             this.userInteractionService = userInteractionService;
             this.interviewerSettings = interviewerSettings;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -124,10 +124,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.clicksCountOnDescriptionPanel > 10)
             {
                 this.clicksCountOnDescriptionPanel = 0;
-
-                var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(),
-                    "Restore");
-                var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(pathToFolder);
+                
+                var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(this.interviewerSettings.RestoreFolder);
                 if (filesInRestoreFolder.Any())
                 {
                     this.IsRestoreVisible = true;
@@ -149,9 +147,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsBackupInProgress = true;
             try
             {
-                var pathToFolder =
-                    this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Backup");
-                var createdFileName = await this.troubleshootingService.BackupAsync(pathToFolder);
+                var createdFileName = await this.backupRestoreService.BackupAsync(this.interviewerSettings.BackupFolder);
 
                 this.BackupLocation = createdFileName;
                 this.BackupCreationDate = DateTime.Now;
@@ -179,7 +175,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.IsBackupInProgress = true;
                 try
                 {
-                    await this.troubleshootingService.RestoreAsync(this.RestoreLocation);
+                    await this.backupRestoreService.RestoreAsync(this.RestoreLocation);
                     this.tabletDiagnosticService.RestartTheApp();
                 }
                 catch (Exception e)

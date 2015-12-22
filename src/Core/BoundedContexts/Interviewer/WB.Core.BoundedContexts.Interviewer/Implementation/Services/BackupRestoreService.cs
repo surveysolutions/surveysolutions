@@ -6,33 +6,43 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class TroubleshootingService : ITroubleshootingService
+    public class BackupRestoreService : IBackupRestoreService
     {
         private readonly IArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IInterviewerSettings interviewerSettings;
 
-        public TroubleshootingService(IArchiveUtils archiver,
-            IFileSystemAccessor fileSystemAccessor)
+        public BackupRestoreService(IArchiveUtils archiver,
+            IFileSystemAccessor fileSystemAccessor, IInterviewerSettings interviewerSettings)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public Task<byte[]> GetSystemBackupAsync()
         {
             return Task.Run(() =>
+            {
+                var filesInCrashFolder =
+                    this.fileSystemAccessor.GetFilesInDirectory(this.interviewerSettings.CrushFolder);
+                var crashDirectory = this.fileSystemAccessor.CombinePath(FileSystem.Current.LocalStorage.Path,
+                    "crashes");
+                if(!this.fileSystemAccessor.IsDirectoryExists(crashDirectory))
+                    this.fileSystemAccessor.CreateDirectory(crashDirectory);
 
-                this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path,
-                    fileFilter: @"\.log$;\.dll$;\.mdb$;"));
+                foreach (var fileInCrushFolder in filesInCrashFolder)
+                {
+                    this.fileSystemAccessor.CopyFileOrDirectory(fileInCrushFolder, crashDirectory);
+                }
+
+                return this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path,
+                    fileFilter: @"\.log$;\.dll$;\.mdb$;");
+            });
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
-            {
-                this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
-            }
-
             IFolder backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
             var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
