@@ -194,7 +194,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             int speedInEventsPerMinute = (int)(
                 republishTimeSpent.TotalSeconds == 0
                 ? 0
-                : 60 * republishedEventsCount / republishTimeSpent.TotalSeconds);
+                : 60L * republishedEventsCount / republishTimeSpent.TotalSeconds);
 
             TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
                 republishedEventsCount == 0
@@ -205,7 +205,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             var criticalRebuildReadSideExceptions = errors.Where(error => IsCriticalException(error.Item3)).ToList();
             var exceptionsByEventHandlersWhichShouldBeIgnored = errors.Except(criticalRebuildReadSideExceptions).ToList();
 
-            return new ReadSideStatus()
+            return new ReadSideStatus
             {
                 IsRebuildRunning = this.AreViewsBeingRebuiltNow(),
 
