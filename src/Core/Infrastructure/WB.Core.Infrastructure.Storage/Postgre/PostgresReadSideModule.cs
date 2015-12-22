@@ -42,8 +42,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             this.mappingAssemblies = mappingAssemblies;
         }
 
-        protected override object GetPostgresReadSideStorage(IContext context)
-            => context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(context.GenericArguments[0]));
+        protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IContext context)
+            => (IReadSideStorage<TEntity>) context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(typeof(TEntity)));
 
         public override void Load()
         {
