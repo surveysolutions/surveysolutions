@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1);
 
         It should_create_header_with_5_columns_wich_corresponds_to_gps_properties = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId].ColumnNames.ShouldEqual(new[] { "gps_Latitude", "gps_Longitude", "gps_Accuracy", "gps_Altitude" , "gps_Timestamp"});
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId].ColumnNames.ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 result =
-                    questionDataParser.BuildAnswerFromStringArray(new [] { new Tuple<string, string>(questionVarName + "_1", "1"), new Tuple<string, string>(questionVarName + "_2", "2") },
+                    questionDataParser.BuildAnswerFromStringArray(new [] { new Tuple<string, string>(questionVarName + "__1", "1"), new Tuple<string, string>(questionVarName + "__2", "2") },
                         question);
 
         private It should_result_be_type_of_array_of_decimal = () =>

@@ -407,8 +407,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
-                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}_latitude", gpsExportedQuestion.VariableName));
-                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}_longitude", gpsExportedQuestion.VariableName));
+                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}__latitude", gpsExportedQuestion.VariableName));
+                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}__longitude", gpsExportedQuestion.VariableName));
 
                 var latitude = latitudeColumnIndex < 0
                     ? null

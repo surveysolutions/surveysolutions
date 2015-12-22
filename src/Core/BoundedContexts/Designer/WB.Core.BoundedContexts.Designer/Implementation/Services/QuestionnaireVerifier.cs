@@ -26,6 +26,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private const int MaxOptionsCountInCascadingQuestion = 15000;
         private const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
+        private const int DefaultVariableLengthLimit = 32;
+        private const int DefaultRestrictedVariableLengthLimit = 20;
+
+        private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
+            new QuestionType[]
+            {
+                QuestionType.GpsCoordinates,
+                QuestionType.MultyOption,
+                QuestionType.TextList
+            };
+
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         {
             QuestionType.DateTime,
@@ -88,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
 
-        private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
+        private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(
@@ -903,9 +914,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !QuestionnaireNameRegex.IsMatch(questionnaire.Title);
         }
 
-        private static bool QuestionHasInvalidVariableName(IQuestion arg)
+        private static bool QuestionHasInvalidVariableName(IQuestion question)
         {
-            return !IsVariableNameValid(arg.StataExportCaption);
+            if (string.IsNullOrEmpty(question.StataExportCaption))
+                return false;
+
+            int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(question.QuestionType)
+                ? DefaultRestrictedVariableLengthLimit
+                : DefaultVariableLengthLimit;
+
+            if (question.StataExportCaption.Length > variableLengthLimit)
+                return true;
+
+            return !VariableNameRegex.IsMatch(question.StataExportCaption);
         }
 
         private static bool IsVariableNameValid(string variableName)
@@ -913,7 +934,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(variableName))
                 return true;
 
-            if (variableName.Length > 32)
+           if (variableName.Length > DefaultVariableLengthLimit)
                 return false;
             return VariableNameRegex.IsMatch(variableName);
         }

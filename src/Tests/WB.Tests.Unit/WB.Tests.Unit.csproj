@@ -348,6 +348,7 @@
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
+    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_9_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_lookup_table.cs" />
@@ -438,7 +439,7 @@
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\SpssFormatExportHandlerTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_all_data.cs" />
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_approved_data.cs" />
-    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
+    <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_contains_consecutive_underscore_characters.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_question_condition_containing_self.cs" />
