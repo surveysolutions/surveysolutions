@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
 
             IFolder backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
-            var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm")}.ibak";
+            var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
             var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
             var backup = await Task.Run(() => this.GetSystemBackup());
             using (var stream = await emptyBackupFile.OpenAsync(FileAccess.ReadAndWrite))
