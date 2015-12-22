@@ -136,7 +136,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                     yield return new UnzippedFile
                     {
                         FileName = zipFileOrDirectory.Name,
-                        FileStream = unzippedFileStream
+                        FileBytes = unzippedFileStream
                     };
                 }
             }
@@ -157,6 +157,30 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)
         {
             return new Dictionary<string, long>();
+        }
+
+
+        public byte[] CompressStringToByteArray(string fileName, string fileContentAsString)
+        {
+            using (MemoryStream outputMemoryStream = new MemoryStream())
+            {
+                using (ZipOutputStream zipStream = new ZipOutputStream(outputMemoryStream))
+                {
+                    zipStream.SetLevel(3);
+
+                    ZipEntry newEntry = new ZipEntry(fileName) { DateTime = DateTime.Now };
+
+                    zipStream.PutNextEntry(newEntry);
+
+                    var inputMemoryStream = new MemoryStream(Encoding.Unicode.GetBytes(fileContentAsString));
+
+                    StreamUtils.Copy(inputMemoryStream, zipStream, new byte[4096]);
+                    zipStream.CloseEntry();
+
+                    zipStream.IsStreamOwner = false;
+                }
+                return outputMemoryStream.ToArray();
+            }
         }
 
         public string CompressString(string stringToCompress)

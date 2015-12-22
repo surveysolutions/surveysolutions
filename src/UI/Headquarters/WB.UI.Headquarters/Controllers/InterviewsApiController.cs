@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Storage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -19,55 +26,28 @@ using WB.UI.Shared.Web.Filters;
 namespace WB.UI.Headquarters.Controllers
 {
     [Authorize(Roles = "Administrator, Headquarter")]
-    [ApiValidationAntiForgeryToken]
     public class InterviewsApiController : BaseApiController
     {
         private readonly IPreloadedDataRepository preloadedDataRepository;
         readonly Func<ISampleImportService> sampleImportServiceFactory;
         private readonly IInterviewImportService interviewImportService;
+        private readonly IArchiveUtils archiver;
 
         public InterviewsApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IPreloadedDataRepository preloadedDataRepository, Func<ISampleImportService> sampleImportServiceFactory,
-            IInterviewImportService interviewImportService)
+            IInterviewImportService interviewImportService,
+            IArchiveUtils archiver)
             : base(commandService, globalInfo, logger)
         {
             this.preloadedDataRepository = preloadedDataRepository;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
             this.interviewImportService = interviewImportService;
+            this.archiver = archiver;
         }
 
         [ObserverNotAllowedApi]
-        public void ImportSampleData(BatchUploadModel model)
-        {
-            PreloadedDataByFile preloadedData = this.preloadedDataRepository.GetPreloadedDataOfSample(model.InterviewId);
-            Guid responsibleHeadquarterId = this.GlobalInfo.GetCurrentUser().Id;
-
-            new Task(() =>
-            {
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
-                try
-                {
-                    var sampleImportService = this.sampleImportServiceFactory.Invoke();
-
-                    sampleImportService.CreateSample(
-                        model.QuestionnaireId,
-                        model.QuestionnaireVersion,
-                        model.InterviewId,
-                        preloadedData,
-                        responsibleHeadquarterId,
-                        model.ResponsibleSupervisor);
-                }
-                finally
-                {
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-                }
-            }).Start();
-        }
-
-        [ObserverNotAllowedApi]
+        [ApiValidationAntiForgeryToken]
         public void ImportPanelData(BatchUploadModel model)
         {
             PreloadedDataByFile[] preloadedData = this.preloadedDataRepository.GetPreloadedDataOfPanel(model.InterviewId);
@@ -108,15 +88,110 @@ namespace WB.UI.Headquarters.Controllers
                 TotalInterviewsCount = status.TotalInterviewsCount,
                 CreatedInterviewsCount = status.CreatedInterviewsCount,
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
-                ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss")
+                ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
+                HasErrors = status.State.Errors.Any()
             };
         }
 
         [HttpPost]
-        public void ImportInterviews(ImportInterviewsRequestApiView request)
+        [ObserverNotAllowedApi]
+        [ApiValidationAntiForgeryToken]
+        public HttpResponseMessage ImportInterviews(ImportInterviewsRequestApiView request)
         {
+            if (this.interviewImportService.Status.IsInProgress)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                       "Import interviews is in progress. Wait until current operation is finished.");
+            }
+
+            var fileStream = new MemoryStream(request.FileWithInterviews.FileBytes);
+
+            if (this.archiver.IsZipStream(fileStream))
+            {
+                var unzippedFiles = this.archiver.UnzipStream(fileStream).ToList();
+
+                var fileWithInterviews = unzippedFiles.FirstOrDefault();
+                if (fileWithInterviews == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                        "Zip file does not contains file with interviews.");
+                }
+
+                fileStream = new MemoryStream(fileWithInterviews.FileBytes);
+            }
+
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
-            this.interviewImportService.ImportInterviews(questionnaireIdentity, request.FileWithInterviews.FileStream);
+
+            var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileStream.ToArray());
+
+            var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
+                    column => column.IsRequired && !column.ExistsInFIle).Select(column => column.ColumnName).ToList();
+
+            var isSupervisorRequired = !descriptionByFileWithInterviews.HasSupervisorColumn &&
+                                       !request.SupervisorId.HasValue;
+
+            if (!requiredNotExistingColumns.Any() && !isSupervisorRequired)
+            {
+                Task.Run(() =>
+                {
+                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+
+                    try
+                    {
+                        this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
+                            fileDescription: descriptionByFileWithInterviews);
+                    }
+                    finally
+                    {
+                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                    }
+                });
+            }
+
+            return Request.CreateResponse(new ImportInterviewsResponseApiView
+            {
+                IsSupervisorRequired = isSupervisorRequired,
+                RequiredPrefilledQuestions = requiredNotExistingColumns
+            });
+        }
+
+        [HttpGet]
+        [ObserverNotAllowedApi]
+        public HttpResponseMessage GetInvalidInterviewsByLastImport()
+        {
+            var interviewImportState = this.interviewImportService.Status.State;
+            var delimiter = interviewImportState.Delimiter;
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine(string.Join(delimiter, interviewImportState.Columns));
+            
+            foreach (var interviewImportError in interviewImportState.Errors)
+            {
+                sb.AppendLine(string.Concat(string.Join(delimiter, interviewImportError.RawData), delimiter,
+                    interviewImportError.ErrorMessage));
+            }
+
+            var invalidInterviewsFileName = "invalid-interviews";
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StreamContent(new MemoryStream(this.archiver.CompressStringToByteArray($"{invalidInterviewsFileName}.tab", sb.ToString())))
+            };
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = $"{invalidInterviewsFileName}.zip"
+            };
+
+            return response;
+        }
+
+        public class ImportInterviewsResponseApiView
+        {
+            public bool IsSupervisorRequired { get; set; }
+            public List<string> RequiredPrefilledQuestions { get; set; }
         }
 
         public class ImportInterviewsRequestApiView
@@ -124,6 +199,7 @@ namespace WB.UI.Headquarters.Controllers
             public Guid QuestionnaireId { get; set; }
             public int QuestionnaireVersion { get; set; }
             public HttpFile FileWithInterviews { get; set; }
+            public Guid? SupervisorId { get; set; }
         }
 
         public class InterviewImportStatusApiView
@@ -134,6 +210,7 @@ namespace WB.UI.Headquarters.Controllers
             public int CreatedInterviewsCount { get; set; }
             public string ElapsedTime { get; set; }
             public string EstimatedTime { get; set; }
+            public bool HasErrors { get; set; }
         }
     }
 }

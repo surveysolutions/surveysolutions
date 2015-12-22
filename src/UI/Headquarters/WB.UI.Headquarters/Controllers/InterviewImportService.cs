@@ -5,16 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage;
-using WB.Core.SharedKernels.DataCollection;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
@@ -25,189 +24,352 @@ namespace WB.UI.Headquarters.Controllers
 {
     public class InterviewImportService : IInterviewImportService
     {
+        const string GPSLATITUDECOLUMNPOSTFIX = "_latitude";
+        const string GPSLONGITUDECOLUMNPOSTFIX = "_longitude";
+        const string GPSACCURACYCOLUMNPOSTFIX = "_accuracy";
+        const string GPSALTITUDECOLUMNPOSTFIX = "_altitude";
+        const string GPSTIMESTAMPCOLUMNPOSTFIX = "_timestamp";
+        const string SUPERVISORCOLUMNNAME = "supervisor";
+        const string INTERVIEWERCOLUMNNAME = "interviewer";
+
+        private class ImportedInterview
+        {
+            public Guid? SupervisorId { get; set; }
+            public Guid? InterviewerId { get; set; }
+            public Dictionary<Guid, object> AnswersOnPrefilledQuestions { get; set; }
+        }
+
+        private class FileInterviews
+        {
+            public List<ImportedInterview> Imported { get; set; }
+            public List<InterviewImportError> WithErrors { get; set; }
+        }
+
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository;
         private readonly ICommandService commandService;
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IUserViewFactory userViewFactory;
-        private readonly IArchiveUtils archiver;
+        private readonly ITransactionManagerProvider transactionManager;
+        private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
 
-        private readonly ConcurrentDictionary<string, Guid> supervisorCache = new ConcurrentDictionary<string, Guid>();
+        private readonly ConcurrentDictionary<string, Guid?> usersCache = new ConcurrentDictionary<string, Guid?>();
 
         public InterviewImportService(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository,
             ICommandService commandService,
             IGlobalInfoProvider globalInfoProvider,
             IUserViewFactory userViewFactory,
-            IArchiveUtils archiver,
+            ITransactionManagerProvider transactionManager,
+            ILogger logger,
             SampleImportSettings sampleImportSettings)
         {
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
             this.commandService = commandService;
             this.globalInfoProvider = globalInfoProvider;
             this.userViewFactory = userViewFactory;
-            this.archiver = archiver;
+            this.transactionManager = transactionManager;
+            this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
         }
 
-        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, Stream zipOrCsvFileStream)
+        public void ImportInterviews(InterviewImportFileDescription fileDescription, Guid? supervisorId)
         {
-            if (this.Status.IsInProgress)
-                throw new Exception("Import interviews is in progress. Wait until current operation is finished.");
+            var columnsWithTypes = GetFileColumnsWithTypes(fileDescription);
+            var dynamicTypeOfImportedInterview = columnsWithTypes.ToDynamicType("interview");
 
-            if (this.archiver.IsZipStream(zipOrCsvFileStream))
+            this.Status.QuestionnaireTitle = fileDescription.QuestionnaireTitle;
+            this.Status.StartedDateTime = DateTime.Now;
+            this.Status.CreatedInterviewsCount = 0;
+            this.Status.ElapsedTime = 0;
+            this.Status.EstimatedTime = 0;
+            this.Status.State.Columns = fileDescription.FileColumns;
+            this.Status.State.Errors.Clear();
+            this.Status.IsInProgress = true;
+
+            var fileInterviews = this.ReadInterviewsFromFile(dynamicTypeOfImportedInterview, fileDescription);
+            this.Status.TotalInterviewsCount = fileInterviews.Imported.Count + fileInterviews.WithErrors.Count;
+            this.Status.State.Errors = fileInterviews.WithErrors;
+
+            try
             {
-                var unzippedFiles = this.archiver.UnzipStream(zipOrCsvFileStream).ToList();
+                Parallel.ForEach(fileInterviews.Imported,
+                    new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
+                    (importedInterview) =>
+                    {
+                        try
+                        {
+                            this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
+                                interviewId: Guid.NewGuid(),
+                                responsibleId: fileDescription.HeadquartersId,
+                                questionnaireIdentity: fileDescription.QuestionnaireIdentity,
+                                supervisorId: importedInterview.SupervisorId ?? supervisorId.Value,
+                                interviewerId: importedInterview.InterviewerId,
+                                answersTime: DateTime.UtcNow,
+                                answersOnPrefilledQuestions: importedInterview.AnswersOnPrefilledQuestions));
+                        }
+                        catch (Exception ex)
+                        {
+                            this.logger.Error("Import interview.", ex);
+                        }
 
-                zipOrCsvFileStream = unzippedFiles.FirstOrDefault()?.FileStream;
-                if (zipOrCsvFileStream == null)
-                    throw new Exception("Zip file does not contains file with interviews.");
+                        this.Status.CreatedInterviewsCount += 1;
+                        this.Status.ElapsedTime = DateTime.Now.Subtract(this.Status.StartedDateTime).TotalMilliseconds;
+                        this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
+                        this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
+                    });
+            }
+            finally
+            {
+                this.Status.IsInProgress = false;
+            }
+        }
+
+        private FileInterviews ReadInterviewsFromFile(Type dynamicTypeOfImportedInterview,
+            InterviewImportFileDescription fileDescription)
+        {
+            var fileInterviews = new FileInterviews
+            {
+                Imported = new List<ImportedInterview>(),
+                WithErrors = new List<InterviewImportError>()
+            };
+            
+            using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileDescription.FileBytes))))
+            {
+                csvReader.Configuration.AutoMap(dynamicTypeOfImportedInterview);
+                csvReader.Configuration.Delimiter = this.Status.State.Delimiter;
+                csvReader.Configuration.BufferSize = 32768;
+                csvReader.Configuration.IgnoreHeaderWhiteSpace = true;
+                csvReader.Configuration.IsHeaderCaseSensitive = false;
+                csvReader.Configuration.SkipEmptyRecords = true;
+                csvReader.Configuration.TrimFields = true;
+                csvReader.Configuration.TrimHeaders = true;
+                csvReader.Configuration.WillThrowOnMissingField = false;
+                csvReader.Configuration.ThrowOnBadData = true;
+
+                while (csvReader.Read())
+                {
+                    try
+                    {
+                        dynamic dynamicImportedInterview = csvReader.GetRecord(dynamicTypeOfImportedInterview);
+
+                        Guid? supervisorId = null;
+                        if (fileDescription.HasSupervisorColumn)
+                        {
+                            supervisorId = GetUserIdByName(dynamicImportedInterview.supervisor);
+                            if (!supervisorId.HasValue)
+                                throw new Exception($"supervisor '{dynamicImportedInterview.supervisor}' not found ");
+                        }
+
+                        Guid? interviewerId = null;
+                        if (fileDescription.HasInterviewerColumn &&
+                            !string.IsNullOrEmpty(dynamicImportedInterview.interviewer))
+                        {
+                            interviewerId = GetUserIdByName(dynamicImportedInterview.interviewer);
+                            if (!interviewerId.HasValue)
+                                throw new Exception($"interviewer '{dynamicImportedInterview.interviewer}' not found ");
+                        }
+
+                        var answersOnPrefilledQuestions = this.GetAnswersOnPrefilledQuestionsOrThrow(fileDescription.PrefilledQuestions,
+                                TypeExtensions.ToDictionary(dynamicImportedInterview));
+
+                        fileInterviews.Imported.Add(new ImportedInterview
+                        {
+                            SupervisorId = supervisorId,
+                            InterviewerId = interviewerId,
+                            AnswersOnPrefilledQuestions = answersOnPrefilledQuestions
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        fileInterviews.WithErrors.Add(new InterviewImportError
+                        {
+                            RawData = csvReader.CurrentRecord,
+                            ErrorMessage = ex.Data.Contains("CsvHelper") ? ToUserFriendlyErrorMessage((string)ex.Data["CsvHelper"]) : ex.Message
+                        });
+                    }
+                }
             }
 
-            this.Status.IsInProgress = true;
-            this.Status.StartedDateTime = DateTime.Now;
+            return fileInterviews;
+        }
 
+        private static string ToUserFriendlyErrorMessage(string csvExceptionAsString)
+        {
+            return csvExceptionAsString.Substring(csvExceptionAsString.IndexOf("Field Name", StringComparison.Ordinal)).Replace("\r\n", ", ");
+        }
+
+        private static Dictionary<string, Type> GetFileColumnsWithTypes(InterviewImportFileDescription fileDescription)
+        {
+            var columnsWithTypes = new Dictionary<string, Type>(fileDescription.ColumnsByPrefilledQuestions
+                .Where(column => column.ExistsInFIle)
+                .ToDictionary(column => column.ColumnName, column => column.ColumnType));
+
+            if (fileDescription.HasSupervisorColumn)
+            {
+                columnsWithTypes.Add(SUPERVISORCOLUMNNAME, typeof (string));
+            }
+            if (fileDescription.HasInterviewerColumn)
+            {
+                columnsWithTypes.Add(INTERVIEWERCOLUMNNAME, typeof (string));
+            }
+            return columnsWithTypes;
+        }
+
+        public InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes)
+        {
             var questionnaireDocument = this.questionnaireDocumentRepository.AsVersioned()
                 .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version).Questionnaire;
 
-            this.Status.QuestionnaireTitle = $"(ver. {questionnaireIdentity.Version}) {questionnaireDocument.Title}";
-
-            var prefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured).ToList();
-
-            var createInterviewCommands = this.ReadInterviewsFromCsv(questionnaireIdentity, zipOrCsvFileStream, prefilledQuestions);
-            this.Status.TotalInterviewsCount = createInterviewCommands.Count;
-
-            Task.Run(() =>
+            var interviewImportFileDescription = new InterviewImportFileDescription()
             {
+                ColumnsByPrefilledQuestions = new List<InterviewImportColumn>(),
+                QuestionnaireIdentity = questionnaireIdentity,
+                QuestionnaireTitle = $"(ver. {questionnaireIdentity.Version}) {questionnaireDocument.Title}",
+                FileBytes = fileBytes,
+                HeadquartersId = this.globalInfoProvider.GetCurrentUser().Id,
+                PrefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured)
+                        .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
+                        .ToList(),
+            };
+
+            using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileBytes))))
+            {
+                csvReader.Configuration.Delimiter = this.Status.State.Delimiter;
+                csvReader.Configuration.TrimHeaders = true;
+                csvReader.Configuration.IsHeaderCaseSensitive = false;
+                csvReader.Read();
+
+                var columns = interviewImportFileDescription.FileColumns = csvReader.FieldHeaders.Select(header => header.Trim().ToLower()).ToArray();
+                interviewImportFileDescription.HasSupervisorColumn = columns.Contains(SUPERVISORCOLUMNNAME);
+                interviewImportFileDescription.HasInterviewerColumn = columns.Contains(INTERVIEWERCOLUMNNAME);
+
+                foreach (var prefilledQuestion in interviewImportFileDescription.PrefilledQuestions)
+                {
+                    if (prefilledQuestion.IsGps)
+                    {
+                        interviewImportFileDescription.ColumnsByPrefilledQuestions.AddRange(new[]
+                        {
+                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSLATITUDECOLUMNPOSTFIX}", columns, true, typeof (double)),
+                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSLONGITUDECOLUMNPOSTFIX}", columns, true, typeof (double)),
+                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSACCURACYCOLUMNPOSTFIX}", columns, false, typeof (double?)),
+                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSALTITUDECOLUMNPOSTFIX}", columns, false, typeof (double)),
+                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSTIMESTAMPCOLUMNPOSTFIX}", columns, false, typeof (DateTimeOffset?))
+                        });
+                    }
+                    else
+                    {
+                        interviewImportFileDescription.ColumnsByPrefilledQuestions.Add(
+                            ToInterviewImportColumn(prefilledQuestion.Variable, columns, true, prefilledQuestion.AnswerType));
+                    }
+                }
+            }
+            
+            return interviewImportFileDescription;
+        }
+
+        private InterviewImportPrefilledQuestion ToInterviewImportPrefilledQuestion(IQuestion question,
+            QuestionnaireDocument questionnaireDocument)
+        {
+            return new InterviewImportPrefilledQuestion
+            {
+                QuestionId = question.PublicKey,
+                Variable = question.StataExportCaption.ToLower(),
+                AnswerType = this.GetTypeOfAnswer(question),
+                IsGps = question.QuestionType == QuestionType.GpsCoordinates,
+                IsRosterSize = question.QuestionType == QuestionType.Numeric &&
+                               questionnaireDocument.Find<IGroup>(
+                                   group => group.RosterSizeQuestionId == question.PublicKey).Any()
+            };
+        }
+
+        private static InterviewImportColumn ToInterviewImportColumn(string columnName, string[] fileColumns, bool isRequired, Type columnType)
+        {
+            return new InterviewImportColumn
+            {
+                ColumnName = columnName,
+                ColumnType = columnType,
+                IsRequired = isRequired,
+                ExistsInFIle = fileColumns.Contains(columnName)
+            };
+        }
+
+        private Guid? GetUserIdByName(string userName)
+        {
+            userName = userName.ToLower();
+            if (!this.usersCache.Keys.Contains(userName))
+            {
+                this.transactionManager.GetTransactionManager().BeginQueryTransaction();
                 try
                 {
-                    Parallel.ForEach(createInterviewCommands,
-                        new ParallelOptions {MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit},
-                        (createInterviewCommand) =>
-                        {
-
-                            this.commandService.Execute(createInterviewCommand);
-                            this.Status.CreatedInterviewsCount += 1;
-
-                            this.Status.ElapsedTime =
-                                DateTime.Now.Subtract(this.Status.StartedDateTime).TotalMilliseconds;
-                            this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
-                            this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
-                        });
+                    var user = this.userViewFactory.Load(new UserViewInputModel(userName, null));
+                    return this.usersCache.GetOrAdd(userName, user?.PublicKey);
                 }
                 finally
                 {
-                    this.Status.IsInProgress = false;
-                }
-            });
-        }
-
-        private List<CreateInterviewWithPreloadedData> ReadInterviewsFromCsv(QuestionnaireIdentity questionnaireIdentity, Stream csvFileStream,
-            List<IQuestion> prefilledQuestions)
-        {
-            var csvRow = this.GetInterviewCsvRowProperties(prefilledQuestions);
-
-            var dynamicTypeOfAnswersOnPrefilledQuestions = csvRow.ToDynamicType();
-            var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
-
-            List<CreateInterviewWithPreloadedData> interviewViews;
-            using (var csvReader = new CsvReader(new StreamReader(csvFileStream)))
-            {
-                csvReader.Configuration.AutoMap(dynamicTypeOfAnswersOnPrefilledQuestions);
-                csvReader.Configuration.Delimiter = "\t";
-                csvReader.Configuration.IgnoreReadingExceptions = true;
-                csvReader.Configuration.ReadingExceptionCallback = (exception, reader) => { };
-
-                interviewViews = csvReader.GetRecords(dynamicTypeOfAnswersOnPrefilledQuestions)
-                    .Select((dynamic importedInterview) => new CreateInterviewWithPreloadedData(
-                        interviewId: Guid.NewGuid(),
-                        userId: headquartersId,
-                        questionnaireId: questionnaireIdentity.QuestionnaireId,
-                        version: questionnaireIdentity.Version,
-                        supervisorId: GetSupervisorIdByName(importedInterview.supervisor),
-                        answersTime: DateTime.UtcNow,
-                        preloadedDataDto: new PreloadedDataDto(new []
-                        {
-                            new PreloadedLevelDto(RosterVector.Empty, this.GetAnswersOnPrefilledQuestions(prefilledQuestions, TypeExtensions.ToDictionary(importedInterview)))
-                        })))
-                    .ToList();
-            }
-            return interviewViews;
-        }
-
-        private Dictionary<string, Type> GetInterviewCsvRowProperties(List<IQuestion> prefilledQuestions)
-        {
-            var csvRow = new Dictionary<string, Type>
-            {
-                ["supervisor"] = typeof (string)
-            };
-            foreach (var prefilledQuestion in prefilledQuestions)
-            {
-                if (prefilledQuestion.QuestionType == QuestionType.GpsCoordinates)
-                {
-                    csvRow[prefilledQuestion.StataExportCaption + "_Latitude"] = typeof (double);
-                    csvRow[prefilledQuestion.StataExportCaption + "_Longitude"] = typeof (double);
-                    csvRow[prefilledQuestion.StataExportCaption + "_Accuracy"] = typeof (double);
-                    csvRow[prefilledQuestion.StataExportCaption + "_Altitude"] = typeof (double);
-                    csvRow[prefilledQuestion.StataExportCaption + "_Timestamp"] = typeof (DateTimeOffset);
-                }
-                else
-                {
-                    csvRow[prefilledQuestion.StataExportCaption] = this.GetTypeOfAnswer(prefilledQuestion);
+                    this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
                 }
             }
-            return csvRow;
+
+            return this.usersCache[userName];
         }
 
-        private Guid GetSupervisorIdByName(string supervisorName)
-        {
-            if (!this.supervisorCache.Keys.Contains(supervisorName))
-            {
-                var supervisor = this.userViewFactory.Load(new UserViewInputModel(supervisorName, null));
-                if (supervisor != null)
-                    return this.supervisorCache.GetOrAdd(supervisorName, supervisor.PublicKey);
-            }
-
-            return this.supervisorCache[supervisorName];
-        }
-
-        private Dictionary<Guid, object> GetAnswersOnPrefilledQuestions(List<IQuestion> prefilledQuestions, IDictionary<string, object> interviewView)
+        private Dictionary<Guid, object> GetAnswersOnPrefilledQuestionsOrThrow(List<InterviewImportPrefilledQuestion> prefilledQuestions, 
+            IDictionary<string, object> importedInterview)
         {
             var answersOnPrefilledQuestions = new Dictionary<Guid, object>();
             foreach (var prefilledQuestion in prefilledQuestions)
             {
-                if (interviewView.ContainsKey(prefilledQuestion.StataExportCaption))
+                if (prefilledQuestion.IsGps)
                 {
-                    answersOnPrefilledQuestions.Add(prefilledQuestion.PublicKey, interviewView[prefilledQuestion.StataExportCaption]);
+                    object oLatitude;
+                    object oLongtitude;
+                    object oAccuracy;
+                    object oAltitude;
+                    object oTimestamp;
+
+                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSLATITUDECOLUMNPOSTFIX}", out oLatitude);
+                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSLONGITUDECOLUMNPOSTFIX}", out oLongtitude);
+                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSACCURACYCOLUMNPOSTFIX}", out oAccuracy);
+                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSALTITUDECOLUMNPOSTFIX}", out oAltitude);
+                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSTIMESTAMPCOLUMNPOSTFIX}", out oTimestamp);
+
+                    double? latitude = (double?) oLatitude;
+                    double? longtitude = (double?) oLongtitude;
+
+                    if (latitude.HasValue && (latitude.Value < -91 || latitude.Value > 90))
+                    {
+                        throw new Exception($"Field Name: '{prefilledQuestion.Variable}{GPSLATITUDECOLUMNPOSTFIX}', Field Value: '{latitude}'");
+                    }
+
+                    if (longtitude.HasValue && (longtitude.Value < -181 || longtitude.Value > 180))
+                    {
+                        throw new Exception($"Field Name: '{prefilledQuestion.Variable}{GPSLONGITUDECOLUMNPOSTFIX}', Field Value: '{longtitude}'");
+                    }
+
+                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId, new GeoPosition()
+                    {
+                        Latitude = latitude.GetValueOrDefault(),
+                        Longitude = longtitude.GetValueOrDefault(),
+                        Accuracy = ((double?)oAccuracy).GetValueOrDefault(),
+                        Altitude = ((double?)oAltitude).GetValueOrDefault(),
+                        Timestamp = ((DateTimeOffset?)oTimestamp).GetValueOrDefault()
+                    });
+                }
+                else if (prefilledQuestion.IsRosterSize)
+                {
+                    var answerOnRosterSizeQuestion = (int)importedInterview[prefilledQuestion.Variable];
+                    if (answerOnRosterSizeQuestion < 0 || answerOnRosterSizeQuestion > 40)
+                    {
+                        throw new Exception($"Field Name: '{prefilledQuestion.Variable}', Field Value: '{answerOnRosterSizeQuestion}'");
+                    }
+
+                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId, answerOnRosterSizeQuestion);
                 }
                 else
                 {
-                    switch (prefilledQuestion.QuestionType)
-                    {
-                        case QuestionType.GpsCoordinates:
-
-                            var _Latitude = prefilledQuestion.StataExportCaption + "_Latitude";
-                            var _Longitude = prefilledQuestion.StataExportCaption + "_Longitude";
-                            var _Accuracy = prefilledQuestion.StataExportCaption + "_Accuracy";
-                            var _Altitude = prefilledQuestion.StataExportCaption + "_Altitude";
-                            var _Timestamp = prefilledQuestion.StataExportCaption + "_Timestamp";
-
-                            var Latitude = interviewView.Keys.Contains(_Latitude) ? interviewView[_Latitude] : null;
-                            var Longitude = interviewView.Keys.Contains(_Longitude) ? interviewView[_Longitude] : null;
-                            var Accuracy = interviewView.Keys.Contains(_Accuracy) ? interviewView[_Accuracy] : null;
-                            var Altitude = interviewView.Keys.Contains(_Altitude) ? interviewView[_Altitude] : null;
-                            var Timestamp = interviewView.Keys.Contains(_Timestamp) ? interviewView[_Timestamp] : null;
-
-
-                            if (Latitude != null || Longitude != null || Accuracy != null || Altitude != null || Timestamp != null)
-                            {
-                                answersOnPrefilledQuestions.Add(prefilledQuestion.PublicKey,
-                                    new GeoPosition((double)Latitude, (double)Longitude, (double)Accuracy,
-                                        (double)Altitude, (DateTimeOffset)Timestamp));
-                            }
-
-                            break;
-                    }
+                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId,
+                        importedInterview[prefilledQuestion.Variable]);
                 }
             }
 
@@ -219,22 +381,22 @@ namespace WB.UI.Headquarters.Controllers
             switch (question.QuestionType)
             {
                 case QuestionType.DateTime:
-                    return typeof(DateTime);
+                    return typeof (DateTime);
                 case QuestionType.Numeric:
-                    return ((INumericQuestion)question).IsInteger ? typeof(int) : typeof(decimal);
+                    return ((INumericQuestion) question).IsInteger ? typeof (int) : typeof (decimal);
                 case QuestionType.SingleOption:
-                    return typeof(int);
+                    return typeof (int);
                 default:
-                    return typeof(string);
+                    return typeof (string);
             }
         }
 
-        public void ImportInterviewsWithRosters(QuestionnaireIdentity questionnaireIdentity, Stream zipFileStream)
+        public InterviewImportStatus Status { get; } = new InterviewImportStatus()
         {
-            throw new NotImplementedException();
-        }
-
-        public InterviewImportStatus Status => this.status;
-        public readonly InterviewImportStatus status = new InterviewImportStatus();
+            State = new InterviewImportState
+            {
+                Errors = new List<InterviewImportError>()
+            }
+        };
     }
 }

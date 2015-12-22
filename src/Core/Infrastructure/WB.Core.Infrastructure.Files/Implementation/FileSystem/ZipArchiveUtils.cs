@@ -68,11 +68,10 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             {
                 var unzippedFileStream = new MemoryStream();
                 zipEntry.Extract(unzippedFileStream);
-                unzippedFileStream.Seek(0, SeekOrigin.Begin);
                 yield return new UnzippedFile
                 {
                     FileName = zipEntry.FileName,
-                    FileStream = unzippedFileStream
+                    FileBytes = unzippedFileStream.ToArray()
                 };
             }
         }
@@ -100,6 +99,20 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 }
             }
             return result;
+        }
+
+        public byte[] CompressStringToByteArray(string fileName, string fileContentAsString)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (ZipFile zip = new ZipFile())
+                {
+                    zip.AddEntry(fileName, Encoding.Unicode.GetBytes(fileContentAsString));
+                    zip.Save(memoryStream);
+                }
+
+                return memoryStream.ToArray();
+            }
         }
 
         public string CompressString(string stringToCompress)

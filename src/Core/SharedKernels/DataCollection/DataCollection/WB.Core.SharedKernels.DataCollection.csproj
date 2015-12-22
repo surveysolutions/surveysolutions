@@ -71,6 +71,7 @@
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewByPrefilledQuestions.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
     <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
       <SubType>Code</SubType>

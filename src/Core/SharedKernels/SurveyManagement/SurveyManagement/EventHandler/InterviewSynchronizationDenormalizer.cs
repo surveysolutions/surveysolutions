@@ -2,7 +2,6 @@
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -27,8 +26,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideKeyValueStorage<InterviewData> interviews;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaries;
 
-        private readonly ISerializer serializer;
-
         private readonly IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter;
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
 
@@ -39,7 +36,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviews,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaries,
-            ISerializer serializer,
             IMetaInfoBuilder metaBuilder,
             IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter,
             IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
@@ -49,7 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviews = interviews;
             this.interviewSummaries = interviewSummaries;
             this.metaBuilder = metaBuilder;
-            this.serializer = serializer;
             this.syncPackageWriter = syncPackageWriter;
             this.interviewResponsibleStorageWriter = interviewResponsibleStorageWriter;
             this.synchronizationDtoFactory = synchronizationDtoFactory;
@@ -157,11 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void SaveSynchronizationPackage(InterviewSynchronizationDto doc, Guid responsibleId, string packageId, long globalSequence)
         {
-            var sizeOfInterview = this.serializer.Serialize(doc, TypeSerializationSettings.AllTypes).Length;
-            var sizeOfInterviewMetadata = this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(doc), TypeSerializationSettings.AllTypes).Length;
-
-            this.StoreSynchronizationPackage(doc.Id, responsibleId, SyncItemType.Interview,
-                sizeOfInterview + sizeOfInterviewMetadata, packageId, globalSequence);
+            this.StoreSynchronizationPackage(doc.Id, responsibleId, SyncItemType.Interview, 0, packageId, globalSequence);
         }
 
         public void StoreSynchronizationPackage(Guid interviewId, 
