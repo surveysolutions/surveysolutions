@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
           readSideStorageMock.Verify(x => x.Remove(null_id), Times.Once);
 
         It should_return_readable_status = () =>
-            memoryCachedReadSideStorage.GetReadableStatus().ShouldEqual("  |  cache disabled  |  cached 0");
+            memoryCachedReadSideStorage.GetReadableStatus().ShouldEqual("  |  cache disabled  |  cached (ESENT): 0");
 
         private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
