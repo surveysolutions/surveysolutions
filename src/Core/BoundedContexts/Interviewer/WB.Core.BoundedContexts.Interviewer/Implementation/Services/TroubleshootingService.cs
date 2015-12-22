@@ -9,10 +9,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class TroubleshootingService : ITroubleshootingService
     {
         private readonly IArchiveUtils archiver;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public TroubleshootingService(IArchiveUtils archiver)
+        public TroubleshootingService(IArchiveUtils archiver,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.archiver = archiver;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public byte[] GetSystemBackup()
@@ -23,10 +26,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm")}.ibak";
-            var backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
-            var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
+            if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
+            {
+                this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
+            }
 
+            IFolder backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
+            var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm")}.ibak";
+            var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
             var backup = await Task.Run(() => this.GetSystemBackup());
             using (var stream = await emptyBackupFile.OpenAsync(FileAccess.ReadAndWrite))
             {
@@ -37,7 +44,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public void Restore(string backupFilePath)
         {
-            this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true);
+            if (this.fileSystemAccessor.IsFileExists(backupFilePath))
+            {
+                this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true);
+            }
         }
     }
 }
