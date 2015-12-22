@@ -889,8 +889,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var document = source as QuestionnaireDocument;
             if (document == null)
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
+            if (document.IsDeleted)
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Trying to import template of deleted questionnaire");
+
             document.CreatedBy = createdBy;
-            ApplyEvent(new TemplateImported() { Source = document });
+            ApplyEvent(new TemplateImported { Source = document });
         }
 
         public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
