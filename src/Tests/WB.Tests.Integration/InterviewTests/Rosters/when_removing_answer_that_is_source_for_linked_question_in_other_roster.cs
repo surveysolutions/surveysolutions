@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    [Ignore("fail test for KP-6499")]
     internal class when_removing_answer_that_is_source_for_linked_question_in_other_roster : InterviewTestsContext
     {
         Establish context = () =>
@@ -74,14 +73,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 2 }, DateTime.Now, 66);
 
                 interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[1] { 3 }, DateTime.Now, new decimal[][] { new decimal[] { 1 }, new decimal[] { 2 } });
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[0], DateTime.Now, new decimal[][] { new decimal[] { 2 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[0], DateTime.Now, new decimal[][] { new decimal[] { 1 } });
 
                 using (var eventContext = new EventContext())
                 {
                     interview.RemoveAnswer(sourceQuestionId, new decimal[1] { 1 }, userId, DateTime.Now);
 
                     result.AnswerForLinkedQuestionWasCleared = eventContext.AnyEvent<AnswersRemoved>(q => q.Questions.Any(x => x.Id == linkedId));
-                    result.AnswerForLinkedQuestionOutsideRosterWasCleared = eventContext.AnyEvent<AnswersRemoved>(q => q.Questions.Any(x => x.Id == linkedId));
+                    result.AnswerForLinkedQuestionOutsideRosterWasCleared = eventContext.AnyEvent<AnswersRemoved>(q => q.Questions.Any(x => x.Id == linkedOutsideId));
                 }
 
                 return result;
