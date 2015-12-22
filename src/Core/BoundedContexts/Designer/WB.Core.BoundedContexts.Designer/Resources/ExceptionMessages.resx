@@ -142,10 +142,10 @@
     <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
   </data>
   <data name="LookupTableAlreadyExist" xml:space="preserve">
-    <value>Lookup table with such is is already exist.</value>
+    <value>Lookup table with such id already exist.</value>
   </data>
   <data name="LookupTableIsAbsent" xml:space="preserve">
-    <value>Lookup table with such is is absent.</value>
+    <value>Lookup table with such id is absent.</value>
   </data>
   <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
     <value>File with no data can not be loaded</value>
