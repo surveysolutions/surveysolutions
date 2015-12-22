@@ -168,8 +168,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/ko.datepicker.js", 
                     "~/Scripts/bootstrap3-typeahead.js", 
                     "~/Scripts/components/typeahead-extended.js", 
-                    "~/Scripts/knockout/ko.typeahead.js", 
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
                     "~/Scripts/viewmodels/pages/controlpanel/synchronizationlog.js"
+                }
+            },
+            {
+                "~/js/import-interviews", new[]
+                {
+                    "~/Scripts/bootbox.min.js",
+                    "~/Scripts/knockout.validation.js",
+                    "~/Scripts/viewmodels/pages/interview/custom.js",
+                    "~/Scripts/bootstrap3-typeahead.js",
+                    "~/Scripts/components/typeahead-extended.js",
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
+                    "~/Scripts/pages/import-interviews.js"
                 }
             },
         };

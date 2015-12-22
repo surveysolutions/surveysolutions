@@ -387,10 +387,9 @@ namespace WB.UI.Headquarters.Filters
                 string fileName = FixFilename(file.Headers.ContentDisposition.FileName);
                 string mediaType = file.Headers.ContentType.MediaType;
 
-                using (var stream = await file.ReadAsStreamAsync())
-                {
-                    multipartFormData.Add(name, new HttpFile(fileName, mediaType, stream));
-                }
+                var byteArray = await file.ReadAsByteArrayAsync();
+
+                multipartFormData.Add(name, new HttpFile(fileName, mediaType, byteArray));
             }
 
             foreach (var part in multipartProvider.Contents.Where(x => x.Headers.ContentDisposition.DispositionType == "form-data"
@@ -573,7 +572,7 @@ namespace WB.UI.Headquarters.Filters
                         formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
 
                         // Write the file data directly to the Stream, rather than serializing it to a string.
-                        httpFileToUpload.FileStream = formDataStream;
+                        httpFileToUpload.FileBytes = formDataStream.ToArray();
                     }
                     else
                     {
@@ -615,15 +614,15 @@ namespace WB.UI.Headquarters.Filters
     {
         public string FileName { get; set; }
         public string MediaType { get; set; }
-        public Stream FileStream { get; set; }
+        public byte[] FileBytes { get; set; }
 
         public HttpFile() { }
 
-        public HttpFile(string fileName, string mediaType, Stream fileStream)
+        public HttpFile(string fileName, string mediaType, byte[] fileBytes)
         {
             FileName = fileName;
             MediaType = mediaType;
-            this.FileStream = fileStream;
+            this.FileBytes = fileBytes;
         }
     }
 

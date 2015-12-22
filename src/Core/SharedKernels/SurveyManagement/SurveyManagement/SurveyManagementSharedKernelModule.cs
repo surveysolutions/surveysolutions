@@ -77,6 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             CommandRegistry.Configure<Interview, CreateInterviewCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<Interview, CreateInterviewOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<Interview, CreateInterviewCreatedOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
+            CommandRegistry.Configure<Interview, CreateInterviewByPrefilledQuestions>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());

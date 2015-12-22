@@ -248,8 +248,11 @@
   </data>
   <data name="RefreshActionOnUserUpload" xml:space="preserve">
     <value>Refresh</value>
-   </data>
+  </data>
   <data name="BatchUpload_Title" xml:space="preserve">
     <value>Batch upload</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>File does not contains required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
 </root>
