@@ -389,13 +389,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
-
-            dynamic a = new {a = "", b = 1};
-            a["fdg"] = "";
-            foreach (var property in a.GetType().GetProperties())
-            {
-                var prop = new CsvPropertyMap(property);
-            }
+            
             return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question);
         }
 
