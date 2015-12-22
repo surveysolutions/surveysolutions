@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
+namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 {
     public class QuestionnaireBrowseItem : IReadSideRepositoryEntity
     {
         public QuestionnaireBrowseItem()
         {
-            FeaturedQuestions = new List<FeaturedQuestionItem>();
+            this.FeaturedQuestions = new List<FeaturedQuestionItem>();
         }
 
         protected QuestionnaireBrowseItem(Guid questionnaireId, 

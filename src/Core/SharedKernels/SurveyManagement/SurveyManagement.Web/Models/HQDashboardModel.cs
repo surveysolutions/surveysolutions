@@ -1,4 +1,4 @@
-﻿using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+﻿using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
