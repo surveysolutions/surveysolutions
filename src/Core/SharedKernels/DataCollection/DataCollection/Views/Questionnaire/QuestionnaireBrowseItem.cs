@@ -72,7 +72,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
 
         public virtual long SerializedQuestionnaireSize { get; set; }
 
-        [IgnoreDataMember]
         public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }
     }
 }
