@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(userId, questionId, new decimal[0], DateTime.Now, new decimal[0]));
+            exception = Catch.Only<InterviewException>(() => interview.AnswerPictureQuestion(userId, questionId, new decimal[0], DateTime.Now, "str"));
 
         It should_throw_InterviewException = () =>
             exception.ShouldNotBeNull();

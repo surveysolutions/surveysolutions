@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
-                Create.SingleOptionQuestion(questionId: questionId));
+                Create.SingleOptionQuestion(questionId: questionId, answerCodes: new decimal[] { 0 }));
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.AnswerSingleOptionQuestion(userId, questionId, new decimal[0], DateTime.Now, 1.1m));
+            exception = Catch.Only<InterviewException>(() => interview.AnswerSingleOptionQuestion(userId, questionId, new decimal[0], DateTime.Now, 0));
 
         It should_throw_InterviewException = () =>
             exception.ShouldNotBeNull();
