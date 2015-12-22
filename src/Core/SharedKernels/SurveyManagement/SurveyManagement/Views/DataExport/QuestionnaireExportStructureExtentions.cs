@@ -46,7 +46,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                     }
                     else
                     {
-                        parentColumnLabel = $"Id in \"{structure.HeaderToLevelMap[new ValueVector<Guid>(headerStructureForLevel.LevelScopeVector.Take(i))].LevelName}\"";
+                        var parentRosterVector = new ValueVector<Guid>(headerStructureForLevel.LevelScopeVector.Take(i));
+
+                        if (!structure.HeaderToLevelMap.ContainsKey(parentRosterVector))
+                            continue;
+                        parentColumnLabel = $"Id in \"{structure.HeaderToLevelMap[parentRosterVector].LevelName}\"";
                     }
 
                     labelsForServiceColumnsForTheLevel.Add($"{ServiceColumns.ParentId}{headerStructureForLevel.LevelScopeVector.Length - i}",
