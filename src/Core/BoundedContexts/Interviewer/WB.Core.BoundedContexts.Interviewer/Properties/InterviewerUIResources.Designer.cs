@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup all gathered infromation.
+        ///   Looks up a localized string similar to Backup all gathered information.
         /// </summary>
         public static string Diagnostics_Backup_Title {
             get {
@@ -340,6 +340,69 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Diagnostics_BackupScope_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_BackupScope_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;font color=&quot;red&quot;&gt;No internet connection&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionAbsent_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionAbsent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection is &lt;font color=&quot;red&quot;&gt;not good&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionNotOK_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionNotOK_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection is OK.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionOK_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionOK_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;font color=&quot;red&quot;&gt;No connection with our server&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection type:.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionType_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionType_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network name:.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestNetworkName_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestNetworkName_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ping:.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestPing_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestPing_Title", resourceCulture);
             }
         }
         
@@ -407,7 +470,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on theis device.
+        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on this device.
         /// </summary>
         public static string Diagnostics_Restore_Description {
             get {
@@ -461,7 +524,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app.
+        ///   Looks up a localized string similar to All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app.
         /// </summary>
         public static string Diagnostics_Share_Description {
             get {
@@ -515,7 +578,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test internet connection.
+        ///   Looks up a localized string similar to Test bandwidth to server.
         /// </summary>
         public static string Diagnostics_TestConnection_Title {
             get {

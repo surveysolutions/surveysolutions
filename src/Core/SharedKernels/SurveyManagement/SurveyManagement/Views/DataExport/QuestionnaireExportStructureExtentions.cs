@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
     public static class QuestionnaireExportStructureExtentions
     {
-        public static void CollectLabels(this QuestionnaireExportStructure structure, out Dictionary<string, string> labels, out Dictionary<string, Dictionary<double, string>> varValueLabels)
+        public static void CollectLabels(this QuestionnaireExportStructure structure, out Dictionary<string, Dictionary<string, string>> labelsForServiceColumns, out Dictionary<string, string> labels, out Dictionary<string, Dictionary<double, string>> varValueLabels)
         {
             labels = new Dictionary<string, string>();
             varValueLabels = new Dictionary<string, Dictionary<double, string>>();
+            labelsForServiceColumns = new Dictionary<string, Dictionary<string, string>>();
 
             foreach (var headerStructureForLevel in structure.HeaderToLevelMap.Values)
             {
@@ -33,7 +36,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                             labels.Add(headerItem.ColumnNames[i], headerItem.Titles[i] ?? string.Empty);
                     }
                 }
+                var labelsForServiceColumnsForTheLevel = new Dictionary<string, string>();
+                for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
+                {
+                    string parentColumnLabel;
+                    if (i == 0)
+                    {
+                        parentColumnLabel = "InterviewId";
+                    }
+                    else
+                    {
+                        var parentRosterVector = new ValueVector<Guid>(headerStructureForLevel.LevelScopeVector.Take(i));
 
+                        if (!structure.HeaderToLevelMap.ContainsKey(parentRosterVector))
+                            continue;
+                        parentColumnLabel = $"Id in \"{structure.HeaderToLevelMap[parentRosterVector].LevelName}\"";
+                    }
+
+                    labelsForServiceColumnsForTheLevel.Add($"{ServiceColumns.ParentId}{headerStructureForLevel.LevelScopeVector.Length - i}",
+                        parentColumnLabel);
+                }
+                labelsForServiceColumns.Add(headerStructureForLevel.LevelName, labelsForServiceColumnsForTheLevel);
                 if (headerStructureForLevel.LevelLabels == null) continue;
 
                 var levelLabelName = headerStructureForLevel.LevelIdColumnName;

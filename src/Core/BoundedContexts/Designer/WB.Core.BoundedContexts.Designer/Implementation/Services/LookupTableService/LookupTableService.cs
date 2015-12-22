@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-using CsQuery.ExtensionMethods;
+using CsQuery.ExtensionMethods.Internal;
+
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
@@ -34,11 +36,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string lookupTableName, string fileContent)
         {
-            var lookupTableContent = this.CreateLookupTableContent(fileContent);
-            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableName);
+            var lookupTableContent = string.IsNullOrWhiteSpace(fileContent) 
+                ? this.GetLookupTableContent(questionnaireId, lookupTableId) 
+                : this.CreateLookupTableContent(fileContent);
+
+            if (lookupTableContent == null)
+            {
+                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_cant_has_empty_content));
+            }
+
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableId);
 
             DeleteLookupTableContent(questionnaireId, lookupTableId);
-            
+
             this.lookupTableContentStorage.Store(lookupTableContent, lookupTableStorageId);
         }
 
@@ -56,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTable == null)
                 return;
 
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaireId, lookupTable.TableName);
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, lookupTableId);
 
             lookupTableContentStorage.Remove(lookupTableStorageId);
         }
@@ -75,12 +85,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             if (lookupTable == null)
                 throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
 
-            var lookupTableStorageId = GetLookupTableStorageId(questionnaire.PublicKey, lookupTable.TableName);
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaire.PublicKey, lookupTableId);
 
             var lookupTableContent = this.lookupTableContentStorage.GetById(lookupTableStorageId);
-
-            if (lookupTableContent == null)
-                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
 
             return lookupTableContent;
         }
@@ -106,11 +113,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             foreach (var lookupTable in questionnaire.LookupTables)
             {
-                result.Add(lookupTable.Key,
-                    System.Text.Encoding.UTF8.GetString(
-                        this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content));
+                result.Add(lookupTable.Key, System.Text.Encoding.UTF8.GetString(this.GetLookupTableContentFileImpl(questionnaire, lookupTable.Key).Content));
             }
             return result;
+        }
+
+        public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, string sourceLookupTableName, Guid newQuestionnaireId, Guid newLookupTableId)
+        {
+            var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
+
+            var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
+
+            this.lookupTableContentStorage.Store(content, lookupTableStorageId);
+        }
+
+        public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string lookupTableName)
+        {
+            if (string.IsNullOrWhiteSpace(lookupTableName))
+            {
+                return true;
+            }
+
+            var lookupTableStorageId = this.GetLookupTableStorageId(questionnaireId, tableId);
+
+            return this.lookupTableContentStorage.GetById(lookupTableStorageId) == null;
         }
 
         private LookupTableContentFile GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
@@ -139,9 +165,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
             return new LookupTableContentFile() { Content = memoryStream.ToArray(), FileName = questionnaire.LookupTables[lookupTableId].FileName };
         }
-        private string GetLookupTableStorageId(Guid questionnaireId, string lookupTableName)
+
+        private string GetLookupTableStorageId(Guid questionnaireId, Guid lookupTableId)
         {
-            return $"{questionnaireId.FormatGuid()}-{lookupTableName}";
+            return $"{questionnaireId.FormatGuid()}-{lookupTableId.FormatGuid()}";
         }
 
         private LookupTableContent CreateLookupTableContent(string fileContent)
@@ -159,7 +186,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
                 var fieldHeaders = csvReader.FieldHeaders.Select(x => x.Trim()).ToArray();
 
-                if (fieldHeaders.Length > MAX_COLS_COUNT)
+                var amountOfHeaders = fieldHeaders.Length;
+
+                if (amountOfHeaders > MAX_COLS_COUNT)
                 {
                     throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_columns, MAX_COLS_COUNT));
                 }
@@ -169,12 +198,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_empty_or_invalid_header_are_not_allowed);
                 }
 
-                if (fieldHeaders.Distinct().Count() != fieldHeaders.Length)
+                if (fieldHeaders.Distinct().Count() != amountOfHeaders)
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_duplicating_headers_are_not_allowed);
                 }
 
-                var indexOfRowcodeColumn = fieldHeaders.Select(x => x.ToLower()).IndexOf(ROWCODE.ToLower());
+                var indexOfRowcodeColumn = fieldHeaders.Select(x => x.ToLower()).ToList().IndexOf(ROWCODE.ToLower());
 
                 if (indexOfRowcodeColumn < 0)
                 {
@@ -188,12 +217,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     var row = new LookupTableRow();
                     var record = csvReader.CurrentRecord;
 
-                    for (int i = 0; i < record.Length; i++)
+                    for (int i = 0; i < amountOfHeaders; i++)
                     {
                         if (i == indexOfRowcodeColumn)
                         {
-                            long rowcode;
-                            if (!long.TryParse(record[i], out rowcode))
+                            decimal rowcodeAsDecumal;
+                            if (!decimal.TryParse(record[i], out rowcodeAsDecumal))
+                            {
+                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
+                            }
+                            long rowcode = (long)rowcodeAsDecumal;
+                            var isParcedDecimalValueConvertableToInteger = (decimal)rowcode == rowcodeAsDecumal;
+                            if (!isParcedDecimalValueConvertableToInteger)
                             {
                                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_rowcode_value_cannot_be_parsed, record[i], ROWCODE, rowCurrentRowNumber));
                             }
@@ -201,12 +236,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         }
                         else
                         {
-                            decimal variable;
-                            if (!decimal.TryParse(record[i], out variable))
+                            if (string.IsNullOrWhiteSpace(record[i]))
                             {
-                                throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
+                                variables.Add(null);
                             }
-                            variables.Add(variable);
+                            else
+                            {
+                                decimal variable;
+                                if (!decimal.TryParse(record[i], NumberStyles.Float, CultureInfo.InvariantCulture, out variable))
+                                {
+                                    throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_data_value_cannot_be_parsed, record[i], fieldHeaders[i], rowCurrentRowNumber));
+                                }
+                                variables.Add(variable);
+                            }
                         }
                     }
                     rowCurrentRowNumber++;
@@ -244,7 +286,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private CsvConfiguration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER };
+            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
         }
     }
 }

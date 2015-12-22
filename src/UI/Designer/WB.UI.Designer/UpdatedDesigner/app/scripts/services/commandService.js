@@ -42,7 +42,7 @@
 
                     return Upload.upload({
                         url: urlBase + '/UpdateLookupTable',
-                        data: { file: lookupTable.file, "command":  JSON.stringify(command) }
+                        data: { file: _.isNull(lookupTable.file) ? "" : lookupTable.file, "command": JSON.stringify(command) }
                     }).success(function () {
                         blockUI.stop();
                     }).error(function () {

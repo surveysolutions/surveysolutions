@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Cirrious.CrossCore;
@@ -24,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.CurrentActivity.StartActivity(Intent.CreateChooser(shareIntent, title));
         }
 
-        public void UpdateTheApp(string url)
+        public async Task UpdateTheApp(string url)
         {
             var applicationFileName = "interviewer.apk";
 
@@ -38,7 +39,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             var client = new WebClient();
             var uri = new Uri(new Uri(url), "/api/InterviewerSync/GetLatestVersion");
-            client.DownloadFile(uri, pathTofile);
+            await Task.Run(() => client.DownloadFile(uri, pathTofile));
 
             Intent promptInstall =
                 new Intent(Intent.ActionView).SetDataAndType(

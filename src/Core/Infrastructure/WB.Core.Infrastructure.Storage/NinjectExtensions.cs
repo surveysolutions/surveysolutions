@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using Ninject;
 using Ninject.Activation;
@@ -9,6 +10,8 @@ namespace WB.Core.Infrastructure.Storage
 {
     internal static class NinjectExtensions
     {
+        public static bool HasBinding<T>(this IKernel kernel) => kernel.GetBindings(typeof(T)).Any();
+
         public static IBindingNamedWithOrOnSyntax<T> InIsolatedThreadScopeOrRequestScopeOrThreadScope<T>(this IBindingInSyntax<T> syntax)
         {
             var isolatedThreadScopeCallback = GetIsolatedThreadScopeCallback();

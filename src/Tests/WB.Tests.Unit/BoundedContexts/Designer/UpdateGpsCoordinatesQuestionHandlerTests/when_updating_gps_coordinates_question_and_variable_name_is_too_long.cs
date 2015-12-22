@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__long__variable__ = () =>
-            new[] { "long", "variable" }.ShouldEachConformTo(
+            new[] { "long", "name" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 

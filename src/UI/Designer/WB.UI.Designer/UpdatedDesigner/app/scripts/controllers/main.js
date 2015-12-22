@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -33,44 +33,44 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'esc',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                callback: function() {
+                callback: function () {
                     $scope.verificationStatus.visible = false;
                 }
             });
-           
+
             if (hotkeys.get(focusTreePane) !== false) {
                 hotkeys.del(focusTreePane);
             }
             hotkeys.add({
                 combo: focusTreePane,
-                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                    description: 'Focus questionnaire tree',
-                    callback: function(event) {
-                        event.preventDefault();
-                        document.activeElement.blur();
-                    }
-                });
-           
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                description: 'Focus questionnaire tree',
+                callback: function (event) {
+                    event.preventDefault();
+                    document.activeElement.blur();
+                }
+            });
+
             if (hotkeys.get(focusEditorPane) !== false) {
                 hotkeys.del(focusEditorPane);
             }
             hotkeys.add({
                 combo: focusEditorPane,
-                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                    description: 'Focus title field in editor',
-                    callback: function (event) {
-                        event.preventDefault();
-                        $($(".question-editor textarea").get(0)).focus();
-                    }
-                });
-          
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                description: 'Focus title field in editor',
+                callback: function (event) {
+                    event.preventDefault();
+                    $($(".question-editor textarea").get(0)).focus();
+                }
+            });
+
             if (hotkeys.get(openChaptersPane) !== false) {
                 hotkeys.del(openChaptersPane);
             }
             hotkeys.add(openChaptersPane, 'Open section', function (event) {
-                    event.preventDefault();
-                    $scope.$broadcast("openChaptersList", "");
-                });
+                event.preventDefault();
+                $scope.$broadcast("openChaptersList", "");
+            });
 
             $scope.questionnaireId = $state.params.questionnaireId;
 
@@ -84,7 +84,7 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.toggleCheatSheet = function() {
+            $scope.toggleCheatSheet = function () {
                 hotkeys.toggleCheatSheet();
             };
 
@@ -136,8 +136,12 @@ angular.module('designerApp')
             $scope.navigateTo = function (reference) {
                 if (reference.type.toLowerCase() === "macro") {
                     $scope.verificationStatus.visible = false;
-                    $rootScope.$broadcast("openMacrosList", { focusOn : reference.itemId });
-                } else {
+                    $rootScope.$broadcast("openMacrosList", { focusOn: reference.itemId });
+                } else if (reference.type.toLowerCase() === "lookuptable") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openLookupTables", { focusOn: reference.itemId });
+                }
+                else {
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
                         itemId: reference.itemId
@@ -145,24 +149,24 @@ angular.module('designerApp')
                 }
             };
 
-            $scope.removeItemWithIdFromErrors = function(itemId) {
+            $scope.removeItemWithIdFromErrors = function (itemId) {
                 var errors = $scope.verificationStatus.errors;
 
-                $scope.verificationStatus.errors = _.filter(errors, function(item) {
+                $scope.verificationStatus.errors = _.filter(errors, function (item) {
                     return item.ItemId != itemId;
                 });
-                _.each(errors, function(error) {
+                _.each(errors, function (error) {
                     if (error.isGroupedMessage) {
-                        error.references = _.filter(error.references, function(reference) {
+                        error.references = _.filter(error.references, function (reference) {
                             return reference.itemId != itemId;
                         });
                     }
                 });
 
                 var errorsCount = 0;
-                _.each(errors, function(error) {
+                _.each(errors, function (error) {
                     if (error.isGroupedMessage) {
-                        _.each(error.references, function(reference) {
+                        _.each(error.references, function (reference) {
                             errorsCount++;
                         });
                     } else {
@@ -170,7 +174,7 @@ angular.module('designerApp')
                     }
                 });
 
-                errors = _.filter(errors, function(error) {
+                errors = _.filter(errors, function (error) {
                     return !error.isGroupedMessage || error.references.length;
                 });
 
@@ -226,7 +230,7 @@ angular.module('designerApp')
                 getQuestionnaire();
             });
 
-            $scope.getPersonsSharedWith = function(questionnaire) {
+            $scope.getPersonsSharedWith = function (questionnaire) {
                 if (!questionnaire)
                     return [];
 
@@ -247,7 +251,7 @@ angular.module('designerApp')
                 });
             };
 
-            $scope.aceLoaded = function(editor){
+            $scope.aceLoaded = function (editor) {
                 // Editor part
                 var renderer = editor.renderer;
 

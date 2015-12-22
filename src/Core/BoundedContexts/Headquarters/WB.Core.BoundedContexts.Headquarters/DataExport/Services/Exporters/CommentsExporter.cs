@@ -27,6 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
         private readonly ITransactionManagerProvider transactionManager;
 
+        protected CommentsExporter()
+        {
+        }
+
         public CommentsExporter(
             InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
@@ -191,6 +195,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     return FileBasedDataExportRepositoryWriterMessages.Headquarter;
                 case UserRoles.Administrator:
                     return FileBasedDataExportRepositoryWriterMessages.Administrator;
+                case UserRoles.ApiUser:
+                    return FileBasedDataExportRepositoryWriterMessages.ApiUser;
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }

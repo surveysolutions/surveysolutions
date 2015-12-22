@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
-    public class InterviewActionsExporter
+    internal class InterviewActionsExporter
     {
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -28,19 +28,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses;
 
+        protected InterviewActionsExporter()
+        {
+        }
 
         public InterviewActionsExporter(InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor, 
             ICsvWriter csvWriter, 
-            ITransactionManagerProvider transactionManager, IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage)
+            ITransactionManagerProvider transactionManager, IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.transactionManager = transactionManager;
-            this.interviewActionsDataStorage = interviewActionsDataStorage;
+            this.interviewStatuses = interviewStatuses;
         }
 
         public void ExportAll(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
@@ -74,11 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.SeparatorOfExportedDataFile.ToString());
 
-            var totalActionsToExportCount = this.transactionManager.GetTransactionManager()
-                                                .ExecuteInQueryTransaction(() => 
-                                                    this.interviewActionsDataStorage.Query(_ => _.Where(whereClauseForAction)
-                                                                                                 .SelectMany(x => x.InterviewCommentedStatuses)
-                                                                                                 .Count()));
+            var totalActionsToExportCount = this.CountActionsToExport(whereClauseForAction);
 
             int skip = 0;
 
@@ -97,10 +96,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             progress.Report(100);
         }
 
+        private int CountActionsToExport(Expression<Func<InterviewStatuses, bool>> whereClauseForAction)
+        {
+            return this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => 
+                this.interviewStatuses.Query(_ => _.Where(whereClauseForAction)
+                    .SelectMany(x => x.InterviewCommentedStatuses)
+                    .Count()));
+        }
+
         private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewStatuses, bool>> queryActions, int skip)
         {
             var interviews =
-              this.interviewActionsDataStorage.Query(
+              this.interviewStatuses.Query(
                   _ =>
                       _.Where(queryActions)
                           .SelectMany(
@@ -148,6 +155,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     return FileBasedDataExportRepositoryWriterMessages.Headquarter;
                 case UserRoles.Administrator:
                     return FileBasedDataExportRepositoryWriterMessages.Administrator;
+                case UserRoles.ApiUser:
+                    return FileBasedDataExportRepositoryWriterMessages.ApiUser;
+
             }
             return FileBasedDataExportRepositoryWriterMessages.UnknownRole;
         }

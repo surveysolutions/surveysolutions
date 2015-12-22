@@ -150,13 +150,18 @@
                                         Drop File here
                                     </div>
                                    
-                                    <div class="actions clearfix">
+                                    <div class="actions clearfix" ng-class="{dirty: lookupTableForm.$dirty }">
                                         <div ng-show="lookupTableForm.$dirty" class="pull-left">
                                             <button type="submit" ng-disabled="lookupTableForm.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table, lookupTableForm);$event.stopPropagation()">Save</button>
                                             <button type="button" class="btn lighter-hover" ng-click="cancel(table, lookupTableForm);$event.stopPropagation()">Cancel</button>
                                         </div>
-                                        <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}"  ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" >Download file</a>
-                                        <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file, lookupTableForm);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">Select file</button>
+                                        <div class="permanent-actions clearfix">
+                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
+                                            <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file, lookupTableForm);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">
+                                                <span ng-hide="table.hasUploadedFile">Select file</span>
+                                                <span ng-show="table.hasUploadedFile">Update file</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </ng-form>
                             </li>
@@ -200,6 +205,7 @@
                                     <a class="verification-item" href="javascript:void(0);">
                                         <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
                                         <span ng-if="reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
+                                        <span ng-if="reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
                                         <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                         <span class="title">{{reference.title}}</span>
                                         <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macro'" class="variable" ng-bind="reference.variable">aaaa</span>

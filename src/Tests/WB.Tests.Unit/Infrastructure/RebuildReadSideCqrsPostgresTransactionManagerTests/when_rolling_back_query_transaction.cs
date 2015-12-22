@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.RebuildReadSideCqrsPostgresTransactionMan
         It should_throw_NotSupportedException = () =>
             exception.ShouldBeOfExactType<NotSupportedException>();
 
-        private static RebuildReadSideCqrsPostgresTransactionManager transactionManager;
+        private static RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions transactionManager;
         private static Exception exception;
     }
 }

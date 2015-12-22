@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -35,19 +34,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             result.Levels[0].Records.Length.ShouldEqual(1);
 
         It should__first_record_have_1_answers = () =>
-            result.Levels[0].Records[0].Questions.Length.ShouldEqual(2);
-
-        It should_first_record_id_equals_0 = () =>
-            result.Levels[0].Records[0].RecordId.ShouldEqual(result.Levels[0].Records[0].InterviewId.FormatGuid());
+            result.Levels[0].Records[0].GetQuestions().Count().ShouldEqual(2);
 
         It should_first_parent_ids_be_empty = () =>
            result.Levels[0].Records[0].ParentRecordIds.ShouldBeEmpty();
 
         It should_answered_question_be_not_empty = () =>
-           result.Levels[0].Records[0].Questions.ShouldQuestionHasOneNotEmptyAnswer(answeredQuestionId);
+           result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldNotEqual(0);
 
         It should_unanswered_question_be_empty = () =>
-          result.Levels[0].Records[0].Questions.ShouldQuestionHasNoAnswers(unansweredQuestionId);
+          result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldNotEqual(0);
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

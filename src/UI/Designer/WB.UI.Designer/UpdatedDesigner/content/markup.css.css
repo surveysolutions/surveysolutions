@@ -7166,6 +7166,9 @@ textarea {
 .icon-macro {
   background-position: 0 -388px;
 }
+.icon-lookup {
+  background-position: 0 -413px;
+}
 .icon-error.icon-numeric {
   background-position: -30px 0;
 }
@@ -7201,6 +7204,9 @@ textarea {
 }
 .icon-error.icon-macro {
   background-position: -30px -388px;
+}
+.icon-error.icon-lookup {
+  background-position: -30px -413px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7788,13 +7794,13 @@ textarea#edit-group-description {
   text-decoration: none;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-chapters {
-  background: url(i/chapter-panel-btn.png) 0 19px no-repeat;
+  background: url(i/designer-left-icons.png) 0 0 no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-macroses {
-  background: url(i/macro-panel-btn.png) center center no-repeat;
+  background: url(i/designer-left-icons.png) 0 -200px no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-lookupTables {
-  background: url(i/macro-panel-btn.png) center center no-repeat;
+  background: url(i/designer-left-icons.png) 0 -250px no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a:hover {
   background-color: #dbdfe2;
@@ -7942,6 +7948,7 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input.table-name {
   width: 275px;
+  color: #e004c9;
 }
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[disabled],
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[readonly],
@@ -7999,6 +8006,7 @@ textarea#edit-group-description {
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions {
   margin-left: -6px;
   margin-right: -6px;
+  position: relative;
 }
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button,
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn {
@@ -8007,6 +8015,19 @@ textarea#edit-group-description {
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button:hover,
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn:hover {
   background: #e6e6e6;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions .permanent-actions {
+  background: #fff;
+  -webkit-box-shadow: -30px 1px 25px 0px #fff;
+  -moz-box-shadow: -30px 1px 25px 0px #fff;
+  box-shadow: -30px 1px 25px 0px #fff;
+  bottom: 5px;
+  position: absolute;
+  right: 0;
+  padding-left: 5px;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions.dirty .permanent-actions {
+  position: static;
 }
 #designer-editor.container section#main .macros-panel {
   width: 85%;

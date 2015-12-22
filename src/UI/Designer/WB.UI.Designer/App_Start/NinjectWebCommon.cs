@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -28,6 +29,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
@@ -80,8 +82,12 @@ namespace WB.UI.Designer.App_Start
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
+            string appDataDirectory = HostingEnvironment.MapPath("~/App_Data");
 
             int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+            string esentCacheFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Cache.Folder"] ?? @"Temp\EsentCache");
+            var cacheSettings = new ReadSideCacheSettings(esentCacheFolder, postgresCacheSize, postgresCacheSize / 2);
+
             var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
 
             var readSideSettings = new ReadSideSettings(
@@ -99,14 +105,11 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, 
-                    postgresCacheSize,
-                    mappingAssemblies),
-
+                new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new PostresKeyValueModule(postgresCacheSize),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),

@@ -66,9 +66,7 @@ namespace WB.UI.Designer.Code.Implementation
                 return questionnaire;
 
             var sharedPersons = this.sharedPersons.GetById(id);
-
-
-            if (!sharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId))
+            if (sharedPersons == null || !sharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
             }

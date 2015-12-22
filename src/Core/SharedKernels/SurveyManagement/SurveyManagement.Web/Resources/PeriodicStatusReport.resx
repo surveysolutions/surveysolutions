@@ -213,4 +213,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
     <value>Number of approvals and rejections performed by a supervisor on questionnaires collected by a {0}.</value>
   </data>
+  <data name="By" xml:space="preserve">
+    <value>By</value>
+  </data>
 </root>

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 result =
-                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "_1", "a"), new Tuple<string, string>(questionVarName + "_2", "b"), new Tuple<string, string>(questionVarName + "_3", "c") },
+                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "__1", "a"), new Tuple<string, string>(questionVarName + "__2", "b"), new Tuple<string, string>(questionVarName + "__3", "c") },
                         question);
 
         private It should_result_be_type_of_array_of_Tuple_decimal_string = () =>

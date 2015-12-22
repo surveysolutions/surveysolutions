@@ -14,20 +14,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class CheckNewVersionViewModel : BaseViewModel
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly ILogger logger;
 
         private bool isVersionCheckInProgress;
         private bool isNewVersionAvaliable;
-        private int latestApplicationVersion;
         private string checkNewVersionResult;
 
-        public CheckNewVersionViewModel(ISynchronizationService synchronizationService, IUserInteractionService userInteractionService, IInterviewerSettings interviewerSettings, ITabletDiagnosticService tabletDiagnosticService, ILogger logger)
+        public CheckNewVersionViewModel(ISynchronizationService synchronizationService, 
+            IInterviewerSettings interviewerSettings, 
+            ITabletDiagnosticService tabletDiagnosticService, 
+            ILogger logger)
         {
             this.synchronizationService = synchronizationService;
-            this.userInteractionService = userInteractionService;
             this.interviewerSettings = interviewerSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.logger = logger;
@@ -44,12 +44,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get { return this.isNewVersionAvaliable; }
             set { this.RaiseAndSetIfChanged(ref this.isNewVersionAvaliable, value); }
-        }
-
-        public int LatestApplicationVersion
-        {
-            get { return this.latestApplicationVersion; }
-            set { this.RaiseAndSetIfChanged(ref this.latestApplicationVersion, value); }
         }
 
         public string CheckNewVersionResult
@@ -78,7 +72,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.CheckNewVersionResult =
                         InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
-                await Task.Run(() => this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint));
+
+                await this.tabletDiagnosticService.UpdateTheApp(this.interviewerSettings.Endpoint);
 
                 this.CheckNewVersionResult = null;
             }
@@ -107,7 +102,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
                     {
                         this.IsNewVersionAvaliable = true;
-                        this.LatestApplicationVersion = versionFromServer.Value;
                     }
                     else
                     {
