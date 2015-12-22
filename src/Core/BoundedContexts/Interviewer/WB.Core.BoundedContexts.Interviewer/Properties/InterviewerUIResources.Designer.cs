@@ -299,7 +299,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup all gathered infromation.
+        ///   Looks up a localized string similar to Backup all gathered information.
         /// </summary>
         public static string Diagnostics_Backup_Title {
             get {

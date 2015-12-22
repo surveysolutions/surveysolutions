@@ -453,7 +453,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>All collected data will be saved as backup file on this device.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Backup all gathered infromation</value>
+    <value>Backup all gathered information</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>We will check for the newer version on HQ server</value>
