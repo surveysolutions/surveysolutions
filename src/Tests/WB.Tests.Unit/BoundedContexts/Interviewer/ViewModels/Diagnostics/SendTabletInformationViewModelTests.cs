@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 {
@@ -88,8 +89,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             return
                 new SendTabletInformationViewModel(
-                    troubleshootingService ?? Mock.Of<ITroubleshootingService>(_ => _.GetSystemBackup() == new byte[0]),
-                    synchronizationService ?? Mock.Of<ISynchronizationService>(), Mock.Of<ILogger>());
+                    troubleshootingService ?? Mock.Of<ITroubleshootingService>(_ => _.GetSystemBackupAsync() == Task.FromResult(new byte[0])),
+                    synchronizationService ?? Mock.Of<ISynchronizationService>(), Mock.Of<ILogger>(), Mock.Of<IUserInteractionService>());
         }
     }
 }
