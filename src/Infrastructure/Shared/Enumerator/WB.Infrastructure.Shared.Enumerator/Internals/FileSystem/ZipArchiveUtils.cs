@@ -132,11 +132,10 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
                     var unzippedFileStream = new MemoryStream();
                     zipFileStream.CopyTo(unzippedFileStream);
-                    unzippedFileStream.Seek(0, SeekOrigin.Begin);
                     yield return new UnzippedFile
                     {
                         FileName = zipFileOrDirectory.Name,
-                        FileBytes = unzippedFileStream
+                        FileBytes = unzippedFileStream.ToArray()
                     };
                 }
             }
