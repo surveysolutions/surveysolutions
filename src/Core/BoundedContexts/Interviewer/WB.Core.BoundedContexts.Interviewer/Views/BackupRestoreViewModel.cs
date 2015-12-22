@@ -113,34 +113,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await RestoreAsync()); }
         }
 
-        public IMvxCommand IncreaseClicksCountOnDescriptionPanelCommand
-        {
-            get
-            {
-                return new MvxCommand(() =>
-                {
-                    clicksCountOnDescriptionPanel++;
-                    if (this.clicksCountOnDescriptionPanel > 10)
-                    {
-                        this.clicksCountOnDescriptionPanel = 0;
+        public IMvxCommand IncreaseClicksCountOnDescriptionPanelCommand => new MvxCommand(this.IncreaseClicksCountOnDescriptionPanel);
 
-                        var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(), "Restore");
-                        var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(pathToFolder);
-                        if (filesInRestoreFolder.Any())
-                        {
-                            this.IsRestoreVisible = true;
-                            this.IsBackupCreated = false;
-                            this.RestoreLocation = filesInRestoreFolder[0];
-                            this.RestoreScope = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(RestoreLocation));
-                            this.RestoreCreationDate = this.fileSystemAccessor.GetCreationTime(RestoreLocation);
-                        }
-                    }
-                });
+        private void IncreaseClicksCountOnDescriptionPanel()
+        {
+            if (this.IsBackupInProgress)
+                return;
+
+            this.clicksCountOnDescriptionPanel++;
+            if (this.clicksCountOnDescriptionPanel > 10)
+            {
+                this.clicksCountOnDescriptionPanel = 0;
+
+                var pathToFolder = this.fileSystemAccessor.CombinePath(this.interviewerSettings.GetExternalStorageDirectory(),
+                    "Restore");
+                var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(pathToFolder);
+                if (filesInRestoreFolder.Any())
+                {
+                    this.IsRestoreVisible = true;
+                    this.IsBackupCreated = false;
+                    this.RestoreLocation = filesInRestoreFolder[0];
+                    this.RestoreScope = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(this.RestoreLocation));
+                    this.RestoreCreationDate = this.fileSystemAccessor.GetCreationTime(this.RestoreLocation);
+                }
             }
         }
 
         private async Task BackupAsync()
         {
+            if (this.IsBackupInProgress)
+                return;
+
             this.IsBackupCreated = false;
             this.IsRestoreVisible = false;
             this.IsBackupInProgress = true;
@@ -166,6 +169,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task RestoreAsync()
         {
+            if (this.IsBackupInProgress)
+                return;
+
             if (await this.userInteractionService.ConfirmAsync(
                 InterviewerUIResources.Troubleshooting_RestoreConfirmation.FormatString(this.RestoreLocation),
                 string.Empty, UIResources.Yes, UIResources.No))
