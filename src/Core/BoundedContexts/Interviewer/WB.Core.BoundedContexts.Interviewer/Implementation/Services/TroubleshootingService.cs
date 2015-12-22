@@ -18,10 +18,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public byte[] GetSystemBackup()
+        public Task<byte[]> GetSystemBackupAsync()
         {
-            return this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path,
-                fileFilter: @"\.log$;\.dll$;\.mdb$;");
+            return Task.Run(() =>
+
+                this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path,
+                    fileFilter: @"\.log$;\.dll$;\.mdb$;"));
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
@@ -34,7 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IFolder backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
             var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
-            var backup = await Task.Run(() => this.GetSystemBackup());
+            var backup = await this.GetSystemBackupAsync();
             using (var stream = await emptyBackupFile.OpenAsync(FileAccess.ReadAndWrite))
             {
                 stream.Write(backup, 0, backup.Length);
@@ -42,12 +44,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return emptyBackupFile.Path;
         }
 
-        public void Restore(string backupFilePath)
+        public Task RestoreAsync(string backupFilePath)
         {
-            if (this.fileSystemAccessor.IsFileExists(backupFilePath))
+            return Task.Run(() =>
             {
-                this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true);
-            }
+                if (this.fileSystemAccessor.IsFileExists(backupFilePath))
+                {
+                    this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true);
+                }
+            });
         }
     }
 }
