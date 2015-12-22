@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private NavigationState navigationState;
         string interviewId;
+
         public ActiveStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             EnumerationStageViewModel enumerationStage)
@@ -23,7 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private EnumerationStageViewModel EnumerationStage { get; set; }
 
-
         public void Init(string interviewId, NavigationState navigationState)
         {
             this.interviewId = interviewId;
@@ -33,6 +33,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.ScreenChanged += this.OnScreenChanged;
 
+            this.EnumerationStage.PropertyChanged += EnumerationStage_PropertyChanged;
+        }
+
+        private void EnumerationStage_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Name")
+            {
+                this.RaisePropertyChanged(() => this.Name);
+            }
         }
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
@@ -81,6 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
+            this.EnumerationStage.PropertyChanged -= this.EnumerationStage_PropertyChanged;
             this.EnumerationStage.Dispose();
         }
     }

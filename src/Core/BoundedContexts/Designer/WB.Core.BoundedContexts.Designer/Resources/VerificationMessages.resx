@@ -121,28 +121,28 @@
     <value>Questionnaire must contain at least one question.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Validation condition has syntax error.</value>
+    <value>Validation condition has a syntax error.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Enabling condition has syntax error.</value>
+    <value>Enabling condition has a syntax error.</value>
   </data>
   <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Validation condition references nonexistent question.</value>
+    <value>Validation condition references a nonexistent question.</value>
   </data>
   <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Enabling condition references nonexistent question.</value>
+    <value>Enabling condition references a nonexistent question.</value>
   </data>
   <data name="WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion" xml:space="preserve">
     <value>Roster size question is missing.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Linked question references nonexistent question.</value>
+    <value>Linked question references a nonexistent question.</value>
   </data>
   <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Linked question references question of not supported type.</value>
+    <value>Linked question references a question type that is not supported.</value>
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
-    <value>Linked question references question not under roster.</value>
+    <value>Linked question references a question not in a roster.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title substitution cannot be marked as prefilled.</value>
@@ -151,16 +151,16 @@
     <value>Question with title substitution cannot reference itself.</value>
   </data>
   <data name="WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Question with title substitution references nonexistent question.</value>
+    <value>Question with title substitution references a nonexistent question.</value>
   </data>
   <data name="WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Question with title substitution references question of not supported type.</value>
+    <value>Question with title substitution references a question type that is not supported.</value>
   </data>
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question with title substitution cannot reference questions from deeper roster level.</value>
+    <value>Question with title substitution cannot reference questions from a deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Question has options count less than max number of answers.</value>
+    <value>Max number of answers is greater than number of question's options.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled.</value>
@@ -175,7 +175,7 @@
     <value />
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
-    <value>Prefilled questions cannot be inside of roster.</value>
+    <value>Prefilled questions cannot be inside a roster.</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
     <value>Roster where roster size source is question could not have fixed set of items.</value>
@@ -397,7 +397,7 @@
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
   <data name="WB0029_LookupWithTheSameVariableNameAlreadyExists" xml:space="preserve">
-    <value>Lookup with the same variable name already exists.</value>
+    <value>Lookup table with the same variable name already exists.</value>
   </data>
   <data name="WB0026_NameForLookupTableIsNotUnique" xml:space="preserve">
     <value>Another Lookup table with the same name already exists.</value>
@@ -419,5 +419,11 @@
   </data>
   <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
     <value>Lookup table has not unique rowcode values</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>Lookup table cannot be empty</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Lookup table name cannot be a reserved word.</value>
   </data>
 </root>

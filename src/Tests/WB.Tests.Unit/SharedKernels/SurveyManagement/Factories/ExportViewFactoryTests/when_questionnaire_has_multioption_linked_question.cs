@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             ExportedHeaderItem exportedHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId];
 
             exportedHeaderItem.ColumnNames.Length.ShouldEqual(2);
-            exportedHeaderItem.ColumnNames.SequenceEqual(new[] { "mult_0", "mult_1" }).ShouldBeTrue();
+            exportedHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__0", "mult__1" }).ShouldBeTrue();
             exportedHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_Linked);
             exportedHeaderItem.QuestionType.ShouldEqual(QuestionType.MultyOption);
         };

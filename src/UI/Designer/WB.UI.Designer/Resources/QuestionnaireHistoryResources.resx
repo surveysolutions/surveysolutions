@@ -198,13 +198,37 @@
   <data name="Macro" xml:space="preserve">
     <value>Macro</value>
   </data>
-  <data name="EmptyMacroAdded" xml:space="preserve">
+  <data name="Macro_EmptyMacroAdded" xml:space="preserve">
     <value>Empty macro with no name added</value>
   </data>
-  <data name="MacroDeleted" xml:space="preserve">
+  <data name="Macro_Deleted" xml:space="preserve">
     <value>Macro "{0}" deleted</value>
   </data>
-  <data name="MacroUpdated" xml:space="preserve">
+  <data name="Macro_Updated" xml:space="preserve">
     <value>Macro "{0}" updated</value>
+  </data>
+  <data name="LookupTable_EmptyTableAdded" xml:space="preserve">
+    <value>Empty lookup table with no name added</value>
+  </data>
+  <data name="LookupTable_Deleted" xml:space="preserve">
+    <value>Lookup table "{0}" updated</value>
+  </data>
+  <data name="LookupTable_Updated" xml:space="preserve">
+    <value>Lookup table "{0}" updated</value>
+  </data>
+  <data name="LookupTable_EmptyTableDeleted" xml:space="preserve">
+    <value>Lookup table with no name deleted</value>
+  </data>
+  <data name="LookupTable_EmptyTableUpdated" xml:space="preserve">
+    <value>Lookup table with no name updated</value>
+  </data>
+  <data name="Macro_EmptyMacroDeleted" xml:space="preserve">
+    <value>Macro with no name deleted</value>
+  </data>
+  <data name="Macro_EmptyMacroUpdated" xml:space="preserve">
+    <value>Macro with no name upfated</value>
+  </data>
+  <data name="LookupTable" xml:space="preserve">
+    <value>Lookup table</value>
   </data>
 </root>

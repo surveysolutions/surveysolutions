@@ -68,7 +68,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 Dictionary<string, string> varLabels;
                 Dictionary<string, Dictionary<double, string>> varValueLabels;
-                questionnaireExportStructure.CollectLabels(out varLabels, out varValueLabels);
+                Dictionary<string, Dictionary<string, string>> labelsForServiceColumns;
+                questionnaireExportStructure.CollectLabels(out labelsForServiceColumns, out varLabels, out varValueLabels);
 
                 IMetaDescription metaDescription = this.metaDescriptionFactory.CreateMetaDescription();
 

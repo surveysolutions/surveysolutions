@@ -69,6 +69,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -118,6 +119,7 @@ using WB.Core.SharedKernels.SurveyManagement.Synchronization.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -140,38 +142,6 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
-
-        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
-        {
-            return new FixedRosterTitle(value, title);
-        }
-
-        public static LookupTable LookupTable(string tableName)
-        {
-            return new LookupTable
-            {
-                TableName = tableName
-            };
-        }
-
-        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
-        {
-            return new LookupTableContent
-            {
-                VariableNames = variableNames,
-                Rows = rows
-            };
-        }
-
-        public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
-        {
-            return new LookupTableRow
-            {
-                RowCode = rowcode,
-                Variables = values
-            };
-        }
-
         public static AccountDocument AccountDocument(string userName="")
         {
             return new AccountDocument() { UserName = userName };
@@ -256,6 +226,27 @@ namespace WB.Tests.Unit
                 title: title,
                 groupId: chapterId,
                 children: children);
+        }
+
+
+        public static CodeGenerationSettings CodeGenerationSettings()
+        {
+            return new CodeGenerationSettings(
+                abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
+                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+                namespaces: new[]
+                {
+                    "WB.Core.SharedKernels.DataCollection.V2",
+                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V4",
+                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5",
+                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
+                },
+                areRosterServiceVariablesPresent: true,
+                rosterType: "RosterRowList",
+                isLookupTablesFeatureSupported: true);
         }
 
         public static CodeGenerator CodeGenerator(
@@ -456,6 +447,11 @@ namespace WB.Tests.Unit
         public static FileSystemIOAccessor FileSystemIOAccessor()
         {
             return new FileSystemIOAccessor();
+        }
+
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        {
+            return new FixedRosterTitle(value, title);
         }
 
         public static GenerationResult GenerationResult(bool success=false)
@@ -766,8 +762,10 @@ namespace WB.Tests.Unit
             Guid interviewId,
             params ExportedQuestion[] questions)
         {
-            return new InterviewDataExportRecord(interviewId, "test", new string[0], new string[0],
-                questions, new string [0]);
+            return new InterviewDataExportRecord("test", new string[0], new string[0], new string [0])
+            {
+                Answers = questions.Select(x => string.Join("\n", x)).ToArray() 
+            };
         }
 
         public static InterviewDataExportView InterviewDataExportView(
@@ -776,8 +774,7 @@ namespace WB.Tests.Unit
             long questionnaireVersion = 1, 
             params InterviewDataExportLevelView[] levels)
         {
-            return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion, levels);
+            return new InterviewDataExportView(interviewId ?? Guid.NewGuid(), levels);
         }
 
         public static IPublishedEvent<InterviewDeleted> InterviewDeletedEvent(string userId = null, string origin = null, Guid? interviewId = null)
@@ -1060,9 +1057,44 @@ namespace WB.Tests.Unit
             return new LiteEventRegistry();
         }
 
+        public static LookupTable LookupTable(string tableName)
+        {
+            return new LookupTable
+            {
+                TableName = tableName
+            };
+        }
+
         public static LookupTable LookupTable()
         {
             return new LookupTable() {FileName = "name", TableName = "table"};
+        }
+
+        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
+        {
+            return new LookupTableContent
+            {
+                VariableNames = variableNames,
+                Rows = rows
+            };
+        }
+
+        public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
+        {
+            return new LookupTableRow
+            {
+                RowCode = rowcode,
+                Variables = values
+            };
+        }
+
+        public static LookupTableService LookupTableService(
+            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+        {
+            return new LookupTableService(
+                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
+                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
         }
 
         public static Macro Macro(string name, string content = null, string description = null)
@@ -1227,19 +1259,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
-        {
-            return new NumericQuestion
-            {
-                QuestionType = QuestionType.Numeric,
-                PublicKey = id ?? Guid.NewGuid(),
-                StataExportCaption = variable,
-                IsInteger = false,
-                ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression
-            };
-        }
-
         public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             bool isInteger = false, int? countOfDecimalPlaces = null, string variableName="var1")
         {
@@ -1292,6 +1311,19 @@ namespace WB.Tests.Unit
                 sourceQuestionId : GetQuestionnaireItemId(sourceQuestionId),
                 targetIndex : 0
             ));
+        }
+
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        {
+            return new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                IsInteger = false,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression
+            };
         }
 
         public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
@@ -1498,7 +1530,8 @@ namespace WB.Tests.Unit
                 Mock.Of<IClock>(),
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
                 Create.SubstitutionService(),
-                Create.KeywordsProvider());
+                Create.KeywordsProvider(),
+                Mock.Of<ILookupTableService>());
         }
 
         public static IPublishedEvent<QuestionnaireAssemblyImported> QuestionnaireAssemblyImported(Guid questionnaireId, long version)
@@ -1645,27 +1678,6 @@ namespace WB.Tests.Unit
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
-
-        public static CodeGenerationSettings CodeGenerationSettings()
-        {
-            return new CodeGenerationSettings(
-                abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
-                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
-                namespaces: new[]
-                {
-                    "WB.Core.SharedKernels.DataCollection.V2",
-                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V4",
-                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                    "WB.Core.SharedKernels.DataCollection.V5",
-                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
-                },
-                areRosterServiceVariablesPresent: true,
-                rosterType: "RosterRowList",
-                isLookupTablesFeatureSupported: true);
-        }
-
         public static QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
         {
             return new QuestionnaireExportStructure
@@ -1702,6 +1714,12 @@ namespace WB.Tests.Unit
                 GroupKey = GetQuestionnaireItemParentId(targetGroupId),
                 TargetIndex = targetIndex ?? 0
             }, Guid.Parse(questionnaireId??Guid.NewGuid().ToString()));
+        }
+
+        public static QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        {
+            return new QuestionnaireKeyValueStorage(
+                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
 
         public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)
@@ -1753,34 +1771,24 @@ namespace WB.Tests.Unit
         }
 
         public static QuestionnaireVerificationError QuestionnaireVerificationError()
-        {
-            return new QuestionnaireVerificationError("ee", "mm", VerificationErrorLevel.General);
-        }
+            => new QuestionnaireVerificationError("ee", "mm", VerificationErrorLevel.General);
 
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
-        {
-            return new QuestionnaireView(new QuestionnaireDocument() {CreatedBy = createdBy ?? Guid.NewGuid()});
-        }
+            => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid( )});
 
         public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
-        {
-            return new QuestionnaireView(questionnaireDocument);
-        }
+            => new QuestionnaireView(questionnaireDocument);
+
+        private static ReadSideCacheSettings ReadSideCacheSettings()
+            => new ReadSideCacheSettings("folder", 128, 8);
 
         public static ReadSideSettings ReadSideSettings()
-        {
-            return new ReadSideSettings(readSideVersion: 0);
-        }
+            => new ReadSideSettings(readSideVersion: 0);
 
-        public static RebuildReadSideCqrsPostgresTransactionManager RebuildReadSideCqrsPostgresTransactionManager()
-        {
-            return new RebuildReadSideCqrsPostgresTransactionManager(Mock.Of<ISessionFactory>());
-        }
+        public static RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions RebuildReadSideCqrsPostgresTransactionManager()
+            => new RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions();
 
-        public static RoslynExpressionProcessor RoslynExpressionProcessor()
-        {
-            return new RoslynExpressionProcessor();
-        }
+        public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
         public static Group Roster(
             Guid? rosterId = null, 
@@ -2217,9 +2225,11 @@ namespace WB.Tests.Unit
             ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
         {
             return new TransactionManagerProvider(
-                transactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
-                noTransactionTransactionManagerFactory ?? Mock.Of<ICqrsPostgresTransactionManager>,
-                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>());
+                transactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
+                noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
+                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
+                rebuildReadSideTransactionManager ?? Mock.Of<ICqrsPostgresTransactionManager>(),
+                Create.ReadSideCacheSettings());
         }
 
         public static IPublishedEvent<UnapprovedByHeadquarters> UnapprovedByHeadquartersEvent(Guid? interviewId = null, string userId = null, string comment = null)
@@ -2367,9 +2377,9 @@ namespace WB.Tests.Unit
 
         internal static class Command
         {
-            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
-                return new AddLookupTable(questionnaireId, lookupTableId, responsibleId);
+                return new AddLookupTable(questionnaireId, lookupTableName, null, lookupTableId, responsibleId);
             }
 
             public static AddMacro AddMacro(Guid questionnaire, Guid? macroId = null, Guid? userId = null)
@@ -2424,9 +2434,9 @@ namespace WB.Tests.Unit
                 return new LinkUserToDevice(userId, deviceId);
             }
 
-            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId)
+            public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
-                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, "table","file");
+                return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName,"file");
             }
 
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
@@ -2443,19 +2453,37 @@ namespace WB.Tests.Unit
             }
         }
 
-        public static QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false)
         {
-            return new QuestionnaireKeyValueStorage(
-                questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
+            return new DateTimeQuestion("Question DT")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                QuestionText = text,
+                QuestionType = QuestionType.DateTime,
+                StataExportCaption = variable,
+                QuestionScope = scope,
+                Featured = preFilled
+            };
         }
-
-        public static LookupTableService LookupTableService(
-            IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage = null, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage = null)
+        public static QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false)
         {
-            return new LookupTableService(
-                lookupTableContentStorage ?? Mock.Of<IPlainKeyValueStorage<LookupTableContent>>(),
-                documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>());
+            return new QRBarcodeQuestion()
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                QuestionText = text,
+                QuestionType = QuestionType.QRBarcode,
+                StataExportCaption = variable,
+                QuestionScope = scope,
+                Featured = preFilled
+            };
         }
     }
 }

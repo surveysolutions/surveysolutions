@@ -48,6 +48,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpPost]
+        [NoTransaction]
         public void StopReadSideRebuilding()
         {
             this.readSideAdministrationService.StopAllViewsRebuilding();

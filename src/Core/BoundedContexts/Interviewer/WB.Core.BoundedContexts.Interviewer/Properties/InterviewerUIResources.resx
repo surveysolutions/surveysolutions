@@ -453,7 +453,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>All collected data will be saved as backup file on this device.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Backup all gathered infromation</value>
+    <value>Backup all gathered information</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>We will check for the newer version on HQ server</value>
@@ -462,7 +462,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Version: {0}. Check for a new version</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>By restoring saved data you will replace all current assigments on theis device</value>
+    <value>By restoring saved data you will replace all current assigments on this device</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
     <value>RESTORE</value>
@@ -474,7 +474,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Collect and send to HQ all tablet infromation</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>All information below will be shared as plain text. It can be send by email, google hangouts of any other messaging app</value>
+    <value>All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app</value>
   </data>
   <data name="Diagnostics_Share_Title" xml:space="preserve">
     <value>Share all technical information</value>
@@ -492,7 +492,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>We will test connection with our server and it's speed</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Test internet connection</value>
+    <value>Test bandwidth to server</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
     <value>Delete</value>
@@ -541,5 +541,26 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
     <value>Saved data found:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Connection is OK</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Connection type:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Network name:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Connection is &lt;font color="red"&gt;not good&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;No connection with our server&lt;/font&gt;</value>
   </data>
 </root>

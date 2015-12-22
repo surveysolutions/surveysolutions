@@ -60,5 +60,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Assert.Throws<QuestionnaireException>(act);
             }
         }
+
+        [Test]
+        public void Execute_When_QuestionnaireDocument_is_deleted_should_throw_an_exception()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid responsibleId = Guid.NewGuid();
+                Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+                var document = Create.QuestionnaireDocument();
+                document.IsDeleted = true;
+
+                // act
+                TestDelegate act = () => questionnaire.ImportQuestionnaire(Guid.NewGuid(), document);
+
+                // assert
+                Assert.Throws<QuestionnaireException>(act);
+            }
+        }
+
     }
 }

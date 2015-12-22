@@ -41,7 +41,7 @@
     <item name="android:textStyle">bold</item>
     <item name="android:clickable">true</item>
     <item name="android:paddingTop">@dimen/Troubleshooting_padding</item>
-    <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingBottom">@dimen/Diagnostics_Title_padding</item>
   </style>
   <style name="Diagnostics_Section_Description">
     <item name="android:fontFamily">Arial</item>
@@ -49,7 +49,8 @@
     <item name="android:textColor">@color/complete_screen_title_text</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
-    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textSize">@dimen/textsize_12</item>
+    <item name="android:lineSpacingExtra">@dimen/Diagnostics_Description_LineSpacing</item>
   </style>
   <style name="Diagnostics_Section_Description_Warning"  parent="Diagnostics_Section_Description">
     <item name="android:textColor">@color/errorTextColor</item>
@@ -57,10 +58,9 @@
   <style name="Diagnostics_Subsection_Title" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:textSize">@dimen/textsize_20</item>
-    <item name="android:fontFamily">Roboto</item>
-    <item name="android:paddingTop">@dimen/Troubleshooting_padding</item>
-    <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
+    <item name="android:textSize">@dimen/textsize_30</item>
+    <item name="android:fontFamily">Roboto Light</item>
+    <item name="android:paddingBottom">@dimen/Diagnostics_Title_padding</item>
   </style>
   <style name="Diagnostics_Subsection_Value" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
@@ -68,13 +68,14 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:fontFamily">Roboto</item>
     <item name="android:textStyle">bold</item>
+    <item name="android:paddingBottom">@dimen/Diagnostics_SubsectionValue_padding</item>
   </style>
 <style name="Diagnostic_FormContainer" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:gravity">center</item>
-    <item name="android:orientation">vertical</item>
-    <item name="android:paddingTop">@dimen/Troubleshooting_padding</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingTop">@dimen/Diagnostics_Description_LineSpacing</item>
   </style>
   <style name="Diagnostics_Green_Button" parent="AppTheme">
     <item name="android:layout_width">wrap_content</item>
@@ -84,7 +85,6 @@
     <item name="android:background">@drawable/group_completed</item>
   </style>
   <style name="Diagnostic_Transparent_Button" parent="Login_Button">
-    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:background">@drawable/transparent_input_button</item>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Humanizer;
 using Newtonsoft.Json;
@@ -7,10 +8,11 @@ using NpgsqlTypes;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal abstract class PostgresKeyValueStorage<TEntity> where TEntity: class
+    internal abstract class PostgresKeyValueStorage<TEntity> 
+        where TEntity: class
     {
-        private readonly string connectionString;
-        private readonly string tableName = typeof(TEntity).Name.Pluralize();
+        protected readonly string connectionString;
+        protected readonly string tableName = typeof(TEntity).Name.Pluralize();
 
         public PostgresKeyValueStorage(string connectionString)
         {
@@ -110,6 +112,27 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            this.EnshureTableExists();
+
+            using (var connection = new NpgsqlConnection(this.connectionString))
+            {
+                connection.Open();
+                using (var writer = connection.BeginBinaryImport($"COPY {this.tableName}(id, value) FROM STDIN BINARY;"))
+                {
+                    foreach (var item in bulk)
+                    {
+                        writer.StartRow();
+                        writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
+
+                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, JsonSerializerSettings); 
+                        writer.Write(serializedValue, NpgsqlDbType.Json); // write value
+                    }
+                }
+            }
+        }
+
         public void Clear()
         {
             EnshureTableExists();
@@ -132,7 +155,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public string GetReadableStatus()
         {
-            return "Postgres Key/Value :/";
+            return "Postgres K/V :/";
         }
 
         protected void EnshureTableExists()
@@ -141,7 +164,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             {
                 connection.Open();
                 var command = @"CREATE TABLE IF NOT EXISTS " + this.tableName + @" (
-    id        varchar(70) PRIMARY KEY,
+    id        text PRIMARY KEY,
     value       JSON NOT NULL
 )";
                 using (var sqlCommand = connection.CreateCommand())
@@ -152,7 +175,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        private static JsonSerializerSettings JsonSerializerSettings
+        protected static JsonSerializerSettings JsonSerializerSettings
         {
             get
             {

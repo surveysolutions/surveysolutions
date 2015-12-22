@@ -77,10 +77,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interview);
 
         It should_linked_question_have_one_answer = () =>
-           GetLevel(result, new[] { rosterId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
+           GetLevel(result, new[] { rosterId }).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
 
         It should_linked_question_have_first_answer_be_equal_to_0 = () =>
-           GetLevel(result, new[] { rosterId }).Records[0].Questions[0].Answers[0].ShouldEqual("0");
+           GetLevel(result, new[] { rosterId }).Records[0].GetQuestions()[0].Answers[0].ShouldEqual("0");
 
       
         private static InterviewDataExportView result;

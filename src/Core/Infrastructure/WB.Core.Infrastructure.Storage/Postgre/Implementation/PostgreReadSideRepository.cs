@@ -5,6 +5,7 @@ using Microsoft.Practices.ServiceLocation;
 using NHibernate;
 using NHibernate.Linq;
 using Ninject;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -61,28 +62,22 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
-            using (ISession session = sessionFactory.OpenSession())
-            using (ITransaction transaction = session.BeginTransaction())
+
+            foreach (var subBulk in bulk.Batch(2048))
             {
-                foreach (var tuple in bulk)
+                using (ISession session = sessionFactory.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
                 {
-                    TEntity entity = tuple.Item1;
-                    string id = tuple.Item2;
-
-                    var storedEntity = session.Get<TEntity>(id);
-
-                    if (storedEntity != null)
+                    foreach (var tuple in subBulk)
                     {
-                        var merge = session.Merge(entity);
-                        session.Update(merge);
+                        TEntity entity = tuple.Item1;
+                        string id = tuple.Item2;
+
+                        session.Save(entity, id);
                     }
-                    else
-                    {
-                        session.Save(entity);
-                    }
+
+                    transaction.Commit();
                 }
-
-                transaction.Commit();
             }
         }
 

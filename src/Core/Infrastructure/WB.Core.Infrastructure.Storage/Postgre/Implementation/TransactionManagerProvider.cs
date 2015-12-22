@@ -9,37 +9,45 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     {
         private readonly Func<ICqrsPostgresTransactionManager> transactionManagerFactory;
         private readonly Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory;
-        private readonly ICqrsPostgresTransactionManager rebuildReadSideTransactionManager;
+        private readonly ICqrsPostgresTransactionManager rebuildReadSideTransactionManagerWithSessions;
+        private readonly ICqrsPostgresTransactionManager rebuildReadSideTransactionManagerWithoutSessions;
+
         private ICqrsPostgresTransactionManager pinnedTransactionManager;
+        private readonly ReadSideCacheSettings cacheSettings;
 
         public TransactionManagerProvider(
             Func<CqrsPostgresTransactionManager> transactionManagerFactory,
             Func<NoTransactionCqrsPostgresTransactionManager> noTransactionTransactionManagerFactory,
-            RebuildReadSideCqrsPostgresTransactionManager rebuildReadSideCqrsTransactionManager)
-            : this((Func<ICqrsPostgresTransactionManager>)transactionManagerFactory, (Func<ICqrsPostgresTransactionManager>) noTransactionTransactionManagerFactory, (ICqrsPostgresTransactionManager)rebuildReadSideCqrsTransactionManager) { }
+            RebuildReadSideCqrsPostgresTransactionManagerWithSessions rebuildReadSideCqrsPostgresTransactionManagerWithSessions,
+            RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions rebuildReadSideCqrsPostgresTransactionManagerWithoutSessions,
+            ReadSideCacheSettings cacheSettings)
+            : this(transactionManagerFactory, 
+                  noTransactionTransactionManagerFactory,
+                  (ICqrsPostgresTransactionManager)rebuildReadSideCqrsPostgresTransactionManagerWithSessions,
+                  (ICqrsPostgresTransactionManager)rebuildReadSideCqrsPostgresTransactionManagerWithoutSessions,
+                  cacheSettings) { }
 
-        internal TransactionManagerProvider(Func<ICqrsPostgresTransactionManager> transactionManagerFactory,
+        internal TransactionManagerProvider(
+            Func<ICqrsPostgresTransactionManager> transactionManagerFactory,
             Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory,
-            ICqrsPostgresTransactionManager rebuildReadSideTransactionManager)
+            ICqrsPostgresTransactionManager rebuildReadSideTransactionManagerWithSessions,
+            ICqrsPostgresTransactionManager rebuildReadSideTransactionManagerWithoutSessions,
+            ReadSideCacheSettings cacheSettings)
         {
             this.transactionManagerFactory = transactionManagerFactory;
-            this.rebuildReadSideTransactionManager = rebuildReadSideTransactionManager;
             this.noTransactionTransactionManagerFactory = noTransactionTransactionManagerFactory;
+            this.rebuildReadSideTransactionManagerWithSessions = rebuildReadSideTransactionManagerWithSessions;
+            this.rebuildReadSideTransactionManagerWithoutSessions = rebuildReadSideTransactionManagerWithoutSessions;
+            this.cacheSettings = cacheSettings;
         }
 
-        public ITransactionManager GetTransactionManager()
-        {
-            return this.GetPostgresTransactionManager();
-        }
+        public ITransactionManager GetTransactionManager() => this.GetPostgresTransactionManager();
 
-        public ISession GetSession()
-        {
-            return this.GetPostgresTransactionManager().GetSession();
-        }
+        public ISession GetSession() => this.GetPostgresTransactionManager().GetSession();
 
         public void PinRebuildReadSideTransactionManager()
         {
-            this.pinnedTransactionManager = this.rebuildReadSideTransactionManager;
+            this.pinnedTransactionManager = this.ShouldDisableSessions() ? this.rebuildReadSideTransactionManagerWithoutSessions : this.rebuildReadSideTransactionManagerWithSessions;
         }
 
         public void UnpinTransactionManager()
@@ -54,5 +62,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     this.noTransactionTransactionManagerFactory.Invoke() : 
                     this.transactionManagerFactory.Invoke());
         }
+
+        private bool ShouldDisableSessions() => this.cacheSettings.EnableEsentCache;
     }
 }

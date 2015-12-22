@@ -3,7 +3,6 @@ using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -13,6 +12,11 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using System.Net.Http;
+using System.Web.Http;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -57,15 +61,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewViewFactory = null,
-            IInterviewDetailsViewFactory interviewDetailsView = null)
+            IInterviewDetailsViewFactory interviewDetailsView = null,
+            ICommandService commandService = null,
+            IGlobalInfoProvider globalInfoProvider = null,
+            IUserViewFactory userViewFactory = null,
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null)
         {
-            return new InterviewsController(
+            var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
                 interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
-                Mock.Of<ICommandService>(),
-                Mock.Of<IGlobalInfoProvider>(),
-                Mock.Of<IUserViewFactory>());
+                commandService ?? Mock.Of<ICommandService>(),
+                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+
+            controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
+            controller.Request.SetConfiguration(new HttpConfiguration());
+
+            return controller;
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(

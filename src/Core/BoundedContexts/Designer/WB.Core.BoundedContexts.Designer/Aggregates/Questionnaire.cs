@@ -40,6 +40,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private const int maxFilteredComboboxOptionsCount = 15000;
         private const int maxCascadingComboboxOptionsCount = 15000;
         private const int MaxGroupDepth = 10;
+        private const int DefaultVariableLengthLimit = 32;
+        private const int DefaultRestrictedVariableLengthLimit = 20;
+
+        private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes = 
+            new QuestionType[]
+            {
+                QuestionType.GpsCoordinates,
+                QuestionType.MultyOption,
+                QuestionType.TextList
+            };
 
         private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
         {
@@ -147,6 +157,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void Apply(QuestionnaireCloned e)
         {
             this.innerDocument = e.QuestionnaireDocument;
+            if (e.QuestionnaireDocument.Macros != null)
+            {
+                this.macroIds = e.QuestionnaireDocument.Macros.Select(x => x.Key).ToHashSet();
+            }
+            if (e.QuestionnaireDocument.LookupTables != null)
+            {
+                this.lookupTableIds = e.QuestionnaireDocument.LookupTables.Select(x => x.Key).ToHashSet();
+            }
         }
 
         private void Apply(GroupCloned e)
@@ -784,10 +802,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IExpressionProcessor expressionProcessor;
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider variableNameValidator;
+        private readonly ILookupTableService lookupTableService;
 
         #endregion
 
-        public Questionnaire(IQuestionnaireEntityFactory questionnaireEntityFactory, ILogger logger, IClock clock, IExpressionProcessor expressionProcessor, ISubstitutionService substitutionService, IKeywordsProvider variableNameValidator)
+        public Questionnaire(
+            IQuestionnaireEntityFactory questionnaireEntityFactory, 
+            ILogger logger, 
+            IClock clock, 
+            IExpressionProcessor expressionProcessor, 
+            ISubstitutionService substitutionService, 
+            IKeywordsProvider variableNameValidator, 
+            ILookupTableService lookupTableService)
         {
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
@@ -795,6 +821,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.expressionProcessor = expressionProcessor;
             this.substitutionService = substitutionService;
             this.variableNameValidator = variableNameValidator;
+            this.lookupTableService = lookupTableService;
         }
 
         #region Questionnaire command handlers
@@ -844,6 +871,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 clonedDocument.SharedPersons.Clear();
             }
 
+            foreach (var lookupTable in document.LookupTables)
+            {
+                var lookupTableName = lookupTable.Value.TableName;
+
+                if (!this.lookupTableService.IsLookupTableEmpty(document.PublicKey, lookupTable.Key, lookupTableName))
+                {
+                    lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.EventSourceId, lookupTable.Key);
+                }
+            }
+
             ApplyEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = clonedDocument,
@@ -862,8 +899,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var document = source as QuestionnaireDocument;
             if (document == null)
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
+            if (document.IsDeleted)
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Trying to import template of deleted questionnaire");
+
             document.CreatedBy = createdBy;
-            ApplyEvent(new TemplateImported() { Source = document });
+            ApplyEvent(new TemplateImported { Source = document });
         }
 
         public void UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId)
@@ -914,6 +954,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
+
             if (this.lookupTableIds.Contains(command.LookupTableId))
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
@@ -924,6 +966,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateLookupTable(UpdateLookupTable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
 
             if (!this.lookupTableIds.Contains(command.LookupTableId))
             {
@@ -968,7 +1012,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName, DefaultVariableLengthLimit);
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
@@ -1286,7 +1330,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName);
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName, DefaultVariableLengthLimit);
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
@@ -1588,7 +1632,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                responsibleId);
+               QuestionType.Text, responsibleId);
 
             this.ApplyEvent(new QuestionChanged
             (
@@ -1639,7 +1683,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.GpsCoordinates, responsibleId);
             
             this.ApplyEvent(new QuestionChanged
             (
@@ -1690,7 +1734,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled,
-                responsibleId);
+                QuestionType.DateTime, responsibleId);
             
             this.ApplyEvent(new QuestionChanged
             (
@@ -1743,7 +1787,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, QuestionType.MultyOption, responsibleId);
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
@@ -1814,7 +1858,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.SingleOption, responsibleId);
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
@@ -1961,7 +2005,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.Numeric, responsibleId);
 
             this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(isInteger, countOfDecimalPlaces);
             this.ThrowIfDecimalPlacesValueIsIncorrect(countOfDecimalPlaces);
@@ -2000,7 +2044,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, responsibleId);
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.TextList, responsibleId);
 
             this.ApplyEvent(new TextListQuestionChanged
             {
@@ -2028,8 +2072,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
-            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
-                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
+            var isPrefilled = false;
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.Multimedia, responsibleId);
 
             this.ApplyEvent(new MultimediaQuestionUpdated()
             {
@@ -2055,8 +2101,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
-            this.ThrowIfGeneralQuestionSettingsAreInvalid(questionId: questionId, parentGroupId: null, title: title,
-                variableName: variableName, condition: enablementCondition, responsibleId: responsibleId);
+            var isPrefilled = false;
+            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+
+            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, responsibleId);
+            
 
             this.ApplyEvent(new QRBarcodeQuestionUpdated()
             {
@@ -2359,35 +2408,22 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfGeneralQuestionSettingsAreInvalid(Guid questionId, Guid? parentGroupId, string title, string variableName,
-            string condition, Guid responsibleId)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName);
-
-            var parentGroup = parentGroupId.HasValue
-                ? this.GetGroupById(parentGroupId.Value)
-                : this.innerDocument.GetParentById(questionId);
-
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, false, parentGroup);
-
-            if (parentGroupId.HasValue)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
-            }
-        }
-
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, 
             IGroup parentGroup, 
             string title,
             string alias,
             bool isPrefilled,
+            QuestionType questionType,
             Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfTitleIsEmptyOrTooLong(title);
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias);
+
+            int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(questionType)
+                ? DefaultRestrictedVariableLengthLimit
+                : DefaultVariableLengthLimit;
+
+            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, alias, variableLengthLimit);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, alias, questionId, isPrefilled, parentGroup);
 
@@ -2649,18 +2685,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(DomainExceptionType.StaticTextIsEmpty, "Static text is empty");
         }
 
-        private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string stataCaption)
+        private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string stataCaption, int variableLengthLimit)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
                 return;
             }
-
-            bool isTooLong = stataCaption.Length > 32;
+            
+            bool isTooLong = stataCaption.Length > variableLengthLimit;
             if (isTooLong)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameMaxLength, "Variable name or roster ID shouldn't be longer than 32 characters");
+                    DomainExceptionType.VariableNameMaxLength, string.Format("This element's name or ID shouldn't be longer than {0} characters.", variableLengthLimit));
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
@@ -2682,7 +2718,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (endsWithUnderscore)
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't end with underscore");
+                    DomainExceptionType.VariableNameEndsWithUnderscore, "Variable name or roster ID shouldn't end with underscore");
+            }
+
+            bool hasConsecutiveUnderscore = stataCaption.Contains("__");
+            if (hasConsecutiveUnderscore)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.VariableNameHasConsecutiveUnderscores, "Variable name or roster ID shouldn't have two and more consecutive underscore characters.");
             }
 
             var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()

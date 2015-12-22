@@ -8,15 +8,19 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables
     {
         public AddLookupTable(
             Guid questionnaireId, 
-            Guid lookupTableId, 
+            string lookupTableName, 
+            string lookupTableFileName,
+            Guid lookupTableId,
             Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
             this.LookupTableId = lookupTableId;
+            this.LookupTableName = lookupTableName;
+            this.LookupTableFileName = lookupTableFileName;
         }
 
         public Guid LookupTableId { get; private set; }
-        public string LookupTableName { get; set; }
-        public string LookupTableFileName { get; set; }
+        public string LookupTableName { get; private set; }
+        public string LookupTableFileName { get; private set; }
     }
 }

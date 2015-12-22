@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
     internal class ExportViewFactory : IExportViewFactory
     {
+        private const string GeneratedTitleExportFormat = "{0}__{1}";
+
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -74,10 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                         exportStructureForLevel.LevelName,
                         this.BuildRecordsForHeader(interview, exportStructureForLevel))).ToArray();
 
-            return new InterviewDataExportView(interview.InterviewId, 
-                interview.QuestionnaireId,
-                interview.QuestionnaireVersion,
-                interviewDataExportLevelViews);
+            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
@@ -120,8 +119,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     };
                 }
 
-                dataRecords.Add(new InterviewDataExportRecord(interview.InterviewId, recordId, referenceValues, parentRecordIds,
-                    this.GetQuestionsForExport(dataByLevel, headerStructureForLevel), systemVariableValues));
+                string[][] questionsForExport = this.GetQuestionsForExport(dataByLevel, headerStructureForLevel);
+
+                dataRecords.Add(new InterviewDataExportRecord(recordId, 
+                    referenceValues, 
+                    parentRecordIds,
+                    systemVariableValues)
+                {
+                    Answers = questionsForExport.Select(x => string.Join("\n", x)).ToArray()
+                });
+
             }
 
             return dataRecords.ToArray();
@@ -182,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return string.Empty;
         }
 
-        private ExportedQuestion[] GetQuestionsForExport(InterviewLevel interviewLevel,
+        private string[][] GetQuestionsForExport(InterviewLevel interviewLevel,
             HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<ExportedQuestion>();
@@ -197,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     {
                         answers.Add(string.Empty);
                     }
-                    exportedQuestion = new ExportedQuestion(headerItem.PublicKey, headerItem.QuestionType, answers.ToArray());
+                    exportedQuestion = new ExportedQuestion(headerItem.QuestionType, answers.ToArray());
                 }
                 else
                 {
@@ -206,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 result.Add(exportedQuestion);
             }
-            return result.ToArray();
+            return result.Select(x => x.Answers).ToArray();
         }
 
         private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)
@@ -295,12 +302,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     var columnValue = decimal.Parse(question.Answers[i].AnswerValue);
 
-                    exportedHeaderItem.ColumnNames[i] = $"{question.StataExportCaption}_{DecimalToHeaderConverter.ToHeader(columnValue)}";
+                    exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, 
+                        question.StataExportCaption, DecimalToHeaderConverter.ToHeader(columnValue)); 
+                        
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
                 else
                 {
-                    exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
+                    exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, question.StataExportCaption, i);
                 }
 
                 if (!IsQuestionLinked(question))
@@ -522,7 +531,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             for (int i = 0; i < gpsColumns.Length; i++)
             {
-                gpsQuestionExportHeader.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption,
+                gpsQuestionExportHeader.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, question.StataExportCaption,
                     gpsColumns[i]);
 
                 gpsQuestionExportHeader.Titles[i] += string.Format("{0}", gpsColumns[i]);
