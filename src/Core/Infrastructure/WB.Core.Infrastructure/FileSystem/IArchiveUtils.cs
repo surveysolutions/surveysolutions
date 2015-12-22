@@ -14,6 +14,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         bool IsZipStream(Stream zipStream);
         Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath);
+        byte[] CompressStringToByteArray(string fileName, string fileContentAsString);
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
     }
@@ -21,6 +22,6 @@ namespace WB.Core.Infrastructure.FileSystem
     public class UnzippedFile
     {
         public string FileName { get; set; }
-        public Stream FileStream { get; set; }
+        public byte[] FileBytes { get; set; }
     }
 }

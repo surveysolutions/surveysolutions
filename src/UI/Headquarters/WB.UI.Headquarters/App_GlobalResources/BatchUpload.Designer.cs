@@ -277,6 +277,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File does not contains required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;.
+        /// </summary>
+        internal static string PrefilledQuestionsRequired {
+            get {
+                return ResourceManager.GetString("PrefilledQuestionsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready for user creation.
         /// </summary>
         internal static string ReadyForUserCreation {
