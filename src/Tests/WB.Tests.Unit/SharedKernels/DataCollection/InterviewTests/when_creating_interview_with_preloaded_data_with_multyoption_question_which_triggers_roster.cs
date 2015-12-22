@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = new decimal[] {1, 2};
-            preloadedDataDto = new PreloadedDataDto("id",
+            preloadedDataDto = new PreloadedDataDto(
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object> { { prefilledQuestionId, prefilledQuestionAnswer } }),
