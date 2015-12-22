@@ -13,8 +13,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         public PostgresKeyValueModule(ReadSideCacheSettings cacheSettings)
             : base(cacheSettings) {}
 
-        protected override object GetPostgresReadSideStorage(IContext context)
-            => context.Kernel.GetService(typeof(PostgresReadSideKeyValueStorage<>).MakeGenericType(context.GenericArguments[0]));
+        protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IContext context)
+            => (IReadSideStorage<TEntity>) context.Kernel.GetService(typeof(PostgresReadSideKeyValueStorage<>).MakeGenericType(typeof(TEntity)));
 
         public override void Load()
         {
