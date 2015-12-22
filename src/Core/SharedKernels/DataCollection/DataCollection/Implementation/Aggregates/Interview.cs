@@ -1055,35 +1055,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return groupRosterVectors.Select(groupRosterVector => new Identity(groupId, groupRosterVector));
         }
 
-        private IEnumerable<Identity> GetInstancesOfQuestionsInAllRosterLevels(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid questionId, RosterVector rosterVector, IQuestionnaire questionnaire)
-        {
-            int vectorRosterLevel = rosterVector.Length;
-            int questionRosterLevel = questionnaire.GetRosterLevelForQuestion(questionId);
-
-            if (questionRosterLevel > vectorRosterLevel)
-            {
-                Guid[] parentRosterGroupsStartingFromTop =
-                    questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).ToArray();
-
-                IEnumerable<RosterVector> questionRosterVectors = this.ExtendRosterVector(state,
-                    rosterVector, questionRosterLevel, parentRosterGroupsStartingFromTop);
-
-                foreach (decimal[] questionRosterVector in questionRosterVectors)
-                {
-                    yield return new Identity(questionId, questionRosterVector);
-                }
-            }
-
-            else if (questionRosterLevel <= vectorRosterLevel)
-            {
-                decimal[] questionRosterVector = rosterVector.Shrink(questionRosterLevel);
-
-                yield return new Identity(questionId, questionRosterVector);
-            }
-        }
-
+      
         private IEnumerable<Identity> GetInstancesOfGroupsWithSameAndUpperRosterLevelOrThrow(
             IEnumerable<Guid> groupIds, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
@@ -4157,8 +4129,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             Guid referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestion.Id);
 
-            return GetInstancesOfQuestionsInAllRosterLevels(state,
-                referencedQuestionId, linkedQuestion.RosterVector, questionnaire);
+            var rosterScopesForReferencedQuestion = questionnaire.GetRosterGroupsByRosterSizeQuestion(referencedQuestionId);
+            var rosterScopeForLinkedQuestion = questionnaire.GetRosterGroupsByRosterSizeQuestion(linkedQuestion.Id);
+
+            var commonRosterVectorBaseLength = rosterScopesForReferencedQuestion.Intersect(rosterScopeForLinkedQuestion).Count();
+
+            var baseOfRosterVectorOfReferencedQuestion = new RosterVector(linkedQuestion.RosterVector.Take(commonRosterVectorBaseLength));
+
+            var referencedQuestionIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, referencedQuestionId, baseOfRosterVectorOfReferencedQuestion, questionnaire);
+
+            return referencedQuestionIdentities;
         }
 
         private bool IsQuestionGoingToBeDisabled(Identity question,
