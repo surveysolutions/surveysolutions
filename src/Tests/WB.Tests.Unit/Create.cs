@@ -1151,7 +1151,7 @@ namespace WB.Tests.Unit
             return new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = "multiple_options_question",
+                StataExportCaption = "mo_question",
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
