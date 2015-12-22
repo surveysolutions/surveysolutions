@@ -2463,7 +2463,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
+                QuestionType = QuestionType.DateTime,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
@@ -2479,7 +2479,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
-                QuestionType = QuestionType.Text,
+                QuestionType = QuestionType.QRBarcode,
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
