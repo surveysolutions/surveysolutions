@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with such is is already exist..
+        ///   Looks up a localized string similar to Lookup table with such id already exist..
         /// </summary>
         internal static string LookupTableAlreadyExist {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with such is is absent..
+        ///   Looks up a localized string similar to Lookup table with such id is absent..
         /// </summary>
         internal static string LookupTableIsAbsent {
             get {
