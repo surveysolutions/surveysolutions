@@ -2452,5 +2452,38 @@ namespace WB.Tests.Unit
                 action.Invoke();
             }
         }
+
+        public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false)
+        {
+            return new DateTimeQuestion("Question DT")
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                QuestionText = text,
+                QuestionType = QuestionType.Text,
+                StataExportCaption = variable,
+                QuestionScope = scope,
+                Featured = preFilled
+            };
+        }
+        public static QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false)
+        {
+            return new QRBarcodeQuestion()
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                QuestionText = text,
+                QuestionType = QuestionType.Text,
+                StataExportCaption = variable,
+                QuestionScope = scope,
+                Featured = preFilled
+            };
+        }
     }
 }
