@@ -1,28 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
-    public class InterviewDataExportRecord 
+    public class InterviewDataExportRecord : IReadSideRepositoryEntity
     {
-        public InterviewDataExportRecord(Guid interviewId, string recordId, string[] referenceValues, string[] parentLevelIds,
-            ExportedQuestion[] questions, string[] systemVariableValues)
+        protected InterviewDataExportRecord()
         {
-            this.InterviewId = interviewId;
+        }
+
+        public InterviewDataExportRecord(string recordId, 
+            string[] referenceValues, 
+            string[] parentLevelIds,
+            string[] systemVariableValues)
+        {
             this.RecordId = recordId;
             this.ParentRecordIds = parentLevelIds;
-            this.Questions = questions;
             this.ReferenceValues = referenceValues;
             this.SystemVariableValues = systemVariableValues;
         }
 
-        public Guid InterviewId { get; private set; }
-        public string RecordId { get; private set; }
-        public string[] ParentRecordIds { get; private set; }
+        public virtual string Id { get; set; }
+        public virtual string RecordId { get; set; }
+        public virtual Guid InterviewId{ get; set; }
+        public virtual string LevelName { get; set; }
+        public virtual string[] ParentRecordIds { get; set; }
+        public virtual string[] ReferenceValues { get; set; }
+        public virtual string[] SystemVariableValues { set; get; }
+        public virtual string[] Answers { get; set; }
 
-        public string[] ReferenceValues { get; private set; }
-
-        public string[] SystemVariableValues { set; get; }
-
-        public ExportedQuestion[] Questions { get; private set; }
+        public virtual IList<ExportedQuestion> GetQuestions() => this.Answers.Select(x => new ExportedQuestion {Answers = x.Split('\n')}).ToList();
     }
 }

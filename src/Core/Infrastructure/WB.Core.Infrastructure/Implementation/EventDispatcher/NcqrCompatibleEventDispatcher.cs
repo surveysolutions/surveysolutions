@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -179,52 +180,50 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         }
 
         public void PublishEventToHandlers(IPublishableEvent eventMessage,
-            Dictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
+            IReadOnlyDictionary<IEventHandler, Stopwatch> handlersWithStopwatch)
         {
-            var occurredExceptions = new List<Exception>();
+            var occurredExceptions = new ConcurrentBag<Exception>();
 
             foreach (var handlerWithStopwatch in handlersWithStopwatch)
             {
-                var handlerType = handlerWithStopwatch.Key.GetType();
-
-                if (!this.registredHandlers.ContainsKey(handlerType))
-                    return;
-
-                var bus = this.registredHandlers[handlerType].Bus;
-
-                Stopwatch stopWatch = handlerWithStopwatch.Value;
-
-                stopWatch.Start();
-
-                bus.OnCatchingNonCriticalEventHandlerException +=
-                        this.OnCatchingNonCriticalEventHandlerException;
-                try
-                {
-                    this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
-                    bus.Publish(eventMessage);
-                    this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
-                }
-                catch (Exception exception)
-                {
-                    occurredExceptions.Add(exception);
-                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
-                }
-                finally
-                {
-                    bus.OnCatchingNonCriticalEventHandlerException -=
-                        this.OnCatchingNonCriticalEventHandlerException;
-                }
-
-                stopWatch.Stop();
+                this.PublishEventToHandlerWithStopwatch(eventMessage, handlerWithStopwatch.Key, handlerWithStopwatch.Value, occurredExceptions);
             }
 
             if (occurredExceptions.Count > 0)
                 throw new AggregateException(
-                    string.Format(
-                        "{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.",
-                        occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId,
-                        eventMessage.EventSequence),
+                    $"{occurredExceptions.Count} handler(s) failed to handle published event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.",
                     occurredExceptions);
+        }
+
+        private void PublishEventToHandlerWithStopwatch(IPublishableEvent eventMessage, IEventHandler handler, Stopwatch stopwatch, ConcurrentBag<Exception> occurredExceptions)
+        {
+            var handlerType = handler.GetType();
+
+            if (!this.registredHandlers.ContainsKey(handlerType))
+                return;
+
+            var bus = this.registredHandlers[handlerType].Bus;
+
+            stopwatch.Start();
+
+            bus.OnCatchingNonCriticalEventHandlerException += this.OnCatchingNonCriticalEventHandlerException;
+            try
+            {
+                this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
+                bus.Publish(eventMessage);
+                this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
+            }
+            catch (Exception exception)
+            {
+                occurredExceptions.Add(exception);
+                this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+            }
+            finally
+            {
+                bus.OnCatchingNonCriticalEventHandlerException -= this.OnCatchingNonCriticalEventHandlerException;
+            }
+
+            stopwatch.Stop();
         }
 
         public void Register(IEventHandler handler)

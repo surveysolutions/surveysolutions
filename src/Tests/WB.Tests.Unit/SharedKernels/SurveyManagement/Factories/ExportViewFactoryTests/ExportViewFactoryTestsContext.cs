@@ -83,18 +83,4 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             return interviewData;
         }
     }
-    internal static class ShouldExtensions
-    {
-        public static void ShouldQuestionHasOneNotEmptyAnswer(this ExportedQuestion[] questions, Guid questionId)
-        {
-            questions.ShouldContain(q => q.QuestionId == questionId);
-            var answers = questions.First(q => q.QuestionId == questionId).Answers;
-            answers.ShouldContain(a => !string.IsNullOrEmpty(a));
-        }
-
-        public static void ShouldQuestionHasNoAnswers(this ExportedQuestion[] questions, Guid questionId)
-        {
-            questions.ShouldNotContain(q => q.QuestionId == questionId && q.Answers.Any(a => !string.IsNullOrEmpty(a)));
-        }
-    }
 }

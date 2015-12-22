@@ -61,6 +61,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.RaiseAndSetIfChanged(ref this.isPackageBuild, value); }
         }
 
+        public byte[] InformationPackageContent
+        {
+            get { return this.informationPackageContent; }
+            set { this.RaiseAndSetIfChanged(ref this.informationPackageContent, value); }
+        }
+
         public bool IsPackageSendingAttemptCompleted
         {
             get { return this.isPackageSendingAttemptCompleted; }
@@ -84,15 +90,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsPackageSendingAttemptCompleted = false;
             this.IsInProgress = true;
             var cancellationTokenSource = new CancellationTokenSource();
-
-            var backupStream = await Task.Run(() => this.troubleshootingService.GetSystemBackup());
+            var backupStream =
+                await Task.Run(() => this.troubleshootingService.GetSystemBackup(), cancellationTokenSource.Token);
 
             if (!cancellationTokenSource.IsCancellationRequested)
             {
                 this.IsPackageBuild = true;
                 this.Scope = FileSizeUtils.SizeSuffix(backupStream.Length);
                 this.WhenGenerated = DateTime.Now;
-                this.informationPackageContent = backupStream;
+                this.InformationPackageContent = backupStream;
             }
 
             this.IsInProgress = false;
@@ -109,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 await this.synchronizationService.SendTabletInformationAsync(
-                    Convert.ToBase64String(this.informationPackageContent), cancellationTokenSource.Token);
+                    Convert.ToBase64String(this.InformationPackageContent), cancellationTokenSource.Token);
                 this.PackageSendingAttemptResponceText =
                     InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }

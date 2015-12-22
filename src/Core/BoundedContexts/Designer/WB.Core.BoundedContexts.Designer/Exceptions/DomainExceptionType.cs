@@ -5,7 +5,7 @@
         /// <summary>
         /// This should be used when there are no business logic depending on exception type.
         /// </summary>
-        Undefined,
+        Undefined = 0,
 
         TriggerLinksToNotExistingGroup, 
 
@@ -154,6 +154,10 @@
 
         LookupTableIsAbsent,
 
-        EmptyLookupTable
+        EmptyLookupTable,
+
+        VariableNameEndsWithUnderscore,
+
+        VariableNameHasConsecutiveUnderscores
     }
 }

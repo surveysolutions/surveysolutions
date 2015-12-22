@@ -8,12 +8,14 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using NHibernate;
+using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -25,39 +27,40 @@ using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
-    public class InterviewsExporter
+    internal class InterviewsExporter
     {
         private readonly string dataFileExtension = "tab";
 
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IExportViewFactory exportViewFactory;
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
+        private readonly ISessionFactory sessionFactory;
+
+        protected InterviewsExporter()
+        {
+        }
 
         public InterviewsExporter(ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            IFileSystemAccessor fileSystemAccessor, 
-            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
-            IExportViewFactory exportViewFactory,
+            IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
-            InterviewDataExportSettings interviewDataExportSettings,
-            ICsvWriter csvWriter)
+            InterviewDataExportSettings interviewDataExportSettings, 
+            ICsvWriter csvWriter,
+            [Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
         {
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.interviewDatas = interviewDatas;
-            this.exportViewFactory = exportViewFactory;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
+            this.sessionFactory = sessionFactory;
         }
 
-        public void ExportAll(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
+        public virtual void ExportAll(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
             this.logger.Info($"Export all interviews for questionnaire {questionnaireIdentity} started");
@@ -73,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.logger.Info($"Export all interviews for questionnaire {questionnaireIdentity} finised. Took {stopwatch.Elapsed:c} to complete");
         }
 
-        public void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
+        public virtual  void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
 
@@ -190,7 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    },
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
-                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(questionnaireExportStructure, interviewId);
+                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(interviewId);
                        exportBulk.Add(exportedData);
 
                        Interlocked.Increment(ref totalInterviewsProcessed);
@@ -251,23 +254,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
-        private InterviewExportedDataRecord ExportSingleInterview(QuestionnaireExportStructure questionnaireExportStructure, 
-            Guid interviewId)
+        private InterviewExportedDataRecord ExportSingleInterview(Guid interviewId)
         {
-            InterviewData interviewData =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.interviewDatas.GetById(interviewId));
+            IList<InterviewDataExportRecord> records = null;
+            using (var session = this.sessionFactory.OpenStatelessSession())
+            {
+               records = session.QueryOver<InterviewDataExportRecord>()
+                    .Where(x => x.InterviewId == interviewId)
+                    .List<InterviewDataExportRecord>();
+            }
 
-            InterviewDataExportView interviewExportStructure =
-                this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure,
-                    interviewData);
+            var interviewExportStructure = InterviewDataExportView.CreateFromRecords(records);
 
-            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure);
+            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);
 
             return exportedData;
         }
 
-        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView)
+        private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid interviewId)
         {
             var interviewData = new Dictionary<string, string[]>(); // file name, array of rows
 
@@ -281,7 +285,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ReferenceValues);
 
-                    foreach (var exportedQuestion in interviewDataExportRecord.Questions)
+                    foreach (var exportedQuestion in interviewDataExportRecord.GetQuestions())
                     {
                         parametersToConcatenate.AddRange(exportedQuestion.Answers.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
                     }
@@ -298,7 +302,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             var interviewExportedData = new InterviewExportedDataRecord
             {
-                InterviewId = interviewDataExportView.InterviewId.FormatGuid(),
+                InterviewId = interviewId.FormatGuid(),
                 Data = interviewData,
             };
 

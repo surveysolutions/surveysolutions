@@ -26,6 +26,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private const int MaxOptionsCountInCascadingQuestion = 15000;
         private const int MaxOptionsCountInFilteredComboboxQuestion = 15000;
 
+        private const int DefaultVariableLengthLimit = 32;
+        private const int DefaultRestrictedVariableLengthLimit = 20;
+
+        private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
+            new QuestionType[]
+            {
+                QuestionType.GpsCoordinates,
+                QuestionType.MultyOption,
+                QuestionType.TextList
+            };
+
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeLinkedQuestionSource = new[]
         {
             QuestionType.DateTime,
@@ -88,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
 
-        private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
+        private static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
         public QuestionnaireVerifier(
@@ -188,9 +199,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
                     MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
-
+                    
+                    LookupVerifier(LookupTableNameIsKeyword, "WB0052", VerificationMessages.WB0052_LookupNameIsKeyword, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasInvalidName, "WB0024", VerificationMessages.WB0024_LookupHasInvalidName, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasEmptyName, "WB0025", VerificationMessages.WB0025_LookupHasEmptyName, VerificationErrorLevel.Critical),
+                    LookupVerifier(LookupTableHasEmptyContent, "WB0048", VerificationMessages.WB0048_LookupHasEmptyContent, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableHasInvalidHeaders, "WB0031", VerificationMessages.WB0031_LookupTableHasInvalidHeaders, VerificationErrorLevel.Critical),
                     LookupVerifier(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
                     LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
@@ -534,21 +547,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
-            Func<LookupTable, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
+            Func<Guid, LookupTable, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
         {
             return (questionnaire, state) => questionnaire
                     .LookupTables
-                    .Where(entity => hasError(entity.Value, questionnaire))
+                    .Where(entity => hasError(entity.Key, entity.Value, questionnaire))
                     .Select(entity => new QuestionnaireVerificationError(code, message, level, CreateLookupReference(entity.Key)));
         }
 
         private Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> LookupVerifier(
             Func<LookupTable, LookupTableContent, QuestionnaireDocument, bool> hasError, string code, string message, VerificationErrorLevel level = VerificationErrorLevel.General)
         {
-            return (questionnaire, state) => questionnaire
-                    .LookupTables
-                    .Where(entity => hasError(entity.Value, lookupTableService.GetLookupTableContent(questionnaire.PublicKey, entity.Key), questionnaire))
-                    .Select(entity => new QuestionnaireVerificationError(code, message, level, CreateLookupReference(entity.Key)));
+            return (questionnaire, state) => 
+                from lookupTable in questionnaire.LookupTables
+                let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
+                where lookupTableContent != null
+                where hasError(lookupTable.Value, lookupTableContent, questionnaire)
+                select new QuestionnaireVerificationError(code, message, level, CreateLookupReference(lookupTable.Key));
         }
 
         private static Func<QuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationError>> Verifier(
@@ -624,14 +639,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !IsVariableNameValid(macro.Name);
         }
 
-        private static bool LookupTableHasEmptyName(LookupTable table, QuestionnaireDocument questionnaire)
+        private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(table.TableName);
         }
         
-        private static bool LookupTableHasInvalidName(LookupTable table, QuestionnaireDocument questionnaire)
+        private static bool LookupTableHasInvalidName(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(table.TableName);
+        }
+
+        private bool LookupTableNameIsKeyword(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
+        {
+            return keywordsProvider.GetAllReservedKeywords().Contains(table.TableName.ToLower());
+        }
+
+        private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
+        {
+            var lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, tableId);
+            return lookupTableContent == null;
         }
 
         private static bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, QuestionnaireDocument questionnaire)
@@ -888,9 +914,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return !QuestionnaireNameRegex.IsMatch(questionnaire.Title);
         }
 
-        private static bool QuestionHasInvalidVariableName(IQuestion arg)
+        private static bool QuestionHasInvalidVariableName(IQuestion question)
         {
-            return !IsVariableNameValid(arg.StataExportCaption);
+            if (string.IsNullOrEmpty(question.StataExportCaption))
+                return false;
+
+            int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(question.QuestionType)
+                ? DefaultRestrictedVariableLengthLimit
+                : DefaultVariableLengthLimit;
+
+            if (question.StataExportCaption.Length > variableLengthLimit)
+                return true;
+
+            return !VariableNameRegex.IsMatch(question.StataExportCaption);
         }
 
         private static bool IsVariableNameValid(string variableName)
@@ -898,7 +934,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(variableName))
                 return true;
 
-            if (variableName.Length > 32)
+           if (variableName.Length > DefaultVariableLengthLimit)
                 return false;
             return VariableNameRegex.IsMatch(variableName);
         }

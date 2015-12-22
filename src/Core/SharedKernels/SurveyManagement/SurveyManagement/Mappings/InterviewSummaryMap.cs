@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                     });
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
+                    collection.Lazy(CollectionLazy.NoLazy);
                 },
                 rel => { 
                     rel.OneToMany();

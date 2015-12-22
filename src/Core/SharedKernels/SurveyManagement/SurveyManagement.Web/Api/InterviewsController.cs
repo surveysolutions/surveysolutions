@@ -6,6 +6,7 @@ using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -15,7 +16,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
 
         private readonly ICommandService commandService;
         private readonly IGlobalInfoProvider globalInfoProvider;
@@ -38,7 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IInterviewHistoryFactory interviewHistoryViewFactory,
             ICommandService commandService,
             IGlobalInfoProvider globalInfoProvider,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferences)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -47,6 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.commandService = commandService;
             this.globalInfoProvider = globalInfoProvider;
             this.userViewFactory = userViewFactory;
+            this.interviewReferences = interviewReferences;
         }
 
         [HttpGet]
@@ -74,14 +77,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public InterviewApiDetails InterviewDetails(Guid id)
         {
             InterviewDetailsFilter filter = new InterviewDetailsFilter();
-
             var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, filter:filter);
-
             if (interview == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-
             var interviewDetails = new InterviewApiDetails(interview.InterviewDetails);
 
             return interviewDetails;
@@ -100,6 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
             return interview;
         }
+
 #region POST
         [HttpPost]
         [Route("assign")]
@@ -159,7 +160,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var executor = this.globalInfoProvider.GetCurrentUser();
             return TryExecuteCommand(new HqRejectInterviewCommand(request.Id, executor.Id, request.Comment));
         }
-#endregion
+
+
+        [HttpPost]
+        [Route("hqunapprove")]
+        public HttpResponseMessage HQUnapprove(StatusChangeApiModel request)
+        {
+            this.ThrowIfInterviewDoesnotExist(request.Id);
+
+            var executor = this.globalInfoProvider.GetCurrentUser();
+            return TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, executor.Id, request.Comment));
+        }
+        #endregion
 
         private HttpResponseMessage TryExecuteCommand(ICommand command)
         {
@@ -182,10 +194,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private void ThrowIfInterviewDoesnotExist(Guid id)
         {
-            InterviewDetailsFilter filter = new InterviewDetailsFilter();
-            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, filter: filter);
-
-            if (interview == null)
+            var interviewRefs = this.interviewReferences.GetById(id);
+            if (interviewRefs == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }

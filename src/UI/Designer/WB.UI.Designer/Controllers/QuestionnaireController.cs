@@ -85,9 +85,8 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     var questionnaireId = Guid.NewGuid();
-                    this.commandService.Execute(
-                        new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId,
-                            model.IsPublic, sourceModel.Source));
+
+                    this.commandService.Execute(new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
                     return this.RedirectToAction("Open", "App", new { id = questionnaireId });
                 }

@@ -142,10 +142,10 @@
     <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
   </data>
   <data name="LookupTableAlreadyExist" xml:space="preserve">
-    <value>Lookup table with such is is already exist.</value>
+    <value>Lookup table with such id already exist.</value>
   </data>
   <data name="LookupTableIsAbsent" xml:space="preserve">
-    <value>Lookup table with such is is absent.</value>
+    <value>Lookup table with such id is absent.</value>
   </data>
   <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
     <value>File with no data can not be loaded</value>
@@ -166,7 +166,7 @@
     <value>Value {0} can not be parsed as long integer number. Column {1}, row {2}.</value>
   </data>
   <data name="LookupTables_too_many_columns" xml:space="preserve">
-    <value>Too many columns in uploaded file. Max coumns count is {0}</value>
+    <value>Too many columns in uploaded file. Max columns count is {0}</value>
   </data>
   <data name="LookupTables_too_many_rows" xml:space="preserve">
     <value>Max rows count limit ({0} rows) was exceeded.</value>

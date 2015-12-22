@@ -27,9 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 
             answerWithColumns = new[]
             {
-                Tuple.Create(questionVarName + "_1", "1"),
-                Tuple.Create(questionVarName + "_1", ""),
-                Tuple.Create(questionVarName + "_3", "0")
+                Tuple.Create(questionVarName + "__1", "1"),
+                Tuple.Create(questionVarName + "__1", ""),
+                Tuple.Create(questionVarName + "__3", "0")
             };
         };
         

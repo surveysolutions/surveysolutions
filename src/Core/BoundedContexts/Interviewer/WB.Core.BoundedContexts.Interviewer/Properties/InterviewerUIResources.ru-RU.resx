@@ -451,34 +451,34 @@
     <value>Назначено {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Все собранные данные будут сохраненны как резервная копия на этом устройстве.</value>
+    <value>Все собранные данные будут сохранены как резервная копия на этом устройстве.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
     <value>Создать резервную копию собранной информации</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>Мы проверим наличие новой версии на сервере Хедквотера</value>
+    <value>Мы проверим наличие новой версии на сервере</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
     <value>Версия: {0}. Проверить наличие новой версии</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Востановить данные из бекапа</value>
+    <value>Восстановление сохраненных данных приведет к замене всех текущих интервью на вашем устройстве</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>Востановить данные из бекапа</value>
+    <value>Восстановить данные из резервной копии</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
     <value>Все собранные данные и информация о приложении будут собранны в единый архив. Операция может занять до 10 минут.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Собрать и отправить на Хедквотер информацию о приложении</value>
+    <value>Собрать и отправить на сервер информацию о приложении</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>Информация будет собранна в текстовом виде. Она может быть отправленна по электроннй почте, google hangouts или любому другому приложению по обмену сообщениями</value>
+    <value>Информация будет собрана в текстовом виде. Она может быть отправлена по электроннй почте, при помощи программы Google hangouts или любым другим приложением по обмену сообщениями</value>
   </data>
   <data name="Diagnostics_Share_Title" xml:space="preserve">
-    <value>Поделится технической информацией через</value>
+    <value>Передать техническую информацию</value>
   </data>
   <data name="Diagnostics_Title" xml:space="preserve">
     <value>Диагностика</value>
@@ -487,13 +487,13 @@
     <value>Диагностика</value>
   </data>
   <data name="Share_to_Title" xml:space="preserve">
-    <value>Поделится информацией через..</value>
+    <value>Передать техническую информацию при помощи..</value>
   </data>
   <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>Мы проверим интернет соединение с нашим сервером и его скорость</value>
+    <value>Проверка подключения к серверу и его скорость</value>
   </data>
   <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Проверить интернет соединение</value>
+    <value>Проверить скорость соединения с сервером</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -508,16 +508,16 @@
     <value>Объем:</value>
   </data>
   <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
-    <value>Когда созданн:</value>
+    <value>Дата и время создания:</value>
   </data>
   <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
-    <value>Загружаем, пожалуйста подождите...</value>
+    <value>Происходит загрузка, пожалуйста подождите...</value>
   </data>
   <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
     <value>Существует более новая версия. Вы хотите загрузить и обновить приложение?</value>
   </data>
   <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
-    <value>Версия:</value>
+    <value>Версия номер:</value>
   </data>
   <data name="Diagnostics_No" xml:space="preserve">
     <value>Нет</value>
@@ -526,13 +526,13 @@
     <value>Обновить</value>
   </data>
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
-    <value>У вас установленна последняя версия приложения.</value>
+    <value>У вас установлена последняя версия приложения.</value>
   </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
-    <value>Когда сохранены:</value>
+    <value>Дата и время создания резервной копии:</value>
   </data>
   <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
-    <value>Путь к файлу с бекапом:</value>
+    <value>Путь к файлу с резервной копией:</value>
   </data>
   <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
     <value>Данные сохранены</value>
@@ -541,6 +541,27 @@
     <value>Объем:</value>
   </data>
   <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
-    <value>Сохраненные данные найденны:</value>
+    <value>Сохраненные данные:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Соединение с интернетом отсутствует&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Соединение &lt;font color="red"&gt;плохое&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Соединение хорошее</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Тип соединения:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Имя сети:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Пинг:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Соединение с нашим сервером отсутствует&lt;/font&gt;</value>
   </data>
 </root>

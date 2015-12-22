@@ -77,8 +77,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 Dictionary<string, string> varLabels;
                 Dictionary<string, Dictionary<double, string>> varValueLabels;
+                Dictionary<string, Dictionary<string, string>> labelsForServiceColumns;
 
-                questionnaireExportStructure.CollectLabels(out varLabels, out varValueLabels);
+                questionnaireExportStructure.CollectLabels(out labelsForServiceColumns, out varLabels,
+                    out varValueLabels);
 
                 var result = new List<string>();
                 string fileExtention = format == DataExportFormat.STATA
@@ -95,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
 
-                    UpdateMetaWithLabels(meta, varLabels, varValueLabels);
+                    UpdateMetaWithLabels(meta, labelsForServiceColumns[this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile)], varLabels, varValueLabels);
 
                     using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
                     {
@@ -122,12 +124,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return new string[0];
         }
 
-        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> varLabels, Dictionary<string, Dictionary<double, string>> varValueLabels)
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> serviceColumnLabels, Dictionary<string, string> varLabels, Dictionary<string, Dictionary<double, string>> varValueLabels)
         {
             foreach (var datasetVariable in meta.Variables)
             {
                 if (varLabels.ContainsKey(datasetVariable.VarName))
                     datasetVariable.VarLabel = varLabels[datasetVariable.VarName];
+
+                if(serviceColumnLabels.ContainsKey(datasetVariable.VarName))
+                    datasetVariable.VarLabel = serviceColumnLabels[datasetVariable.VarName];
 
                 if (varValueLabels.ContainsKey(datasetVariable.VarName))
                 {

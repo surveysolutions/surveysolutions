@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("m, ");
             
             #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  row.Variables)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) )));
             
             #line default
             #line hidden
@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("(decimal rowcode, ");
             
             #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  table.VariableNames.Select(variableName =>"double " + variableName))));
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName))));
             
             #line default
             #line hidden
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\t\tpublic double ");
+            this.Write("\t\tpublic double? ");
             
             #line 62 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(variableName));
