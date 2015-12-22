@@ -752,6 +752,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\when_creating_and_getting_metadata_for_questionnaire.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_is_nested_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\FileBasedTabletInformationServiceTests\when_requesting_list_of_packages_and_storage_contains_2_invalid_and_1valid_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\SupervisorsViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_need_sort_by_interviewers.cs" />

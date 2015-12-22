@@ -8,6 +8,7 @@ using Moq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Moq.It;
@@ -31,9 +32,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             return fileSystemAccessorMock.Object;
         }
 
-        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(params ExportedHeaderItem[] exportedHeaderItems)
+        protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = null,
+            params ExportedHeaderItem[] exportedHeaderItems)
         {
             var result = new HeaderStructureForLevel();
+            result.LevelScopeVector = new ValueVector<Guid>();
+            result.LevelName = levelName;
             foreach (var exportedHeaderItem in exportedHeaderItems)
             {
                 result.HeaderItems.Add(exportedHeaderItem.PublicKey, exportedHeaderItem);
