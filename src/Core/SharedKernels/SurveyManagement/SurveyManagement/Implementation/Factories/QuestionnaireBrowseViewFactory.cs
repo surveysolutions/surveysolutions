@@ -1,10 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using NHibernate.Criterion;
+using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     public class QuestionnaireBrowseViewFactory : IQuestionnaireBrowseViewFactory
     {
@@ -66,8 +71,13 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
                     pagedResults = queryResult.Skip((input.Page - 1) * input.PageSize.Value).Take(input.PageSize.Value);
                 }
 
+                var itemIds = pagedResults.Select(x => x.Id).ToArray();
+                var actualItems = queryable.Where(x => itemIds.Contains(x.Id))
+                                           .OrderUsingSortExpression(input.Order)
+                                           .Fetch(x => x.FeaturedQuestions)
+                                           .ToList();
 
-                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), pagedResults.ToList(), input.Order);
+                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), actualItems, input.Order);
             });
         }
 

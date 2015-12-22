@@ -113,7 +113,9 @@
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
     <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />
+    <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
+    <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
@@ -346,6 +348,8 @@
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoForLinkedQuestions.cs" />
     <Compile Include="Views\Questionnaire\SampleUploadView.cs" />

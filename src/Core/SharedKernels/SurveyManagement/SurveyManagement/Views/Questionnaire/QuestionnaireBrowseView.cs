@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem
+namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 {
     public class QuestionnaireBrowseView
     {
