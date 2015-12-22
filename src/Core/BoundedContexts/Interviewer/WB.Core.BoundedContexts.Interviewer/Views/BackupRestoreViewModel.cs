@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.IsBackupInProgress = true;
                 try
                 {
-                    await Task.Run(() => this.troubleshootingService.Restore(this.RestoreLocation));
+                    await this.troubleshootingService.RestoreAsync(this.RestoreLocation);
                     this.tabletDiagnosticService.RestartTheApp();
                 }
                 catch (Exception e)
