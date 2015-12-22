@@ -69,7 +69,7 @@ namespace WB.UI.Interviewer.Infrastructure
             
             this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
 
-            this.Bind<ITroubleshootingService>().To<TroubleshootingService>();
+            this.Bind<IBackupRestoreService>().To<BackupRestoreService>();
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(),

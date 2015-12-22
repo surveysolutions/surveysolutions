@@ -26,7 +26,6 @@ namespace WB.UI.Interviewer
             base.OnCreate();
 
             CrashManager.Initialize(this);
-            CrashManager.AttachSender(() => new FileReportSender(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "crashes.log")));
         }
 
         public override void OnLowMemory()

@@ -317,7 +317,6 @@
   <ItemGroup>
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
-    <Compile Include="Activities\FilePickerFragment.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
@@ -347,7 +346,7 @@
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
-    <Compile Include="Implementations\Services\UpdateProcessor.cs" />
+    <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\EmailReporterAttribute.cs" />

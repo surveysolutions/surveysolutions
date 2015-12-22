@@ -9,10 +9,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         string GetApplicationVersionName();
         string GetDeviceTechnicalInformation();
         int GetApplicationVersionCode();
-        string GetExternalStorageDirectory();
+        string ExternalStorageDirectory { get; }
         Task SetEndpointAsync(string endpoint);
         Task SetHttpResponseTimeoutAsync(int timeout);
         Task SetGpsResponseTimeoutAsync(int timeout);
         Task SetCommunicationBufferSize(int bufferSize);
+        string BackupFolder { get; }
+        string RestoreFolder { get; }
+        string CrushFolder { get; }
     }
 }
