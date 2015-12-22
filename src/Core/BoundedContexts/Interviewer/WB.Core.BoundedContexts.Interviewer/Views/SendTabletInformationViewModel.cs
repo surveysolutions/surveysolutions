@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -15,6 +16,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly ITroubleshootingService troubleshootingService;
         private readonly ISynchronizationService synchronizationService;
+        private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
 
         private string scope;
@@ -28,11 +30,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public SendTabletInformationViewModel(
             ITroubleshootingService troubleshootingService,
             ISynchronizationService synchronizationService,
-            ILogger logger)
+            ILogger logger, 
+            IUserInteractionService userInteractionService)
         {
             this.troubleshootingService = troubleshootingService;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
+            this.userInteractionService = userInteractionService;
         }
 
         public string Scope
@@ -87,18 +91,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task CreateTabletInformation()
         {
+            if (this.IsInProgress)
+                return;
+
+            this.IsPackageBuild = false;
             this.IsPackageSendingAttemptCompleted = false;
             this.IsInProgress = true;
-            var cancellationTokenSource = new CancellationTokenSource();
-            var backupStream =
-                await Task.Run(() => this.troubleshootingService.GetSystemBackup(), cancellationTokenSource.Token);
 
-            if (!cancellationTokenSource.IsCancellationRequested)
+            try
             {
+                var backupStream = await this.troubleshootingService.GetSystemBackupAsync();
                 this.IsPackageBuild = true;
                 this.Scope = FileSizeUtils.SizeSuffix(backupStream.Length);
                 this.WhenGenerated = DateTime.Now;
                 this.InformationPackageContent = backupStream;
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(e.Message, e);
+                await this.userInteractionService.AlertAsync(e.Message);
             }
 
             this.IsInProgress = false;

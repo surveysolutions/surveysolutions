@@ -154,7 +154,7 @@
             };
             
             var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
-                if (actualQuestion.type != "SingleOption")
+                if (actualQuestion.type !== "SingleOption" || actualQuestion.type !== "MultyOption")
                     return false;
 
                 if ((actualQuestion.wereOptionsTruncated || false) === false)

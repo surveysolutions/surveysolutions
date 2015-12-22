@@ -13,6 +13,7 @@
         <locale>id-ID</locale>
         <locale>pt-PT</locale>
         <locale>ar</locale>
+        <locale>zh-CN</locale>
       </locales>
       <items>
         <it rn="Properties\UIResources.resx" nm="Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -31,16 +32,16 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptyQuestionnairesList" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="No questionnaires yet&#xA;&#xA;You can create or edit your questionnaires in Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Опросники не обнаружены&#xD;&#xA;&#xD;&#xA;Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Питальники було не знайдено&#xD;&#xA;&#xD;&#xA;Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Todavía no hay cuestionarios&#xD;&#xA;&#xD;&#xA;Puede crear o editar sus cuestionarios en Survey Solutions Designer&#xD;&#xA;" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="ยังไม่มีแบบสอบถาม&#xA;คุณสามารถสร้างหรือแก้ไขแบบสอบถามด้วย Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Không có câu hỏi yet&#xD;&#xA;&#xD;&#xA;You có thể tạo hoặc chỉnh sửa của bạn câu hỏi trong cuộc khảo sát giải pháp thiết kế" ts="Translated" qs="AutoTranslated" />
-            <li lc="id-ID" tx="Belum ada kuesioner&#xD;&#xA;&#xD;&#xA;Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="Yet&#xD;&#xA;&#xD;&#xA;You الاستبيانات لا يمكن إنشاء أو تحرير الاستبيانات الخاصة بك في &quot;مصمم حلول المسح&quot;" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Aucun questionnaire disponible pour l'instant&#xD;&#xA;&#xD;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="No questionnaires yet&#xD;&#xA;&#xD;&#xA;You can create or edit your questionnaires in Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Опросники не обнаружены&#xD;&#xA;&#xD;&#xA;Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Питальники було не знайдено&#xD;&#xA;&#xD;&#xA;Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Todavía no hay cuestionarios&#xD;&#xA;&#xD;&#xA;Puede crear o editar sus cuestionarios en Survey Solutions Designer&#xD;&#xA;" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ยังไม่มีแบบสอบถาม&#xA;คุณสามารถสร้างหรือแก้ไขแบบสอบถามด้วย Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Không có câu hỏi yet&#xD;&#xA;&#xD;&#xA;You có thể tạo hoặc chỉnh sửa của bạn câu hỏi trong cuộc khảo sát giải pháp thiết kế" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Belum ada kuesioner&#xD;&#xA;&#xD;&#xA;Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions" ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="Yet&#xD;&#xA;&#xD;&#xA;You الاستبيانات لا يمكن إنشاء أو تحرير الاستبيانات الخاصة بك في &quot;مصمم حلول المسح&quot;" ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Aucun questionnaire disponible pour l'instant&#xD;&#xA;&#xD;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptySearchResult" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -65,7 +66,7 @@
             <li lc="es-ES" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="{0:dd MMM HH:mm}" er="" ts="Translated" qs="ToReview" />
+            <li lc="id-ID" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="fr-FR" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
@@ -185,16 +186,16 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_InternalServerError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Server error. Please contact the support team at support@mysurvey.solutions." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="uk-UA" tx="Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="es-ES" tx="Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Erro de servidor. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="ar" tx="خطأ في الملقم. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Server error. Please contact the support team at support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Erro de servidor. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="خطأ في الملقم. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_InvalidEndpoint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -270,7 +271,7 @@
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_UpgradeRequired" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="New version of application was released. Please, update the application" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Но" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Выпущена новая версия приложения. Обновитесь, пожалуйста." ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Вийшла нова версія програми. Будь ласка, оновіть додаток" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Existe una nueva versión de la aplicación. Por favor, actualice la aplicación" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="มีเวอร์ชันใหม่แล้ว  กรุณาปรับปรุงเวอร์ชั่นของโปรแกรม Survey Solutions ในเครื่องของท่าน" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
@@ -755,16 +756,16 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_NegativeRosterSizeAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative." ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="uk-UA" tx="Відповідь '{0}' є неправильною, оскільки питання використовується як розмір списку і вказаного відповідь буде негативною" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es-ES" tx="Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="th-TH" tx="จำนวนสมาชิกต้องมากกว่า {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="vi-VN" tx="Câu trả lời '{0}' là không chính xác bởi vì câu hỏi được sử dụng như kích thước của danh sách và câu trả lời cụ thể là tiêu cực" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="id-ID" tx="Jawaban '{0}' tidak benar karena pertanyaan yang digunakan sebagai ukuran daftar dan jawaban yang diberikan negatif." ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a pergunta é usada como tamanho do plantel e a resposta especificada é negativa" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن السؤال كحجم قائمة والجواب المحدد سلبي" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle définit la taille du roster mais elle est négative" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Відповідь '{0}' є неправильною, оскільки питання використовується як розмір списку і вказаного відповідь буде негативною" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="จำนวนสมาชิกต้องมากกว่า {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Câu trả lời '{0}' là không chính xác bởi vì câu hỏi được sử dụng như kích thước của danh sách và câu trả lời cụ thể là tiêu cực" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Jawaban '{0}' tidak benar karena pertanyaan yang digunakan sebagai ukuran daftar dan jawaban yang diberikan negatif." ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a pergunta é usada como tamanho do plantel e a resposta especificada é negativa" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن السؤال كحجم قائمة والجواب المحدد سلبي" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle définit la taille du roster mais elle est négative" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_ParsingError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -907,6 +908,12 @@
             <li lc="fr-FR" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Properties\UIResources.resx" nm="Interviewer_Diagnostics" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Diagnostics" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Диагностика" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Cancel" ts="Translated" qs="ToReview" />
@@ -923,13 +930,13 @@
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="You already assigned to another device" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="You are already assigned to another device" ts="Changed" qs="ToReview" />
             <li lc="ru-RU" tx="Ваша учетная запись уже привязана к другому устройству" ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Ваш обліковий запис вже прив'язаний до іншого пристрою" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="Usted ya ha sido vinculado/a a otro dispositivo" ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="คุณถูกมอบหมายให้ทำงานด้วยเครื่องอื่นแล้ว" ts="Translated" qs="ToReview" />
+            <li lc="th-TH" tx="คุณถูกมอบหมายให้ทำงานด้วยเครื่องอื่นแล้ว" ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Bạn đã được đặt cho một thiết bị khác" ts="Changed" qs="ToReview" />
-            <li lc="id-ID" tx="Anda sudah dialokasikan perangkat lain" ts="Translated" qs="ToReview" />
+            <li lc="id-ID" tx="Anda sudah dialokasikan perangkat lain" ts="Changed" qs="ToReview" />
             <li lc="pt-PT" tx="Você já atribuído a outro instumento" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="يمكنك تعيينها بالفعل إلى جهاز آخر" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Votre compte est déjà associé à un autre appareil" ts="Changed" qs="ToReview" />
@@ -961,20 +968,6 @@
             <li lc="pt-PT" tx="Se você vincular novamente a este dispositivo &lt;br/&gt; todos os dados no antigo será perdidos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إذا كان يمكنك إعادة ربط لهذا الجهاز&lt;br&gt;سيتم فقدان كافة البيانات الموجودة على القديم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Si vous liez votre compte à ce nouvel appareil&lt;br&gt;toutes les données sur votre ancien appareil seront supprimées" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Properties\UIResources.resx" nm="Interviewer_Troubleshooting" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Troubleshooting" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Устранение неполадок" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Вирішення проблем" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Resolución de problemas" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="การแก้ไขปัญหา" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Giải đáp thắc mắc" ts="Translated" qs="AutoTranslated" />
-            <li lc="id-ID" tx="Pemecahan masalah" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Solução de problemas" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="استكشاف الأخطاء وإصلاحها" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Dépannage" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_TryOnlineLogin" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
