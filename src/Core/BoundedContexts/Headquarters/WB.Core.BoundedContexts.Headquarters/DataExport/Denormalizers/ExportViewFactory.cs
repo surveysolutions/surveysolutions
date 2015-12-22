@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
     internal class ExportViewFactory : IExportViewFactory
     {
+        private const string GeneratedTitleExportFormat = "{0}__{1}";
+
         private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -300,12 +302,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     var columnValue = decimal.Parse(question.Answers[i].AnswerValue);
 
-                    exportedHeaderItem.ColumnNames[i] = $"{question.StataExportCaption}_{DecimalToHeaderConverter.ToHeader(columnValue)}";
+                    exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, 
+                        question.StataExportCaption, DecimalToHeaderConverter.ToHeader(columnValue)); 
+                        
                     exportedHeaderItem.ColumnValues[i] = columnValue;
                 }
                 else
                 {
-                    exportedHeaderItem.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption, i);
+                    exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, question.StataExportCaption, i);
                 }
 
                 if (!IsQuestionLinked(question))
@@ -527,7 +531,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             for (int i = 0; i < gpsColumns.Length; i++)
             {
-                gpsQuestionExportHeader.ColumnNames[i] = string.Format("{0}_{1}", question.StataExportCaption,
+                gpsQuestionExportHeader.ColumnNames[i] = string.Format(GeneratedTitleExportFormat, question.StataExportCaption,
                     gpsColumns[i]);
 
                 gpsQuestionExportHeader.Titles[i] += string.Format("{0}", gpsColumns[i]);

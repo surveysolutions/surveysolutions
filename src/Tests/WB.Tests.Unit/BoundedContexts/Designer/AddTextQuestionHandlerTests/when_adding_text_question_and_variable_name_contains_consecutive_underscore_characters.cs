@@ -8,7 +8,7 @@ using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
 {
-    internal class when_adding_text_question_and_variable_name_is_too_long : QuestionnaireTestsContext
+    internal class when_adding_text_question_and_variable_name_contains_consecutive_underscore_characters : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     questionId: questionId,
                     parentGroupId: chapterId,
                     title: title,
-                    variableName: longVariableName,
-                variableLabel: null,
+                    variableName: variableNameWithTwoUndescores,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
-        It should_throw_exception_with_message_containting__long__variable__ = () =>
-            new[] { "long", "element's", "name", "id" }.ShouldEachConformTo(
+        It should_throw_exception_with_message_containting__variable__start__digit__ = () =>
+            new[] { "variable", "consecutive", "underscore" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
 
@@ -46,10 +46,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-        private static string longVariableName = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+        private static string variableNameWithTwoUndescores = "vari__able";
         private static bool isPreFilled = false;
         private static string title = "title";
-        private static string instructions = "intructions";
+        private static string instructions = "instructions";
         private static string enablementCondition = "";
         private static string validationExpression = "";
         private static string validationMessage = "";
