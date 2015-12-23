@@ -130,6 +130,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
         [HttpPost]
         [Route("{id:guid}")]
+        [Route("package/{id:guid}")]
         public void Post(Guid id, [FromBody]string package)
         {
             this.incomingSyncPackagesQueue.Enqueue(interviewId: id, item: package);
