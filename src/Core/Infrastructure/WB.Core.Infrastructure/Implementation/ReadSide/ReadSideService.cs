@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
@@ -12,6 +13,7 @@ using Ncqrs.Eventing.Storage;
 
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -623,11 +625,16 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     .Distinct()
                     .ToArray();
 
-                foreach (ICacheableRepositoryWriter writer in writers)
+                var entitiesInProgress = new ConcurrentDictionary<string, Unit>();
+
+                writers.AsParallel().ForAll(writer =>
                 {
-                    using (GlobalStopwatcher.Scope($"Disable cache for {GetStorageEntityName(writer)}"))
+                    var storageEntityName = GetStorageEntityName(writer);
+
+                    using (GlobalStopwatcher.Scope($"Disable cache for {storageEntityName}"))
                     {
-                        UpdateStatusMessage($"Disabling cache in repository writer for entity {GetStorageEntityName(writer)}.");
+                        entitiesInProgress.TryAdd(storageEntityName, Unit.Value);
+                        UpdateStatusMessage($"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}.");
 
                         try
                         {
@@ -638,12 +645,14 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         catch (Exception exception)
                         {
                             this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
-                            string message = $"Failed to disable cache and store data to repository for writer {GetStorageEntityName(writer)}.";
+                            string message = $"Failed to disable cache and store data to repository for writer {storageEntityName}.";
                             this.SaveErrorForStatusReport(message, exception);
-                            UpdateStatusMessage(message);
                         }
+
+                        entitiesInProgress.TryRemove(storageEntityName);
+                        UpdateStatusMessage($"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}.");
                     }
-                }
+                });
 
                 UpdateStatusMessage("Cache in repository writers disabled.");
             }

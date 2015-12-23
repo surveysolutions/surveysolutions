@@ -92,7 +92,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
 
         private ISessionFactory BuildSessionFactory()
         {
-            File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
+            //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
             try
             {
                 DatabaseManagement.CreateDatabase(connectionString);
