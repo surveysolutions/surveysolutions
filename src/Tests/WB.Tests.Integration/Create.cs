@@ -10,7 +10,7 @@ using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
+using NHibernate.Transform;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -21,6 +21,8 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -31,6 +33,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -552,6 +555,16 @@ namespace WB.Tests.Integration
                        RowCode = rowcode,
                        Variables = values
             };
+        }
+
+        public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
+            ISessionProvider sessionProvider = null, PostgreConnectionSettings postgreConnectionSettings = null)
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            return new PostgresReadSideKeyValueStorage<TEntity>(
+                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                postgreConnectionSettings ?? new PostgreConnectionSettings(),
+                Mock.Of<ILogger>());
         }
     }
 }

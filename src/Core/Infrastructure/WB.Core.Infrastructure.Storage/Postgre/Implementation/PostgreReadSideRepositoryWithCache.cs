@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Caching;
 using Ninject;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions;
 
 
@@ -10,20 +11,18 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     internal class PostgreReadSideRepositoryWithCache<TEntity> : PostgreReadSideRepository<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private MemoryCache cache = new MemoryCache("cache");
+        private readonly MemoryCache cache = new MemoryCache("cache");
 
-        public PostgreReadSideRepositoryWithCache([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider)
-            : base(sessionProvider)
-        {
-        }
+        public PostgreReadSideRepositoryWithCache([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger)
+            : base(sessionProvider, logger) {}
 
         public override TEntity GetById(string id)
         {
-            if (cache.Contains(id))
-                return (TEntity)cache[id];
+            if (this.cache.Contains(id))
+                return (TEntity)this.cache[id];
 
             var questionare = base.GetById(id);
-            cache[id] = questionare;
+            this.cache[id] = questionare;
             return questionare;
         }
 
