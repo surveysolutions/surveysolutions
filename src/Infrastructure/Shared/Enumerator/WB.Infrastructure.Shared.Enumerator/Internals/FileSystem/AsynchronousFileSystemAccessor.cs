@@ -20,13 +20,12 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             }
         }
 
-        public async Task CopyFileAsync(string sourceDir, string targetDir)
+        public async Task CopyFileAsync(string sourceFile, string targetDir)
         {
-            var parentFolderPath = Directory.GetParent(targetDir).FullName;
-            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
+            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetDir);
 
-            var copyOfTheFile = await parentFolder.CreateFileAsync(Path.GetFileName(sourceDir), CreationCollisionOption.GenerateUniqueName);
-            var originalFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(sourceDir);
+            var copyOfTheFile = await parentFolder.CreateFileAsync(Path.GetFileName(sourceFile), CreationCollisionOption.GenerateUniqueName);
+            var originalFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(sourceFile);
 
             using (var originalStream = await originalFile.OpenAsync(PCLStorage.FileAccess.Read))
             {
