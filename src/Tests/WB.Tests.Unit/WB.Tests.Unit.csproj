@@ -482,6 +482,7 @@
     <Compile Include="BoundedContexts\Headquarters\UserBatchCreatorTests\UserBatchCreatorTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingServiceTests\UserPreloadingServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingVerifierTests\UserPreloadingVerifierTests.cs" />
+    <Compile Include="BoundedContexts\Interviewer\BackupRestoreServiceTests\BackupRestoreServiceNUnitTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_AnswersRemoved_event_for_prefilled_GPS_question.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_InterviewOnClientCreated_event_and_one_of_prefilled_questions_is_GPS.cs" />
