@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using NHibernate.Dialect;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
+using NpgsqlTypes;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
 {
-    public class CustomPostgreSQL82Dialect : PostgreSQL82Dialect
+    public class PostgreSQL91Dialect : PostgreSQL82Dialect
     {
-        public CustomPostgreSQL82Dialect()
+        public PostgreSQL91Dialect()
         {
             RegisterColumnType(DbType.Object, "text[]");
+            RegisterColumnType(DbType.Object, "numeric[]");
         }
     }
 
-    public class PostgresSqlStringArrayType : IUserType
+    public class PostgresSqlArrayType<T> : IUserType
     {
         bool IUserType.Equals(object x, object y)
         {
@@ -35,7 +38,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
                 return null;
             }
 
-            string[] res = resultSet.GetValue(index) as string[];
+            T[] res = resultSet.GetValue(index) as T[];
 
             if (res != null)
             {
@@ -54,7 +57,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
             }
             else
             {
-                var list = (string[])value;
+                var list = (T[])value;
                 parameter.Value = list;
             }
         }
@@ -87,7 +90,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
                 {
                     new NpgsqlExtendedSqlType(
                         DbType.Object,
-                        NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Text
+                        NpgSqlType
                         )
                 };
 
@@ -95,7 +98,26 @@ namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
             }
         }
 
-        public virtual Type ReturnedType => typeof(string[]);
+        private static readonly Dictionary<Type, NpgsqlTypes.NpgsqlDbType> TypesMatcher = new Dictionary<Type, NpgsqlDbType>()
+        {
+            { typeof(string[]), NpgsqlDbType.Array | NpgsqlDbType.Text },
+            { typeof(decimal[]), NpgsqlDbType.Array | NpgsqlDbType.Numeric }
+        }; 
+        protected virtual NpgsqlTypes.NpgsqlDbType NpgSqlType
+        {
+            get
+            {
+                var targetTypeName = this.ReturnedType;
+                if (!TypesMatcher.ContainsKey(targetTypeName))
+                {
+                    throw new KeyNotFoundException($"Add mapping of .net type {targetTypeName} to postgresql type.");
+                }
+
+                return TypesMatcher[targetTypeName];
+            }
+        }
+
+        public virtual Type ReturnedType => typeof(T[]);
 
         public bool IsMutable { get; private set; }
     }
