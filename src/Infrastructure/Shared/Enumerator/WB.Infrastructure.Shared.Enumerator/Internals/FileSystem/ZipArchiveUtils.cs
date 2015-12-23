@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,7 +11,6 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 {
-
     class ZipArchiveUtils : IArchiveUtils
     {
         readonly IFileSystemAccessor fileSystemAccessor;
@@ -40,6 +40,11 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
                 return memoryStream.ToArray();
             }
+        }
+
+        public async Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            return await Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
@@ -118,6 +123,11 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
                     }
                 }
             }
+        }
+
+        public async Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
+        {
+            await Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
         }
 
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)

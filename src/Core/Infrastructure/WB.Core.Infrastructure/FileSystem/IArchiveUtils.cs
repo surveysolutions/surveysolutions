@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -7,8 +8,10 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         void ZipDirectory(string directory, string archiveFile);
         byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null);
+        Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null);
         void ZipFiles(IEnumerable<string> files, string archiveFilePath);
         void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
+        Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
         IEnumerable<UnzippedFile> UnzipStream(Stream zipStream);
         bool IsZipFile(string filePath);
 

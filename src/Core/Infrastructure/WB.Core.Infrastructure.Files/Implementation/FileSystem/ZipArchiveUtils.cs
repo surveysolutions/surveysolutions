@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
@@ -35,6 +36,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public async Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            return await Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
+        }
+
         public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
         {
             throw new NotImplementedException();
@@ -58,6 +64,11 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             {
                 decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
             }
+        }
+
+        public async Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
+        {
+            await Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
         }
 
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
