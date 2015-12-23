@@ -201,7 +201,7 @@
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
-                        "fixedRosterTitles": [{ value:0, title: "Title" }],
+                        "fixedRosterTitles": [{ value: 1, title: "First Title" }, { value:2, title: "Second Title" }],
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
                         "variableName": group.variableName,
