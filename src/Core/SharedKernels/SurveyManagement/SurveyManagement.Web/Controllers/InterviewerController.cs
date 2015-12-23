@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
              
                 this.Success("Interviewer was successfully created");
-                return this.Back(model.SupervisorId);
+                return this.Back();
             }
             
             return this.View(model);
@@ -107,22 +107,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.UpdateAccount(user: user, editModel: model);
                 
                 this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                return this.Back(user.Supervisor.Id);
+                return this.Back();
             }
            
             return this.View(model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult Back(Guid id)
+        public ActionResult Back()
         {
-            if (!(this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator))
-                return this.RedirectToAction("Index", "Interviewers");
-
-            var user = this.GetUserById(id);
-
-            return this.RedirectToAction("Index", "Interviewers",
-                new {supervisorId = user.Supervisor == null ? user.PublicKey : user.Supervisor.Id});
+            return this.RedirectToAction("Index", "Interviewers");
         }
     }
 }
