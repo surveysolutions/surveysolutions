@@ -29,20 +29,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
-        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
 
         public InterviewerQuestionnairesController(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer)
         {
             this.questionnaireStore = questionnaireStore;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
-            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
         }
@@ -82,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             var resultValue = new QuestionnaireApiView
             {
                 QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned.Questionnaire),
-                AllowCensus = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).AllowCensusMode
+                AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 
             var response = Request.CreateResponse(resultValue);
