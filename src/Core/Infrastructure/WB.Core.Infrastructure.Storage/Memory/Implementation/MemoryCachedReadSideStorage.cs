@@ -39,7 +39,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         }
 
         public string GetReadableStatus()
-            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheEnabled ? "enabled" : "disabled")}  |  cached (ESENT): {this.cache.Count}";
+            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheEnabled ? "enabled" : "disabled")}  |  cached (memory): {this.cache.Count}";
 
         public Type ViewType => typeof(TEntity);
 

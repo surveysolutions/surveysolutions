@@ -38,6 +38,7 @@ using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
@@ -84,9 +85,11 @@ namespace WB.UI.Designer.App_Start
             var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
             string appDataDirectory = HostingEnvironment.MapPath("~/App_Data");
 
-            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
-            string esentCacheFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Cache.Folder"] ?? @"Temp\EsentCache");
-            var cacheSettings = new ReadSideCacheSettings(esentCacheFolder, postgresCacheSize, postgresCacheSize / 2);
+            var cacheSettings = new ReadSideCacheSettings(
+                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
             var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
 
