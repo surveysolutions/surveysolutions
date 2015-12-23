@@ -18,31 +18,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 
             Property(x => x.ParentRecordIds, pm =>
             {
-                pm.Type<PostgresSqlStringArrayType>();
+                pm.Type<PostgresSqlArrayType<string>>();
                 pm.Column(clm => clm.SqlType("text[]"));
             });
 
             Property(x => x.ReferenceValues, pm =>
             {
-                pm.Type<PostgresSqlStringArrayType>();
+                pm.Type<PostgresSqlArrayType<string>>();
                 pm.Column(clm => clm.SqlType("text[]"));
             });
 
             Property(x => x.ReferenceValues, pm =>
             {
-                pm.Type<PostgresSqlStringArrayType>();
+                pm.Type<PostgresSqlArrayType<string>>();
                 pm.Column(clm => clm.SqlType("text[]"));
             });
 
 
             Property(x => x.SystemVariableValues, pm =>
             {
-                pm.Type<PostgresSqlStringArrayType>();
+                pm.Type<PostgresSqlArrayType<string>>();
                 pm.Column(clm => clm.SqlType("text[]"));
             });
             Property(x => x.Answers, pm =>
             {
-                pm.Type<PostgresSqlStringArrayType>();
+                pm.Type<PostgresSqlArrayType<string>>();
                 pm.Column(clm => clm.SqlType("text[]"));
             });
 
