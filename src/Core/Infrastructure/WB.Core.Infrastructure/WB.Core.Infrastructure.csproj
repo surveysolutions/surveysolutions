@@ -56,6 +56,7 @@
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventBus\IEvent.cs" />
+    <Compile Include="FileSystem\IAsynchronousFileSystemAccessor.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />

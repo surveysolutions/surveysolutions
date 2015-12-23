@@ -23,6 +23,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
+            this.Bind<IAsynchronousFileSystemAccessor>().To<AsynchronousFileSystemAccessor>().InSingletonScope();
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IMvxLocationWatcher>().To<PlayServicesLocationWatcher>();

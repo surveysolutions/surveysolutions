@@ -144,6 +144,7 @@
     <Compile Include="Internals\FileSystem\AndroidFileInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileSystem.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileSystemEntryInfo.cs" />
+    <Compile Include="Internals\FileSystem\AsynchronousFileSystemAccessor.cs" />
     <Compile Include="Internals\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Internals\GpsLocationService.cs" />
