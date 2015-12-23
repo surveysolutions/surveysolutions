@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -62,43 +64,60 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [HttpGet]
         [Route("")]
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
-        public List<InterviewApiView> Get()
+        public HttpResponseMessage Get()
         {
-            return this.interviewsFactory.GetInProgressInterviews(this.globalInfoProvider.GetCurrentUser().Id)
-                    .Select(interview => new InterviewApiView()
-                    {
-                        Id = interview.Id,
-                        QuestionnaireIdentity = interview.QuestionnaireIdentity,
-                        IsRejected = interview.IsRejected
-                    }).ToList();
+            var resultValue = this.interviewsFactory.GetInProgressInterviews(this.globalInfoProvider.GetCurrentUser().Id)
+                .Select(interview => new InterviewApiView()
+                {
+                    Id = interview.Id,
+                    QuestionnaireIdentity = interview.QuestionnaireIdentity,
+                    IsRejected = interview.IsRejected
+                }).ToList();
+
+            var response = this.Request.CreateResponse(resultValue);
+            response.Headers.CacheControl = new CacheControlHeaderValue()
+            {
+                Public = false,
+                NoCache = true
+            };
+
+            return response;
         }
 
         [HttpGet]
         [Route("{id:guid}")]
         [WriteToSyncLog(SynchronizationLogType.GetInterview)]
-        public InterviewDetailsApiView Details(Guid id)
+        public HttpResponseMessage Details(Guid id)
         {
             var interviewDetails = this.interviewsFactory.GetInterviewDetails(id);
             if (interviewDetails == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             var interviewMetaInfo = this.metaBuilder.GetInterviewMetaInfo(interviewDetails);
-            
-            return new InterviewDetailsApiView
+
+            var resultValue = new InterviewDetailsApiView
             {
                 LastSupervisorOrInterviewerComment = interviewDetails.Comments,
                 RejectedDateTime = interviewDetails.RejectDateTime,
                 InterviewerAssignedDateTime = interviewDetails.InterviewerAssignedDateTime,
                 AnswersOnPrefilledQuestions =
                     interviewMetaInfo.FeaturedQuestionsMeta.Select(ToAnswerOnPrefilledQuestionApiView).ToList(),
-                DisabledGroups = interviewDetails.DisabledGroups.Select(ToIdentityApiView).ToList(),
-                DisabledQuestions = interviewDetails.DisabledQuestions.Select(ToIdentityApiView).ToList(),
-                InvalidAnsweredQuestions = interviewDetails.InvalidAnsweredQuestions.Select(ToIdentityApiView).ToList(),
-                ValidAnsweredQuestions = interviewDetails.ValidAnsweredQuestions.Select(ToIdentityApiView).ToList(),
+                DisabledGroups = interviewDetails.DisabledGroups.Select(this.ToIdentityApiView).ToList(),
+                DisabledQuestions = interviewDetails.DisabledQuestions.Select(this.ToIdentityApiView).ToList(),
+                InvalidAnsweredQuestions = interviewDetails.InvalidAnsweredQuestions.Select(this.ToIdentityApiView).ToList(),
+                ValidAnsweredQuestions = interviewDetails.ValidAnsweredQuestions.Select(this.ToIdentityApiView).ToList(),
                 WasCompleted = interviewDetails.WasCompleted,
-                RosterGroupInstances = interviewDetails.RosterGroupInstances.Select(ToRosterApiView).ToList(),
-                Answers = interviewDetails.Answers.Select(ToInterviewApiView).ToList()
+                RosterGroupInstances = interviewDetails.RosterGroupInstances.Select(this.ToRosterApiView).ToList(),
+                Answers = interviewDetails.Answers.Select(this.ToInterviewApiView).ToList()
             };
+            var response = this.Request.CreateResponse(resultValue);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                Public = false,
+                NoCache = true
+            };
+
+            return response;
         }
 
         [HttpPost]

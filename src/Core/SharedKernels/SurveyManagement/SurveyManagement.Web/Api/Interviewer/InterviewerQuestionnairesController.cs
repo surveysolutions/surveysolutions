@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [HttpGet]
         [Route("census")]
         [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
-        public List<QuestionnaireIdentity> Census()
+        public HttpResponseMessage Census()
         {
             var query = new QuestionnaireBrowseInputModel()
             {
@@ -61,24 +61,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
                 .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version)).ToList();
 
-            return censusQuestionnaires;
+            var response = this.Request.CreateResponse(censusQuestionnaires);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
+            return response;
         }
 
         [HttpGet]
         [Route("{id:guid}/{version:int}")]
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        public QuestionnaireApiView Get(Guid id, int version)
+        public HttpResponseMessage Get(Guid id, int version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
 
             if (questionnaireDocumentVersioned == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return new QuestionnaireApiView()
+            var resultValue = new QuestionnaireApiView
             {
                 QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned.Questionnaire),
                 AllowCensus = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).AllowCensusMode
             };
+
+            var response = Request.CreateResponse(resultValue);
+            response.Headers.CacheControl = new CacheControlHeaderValue()
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(10)
+            };
+
+            return response;
         }
 
         [HttpGet]
@@ -95,6 +109,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(10)
+            };
 
             return response;
         }
