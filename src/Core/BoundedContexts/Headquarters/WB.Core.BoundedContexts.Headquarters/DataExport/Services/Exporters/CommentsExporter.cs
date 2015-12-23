@@ -94,17 +94,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 whereClauseForComments =
                     interviewComments =>
                         interviewComments.QuestionnaireId == questionnaireExportStructure.QuestionnaireId.FormatGuid() &&
-                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version;
+                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                        interviewComments.IsApprovedByHQ;
             }
             else
             {
                 whereClauseForComments =
                     interviewComments =>
                         interviewComments.QuestionnaireId == questionnaireExportStructure.QuestionnaireId.FormatGuid() &&
-                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version &&
-                        interviewComments.IsApprovedByHQ;
+                        interviewComments.QuestionnaireVersion == questionnaireExportStructure.Version;
             }
-
 
             var countOfAllRecords =
                 this.transactionManager.GetTransactionManager()
