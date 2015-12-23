@@ -6,21 +6,56 @@ namespace WB.Infrastructure.Shared.Enumerator
     {
         public static string GetPathToSubfolderInLocalDirectory(string subFolderName)
         {
-            var pathToSubfolderInLocalDirectory = PortablePath.Combine(FileSystem.Current.LocalStorage.Path, subFolderName);
+            return GetPathToSubfolderInDirectory(GetPathToLocalDirectory(), subFolderName);
+        }
 
-            var subfolderExistingStatus = FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
+        public static string GetPathToLocalDirectory()
+        {
+            return FileSystem.Current.LocalStorage.Path;
+        }
+
+        public static string GetPathToExternalDirectory()
+        {
+            return Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+        }
+
+        public static string GetPathToSubfolderInExternalDirectory(string subFolderName)
+        {
+            return GetPathToSubfolderInDirectory(PortablePath.Combine(GetPathToExternalDirectory(), "Interviewer"), subFolderName);
+        }
+
+        public static string GetPathToFileInLocalSubDirectory(string subFolderName, string fileName)
+        {
+            return GetPathToFileInSubDirectory(GetPathToSubfolderInLocalDirectory(subFolderName), fileName);
+        }
+
+        public static string GetPathToFileInExternalSubDirectory(string subFolderName, string fileName)
+        {
+            return GetPathToFileInSubDirectory(GetPathToSubfolderInExternalDirectory(subFolderName), fileName);
+        }
+
+        public static string GetPathToCrushFile()
+        {
+            return GetPathToFileInSubDirectory(GetPathToSubfolderInExternalDirectory("Logs"), "crashes.log");
+        }
+
+        private static string GetPathToSubfolderInDirectory(string directory, string subFolderName)
+        {
+            var pathToSubfolderInLocalDirectory = PortablePath.Combine(directory, subFolderName);
+
+            var subfolderExistingStatus =
+                FileSystem.Current.LocalStorage.CheckExistsAsync(pathToSubfolderInLocalDirectory).Result;
             if (subfolderExistingStatus != ExistenceCheckResult.FolderExists)
             {
-                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory, CreationCollisionOption.FailIfExists).Wait();
+                FileSystem.Current.LocalStorage.CreateFolderAsync(pathToSubfolderInLocalDirectory,
+                    CreationCollisionOption.FailIfExists).Wait();
             }
 
             return pathToSubfolderInLocalDirectory;
         }
 
-        public static string GetPathToFileInLocalSubDirectory(string subFolderName, string fileName)
+        private static string GetPathToFileInSubDirectory(string  subFolder, string fileName)
         {
-            var subFolder = GetPathToSubfolderInLocalDirectory(subFolderName);
-
             return FileSystem.Current.GetFolderFromPathAsync(subFolder)
                 .Result
                 .CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists)
