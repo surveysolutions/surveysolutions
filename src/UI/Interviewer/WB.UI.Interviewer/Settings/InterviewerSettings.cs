@@ -7,12 +7,10 @@ using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Utils;
 
 namespace WB.UI.Interviewer.Settings
 {
@@ -24,12 +22,21 @@ namespace WB.UI.Interviewer.Settings
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        
+        private readonly string backupFolder;
+        private readonly string restoreFolder;
+        private readonly string crushFilePath;
+
         public InterviewerSettings(
             IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider, 
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             IAsyncPlainStorage<InterviewView> interviewViewRepository, 
-            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, IFileSystemAccessor fileSystemAccessor)
+            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
+            IFileSystemAccessor fileSystemAccessor,
+            string backupFolder, 
+            string restoreFolder, 
+            string crushFilePath)
         {
             this.settingsStorage = settingsStorage;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
@@ -37,6 +44,9 @@ namespace WB.UI.Interviewer.Settings
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.backupFolder = backupFolder;
+            this.restoreFolder = restoreFolder;
+            this.crushFilePath = crushFilePath;
         }
 
         private ApplicationSettingsView CurrentSettings => this.settingsStorage.Query(settings => settings.FirstOrDefault()) ?? new ApplicationSettingsView
@@ -122,49 +132,11 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-        public string ExternalStorageDirectory
-        {
-            get
-            {
-                var externalFolder =
-                    this.fileSystemAccessor.CombinePath(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath,
-                        "Interviewer");
+        public string BackupFolder => backupFolder;
 
-                this.CreateFolderIfNeeded(externalFolder);
+        public string RestoreFolder => restoreFolder;
 
-                return externalFolder;
-            }
-        }
-
-        public string BackupFolder
-        {
-            get
-            {
-                var backupFolder= this.fileSystemAccessor.CombinePath(this.ExternalStorageDirectory, "Backup");
-                CreateFolderIfNeeded(backupFolder);
-                return backupFolder;
-            }
-        }
-
-        public string RestoreFolder
-        {
-            get
-            {
-                var restoreFolder = this.fileSystemAccessor.CombinePath(this.ExternalStorageDirectory, "Restore");
-                CreateFolderIfNeeded(restoreFolder);
-                return restoreFolder;
-            }
-        }
-
-        public string CrushFolder
-        {
-            get
-            {
-                var crushFolder = this.fileSystemAccessor.CombinePath(this.ExternalStorageDirectory, "Logs");
-                CreateFolderIfNeeded(crushFolder);
-                return crushFolder;
-            }
-        }
+        public string CrushFilePath => crushFilePath;
 
         private async Task SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
@@ -199,12 +171,6 @@ namespace WB.UI.Interviewer.Settings
         {
             return
                 FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(FileSystem.Current.LocalStorage.Path));
-        }
-
-        private void CreateFolderIfNeeded(string folder)
-        {
-            if (!this.fileSystemAccessor.IsDirectoryExists(folder))
-                this.fileSystemAccessor.CreateDirectory(folder);
         }
     }
 }

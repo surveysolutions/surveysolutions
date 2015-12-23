@@ -61,15 +61,13 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
 
-            this.Bind<IEnumeratorSettings>().To<InterviewerSettings>();
-
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             
             this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
 
-            this.Bind<IBackupRestoreService>().To<BackupRestoreService>();
+            this.Bind<IBackupRestoreService>().To<BackupRestoreService>().WithConstructorArgument("privateStorage", AndroidPathUtils.GetPathToLocalDirectory());
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(),
