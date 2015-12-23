@@ -1779,8 +1779,8 @@ namespace WB.Tests.Unit
         public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument)
             => new QuestionnaireView(questionnaireDocument);
 
-        private static ReadSideCacheSettings ReadSideCacheSettings()
-            => new ReadSideCacheSettings("folder", 128, 8);
+        public static ReadSideCacheSettings ReadSideCacheSettings(int cacheSizeInEntities = 128, int storeOperationBulkSize = 8)
+            => new ReadSideCacheSettings(true, "folder", cacheSizeInEntities, storeOperationBulkSize);
 
         public static ReadSideSettings ReadSideSettings()
             => new ReadSideSettings(readSideVersion: 0);

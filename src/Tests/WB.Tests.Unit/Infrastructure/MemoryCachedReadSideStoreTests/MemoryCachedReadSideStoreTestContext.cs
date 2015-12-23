@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         {
             return new MemoryCachedReadSideStorage<ReadSideRepositoryEntity>(
                 readSideStorage ?? Mock.Of<IReadSideStorage<ReadSideRepositoryEntity>>(),
-                new ReadSideCacheSettings(null, cacheSizeInEntities, storeOperationBulkSize));
+                Create.ReadSideCacheSettings(cacheSizeInEntities: cacheSizeInEntities, storeOperationBulkSize: storeOperationBulkSize));
         }
     }
     internal class ReadSideRepositoryEntity : IReadSideRepositoryEntity
