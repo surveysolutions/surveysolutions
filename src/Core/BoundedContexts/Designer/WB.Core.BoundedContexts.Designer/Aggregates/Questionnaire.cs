@@ -3284,9 +3284,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowIfRosterByFixedTitlesIsIncorrect(Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
             FixedRosterTitle[] rosterFixedTitles)
         {
-            if (rosterFixedTitles == null || rosterFixedTitles.Length == 0)
+            if (rosterFixedTitles == null || rosterFixedTitles.Length < 2)
             {
-                throw new QuestionnaireException("List of titles for fixed set of items roster should not be empty");
+                throw new QuestionnaireException("List of titles for fixed set of items roster should contain at least two items");
             }
             
             if (rosterFixedTitles.Length > 250)

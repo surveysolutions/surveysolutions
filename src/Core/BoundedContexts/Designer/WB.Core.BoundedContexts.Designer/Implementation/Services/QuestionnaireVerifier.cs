@@ -757,8 +757,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return false;
             if (group.FixedRosterTitles == null)
                 return false;
-            if (group.FixedRosterTitles.Length == 0)
-                return false;
+
+            if (group.FixedRosterTitles.Length < 2)
+                return true;
 
             return group.FixedRosterTitles.Any(title => string.IsNullOrWhiteSpace(title.Title));
         }

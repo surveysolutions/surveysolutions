@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new RosterChanged(responsibleId, roster1Id){
                     RosterSizeQuestionId = null,
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    FixedRosterTitles = new[] { new FixedRosterTitle(1, "test") },
+                    FixedRosterTitles = new[] { new FixedRosterTitle(1, "test"), new FixedRosterTitle(2, "test 2") },
                     RosterTitleQuestionId = null 
                 });
             
