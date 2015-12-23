@@ -634,7 +634,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     using (GlobalStopwatcher.Scope($"Disable cache for {storageEntityName}"))
                     {
                         entitiesInProgress.TryAdd(storageEntityName, Unit.Value);
-                        UpdateStatusMessage($"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}.");
+                        UpdateStatusMessage($"Disabling cache for {string.Join(", ", entitiesInProgress.Keys)}.");
 
                         try
                         {
@@ -703,7 +703,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 try
                 {
                     this.eventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
-                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
+
+                    using (GlobalStopwatcher.Scope($"Publish event {eventTypeName}"))
+                    {
+                        this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
+                    }
                 }
                 catch (Exception exception)
                 {
