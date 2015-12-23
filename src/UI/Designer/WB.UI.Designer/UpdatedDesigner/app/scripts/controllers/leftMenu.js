@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('LeftMenuCtrl',
-        function ($rootScope, $scope, utilityService) {
+        function ($rootScope, $scope) {
             'use strict';
 
             $scope.isFoldedChapters = false;

@@ -29,8 +29,11 @@
             $scope.onKeyPressInOptions = function(keyEvent) {
                 if (keyEvent.which === 13) {
                     keyEvent.preventDefault();
+
+                    var targetDomElement = keyEvent.target ? keyEvent.target : keyEvent.srcElement;
+
                     utilityService.moveFocusAndAddOptionIfNeeded(
-                        event.target ? event.target : event.srcElement,
+                        targetDomElement,
                         ".question-options-editor",
                         ".question-options-editor input.question-option-value-editor",
                         $scope.activeQuestion.options,
@@ -88,6 +91,8 @@
                     $scope.questionForm.$setPristine();
                 }
             };
+
+            $scope.MAX_OPTIONS_COUNT = 200;
 
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
@@ -213,6 +218,9 @@
             };
 
             $scope.addOption = function () {
+                if ($scope.activeQuestion.optionsCount >= $scope.MAX_OPTIONS_COUNT)
+                    return;
+
                 $scope.activeQuestion.options.push({
                     "value": null,
                     "title": '',
@@ -281,7 +289,7 @@
 
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
-                $scope.activeQuestion.optionsCount -= 1;
+                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                 $scope.questionForm.$setDirty();
             };
 
