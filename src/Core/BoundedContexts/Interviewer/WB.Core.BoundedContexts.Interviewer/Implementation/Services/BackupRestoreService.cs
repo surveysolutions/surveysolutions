@@ -39,14 +39,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
             var backup = await this.GetSystemBackupAsync();
-            var emptyBackupFile = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
+            var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
 
             var isBackupFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(backupToFolderPath);
             if (!isBackupFolderExists)
                 await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath);
 
-            await this.fileSystemAccessor.WriteAllBytesAsync(emptyBackupFile, backup);
-            return emptyBackupFile;
+            await this.fileSystemAccessor.WriteAllBytesAsync(backupFilePath, backup);
+            return backupFilePath;
         }
 
         public async Task RestoreAsync(string backupFilePath)
