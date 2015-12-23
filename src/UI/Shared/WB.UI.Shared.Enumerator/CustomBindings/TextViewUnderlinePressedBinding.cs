@@ -16,6 +16,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView control, bool value)
         {
+            var decoratedContent = new SpannableString(this.Target.Text);
+            decoratedContent.SetSpan(new UnderlineSpan(), 0, decoratedContent.Length(), 0);
+            this.Target.TextFormatted = decoratedContent;
         }
 
 
@@ -34,12 +37,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (e.Event.Action == MotionEventActions.Down)
             {
                 var decoratedContent = new SpannableString(this.Target.Text);
-                decoratedContent.SetSpan(new UnderlineSpan(), 0, decoratedContent.Length(), 0);
                 this.Target.TextFormatted = decoratedContent;
             }
             else if (e.Event.Action == MotionEventActions.Up)
             {
                 var decoratedContent = new SpannableString(this.Target.Text);
+                decoratedContent.SetSpan(new UnderlineSpan(), 0, decoratedContent.Length(), 0);
                 this.Target.TextFormatted = decoratedContent;
             }
 

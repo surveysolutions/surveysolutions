@@ -19,7 +19,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:paddingLeft">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingLeft">@dimen/Troubleshooting_double_padding</item>
     <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
@@ -27,7 +27,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>
     <item name="android:orientation">vertical</item>
-    <item name="android:paddingLeft">@dimen/Troubleshooting_padding</item>
+    <item name="android:paddingLeft">@dimen/Troubleshooting_double_padding</item>
     <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
@@ -59,7 +59,7 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_30</item>
-    <item name="android:fontFamily">Roboto Light</item>
+    <item name="android:fontFamily">sans-serif-light</item>
     <item name="android:paddingBottom">@dimen/Diagnostics_Title_padding</item>
   </style>
   <style name="Diagnostics_Subsection_Value" parent="AppTheme">
