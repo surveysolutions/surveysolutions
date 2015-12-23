@@ -77,7 +77,8 @@
     };
 
     self.updateStatus = function() {
-        self.SendRequest(self.updateRebuildStatusApiUrl, {}, function(data) {
+        _.delay(self.updateStatus, 3000);
+        self.SendRequest(self.updateRebuildStatusApiUrl, {}, function (data) {
             self.isRebuildRunning(data.IsRebuildRunning);
 
             self.readSideApplicationVersion(data.ReadSideApplicationVersion);
@@ -100,8 +101,6 @@
             self.reloadDenormalizerStatistics(data.ReadSideDenormalizerStatistics);
             self.reloadErrorsList(self.rebuildErrors, data.RebuildErrors);
             self.reloadErrorsList(self.warningEventHandlerErrors, data.WarningEventHandlerErrors);
-
-            _.delay(self.updateStatus, 3000);
         }, true, true);
     };
 
