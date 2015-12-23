@@ -651,6 +651,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool LookupTableNameIsKeyword(Guid tableId, LookupTable table, QuestionnaireDocument questionnaire)
         {
+            if (string.IsNullOrWhiteSpace(table.FileName))
+                return false;
             return keywordsProvider.GetAllReservedKeywords().Contains(table.TableName.ToLower());
         }
 
