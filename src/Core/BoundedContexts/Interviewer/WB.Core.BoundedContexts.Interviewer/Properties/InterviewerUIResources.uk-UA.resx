@@ -560,4 +560,7 @@
   <data name="Share_to_Title" xml:space="preserve">
     <value>Передати технічну інформацію за допомогою..</value>
   </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Папка '{0}' пуста. Пожалуйста, положите данные, которые Вы хотите восстановить в эту папку.</value>
+  </data>
 </root>

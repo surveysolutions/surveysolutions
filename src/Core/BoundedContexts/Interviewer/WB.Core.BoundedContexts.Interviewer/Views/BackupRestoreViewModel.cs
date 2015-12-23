@@ -113,9 +113,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await RestoreAsync()); }
         }
 
-        public IMvxCommand IncreaseClicksCountOnDescriptionPanelCommand => new MvxCommand(this.IncreaseClicksCountOnDescriptionPanel);
+        public IMvxCommand IncreaseClicksCountOnDescriptionPanelCommand => new MvxCommand(async () => await this.IncreaseClicksCountOnDescriptionPanel());
 
-        private void IncreaseClicksCountOnDescriptionPanel()
+        private async Task IncreaseClicksCountOnDescriptionPanel()
         {
             if (this.IsBackupInProgress)
                 return;
@@ -124,8 +124,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (this.clicksCountOnDescriptionPanel > 10)
             {
                 this.clicksCountOnDescriptionPanel = 0;
-                
-                var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(this.interviewerSettings.RestoreFolder);
+
+                var restoreFolder = this.interviewerSettings.RestoreFolder;
+
+                if (!this.fileSystemAccessor.IsDirectoryExists(restoreFolder))
+                    this.fileSystemAccessor.CreateDirectory(restoreFolder);
+
+                var filesInRestoreFolder = this.fileSystemAccessor.GetFilesInDirectory(restoreFolder);
                 if (filesInRestoreFolder.Any())
                 {
                     this.IsRestoreVisible = true;
@@ -133,6 +138,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     this.RestoreLocation = filesInRestoreFolder[0];
                     this.RestoreScope = FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetFileSize(this.RestoreLocation));
                     this.RestoreCreationDate = this.fileSystemAccessor.GetCreationTime(this.RestoreLocation);
+                }
+                else
+                {
+                    await this.userInteractionService.AlertAsync(InterviewerUIResources.Troubleshooting_RestoreFolderIsEmpty.FormatString(restoreFolder));
                 }
             }
         }

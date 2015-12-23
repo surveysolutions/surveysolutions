@@ -1318,6 +1318,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Folder &apos;{0}&apos; is empty. Please put the backup you willing to restore in the folder..
+        /// </summary>
+        public static string Troubleshooting_RestoreFolderIsEmpty {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoreFolderIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sending of information package is failed.
         /// </summary>
         public static string Troubleshooting_SendingOfInformationPackageErrorMessage {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -11,58 +10,56 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IArchiveUtils archiver;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerSettings interviewerSettings;
+        private readonly string privateStorage;
 
-        public BackupRestoreService(IArchiveUtils archiver,
-            IFileSystemAccessor fileSystemAccessor, IInterviewerSettings interviewerSettings)
+        public BackupRestoreService(
+            IArchiveUtils archiver,
+            IFileSystemAccessor fileSystemAccessor, 
+            IInterviewerSettings interviewerSettings, 
+            string privateStorage)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerSettings = interviewerSettings;
+            this.privateStorage = privateStorage;
         }
 
         public Task<byte[]> GetSystemBackupAsync()
         {
             return Task.Run(() =>
             {
-                var filesInCrashFolder =
-                    this.fileSystemAccessor.GetFilesInDirectory(this.interviewerSettings.CrushFolder);
-                var crashDirectory = this.fileSystemAccessor.CombinePath(FileSystem.Current.LocalStorage.Path,
-                    "crashes");
-                if(!this.fileSystemAccessor.IsDirectoryExists(crashDirectory))
-                    this.fileSystemAccessor.CreateDirectory(crashDirectory);
+                var pathToCrushFile = this.interviewerSettings.CrushFilePath;
 
-                foreach (var fileInCrushFolder in filesInCrashFolder)
-                {
-                    this.fileSystemAccessor.CopyFileOrDirectory(fileInCrushFolder, crashDirectory);
-                }
+                if (this.fileSystemAccessor.IsFileExists(pathToCrushFile))
+                    this.fileSystemAccessor.CopyFileOrDirectory(pathToCrushFile, privateStorage);
 
-                return this.archiver.ZipDirectoryToByteArray(FileSystem.Current.LocalStorage.Path,
+                return this.archiver.ZipDirectoryToByteArray(privateStorage,
                     fileFilter: @"\.log$;\.dll$;\.mdb$;");
             });
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            IFolder backupToFolder = await FileSystem.Current.GetFolderFromPathAsync(backupToFolderPath);
             var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
-            var emptyBackupFile = await backupToFolder.CreateFileAsync(backupFileName, CreationCollisionOption.GenerateUniqueName);
             var backup = await this.GetSystemBackupAsync();
-            using (var stream = await emptyBackupFile.OpenAsync(FileAccess.ReadAndWrite))
+            var emptyBackupFile =
+                this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
+            await Task.Run(() =>
             {
-                stream.Write(backup, 0, backup.Length);
-            }
-            return emptyBackupFile.Path;
+                if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
+                    this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
+
+                this.fileSystemAccessor.WriteAllBytes(emptyBackupFile, backup);
+            });
+            return emptyBackupFile;
         }
 
-        public Task RestoreAsync(string backupFilePath)
+        public async Task RestoreAsync(string backupFilePath)
         {
-            return Task.Run(() =>
+            if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
-                if (this.fileSystemAccessor.IsFileExists(backupFilePath))
-                {
-                    this.archiver.Unzip(backupFilePath, FileSystem.Current.LocalStorage.Path, true);
-                }
-            });
+                await Task.Run(() => this.archiver.Unzip(backupFilePath, privateStorage, true));
+            }
         }
     }
 }

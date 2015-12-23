@@ -9,26 +9,21 @@ using Cirrious.CrossCore.Droid.Platform;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Infrastructure.Shared.Enumerator;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class TabletDiagnosticService: ITabletDiagnosticService
     {
-        private readonly IInterviewerSettings interviewerSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public TabletDiagnosticService(
-            IInterviewerSettings interviewerSettings, 
             IFileSystemAccessor fileSystemAccessor)
         {
-            this.interviewerSettings = interviewerSettings;
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        private Activity CurrentActivity
-        {
-            get { return Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity; }
-        }
+        private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
 
         public void LaunchShareAction(string title, string info)
         {
@@ -41,9 +36,8 @@ namespace WB.UI.Interviewer.Implementations.Services
         public async Task UpdateTheApp(string url)
         {
             var applicationFileName = "interviewer.apk";
-
             string pathTofile =
-                fileSystemAccessor.CombinePath(this.fileSystemAccessor.CombinePath(this.interviewerSettings.ExternalStorageDirectory, "download"),
+                fileSystemAccessor.CombinePath(this.fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "download"),
                     applicationFileName);
             // generate unique name instead of delete
             if (this.fileSystemAccessor.IsFileExists(pathTofile))
