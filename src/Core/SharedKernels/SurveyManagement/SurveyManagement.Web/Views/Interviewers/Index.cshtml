@@ -4,6 +4,7 @@
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.Core.SharedKernels.SurveyManagement.Web.Resources
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 
 
 
@@ -27,7 +28,13 @@
             var model = new Supervisor.VM.Interviewers($interviewersApiUrl, $commandExecutionUrl, $interviewersPageUrl, $supervisorsUrl);
             ko.applyBindings(model);
             model.load();
+
+            @if (TempData.ContainsKey(Alerts.SUCCESS))
+            {
+                <text> setTimeout(function () { $('.alert-success').hide(); }, 5000);</text>
+            }
         });
+
     </script>
 }
 
