@@ -362,7 +362,7 @@
         </div>
         </script>
 
-        <script type="text/ng-template" id="Numeric-template.html">
+    <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
                 <div class="col-xs-4">
                     <div class="checkbox checkbox-in-column">
@@ -372,8 +372,9 @@
                 </div>
                 <div class="col-xs-8 inline-inputs">
                     <div class="form-group checkbox-in-column" ng-show="!activeQuestion.isInteger" ng-class="{'has-error': !questionForm.countOfDecimalPlaces.$valid}">
-                        <label for="edit-question-count-decimal">Number of decimal places</label>
+                        <label for="edit-question-count-decimal">Number of decimal places</label> 
                         <input id="edit-question-count-decimal" type="text"
+                               maxlength="15"
                                name="countOfDecimalPlaces"
                                ng-pattern="/^\d+$/"
                                ng-model="activeQuestion.countOfDecimalPlaces"
