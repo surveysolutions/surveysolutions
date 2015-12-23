@@ -6,6 +6,7 @@ using NHibernate;
 using NHibernate.Linq;
 using Ninject;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -17,10 +18,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;
+        private readonly ILogger logger;
 
-        public PostgreReadSideRepository([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider)
+        public PostgreReadSideRepository([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger)
         {
             this.sessionProvider = sessionProvider;
+            this.logger = logger;
         }
 
         public virtual int Count()
@@ -61,23 +64,15 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
-
-            foreach (var subBulk in bulk.Batch(2048))
+            try
             {
-                using (ISession session = sessionFactory.OpenSession())
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    foreach (var tuple in subBulk)
-                    {
-                        TEntity entity = tuple.Item1;
-                        string id = tuple.Item2;
+                this.FastBulkStore(bulk);
+            }
+            catch (Exception exception)
+            {
+                this.logger.Warn($"Failed to store bulk of {bulk.Count} entities of type {this.ViewType.Name} using fast way. Switching to slow way.", exception);
 
-                        session.Save(entity, id);
-                    }
-
-                    transaction.Commit();
-                }
+                this.SlowBulkStore(bulk);
             }
         }
 
@@ -103,6 +98,56 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public string GetReadableStatus()
         {
             return "PostgreSQL :'(";
+        }
+
+        private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+
+            foreach (var subBulk in bulk.Batch(2048))
+            {
+                using (ISession session = sessionFactory.OpenSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    foreach (var tuple in subBulk)
+                    {
+                        TEntity entity = tuple.Item1;
+                        string id = tuple.Item2;
+
+                        session.Save(entity, id);
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+            using (ISession session = sessionFactory.OpenSession())
+            using (ITransaction transaction = session.BeginTransaction())
+            {
+                foreach (var tuple in bulk)
+                {
+                    TEntity entity = tuple.Item1;
+                    string id = tuple.Item2;
+
+                    var storedEntity = session.Get<TEntity>(id);
+
+                    if (storedEntity != null)
+                    {
+                        var merge = session.Merge(entity);
+                        session.Update(merge);
+                    }
+                    else
+                    {
+                        session.Save(entity);
+                    }
+                }
+
+                transaction.Commit();
+            }
         }
     }
 }

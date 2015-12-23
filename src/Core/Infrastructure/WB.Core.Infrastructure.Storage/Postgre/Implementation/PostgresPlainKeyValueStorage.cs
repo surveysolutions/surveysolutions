@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using Npgsql;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
@@ -11,8 +12,8 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     {
         private readonly PostgresPlainStorageSettings connectionSettings;
 
-        public PostgresPlainKeyValueStorage(IPlainSessionProvider plainSessionProvider, PostgresPlainStorageSettings connectionSettings)
-            : base(connectionSettings.ConnectionString)
+        public PostgresPlainKeyValueStorage(IPlainSessionProvider plainSessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger)
+            : base(connectionSettings.ConnectionString, logger)
         {
             this.connectionSettings = connectionSettings;
         }

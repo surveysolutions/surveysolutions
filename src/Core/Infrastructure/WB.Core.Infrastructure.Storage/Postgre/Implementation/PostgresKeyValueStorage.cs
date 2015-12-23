@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Humanizer;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
@@ -14,9 +16,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         protected readonly string connectionString;
         protected readonly string tableName = typeof(TEntity).Name.Pluralize();
 
-        public PostgresKeyValueStorage(string connectionString)
+        private readonly ILogger logger;
+
+        public PostgresKeyValueStorage(string connectionString, ILogger logger)
         {
             this.connectionString = connectionString;
+            this.logger = logger;
             EnshureTableExists();
         }
 
@@ -112,24 +117,17 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            this.EnshureTableExists();
-
-            using (var connection = new NpgsqlConnection(this.connectionString))
+            try
             {
-                connection.Open();
-                using (var writer = connection.BeginBinaryImport($"COPY {this.tableName}(id, value) FROM STDIN BINARY;"))
-                {
-                    foreach (var item in bulk)
-                    {
-                        writer.StartRow();
-                        writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
+                this.FastBulkStore(bulk);
+            }
+            catch (Exception exception)
+            {
+                this.logger.Warn($"Failed to store bulk of {bulk.Count} entities of type {this.ViewType.Name} using fast way. Switching to slow way.", exception);
 
-                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, JsonSerializerSettings); 
-                        writer.Write(serializedValue, NpgsqlDbType.Json); // write value
-                    }
-                }
+                this.SlowBulkStore(bulk);
             }
         }
 
@@ -156,6 +154,38 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public string GetReadableStatus()
         {
             return "Postgres K/V :/";
+        }
+
+        private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            this.EnshureTableExists();
+
+            using (var connection = new NpgsqlConnection(this.connectionString))
+            {
+                connection.Open();
+                using (var writer = connection.BeginBinaryImport($"COPY {this.tableName}(id, value) FROM STDIN BINARY;"))
+                {
+                    foreach (var item in bulk)
+                    {
+                        writer.StartRow();
+                        writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
+
+                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, JsonSerializerSettings);
+                        writer.Write(serializedValue, NpgsqlDbType.Json); // write value
+                    }
+                }
+            }
+        }
+
+        private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                var entity = tuple.Item1;
+                var id = tuple.Item2;
+
+                this.Store(entity, id);
+            }
         }
 
         protected void EnshureTableExists()
