@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Controllers
         const string GPSACCURACYCOLUMNPOSTFIX = "_accuracy";
         const string GPSALTITUDECOLUMNPOSTFIX = "_altitude";
         const string GPSTIMESTAMPCOLUMNPOSTFIX = "_timestamp";
-        const string SUPERVISORCOLUMNNAME = "supervisor";
+        const string SUPERVISORCOLUMNNAME = "responsible";
         const string INTERVIEWERCOLUMNNAME = "interviewer";
 
         private class ImportedInterview
