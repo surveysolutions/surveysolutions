@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -24,7 +23,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
-using WB.UI.Interviewer.Settings;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -39,6 +37,10 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.AddDocument("Document", typeof(QuestionnaireDocumentView));
             SiaqodbConfigurator.AddDocument("Model", typeof(QuestionnaireModelView));
             SiaqodbConfigurator.AddText("JsonEvent", typeof(EventView));
+            SiaqodbConfigurator.AddText("Title", typeof(QuestionnaireView));
+            SiaqodbConfigurator.AddText("LastInterviewerOrSupervisorComment", typeof(InterviewView));
+            SiaqodbConfigurator.AddText("QuestionText", typeof(InterviewAnswerOnPrefilledQuestionView));
+            SiaqodbConfigurator.AddText("Answer", typeof(InterviewAnswerOnPrefilledQuestionView));
             SiaqodbConfigurator.SpecifyStoredDateTimeKind(DateTimeKind.Utc);
             SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof(IPlainStorageEntity));
             SiaqodbConfigurator.EncryptedDatabase = true;
