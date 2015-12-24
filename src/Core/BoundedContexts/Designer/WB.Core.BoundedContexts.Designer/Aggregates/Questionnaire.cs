@@ -1791,7 +1791,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-
+            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, false, null, linkedToQuestionId.HasValue);
 
             this.ApplyEvent(new QuestionChanged
             (
