@@ -565,6 +565,6 @@
     <value>&lt;font color="red"&gt;Соединение с нашим сервером отсутствует&lt;/font&gt;</value>
   </data>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
-    <value>Папка '{0}' порожня. Будь ласка, покладіть резервну копію, з якої Вы бажаєте відновитись в цю папку.</value>
+    <value>Папка '{0}' пуста. Пожалуйста, положите данные, которые Вы хотите восстановить в эту папку.</value>
   </data>
 </root>
