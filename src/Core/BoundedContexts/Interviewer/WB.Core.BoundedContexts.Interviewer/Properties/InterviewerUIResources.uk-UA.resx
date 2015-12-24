@@ -133,7 +133,8 @@
     <value>Завершено {0}</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу</value>
+    <value>Cтворити 
+iнтервью</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Нові {0}</value>
