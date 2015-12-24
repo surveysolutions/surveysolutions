@@ -126,8 +126,7 @@ namespace WB.UI.Interviewer
             
             kernel.Bind<IEnumeratorSettings, IRestServiceSettings, IInterviewerSettings>().To<InterviewerSettings>()
                 .WithConstructorArgument("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
-                .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"))
-                .WithConstructorArgument("crushFilePath", AndroidPathUtils.GetPathToCrushFile());
+                .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
 

@@ -26,7 +26,7 @@ namespace WB.UI.Interviewer
             base.OnCreate();
 
             CrashManager.Initialize(this);
-            CrashManager.AttachSender(() => new FileReportSender(AndroidPathUtils.GetPathToCrushFile()));
+            CrashManager.AttachSender(() => new FileReportSender(AndroidPathUtils.GetPathToCrashFile()));
         }
 
         public override void OnLowMemory()

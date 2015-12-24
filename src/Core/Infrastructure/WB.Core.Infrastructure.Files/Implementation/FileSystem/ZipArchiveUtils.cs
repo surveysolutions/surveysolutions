@@ -36,9 +36,9 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
-        public async Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
         {
-            return await Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
+            return Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
         }
 
         public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
@@ -66,9 +66,9 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
-        public async Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
+        public Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
-            await Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
+            return Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
         }
 
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
