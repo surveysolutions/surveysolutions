@@ -30,7 +30,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         {
             var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(targetDir);
 
-            var copyOfTheFile = await parentFolder.CreateFileAsync(Path.GetFileName(sourceFile), CreationCollisionOption.GenerateUniqueName);
+            var copyOfTheFile = await parentFolder.CreateFileAsync(Path.GetFileName(sourceFile), CreationCollisionOption.ReplaceExisting);
             var originalFile = await PCLStorage.FileSystem.Current.GetFileFromPathAsync(sourceFile);
 
             using (var originalStream = await originalFile.OpenAsync(PCLStorage.FileAccess.Read))

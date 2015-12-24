@@ -34,7 +34,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             return GetPathToFileInSubDirectory(GetPathToSubfolderInExternalDirectory(subFolderName), fileName);
         }
 
-        public static string GetPathToCrushFile()
+        public static string GetPathToCrashFile()
         {
             return GetPathToFileInSubDirectory(GetPathToSubfolderInExternalDirectory("Logs"), "crashes.log");
         }
