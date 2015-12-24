@@ -12,5 +12,6 @@ namespace WB.Core.Infrastructure.FileSystem
         Task<bool> IsFileExistsAsync(string pathToFile);
 
         string CombinePath(string path1, string path2);
+        Task DeleteFileAsync(string pathTofile);
     }
 }
