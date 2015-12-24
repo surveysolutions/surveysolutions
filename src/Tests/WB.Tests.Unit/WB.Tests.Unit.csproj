@@ -433,6 +433,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_fixed_titles_that_have_one_item.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_size_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_referencing_not_existing_roster_title_question.cs" />
+    <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_with_more_than_200_options.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateTextQuestionHandlerTests\when_updating_text_question_and_title_contains_substitution_to_question_duplicated_var_name.cs" />
     <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\BinaryFormatDataExportHandlerTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\when_export_all_binary_data.cs" />
