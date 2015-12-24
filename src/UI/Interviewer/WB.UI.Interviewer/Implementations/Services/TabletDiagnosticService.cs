@@ -1,26 +1,24 @@
 using System;
-//using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
+using Flurl;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Infrastructure.Shared.Enumerator;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
     internal class TabletDiagnosticService: ITabletDiagnosticService
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAsynchronousFileSystemAccessor asynchronousFileSystemAccessor;
 
-        public TabletDiagnosticService(
-            IFileSystemAccessor fileSystemAccessor)
+        public TabletDiagnosticService(IAsynchronousFileSystemAccessor asynchronousFileSystemAccessor)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
+            this.asynchronousFileSystemAccessor = asynchronousFileSystemAccessor;
         }
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
@@ -36,16 +34,24 @@ namespace WB.UI.Interviewer.Implementations.Services
         public async Task UpdateTheApp(string url)
         {
             var applicationFileName = "interviewer.apk";
-            string pathTofile =
-                fileSystemAccessor.CombinePath(this.fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "download"),
-                    applicationFileName);
-            // generate unique name instead of delete
-            if (this.fileSystemAccessor.IsFileExists(pathTofile))
-                this.fileSystemAccessor.DeleteFile(pathTofile);
+            var pathToExternalDirectory = AndroidPathUtils.GetPathToExternalDirectory();
+            var downloadFolder = this.asynchronousFileSystemAccessor.CombinePath(pathToExternalDirectory, "download");
+            string pathTofile = this.asynchronousFileSystemAccessor.CombinePath(downloadFolder, applicationFileName);
 
-            var client = new WebClient();
-            var uri = new Uri(new Uri(url), "/api/InterviewerSync/GetLatestVersion");
-            await Task.Run(() => client.DownloadFile(uri, pathTofile));
+            if (await this.asynchronousFileSystemAccessor.IsFileExistsAsync(pathTofile))
+            {
+                await this.asynchronousFileSystemAccessor.DeleteFileAsync(pathTofile);
+            }
+
+            HttpClient client = new HttpClient();
+            
+            var uri = new Uri(Url.Combine(url, "/api/InterviewerSync/GetLatestVersion"));
+
+            var response = await client.GetAsync(uri);
+            response.EnsureSuccessStatusCode();
+
+            byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
+            await this.asynchronousFileSystemAccessor.WriteAllBytesAsync(pathTofile, responseBytes);
 
             Intent promptInstall =
                 new Intent(Intent.ActionView).SetDataAndType(
