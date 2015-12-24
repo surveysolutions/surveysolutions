@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
 {
     internal class when_searching_for_supervisor : SupervisorsViewFactoryTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             UserDocument supervisor = CreateSupervisor(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), "Supervisor1");
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(supervisor);
