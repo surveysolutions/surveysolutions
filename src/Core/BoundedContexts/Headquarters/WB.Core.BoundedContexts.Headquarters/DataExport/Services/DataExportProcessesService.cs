@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             this.processes.GetOrNull(processId)?.Cancel();
 
-            this.processes.Remove(processId);
+            this.processes.TryRemove(processId);
         }
 
         private static void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
