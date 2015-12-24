@@ -29,6 +29,18 @@ namespace WB.Core.GenericSubdomains.Portable
             return value;
         }
 
+        public static TValue GetOrUpdate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit)
+        {
+            TValue value;
+
+            if (dict.TryGetValue(key, out value))
+                return value;
+
+            value = valueInit.Invoke();
+            dict[key] = value;
+            return value;
+        }
+
         public static TValue GetOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
