@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             foreach (var interviewView in interviewViews)
             {
                 var interviewDashboardItem = this.interviewViewModelFactory.GetNew<InterviewDashboardItemViewModel>();
-                interviewDashboardItem.Init(interviewView.Id);
+                interviewDashboardItem.Init(interviewView);
                 yield return interviewDashboardItem;
             }
         }

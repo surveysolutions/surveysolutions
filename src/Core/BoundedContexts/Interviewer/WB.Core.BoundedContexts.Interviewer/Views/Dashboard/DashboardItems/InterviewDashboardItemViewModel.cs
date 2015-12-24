@@ -66,9 +66,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.interviewerInterviewFactory = interviewFactory;
         }
 
-        public void Init(string intrerviewId)
+        public void Init(InterviewView interview)
         {
-            var interview = this.interviewViewRepository.GetById(intrerviewId);
             var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
 
             this.InterviewId = interview.InterviewId;
