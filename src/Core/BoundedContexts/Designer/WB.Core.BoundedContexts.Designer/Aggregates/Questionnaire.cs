@@ -1791,7 +1791,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, false, null, linkedToQuestionId.HasValue);
+            this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToQuestionId.HasValue);
 
             this.ApplyEvent(new QuestionChanged
             (
@@ -1869,7 +1869,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
             this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationExpression, enablementCondition);
-            this.ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(options, isFilteredCombobox, cascadeFromQuestionId, linkedToQuestionId.HasValue);
+
+            if (!isFilteredCombobox && !cascadeFromQuestionId.HasValue)
+            {
+                this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToQuestionId.HasValue);
+            }
 
             this.ApplyEvent(new QuestionChanged
             (
@@ -2803,13 +2807,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfCategoricalSingleOptionsQuestionHasMoreThan200Options(Option[] options, bool isFilteredCombobox, Guid? cascadeFromQuestionId, bool isLinkedQuestion)
+        private void ThrowIfCategoricalQuestionHasMoreThan200Options(Option[] options, bool isLinkedQuestion)
         {
-            if (!isLinkedQuestion && !isFilteredCombobox && !cascadeFromQuestionId.HasValue && options.Count() > 200)
+            if (!isLinkedQuestion && options.Count() > 200)
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalSingleOptionHasMoreThan200Options,
-                    "Categorical single-select question contains more than 200 options");
+                throw new QuestionnaireException(DomainExceptionType.CategoricalQuestionHasMoreThan200Options, ExceptionMessages.CategoricalQuestionHasMoreThan200Options);
             }
         }
 
