@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -41,29 +42,28 @@ namespace WB.Core.GenericSubdomains.Portable
             return value;
         }
 
-        public static TValue GetOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        public static TValue GetOrNull<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : class
         {
             return dictionary.ContainsKey(key) ? dictionary[key] : null;
         }
 
-        public static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        public static TValue? GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : struct
         {
             return dictionary.ContainsKey(key) ? dictionary[key] : null as TValue?;
         }
 
-        public static TValue GetOrNull<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
-            where TValue : class
-        {
-            return dictionary.ContainsKey(key) ? dictionary[key] : null;
-        }
-
         public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
-            where TValue : class
         {
             TValue _;
             return dictionary.TryRemove(key, out _);
+        }
+
+        public static ConcurrentDictionary<TKey, TElement> ToConcurrentDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector,
+            Func<TSource, TElement> elementSelector)
+        {
+            return new ConcurrentDictionary<TKey, TElement>(source.ToDictionary(keySelector, elementSelector));
         }
     }
 }

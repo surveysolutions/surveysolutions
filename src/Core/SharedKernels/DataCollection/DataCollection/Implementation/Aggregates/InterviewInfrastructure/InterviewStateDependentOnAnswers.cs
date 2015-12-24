@@ -219,10 +219,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
-                this.AnswersSupportedInExpressions.Remove(questionKey);
-                this.LinkedSingleOptionAnswersBuggy.Remove(questionKey);
-                this.LinkedMultipleOptionsAnswers.Remove(questionKey);
-                this.TextListAnswers.Remove(questionKey);
+                this.AnswersSupportedInExpressions.TryRemove(questionKey);
+                this.LinkedSingleOptionAnswersBuggy.TryRemove(questionKey);
+                this.LinkedMultipleOptionsAnswers.TryRemove(questionKey);
+                this.TextListAnswers.TryRemove(questionKey);
                 this.AnsweredQuestions.Remove(questionKey);
                 this.DisabledQuestions.Remove(questionKey);
                 this.ValidAnsweredQuestions.Remove(questionKey);
