@@ -22,14 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
-            // Adjust the model appropriately
-            int count = this.reader.Count();
-            if (count == 0)
-            {
-                return new QuestionnaireBrowseView(
-                    input.Page, input.PageSize.GetValueOrDefault(), count, new QuestionnaireBrowseItem[0], string.Empty);
-            }
-
             return this.reader.Query(queryable =>
             {
                 IQueryable<QuestionnaireBrowseItem> query = queryable;
