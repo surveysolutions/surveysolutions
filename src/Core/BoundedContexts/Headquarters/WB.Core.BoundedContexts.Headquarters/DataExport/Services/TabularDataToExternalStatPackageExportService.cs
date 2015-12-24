@@ -97,7 +97,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
 
-                    UpdateMetaWithLabels(meta, labelsForServiceColumns[this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile)], varLabels, varValueLabels);
+                    var levelName = this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile);
+                    if(labelsForServiceColumns.ContainsKey(levelName))
+                         UpdateMetaWithLabels(meta, labelsForServiceColumns[levelName], varLabels, varValueLabels);
 
                     using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
                     {
