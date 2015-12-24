@@ -617,7 +617,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private void DisableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
-            using (GlobalStopwatcher.Scope("Disable cache"))
+            using (GlobalStopwatcher.Scope("Disable caches"))
             {
                 UpdateStatusMessage("Disabling cache in repository writers.");
 
@@ -631,7 +631,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     var storageEntityName = GetStorageEntityName(writer);
 
-                    using (GlobalStopwatcher.Scope($"Disable cache for {storageEntityName}"))
+                    using (GlobalStopwatcher.Scope("Disable cache", storageEntityName))
                     {
                         entitiesInProgress.TryAdd(storageEntityName, Unit.Value);
                         UpdateStatusMessage($"Disabling cache for {string.Join(", ", entitiesInProgress.Keys)}.");
@@ -704,7 +704,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     this.eventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
 
-                    using (GlobalStopwatcher.Scope($"Publish event {eventTypeName}"))
+                    using (GlobalStopwatcher.Scope("Publish event", eventTypeName))
                     {
                         this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
                     }
