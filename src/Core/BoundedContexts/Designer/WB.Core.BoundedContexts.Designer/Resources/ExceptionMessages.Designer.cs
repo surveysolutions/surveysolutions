@@ -133,6 +133,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Categorical question contains more than 200 options.
+        /// </summary>
+        internal static string CategoricalQuestionHasMoreThan200Options {
+            get {
+                return ResourceManager.GetString("CategoricalQuestionHasMoreThan200Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lookup table with such id already exist..
         /// </summary>
         internal static string LookupTableAlreadyExist {

@@ -134,7 +134,7 @@
 
         FilteredComboboxQuestionOptionsMaxLength,
 
-        CategoricalSingleOptionHasMoreThan200Options,
+        CategoricalQuestionHasMoreThan200Options,
 
         CategoricalCascadingOptionsCantContainsEmptyParentValueField,
 
