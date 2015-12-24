@@ -13,8 +13,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
         private readonly IMvxReachability mvxReachability;
+        private readonly string unknown = "UNKNOWN";
 
-        public AndroidNetworkService(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity, IMvxReachability mvxReachability)
+       public AndroidNetworkService(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity, IMvxReachability mvxReachability)
         {
             this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
             this.mvxReachability = mvxReachability;
@@ -41,12 +42,20 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public string GetNetworkType()
         {
+            var network = this.GetNetworkInfo();
+            if (network == null)
+                return unknown;
+
             return this.GetNetworkInfo().TypeName;
         }
 
         public string GetNetworkName()
         {
             var network = this.GetNetworkInfo();
+
+            if (network == null)
+                return unknown;
+
             if (network.Type == ConnectivityType.Wifi)
             {
                 WifiManager manager = (WifiManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.WifiService);
