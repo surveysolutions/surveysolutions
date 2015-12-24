@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.UI.Interviewer.Infrastructure.Internals.Crasher.Utils;
 
 namespace WB.UI.Interviewer.Settings
 {
@@ -25,7 +24,6 @@ namespace WB.UI.Interviewer.Settings
         
         private readonly string backupFolder;
         private readonly string restoreFolder;
-        private readonly string crushFilePath;
 
         public InterviewerSettings(
             IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
@@ -35,8 +33,7 @@ namespace WB.UI.Interviewer.Settings
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
             IFileSystemAccessor fileSystemAccessor,
             string backupFolder, 
-            string restoreFolder, 
-            string crushFilePath)
+            string restoreFolder)
         {
             this.settingsStorage = settingsStorage;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
@@ -46,7 +43,6 @@ namespace WB.UI.Interviewer.Settings
             this.fileSystemAccessor = fileSystemAccessor;
             this.backupFolder = backupFolder;
             this.restoreFolder = restoreFolder;
-            this.crushFilePath = crushFilePath;
         }
 
         private ApplicationSettingsView CurrentSettings => this.settingsStorage.Query(settings => settings.FirstOrDefault()) ?? new ApplicationSettingsView
@@ -135,8 +131,6 @@ namespace WB.UI.Interviewer.Settings
         public string BackupFolder => backupFolder;
 
         public string RestoreFolder => restoreFolder;
-
-        public string CrushFilePath => crushFilePath;
 
         private async Task SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {

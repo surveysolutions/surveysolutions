@@ -16,6 +16,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         
         string BackupFolder { get; }
         string RestoreFolder { get; }
-        string CrushFilePath { get; }
     }
 }

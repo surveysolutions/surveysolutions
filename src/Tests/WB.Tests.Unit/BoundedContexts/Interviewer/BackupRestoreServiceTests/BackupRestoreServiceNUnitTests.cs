@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
             IAsynchronousFileSystemAccessor fileSystemAccessor = null)
         {
             return new BackupRestoreService(archiver ?? Mock.Of<IArchiveUtils>(),
-                fileSystemAccessor ?? Mock.Of<IAsynchronousFileSystemAccessor>(), Mock.Of<IInterviewerSettings>(_=>_.CrushFilePath=="crush"), "private");
+                fileSystemAccessor ?? Mock.Of<IAsynchronousFileSystemAccessor>(), "private", "crush");
         }
     }
 }

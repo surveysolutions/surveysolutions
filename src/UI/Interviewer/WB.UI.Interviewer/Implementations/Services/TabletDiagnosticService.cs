@@ -3,12 +3,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.OS;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Droid.Platform;
 using Flurl;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Shared.Enumerator;
+using WB.UI.Interviewer.Activities;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
@@ -63,9 +65,11 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void RestartTheApp()
         {
-            Intent intent = this.CurrentActivity.PackageManager.GetLaunchIntentForPackage(this.CurrentActivity.PackageName);
-            intent.AddFlags(ActivityFlags.ClearTop);
+            Intent intent = new Intent(this.CurrentActivity,
+                typeof(SplashActivity));
+            intent.AddFlags(ActivityFlags.NewTask);
             Application.Context.StartActivity(intent);
+            Process.KillProcess(Process.MyPid());
         }
     }
 }
