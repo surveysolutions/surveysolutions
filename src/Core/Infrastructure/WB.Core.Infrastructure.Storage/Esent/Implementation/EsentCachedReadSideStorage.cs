@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +21,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         private readonly ReadSideCacheSettings cacheSettings;
 
         private bool isCacheUsed = false;
+        private int entitiesSentToStorage = 0;
 
         private readonly Dictionary<string, TEntity> memoryCache = new Dictionary<string, TEntity>();
         private PersistentDictionary<string, string> esentCache;
@@ -48,7 +49,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         }
 
         public string GetReadableStatus()
-            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "enabled" : "disabled")}  |  cached (memory/ESENT): {this.memoryCache.Count:N0} / {this.esentCache.Count:N0}";
+            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "enabled" : "disabled")}  |  memory ⇄ ESENT → storage : {this.memoryCache.Count:N0} ⇄ {this.esentCache.Count:N0} → {this.entitiesSentToStorage:N0}";
 
         public Type ViewType => typeof(TEntity);
 
@@ -59,6 +60,8 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
         public void EnableCache()
         {
             this.isCacheUsed = true;
+
+            this.entitiesSentToStorage = 0;
 
             // TODO: fill esent cache with data from actual storage
         }
@@ -203,6 +206,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
             foreach (var bulk in bulks)
             {
                 this.storage.BulkStore(bulk);
+                this.entitiesSentToStorage += bulk.Count;
             }
 
             this.esentCache.Dispose();

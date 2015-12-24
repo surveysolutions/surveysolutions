@@ -57,7 +57,8 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static StopwatchScope Scope(string category, string name) => new StopwatchScope(GetStopwatch(category, name));
 
-        private static StopwatchWrapper GetStopwatch(string category, string name) => categories.GetOrAdd(category).Stopwatches.GetOrAdd(name);
+        private static StopwatchWrapper GetStopwatch(string category, string name)
+            => categories.GetOrUpdate(category, () => new StopwatchesCategory()).Stopwatches.GetOrUpdate(name, () => new StopwatchWrapper());
 
         public static void Reset()
         {
