@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             healthCheckService.Setup(x => x.Check())
                 .Returns(new HealthCheckResults(HealthCheckStatus.Happy,
                     EventStoreHealthCheckResult.Happy(), NumberOfUnhandledPackagesHealthCheckResult.Happy(0),
-                    NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0), new FolderPermissionCheckResult(HealthCheckStatus.Happy, "", new string[0], new string[0]), ReadSideHealthCheckResult.Happy()));
+                    new FolderPermissionCheckResult(HealthCheckStatus.Happy, "", new string[0], new string[0]), ReadSideHealthCheckResult.Happy()));
             controller = CreateHealthCheckApiController(healthCheckService.Object
                 /*KP-4929        databaseHealthCheck,
                       eventStoreHealthCheck,

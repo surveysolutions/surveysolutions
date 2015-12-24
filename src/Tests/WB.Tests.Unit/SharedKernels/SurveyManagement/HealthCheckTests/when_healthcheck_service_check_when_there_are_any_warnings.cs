@@ -13,14 +13,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
         {
             var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Happy());
             var numberOfUnhandledPackagesChecker = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Warning(numberOfunhandledPackages, numberOfUnhandledPackagesErrorMessage));
-            var numberOfSyncPackagesWithBigSizeChecker = Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(m => m.Check() == NumberOfSyncPackagesWithBigSizeCheckResult.Warning(numberOfSyncPackagesWithBigSize, numberOfSyncPackagesWithBigSizeErrorMessage));
             var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
             var readSideHealthChecker = Mock.Of<IAtomicHealthCheck<ReadSideHealthCheckResult>>(m => m.Check() == ReadSideHealthCheckResult.Happy());
 
             service = CreateHealthCheckService(
                 eventStoreHealthCheck,
                 numberOfUnhandledPackagesChecker,
-                numberOfSyncPackagesWithBigSizeChecker,
                 folderPermissionChecker,
                 readSideHealthChecker);
         };
@@ -51,22 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
         It should_return_4_packages_for_NumberOfUnhandledPackages_check = () =>
             result.NumberOfUnhandledPackages.Value.ShouldEqual(numberOfunhandledPackages);
 
-        It should_return_Warning_status_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.Status.ShouldEqual(HealthCheckStatus.Warning);
-
-        It should_return_error_message_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.ErrorMessage.ShouldEqual(numberOfSyncPackagesWithBigSizeErrorMessage);
-
-        It should_return_5_sync_packages_for_NumberOfSyncPackagesWithBigSize_check = () =>
-            result.NumberOfSyncPackagesWithBigSize.Value.ShouldEqual(numberOfSyncPackagesWithBigSize);
-
         It should_return_Down_status_for_FolderPermissionCheckResult_check = () =>
             result.FolderPermissionCheckResult.Status.ShouldEqual(HealthCheckStatus.Happy);
 
 
         private static string numberOfUnhandledPackagesErrorMessage = "numberOfUnhandledPackagesErrorMessage error message";
-        private static string numberOfSyncPackagesWithBigSizeErrorMessage = "numberOfSyncPackagesWithBigSizeErrorMessage error message";
-        private static int numberOfSyncPackagesWithBigSize = 5;
         private static int numberOfunhandledPackages = 4;
 
         private static HealthCheckResults result;
