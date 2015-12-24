@@ -156,9 +156,9 @@ namespace WB.UI.Headquarters.Controllers
                         Guid? supervisorId = null;
                         if (fileDescription.HasSupervisorColumn)
                         {
-                            supervisorId = GetUserIdByName(dynamicImportedInterview.supervisor);
+                            supervisorId = GetUserIdByName(dynamicImportedInterview.responsible);
                             if (!supervisorId.HasValue)
-                                throw new Exception($"supervisor '{dynamicImportedInterview.supervisor}' not found ");
+                                throw new Exception($"supervisor '{dynamicImportedInterview.responsible}' not found ");
                         }
 
                         Guid? interviewerId = null;
