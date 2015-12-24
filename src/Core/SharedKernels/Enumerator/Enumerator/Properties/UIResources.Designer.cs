@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors.
+        ///   Looks up a localized string similar to Error(s).
         /// </summary>
         public static string Interview_Complete_Errors {
             get {
