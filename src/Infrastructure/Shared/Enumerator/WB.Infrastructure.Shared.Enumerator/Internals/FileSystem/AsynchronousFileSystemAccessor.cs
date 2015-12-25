@@ -44,15 +44,24 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
         public async Task CreateDirectoryAsync(string path)
         {
-            var parentFolderPath = Directory.GetParent(path).FullName;
-            var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
-            await parentFolder.CreateFolderAsync(Path.GetDirectoryName(path), CreationCollisionOption.FailIfExists);
+            string parentFolderPath = path;
+            IFolder parentFolder;
+
+            do
+            {
+                parentFolderPath = Directory.GetParent(parentFolderPath).FullName;
+                parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
+            } while (parentFolder == null);
+
+            var subPathInExistingFolderToCreate = path.Replace(parentFolderPath, "").TrimStart(Path.DirectorySeparatorChar);
+            await parentFolder.CreateFolderAsync(subPathInExistingFolderToCreate, CreationCollisionOption.FailIfExists);
         }
 
         public async Task<bool> IsDirectoryExistsAsync(string pathToDirectory)
         {
             var parentFolderPath = Directory.GetParent(pathToDirectory).FullName;
             var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
+            if (parentFolder == null) return false;
             return (await parentFolder.CheckExistsAsync(Path.GetDirectoryName(pathToDirectory))) ==
                    ExistenceCheckResult.FolderExists;
         }
@@ -61,7 +70,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         {
             var parentFolderPath = Directory.GetParent(pathToFile).FullName;
             var parentFolder = await PCLStorage.FileSystem.Current.GetFolderFromPathAsync(parentFolderPath);
-
+            if (parentFolder == null) return false;
             return (await parentFolder.CheckExistsAsync(Path.GetFileName(pathToFile))) ==
                   ExistenceCheckResult.FileExists;
         }
