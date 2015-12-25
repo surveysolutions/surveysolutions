@@ -277,7 +277,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File does not contains required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;.
+        ///   Looks up a localized string similar to File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;.
         /// </summary>
         internal static string PrefilledQuestionsRequired {
             get {
