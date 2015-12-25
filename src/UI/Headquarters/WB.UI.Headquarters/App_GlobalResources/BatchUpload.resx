@@ -253,6 +253,6 @@
     <value>Batch upload</value>
   </data>
   <data name="PrefilledQuestionsRequired" xml:space="preserve">
-    <value>File does not contains required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
 </root>
