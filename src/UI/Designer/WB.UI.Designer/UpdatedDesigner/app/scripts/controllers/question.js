@@ -11,20 +11,21 @@
                 hotkeys.del(saveQuestion);
             }
 
-            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                hotkeys.bindTo($scope)
-                    .add({
-                        combo: saveQuestion,
-                        description: 'Save changes',
-                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                        callback: function(event) {
+            
+            hotkeys.bindTo($scope)
+                .add({
+                    combo: saveQuestion,
+                    description: 'Save changes',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    callback: function(event) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                             $scope.saveQuestion();
                             $scope.questionForm.$setPristine();
                             event.preventDefault();
                         }
-                    });
+                    }
+                });
 
-            }
 
             $scope.onKeyPressInOptions = function(keyEvent) {
                 if (keyEvent.which === 13) {
