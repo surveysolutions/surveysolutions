@@ -113,6 +113,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.UserName = userIdentity.Name;
         }
 
+        public void RefreshEndpoint()
+        {
+            this.Endpoint = this.interviewerSettings.Endpoint;
+        }
+
         private async Task SignInAsync()
         {
             this.IsUserValid = true;
