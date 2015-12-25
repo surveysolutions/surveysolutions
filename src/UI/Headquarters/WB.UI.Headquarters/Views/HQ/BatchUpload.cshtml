@@ -50,14 +50,14 @@
 <div class="row-fluid">
     <div data-bind="visible: canImportInterviews" style="display: none;">
         <div class="row">
-            <div class="col-md-9">
+            <div data-bind="css: { 'col-md-9': status.hasErrors() == true, 'col-md-12': status.hasErrors() == false }">
                 <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.UploadSample, Model.QuestionnaireVersion, Model.QuestionnaireTitle)</h3>
                 <div>
                     @BatchUpload.UploadSampleDescription
                 </div>
                 <br />
                 @if (Model != null && Model.FeaturedQuestions != null)
-            {
+                {
                     <div style="overflow-x: scroll">
                         <table class="table table-striped table-bordered table-condensed table-break-words">
                             <thead>
@@ -96,7 +96,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div data-bind="css: { 'col-md-3': status.hasErrors }">
                 <ul class="list-group" data-bind="if: status.hasErrors" style="padding-top: 30px">
                     <li class="list-group-item disabled">
                         <b>Last import status</b>
@@ -147,10 +147,12 @@
         <div class="jumbotron">
             <h2 data-bind="text: status.questionnaireTitle"></h2>
             <p>Import interviews is in progress, please wait until current operation is finished</p>
-            <p>
+            <p data-bind="visible: status.totalInterviewsCount() > 0">
                 <b><span data-bind="text: status.createdInterviewsCount"></span></b> of <b><span data-bind="text: status.totalInterviewsCount"></span></b> interviews created
             </p>
-            <p><b><span data-bind="text: status.elapsedTime"></span></b> of <b><span data-bind="text: status.estimatedTime"></span></b> time spent</p>
+            <p data-bind="visible: status.estimatedTime() > 0">
+                <b><span data-bind="text: status.elapsedTime"></span></b> of <b><span data-bind="text: status.estimatedTime"></span></b> time spent
+            </p>
             <p>
                 <a data-bind="if: status.hasErrors, attr: { href: $invalidInterviewsByLastImportUrl }">
                     <i class="glyphicon glyphicon-download-alt"></i> Download invalid interviews
