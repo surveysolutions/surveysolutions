@@ -68,7 +68,7 @@
                         android:orientation="horizontal"
                         android:gravity="left">
           <Button
-            style="@style/Login_Singin_Button"
+            style="@style/Login_Button"
             android:id="@+id/LoginPage_singin_button"
             local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
           <Button

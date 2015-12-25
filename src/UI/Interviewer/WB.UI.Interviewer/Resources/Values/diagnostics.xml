@@ -23,6 +23,9 @@
     <item name="android:paddingRight">@dimen/Troubleshooting_padding</item>
     <item name="android:paddingBottom">@dimen/Troubleshooting_padding</item>
   </style>
+  <style name="Restore_Button" parent="Login_Button">
+    <item name="android:layout_marginBottom">@dimen/Login_Footer_paddingBottom</item>
+  </style>
   <style name="Diagnostics_SubSection">
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">match_parent</item>

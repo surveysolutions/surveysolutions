@@ -68,8 +68,8 @@
 
   <LinearLayout style="@style/Diagnostics_TitleSection" local:MvxBind="Visible BackupRestore.IsRestoreVisible;">
     <Button
-    style="@style/Login_Singin_Button"
-    local:MvxBind="Text Localization('Diagnostics_Restore_Title'); Click BackupRestore.RestoreCommand" />
+      style="@style/Restore_Button"
+      local:MvxBind="Text Localization('Diagnostics_Restore_Title'); Click BackupRestore.RestoreCommand" />
     <TextView
               style="@style/Diagnostics_Section_Description_Warning"
               local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
