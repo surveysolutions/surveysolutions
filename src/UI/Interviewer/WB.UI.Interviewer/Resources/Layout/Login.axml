@@ -36,14 +36,16 @@
         <ImageView
             style="@style/Login_Logo"
             android:id="@+id/LoginPage_logo" />
-        <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical">
-          <TextView
+
+        <TextView
             style="@style/Login_ErrorMessage"
             android:id="@+id/LoginPage_error_message"
             android:layout_width="wrap_content"
             local:MvxBind="Text ErrorMessage; Visible Or(Not(IsUserValid), IsOnlineLoginButtonVisible)" />
+        
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
           <EditText
             style="@style/Login_Login_Editor"
             android:id="@+id/LoginPage_login"
@@ -64,18 +66,10 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="left">
-            <Button
-              style="@style/Login_Singin_Button"
-              android:id="@+id/LoginPage_singin_button"
-              android:layout_below="@+id/LoginPage_password"
-              local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
-
-            <Button
-              style="@style/Login_OnlineSingin_Button"
-              android:id="@+id/LoginPage_Online_Login_button"
-              android:layout_toRightOf="@+id/LoginPage_singin_button"
-              android:layout_below="@+id/LoginPage_password"
-              local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;" />
+            <Button style="@style/Login_Button"
+                    local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
+            <Button style="@style/Login_OnlineSingin_Button"
+                    local:MvxBind="Click OnlineSignInCommand; Text Localization('Interviewer_TryOnlineLogin'); Visible IsOnlineLoginButtonVisible;" />
           </LinearLayout>
         </LinearLayout>
 
