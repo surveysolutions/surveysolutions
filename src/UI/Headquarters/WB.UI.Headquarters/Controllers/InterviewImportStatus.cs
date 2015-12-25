@@ -8,6 +8,8 @@ namespace WB.UI.Headquarters.Controllers
 {
     public class InterviewImportStatus
     {
+        public Guid QuestionnaireId { get; set; }
+        public long QuestionnaireVersion { get; set; }
         public string QuestionnaireTitle { get; set; }
         public bool IsInProgress { get; set; } = false;
         public DateTime StartedDateTime { get; set; }
