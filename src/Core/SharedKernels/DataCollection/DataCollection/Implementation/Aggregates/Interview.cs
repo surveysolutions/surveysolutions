@@ -3729,7 +3729,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected void ThrowIfInterviewReceivedByInterviewer()
         {
             if (this.receivedByInterviewer) 
-                throw new InterviewException($"Cann't modify Interview {this.EventSourceId} on server, because it received by interviewer.");
+                throw new InterviewException($"Can't modify Interview {this.EventSourceId} on server, because it received by interviewer.");
         }
 
         private void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
