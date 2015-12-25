@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             exception.ShouldNotBeNull();
             exception.ShouldBeOfExactType<InterviewException>();
-            exception.Message.ShouldEqual($"Cann't modify Interview {interview.EventSourceId} on server, because it received by interviewer.");
+            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId} on server, because it received by interviewer.");
         };
 
         It should_not_raise_any_NumericIntegerQuestionAnswered_event = () =>
