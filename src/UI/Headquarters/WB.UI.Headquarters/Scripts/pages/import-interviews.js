@@ -5,6 +5,8 @@
     self.fileWithInterviews = ko.observable().extend({ required: true });
     self.isViewModelValid = function () { return true };
     self.status = {
+        questionnaireId: ko.observable(),
+        questionnaireVersion: ko.observable(),
         createdInterviewsCount: ko.observable(0),
         totalInterviewsCount: ko.observable(0),
         elapsedTime: ko.observable("-"),
@@ -27,6 +29,11 @@
     self.canImportInterviews = ko.computed(function() {
         return self.isStatusLoaded() && !self.status.isInProgress();
     });
+    self.isNeedShowStatusPanel = function() {
+        return self.status.hasErrors()
+            && questionnaireId == elf.status.questionnaireId()
+            && questionnaireVersion == self.status.questionnaireVersion();
+    }
 
     self.load = function (isViewModelValid) {
         self.isViewModelValid = isViewModelValid;
@@ -41,6 +48,8 @@
             self.status.elapsedTime(data.ElapsedTime);
             self.status.estimatedTime(data.EstimatedTime);
             self.status.questionnaireTitle(data.QuestionnaireTitle);
+            self.status.questionnaireId(data.QuestionnaireId);
+            self.status.questionnaireVersion(data.QuestionnaireVersion);
             self.status.hasErrors(data.HasErrors);
 
             self.isStatusLoaded(true);
@@ -82,6 +91,7 @@
                             self.fileWithInterviews('');
                             self.selectedResponsible(undefined);
                         }
+                        $("#select-supervisor-dialog").hide().appendTo($('body'));
                     }
                 });
             } 

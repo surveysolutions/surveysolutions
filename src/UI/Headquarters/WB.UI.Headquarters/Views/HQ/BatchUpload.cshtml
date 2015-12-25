@@ -50,7 +50,7 @@
 <div class="row-fluid">
     <div data-bind="visible: canImportInterviews" style="display: none;">
         <div class="row">
-            <div data-bind="css: { 'col-md-9': status.hasErrors() == true, 'col-md-12': status.hasErrors() == false }">
+            <div data-bind="css: { 'col-md-9': isNeedShowStatusPanel() == true, 'col-md-12': isNeedShowStatusPanel  () == false }">
                 <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.UploadSample, Model.QuestionnaireVersion, Model.QuestionnaireTitle)</h3>
                 <div>
                     @BatchUpload.UploadSampleDescription
@@ -96,8 +96,8 @@
                     </form>
                 </div>
             </div>
-            <div data-bind="css: { 'col-md-3': status.hasErrors }">
-                <ul class="list-group" data-bind="if: status.hasErrors" style="padding-top: 30px">
+            <div data-bind="css: { 'col-md-3': isNeedShowStatusPanel() }">
+                <ul class="list-group" data-bind="if: isNeedShowStatusPanel()" style="padding-top: 30px">
                     <li class="list-group-item disabled">
                         <b>Last import status</b>
                     </li>
@@ -150,7 +150,7 @@
             <p data-bind="visible: status.totalInterviewsCount() > 0">
                 <b><span data-bind="text: status.createdInterviewsCount"></span></b> of <b><span data-bind="text: status.totalInterviewsCount"></span></b> interviews created
             </p>
-            <p data-bind="visible: status.estimatedTime() > 0">
+            <p data-bind="visible: status.createdInterviewsCount() > 0">
                 <b><span data-bind="text: status.elapsedTime"></span></b> of <b><span data-bind="text: status.estimatedTime"></span></b> time spent
             </p>
             <p>

@@ -83,6 +83,8 @@ namespace WB.UI.Headquarters.Controllers
             var status = this.interviewImportService.Status;
             return new InterviewImportStatusApiView
             {
+                QuestionnaireId = status.QuestionnaireId,
+                QuestionnaireVersion = status.QuestionnaireVersion,
                 QuestionnaireTitle = status.QuestionnaireTitle,
                 IsInProgress = status.IsInProgress,
                 TotalInterviewsCount = status.TotalInterviewsCount,
@@ -204,6 +206,8 @@ namespace WB.UI.Headquarters.Controllers
 
         public class InterviewImportStatusApiView
         {
+            public Guid QuestionnaireId { get; set; }
+            public long QuestionnaireVersion { get; set; }
             public string QuestionnaireTitle { get; set; }
             public bool IsInProgress { get; set; }
             public int TotalInterviewsCount { get; set; }

@@ -78,6 +78,8 @@ namespace WB.UI.Headquarters.Controllers
             var columnsWithTypes = GetFileColumnsWithTypes(fileDescription);
             var dynamicTypeOfImportedInterview = columnsWithTypes.ToDynamicType("interview");
 
+            this.Status.QuestionnaireId = fileDescription.QuestionnaireIdentity.QuestionnaireId;
+            this.Status.QuestionnaireVersion = fileDescription.QuestionnaireIdentity.Version;
             this.Status.QuestionnaireTitle = fileDescription.QuestionnaireTitle;
             this.Status.StartedDateTime = DateTime.Now;
             this.Status.CreatedInterviewsCount = 0;
