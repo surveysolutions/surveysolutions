@@ -567,4 +567,7 @@
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
     <value>Папка '{0}' пуста. Пожалуйста, положите данные, которые Вы хотите восстановить в эту папку.</value>
   </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Адрес сайта Supervisor '{0}' отличается от сохранённого в настройках ('{1}'). Загрузить URL из настроек?</value>
+  </data>
 </root>
