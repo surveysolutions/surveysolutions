@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            exception.ShouldNotBeNull();
 
         It should_throw_InterviewException_with_explanation = () =>
-           exception.Message.ShouldEqual($"Cann't modify Interview {interview.EventSourceId} on server, because it received by interviewer.");
+           exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId} on server, because it received by interviewer.");
 
         private static Interview interview;
         private static Guid userId;

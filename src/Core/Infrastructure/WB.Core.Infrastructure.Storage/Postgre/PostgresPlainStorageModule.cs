@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.Infrastructure.Storage.Postgre
 {
@@ -61,7 +62,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = this.settings.ConnectionString;
-                db.Dialect<NHibernate.Dialect.PostgreSQL82Dialect>();
+                db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
