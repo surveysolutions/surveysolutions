@@ -35,11 +35,11 @@ namespace WB.UI.Interviewer.Activities
             }
         }
 
-        protected override void OnResume()
+        protected override async void OnResume()
         {
             base.OnResume();
 
-            this.ViewModel.RefreshEndpoint();
+            await this.ViewModel.RefreshEndpoint();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
