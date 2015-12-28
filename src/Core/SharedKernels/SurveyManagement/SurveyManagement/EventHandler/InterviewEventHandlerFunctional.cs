@@ -332,6 +332,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             state.ResponsibleId = @event.Payload.InterviewerId;
             state.ResponsibleRole = UserRoles.Operator;
+            state.ReceivedByInterviewer = false;
 
             return state;
         }
