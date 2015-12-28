@@ -78,6 +78,7 @@ namespace WB.UI.Headquarters.Controllers
             var columnsWithTypes = GetFileColumnsWithTypes(fileDescription);
             var dynamicTypeOfImportedInterview = columnsWithTypes.ToDynamicType("interview");
 
+            this.Status = new InterviewImportStatus();
             this.Status.QuestionnaireId = fileDescription.QuestionnaireIdentity.QuestionnaireId;
             this.Status.QuestionnaireVersion = fileDescription.QuestionnaireIdentity.Version;
             this.Status.QuestionnaireTitle = fileDescription.QuestionnaireTitle;
@@ -393,12 +394,6 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        public InterviewImportStatus Status { get; } = new InterviewImportStatus()
-        {
-            State = new InterviewImportState
-            {
-                Errors = new List<InterviewImportError>()
-            }
-        };
+        public InterviewImportStatus Status { get; private set; } = new InterviewImportStatus();
     }
 }

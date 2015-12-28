@@ -8,6 +8,11 @@ namespace WB.UI.Headquarters.Controllers
 {
     public class InterviewImportStatus
     {
+        public InterviewImportStatus()
+        {
+            State = new InterviewImportState { Errors = new List<InterviewImportError>() };
+        }
+
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { get; set; }
         public string QuestionnaireTitle { get; set; }

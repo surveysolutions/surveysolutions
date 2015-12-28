@@ -15,9 +15,13 @@ namespace WB.UI.Interviewer.Converters
         {
             if (culture == null)
                 culture = CultureInfo.CurrentUICulture;
-
-            if (string.Compare(culture.TwoLetterISOLanguageName, "in", StringComparison.InvariantCultureIgnoreCase) != 0)
-                culture = indonesianCultureInfo;
+            
+            //hack for Indonesian culture android issue 
+            if (culture.TwoLetterISOLanguageName.ToLower() == "iv")
+            {
+                if(Java.Util.Locale.Default.ISO3Country.ToUpper() == "IDN")
+                    culture = indonesianCultureInfo;
+            }
 
             var localizeString = InterviewerUIResources.ResourceManager.GetString(value, culture);
             if (!localizeString.IsNullOrEmpty())
