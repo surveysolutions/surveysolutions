@@ -1046,7 +1046,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization succesfully completed.
+        ///   Looks up a localized string similar to Synchronization successfully completed.
         /// </summary>
         public static string Synchronization_Success_Title {
             get {
