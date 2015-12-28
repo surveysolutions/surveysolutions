@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
+        private readonly IUserInteractionService userInteractionService;
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -33,7 +34,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IInterviewerSettings interviewerSettings,
             ISynchronizationService synchronizationService,
-            ILogger logger)
+            ILogger logger, 
+            IUserInteractionService userInteractionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
@@ -42,6 +44,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewerSettings = interviewerSettings;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
+            this.userInteractionService = userInteractionService;
         }
 
         private string endpoint;
@@ -113,9 +116,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.UserName = userIdentity.Name;
         }
 
-        public void RefreshEndpoint()
+        public async Task RefreshEndpoint()
         {
-            this.Endpoint = this.interviewerSettings.Endpoint;
+            var settingsEndpoint = this.interviewerSettings.Endpoint;
+            if (!string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
+            {
+                var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
+                if (await this.userInteractionService.ConfirmAsync(message))
+                {
+                    this.Endpoint = settingsEndpoint;
+                }
+            }
         }
 
         private async Task SignInAsync()

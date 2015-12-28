@@ -614,6 +614,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization endpoint &apos;{0}&apos; is different from provided in Settings (&apos;{1}&apos;). Load URL from settings?.
+        /// </summary>
+        public static string FinishInstallation_EndpointDiffers {
+            get {
+                return ResourceManager.GetString("FinishInstallation_EndpointDiffers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
