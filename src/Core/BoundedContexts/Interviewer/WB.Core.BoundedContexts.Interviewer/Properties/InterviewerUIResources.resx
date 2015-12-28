@@ -568,6 +568,5 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Synchronization endpoint '{0}' is different from provided in Settings ('{1}'). Load URL from settings?</value>
-    <comment>{0} - endpoint on Finish Installation page. {1} - endpoint in Settings</comment>
   </data>
 </root>
