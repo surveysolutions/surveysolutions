@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your user account is locked. Please contact to your supervisor..
+        ///   Looks up a localized string similar to Your user account is locked. Please contact your supervisor..
         /// </summary>
         public static string AccountIsLockedOnServer {
             get {
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your account is not approved. Please contact to your supervisor..
+        ///   Looks up a localized string similar to Your account is not approved. Please contact your supervisor..
         /// </summary>
         public static string AccountIsNotApprovedOnServer {
             get {
@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All collected data will be saved as backup file on this device..
+        ///   Looks up a localized string similar to All collected data will be saved to backup file on this device..
         /// </summary>
         public static string Diagnostics_Backup_Description {
             get {
@@ -668,7 +668,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication problem on the remote server too. Please contact your Supervisor or Headquarter.
+        ///   Looks up a localized string similar to Authentication problem on the remote server. Please contact your Supervisor.
         /// </summary>
         public static string Login_Online_SignIn_Failed {
             get {
@@ -686,7 +686,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The website of Survey Solutions Supervisor is on the maintenance mode now. Sorry for the inconvenience.
+        ///   Looks up a localized string similar to The website of Survey Solutions Supervisor is on maintenance. Sorry for the inconvenience.
         /// </summary>
         public static string Maintenance {
             get {
@@ -1136,9 +1136,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your interviewer account (&apos;{0}&apos;). 
-        ///Your account may have one of the following problems: have a different password than you entered, be locked by Headquarter, or be deleted by Headquarter.
-        ///Please enter your updated password. If doing so does not resolve the problem, please contact your Supervisor or Headquarter..
+        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials (&apos;{0}&apos;). 
+        ///Your account may have a different password; be locked or deleted.
+        ///Please re-enter your password. If the problem persists, contact your Supervisor..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {
             get {
@@ -1309,7 +1309,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is presented at {0}.
+        ///   Looks up a localized string similar to All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is present at {0}.
         /// </summary>
         public static string Troubleshooting_RestoreConfirmation {
             get {
@@ -1327,7 +1327,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Folder &apos;{0}&apos; is empty. Please put the backup you willing to restore in the folder..
+        ///   Looks up a localized string similar to Folder &apos;{0}&apos; is empty. Please put the backup you want to restore in the folder..
         /// </summary>
         public static string Troubleshooting_RestoreFolderIsEmpty {
             get {
