@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,9 @@ using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -69,6 +73,38 @@ namespace WB.UI.Interviewer.Activities
             await Task.Run(this.RestoreQuestionnairesAsync);
             await Task.Run(this.RestoreQuestionnaireModelsAndDocumentsAsync);
             await Task.Run(this.RestoreEventStreamsAsync);
+            await Task.Run(this.RestoreInterviewDetailsAsync);
+        }
+
+        private async Task RestoreInterviewDetailsAsync()
+        {
+            var commandService = Mvx.Resolve<ICommandService>();
+            var serializer = Mvx.Resolve<ISerializer>();
+
+            var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
+
+            var pathToInterviewDetails =
+                PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "SyncCache");
+
+            var interviewDetailsFolder = await FileSystem.Current.GetFolderFromPathAsync(pathToInterviewDetails);
+
+            if (interviewDetailsFolder == null) return;
+
+            var interviewer = interviewersRepository.Query(interviewers => interviewers.FirstOrDefault());
+
+            if (interviewer == null) return;
+
+            foreach (var interviewDetailsFile in await interviewDetailsFolder.GetFilesAsync())
+            {
+                var interviewDetailsText = await interviewDetailsFile.ReadAllTextAsync();
+                var interviewSynchronizationDto =
+                    serializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText);
+
+                await commandService.ExecuteAsync(new SynchronizeInterviewCommand(
+                    interviewId: Guid.Parse(interviewDetailsFile.Name),
+                    userId: interviewer.UserId,
+                    sycnhronizedInterview: interviewSynchronizationDto));
+            }
         }
 
         private async Task RestoreInterviewerAsync()
