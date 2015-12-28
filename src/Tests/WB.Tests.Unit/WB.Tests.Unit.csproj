@@ -708,6 +708,7 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\CumulativeChartDenormalizerTests\when_handling_InterviewStatusChanged_event_and_there_is_last_status_for_this_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewReceivedBySupervisor_event_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_InterviewReceivedByInterviewer_event_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_interview_is_reassigned_to_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewCreated_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewFromPreloadedDataCreated_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewReferencesDenormalizerTests\when_applying_InterviewOnClientCreated_event.cs" />
