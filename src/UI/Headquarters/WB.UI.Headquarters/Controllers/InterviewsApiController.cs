@@ -32,18 +32,21 @@ namespace WB.UI.Headquarters.Controllers
         readonly Func<ISampleImportService> sampleImportServiceFactory;
         private readonly IInterviewImportService interviewImportService;
         private readonly IArchiveUtils archiver;
+        private readonly IGlobalInfoProvider globalInfoProvider;
 
         public InterviewsApiController(
             ICommandService commandService, IGlobalInfoProvider globalInfo, ILogger logger,
             IPreloadedDataRepository preloadedDataRepository, Func<ISampleImportService> sampleImportServiceFactory,
             IInterviewImportService interviewImportService,
-            IArchiveUtils archiver)
+            IArchiveUtils archiver,
+            IGlobalInfoProvider globalInfoProvider)
             : base(commandService, globalInfo, logger)
         {
             this.preloadedDataRepository = preloadedDataRepository;
             this.sampleImportServiceFactory = sampleImportServiceFactory;
             this.interviewImportService = interviewImportService;
             this.archiver = archiver;
+            this.globalInfoProvider = globalInfoProvider;
         }
 
         [ObserverNotAllowedApi]
@@ -123,14 +126,17 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
+            var fileBytes = fileStream.ToArray();
 
-            var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileStream.ToArray());
+            var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileBytes);
 
             var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
                     column => column.IsRequired && !column.ExistsInFIle).Select(column => column.ColumnName).ToList();
 
             var isSupervisorRequired = !descriptionByFileWithInterviews.HasSupervisorColumn &&
                                        !request.SupervisorId.HasValue;
+
+            var responsibleId = this.globalInfoProvider.GetCurrentUser().Id;
 
             if (!requiredNotExistingColumns.Any() && !isSupervisorRequired)
             {
@@ -141,7 +147,8 @@ namespace WB.UI.Headquarters.Controllers
                     try
                     {
                         this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
-                            fileDescription: descriptionByFileWithInterviews);
+                            questionnaireIdentity: questionnaireIdentity, fileBytes: fileBytes, 
+                            responsibleId: responsibleId);
                     }
                     finally
                     {
