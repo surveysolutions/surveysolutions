@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         public virtual string Id { get; set; }
         public virtual string RecordId { get; set; }
-        public virtual Guid InterviewId{ get; set; }
+        public virtual Guid InterviewId { get; set; }
         public virtual string LevelName { get; set; }
         public virtual string[] ParentRecordIds { get; set; }
         public virtual string[] ReferenceValues { get; set; }
