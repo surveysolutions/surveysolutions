@@ -141,6 +141,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InterviewerUIResources.th-TH.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\InterviewerUIResources.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewerUIResources.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerInterviewFactory.cs" />
@@ -248,6 +253,10 @@
       <LastGenOutput>InterviewerUIResources.th-TH.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\InterviewerUIResources.uk-UA.resx" />
+    <EmbeddedResource Include="Properties\InterviewerUIResources.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
