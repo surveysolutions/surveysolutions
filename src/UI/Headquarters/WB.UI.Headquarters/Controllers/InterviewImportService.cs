@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -47,7 +46,6 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository;
         private readonly ICommandService commandService;
-        private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IUserViewFactory userViewFactory;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
@@ -58,7 +56,6 @@ namespace WB.UI.Headquarters.Controllers
         public InterviewImportService(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository,
             ICommandService commandService,
-            IGlobalInfoProvider globalInfoProvider,
             IUserViewFactory userViewFactory,
             ITransactionManagerProvider transactionManager,
             ILogger logger,
@@ -66,27 +63,41 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
             this.commandService = commandService;
-            this.globalInfoProvider = globalInfoProvider;
             this.userViewFactory = userViewFactory;
             this.transactionManager = transactionManager;
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
         }
 
-        public void ImportInterviews(InterviewImportFileDescription fileDescription, Guid? supervisorId)
+        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes, Guid? supervisorId, Guid responsibleId)
         {
+
+            InterviewImportFileDescription fileDescription;
+            
+            try
+            {
+                this.transactionManager.GetTransactionManager().BeginQueryTransaction();
+                fileDescription = this.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileBytes);
+            }
+            finally
+            {
+                this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
+            }
+            
             var columnsWithTypes = GetFileColumnsWithTypes(fileDescription);
             var dynamicTypeOfImportedInterview = columnsWithTypes.ToDynamicType("interview");
 
-            this.Status = new InterviewImportStatus();
-            this.Status.QuestionnaireId = fileDescription.QuestionnaireIdentity.QuestionnaireId;
-            this.Status.QuestionnaireVersion = fileDescription.QuestionnaireIdentity.Version;
-            this.Status.QuestionnaireTitle = fileDescription.QuestionnaireTitle;
-            this.Status.StartedDateTime = DateTime.Now;
-            this.Status.CreatedInterviewsCount = 0;
-            this.Status.ElapsedTime = 0;
-            this.Status.EstimatedTime = 0;
-            this.Status.State.Columns = fileDescription.FileColumns;
+            this.Status = new InterviewImportStatus
+            {
+                QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                QuestionnaireVersion = questionnaireIdentity.Version,
+                QuestionnaireTitle = fileDescription.QuestionnaireTitle,
+                StartedDateTime = DateTime.Now,
+                CreatedInterviewsCount = 0,
+                ElapsedTime = 0,
+                EstimatedTime = 0,
+                State = {Columns = fileDescription.FileColumns}
+            };
             this.Status.State.Errors.Clear();
             this.Status.IsInProgress = true;
 
@@ -104,8 +115,8 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
                                 interviewId: Guid.NewGuid(),
-                                responsibleId: fileDescription.HeadquartersId,
-                                questionnaireIdentity: fileDescription.QuestionnaireIdentity,
+                                responsibleId: responsibleId,
+                                questionnaireIdentity: questionnaireIdentity,
                                 supervisorId: importedInterview.SupervisorId ?? supervisorId.Value,
                                 interviewerId: importedInterview.InterviewerId,
                                 answersTime: DateTime.UtcNow,
@@ -136,7 +147,7 @@ namespace WB.UI.Headquarters.Controllers
                 Imported = new List<ImportedInterview>(),
                 WithErrors = new List<InterviewImportError>()
             };
-            
+
             using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileDescription.FileBytes))))
             {
                 csvReader.Configuration.AutoMap(dynamicTypeOfImportedInterview);
@@ -148,33 +159,19 @@ namespace WB.UI.Headquarters.Controllers
                 csvReader.Configuration.TrimFields = true;
                 csvReader.Configuration.TrimHeaders = true;
                 csvReader.Configuration.WillThrowOnMissingField = false;
-                csvReader.Configuration.ThrowOnBadData = true;
 
-                while (csvReader.Read())
+                try
                 {
-                    try
+                    while (csvReader.Read())
                     {
+
                         dynamic dynamicImportedInterview = csvReader.GetRecord(dynamicTypeOfImportedInterview);
 
-                        Guid? supervisorId = null;
-                        if (fileDescription.HasSupervisorColumn)
-                        {
-                            supervisorId = GetUserIdByName(dynamicImportedInterview.responsible);
-                            if (!supervisorId.HasValue)
-                                throw new Exception($"supervisor '{dynamicImportedInterview.responsible}' not found ");
-                        }
+                        var supervisorId = GetSupervisorIdOrThrow(fileDescription, dynamicImportedInterview);
+                        var interviewerId = GetInterviewerIdOrThrow(fileDescription, dynamicImportedInterview);
 
-                        Guid? interviewerId = null;
-                        if (fileDescription.HasInterviewerColumn &&
-                            !string.IsNullOrEmpty(dynamicImportedInterview.interviewer))
-                        {
-                            interviewerId = GetUserIdByName(dynamicImportedInterview.interviewer);
-                            if (!interviewerId.HasValue)
-                                throw new Exception($"interviewer '{dynamicImportedInterview.interviewer}' not found ");
-                        }
-
-                        var answersOnPrefilledQuestions = this.GetAnswersOnPrefilledQuestionsOrThrow(fileDescription.PrefilledQuestions,
-                                TypeExtensions.ToDictionary(dynamicImportedInterview));
+                        var answersOnPrefilledQuestions = this.GetAnswersOnPrefilledQuestionsOrThrow(
+                            fileDescription.PrefilledQuestions, TypeExtensions.ToDictionary(dynamicImportedInterview));
 
                         fileInterviews.Imported.Add(new ImportedInterview
                         {
@@ -182,19 +179,47 @@ namespace WB.UI.Headquarters.Controllers
                             InterviewerId = interviewerId,
                             AnswersOnPrefilledQuestions = answersOnPrefilledQuestions
                         });
+
                     }
-                    catch (Exception ex)
+                }
+                catch (Exception ex)
+                {
+                    fileInterviews.WithErrors.Add(new InterviewImportError
                     {
-                        fileInterviews.WithErrors.Add(new InterviewImportError
-                        {
-                            RawData = csvReader.CurrentRecord,
-                            ErrorMessage = ex.Data.Contains("CsvHelper") ? ToUserFriendlyErrorMessage((string)ex.Data["CsvHelper"]) : ex.Message
-                        });
-                    }
+                        RawData = csvReader.CurrentRecord,
+                        ErrorMessage = ex.Data.Contains("CsvHelper")
+                            ? ToUserFriendlyErrorMessage((string) ex.Data["CsvHelper"])
+                            : ex.Message
+                    });
                 }
             }
 
             return fileInterviews;
+        }
+
+        private Guid? GetInterviewerIdOrThrow(InterviewImportFileDescription fileDescription, dynamic dynamicImportedInterview)
+        {
+            Guid? interviewerId = null;
+            if (fileDescription.HasInterviewerColumn &&
+                !string.IsNullOrEmpty(dynamicImportedInterview.interviewer))
+            {
+                interviewerId = GetUserIdByName(dynamicImportedInterview.interviewer);
+                if (!interviewerId.HasValue)
+                    throw new Exception($"interviewer '{dynamicImportedInterview.interviewer}' not found ");
+            }
+            return interviewerId;
+        }
+
+        private Guid? GetSupervisorIdOrThrow(InterviewImportFileDescription fileDescription, dynamic dynamicImportedInterview)
+        {
+            Guid? supervisorId = null;
+            if (fileDescription.HasSupervisorColumn)
+            {
+                supervisorId = GetUserIdByName(dynamicImportedInterview.responsible);
+                if (!supervisorId.HasValue)
+                    throw new Exception($"supervisor '{dynamicImportedInterview.responsible}' not found ");
+            }
+            return supervisorId;
         }
 
         private static string ToUserFriendlyErrorMessage(string csvExceptionAsString)
@@ -227,10 +252,8 @@ namespace WB.UI.Headquarters.Controllers
             var interviewImportFileDescription = new InterviewImportFileDescription()
             {
                 ColumnsByPrefilledQuestions = new List<InterviewImportColumn>(),
-                QuestionnaireIdentity = questionnaireIdentity,
                 QuestionnaireTitle = $"(ver. {questionnaireIdentity.Version}) {questionnaireDocument.Title}",
                 FileBytes = fileBytes,
-                HeadquartersId = this.globalInfoProvider.GetCurrentUser().Id,
                 PrefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured)
                         .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
                         .ToList(),

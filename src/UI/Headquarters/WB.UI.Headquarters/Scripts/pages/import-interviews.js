@@ -31,8 +31,8 @@
     });
     self.isNeedShowStatusPanel = function() {
         return self.status.hasErrors()
-            && questionnaireId == elf.status.questionnaireId()
-            && questionnaireVersion == self.status.questionnaireVersion();
+            && questionnaireId === self.status.questionnaireId()
+            && questionnaireVersion === self.status.questionnaireVersion();
     }
 
     self.load = function (isViewModelValid) {
