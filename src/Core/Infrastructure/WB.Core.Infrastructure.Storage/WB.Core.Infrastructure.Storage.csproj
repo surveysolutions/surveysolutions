@@ -159,6 +159,7 @@
     <Compile Include="IsolatedThreadExtensions.cs" />
     <Compile Include="Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Postgre\Implementation\PostgresEventStore.cs" />
+    <Compile Include="Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
     <Compile Include="Postgre\NhExtensions\PostgreSQL91Dialect.cs" />
     <Compile Include="Postgre\NhExtensions\NpgsqlDriverExtended.cs" />
