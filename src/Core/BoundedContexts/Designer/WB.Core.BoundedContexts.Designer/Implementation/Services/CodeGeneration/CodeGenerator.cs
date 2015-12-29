@@ -51,12 +51,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var transformText = GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
 
             var generatedClasses = new Dictionary<string, string>();
-            generatedClasses.Add(new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Questionnaire,
-                ExpressionType = ExpressionLocationType.General,
-                Id = questionnaire.PublicKey
-            }.ToString(), transformText);
+
+            generatedClasses.Add(ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText);
 
             if (codeGenerationSettings.IsLookupTablesFeatureSupported)
             {
@@ -75,8 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<string, string> generatedClasses)
         {
             var lookupTablesTemplate = new LookupTablesTemplateV5(lookupTables);
-            var fileName = new ExpressionLocation(ExpressionLocationItemType.LookupTable).ToString();
-            generatedClasses.Add(fileName, lookupTablesTemplate.TransformText());
+            generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
         }
 
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
@@ -95,7 +90,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
                     areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList",
                     isLookupTablesFeatureSupported: false);
 
             if (version.Major == 10)
@@ -111,7 +105,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
                     },
                     areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList",
                     isLookupTablesFeatureSupported: false);
             return new CodeGenerationSettings(
                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
@@ -127,7 +120,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                    },
                    areRosterServiceVariablesPresent: true,
-                   rosterType: "RosterRowList",
                    isLookupTablesFeatureSupported: true);
         }
 
@@ -149,15 +141,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             false,
                             questionTemplateModel.VariableName);
 
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
+                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
-                        generatedClasses.Add(new ExpressionLocation
-                            {
-                                ItemType = ExpressionLocationItemType.Question,
-                                ExpressionType = ExpressionLocationType.Condition,
-                                Id = questionTemplateModel.Id
-                            }.ToString(), methodTemplate.TransformText());
+                        generatedClasses.Add(ExpressionLocation.QuestionCondition(questionTemplateModel.Id).Key, methodTemplate.TransformText());
                     }
 
                     if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
@@ -173,12 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         var methodTemplate =
                             new ExpressionMethodTemplate(expressionMethodModel);
 
-                        generatedClasses.Add(new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Question,
-                            ExpressionType = ExpressionLocationType.Validation,
-                            Id = questionTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
+                        generatedClasses.Add(ExpressionLocation.QuestionValidation(questionTemplateModel.Id).Key, methodTemplate.TransformText());
                     }
                 }
 
@@ -194,15 +175,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             false,
                             groupTemplateModel.VariableName);
 
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
+                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
-                        generatedClasses.Add(new ExpressionLocation
-                            {
-                                ItemType = ExpressionLocationItemType.Group,
-                                ExpressionType = ExpressionLocationType.Condition,
-                                Id = groupTemplateModel.Id
-                            }.ToString(), methodTemplate.TransformText());
+                        generatedClasses.Add(ExpressionLocation.GroupCondition(groupTemplateModel.Id).Key, methodTemplate.TransformText());
                     }
                 }
 
@@ -220,13 +195,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
-                        generatedClasses.Add(
-                            new ExpressionLocation
-                            {
-                                ItemType = ExpressionLocationItemType.Roster,
-                                ExpressionType = ExpressionLocationType.Condition,
-                                Id = rosterTemplateModel.Id
-                            }.ToString(), methodTemplate.TransformText());
+                        generatedClasses.Add(ExpressionLocation.RosterCondition(rosterTemplateModel.Id).Key, methodTemplate.TransformText());
                     }
                 }
             }
@@ -250,13 +219,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
-                    generatedClasses.Add(
-                        new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Question,
-                            ExpressionType = ExpressionLocationType.Condition,
-                            Id = questionTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
+                    generatedClasses.Add(ExpressionLocation.QuestionCondition(questionTemplateModel.Id).Key, methodTemplate.TransformText());
                 }
 
                 if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
@@ -269,16 +232,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         true,
                         questionTemplateModel.VariableName);
 
-                    var methodTemplate =
-                        new ExpressionMethodTemplate(expressionMethodModel);
+                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
-                    generatedClasses.Add(
-                        new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Question,
-                            ExpressionType = ExpressionLocationType.Validation,
-                            Id = questionTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
+                    generatedClasses.Add(ExpressionLocation.QuestionValidation(questionTemplateModel.Id).Key, methodTemplate.TransformText());
                 }
             }
 
@@ -296,13 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
 
-                    generatedClasses.Add(
-                        new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Group,
-                            ExpressionType = ExpressionLocationType.Condition,
-                            Id = groupTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
+                    generatedClasses.Add(ExpressionLocation.GroupCondition(groupTemplateModel.Id).Key, methodTemplate.TransformText());
                 }
             }
         }

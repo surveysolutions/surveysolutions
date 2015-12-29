@@ -55,7 +55,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     additionInterfaces: new string[0],
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
-                    rosterType: "IEnumerable",
                     abstractConditionalLevelClassName: "AbstractConditionalLevel",
                     isLookupTablesFeatureSupported: true), true);
 

@@ -68,7 +68,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var @roster in Model.Rosters) 
     {
 #>
-	public <#=Model.RosterType#><<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+	public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
 	{
 		get 
 		{

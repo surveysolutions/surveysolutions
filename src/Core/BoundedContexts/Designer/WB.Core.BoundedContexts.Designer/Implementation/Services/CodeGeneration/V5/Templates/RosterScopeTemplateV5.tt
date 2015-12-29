@@ -73,7 +73,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var parentRoster in Model.AllParentsRostersToTop) 
 	{
 #>
-		public <#=Model.RosterType#><<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }										
+		public RosterRowList<<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }										
 <#
 	}
 #>
@@ -115,40 +115,20 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	{
 #>
 	private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
-<#
-	if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-	{
-#>
-	private bool <#=@group.GeneratedConditionsMethodName#>()
-	{
-		return <#=@group.Conditions#>;
-	}	  
-<#
-	}
-#>
 <# 
 	}
 #>
 	//rosters
 <#
-	RosterCollectionsDefenitions(Model.RosterType, Model.Rosters);
+	RosterCollectionsDefenitions(Model.Rosters);
 #>
 <#
 	foreach (var @roster in Model.RostersInScope) 
 	{
 #>
 	private ConditionalState <#= @roster.GeneratedStateName#> = new ConditionalState(IdOf.<#=@roster.GeneratedIdName#>, ItemType.Group);
-
-<#
-		if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-		{
-#>
-	private bool <#=@roster.GeneratedConditionsMethodName#>()
-	{
-		return <#=@roster.Conditions#>;
-	}	  
+	  
 <# 
-		}
 	}
 #>
 	private readonly List<Action> _conditionExpressions = new List<Action>();
