@@ -15,48 +15,38 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         where TEntity: class
     {
         MemoryCache memoryCache;
-        readonly string cacheKey;
+        readonly string cacheKey = "K/V memory cache";
 
         public PostgresKeyValueStorageWithCache(string connectionString, ILogger logger)
             : base(connectionString, logger)
         {
-            cacheKey = "K/V memory cache" + this.GetType().ToString();
             memoryCache = new MemoryCache(cacheKey);
         }
 
 
         public override TEntity GetById(string id)
         {
-            lock (string.Intern(GetLockString(id)))
-            {
-                var value = this.memoryCache.Get(id) as TEntity;
-                if (value != null)
-                    return value;
-
-                value = base.GetById(id);
-                if (value != null)
-                    this.memoryCache.Add(id, value, DateTimeOffset.Now.AddSeconds(30));
-
+            var value = this.memoryCache.Get(id) as TEntity;
+            if (value != null)
                 return value;
-            }
+
+            value = base.GetById(id);
+            if (value != null)
+                this.memoryCache.Add(id, value, DateTimeOffset.Now.AddSeconds(30));
+
+            return value;
         }
 
         public override void Remove(string id)
         {
-            lock (string.Intern(GetLockString(id)))
-            {
-                this.memoryCache.Remove(id);
-                base.Remove(id);
-            }
+            this.memoryCache.Remove(id);
+            base.Remove(id);
         }
 
         public override void Store(TEntity view, string id)
         {
-            lock (string.Intern(GetLockString(id)))
-            {
-                this.memoryCache.Remove(id);
-                base.Store(view, id);
-            }
+            this.memoryCache.Remove(id);
+            base.Store(view, id);
         }
 
         public override void BulkStore(List<Tuple<TEntity, string>> bulk)
@@ -76,11 +66,6 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         public override string GetReadableStatus()
         {
             return "Postgres with Cache K/V :/";
-        }
-
-        private string GetLockString(string id)
-        {
-            return id + this.cacheKey;
         }
     }
 }
