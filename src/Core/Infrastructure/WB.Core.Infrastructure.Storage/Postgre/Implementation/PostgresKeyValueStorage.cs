@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             EnshureTableExists();
         }
 
-        public TEntity GetById(string id)
+        public virtual TEntity GetById(string id)
         {
             string queryResult;
             using (var command = new NpgsqlCommand())
@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         protected abstract object ExecuteScalar(IDbCommand command);
         protected abstract int ExecuteNonQuery(IDbCommand command);
         
-        public void Remove(string id)
+        public virtual void Remove(string id)
         {
             int queryResult;
             using (var command = new NpgsqlCommand())
@@ -70,7 +70,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        public void Store(TEntity view, string id)
+        public virtual void Store(TEntity view, string id)
         {
             object existsResult;
             using (var existsCommand = new NpgsqlCommand())
@@ -131,7 +131,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             EnshureTableExists();
 
@@ -151,7 +151,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             get { return typeof(TEntity); }
         }
 
-        public string GetReadableStatus()
+        public virtual string GetReadableStatus()
         {
             return "Postgres K/V :/";
         }
