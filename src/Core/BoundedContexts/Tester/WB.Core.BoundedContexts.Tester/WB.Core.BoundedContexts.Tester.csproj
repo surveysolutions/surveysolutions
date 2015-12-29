@@ -51,6 +51,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TesterUIResources.th-TH.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\TesterUIResources.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TesterUIResources.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -186,6 +191,10 @@
     <EmbeddedResource Include="Properties\TesterUIResources.th-TH.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TesterUIResources.th-TH.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\TesterUIResources.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TesterUIResources.zh-CN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

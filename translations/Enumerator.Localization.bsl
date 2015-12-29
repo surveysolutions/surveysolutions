@@ -28,6 +28,7 @@
             <li lc="pt-PT" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء الأمر" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Annuler" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptyQuestionnairesList" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -42,6 +43,7 @@
             <li lc="pt-PT" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="Yet&#xD;&#xA;&#xD;&#xA;You الاستبيانات لا يمكن إنشاء أو تحرير الاستبيانات الخاصة بك في &quot;مصمم حلول المسح&quot;" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Aucun questionnaire disponible pour l'instant&#xD;&#xA;&#xD;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptySearchResult" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -56,6 +58,7 @@
             <li lc="pt-PT" tx="Não há questionários encontrados" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استبيانات لم يتم العثور على" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Aucun questionnaire trouvé" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="没有找到调查问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_LastEntryDate_Format" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -70,6 +73,7 @@
             <li lc="pt-PT" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="fr-FR" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_MyQuestionnairesLinkText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -84,6 +88,7 @@
             <li lc="pt-PT" tx="Meus questionários" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بلدي الاستبيانات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Mes questionnaires" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="我的调查问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_PublicQuestionnairesLinkText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -98,6 +103,7 @@
             <li lc="pt-PT" tx="Questionários públicos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات العامة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Questionnaires publics" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="公共调查问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_ToolbarText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -112,6 +118,7 @@
             <li lc="pt-PT" tx="Questionários" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Questionnaires" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="调查问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="DateQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -126,6 +133,7 @@
             <li lc="pt-PT" tx="Toque para inserir data" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال تاريخ" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour sélectionner la date" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击输入日期" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="EndpointHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -140,6 +148,7 @@
             <li lc="pt-PT" tx="Ponto de extremidade de sincronização" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نقطة النهاية المزامنة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Point de synchronisation" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="同步端点" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="EndpointText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -154,6 +163,7 @@
             <li lc="pt-PT" tx="Ponto de extremidade de serviço Web:" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نقطة نهاية الخدمة ويب:" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Web Service Endpoint:" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="网络服务端点：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_AccountIsLockedOnServer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -168,6 +178,7 @@
             <li lc="pt-PT" tx="Sua conta de usuário está bloqueada. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تأمين حساب المستخدم الخاص بك. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Votre compte d'utilisateur est verrouillé. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions." ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="您的账户已被锁定。请联系支持团队：support@mysurvey.solutions。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_AccountIsNotApprovedOnServer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -182,20 +193,22 @@
             <li lc="pt-PT" tx="Sua conta não é aprovada. Por favor, confirme sua conta primeiro." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم تتم الموافقة على الحساب الخاص بك. الرجاء تأكيد الحساب الخاص بك أولاً." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Votre compte n'est pas approuvé. Veuillez confirmer votre compte d'abord." ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="您的账户未获批准。请首先确认您的账户。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_InternalServerError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Server error. Please contact the support team at support@mysurvey.solutions" ts="Changed" qs="ToReview" />
-            <li lc="ru-RU" tx="На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="uk-UA" tx="Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="es-ES" tx="Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." ts="Changed" qs="ToReview" />
-            <li lc="pt-PT" tx="Erro de servidor. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="خطأ في الملقم. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="На данный момент сервер недоступен. Просим прощения за неудобства. Работа сервера будет восстановлена в ближайшее время" er="" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Error del servidor. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Lỗi máy chủ. Xin vui lòng liên hệ với nhóm hỗ trợ tại support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="pt-PT" tx="Erro de servidor. Favor de entrar em contato com a equipe de suporte em support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="خطأ في الملقم. الرجاء الاتصال بفريق الدعم في support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="服务器错误。请联系支持团队：support@mysurvey.solutions。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_InvalidEndpoint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -210,6 +223,7 @@
             <li lc="pt-PT" tx="Survey Solutions Designer URL fornecido é inválido. Verifique as configurações." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وقدمت دراسة حلول مصمم عنوان URL غير صحيح. تحقق من إعدادات." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Ll'URL de Survey Solutions Designer n'est pas valide. Vérifiez l'adresse dans les paramètres." ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="提供的Survey Solutions Designer网址无效。请检查设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_Maintenance" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -224,6 +238,7 @@
             <li lc="pt-PT" tx="O site de Survey Solutions Designer agora ésta em modo de manutenção. Desculpe pela inconveniência" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مصمم موقع ويب حلول المسح الآن في وضع الصيانة. نأسف للإزعاج" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Le site web de Survey Solutions Designer est actuellement en cours de maintenance. Désolé pour le désagrément" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="Survey Solutions Designer网站正处于维护模式。抱歉给您带来不便。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_RequestTimeout" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -238,6 +253,7 @@
             <li lc="pt-PT" tx="Timeout na conexão com o site de Survey Solutions Designer. Verifique sua conexão de internet." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المهلة عند الاتصال بموقع ويب &quot;مصمم حلول استقصاء&quot;. تحقق من اتصالك بالإنترنت." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Dépassement du délai de réponses lors de la connexion au au site web de Survey Solutions Designer. Vérifiez votre connexion internet." ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="连接到Survey Solutions Designer网站时超时。请检查您的网络连接。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_ServiceUnavailable" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -252,6 +268,7 @@
             <li lc="pt-PT" tx="Não há conexão para o Survey Solutions Designer. Por favor, certifique-se de que o site está disponível." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد اتصال &quot;مصمم حلول المسح&quot;. الرجاء التأكد من أن هذا الموقع متاح." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Aucune connexion avec le site Designer de Survey Solutions. Veuillez vous assurer que le site est disponible." ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="没有连接到Survey Solutions Designer网站。请确保网站是可用的。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_Unauthorized" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -266,20 +283,22 @@
             <li lc="pt-PT" tx="Seu login ou senha está incorreta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول أو كلمة المرور الخاصة بك غير صحيحة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Votre login ou mot de passe est invalide" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="您的用户名或密码不正确" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_UpgradeRequired" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="New version of application was released. Please, update the application" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Выпущена новая версия приложения. Обновитесь, пожалуйста." ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Выпущена новая версия приложения. Обновитесь, пожалуйста." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="uk-UA" tx="Вийшла нова версія програми. Будь ласка, оновіть додаток" ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Existe una nueva versión de la aplicación. Por favor, actualice la aplicación" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="มีเวอร์ชันใหม่แล้ว  กรุณาปรับปรุงเวอร์ชั่นของโปรแกรม Survey Solutions ในเครื่องของท่าน" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="th-TH" tx="มีเวอร์ชันใหม่แล้ว  กรุณาปรับปรุงเวอร์ชั่นของโปรแกรม Survey Solutions ในเครื่องของท่าน" er="" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Các phiên bản mới của ứng dụng được phát hành. Xin vui lòng, Cập nhật các ứng dụng" ts="Translated" qs="AutoTranslated" />
             <li lc="id-ID" tx="Versi baru dari aplikasi telah dirilis. Silahkan, memperbarui aplikasi" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Nova versão do aplicativo foi lançado. Por favor, atualizar o aplicativo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إصدار نسخة جديدة من التطبيق. من فضلك، تحديث التطبيق" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Nouvelle version de l'application disponible. Veuillez mettre à jour l'application" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="应用程序的新版本已发布，请更新应用程序。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="FilteredComboboxQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -294,6 +313,7 @@
             <li lc="pt-PT" tx="Toque para introduzir texto" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال النص" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour saisir du texte" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击输入文本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="GpsQuestion_Timeout" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -308,6 +328,7 @@
             <li lc="pt-PT" tx="GPS foi incapaz de determinar a sua localização. Para solucionar, por favor, tente o seguinte: Certifique-se de que você está ao ar livre, confirme que seu GPS está habilitado, ou alterar a configuração de tempo limite do seu GPS." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وكان نظام تحديد المواقع غير قادر على تحديد الموقع الخاص بك. لاستكشاف الأخطاء وإصلاحها، الرجاء محاولة ما يلي: ضمان أن كنت في الهواء الطلق، وتأكد من تمكين الخاص بك لتحديد المواقع، أو تغيير إعداد مهلة GPS الخاص بك." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="GPS n'a pas pu fixer vos coordonnées. Pour dépanner, essayez les actions suivantes : s'assurer que vous êtes à l'extérieur, vérifiez que votre GPS est activé, ou modifier le paramètre de délai de réponse de votre GPS." ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="全球定位系统（GPS）无法确定您的位置。为排除故障，请尝试以下方法：确保您在户外、确保您的GPS已启用或更改您的GPS超时设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="IntegerQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -322,6 +343,7 @@
             <li lc="pt-PT" tx="Toque para digitar um número" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال رقم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour saisir un nombre entier" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击输入数字" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Comment_Interviewer_Caption" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -336,6 +358,7 @@
             <li lc="pt-PT" tx="Seu comentário" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التعليق الخاص بك" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Votre commentaire" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="您的评论" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Answered" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -350,6 +373,7 @@
             <li lc="pt-PT" tx="Respondeu" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الرد على" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Renseignées" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="已回答" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Button" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -364,6 +388,7 @@
             <li lc="pt-PT" tx="Completo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إكمال" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Terminer" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="zh-CN" tx="完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Consequences_Instrunction" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -378,20 +403,22 @@
             <li lc="pt-PT" tx="Depois que você terminar esta entrevista, será marcada como concluída e será enviado para supervisor durante a próxima sincronização" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بعد الانتهاء من هذه المقابلة أنه سيتم وضع علامة كمكتملة وسيتم تحميلها للمشرف أثناء المزامنة التالية" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Après avoir marqué cet entretien comme étant, il sera transféré au superviseur lors de votre prochaine synchronisation" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="结束调查后，问卷将被标记为已完成，并将在下次同步时上传给督导员。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Errors" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Errors" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Помилок" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Ошибок" ts="Translated" qs="ToReview" />
-            <li lc="es-ES" tx="Errores" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="ข้อผิดพลาด" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Lỗi" ts="Translated" qs="AutoTranslated" />
-            <li lc="id-ID" tx="Kesalahan" ts="Translated" qs="ToReview" />
-            <li lc="pt-PT" tx="Erros" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="أخطاء" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Erreurs" ts="Translated" qs="AutoTranslated" />
+            <li lc="uk-UA" tx="Помилок" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Ошибок" ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Errores" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ข้อผิดพลาด" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Lỗi" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Kesalahan" ts="Changed" qs="ToReview" />
+            <li lc="pt-PT" tx="Erros" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="أخطاء" ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="Erreurs" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_No" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -406,6 +433,7 @@
             <li lc="pt-PT" tx="Não" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Non" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="否" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Note_For_Supervisor" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -420,6 +448,7 @@
             <li lc="pt-PT" tx="Nota para supervisor" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ملاحظة للمشرف" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Remarque à l'attention du superviseur" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="给督导员的说明" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Questions_Status" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -434,6 +463,7 @@
             <li lc="pt-PT" tx="Status de perguntas" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وضع الأسئلة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Statut du questionnaire" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="问题状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Screen_Description" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -448,6 +478,7 @@
             <li lc="pt-PT" tx="Você está prestes a terminar esta entrevista" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أنت على وشك الانتهاء من هذه المقابلة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Vous êtes sur le point d'achever cet entretien" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="您即将完成这次调查" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Screen_Title" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -462,6 +493,7 @@
             <li lc="pt-PT" tx="Completo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إكمال" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Résumé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="zh-CN" tx="完成" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Unanswered" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -476,6 +508,7 @@
             <li lc="pt-PT" tx="Sem resposta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بلا إجابة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Sans réponse" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="未回答" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_CompleteScreen_ButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -488,6 +521,7 @@
             <li lc="es-ES" tx="Ir a pantalla de estado&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Untuk menyelesaikan layar&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไปยังหน้าจอ Complete&#xD;&#xA;" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="转到完成屏幕" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -502,6 +536,7 @@
             <li lc="pt-PT" tx="{0} respostas" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} إجابات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="{0} réponses" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="{0}个答案" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_One" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -516,6 +551,7 @@
             <li lc="pt-PT" tx="uma resposta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إجابة واحدة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="une seule réponse" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="1个答案" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_ManyFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -530,6 +566,7 @@
             <li lc="pt-PT" tx="{0} erros" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} أخطاء" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="{0} erreurs" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="{0}个错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_One" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -544,6 +581,7 @@
             <li lc="pt-PT" tx="um erro" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ واحد" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="une seule erreur" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="1个错误" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Status_CompletedFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -558,6 +596,7 @@
             <li lc="pt-PT" tx="Seção concluída: {0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم الانتهاء: {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Section terminée : {0}" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="本部分已完成：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Status_NotStarted" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -572,6 +611,7 @@
             <li lc="pt-PT" tx="Seção não começada" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم لم تبدأ" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Section non encore entamée" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="本部分尚未开始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Status_StartedIncompleteFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -586,6 +626,7 @@
             <li lc="pt-PT" tx="Seção começada: {0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بدأ القسم: {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Section entamée : {0}" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="本部分已开始：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Subgroups_ManyFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -600,6 +641,7 @@
             <li lc="pt-PT" tx="{0} sub-seções" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} الأقسام الفرعية" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="{0} sous-sections" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="{0}个子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Subgroups_One" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -614,6 +656,7 @@
             <li lc="pt-PT" tx="uma sub-seção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم فرعي واحد" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="une sous-section" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="一个子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Subgroups_Zero" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -628,6 +671,7 @@
             <li lc="pt-PT" tx="nenhuma sub-seção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد أقسام فرعية" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="aucune sous-section" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="没有子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Instruction_Title" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -642,6 +686,7 @@
             <li lc="pt-PT" tx="Instrução" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليمات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Instruction" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="说明" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_LinkedQuestion_Empty" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -656,6 +701,7 @@
             <li lc="pt-PT" tx="As opções estarão disponíveis depois de responder a pergunta referenciada" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الخيارات ستكون متاحة بعد الإجابة على السؤال المشار إليه" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Les modalités ne seront disponibles qu'après avoir renseigné la question référencée" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="回答完参照问题后选项才可用" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_NextSection_ButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -670,6 +716,7 @@
             <li lc="pt-PT" tx="Próxima seção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المقطع التالي" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Section suivante" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="下一部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_ParentGroup_ButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -682,6 +729,7 @@
             <li lc="es-ES" tx="Ir a nivel superior&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Menuju direktori induk&#xD;&#xA;" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไปตอนก่อนหน้า&#xD;&#xA;" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="转到上一屏" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_AnsweredQuestions" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -696,6 +744,7 @@
             <li lc="pt-PT" tx="Todos os {0} perguntas respondidas" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} جميع الإجابة على الأسئلة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Chacun des {0} questions a été renseigné" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="已回答全部{0}个问题" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_UnansweredQuestions" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -710,6 +759,7 @@
             <li lc="pt-PT" tx="Nota: {0} perguntas são sem resposta" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ملاحظة: {0} الأسئلة التي لم يرد عليها" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Remarque : {0} questions sont sans réponse" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="注意：{0}个问题没有回答" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Cascading_NoMatchingValue" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -724,6 +774,7 @@
             <li lc="pt-PT" tx="Resposta &quot;{0}&quot; não coincide com qualquer opção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة &quot;{0}&quot; لا يتطابق مع أي خيار" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="La réponse « {0} » ne correspond pas à une modalité possible" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="答案“{0}”未能匹配任何选项" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Filter_MatchError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -738,6 +789,7 @@
             <li lc="pt-PT" tx="Resposta &quot;{0}&quot; não coincide com qualquer opção" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة &quot;{0}&quot; لا يتطابق مع أي خيار" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="La réponse « {0} » ne correspond pas à une modalité possible" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="答案“{0}”未能匹配任何选项" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_EmptyValueError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -752,20 +804,22 @@
             <li lc="pt-PT" tx="Valor vazio não pode ser salvo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن حفظ قيمة فارغة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Impossible d'enregistrer une valeur vide" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="不能保存空值" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_NegativeRosterSizeAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Answer '{0}' is incorrect because question is used as size of roster and specified answer is negative" ts="Changed" qs="ToReview" />
-            <li lc="ru-RU" tx="Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="uk-UA" tx="Відповідь '{0}' є неправильною, оскільки питання використовується як розмір списку і вказаного відповідь буде негативною" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="es-ES" tx="Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="จำนวนสมาชิกต้องมากกว่า {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="vi-VN" tx="Câu trả lời '{0}' là không chính xác bởi vì câu hỏi được sử dụng như kích thước của danh sách và câu trả lời cụ thể là tiêu cực" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="id-ID" tx="Jawaban '{0}' tidak benar karena pertanyaan yang digunakan sebagai ukuran daftar dan jawaban yang diberikan negatif." ts="Changed" qs="ToReview" />
-            <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a pergunta é usada como tamanho do plantel e a resposta especificada é negativa" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن السؤال كحجم قائمة والجواب المحدد سلبي" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
-            <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle définit la taille du roster mais elle est négative" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке" er="" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Відповідь '{0}' є неправильною, оскільки питання використовується як розмір списку і вказаного відповідь буде негативною" er="" ts="Changed" qs="ToReview" />
+            <li lc="es-ES" tx="Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa" er="" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="จำนวนสมาชิกต้องมากกว่า {0}" er="" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Câu trả lời '{0}' là không chính xác bởi vì câu hỏi được sử dụng như kích thước của danh sách và câu trả lời cụ thể là tiêu cực" er="" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Jawaban '{0}' tidak benar karena pertanyaan yang digunakan sebagai ukuran daftar dan jawaban yang diberikan negatif." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a pergunta é usada como tamanho do plantel e a resposta especificada é negativa" er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن السؤال كحجم قائمة والجواب المحدد سلبي" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle définit la taille du roster mais elle est négative" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="答案“{0}”不正确，因为本问题的答案将用于设置名单项目的数量，而给出的答案为负值。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_ParsingError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -780,6 +834,7 @@
             <li lc="pt-PT" tx="Valor inserido não pode ser analisado como um valor inteiro" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن تحليل القيمة المدخلة كقيمة عدد صحيح" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Valeur inscrite ne peut pas être analysée comme un nombre entier" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="输入的数值不能被解析为整数" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -794,6 +849,7 @@
             <li lc="pt-PT" tx="Resposta '{0}' está incorreta porque a resposta é maior que o limite superior do Roster '{1}'." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة '{0}' غير صحيحة لأن الجواب أكبر من الحد الأعلى قائمة '{1}'." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle dépasse à la limite supérieure du roster « {1} »." ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="答案“{0}”不正确，因为超过了名单项目的上限'{1}'。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_List_Empty_Values_Are_Not_Allowed" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -808,6 +864,7 @@
             <li lc="pt-PT" tx="Não são permitidos valores vazios" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="غير مسموح بالقيم الفارغة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Les valeurs vides ne sont pas autorisés" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="不能是空值" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Real_ParsingError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -822,6 +879,7 @@
             <li lc="pt-PT" tx="Valor inserido não pode ser analisado como um valor decimal" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن تحليل القيمة المدخلة كقيمة عشرية" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Valeur composé ne peut pas être analysée comme valeur décimale" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="输入的数值不能被解析为小数" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Text_MaskError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -836,6 +894,7 @@
             <li lc="pt-PT" tx="Por favor, preencha todos os valores requeridos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يرجى ملء كافة القيم المطلوبة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Veuillez remplir toutes les cases requises" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="请填写所有必需的数值" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_Gps_SaveAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -850,6 +909,7 @@
             <li lc="pt-PT" tx="Toque para registrar GPS" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اضغط على سجل لتحديد المواقع" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour enregistrer les coordonnées GPS" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击记录GPS位置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_Multimedia_TapToTakePhoto" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -864,6 +924,7 @@
             <li lc="pt-PT" tx="Toque para tirar uma foto" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لالتقاط صورة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour prendre une photo" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击拍照" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_QrBarcode_SaveAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -878,6 +939,7 @@
             <li lc="pt-PT" tx="Toque para tirar o código de barras" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اضغط على اتخاذ الرمز الشريطي" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour capter le code-barres" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击扫描条形码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_RemoveRowFromRosterMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -892,6 +954,7 @@
             <li lc="pt-PT" tx="Tem certeza que deseja remover {0} linha(s) de cada lista relacionada?" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="هل أنت متأكد من أنك تريد إزالة {0} الصف (الصفوف) من كل قائمة ذات الصلة?" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Êtes-vous sûr de vouloir supprimer {0} ligne (s) de chaque roster qui y est lié ?" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="您确定要从每个相关的名单中删除{0}行吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_ApplicationName" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -906,12 +969,15 @@
             <li lc="pt-PT" tx="Entrevistador de Survey Solutions" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="دراسة الحلول المقابلة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="Survey Solutions调查员" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_Diagnostics" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Diagnostics" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Диагностика" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Діагностіка" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="诊断" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -926,6 +992,7 @@
             <li lc="pt-PT" tx="Cancelar" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء الأمر" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Annuler" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -940,6 +1007,7 @@
             <li lc="pt-PT" tx="Você já atribuído a outro instumento" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="يمكنك تعيينها بالفعل إلى جهاز آخر" ts="Changed" qs="ToReview" />
             <li lc="fr-FR" tx="Votre compte est déjà associé à un autre appareil" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="您已经被分配到另外一台设备" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_RelinkButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -954,6 +1022,7 @@
             <li lc="pt-PT" tx="Revinculação" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إعادة ربط" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="S'associer à cet appareil" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="重新链接" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_RelinkMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -968,6 +1037,7 @@
             <li lc="pt-PT" tx="Se você vincular novamente a este dispositivo &lt;br/&gt; todos os dados no antigo será perdidos" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إذا كان يمكنك إعادة ربط لهذا الجهاز&lt;br&gt;سيتم فقدان كافة البيانات الموجودة على القديم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Si vous liez votre compte à ce nouvel appareil&lt;br&gt;toutes les données sur votre ancien appareil seront supprimées" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="如果您重新链接到这台设备 &lt;br/&gt; 旧设备上的所有数据将会丢失" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_TryOnlineLogin" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -982,6 +1052,7 @@
             <li lc="pt-PT" tx="Tente o login on-line" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حاول تسجيل الدخول على الإنترنت" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Essayez de vous connecter en ligne" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="尝试在线登录" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="LoginNameHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -996,6 +1067,7 @@
             <li lc="pt-PT" tx="Seu login" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول الخاص بك" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Votre login" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="您的用户名" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="LoginText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1010,6 +1082,7 @@
             <li lc="pt-PT" tx="iniciar sessão" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="S'identifer" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="登录" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="LoginTitleText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1024,6 +1097,7 @@
             <li lc="pt-PT" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اختبار الاستبيان حلول المسح" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="Survey Solutions问卷测试" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="No" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1038,6 +1112,7 @@
             <li lc="pt-PT" tx="Não" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Non" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="否" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PasswordHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1052,6 +1127,7 @@
             <li lc="pt-PT" tx="Senha" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="كلمة المرور" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Mot de passe" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="密码" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1066,6 +1142,7 @@
             <li lc="pt-PT" tx="Google Play Services não estão disponíveis" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا تتوفر &quot;خدمات تشغيل جوجل&quot;" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Google Play Services n'est pas disponible" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="Google Play服务不可用" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PlayServicesLocationWatcher_Location_Client_not_started" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1080,6 +1157,7 @@
             <li lc="pt-PT" tx="Cliente de Localização não foi iniciado" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="موقع العميل لم تبدأ" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Location Client n'a pas démarré" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="位置客户端未启动" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1094,6 +1172,7 @@
             <li lc="pt-PT" tx="Você não pode iniciar o serviço de MvxLocation mais de uma vez" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن بدء تشغيل خدمة مفكسلوكيشن أكثر من مرة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Impossible de démarrer le service MvxLocation plus d'une fois" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="您不能重复启动MvxLocation服务" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PrefilledQuestions_StartInterview" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1108,6 +1187,7 @@
             <li lc="pt-PT" tx="INÍCIO" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بدء تشغيل" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="DÉBUT" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="开始" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="RealQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1122,6 +1202,7 @@
             <li lc="pt-PT" tx="Toque para digitar decimal" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال رقم عشري" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour saisir un nombre décimal" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击输入小数" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="StaySignedInText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1136,6 +1217,7 @@
             <li lc="pt-PT" tx="Permaneça assinado" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاحتفاظ بتسجيل الدخول" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Rester connecté" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="保持登录状态" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Synchronization_UserLinkedToAnotherDevice_Description" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1150,6 +1232,7 @@
             <li lc="pt-PT" tx="Você não tem quaisquer atribuições neste instrumento. Enviar informações de tablet, limpar dados do aplicativo e logon de conta outra" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ليس لديك أي تعيينات في هذا الجهاز. إرسال معلومات الكمبيوتر اللوحي، ومسح البيانات للتطبيق وتسجيل الدخول بحساب آخر" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Vous n'avez aucune affectations sur cet appareil. Envoyer des données du système de la tablette, effacer les données de l'application et se connecter avec un autre compte d'utilisateur" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="您在这台设备上没有调查任务。请发送平板电脑信息、清除应用程序数据并使用另外一个账户登录。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="TextListQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1164,6 +1247,7 @@
             <li lc="pt-PT" tx="Toque para inserir novo item" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال عنصر جديد" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour ajouter de nouveaux éléments à la liste" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击输入新的项目" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="TextQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1178,6 +1262,7 @@
             <li lc="pt-PT" tx="Toque para introduzir texto" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال النص" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour saisir du texte" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="点击输入文本" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="TextQuestion_MaskHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1192,6 +1277,7 @@
             <li lc="pt-PT" tx="Toque para inserir texto ({0})" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لإدخال نص ({0})" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Appuyer pour saisir du texte ({0})" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="点击输入文本（{0}）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Validity_Answered_Invalid_ErrorCaption" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1206,6 +1292,7 @@
             <li lc="pt-PT" tx="Resposta é inválida" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة غير صحيحة" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="La réponse est invalide" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="答案无效" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Validity_NotAnswered_InterviewException_ErrorCaption" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1220,6 +1307,7 @@
             <li lc="pt-PT" tx="Resposta não foi salvo" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يتم حفظ الإجابات" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="La réponse n'a pas été enregistrée" ts="Translated" qs="ToReview" />
+            <li lc="zh-CN" tx="答案未保存" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Yes" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1234,6 +1322,7 @@
             <li lc="pt-PT" tx="Sim" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نعم" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Oui" ts="Translated" qs="AutoTranslated" />
+            <li lc="zh-CN" tx="是" ts="Translated" qs="ToReview" />
           </lis>
         </it>
       </items>
