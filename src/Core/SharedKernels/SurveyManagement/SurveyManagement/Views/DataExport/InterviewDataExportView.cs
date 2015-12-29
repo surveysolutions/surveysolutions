@@ -24,10 +24,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         public IList<InterviewDataExportRecord> Records { get; private set; }
 
-        public static InterviewDataExportView CreateFromRecords(IList<InterviewDataExportRecord> records)
+        public static InterviewDataExportView CreateFromRecords(Guid interviewId, IList<InterviewDataExportRecord> records)
         {
-            Guid interviewId = records.Select(record => record.InterviewId).Distinct().Single();
-
             InterviewDataExportLevelView[] levels = records
                 .GroupBy(record => record.LevelName)
                 .Select(grouping => new InterviewDataExportLevelView(null, grouping.Key, grouping.ToArray()))

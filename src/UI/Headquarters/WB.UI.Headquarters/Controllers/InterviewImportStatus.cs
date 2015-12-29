@@ -44,11 +44,9 @@ namespace WB.UI.Headquarters.Controllers
         public bool HasSupervisorColumn { get; set; }
         public bool HasInterviewerColumn { get; set; }
         public List<InterviewImportColumn> ColumnsByPrefilledQuestions { get; set; }
-        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public byte[] FileBytes { get; set; }
         public List<InterviewImportPrefilledQuestion> PrefilledQuestions { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public Guid HeadquartersId { get; set; }
         public string[] FileColumns { get; set; }
     }
 
