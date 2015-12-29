@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
             value = base.GetById(id);
             if (value != null)
-                memoryCache.Add(id, value, DateTimeOffset.Now.AddSeconds(30));
+                memoryCache.Set(id, value, DateTimeOffset.Now.AddSeconds(30));
 
             return value;
         }
@@ -43,7 +43,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public override void Store(TEntity view, string id)
         {
-            memoryCache.Remove(id);
+            memoryCache.Set(id, view, DateTimeOffset.Now.AddSeconds(30));
             base.Store(view, id);
         }
 
