@@ -8,7 +8,11 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
+using Dapper;
 using NHibernate;
+using NHibernate.Engine;
+using NHibernate.Metadata;
+using NHibernate.Persister.Entity;
 using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
@@ -257,11 +261,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private InterviewExportedDataRecord ExportSingleInterview(Guid interviewId)
         {
             IList<InterviewDataExportRecord> records = null;
+
             using (var session = this.sessionFactory.OpenStatelessSession())
             {
-               records = session.QueryOver<InterviewDataExportRecord>()
-                    .Where(x => x.InterviewId == interviewId)
-                    .List<InterviewDataExportRecord>();
+                records = session.Connection.Query<InterviewDataExportRecord>("SELECT * FROM interviewdataexportrecords WHERE interviewid = @interviewId", 
+                                                                              new {interviewId = interviewId})
+                                            .ToList();
             }
 
             var interviewExportStructure = InterviewDataExportView.CreateFromRecords(records);
