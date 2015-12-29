@@ -205,13 +205,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                        progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
                    });
 
+                this.logger.Info(string.Format("Exported {0:N0} interviews out of {1:N0} for questionnaire {2}",
+                    totalInterviewsProcessed,
+                    interviewIdsToExport.Count,
+                    new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version)));
+
                 this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
             }
-
-            this.logger.Info(string.Format("Exported {0:N0} interviews out of {1:N0} for questionnaire {2}", 
-                totalInterviewsProcessed, 
-                interviewIdsToExport.Count, 
-                new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version)));
 
             progress.Report(100);
         }
