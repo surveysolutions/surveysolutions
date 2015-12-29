@@ -104,6 +104,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.th-TH.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\UIResources.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -295,6 +300,10 @@
       <LastGenOutput>UIResources.th-TH.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\UIResources.uk-UA.resx" />
+    <EmbeddedResource Include="Properties\UIResources.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
