@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal class PostgresPlainKeyValueStorage<TEntity> : PostgresKeyValueStorage<TEntity>,
+    internal class PostgresPlainKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
         IPlainKeyValueStorage<TEntity>, IDisposable
         where TEntity : class
     {
