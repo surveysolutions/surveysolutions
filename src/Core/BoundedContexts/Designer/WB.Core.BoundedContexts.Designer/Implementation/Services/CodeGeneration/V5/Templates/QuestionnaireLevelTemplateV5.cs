@@ -172,14 +172,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\tpublic ");
-            
-            #line 71 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.RosterType));
-            
-            #line default
-            #line hidden
-            this.Write("<");
+            this.Write("\tpublic RosterRowList<");
             
             #line 71 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\QuestionnaireLevelTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));

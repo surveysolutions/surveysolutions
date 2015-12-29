@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<string, string> GeneratedScopesTypeNames { set; get; }
         public Dictionary<string, RosterScopeTemplateModel> RostersGroupedByScope { set; get; }
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { set; get; }
-        public Dictionary<string, Guid> VariableNames { set; get; }
 
         public Dictionary<Guid, List<Guid>> ConditionalDependencies { set; get; }
         public Dictionary<Guid, List<Guid>> StructuralDependencies { set; get; }

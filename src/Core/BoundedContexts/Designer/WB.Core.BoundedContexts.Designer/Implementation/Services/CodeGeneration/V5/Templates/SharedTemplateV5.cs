@@ -776,7 +776,7 @@ this.Write(" : null; }\r\n\t\t\t\r\n\t}\r\n");
 
 	}
 }
-void RosterCollectionsDefenitions(string rosterType, List<RosterTemplateModel> rosters)
+void RosterCollectionsDefenitions(List<RosterTemplateModel> rosters)
 {
 	foreach (var @roster in rosters) 
 	{
@@ -786,21 +786,7 @@ void RosterCollectionsDefenitions(string rosterType, List<RosterTemplateModel> r
         #line hidden
         
         #line 120 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
-this.Write("\tpublic ");
-
-        
-        #line default
-        #line hidden
-        
-        #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
-this.Write(this.ToStringHelper.ToStringWithCulture(rosterType));
-
-        
-        #line default
-        #line hidden
-        
-        #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
-this.Write("<");
+this.Write("\tpublic RosterRowList<");
 
         
         #line default

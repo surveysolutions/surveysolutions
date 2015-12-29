@@ -245,7 +245,6 @@ namespace WB.Tests.Unit
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
                 areRosterServiceVariablesPresent: true,
-                rosterType: "RosterRowList",
                 isLookupTablesFeatureSupported: true);
         }
 
