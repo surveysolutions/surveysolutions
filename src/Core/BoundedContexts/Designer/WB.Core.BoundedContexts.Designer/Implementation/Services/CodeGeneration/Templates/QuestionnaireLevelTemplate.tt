@@ -100,17 +100,13 @@
                 
         <#foreach (var @roster in Model.Rosters) 
         {#>
-        public <#=Model.RosterType#><<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+        public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
         {
             get 
             {
                 var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-
-				<#if(Model.RosterType=="IEnumerable"){#>
-					return  rosters == null ? new List<<#=@roster.GeneratedTypeName#>>() : rosters.Select(x => x as <#=@roster.GeneratedTypeName#>).ToList();
-				<#}else{#>
+			
 				return  new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
-				<#}#>
             }
         }
         <# }#>

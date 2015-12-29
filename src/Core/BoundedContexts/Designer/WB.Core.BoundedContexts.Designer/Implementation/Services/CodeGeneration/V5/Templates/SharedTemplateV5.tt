@@ -113,12 +113,12 @@ void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
 <#+
 	}
 }
-void RosterCollectionsDefenitions(string rosterType, List<RosterTemplateModel> rosters)
+void RosterCollectionsDefenitions(List<RosterTemplateModel> rosters)
 {
 	foreach (var @roster in rosters) 
 	{
 #>
-	public <#=rosterType#><<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+	public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
 	{
 		get
 		{
