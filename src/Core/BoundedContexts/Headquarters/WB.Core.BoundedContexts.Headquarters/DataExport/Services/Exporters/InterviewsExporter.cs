@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                                             .ToList();
             }
 
-            var interviewExportStructure = InterviewDataExportView.CreateFromRecords(records);
+            var interviewExportStructure = InterviewDataExportView.CreateFromRecords(interviewId, records);
 
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);
 
