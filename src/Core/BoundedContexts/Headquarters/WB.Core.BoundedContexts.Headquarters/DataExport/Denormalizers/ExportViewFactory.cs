@@ -169,10 +169,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             for (var i = 1; i <= rosterVector.Length; i++)
             {
                 var levelForVector =
-                    interview.Levels.SingleOrDefault(
-                        l => l.Key == this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
+                    interview.Levels.GetOrNull(
+                        this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
 
-                var questionToCheck = levelForVector.Value.QuestionsSearchCache.ContainsKey(id) ? levelForVector.Value.QuestionsSearchCache[id] : null;
+                var questionToCheck = levelForVector?.QuestionsSearchCache.GetOrNull(id);
 
                 if (questionToCheck == null)
                     continue;
