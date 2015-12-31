@@ -255,4 +255,13 @@
   <data name="PrefilledQuestionsRequired" xml:space="preserve">
     <value>File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>You must choose a file to upload</value>
+  </data>
+  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
+    <value>Select supervisor</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Select</value>
+  </data>
 </root>

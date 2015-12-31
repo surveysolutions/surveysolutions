@@ -41,8 +41,7 @@ namespace WB.UI.Headquarters.Controllers
 
     public class InterviewImportFileDescription
     {
-        public bool HasSupervisorColumn { get; set; }
-        public bool HasInterviewerColumn { get; set; }
+        public bool HasResponsibleColumn { get; set; }
         public List<InterviewImportColumn> ColumnsByPrefilledQuestions { get; set; }
         public byte[] FileBytes { get; set; }
         public List<InterviewImportPrefilledQuestion> PrefilledQuestions { get; set; }

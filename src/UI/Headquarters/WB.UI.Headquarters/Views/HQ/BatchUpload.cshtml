@@ -16,19 +16,9 @@
             var $importInterviewsStatusUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
             var $importInterviewsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "ImportInterviews"})';
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
-            var model = new Supervisor.VM.ImportInterviews('@Model.QuestionnaireId', '@Model.QuestionnaireVersion', $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl);
-            var isViewModelValid = function () {
-                if (!model.isValid()) {
-                    model.errors.showAllMessages();
-                    return false;
-                } else {
-                    return true;
-                };
-            };
+            var model = new Supervisor.VM.ImportInterviews('@Model.QuestionnaireId', @Model.QuestionnaireVersion, $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl);
 
-            model.load(isViewModelValid);
-
-            ko.validation.group(model);
+            model.load();
             ko.applyBindings(model);
         });
     </script>
@@ -38,12 +28,28 @@
     </script>
 }
 
-<div id="select-supervisor-dialog" style="display: none;">
-    <div class="input-group">
-        <input class="form-control" placeholder="Any" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
-        <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-        <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
-            <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+<div id="dialogSelectSupervisor" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" data-bind="click: cancelSupervisorSelection">&times;</button>
+                @BatchUpload.ImportInterviews_SelectSupervisor
+            </div>
+            <div class="modal-body">
+
+                <div id="select-supervisor-dialog" data-bind="css: { 'has-error': selectedResponsible.hasError }">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Any" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                        <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
+                            <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bind="enable: !selectedResponsible.hasError(), click: selectSupervisor">@BatchUpload.ImportInterviews_SelectButtonText</button>
+            </div>
         </div>
     </div>
 </div>
@@ -87,11 +93,11 @@
                 <div>
                     <form id="importByPrefilledQuestionsForm">
                         <br />
-                        <div class="form-group" data-bind="validationElement: fileWithInterviews">
-                            <div class="input-group">
-                                <input class="form-control" type="file" id="fileByPrefilledQuestions" accept=".tab, .txt, .zip" data-bind="value: fileWithInterviews" />
-                            </div>
+                        <div class="form-inline" data-bind="css: { 'has-error': fileWithInterviews.hasError }">
+                            <input class="form-control" type="file" id="fileByPrefilledQuestions" accept=".tab, .txt, .zip" data-bind="value: fileWithInterviews" />
+                            &nbsp;<span class="help-inline" data-bind="visible: fileWithInterviews.hasError">@BatchUpload.ImportInterviews_ChooseFile</span>
                         </div>
+                        <br />
                         <input type="submit" class="btn btn-primary" value="@BatchUpload.Upload" data-bind="click: importInterviews" />
                     </form>
                 </div>

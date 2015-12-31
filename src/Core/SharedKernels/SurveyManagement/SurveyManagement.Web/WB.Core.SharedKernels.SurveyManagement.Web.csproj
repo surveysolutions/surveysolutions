@@ -688,6 +688,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\tabletinfo.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
     <EmbeddedResource Include="Scripts\spin.js" />
+    <EmbeddedResource Include="Scripts\knockout\ko.extenders.js" />
     <Content Include="Scripts\spin.min.js" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.css" />
     <EmbeddedResource Include="Content\bootstrap-datepicker.min.css" />

@@ -133,10 +133,10 @@ namespace WB.UI.Headquarters.Controllers
             var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
                     column => column.IsRequired && !column.ExistsInFIle).Select(column => column.ColumnName).ToList();
 
-            var isSupervisorRequired = !descriptionByFileWithInterviews.HasSupervisorColumn &&
+            var isSupervisorRequired = !descriptionByFileWithInterviews.HasResponsibleColumn &&
                                        !request.SupervisorId.HasValue;
 
-            var responsibleId = this.globalInfoProvider.GetCurrentUser().Id;
+            var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
             if (!requiredNotExistingColumns.Any() && !isSupervisorRequired)
             {
@@ -148,7 +148,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
                             questionnaireIdentity: questionnaireIdentity, fileBytes: fileBytes, 
-                            responsibleId: responsibleId);
+                            headquartersId: headquartersId);
                     }
                     finally
                     {
