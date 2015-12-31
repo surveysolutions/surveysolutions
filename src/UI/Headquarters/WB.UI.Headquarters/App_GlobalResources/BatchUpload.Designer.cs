@@ -223,6 +223,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must choose a file to upload.
+        /// </summary>
+        internal static string ImportInterviews_ChooseFile {
+            get {
+                return ResourceManager.GetString("ImportInterviews_ChooseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        internal static string ImportInterviews_SelectButtonText {
+            get {
+                return ResourceManager.GetString("ImportInterviews_SelectButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select supervisor.
+        /// </summary>
+        internal static string ImportInterviews_SelectSupervisor {
+            get {
+                return ResourceManager.GetString("ImportInterviews_SelectSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to is in verification process, verified.
         /// </summary>
         internal static string InVerificationProcess {

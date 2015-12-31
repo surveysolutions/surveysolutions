@@ -28,8 +28,7 @@ namespace WB.UI.Headquarters.Controllers
         const string GPSACCURACYCOLUMNPOSTFIX = "_accuracy";
         const string GPSALTITUDECOLUMNPOSTFIX = "_altitude";
         const string GPSTIMESTAMPCOLUMNPOSTFIX = "_timestamp";
-        const string SUPERVISORCOLUMNNAME = "responsible";
-        const string INTERVIEWERCOLUMNNAME = "interviewer";
+        const string RESPONSIBLECOLUMNNAME = "responsible";
 
         private class ImportedInterview
         {
@@ -51,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
 
-        private readonly ConcurrentDictionary<string, Guid?> usersCache = new ConcurrentDictionary<string, Guid?>();
+        private readonly ConcurrentDictionary<string, UserView> usersCache = new ConcurrentDictionary<string, UserView>();
 
         public InterviewImportService(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository,
@@ -69,7 +68,7 @@ namespace WB.UI.Headquarters.Controllers
             this.sampleImportSettings = sampleImportSettings;
         }
 
-        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes, Guid? supervisorId, Guid responsibleId)
+        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes, Guid? supervisorId, Guid headquartersId)
         {
 
             InterviewImportFileDescription fileDescription;
@@ -115,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
                                 interviewId: Guid.NewGuid(),
-                                responsibleId: responsibleId,
+                                responsibleId: headquartersId,
                                 questionnaireIdentity: questionnaireIdentity,
                                 supervisorId: importedInterview.SupervisorId ?? supervisorId.Value,
                                 interviewerId: importedInterview.InterviewerId,
@@ -160,15 +159,35 @@ namespace WB.UI.Headquarters.Controllers
                 csvReader.Configuration.TrimHeaders = true;
                 csvReader.Configuration.WillThrowOnMissingField = false;
 
-                try
-                {
-                    while (csvReader.Read())
-                    {
 
+                while (csvReader.Read())
+                {
+                    try
+                    {
                         dynamic dynamicImportedInterview = csvReader.GetRecord(dynamicTypeOfImportedInterview);
 
-                        var supervisorId = GetSupervisorIdOrThrow(fileDescription, dynamicImportedInterview);
-                        var interviewerId = GetInterviewerIdOrThrow(fileDescription, dynamicImportedInterview);
+                        Guid? supervisorId = null;
+                        Guid? interviewerId = null;
+
+                        if (fileDescription.HasResponsibleColumn)
+                        {
+                            string responsibleName = dynamicImportedInterview.responsible;
+                            var responsible = GetResponsibleByName(responsibleName);
+                            if (responsible == null)
+                            {
+                                throw new Exception($"responsible '{responsibleName}' not found");
+                            }
+
+                            if (responsible.Supervisor == null)
+                            {
+                                supervisorId = responsible.PublicKey;
+                            }
+                            else
+                            {
+                                interviewerId = responsible.PublicKey;
+                                supervisorId = responsible.Supervisor.Id;
+                            }
+                        }
 
                         var answersOnPrefilledQuestions = this.GetAnswersOnPrefilledQuestionsOrThrow(
                             fileDescription.PrefilledQuestions, TypeExtensions.ToDictionary(dynamicImportedInterview));
@@ -181,45 +200,20 @@ namespace WB.UI.Headquarters.Controllers
                         });
 
                     }
-                }
-                catch (Exception ex)
-                {
-                    fileInterviews.WithErrors.Add(new InterviewImportError
+                    catch (Exception ex)
                     {
-                        RawData = csvReader.CurrentRecord,
-                        ErrorMessage = ex.Data.Contains("CsvHelper")
-                            ? ToUserFriendlyErrorMessage((string) ex.Data["CsvHelper"])
-                            : ex.Message
-                    });
+                        fileInterviews.WithErrors.Add(new InterviewImportError
+                        {
+                            RawData = csvReader.CurrentRecord,
+                            ErrorMessage = ex.Data.Contains("CsvHelper")
+                                ? ToUserFriendlyErrorMessage((string) ex.Data["CsvHelper"])
+                                : ex.Message
+                        });
+                    }
                 }
             }
 
             return fileInterviews;
-        }
-
-        private Guid? GetInterviewerIdOrThrow(InterviewImportFileDescription fileDescription, dynamic dynamicImportedInterview)
-        {
-            Guid? interviewerId = null;
-            if (fileDescription.HasInterviewerColumn &&
-                !string.IsNullOrEmpty(dynamicImportedInterview.interviewer))
-            {
-                interviewerId = GetUserIdByName(dynamicImportedInterview.interviewer);
-                if (!interviewerId.HasValue)
-                    throw new Exception($"interviewer '{dynamicImportedInterview.interviewer}' not found ");
-            }
-            return interviewerId;
-        }
-
-        private Guid? GetSupervisorIdOrThrow(InterviewImportFileDescription fileDescription, dynamic dynamicImportedInterview)
-        {
-            Guid? supervisorId = null;
-            if (fileDescription.HasSupervisorColumn)
-            {
-                supervisorId = GetUserIdByName(dynamicImportedInterview.responsible);
-                if (!supervisorId.HasValue)
-                    throw new Exception($"supervisor '{dynamicImportedInterview.responsible}' not found ");
-            }
-            return supervisorId;
         }
 
         private static string ToUserFriendlyErrorMessage(string csvExceptionAsString)
@@ -233,13 +227,9 @@ namespace WB.UI.Headquarters.Controllers
                 .Where(column => column.ExistsInFIle)
                 .ToDictionary(column => column.ColumnName, column => column.ColumnType));
 
-            if (fileDescription.HasSupervisorColumn)
+            if (fileDescription.HasResponsibleColumn)
             {
-                columnsWithTypes.Add(SUPERVISORCOLUMNNAME, typeof (string));
-            }
-            if (fileDescription.HasInterviewerColumn)
-            {
-                columnsWithTypes.Add(INTERVIEWERCOLUMNNAME, typeof (string));
+                columnsWithTypes.Add(RESPONSIBLECOLUMNNAME, typeof (string));
             }
             return columnsWithTypes;
         }
@@ -267,8 +257,7 @@ namespace WB.UI.Headquarters.Controllers
                 csvReader.Read();
 
                 var columns = interviewImportFileDescription.FileColumns = csvReader.FieldHeaders.Select(header => header.Trim().ToLower()).ToArray();
-                interviewImportFileDescription.HasSupervisorColumn = columns.Contains(SUPERVISORCOLUMNNAME);
-                interviewImportFileDescription.HasInterviewerColumn = columns.Contains(INTERVIEWERCOLUMNNAME);
+                interviewImportFileDescription.HasResponsibleColumn = columns.Contains(RESPONSIBLECOLUMNNAME);
 
                 foreach (var prefilledQuestion in interviewImportFileDescription.PrefilledQuestions)
                 {
@@ -320,7 +309,7 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        private Guid? GetUserIdByName(string userName)
+        private UserView GetResponsibleByName(string userName)
         {
             userName = userName.ToLower();
             if (!this.usersCache.Keys.Contains(userName))
@@ -329,7 +318,7 @@ namespace WB.UI.Headquarters.Controllers
                 try
                 {
                     var user = this.userViewFactory.Load(new UserViewInputModel(userName, null));
-                    return this.usersCache.GetOrAdd(userName, user?.PublicKey);
+                    return this.usersCache.GetOrAdd(userName, user);
                 }
                 finally
                 {
