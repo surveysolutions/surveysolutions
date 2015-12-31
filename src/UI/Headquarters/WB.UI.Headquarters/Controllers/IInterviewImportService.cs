@@ -6,7 +6,7 @@ namespace WB.UI.Headquarters.Controllers
     public interface IInterviewImportService
     {
         InterviewImportStatus Status { get; }
-        void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes, Guid? supervisorId, Guid responsibleId);
+        void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes, Guid? supervisorId, Guid headquartersId);
         InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes);
     }
 }
