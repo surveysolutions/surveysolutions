@@ -2,8 +2,8 @@
     Supervisor.VM.ImportInterviews.superclass.constructor.apply(this, arguments);
 
     var self = this;
-    self.fileWithInterviews = ko.observable().extend({ required: true });
-    self.isViewModelValid = function () { return true };
+    self.fileWithInterviews = ko.observable().extend({ required: { shouldValidateOnStart: false } });
+    
     self.status = {
         questionnaireId: ko.observable(),
         questionnaireVersion: ko.observable(),
@@ -24,19 +24,18 @@
             self.isResponsiblesLoading(false);
         });
     }
-    self.selectedResponsible = ko.observable();
+    self.selectedResponsible = ko.observable(undefined).extend({ required: { shouldValidateOnStart: false } });
     self.isStatusLoaded = ko.observable(false);
     self.canImportInterviews = ko.computed(function() {
         return self.isStatusLoaded() && !self.status.isInProgress();
     });
-    self.isNeedShowStatusPanel = function() {
+    self.isNeedShowStatusPanel = ko.computed(function() {
         return self.status.hasErrors()
             && questionnaireId === self.status.questionnaireId()
             && questionnaireVersion === self.status.questionnaireVersion();
-    }
+    });
 
-    self.load = function (isViewModelValid) {
-        self.isViewModelValid = isViewModelValid;
+    self.load = function () {
         self.updateStatusByInterviewsImport();
     };
 
@@ -54,12 +53,12 @@
 
             self.isStatusLoaded(true);
 
-            _.delay(self.updateStatusByInterviewsImport, 1000);
+            _.delay(self.updateStatusByInterviewsImport, 3000);
         }, true, true);
     };
 
     self.importInterviews = function () {
-        if (!self.isViewModelValid())
+        if (!self.fileWithInterviews.isValid())
             return;
 
         var fileByPrefilledQuestions = $("#fileByPrefilledQuestions");
@@ -81,21 +80,23 @@
                 });
             }
             else if (response.IsSupervisorRequired) {
-                $("#select-supervisor-dialog").show();
-                bootbox.alert({
-                    title: "Select supervisor",
-                    message: $("#select-supervisor-dialog"),
-                    callback: function() {
-                        if (!_.isUndefined(self.selectedResponsible())) {
-                            self.importInterviews();
-                            self.fileWithInterviews('');
-                            self.selectedResponsible(undefined);
-                        }
-                        $("#select-supervisor-dialog").hide().appendTo($('body'));
-                    }
+                self.selectedResponsible.isValid();
+                $("#dialogSelectSupervisor").modal({
+                    "backdrop": "static",
+                    "keyboard": true,
+                    "show": true
                 });
             } 
         });
-    };
+    }
+
+    self.selectSupervisor = function() {
+        self.importInterviews();
+        location.href = location.href;
+    }
+
+    self.cancelSupervisorSelection = function() {
+        self.selectedResponsible(undefined);
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ImportInterviews, Supervisor.VM.BasePage);
