@@ -18,7 +18,7 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
-    <MandroidI18n>West</MandroidI18n>
+    <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize />
     <JavaOptions />
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
@@ -69,7 +69,7 @@
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions>
     </AndroidStoreUncompressedFileExtensions>
-    <MandroidI18n>West</MandroidI18n>
+    <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
     <AotAssemblies>False</AotAssemblies>
