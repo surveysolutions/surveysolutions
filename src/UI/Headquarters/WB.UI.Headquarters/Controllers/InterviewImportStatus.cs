@@ -61,7 +61,6 @@ namespace WB.UI.Headquarters.Controllers
     public class InterviewImportColumn
     {
         public string ColumnName { get; set; }
-        public Type ColumnType { get; set; }
         public bool ExistsInFIle { get; set; }
         public bool IsRequired { get; set; }
     }
