@@ -262,6 +262,8 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireDocument = this.questionnaireDocumentRepository.AsVersioned()
                 .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version).Questionnaire;
 
+            var prefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured);
+
             var interviewImportFileDescription = new InterviewImportFileDescription()
             {
                 ColumnsByPrefilledQuestions = new List<InterviewImportColumn>(),
@@ -271,7 +273,7 @@ namespace WB.UI.Headquarters.Controllers
                         .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
                         .ToList(),
             };
-
+            
             using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileBytes))))
             {
                 csvReader.Configuration.Delimiter = this.Status.State.Delimiter;
