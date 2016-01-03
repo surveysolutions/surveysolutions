@@ -128,6 +128,12 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
             var fileBytes = fileStream.ToArray();
 
+            if (fileBytes.Length == 0)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                       $"File {request.FileWithInterviews.FileName} is empty");
+            }
+
             var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileBytes);
 
             var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
