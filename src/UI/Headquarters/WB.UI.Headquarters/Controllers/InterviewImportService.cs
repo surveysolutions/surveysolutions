@@ -269,7 +269,7 @@ namespace WB.UI.Headquarters.Controllers
                 ColumnsByPrefilledQuestions = new List<InterviewImportColumn>(),
                 QuestionnaireTitle = $"(ver. {questionnaireIdentity.Version}) {questionnaireDocument.Title}",
                 FileBytes = fileBytes,
-                PrefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured)
+                PrefilledQuestions = prefilledQuestions
                         .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
                         .ToList(),
             };
