@@ -5,17 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
@@ -23,12 +27,17 @@ namespace WB.UI.Headquarters.Controllers
 {
     public class InterviewImportService : IInterviewImportService
     {
-        const string GPSLATITUDECOLUMNPOSTFIX = "_latitude";
-        const string GPSLONGITUDECOLUMNPOSTFIX = "_longitude";
-        const string GPSACCURACYCOLUMNPOSTFIX = "_accuracy";
-        const string GPSALTITUDECOLUMNPOSTFIX = "_altitude";
-        const string GPSTIMESTAMPCOLUMNPOSTFIX = "_timestamp";
         const string RESPONSIBLECOLUMNNAME = "responsible";
+
+        private class GeoPosition
+        {
+            public double? Latitude { get; set; }
+            public double? Longitude { get; set; }
+            public double? Accuracy { get; set; }
+            public double? Altitude { get; set; }
+            public DateTimeOffset? Timestamp { get; set; }
+
+        }
 
         private class ImportedInterview
         {
@@ -48,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory userViewFactory;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
+        private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
         private readonly SampleImportSettings sampleImportSettings;
 
         private readonly ConcurrentDictionary<string, UserView> usersCache = new ConcurrentDictionary<string, UserView>();
@@ -58,6 +68,7 @@ namespace WB.UI.Headquarters.Controllers
             IUserViewFactory userViewFactory,
             ITransactionManagerProvider transactionManager,
             ILogger logger,
+            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
             SampleImportSettings sampleImportSettings)
         {
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
@@ -65,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers
             this.userViewFactory = userViewFactory;
             this.transactionManager = transactionManager;
             this.logger = logger;
+            this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportSettings = sampleImportSettings;
         }
 
@@ -149,7 +161,6 @@ namespace WB.UI.Headquarters.Controllers
 
             using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileDescription.FileBytes))))
             {
-                csvReader.Configuration.AutoMap(dynamicTypeOfImportedInterview);
                 csvReader.Configuration.Delimiter = this.Status.State.Delimiter;
                 csvReader.Configuration.BufferSize = 32768;
                 csvReader.Configuration.IgnoreHeaderWhiteSpace = true;
@@ -158,7 +169,20 @@ namespace WB.UI.Headquarters.Controllers
                 csvReader.Configuration.TrimFields = true;
                 csvReader.Configuration.TrimHeaders = true;
                 csvReader.Configuration.WillThrowOnMissingField = false;
+                csvReader.Configuration.PrefixReferenceHeaders = true;
+                csvReader.Configuration.UseNewObjectForNullReferenceProperties = false;
 
+                var interviewMap = csvReader.Configuration.AutoMap(dynamicTypeOfImportedInterview);
+                foreach (var prefilledGpsQuestion in fileDescription.PrefilledQuestions.Where(x => x.IsGps))
+                {
+                    var geoPositionReferenceMap = new CsvPropertyReferenceMap(
+                        dynamicTypeOfImportedInterview.GetProperty(prefilledGpsQuestion.Variable),
+                        csvReader.Configuration.AutoMap<GeoPosition>());
+
+                    geoPositionReferenceMap.Prefix($"{prefilledGpsQuestion.Variable}{QuestionDataParser.COLUMNDELIMITER}");
+                    interviewMap.ReferenceMaps.Add(geoPositionReferenceMap);
+                }
+                csvReader.Configuration.RegisterClassMap(interviewMap);
 
                 while (csvReader.Read())
                 {
@@ -223,9 +247,8 @@ namespace WB.UI.Headquarters.Controllers
 
         private static Dictionary<string, Type> GetFileColumnsWithTypes(InterviewImportFileDescription fileDescription)
         {
-            var columnsWithTypes = new Dictionary<string, Type>(fileDescription.ColumnsByPrefilledQuestions
-                .Where(column => column.ExistsInFIle)
-                .ToDictionary(column => column.ColumnName, column => column.ColumnType));
+            var columnsWithTypes = new Dictionary<string, Type>(fileDescription.PrefilledQuestions
+                .ToDictionary(column => column.Variable, column => column.AnswerType));
 
             if (fileDescription.HasResponsibleColumn)
             {
@@ -259,53 +282,37 @@ namespace WB.UI.Headquarters.Controllers
                 var columns = interviewImportFileDescription.FileColumns = csvReader.FieldHeaders.Select(header => header.Trim().ToLower()).ToArray();
                 interviewImportFileDescription.HasResponsibleColumn = columns.Contains(RESPONSIBLECOLUMNNAME);
 
-                foreach (var prefilledQuestion in interviewImportFileDescription.PrefilledQuestions)
+                foreach (var exportColumnByPrefilledQuestion in this.sampleUploadViewFactory.Load(
+                    new SampleUploadViewInputModel(questionnaireIdentity.QuestionnaireId,
+                        questionnaireIdentity.Version)).ColumnListToPreload)
                 {
-                    if (prefilledQuestion.IsGps)
-                    {
-                        interviewImportFileDescription.ColumnsByPrefilledQuestions.AddRange(new[]
+                    var prefilledQuestion = prefilledQuestions.FirstOrDefault(question => question.PublicKey == exportColumnByPrefilledQuestion.Id);
+                    interviewImportFileDescription.ColumnsByPrefilledQuestions.Add(
+                        new InterviewImportColumn
                         {
-                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSLATITUDECOLUMNPOSTFIX}", columns, true, typeof (double)),
-                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSLONGITUDECOLUMNPOSTFIX}", columns, true, typeof (double)),
-                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSACCURACYCOLUMNPOSTFIX}", columns, false, typeof (double?)),
-                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSALTITUDECOLUMNPOSTFIX}", columns, false, typeof (double)),
-                            ToInterviewImportColumn($"{prefilledQuestion.Variable}{GPSTIMESTAMPCOLUMNPOSTFIX}", columns, false, typeof (DateTimeOffset?))
+                            ColumnName = exportColumnByPrefilledQuestion.Caption,
+                            IsRequired = (prefilledQuestion != null && prefilledQuestion.QuestionType != QuestionType.GpsCoordinates) ||
+                                exportColumnByPrefilledQuestion.Caption.IsRequiredGeoPositionColumn(),
+                            ExistsInFIle = columns.Contains(exportColumnByPrefilledQuestion.Caption.ToLower())
                         });
-                    }
-                    else
-                    {
-                        interviewImportFileDescription.ColumnsByPrefilledQuestions.Add(
-                            ToInterviewImportColumn(prefilledQuestion.Variable, columns, true, prefilledQuestion.AnswerType));
-                    }
                 }
             }
             
             return interviewImportFileDescription;
         }
 
-        private InterviewImportPrefilledQuestion ToInterviewImportPrefilledQuestion(IQuestion question,
+        private InterviewImportPrefilledQuestion ToInterviewImportPrefilledQuestion(IQuestion prefilledQuestion,
             QuestionnaireDocument questionnaireDocument)
         {
             return new InterviewImportPrefilledQuestion
             {
-                QuestionId = question.PublicKey,
-                Variable = question.StataExportCaption.ToLower(),
-                AnswerType = this.GetTypeOfAnswer(question),
-                IsGps = question.QuestionType == QuestionType.GpsCoordinates,
-                IsRosterSize = question.QuestionType == QuestionType.Numeric &&
+                QuestionId = prefilledQuestion.PublicKey,
+                Variable = prefilledQuestion.StataExportCaption.ToLower(),
+                AnswerType = this.GetTypeOfAnswer(prefilledQuestion),
+                IsGps = prefilledQuestion.QuestionType == QuestionType.GpsCoordinates,
+                IsRosterSize = prefilledQuestion.QuestionType == QuestionType.Numeric &&
                                questionnaireDocument.Find<IGroup>(
-                                   group => group.RosterSizeQuestionId == question.PublicKey).Any()
-            };
-        }
-
-        private static InterviewImportColumn ToInterviewImportColumn(string columnName, string[] fileColumns, bool isRequired, Type columnType)
-        {
-            return new InterviewImportColumn
-            {
-                ColumnName = columnName,
-                ColumnType = columnType,
-                IsRequired = isRequired,
-                ExistsInFIle = fileColumns.Contains(columnName)
+                                   group => group.RosterSizeQuestionId == prefilledQuestion.PublicKey).Any()
             };
         }
 
@@ -335,48 +342,47 @@ namespace WB.UI.Headquarters.Controllers
             var answersOnPrefilledQuestions = new Dictionary<Guid, object>();
             foreach (var prefilledQuestion in prefilledQuestions)
             {
+                var prefilledQuestionVariable = prefilledQuestion.Variable;
                 if (prefilledQuestion.IsGps)
                 {
-                    object oLatitude;
-                    object oLongtitude;
-                    object oAccuracy;
-                    object oAltitude;
-                    object oTimestamp;
+                    var answerOnGpsQuestion = (GeoPosition)importedInterview[prefilledQuestionVariable];
 
-                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSLATITUDECOLUMNPOSTFIX}", out oLatitude);
-                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSLONGITUDECOLUMNPOSTFIX}", out oLongtitude);
-                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSACCURACYCOLUMNPOSTFIX}", out oAccuracy);
-                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSALTITUDECOLUMNPOSTFIX}", out oAltitude);
-                    importedInterview.TryGetValue($"{prefilledQuestion.Variable}{GPSTIMESTAMPCOLUMNPOSTFIX}", out oTimestamp);
-
-                    double? latitude = (double?) oLatitude;
-                    double? longtitude = (double?) oLongtitude;
-
-                    if (latitude.HasValue && (latitude.Value < -91 || latitude.Value > 90))
+                    if (!answerOnGpsQuestion.Latitude.HasValue)
                     {
-                        throw new Exception($"Field Name: '{prefilledQuestion.Variable}{GPSLATITUDECOLUMNPOSTFIX}', Field Value: '{latitude}'");
+                        throw new Exception($"Field Name: '{prefilledQuestionVariable.GetLatitideColumnName()}' not found");
                     }
 
-                    if (longtitude.HasValue && (longtitude.Value < -181 || longtitude.Value > 180))
+                    if (!answerOnGpsQuestion.Longitude.HasValue)
                     {
-                        throw new Exception($"Field Name: '{prefilledQuestion.Variable}{GPSLONGITUDECOLUMNPOSTFIX}', Field Value: '{longtitude}'");
+                        throw new Exception($"Field Name: '{prefilledQuestionVariable.GetLongitugeColumnName()}' not found");
                     }
 
-                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId, new GeoPosition()
+                    if (answerOnGpsQuestion.Latitude < -90 || answerOnGpsQuestion.Latitude > 90)
                     {
-                        Latitude = latitude.GetValueOrDefault(),
-                        Longitude = longtitude.GetValueOrDefault(),
-                        Accuracy = ((double?)oAccuracy).GetValueOrDefault(),
-                        Altitude = ((double?)oAltitude).GetValueOrDefault(),
-                        Timestamp = ((DateTimeOffset?)oTimestamp).GetValueOrDefault()
-                    });
+                        throw new Exception($"Field Name: '{prefilledQuestionVariable.GetLatitideColumnName()}', Field Value: '{answerOnGpsQuestion.Latitude}'");
+                    }
+
+                    if (answerOnGpsQuestion.Longitude < -180 || answerOnGpsQuestion.Longitude > 180)
+                    {
+                        throw new Exception($"Field Name: '{prefilledQuestionVariable.GetLongitugeColumnName()}', Field Value: '{answerOnGpsQuestion.Longitude}'");
+                    }
+
+                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId,
+                        new Main.Core.Entities.SubEntities.GeoPosition()
+                        {
+                            Latitude = answerOnGpsQuestion.Latitude.GetValueOrDefault(),
+                            Longitude = answerOnGpsQuestion.Longitude.GetValueOrDefault(),
+                            Altitude = answerOnGpsQuestion.Altitude.GetValueOrDefault(),
+                            Accuracy = answerOnGpsQuestion.Accuracy.GetValueOrDefault(),
+                            Timestamp = answerOnGpsQuestion.Timestamp.GetValueOrDefault()
+                        });
                 }
                 else if (prefilledQuestion.IsRosterSize)
                 {
-                    var answerOnRosterSizeQuestion = (int)importedInterview[prefilledQuestion.Variable];
+                    var answerOnRosterSizeQuestion = (int)importedInterview[prefilledQuestionVariable];
                     if (answerOnRosterSizeQuestion < 0 || answerOnRosterSizeQuestion > 40)
                     {
-                        throw new Exception($"Field Name: '{prefilledQuestion.Variable}', Field Value: '{answerOnRosterSizeQuestion}'");
+                        throw new Exception($"Field Name: '{prefilledQuestionVariable}', Field Value: '{answerOnRosterSizeQuestion}'");
                     }
 
                     answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId, answerOnRosterSizeQuestion);
@@ -384,7 +390,7 @@ namespace WB.UI.Headquarters.Controllers
                 else
                 {
                     answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId,
-                        importedInterview[prefilledQuestion.Variable]);
+                        importedInterview[prefilledQuestionVariable]);
                 }
             }
 
@@ -401,6 +407,8 @@ namespace WB.UI.Headquarters.Controllers
                     return ((INumericQuestion) question).IsInteger ? typeof (int) : typeof (decimal);
                 case QuestionType.SingleOption:
                     return typeof (int);
+                case QuestionType.GpsCoordinates:
+                    return typeof(GeoPosition);
                 default:
                     return typeof (string);
             }
