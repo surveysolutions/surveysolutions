@@ -141,7 +141,7 @@ namespace WB.UI.Headquarters.Controllers
                         }
                         catch (Exception ex)
                         {
-                            var answersOnPrefilledQuestions = string.Join(", ", importedInterview.AnswersOnPrefilledQuestions.Values);
+                            var answersOnPrefilledQuestions = string.Join(", ", importedInterview.AnswersOnPrefilledQuestions.Values.Where(x => x != null));
                             this.logger.Error(string.Format("Error during import of interview with prefilled questions {0}. QuestionnaireId {1}, headquartersId: {2}", 
                                 answersOnPrefilledQuestions, 
                                 questionnaireIdentity,
