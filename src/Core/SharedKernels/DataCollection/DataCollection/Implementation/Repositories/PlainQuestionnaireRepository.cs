@@ -17,11 +17,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.repository = repository;
         }
 
-        public IQuestionnaire GetQuestionnaire(Guid id)
-        {
-            throw new NotSupportedException("Plain questionnaire repository should be used only on CAPI and Supervisor and it does not support 'latest questionnaire' method. To create new interview please provide concrete version for creation.");
-        }
-
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
             QuestionnaireDocument questionnaireDocument = this.repository.GetById(GetRepositoryId(id, version));

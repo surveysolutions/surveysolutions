@@ -51,8 +51,7 @@ namespace WB.Tests.Integration.InterviewTests
         protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
             return Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
@@ -89,8 +88,7 @@ namespace WB.Tests.Integration.InterviewTests
             var questionnaire = Create.Questionnaire(questionnaireDocument);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionnaire.GetQuestionnaire()
-                    && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
                     && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
 
             IInterviewExpressionStateV5 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
