@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -118,6 +120,10 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
+
+                int createdInterviewsCount = 0;
+                Stopwatch elapsedTime = Stopwatch.StartNew();
+                
                 Parallel.ForEach(fileInterviews.Imported,
                     new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
                     (importedInterview) =>
@@ -135,11 +141,16 @@ namespace WB.UI.Headquarters.Controllers
                         }
                         catch (Exception ex)
                         {
-                            this.logger.Error("Import interview.", ex);
+                            var answersOnPrefilledQuestions = string.Join(", ", importedInterview.AnswersOnPrefilledQuestions.Values);
+                            this.logger.Error(string.Format("Error during import of interview with prefilled questions {0}. QuestionnaireId {1}, headquartersId: {2}", 
+                                answersOnPrefilledQuestions, 
+                                questionnaireIdentity,
+                                headquartersId), ex);
                         }
 
-                        this.Status.CreatedInterviewsCount += 1;
-                        this.Status.ElapsedTime = DateTime.Now.Subtract(this.Status.StartedDateTime).TotalMilliseconds;
+                        Interlocked.Increment(ref createdInterviewsCount);
+                        this.Status.CreatedInterviewsCount = createdInterviewsCount;
+                        this.Status.ElapsedTime = elapsedTime.ElapsedMilliseconds;
                         this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
                         this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
                     });
