@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download list of interviews. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;.
+        ///   Looks up a localized string similar to Download list of interviews. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;.
         /// </summary>
         public static string GetInterviews {
             get {
