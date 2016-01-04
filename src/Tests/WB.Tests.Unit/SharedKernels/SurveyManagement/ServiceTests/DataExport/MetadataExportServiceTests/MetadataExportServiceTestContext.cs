@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Moq.It;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 questionnaireDocumentVersionedStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                metaDescriptionFactory ?? Mock.Of< IMetaDescriptionFactory> ());
+                metaDescriptionFactory ?? Mock.Of< IMetaDescriptionFactory> (), new QuestionnaireLabelFactory());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

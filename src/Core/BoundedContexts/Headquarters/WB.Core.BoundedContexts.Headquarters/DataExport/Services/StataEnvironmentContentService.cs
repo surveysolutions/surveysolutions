@@ -1,24 +1,27 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class StataEnvironmentContentService : IEnvironmentContentService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
 
-        public StataEnvironmentContentService(IFileSystemAccessor fileSystemAccessor)
+        public StataEnvironmentContentService(
+            IFileSystemAccessor fileSystemAccessor, 
+            IQuestionnaireLabelFactory questionnaireLabelFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.questionnaireLabelFactory = questionnaireLabelFactory;
         }
 
 
@@ -28,21 +31,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                this.CreateContentOfAdditionalFile(headerStructureForLevel, questionnaireExportStructure,
-                    ExportFileSettings.GetContentFileName(headerStructureForLevel.LevelName), folderPath);
+                QuestionnaireLabels questionnaireLabels =
+                      this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(questionnaireExportStructure, headerStructureForLevel.LevelScopeVector);
+
+                this.CreateContentOfAdditionalFile(questionnaireLabels,
+                    ExportFileSettings.GetContentFileName(questionnaireLabels.LevelName), folderPath);
             }
         }
 
-        private void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, QuestionnaireExportStructure questionnaireExportStructure, string dataFileName, string basePath)
+        private void CreateContentOfAdditionalFile(QuestionnaireLabels questionnaireLabels, string dataFileName, string basePath)
         {
             var doContent = new StringBuilder();
             
             BuildInsheet(dataFileName, doContent);
 
-            this.BuildLabelsForLevel(headerStructureForLevel, questionnaireExportStructure, doContent);
+            this.BuildLabelsForLevel(questionnaireLabels, doContent);
 
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
-                this.GetEnvironmentContentFileName(headerStructureForLevel.LevelName));
+                this.GetEnvironmentContentFileName(questionnaireLabels.LevelName));
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString().ToLower());
         }
@@ -59,55 +65,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             doContent.AppendLine($"insheet using \"{fileName}\", tab");
         }
 
-        protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, QuestionnaireExportStructure questionnaireExportStructure, StringBuilder doContent)
+        protected void BuildLabelsForLevel(QuestionnaireLabels questionnaireLabels, StringBuilder doContent)
         {
-            foreach (ExportedHeaderItem headerItem in headerStructureForLevel.HeaderItems.Values)
+            foreach (var variableLabel in questionnaireLabels.LabeledVariable)
             {
-                bool hasLabels = headerItem.Labels.Count > 0;
-
-                string labelName = this.CreateLabelName(headerItem.VariableName);
-
                 doContent.AppendLine();
-                
-                if (hasLabels)
+                if (variableLabel.VariableValueLabels.Any())
                 {
-                    this.AppendLabel(doContent, labelName, headerItem.Labels.Values);
+                    string labelName = this.CreateLabelName(variableLabel.VariableName);
+
+                    this.AppendLabel(doContent, labelName, variableLabel.VariableValueLabels);
+               
+                    this.AppendLabelToValuesMatching(doContent, variableLabel.VariableName, labelName);
                 }
 
-                for (int i = 0; i < headerItem.ColumnNames.Length; i++)
-                {
-                    if (hasLabels)
-                    {
-                        this.AppendLabelToValuesMatching(doContent, headerItem.ColumnNames[i], labelName);
-                    }
-
-                    doContent.AppendLine($"label variable {headerItem.ColumnNames[i]} `\"{this.RemoveNotAllowedChars(headerItem.Titles[i])}\"'");
-                }
+                doContent.AppendLine($"label variable {variableLabel.VariableName} `\"{this.RemoveNotAllowedChars(variableLabel.Label)}\"'");
             }
-
-            for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
-            {
-                string parentColumnLabel;
-                if (i == 0)
-                {
-                    parentColumnLabel = "InterviewId";
-                }
-                else
-                {
-                    parentColumnLabel = $"Id in \"{questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>(headerStructureForLevel.LevelScopeVector.Take(i))].LevelName}\"";
-                }
-
-                doContent.AppendLine(
-                    $"label variable {ServiceColumns.ParentId}{headerStructureForLevel.LevelScopeVector.Length - i} `\"{parentColumnLabel}\"'");
-            }
-
-            if (headerStructureForLevel.LevelLabels != null)
-            {
-                var levelLabelName = this.CreateLabelName(headerStructureForLevel.LevelIdColumnName);
-                this.AppendLabel(doContent, levelLabelName, headerStructureForLevel.LevelLabels);
-                this.AppendLabelToValuesMatching(doContent, headerStructureForLevel.LevelIdColumnName, levelLabelName);
-            }
-
         }
 
         private void AppendLabelToValuesMatching(StringBuilder doContent,string columnName, string labelName)
@@ -115,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             doContent.AppendLine($"label values {columnName} {labelName}");
         }
 
-        private void AppendLabel(StringBuilder doContent, string labelName, IEnumerable<LabelItem> labels)
+        private void AppendLabel(StringBuilder doContent, string labelName, IEnumerable<VariableValueLabel> labels)
         {
             //stata allows only int values less 2,147,483,620 to be labeled
             //stata doesn't allow to declare empty dictionaries
@@ -126,13 +99,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             foreach (var label in labels)
             {
                 decimal value;
-                if (decimal.TryParse(label.Caption, out value) && value < limitValue && (value % 1) == 0)
+                if (decimal.TryParse(label.Value, out value) && value < limitValue && (value % 1) == 0)
                 {
-                    localBuilder.Append($"{label.Caption} `\"{this.RemoveNotAllowedChars(label.Title)}\"' ");
+                    localBuilder.Append($"{label.Value } `\"{this.RemoveNotAllowedChars(label.Label)}\"' ");
                     hasValidValue = true;
                 }
                 else
-                    localBuilder.Append($"/*{label.Caption} `\"{this.RemoveNotAllowedChars(label.Title)}\"'*/ ");
+                    localBuilder.Append($"/*{label.Value} `\"{this.RemoveNotAllowedChars(label.Label)}\"'*/ ");
             }
 
             doContent.AppendFormat(hasValidValue ? "label define {0} " : "/*label define {0}*/ ", labelName);
@@ -154,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             //var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
 
-            return Regex.Replace(s, @"\t|\n|\r|`|'|""", string.Empty);
+            return Regex.Replace(s, @"\t|\n|\r|`|'", string.Empty);
         }
     }
 }
