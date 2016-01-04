@@ -83,6 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
+            this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
 
             this.Bind<TabularFormatDataExportHandler>().ToSelf();

@@ -153,7 +153,9 @@
     <Compile Include="DataExport\Factories\ICsvWriter.cs" />
     <Compile Include="DataExport\Factories\IDatasetWriterFactory.cs" />
     <Compile Include="DataExport\Factories\IMetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Factories\IQuestionnaireLabelFactory.cs" />
     <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Factories\QuestionnaireLabelFactory.cs" />
     <Compile Include="DataExport\Jobs\ExportJob.cs" />
     <Compile Include="DataExport\Jobs\ExportJobScheduler.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
@@ -182,6 +184,9 @@
     <Compile Include="DataExport\Views\DataExportStatusView.cs" />
     <Compile Include="DataExport\Views\DataExportStatusReader.cs" />
     <Compile Include="DataExport\Views\IDataExportStatusReader.cs" />
+    <Compile Include="DataExport\Views\Labels\LabeledVariable.cs" />
+    <Compile Include="DataExport\Views\Labels\QuestionnaireLabels.cs" />
+    <Compile Include="DataExport\Views\Labels\VariableValueLabel.cs" />
     <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
     <Compile Include="DataExport\Denormalizers\QuestionnaireExportStructureDenormalizer.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
