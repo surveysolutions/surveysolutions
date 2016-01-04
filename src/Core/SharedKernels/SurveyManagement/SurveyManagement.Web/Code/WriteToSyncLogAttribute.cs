@@ -153,9 +153,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             var messagesByInterviews = interviewsApiView.Select(x => new UrlHelper(context.Request).Link("Default",
                         new { controller = "Interview", action = "Details", id = x.Id })).ToList();
 
-            return SyncLogMessages.GetInterviews.FormatString(!messagesByInterviews.Any()
-                    ? SyncLogMessages.NoNewInterviewPackagesToDownload
-                    : string.Join("<br>", messagesByInterviews));
+            var readability = !messagesByInterviews.Any()
+                ? SyncLogMessages.NoNewInterviewPackagesToDownload
+                : string.Join("<br />", messagesByInterviews);
+            return SyncLogMessages.GetInterviews.FormatString(readability);
         }
 
         private string GetInterviewPackagesLogMessage(HttpActionExecutedContext context)
