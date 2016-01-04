@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+    #line 1 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class ExpressionMethodTemplate : ExpressionMethodTemplateBase
     {
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing System.Linq;\r\nusing Sys" +
                     "tem.Text.RegularExpressions;\r\n");
             
-            #line 13 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 13 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
 
 	foreach (var namespaceToInclude in Model.Namespaces)
 	{
@@ -43,14 +43,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("using ");
             
-            #line 17 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 17 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(namespaceToInclude));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 18 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 18 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
 
 	}
 
@@ -60,21 +60,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\r\nnamespace WB.Core.SharedKernels.DataCollection.Generated\r\n{\r\n   internal partia" +
                     "l class ");
             
-            #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 24 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedClassName));
             
             #line default
             #line hidden
             this.Write("\r\n   {   \r\n      private bool ");
             
-            #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 26 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedMethodName));
             
             #line default
             #line hidden
             this.Write("()\r\n      {\r\n");
             
-            #line 28 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 28 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
  
 	if(Model.GenerateSelf) 
 	{
@@ -84,14 +84,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("          var self = ");
             
-            #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 32 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.VariableName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 33 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
  
 	}
 
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("          return ");
             
-            #line 36 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
+            #line 36 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ExpressionString));
             
             #line default
