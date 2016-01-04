@@ -527,7 +527,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public void RestoreInterviewStateFromSyncPackage(Guid userId, InterviewSynchronizationDto synchronizedInterview)
         {
             ThrowIfInterviewHardDeleted();
-            IQuestionnaire questionnaire = GetHistoricalQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
+            IQuestionnaire questionnaire = GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             var answerDtos = synchronizedInterview
                 .Answers
                 .Select(answerDto => new InterviewAnswerDto(answerDto.Id, answerDto.QuestionRosterVector, questionnaire.GetAnswerType(answerDto.Id), answerDto.Answer))
@@ -1195,7 +1195,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private IQuestionnaire GetQuestionnaireOrThrow()
         {
-            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetHistoricalQuestionnaireOrThrow(
+            return this.cachedQuestionnaire ?? (this.cachedQuestionnaire = GetQuestionnaireOrThrow(
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version));
         }

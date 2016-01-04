@@ -25,8 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.Version == questionnaireVersion);
 
             questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionnaire &&
-                    repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
         };
 
         Cleanup stuff = () =>
