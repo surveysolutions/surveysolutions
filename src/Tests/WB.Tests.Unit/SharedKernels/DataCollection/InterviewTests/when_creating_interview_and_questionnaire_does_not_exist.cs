@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
 
             var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == null as IQuestionnaire);
 
             interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
         };

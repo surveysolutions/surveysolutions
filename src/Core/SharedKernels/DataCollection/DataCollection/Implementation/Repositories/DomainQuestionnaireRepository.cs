@@ -26,17 +26,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             this.snapshotStore = snapshotStore;
         }
 
-        public IQuestionnaire GetQuestionnaire(Guid id)
-        {
-            return this.GetHistoricalQuestionnaireImpl(id);
-        }
-
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
             return this.GetHistoricalQuestionnaireImpl(id, (int)version);
         }
 
-        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, int? version = null)
+        private IQuestionnaire GetHistoricalQuestionnaireImpl(Guid id, int version)
         {
             int maxEvent = int.MaxValue;
             Snapshot snapshot = null;
@@ -46,10 +41,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             {
                 minVersion = snapshot.Version + 1;
 
-                if (version.HasValue && snapshot.Version >= version.Value)
+                if (snapshot.Version >= version)
                 {
                     var questionnaire = (Questionnaire)this.domainRepository.Load(typeof(Questionnaire), snapshot, new CommittedEventStream(snapshot.EventSourceId));
-                    return questionnaire.GetHistoricalQuestionnaire(version.Value);
+                    return questionnaire.GetHistoricalQuestionnaire(version);
                 }
             }
 
@@ -59,9 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!eventStream.IsEmpty)
                 snapshotStore.SaveShapshot(new Snapshot(id, eventStream.CurrentSourceVersion, aggregateRoot.CreateSnapshot()));
 
-            if(version.HasValue)
-                return aggregateRoot.GetHistoricalQuestionnaire(version.Value);
-            return aggregateRoot.GetQuestionnaire();
+            return aggregateRoot.GetHistoricalQuestionnaire(version);
         }
     }
 }
