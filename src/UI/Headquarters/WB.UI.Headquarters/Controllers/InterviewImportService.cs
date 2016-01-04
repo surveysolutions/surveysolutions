@@ -154,6 +154,8 @@ namespace WB.UI.Headquarters.Controllers
                         this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
                         this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
                     });
+
+                this.logger.Info(string.Format("Imported {0:N0} of interviews. Took {1:c} to complete", this.Status.TotalInterviewsCount, elapsedTime.Elapsed));
             }
             finally
             {
