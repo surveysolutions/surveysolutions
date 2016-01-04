@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+    #line 1 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class RosterScopeTemplateV5 : RosterScopeTemplateV5Base
     {
@@ -38,35 +38,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write(" \r\n\r\n");
             this.Write("\r\n\r\ninternal partial class ");
             
-            #line 10 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 10 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" : AbstractConditionalLevelInstanceV5<");
             
-            #line 10 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 10 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(">, \r\n\tIRosterLevel<");
             
-            #line 11 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 11 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(">, \r\n\tIExpressionExecutableV5\r\n{\t\r\n\tpublic ");
             
-            #line 14 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 14 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("(\r\n\t\tdecimal[] rosterVector, Identity[] rosterKey, \r\n\t\t");
             
-            #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 16 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.ParentTypeName));
             
             #line default
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 	private ");
             
-            #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 25 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 	{	
 ");
             
-            #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 29 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	GroupsStatesInLevelConstructor(Model.Groups);
 	RostersInScopeStatesInLevelConstructor(Model.RostersInScope);
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line default
             #line hidden
             
-            #line 35 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 35 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
     {
@@ -114,28 +114,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t\t_conditionExpressions.Add(Verifier(");
             
-            #line 39 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 39 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tuple.Item1));
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 39 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 39 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tuple.Item2));
             
             #line default
             #line hidden
             this.Write(".ItemId, ");
             
-            #line 39 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 39 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tuple.Item2));
             
             #line default
             #line hidden
             this.Write("));                        \r\n");
             
-            #line 40 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 40 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	}
 
@@ -144,14 +144,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t}\r\n\t\r\n\tprivate ");
             
-            #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
             #line hidden
             this.Write(" @_parent;\t\t\r\n\r\n");
             
-            #line 47 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 47 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	foreach (var parentQuestion in Model.AllParentsQuestionsToTop) 
 	{
@@ -161,28 +161,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\tpublic ");
             
-            #line 51 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 51 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 51 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 51 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.VariableName));
             
             #line default
             #line hidden
             this.Write(" { get { return this.@_parent.");
             
-            #line 51 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 51 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentQuestion.VariableName));
             
             #line default
             #line hidden
             this.Write("; } }\t\t\t\t\t\t\t\t\t\t\r\n");
             
-            #line 52 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 52 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	}
 
@@ -192,7 +192,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\r\n\tpublic decimal @rowcode { get { return this.RosterVector.Last(); } }\r\n\r\n\tpubli" +
                     "c int @rowindex { get { return @_parent.");
             
-            #line 58 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 58 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.RostersInScope[0].VariableName));
             
             #line default
@@ -208,21 +208,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 	public RosterRowList<");
             
-            #line 67 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 67 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("> @roster\r\n\t{\r\n\t\tget { return @_parent.");
             
-            #line 69 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 69 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Model.RostersInScope[0].VariableName));
             
             #line default
             #line hidden
             this.Write("; }\r\n\t}\r\n\r\n");
             
-            #line 72 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 72 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	foreach (var parentRoster in Model.AllParentsRostersToTop) 
 	{
@@ -232,28 +232,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t\tpublic RosterRowList<");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 76 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.GeneratedTypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 76 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
             
             #line default
             #line hidden
             this.Write(" { get { return this.@_parent.");
             
-            #line 76 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 76 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parentRoster.VariableName));
             
             #line default
             #line hidden
             this.Write("; } }\t\t\t\t\t\t\t\t\t\t\r\n");
             
-            #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 77 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	}
 
@@ -263,7 +263,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("\r\n\tpublic override IExpressionExecutableV5 CopyMembers(Func<Identity[], Guid, IEn" +
                     "umerable<IExpressionExecutableV5>> getInstances)\r\n\t{\r\n\t\tvar level = new ");
             
-            #line 83 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 83 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedTypeName));
             
             #line default
@@ -275,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 ");
             
-            #line 88 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 88 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
 
@@ -301,7 +301,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
    
 ");
             
-            #line 108 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 108 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	LookupTablesDefenitions(LookupTables);
 	QuestionsStateDefenitions(Model.Questions);
@@ -311,7 +311,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t//groups\r\n");
             
-            #line 113 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 113 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	foreach (var @group in Model.Groups) 
 	{
@@ -321,21 +321,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\tprivate ConditionalState ");
             
-            #line 117 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 117 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 117 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 117 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n");
             
-            #line 118 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 118 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
  
 	}
 
@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\t//rosters\r\n");
             
-            #line 122 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 122 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	RosterCollectionsDefenitions(Model.Rosters);
 
@@ -352,7 +352,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line default
             #line hidden
             
-            #line 125 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 125 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
 
 	foreach (var @roster in Model.RostersInScope) 
 	{
@@ -362,21 +362,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line hidden
             this.Write("\tprivate ConditionalState ");
             
-            #line 129 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 129 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedStateName));
             
             #line default
             #line hidden
             this.Write(" = new ConditionalState(IdOf.");
             
-            #line 129 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 129 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedIdName));
             
             #line default
             #line hidden
             this.Write(", ItemType.Group);\r\n\t  \r\n");
             
-            #line 131 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 131 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
  
 	}
 
@@ -402,7 +402,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 	{
 		this.@_parent = parentLevel as ");
             
-            #line 151 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 151 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
@@ -410,7 +410,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write(";\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutableV2 parentLevel)\t\t\t\r\n\t{\r\n\t\tth" +
                     "is.@_parent = parentLevel as ");
             
-            #line 156 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 156 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
@@ -418,7 +418,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write(";\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutable parentLevel)\t\t\t\r\n\t{\t\t\t\r\n\t\tt" +
                     "his.@_parent = parentLevel as ");
             
-            #line 161 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
+            #line 161 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.ParentTypeName));
             
             #line default
@@ -444,7 +444,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 10 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 10 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
 {
@@ -455,42 +455,42 @@ void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
         #line default
         #line hidden
         
-        #line 15 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 15 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tEnablementStates.Add(");
 
         
         #line default
         #line hidden
         
-        #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 16 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 16 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(".ItemId, ");
 
         
         #line default
         #line hidden
         
-        #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 16 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@group.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 16 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 16 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 17 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 17 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 	}
 }
@@ -504,42 +504,42 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
         #line default
         #line hidden
         
-        #line 25 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 25 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tEnablementStates.Add(");
 
         
         #line default
         #line hidden
         
-        #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 26 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 26 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(".ItemId, ");
 
         
         #line default
         #line hidden
         
-        #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 26 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 26 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 27 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 27 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);					   
 		if(hasAnyValidation)
@@ -549,56 +549,56 @@ this.Write(");\r\n");
         #line default
         #line hidden
         
-        #line 31 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 31 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tValidationExpressions.Add(new Identity(IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 32 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
 
         
         #line default
         #line hidden
         
-        #line 32 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 32 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(", rosterVector), new Func<bool>[] {\t\t\t\t\t\t\t \r\n\t\t\t\t() => this.IsAnswerEmpty(");
 
         
         #line default
         #line hidden
         
-        #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 33 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
 
         
         #line default
         #line hidden
         
-        #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 33 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(") || ");
 
         
         #line default
         #line hidden
         
-        #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 33 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedValidationsMethodName));
 
         
         #line default
         #line hidden
         
-        #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 33 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("() , \r\n\t\t}); \r\n\r\n");
 
         
         #line default
         #line hidden
         
-        #line 36 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 36 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 		}
 		if (question.IsMultiOptionYesNoQuestion)
@@ -608,84 +608,84 @@ this.Write("() , \r\n\t\t}); \r\n\r\n");
         #line default
         #line hidden
         
-        #line 40 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 40 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tAddUpdaterToMap(IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(", (");
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(typeof(YesNoAnswersOnly).Name));
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" val) => {");
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" = new ");
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(typeof(YesNoAnswers).Name));
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("(");
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 41 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 41 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(".All,val); });\r\n");
 
         
         #line default
         #line hidden
         
-        #line 42 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 42 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 		}else{
 
@@ -693,56 +693,56 @@ this.Write(".All,val); });\r\n");
         #line default
         #line hidden
         
-        #line 44 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 44 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tAddUpdaterToMap(IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
 
         
         #line default
         #line hidden
         
-        #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(", (");
 
         
         #line default
         #line hidden
         
-        #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" val) => {");
 
         
         #line default
         #line hidden
         
-        #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 45 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 45 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("  = val; });\r\n");
 
         
         #line default
         #line hidden
         
-        #line 46 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 46 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 		}
 	}
@@ -757,35 +757,35 @@ void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
         #line default
         #line hidden
         
-        #line 55 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 55 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tRosterGenerators.Add(IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 56 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 56 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedIdName));
 
         
         #line default
         #line hidden
         
-        #line 56 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 56 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(", (decimals, identities) => new ");
 
         
         #line default
         #line hidden
         
-        #line 56 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 56 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 56 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 56 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, thi" +
         "s.StructuralDependencies, this.Quest));\r\n");
 
@@ -793,7 +793,7 @@ this.Write("(decimals, identities, this, this.GetInstances, this.ConditionalDepe
         #line default
         #line hidden
         
-        #line 57 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 57 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 	}
 }
@@ -807,42 +807,42 @@ void RostersInScopeStatesInLevelConstructor(List<RosterTemplateModel> rostersInS
         #line default
         #line hidden
         
-        #line 65 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 65 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\tEnablementStates.Add(");
 
         
         #line default
         #line hidden
         
-        #line 66 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 66 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(roster.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 66 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 66 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(".ItemId, ");
 
         
         #line default
         #line hidden
         
-        #line 66 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 66 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(roster.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 66 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 66 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 67 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 67 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 	}
 }
@@ -858,56 +858,56 @@ void QuestionsCopyOperatorsInCopyMembers(List<QuestionTemplateModel> questions)
         #line default
         #line hidden
         
-        #line 77 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 77 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\t\t");
 
         
         #line default
         #line hidden
         
-        #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 78 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 78 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" = new ");
 
         
         #line default
         #line hidden
         
-        #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 78 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(typeof(YesNoAnswers).Name));
 
         
         #line default
         #line hidden
         
-        #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 78 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("(this.");
 
         
         #line default
         #line hidden
         
-        #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 78 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 78 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 78 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("),\r\n");
 
         
         #line default
         #line hidden
         
-        #line 79 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 79 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 		}else{
 
@@ -915,42 +915,42 @@ this.Write("),\r\n");
         #line default
         #line hidden
         
-        #line 81 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 81 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\t\t\t");
 
         
         #line default
         #line hidden
         
-        #line 82 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 82 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 82 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 82 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" = this.");
 
         
         #line default
         #line hidden
         
-        #line 82 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 82 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(q.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 82 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 82 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(",   \r\n");
 
         
         #line default
         #line hidden
         
-        #line 83 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 83 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 	
 		}
 	}
@@ -960,7 +960,7 @@ this.Write(",   \r\n");
         #line default
         #line hidden
         
-        #line 89 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 89 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
 {
@@ -973,69 +973,69 @@ void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
         #line default
         #line hidden
         
-        #line 96 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 96 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\tprivate ");
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" = new ");
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(typeof(YesNoAnswers).Name));
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("(new decimal[]{");
 
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 question.AllMultioptionYesNoCodes.ForEach(code => this.Write(code + ","));
         
         #line default
         #line hidden
         
-        #line 97 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 97 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("});\r\n");
 
         
         #line default
         #line hidden
         
-        #line 98 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 98 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 		}
 		else
@@ -1045,42 +1045,42 @@ this.Write("});\r\n");
         #line default
         #line hidden
         
-        #line 102 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 102 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\tprivate ");
 
         
         #line default
         #line hidden
         
-        #line 103 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 103 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 103 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 103 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 103 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 103 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 103 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 103 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" = null;\r\n");
 
         
         #line default
         #line hidden
         
-        #line 104 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 104 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
  
 		}
 
@@ -1088,98 +1088,98 @@ this.Write(" = null;\r\n");
         #line default
         #line hidden
         
-        #line 106 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 106 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\tprivate ConditionalState ");
 
         
         #line default
         #line hidden
         
-        #line 107 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 107 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 107 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 107 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" = new ConditionalState(IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 107 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 107 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedIdName));
 
         
         #line default
         #line hidden
         
-        #line 107 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 107 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(");\r\n\tpublic ");
 
         
         #line default
         #line hidden
         
-        #line 108 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 108 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 108 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 108 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 108 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 108 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.VariableName));
 
         
         #line default
         #line hidden
         
-        #line 108 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 108 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\r\n\t{\r\n\t\tget { return ");
 
         
         #line default
         #line hidden
         
-        #line 110 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 110 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedStateName));
 
         
         #line default
         #line hidden
         
-        #line 110 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 110 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(".State != State.Disabled ? this.");
 
         
         #line default
         #line hidden
         
-        #line 110 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 110 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(question.GeneratedMemberName));
 
         
         #line default
         #line hidden
         
-        #line 110 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 110 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" : null; }\r\n\t\t\t\r\n\t}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 113 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 113 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 	}
 }
@@ -1192,70 +1192,70 @@ void RosterCollectionsDefenitions(List<RosterTemplateModel> rosters)
         #line default
         #line hidden
         
-        #line 120 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 120 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\tpublic RosterRowList<");
 
         
         #line default
         #line hidden
         
-        #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 121 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 121 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("> ");
 
         
         #line default
         #line hidden
         
-        #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 121 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.VariableName));
 
         
         #line default
         #line hidden
         
-        #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 121 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\r\n\t{\r\n\t\tget\r\n\t\t{\r\n\t\t\tvar rosters = this.GetInstances(this.RosterKey, IdOf.");
 
         
         #line default
         #line hidden
         
-        #line 125 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 125 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedRosterScopeName));
 
         
         #line default
         #line hidden
         
-        #line 125 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 125 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(".Last());\r\n\t\t\treturn  new RosterRowList<");
 
         
         #line default
         #line hidden
         
-        #line 126 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 126 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(@roster.GeneratedTypeName));
 
         
         #line default
         #line hidden
         
-        #line 126 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 126 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(">(rosters);\r\n\t\t}\r\n\t}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 129 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 129 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 	}
 }
@@ -1269,56 +1269,56 @@ void LookupTablesDefenitions(List<LookupTableTemplateModel> lookupTables)
         #line default
         #line hidden
         
-        #line 137 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 137 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("\tpublic static Dictionary<decimal, ");
 
         
         #line default
         #line hidden
         
-        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 138 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(table.TypeName));
 
         
         #line default
         #line hidden
         
-        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 138 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("> ");
 
         
         #line default
         #line hidden
         
-        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 138 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
 
         
         #line default
         #line hidden
         
-        #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 138 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(" \r\n\t{\r\n\t\tget { return LookupTables.");
 
         
         #line default
         #line hidden
         
-        #line 140 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 140 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(table.TableName));
 
         
         #line default
         #line hidden
         
-        #line 140 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 140 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 this.Write("; }\r\n\t}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 142 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
+        #line 142 "D:\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
 	}
 }
