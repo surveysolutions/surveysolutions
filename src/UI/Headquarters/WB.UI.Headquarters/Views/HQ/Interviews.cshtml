@@ -75,6 +75,7 @@
                 <th data-bind='sortby: "UpdateDate"'>Last Update</th>
                 <th data-bind='sortby: "HasErrors"'>Нas Errors</th>
                 <th data-bind='sortby: "Status"'>Status</th>
+                <th data-bind='sortby: "ReceivedByInterviewer"'>Received by Interviewer</th>
                 <th>Created on Client</th>
                 <th></th>
             </tr>
@@ -103,6 +104,9 @@
                     <!-- /ko -->
                 </td>
                 <td data-bind="text: Status"></td>
+                <td>
+                    <input type="checkbox" data-bind="checked: ReceivedByInterviewer, enable: false" />
+                </td>
                 <td>
                     <input type="checkbox" data-bind="checked: CreatedOnClient, enable: false" />
                 </td>
