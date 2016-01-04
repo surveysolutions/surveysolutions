@@ -2,7 +2,6 @@
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -16,7 +15,6 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -48,13 +46,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemViewFactory = null,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null)
         {
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                questionnaireBrowseItemViewFactory ?? Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
                 allInterviewsViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>());
         }
 
