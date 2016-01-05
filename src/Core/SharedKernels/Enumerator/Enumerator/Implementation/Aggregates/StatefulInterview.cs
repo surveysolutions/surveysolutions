@@ -435,9 +435,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         #endregion
 
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
-        public string QuestionnaireId { get { return this.QuestionnaireIdentity.ToString(); } }
-        public Guid InterviewerId { get { return this.interviewerId; } }
-        public InterviewStatus Status { get { return status; } }
+        public string QuestionnaireId => this.QuestionnaireIdentity.ToString();
+        public Guid InterviewerId => this.interviewerId;
+        public InterviewStatus Status => this.status;
         public Guid Id { get; set; }
         public string InterviewerCompleteComment { get; private set; }
         public string SupervisorRejectComment { get; private set; }
