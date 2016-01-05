@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,6 @@ using CsvHelper.Configuration;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
@@ -24,8 +23,11 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Services;
+using GuidExtensions = WB.Core.GenericSubdomains.Portable.GuidExtensions;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.UI.Headquarters.Implementation.Services
 {
     public class InterviewImportService : IInterviewImportService
     {
@@ -172,10 +174,10 @@ namespace WB.UI.Headquarters.Controllers
                         catch (Exception ex)
                         {
                             var answersOnPrefilledQuestions = string.Join(", ", importedInterview.AnswersOnPrefilledQuestions.Values.Where(x => x != null));
-                            this.logger.Error(string.Format("Error during import of interview with prefilled questions {0}. QuestionnaireId {1}, headquartersId: {2}", 
-                                answersOnPrefilledQuestions, 
-                                questionnaireIdentity,
-                                headquartersId), ex);
+                            this.logger.Error(
+                                $"Error during import of interview with prefilled questions {answersOnPrefilledQuestions}. " +
+                                $"QuestionnaireId {questionnaireIdentity}, " +
+                                $"HeadquartersId: {headquartersId}", ex);
                         }
 
                         Interlocked.Increment(ref createdInterviewsCount);
@@ -185,7 +187,9 @@ namespace WB.UI.Headquarters.Controllers
                         this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
                     });
 
-                this.logger.Info(string.Format("Imported {0:N0} of interviews. Took {1:c} to complete", this.Status.TotalInterviewsCount, elapsedTime.Elapsed));
+                this.logger.Info(
+                    $"Imported {this.Status.TotalInterviewsCount:N0} of interviews. " +
+                    $"Took {elapsedTime.Elapsed:c} to complete");
             }
             finally
             {
@@ -230,7 +234,7 @@ namespace WB.UI.Headquarters.Controllers
                         if (fileDescription.HasResponsibleColumn)
                         {
                             string responsibleName = dynamicImportedInterview.responsible;
-                            var responsible = GetResponsibleByName(responsibleName);
+                            var responsible = this.GetResponsibleByName(responsibleName);
                             if (responsible == null)
                             {
                                 throw new Exception($"responsible '{responsibleName}' not found");
@@ -308,7 +312,7 @@ namespace WB.UI.Headquarters.Controllers
         public InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes)
         {
             var questionnaireDocument = this.questionnaireDocumentRepository.AsVersioned()
-                .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version).Questionnaire;
+                .Get(GuidExtensions.FormatGuid(questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version).Questionnaire;
 
             var prefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured);
 

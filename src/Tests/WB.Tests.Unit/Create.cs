@@ -1255,8 +1255,7 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName="var1")
+        public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null, bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false)
         {
             return new NumericQuestion("Question N")
             {
@@ -1266,7 +1265,8 @@ namespace WB.Tests.Unit
                 IsInteger = isInteger,
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 QuestionType = QuestionType.Numeric,
-                StataExportCaption = variableName
+                StataExportCaption = variableName,
+                Featured = prefilled
             };
         }
 
@@ -2480,6 +2480,14 @@ namespace WB.Tests.Unit
                 QuestionScope = scope,
                 Featured = preFilled
             };
+        }
+
+        public static IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> CreateQuestionnaireReadSideKeyValueStorage(QuestionnaireDocument questionnaire = null)
+        {
+            var questionnaireMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
+            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>()))
+                .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire ?? new QuestionnaireDocument() });
+            return questionnaireMock.Object;
         }
     }
 }
