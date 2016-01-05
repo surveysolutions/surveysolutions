@@ -211,7 +211,9 @@
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionMethodAndState.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LookupTableTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\TypeAndNameModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExecutorTemplateModelFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />

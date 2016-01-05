@@ -79,10 +79,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             this.InterviewScopes.Add(rosterStringKey, rosterLevel);
             this.SetSiblings(rosterIdentityKey, rosterStringKey);
         }
-		 <#if(QuestionnaireTemplateStructure.ShouldGenerateUpdateRosterTitleMethods){#>
 
-		 public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
-            string rosterTitle)
+		public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))
             {
@@ -97,7 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             if (rosterLevel != null)
                 rosterLevel.SetRowName(rosterTitle);
         }
-		 <#}#>
+
         public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
         {
             if (!IdOf.parentScopeMap.ContainsKey(rosterId))

@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         };
 
         Because of = () =>
-            model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings(), false);
+            model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         It should_generate_model_for_1_lookup_table = () =>
             model.LookupTables.Count.ShouldEqual(1);

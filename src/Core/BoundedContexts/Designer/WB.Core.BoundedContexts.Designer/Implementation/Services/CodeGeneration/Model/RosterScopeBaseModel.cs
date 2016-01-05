@@ -12,10 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<GroupTemplateModel> groups, 
             List<QuestionTemplateModel> questions, 
             List<RosterTemplateModel> rosters, 
-            List<Guid> rosterScope, 
-            bool areRowSpecificVariablesPresent, 
-            bool isIRosterLevelInherited,
-            string abstractConditionalLevelClassName,
+            List<Guid> rosterScope,
             string parentGeneratedTypeName)
         {
             GeneratedRosterScopeName = generatedRosterScopeName;
@@ -24,9 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Questions = questions;
             Rosters = rosters;
             RosterScope = rosterScope;
-            AreRowSpecificVariablesPresent = areRowSpecificVariablesPresent;
-            IsIRosterLevelInherited = isIRosterLevelInherited;
-            AbstractConditionalLevelClassName = abstractConditionalLevelClassName;
             ParentGeneratedTypeName = parentGeneratedTypeName;
         }
 
@@ -47,11 +41,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public List<RosterTemplateModel> Rosters { get; set; }
 
         public List<Guid> RosterScope { set; get; }
-
-        public bool AreRowSpecificVariablesPresent { get;private set; }
-
-        public bool IsIRosterLevelInherited { get; private set; }
-
-        public string AbstractConditionalLevelClassName { get; private set; }
     }
 }
