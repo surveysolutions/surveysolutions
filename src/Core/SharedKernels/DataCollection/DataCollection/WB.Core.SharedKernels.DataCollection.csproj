@@ -122,8 +122,6 @@
     </Compile>
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
-    <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
     <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />

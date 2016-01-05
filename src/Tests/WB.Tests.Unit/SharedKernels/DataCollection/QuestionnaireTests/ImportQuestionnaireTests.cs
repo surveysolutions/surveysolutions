@@ -62,42 +62,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         }
 
         [Test]
-        public void ImportFromSupervisor_When_ArgumentIsNotNull_Then_Correct_Event_is_Published()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
-                var newState = CreateQuestionnaireDocumentWithOneChapter();
-
-                // act
-                questionnaire.ImportFromSupervisor(new ImportFromSupervisor(newState));
-
-                // assert
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
-            }
-        }
-
-        [Test]
-        public void ImportFromDesignerForTester_When_ArgumentIsNotNull_Then_Correct_Event_is_Published()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
-                var newState = CreateQuestionnaireDocumentWithOneChapter();
-
-                // act
-                questionnaire.ImportFromDesignerForTester(new ImportFromDesignerForTester(newState));
-
-                // assert
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(2));
-            }
-        }
-
-
-        [Test]
         public void DeleteQuestionnaire_When_Valid_Questionnaire_Imported_with_specified_version_Then_QuestionnaireDeleted_Event_is_Published_with_specified_version()
         {
             // arrange
@@ -210,60 +174,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             // act
 
             Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteQuestionnaire(new DeleteQuestionnaire(Guid.NewGuid(), 2, null)));
-        }
-
-        [Test]
-        public void QuestionnaireCtor_When_ArgumentIsNotNull_Then_Correct_Event_is_Published()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var newState = CreateQuestionnaireDocumentWithOneChapter();
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
-
-                // act
-                questionnaire.ImportFromSupervisor(Create.Command.ImportFromSupervisor(newState));
-               
-                // assert
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
-            }
-        }
-
-
-        [Test]
-        public void ImportFromDesignerForTester_When_Valid_Questionnaire_Imported_Then_Correct_Event_is_Published()
-        {
-
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
-                var document = CreateQuestionnaireDocumentWithOneChapter();
-                // act
-                questionnaire.ImportFromDesignerForTester(new ImportFromDesignerForTester(document));
-
-                // assert
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(document));
-            }
-        }
-
-        [Test]
-        public void ImportImportFromSupervisor_When_Valid_Questionnaire_Imported_Then_Correct_Event_is_Published()
-        {
-
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
-                var document = CreateQuestionnaireDocumentWithOneChapter();
-
-                // act
-                questionnaire.ImportFromSupervisor(new ImportFromSupervisor(document));
-
-                // assert
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(document));
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Version, Is.EqualTo(2));
-            }
         }
 
         [Test]

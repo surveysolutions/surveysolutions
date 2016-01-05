@@ -2447,11 +2447,6 @@ namespace WB.Tests.Unit
                     base64StringOfAssembly);
             }
 
-            public static ImportFromSupervisor ImportFromSupervisor(IQuestionnaireDocument source)
-            {
-                return new ImportFromSupervisor(source);
-            }
-
             public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)
             {
                 return new LinkUserToDevice(userId, deviceId);
