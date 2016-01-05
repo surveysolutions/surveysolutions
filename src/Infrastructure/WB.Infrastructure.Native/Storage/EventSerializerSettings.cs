@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace WB.Core.Infrastructure.Storage
+namespace WB.Infrastructure.Native.Storage
 {
     internal static class EventSerializerSettings
     {

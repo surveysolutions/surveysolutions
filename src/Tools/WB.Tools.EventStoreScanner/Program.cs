@@ -6,9 +6,9 @@ using Main.Core.Events.User;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Storage.EventStore;
-using WB.Core.Infrastructure.Storage.EventStore.Implementation;
 using WB.Core.Synchronization.Events.Sync;
+using WB.Infrastructure.Native.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 
 namespace WB.Tools.EventStoreScanner
 {

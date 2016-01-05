@@ -21,8 +21,6 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Storage.Postgre;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -35,6 +33,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration

@@ -1,13 +1,11 @@
 ﻿using System;
-using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Storage.EventStore.Implementation;
+using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 
-namespace WB.Core.Infrastructure.Storage.EventStore
+namespace WB.Infrastructure.Native.Storage.EventStore
 {
     public class EventStoreWriteSideModule : NinjectModule
     {

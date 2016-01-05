@@ -1,4 +1,4 @@
-namespace WB.Core.Infrastructure.Storage
+namespace WB.Infrastructure.Native.Storage
 {
     public class ReadSideCacheSettings
     {

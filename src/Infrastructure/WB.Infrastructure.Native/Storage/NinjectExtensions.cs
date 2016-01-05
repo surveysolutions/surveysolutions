@@ -6,7 +6,7 @@ using Ninject.Activation;
 using Ninject.Syntax;
 using Ninject.Web.Common;
 
-namespace WB.Core.Infrastructure.Storage
+namespace WB.Infrastructure.Native.Storage
 {
     internal static class NinjectExtensions
     {

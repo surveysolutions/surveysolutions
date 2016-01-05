@@ -1,10 +1,8 @@
 using System;
-using System.Data;
 using System.Threading;
 using NHibernate;
-using Ninject;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions : ICqrsPostgresTransactionManager, IDisposable
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
+namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
     internal class EventMetada
     {

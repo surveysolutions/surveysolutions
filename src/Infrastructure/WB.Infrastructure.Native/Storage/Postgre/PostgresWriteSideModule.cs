@@ -1,10 +1,10 @@
 ﻿using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-using WB.Core.Infrastructure.Storage.EventStore;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
-namespace WB.Core.Infrastructure.Storage.Postgre
+namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public class PostgresWriteSideModule : NinjectModule
     {

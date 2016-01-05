@@ -10,24 +10,19 @@ using Humanizer;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
-using NHibernate.Dialect;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
-using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Storage.Esent.Implementation;
-using WB.Core.Infrastructure.Storage.Postgre.NhExtensions;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
-namespace WB.Core.Infrastructure.Storage.Postgre
+namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public class PostgresReadSideModule : PostgresModuleWithCache
     {
@@ -50,7 +45,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
         {
             base.Load();
 
-            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = connectionString });
+            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings{ConnectionString = this.connectionString });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
 
@@ -96,7 +91,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
             try
             {
-                DatabaseManagement.CreateDatabase(connectionString);
+                DatabaseManagement.CreateDatabase(this.connectionString);
             }
             catch (Exception exc)
             {
@@ -107,12 +102,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
-                db.ConnectionString = connectionString;
+                db.ConnectionString = this.connectionString;
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
-            cfg.AddDeserializedMapping(GetMappings(), "Main");
+            cfg.AddDeserializedMapping(this.GetMappings(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
             this.Kernel.Bind<SchemaUpdate>().ToConstant(update).InSingletonScope();

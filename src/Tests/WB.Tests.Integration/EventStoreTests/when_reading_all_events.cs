@@ -8,8 +8,8 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Storage.EventStore;
-using WB.Core.Infrastructure.Storage.EventStore.Implementation;
+using WB.Infrastructure.Native.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using It = Machine.Specifications.It;
 

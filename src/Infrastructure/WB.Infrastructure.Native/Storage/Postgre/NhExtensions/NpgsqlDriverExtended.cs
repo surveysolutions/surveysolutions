@@ -4,7 +4,7 @@ using NHibernate.Driver;
 using NHibernate.SqlTypes;
 using Npgsql;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
+namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
     public class NpgsqlDriverExtended : NpgsqlDriver
     {

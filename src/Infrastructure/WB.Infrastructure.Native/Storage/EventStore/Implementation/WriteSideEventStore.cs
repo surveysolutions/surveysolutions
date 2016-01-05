@@ -11,24 +11,17 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.Projections;
 using EventStore.ClientAPI.SystemData;
-using Microsoft.Practices.ServiceLocation;
-using Ncqrs;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
-namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
+namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
     class WriteSideEventStore : IStreamableEventStore, IDisposable
     {
@@ -56,7 +49,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             this.logger = logger;
             this.settings = settings;
             this.eventTypeResolver = eventTypeResolver;
-            ConfigureEventStore();
+            this.ConfigureEventStore();
             this.connection = connectionProvider.Open();
 
             using (var cancellationTokenSource = new CancellationTokenSource())
@@ -69,7 +62,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -111,7 +104,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
             do
             {
-                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, settings.MaxCountToRead, false));
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(position, this.settings.MaxCountToRead, false));
 
                 position = slice.NextPosition;
 
@@ -131,7 +124,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
 
 
-            var eventSlicesAfter = GetEventsAfterPosition(position);
+            var eventSlicesAfter = this.GetEventsAfterPosition(position);
 
             foreach (var eventSlice in eventSlicesAfter)
             {
@@ -156,9 +149,9 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             EventPosition? previousSliceEventPosition = null;
             do
             {
-                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, settings.MaxCountToRead, false));
+                slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, this.settings.MaxCountToRead, false));
 
-                var eventsInSlice = slice.Events.Where(e => !IsSystemEventOrFromDeletedStream(e)).Select(ToCommittedEvent).ToArray();
+                var eventsInSlice = slice.Events.Where(e => !IsSystemEventOrFromDeletedStream(e)).Select(this.ToCommittedEvent).ToArray();
 
                 if (shouldLookForLastHandledEvent)
                 {
@@ -227,8 +220,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public int CountOfAllEvents()
         {
-            var httpEndPoint = new IPEndPoint(IPAddress.Parse(settings.ServerIP), settings.ServerHttpPort);
-            var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, defaultTimeout);
+            var httpEndPoint = new IPEndPoint(IPAddress.Parse(this.settings.ServerIP), this.settings.ServerHttpPort);
+            var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, this.defaultTimeout);
 
             var projectionresult =
                 AsyncContext.Run(
@@ -314,7 +307,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var eventMetadataBytes = Encoding.GetBytes(metaData);
             if (this.settings.UseBson)
             {
-                eventDataBytes = SerializeToBson(@event.Payload);
+                eventDataBytes = this.SerializeToBson(@event.Payload);
             }
             else
             {
@@ -368,7 +361,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         ~WriteSideEventStore()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -429,12 +422,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         private void ConfigureEventStore()
         {
-            if (settings.InitializeProjections)
+            if (this.settings.InitializeProjections)
             {
                 var httpEndPoint = new IPEndPoint(IPAddress.Parse(this.settings.ServerIP), this.settings.ServerHttpPort);
-                var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, defaultTimeout);
+                var manager = new ProjectionsManager(new EventStoreLogger(this.logger), httpEndPoint, this.defaultTimeout);
 
-                var userCredentials = new UserCredentials(settings.Login, settings.Password);
+                var userCredentials = new UserCredentials(this.settings.Login, this.settings.Password);
 
                 try
                 {
