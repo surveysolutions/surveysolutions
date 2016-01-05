@@ -489,14 +489,15 @@ namespace WB.Tests.Unit
                 : Guid.Parse(questionnaireItemParentId);
         }
 
-        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1", bool isPrefilled=false)
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1", bool isPrefilled=false, string title = null)
         {
             return new GpsCoordinateQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variableName,
                 QuestionType = QuestionType.GpsCoordinates,
-                Featured = isPrefilled
+                Featured = isPrefilled,
+                QuestionText = title
             };
         }
 
@@ -1255,7 +1256,8 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null, bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false)
+        public static INumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null, 
+            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title=null)
         {
             return new NumericQuestion("Question N")
             {
@@ -1266,7 +1268,8 @@ namespace WB.Tests.Unit
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 QuestionType = QuestionType.Numeric,
                 StataExportCaption = variableName,
-                Featured = prefilled
+                Featured = prefilled,
+                QuestionText = title
             };
         }
 
@@ -1901,13 +1904,13 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null)
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null)
         {
             return new SingleQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = "single_option_question",
-                QuestionText = "SO Question",
+                QuestionText = title??"SO Question",
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 QuestionType = QuestionType.SingleOption,
@@ -2150,7 +2153,14 @@ namespace WB.Tests.Unit
         }
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string mask = null, string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled=false)
+            string mask = null, 
+            string variable = null, 
+            string validationMessage = null, 
+            string text = null, 
+            QuestionScope scope = QuestionScope.Interviewer, 
+            bool preFilled=false,
+            string label=null,
+            string instruction=null)
             
         {
             return new TextQuestion("Question T")
@@ -2164,7 +2174,9 @@ namespace WB.Tests.Unit
                 QuestionType = QuestionType.Text,
                 StataExportCaption = variable,
                 QuestionScope = scope,
-                Featured = preFilled
+                Featured = preFilled,
+                VariableLabel = label,
+                Instructions = instruction
             };
         }
 

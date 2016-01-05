@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Linq;
 using ddidotnet;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -43,57 +45,43 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
         }
-        
+
         public string CreateAndGetDDIMetadataFileForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
+            QuestionnaireDocumentVersioned bigTemplateObject = GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure = GetQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+
+            if (questionnaireExportStructure == null || bigTemplateObject == null)
+            {
+                return string.Empty;
+            }
+
             try
             {
-                QuestionnaireDocumentVersioned bigTemplateObject;
-                QuestionnaireExportStructure questionnaireExportStructure;
-                var shouldTransactionBeStarted = !this.transactionManager.GetTransactionManager().IsQueryTransactionStarted;
-                if(shouldTransactionBeStarted)
-                    this.transactionManager.GetTransactionManager().BeginQueryTransaction();
-                try
-                {
-                    bigTemplateObject = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
-                    questionnaireExportStructure = this.questionnaireExportStructureWriter.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
-                }
-                finally
-                {
-                    if (shouldTransactionBeStarted)
-                        this.transactionManager.GetTransactionManager().RollbackQueryTransaction();
-                }
-
-                if (questionnaireExportStructure == null)
-                    return string.Empty;
-
                 IMetaDescription metaDescription = this.metaDescriptionFactory.CreateMetaDescription();
 
-                metaDescription.Document.Title = bigTemplateObject.Questionnaire.Title;
-                metaDescription.Study.Title = bigTemplateObject.Questionnaire.Title;
+                var questionnaireLabelsForAllLevels =
+                    questionnaireExportStructure.HeaderToLevelMap.Values.Select(
+                        x => this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(questionnaireExportStructure, x.LevelScopeVector)).ToArray();
+
+                metaDescription.Study.Title = metaDescription.Document.Title = GetQuestionnaireTitle(questionnaireExportStructure);
                 metaDescription.Study.Idno = "QUEST";
-                
-                foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
+
+                foreach (var questionnaireLevelLabels in questionnaireLabelsForAllLevels)
                 {
-                    QuestionnaireLabels questionnaireLabels =
-                        this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(questionnaireExportStructure, headerStructureForLevel.LevelScopeVector);
+                    var hhDataFile = metaDescription.AddDataFile(questionnaireLevelLabels.LevelName);
 
-                    var hhDataFile = metaDescription.AddDataFile(questionnaireLabels.LevelName);
-
-                    foreach (LabeledVariable variableLabel in questionnaireLabels.LabeledVariable)
+                    foreach (LabeledVariable variableLabel in questionnaireLevelLabels.LabeledVariable)
                     {
                         if (variableLabel.QuestionId.HasValue)
                         {
                             var questionItem =
-                                bigTemplateObject.Questionnaire.FirstOrDefault<IQuestion>(
-                                    q => q.PublicKey == variableLabel.QuestionId.Value);
+                                bigTemplateObject.Questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == variableLabel.QuestionId.Value);
 
                             if (questionItem == null)
                                 continue;
 
-
-                            var variable = this.AddVariableToDdiFileAndReturnIt(hhDataFile, questionItem.QuestionType,
-                                variableLabel.VariableName);
+                            var variable = this.AddVariableToDdiFileAndReturnIt(hhDataFile, questionItem.QuestionType, variableLabel.VariableName);
 
                             if (!string.IsNullOrWhiteSpace(questionItem.Instructions))
                                 variable.IvuInstr = questionItem.Instructions;
@@ -105,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                             foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
                             {
                                 decimal value;
-                                if(decimal.TryParse(variableValueLabel.Value, out value))
+                                if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
                                     variable.AddValueLabel(value, variableValueLabel.Label);
                             }
                         }
@@ -123,7 +111,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 metaDescription.WriteXml(pathToWrite);
                 return pathToWrite;
             }
-
             catch (Exception exc)
             {
                 this.logger.Error(
@@ -131,6 +118,31 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
 
             return string.Empty;
+        }
+
+        private string GetQuestionnaireTitle(QuestionnaireExportStructure questionnaireExportStructure)
+        {
+            var headerStructureForLevel = questionnaireExportStructure.HeaderToLevelMap.Values.FirstOrDefault(x => !x.LevelScopeVector.Any());
+            if (headerStructureForLevel != null)
+                return headerStructureForLevel.LevelName;
+
+            return string.Empty;
+        }
+
+        private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
+        {
+            return
+                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
+                    () =>
+                        this.questionnaireExportStructureWriter.AsVersioned()
+                            .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+        }
+
+        private QuestionnaireDocumentVersioned GetQuestionnaireDocument(Guid questionnaireId, long questionnaireVersion)
+        {
+            return
+                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
+                    () => this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
         }
 
         private DdiVariable AddVariableToDdiFileAndReturnIt(DdiDataFile hhDataFile, QuestionType questionType, string columnName)

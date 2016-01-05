@@ -7,7 +7,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         public IMetaDescription CreateMetaDescription()
         {
             return new MetaDescription();
-
         }
     }
 }
