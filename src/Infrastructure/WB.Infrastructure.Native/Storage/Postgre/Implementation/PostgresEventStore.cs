@@ -93,7 +93,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private void CreateRelations(IDbConnection connection)
         {
             var assembly = Assembly.GetAssembly(typeof(PostgresEventStore));
-            var resourceName = "WB.Core.Infrastructure.Storage.Postgre.Implementation.InitEventStore.sql";
+            var resourceName = "WB.Infrastructure.Native.Storage.Postgre.Implementation.InitEventStore.sql";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
