@@ -36,57 +36,94 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
             QuestionnaireDocument questionnaire, 
-            CodeGenerationSettings codeGenerationSettings, 
-            bool generateExpressionMethods)
+            CodeGenerationSettings codeGenerationSettings)
         {
             var template = new QuestionnaireExecutorTemplateModel
             {
-                GenerateEmbeddedExpressionMethods = generateExpressionMethods,
                 AdditionInterfaces = codeGenerationSettings.AdditionInterfaces,
                 Namespaces = codeGenerationSettings.Namespaces,
-                ShouldGenerateUpdateRosterTitleMethods = codeGenerationSettings.AreRosterServiceVariablesPresent,
                 Id = questionnaire.PublicKey,
                 GeneratedClassName = $"{InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}"
             };
 
-            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel(
-                executorModel: template,
-                areRowSpecificVariablesPresent: codeGenerationSettings.AreRosterServiceVariablesPresent,
-                isIRosterLevelInherited: codeGenerationSettings.AreRosterServiceVariablesPresent,
-                abstractConditionalLevelClassName: codeGenerationSettings.AbstractConditionalLevelClassName);
+            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel();
 
             template.QuestionnaireLevelModel = questionnaireLevelModel;
 
-            Dictionary<string, string> generatedScopesTypeNames;
-            List<QuestionTemplateModel> allQuestions;
-            List<GroupTemplateModel> allGroups;
-            List<RosterTemplateModel> allRosters;
+            template.LookupTables = BuildLookupTableModels(questionnaire).ToList();
 
-            this.BuildStructures(questionnaire, questionnaireLevelModel, out generatedScopesTypeNames, out allQuestions,
-                out allGroups, out allRosters);
-
-            template.RostersGroupedByScope = 
-                allRosters
-                .GroupBy(r => r.GeneratedTypeName)
-                .ToDictionary(g => g.Key, g => new RosterScopeTemplateModel(g.Key, g.ToList(), template));
-
-            BuildReferencesOnParentRosters(template.RostersGroupedByScope, questionnaireLevelModel);
-
-            BuildReferencesOnParentQuestions(template.RostersGroupedByScope, questionnaireLevelModel);
-            
             template.StructuralDependencies = BuildStructuralDependencies(questionnaire);
 
             template.ConditionalDependencies = BuildConditionalDependencies(questionnaire);
 
             template.ConditionsPlayOrder = BuildConditionsPlayOrder(template.ConditionalDependencies, template.StructuralDependencies);
 
+            Dictionary<string, string> generatedScopesTypeNames;
+            List<QuestionTemplateModel> allQuestions;
+            List<GroupTemplateModel> allGroups;
+            List<RosterTemplateModel> allRosters;
+
+            // creates rosters model and fills questionnaireLevelModel and roster models with questions, groups and nested rosters.
+            this.BuildStructures(questionnaire, questionnaireLevelModel, out generatedScopesTypeNames, out allQuestions, out allGroups, out allRosters);
+
+            questionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(questionnaireLevelModel.Questions, questionnaireLevelModel.Groups, null, template.ConditionsPlayOrder);
+
+            var rosterGroupedByScope = allRosters.GroupBy(r => r.GeneratedTypeName);
+
+            template.RostersGroupedByScope = rosterGroupedByScope
+                .Select(x => BuildRosterScopeTemplateModel(x.Key, x.ToList(), template))
+                .ToDictionary(x => x.GeneratedTypeName);
+
+            BuildReferencesOnParentRosters(template.RostersGroupedByScope, questionnaireLevelModel);
+
+            BuildReferencesOnParentQuestions(template.RostersGroupedByScope, questionnaireLevelModel);
+            
             template.AllQuestions = allQuestions;
             template.AllGroups = allGroups;
             template.AllRosters = allRosters;
             template.GeneratedScopesTypeNames = generatedScopesTypeNames;
-            template.LookupTables = this.BuildLookupTableModels(questionnaire).ToList();
-
             return template;
+        }
+
+        private RosterScopeTemplateModel BuildRosterScopeTemplateModel(
+            string rosterScopeType, 
+            List<RosterTemplateModel> rostersInScope, 
+            QuestionnaireExecutorTemplateModel template)
+        {
+            var groups = rostersInScope.SelectMany(r => r.Groups).ToList();
+            var questions = rostersInScope.SelectMany(r => r.Questions).ToList();
+            var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
+
+            var conditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(questions, groups, rostersInScope, template.ConditionsPlayOrder);
+
+            return new RosterScopeTemplateModel(rosterScopeType, questions, groups, rosters, rostersInScope, conditionMethodsSortedByExecutionOrder);
+        }
+
+        private static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
+            List<QuestionTemplateModel> questions, 
+            List<GroupTemplateModel> groups, 
+            List<RosterTemplateModel> rosters, 
+            List<Guid> conditionsPlayOrder)
+        {
+            List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Conditions)).Reverse().ToList();
+            List<QuestionTemplateModel> questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Conditions)).ToList();
+            List<RosterTemplateModel> rostersWithConditions = (rosters ?? new List<RosterTemplateModel>()).Where(r => !string.IsNullOrWhiteSpace(r.Conditions)).Reverse().ToList();
+
+            Dictionary<Guid, ConditionMethodAndState> itemsToSort = new Dictionary<Guid, ConditionMethodAndState>();
+
+            groupsWithConditions.ForEach(g => itemsToSort.Add(g.Id, new ConditionMethodAndState(g.GeneratedConditionsMethodName, g.GeneratedStateName)));
+            rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.GeneratedConditionsMethodName, r.GeneratedStateName)));
+            questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.GeneratedConditionsMethodName, q.GeneratedStateName)));
+
+            var itemsSorted = new List<ConditionMethodAndState>();
+
+            foreach (Guid id in conditionsPlayOrder)
+            {
+                if (itemsToSort.ContainsKey(id))
+                    itemsSorted.Add(itemsToSort[id]);
+            }
+
+            return itemsSorted;
         }
 
         private static List<Guid> BuildConditionsPlayOrder(
@@ -164,7 +201,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static IEnumerable<RosterScopeTemplateModel> GetParentRosters(RosterScopeTemplateModel rosterModel, Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope)
         {
-            var parentScopeTypeName = rosterModel.ParentTypeName;
+            var parentScopeTypeName = rosterModel.ParentTypeName ?? "";
 
             while (rostersGroupedByScope.ContainsKey(parentScopeTypeName))
             {

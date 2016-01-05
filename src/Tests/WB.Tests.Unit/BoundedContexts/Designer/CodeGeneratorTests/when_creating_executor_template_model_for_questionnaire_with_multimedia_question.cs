@@ -48,9 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             templateModel = executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
                     additionInterfaces: new string[0],
                     namespaces: new string[0],
-                    areRosterServiceVariablesPresent: false,
-                    abstractConditionalLevelClassName: "AbstractConditionalLevel",
-                    isLookupTablesFeatureSupported: true), true);
+                    isLookupTablesFeatureSupported: true));
 
         It should_generate_model_for_multimedia_question = () =>
             GetQuestion(multimediaId).ShouldNotBeNull();

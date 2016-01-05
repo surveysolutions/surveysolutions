@@ -22,8 +22,13 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 		this.@_parent = parent; 
 	}
 
-	private <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
-		Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
+	private <#=Model.GeneratedTypeName#>(
+		decimal[] rosterVector, 
+		Identity[] rosterKey, 
+		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
+		Dictionary<Guid, Guid[]> conditionalDependencies, 
+		Dictionary<Guid, Guid[]> structureDependencies, 
+		IInterviewProperties interviewProperties)
 		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
 	{	
 <#
@@ -33,10 +38,10 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	RostersStatesInLevelConstructor(Model.Rosters);
 #>
 <#
-	foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
+	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder) 
     {
 #>
-		_conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
 <#
 	}
 #>

@@ -1086,7 +1086,6 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_exists.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\when_getting_ordered_list_by_condition_dependency.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\CodeGenerationTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
