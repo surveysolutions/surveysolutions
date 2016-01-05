@@ -554,7 +554,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BatchUserUploadController.cs" />
-    <Compile Include="Controllers\GeoPositionHelper.cs" />
     <Compile Include="Controllers\InterviewImportService.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
