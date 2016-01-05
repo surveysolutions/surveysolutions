@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
-using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Native;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code;

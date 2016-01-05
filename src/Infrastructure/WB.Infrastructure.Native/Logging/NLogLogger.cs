@@ -1,9 +1,10 @@
 ﻿using System;
 using NLog;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
-namespace WB.Core.GenericSubdomains.Native.Logging
+namespace WB.Infrastructure.Native.Logging
 {
-    internal class NLogLogger : Portable.Services.ILogger
+    internal class NLogLogger : ILogger
     {
         private readonly Logger logger;
 

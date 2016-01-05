@@ -3,6 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Infrastructure.Native;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 {
@@ -11,8 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
     {
         public void Execute(IJobExecutionContext context)
         {
-            WB.Core.Infrastructure.Storage.ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-            WB.Core.Infrastructure.Storage.ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
+            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+            ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
             try
             {
                 ServiceLocator.Current.GetInstance<IDataExporter>().RunPendingExport();
@@ -23,8 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             }
             finally
             {
-                WB.Core.Infrastructure.Storage.ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                WB.Core.Infrastructure.Storage.ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
+                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
             }
         }
     }

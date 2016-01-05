@@ -1334,17 +1334,9 @@
       <Project>{dcbfc3f0-8e8c-4529-b474-b6a79225450e}</Project>
       <Name>WB.Core.BoundedContexts.Designer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj">
-      <Project>{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}</Project>
-      <Name>WB.Core.GenericSubdomains.Native</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
-      <Project>{6AC3A080-CECA-4974-9CA1-C239695ED8F8}</Project>
-      <Name>WB.Core.Infrastructure.Files</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>

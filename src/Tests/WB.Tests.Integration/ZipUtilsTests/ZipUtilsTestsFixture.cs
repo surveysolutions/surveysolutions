@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.IO.Compression;
+
 using NUnit.Framework;
 
-using WB.Core.GenericSubdomains.Native;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Tests.Integration.ZipUtilsTests

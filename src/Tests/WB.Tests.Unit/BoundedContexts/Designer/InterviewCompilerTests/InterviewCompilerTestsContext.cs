@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
 {

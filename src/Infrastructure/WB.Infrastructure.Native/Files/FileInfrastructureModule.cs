@@ -1,8 +1,8 @@
 ﻿using Ninject.Modules;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
-namespace WB.Core.Infrastructure.Files
+namespace WB.Infrastructure.Native.Files
 {
     public class FileInfrastructureModule : NinjectModule
     {
