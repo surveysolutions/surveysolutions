@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
 {
-    internal class QuestionnaireLabels
+    internal class QuestionnaireLevelLabels
     {
         private readonly Dictionary<string, LabeledVariable> variableLabels;
 
-        public QuestionnaireLabels(string levelName, LabeledVariable[] labeledVariable)
+        public QuestionnaireLevelLabels(string levelName, LabeledVariable[] labeledVariable)
         {
             this.LevelName = levelName;
             this.variableLabels = labeledVariable.ToDictionary(x => x.VariableName, x => x);

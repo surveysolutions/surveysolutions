@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
@@ -11,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
     internal class QuestionnaireLabelFactory : IQuestionnaireLabelFactory
     {
-        public QuestionnaireLabels CreateLabelsForQuestionnaireLevel(
+        public QuestionnaireLevelLabels CreateLabelsForQuestionnaireLevel(
             QuestionnaireExportStructure structure,
             ValueVector<Guid> levelRosterVector)
         {
@@ -70,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 variableLabels.Add(new LabeledVariable($"{ServiceColumns.ParentId}{levelRosterVector.Length - i}", parentColumnLabel));
             }
 
-            return new QuestionnaireLabels(level.LevelName, variableLabels.ToArray());
+            return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray());
         }
     }
 }
