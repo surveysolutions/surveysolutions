@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 Parents = new Dictionary<Guid, List<GroupReferenceModel>>(),
                 GroupsParentIdMap = new Dictionary<Guid, Guid?>(),
-                GroupsRosterLevelDepth = new Dictionary<Guid, int>(),
                 QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>()
             };
 
@@ -104,7 +103,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 parents.Reverse();
                 questionnaireModel.Parents.Add(item.PublicKey, parents);
-                questionnaireModel.GroupsRosterLevelDepth.Add(item.PublicKey, countOfRostersToTop);
                 questionnaireModel.GroupsParentIdMap.Add(item.PublicKey, closestParentGroupId);
             }
 

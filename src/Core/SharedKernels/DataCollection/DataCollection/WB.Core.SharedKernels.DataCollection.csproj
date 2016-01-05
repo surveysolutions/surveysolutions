@@ -280,6 +280,7 @@
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
     <Compile Include="Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Repositories\QuestionnaireRepositoryExtensions.cs" />
     <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\ConcurrentHashSet.cs" />
@@ -365,4 +366,3 @@
   </Target>
   -->
 </Project>
-
