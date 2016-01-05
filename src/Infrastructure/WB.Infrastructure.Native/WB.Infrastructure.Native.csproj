@@ -177,7 +177,7 @@
     <Compile Include="Storage\EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="Storage\EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
-    <Compile Include="Storage\IsolatedThreadExtensions.cs" />
+    <Compile Include="Threading\IsolatedThreadExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
@@ -187,7 +187,7 @@
     <Compile Include="Storage\Postgre\PostgresModuleWithCache.cs" />
     <Compile Include="Storage\Postgre\PostgresWriteSideModule.cs" />
     <Compile Include="Storage\ReadSideCacheSettings.cs" />
-    <Compile Include="ThreadMarkerManager.cs" />
+    <Compile Include="Threading\ThreadMarkerManager.cs" />
     <Compile Include="Storage\Memory\Implementation\MemoryCachedReadSideStorage.cs" />
     <Compile Include="Storage\NinjectExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\DatabaseManagement.cs" />
