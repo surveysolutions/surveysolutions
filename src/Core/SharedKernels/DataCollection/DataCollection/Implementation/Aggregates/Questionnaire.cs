@@ -122,18 +122,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Version = newVersion,
                 ResponsibleId = command.CreatedBy
             });
+
             this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
 
-        }
-
-        public void ImportFromSupervisor(ImportFromSupervisor command)
-        {
-            ImportFromQuestionnaireDocument(command.Source);
-        }
-
-        public void ImportFromDesignerForTester(ImportFromDesignerForTester command)
-        {
-            ImportFromQuestionnaireDocument(command.Source);
         }
 
         public void DisableQuestionnaire(DisableQuestionnaire command)
@@ -201,14 +192,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     source.GetType(), source.PublicKey));
 
             return document;
-        }
-
-        private void ImportFromQuestionnaireDocument(IQuestionnaireDocument source)
-        {
-            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
-            this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
-
-            this.ApplyEvent(new TemplateImported { Source = document, Version = GetNextVersion() });
         }
 
         private long GetNextVersion()
