@@ -88,8 +88,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4D7FA454-5746-4D01-8072-4219BFD57938}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
@@ -294,3 +292,4 @@ Global
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF} = {27286D23-04D1-475F-A9AE-E799855896E5}
 	EndGlobalSection
 EndGlobal
+
