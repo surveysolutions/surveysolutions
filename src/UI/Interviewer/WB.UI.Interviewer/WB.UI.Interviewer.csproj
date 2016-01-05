@@ -347,6 +347,7 @@
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
+    <Compile Include="Implementations\Services\SiaqodbWithAutoSize.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
