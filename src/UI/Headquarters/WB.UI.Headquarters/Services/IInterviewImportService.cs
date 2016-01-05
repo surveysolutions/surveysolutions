@@ -1,7 +1,8 @@
 using System;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.UI.Headquarters.Controllers;
 
-namespace WB.UI.Headquarters.Controllers
+namespace WB.UI.Headquarters.Services
 {
     public interface IInterviewImportService
     {

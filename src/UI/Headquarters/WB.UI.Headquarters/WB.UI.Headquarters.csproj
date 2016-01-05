@@ -553,12 +553,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BatchUserUploadController.cs" />
-    <Compile Include="Controllers\InterviewImportService.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
-    <Compile Include="Controllers\IInterviewImportService.cs" />
-    <Compile Include="Controllers\InterviewImportStatus.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
@@ -577,6 +574,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\InterviewImportService.cs" />
     <Compile Include="Injections\HeadquartersRegistry.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
@@ -594,6 +592,13 @@
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IInterviewImportService.cs" />
+    <Compile Include="Services\InterviewImportColumn.cs" />
+    <Compile Include="Services\InterviewImportError.cs" />
+    <Compile Include="Services\InterviewImportFileDescription.cs" />
+    <Compile Include="Services\InterviewImportPrefilledQuestion.cs" />
+    <Compile Include="Services\InterviewImportState.cs" />
+    <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
