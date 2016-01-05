@@ -1,13 +1,13 @@
 ﻿using System;
 using EventStore.ClientAPI;
 
-namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
+namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
     public class EventStoreLogger : ILogger
     {
-        private readonly GenericSubdomains.Portable.Services.ILogger genericLogger;
+        private readonly Core.GenericSubdomains.Portable.Services.ILogger genericLogger;
 
-        public EventStoreLogger(GenericSubdomains.Portable.Services.ILogger genericLogger)
+        public EventStoreLogger(Core.GenericSubdomains.Portable.Services.ILogger genericLogger)
         {
             this.genericLogger = genericLogger;
         }

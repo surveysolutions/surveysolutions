@@ -4,8 +4,7 @@ using System.Globalization;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
+using WB.Infrastructure.Native.Storage.Memory.Implementation;
 using WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests;
 using It = Machine.Specifications.It;
 

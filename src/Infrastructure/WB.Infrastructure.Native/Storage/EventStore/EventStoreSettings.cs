@@ -1,13 +1,11 @@
-using System.Collections.Generic;
-
-namespace WB.Core.Infrastructure.Storage.EventStore
+namespace WB.Infrastructure.Native.Storage.EventStore
 {
     public class EventStoreSettings
     {
         public EventStoreSettings()
         {
-            InitializeProjections = true;
-            MaxCountToRead = 1024;
+            this.InitializeProjections = true;
+            this.MaxCountToRead = 1024;
         }
 
         public string ServerIP { get; set; }

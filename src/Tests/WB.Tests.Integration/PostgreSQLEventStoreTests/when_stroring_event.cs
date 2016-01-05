@@ -4,8 +4,8 @@ using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.Infrastructure.Storage.Postgre;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests

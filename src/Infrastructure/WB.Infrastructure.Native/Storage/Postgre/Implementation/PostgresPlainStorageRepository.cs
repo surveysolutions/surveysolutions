@@ -4,7 +4,7 @@ using System.Linq;
 using NHibernate.Linq;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
     {

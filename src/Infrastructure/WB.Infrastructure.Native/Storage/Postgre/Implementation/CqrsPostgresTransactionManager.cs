@@ -3,7 +3,7 @@ using System.Data;
 using NHibernate;
 using Ninject;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class CqrsPostgresTransactionManager : ICqrsPostgresTransactionManager, IDisposable
     {
@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 throw new InvalidOperationException();
 
             this.commandSession = this.sessionFactory.OpenSession();
-            this.commandTransaction = commandSession.BeginTransaction(IsolationLevel.RepeatableRead);
+            this.commandTransaction = this.commandSession.BeginTransaction(IsolationLevel.RepeatableRead);
         }
 
         public void CommitCommandTransaction()
@@ -147,7 +147,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         ~CqrsPostgresTransactionManager()
         {
-            Dispose();
+            this.Dispose();
         }
     }
 }

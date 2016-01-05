@@ -1,7 +1,6 @@
-﻿using System;
-using Npgsql;
+﻿using Npgsql;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal static class DatabaseManagement
     {

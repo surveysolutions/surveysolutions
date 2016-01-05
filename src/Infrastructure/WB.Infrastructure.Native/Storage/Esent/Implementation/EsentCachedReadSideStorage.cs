@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Isam.Esent.Collections.Generic;
-using Microsoft.Isam.Esent.Interop;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Core.Infrastructure.Storage.Esent.Implementation
+namespace WB.Infrastructure.Native.Storage.Esent.Implementation
 {
     internal class EsentCachedReadSideStorage<TEntity> : IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryWriter<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
@@ -216,7 +214,7 @@ namespace WB.Core.Infrastructure.Storage.Esent.Implementation
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 

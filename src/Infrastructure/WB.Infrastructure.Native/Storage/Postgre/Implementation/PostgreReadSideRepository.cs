@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgreReadSideRepository<TEntity> : IReadSideRepositoryWriter<TEntity>,
         IReadSideRepositoryCleaner,

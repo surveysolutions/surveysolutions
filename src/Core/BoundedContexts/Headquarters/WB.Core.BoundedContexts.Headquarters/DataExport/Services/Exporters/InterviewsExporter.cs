@@ -19,7 +19,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -28,6 +27,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {

@@ -1,4 +1,4 @@
-﻿namespace WB.Core.Infrastructure.Storage.Postgre
+﻿namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public class PostgreConnectionSettings
     {

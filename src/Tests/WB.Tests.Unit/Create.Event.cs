@@ -68,7 +68,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;

@@ -6,14 +6,14 @@ using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using NpgsqlTypes;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
+namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
     public class PostgreSQL91Dialect : PostgreSQL82Dialect
     {
         public PostgreSQL91Dialect()
         {
-            RegisterColumnType(DbType.Object, "text[]");
-            RegisterColumnType(DbType.Object, "numeric[]");
+            this.RegisterColumnType(DbType.Object, "text[]");
+            this.RegisterColumnType(DbType.Object, "numeric[]");
         }
     }
 
@@ -90,7 +90,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
                 {
                     new NpgsqlExtendedSqlType(
                         DbType.Object,
-                        NpgSqlType
+                        this.NpgSqlType
                         )
                 };
 

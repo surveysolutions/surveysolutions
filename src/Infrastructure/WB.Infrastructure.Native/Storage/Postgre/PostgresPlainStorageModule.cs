@@ -9,14 +9,13 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
-
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Storage.Postgre.NhExtensions;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
-namespace WB.Core.Infrastructure.Storage.Postgre
+namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public class PostgresPlainStorageModule : Ninject.Modules.NinjectModule
     {
@@ -35,7 +34,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
             
             try
             {
-                DatabaseManagement.CreateDatabase(settings.ConnectionString);
+                DatabaseManagement.CreateDatabase(this.settings.ConnectionString);
             }
             catch (Exception exc)
             {
@@ -66,7 +65,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
             });
 
-            cfg.AddDeserializedMapping(GetMappings(), "Plain");
+            cfg.AddDeserializedMapping(this.GetMappings(), "Plain");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
 

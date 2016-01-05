@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace WB.Core.Infrastructure.Storage
+namespace WB.Infrastructure.Native.Storage
 {
     public static class IsolatedThreadExtensions
     {

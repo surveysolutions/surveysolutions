@@ -3,7 +3,7 @@ using NHibernate.Tool.hbm2ddl;
 using Npgsql;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideBootstraper : IPostgresReadSideBootstraper
     {
@@ -27,7 +27,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 dbCommand.ExecuteNonQuery();
             }
 
-            schemaUpdate.Execute(true, true);
+            this.schemaUpdate.Execute(true, true);
         }
 
         public void CreateIndexesAfterRebuildReadSide()

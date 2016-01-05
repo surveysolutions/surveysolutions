@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Core.Infrastructure.Storage.Memory.Implementation
+namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 {
     internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
         where TEntity : class, IReadSideRepositoryEntity
@@ -30,9 +30,9 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
         public void DisableCache()
         {
-            while (cache.Any())
+            while (this.cache.Any())
             {
-                this.StoreBulkEntitiesToRepository(cache.Keys.ToList());
+                this.StoreBulkEntitiesToRepository(this.cache.Keys.ToList());
             }
 
             this.isCacheEnabled = false;
@@ -87,18 +87,18 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
         {
             foreach (var item in bulk)
             {
-                Store(item.Item1, item.Item2);
+                this.Store(item.Item1, item.Item2);
             }
         }
 
         private TEntity GetByIdUsingCache(string id)
         {
-            if (cache.ContainsKey(id))
-                return cache[id];
+            if (this.cache.ContainsKey(id))
+                return this.cache[id];
 
             var entity = this.storage.GetById(id);
 
-            cache[id] = entity;
+            this.cache[id] = entity;
 
             this.ReduceCacheIfNeeded();
 
@@ -138,7 +138,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
 
             foreach (var entityId in bulk)
             {
-                var entity = cache[entityId];
+                var entity = this.cache[entityId];
 
                 if (entity == null)
                 {
@@ -149,7 +149,7 @@ namespace WB.Core.Infrastructure.Storage.Memory.Implementation
                     entitiesToStore.Add(Tuple.Create(entity, entityId));
                 }
 
-                cache.Remove(entityId);
+                this.cache.Remove(entityId);
             }
 
             this.storage.BulkStore(entitiesToStore);
