@@ -5,9 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireLevelTemplateModel : RosterScopeBaseModel
     {
-        public QuestionnaireLevelTemplateModel(QuestionnaireExecutorTemplateModel executorModel,
-            bool areRowSpecificVariablesPresent, 
-            bool isIRosterLevelInherited, string abstractConditionalLevelClassName)
+        public QuestionnaireLevelTemplateModel()
             : base(
             "@__questionnaire_scope", 
             "QuestionnaireTopLevel",
@@ -15,14 +13,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             new List<QuestionTemplateModel>(), 
             new List<RosterTemplateModel>(), 
             new List<Guid>(),
-            areRowSpecificVariablesPresent,
-            isIRosterLevelInherited,
-            abstractConditionalLevelClassName,
             null)
         {
-            ExecutorModel = executorModel;
         }
 
-        public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
+        public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; }
     }
 }

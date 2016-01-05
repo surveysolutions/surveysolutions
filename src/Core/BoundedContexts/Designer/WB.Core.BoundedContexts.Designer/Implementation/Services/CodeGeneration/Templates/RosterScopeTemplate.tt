@@ -4,11 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #> 
-    internal partial class <#=Model.GeneratedTypeName#> : <#=this.Model.AbstractConditionalLevelClassName#><<#=this.Model.GeneratedTypeName#>>
-	<# if(Model.IsIRosterLevelInherited){#>
-	, IRosterLevel<<#=this.Model.GeneratedTypeName#>> 
-	<#}#>
-	, IExpressionExecutable
+    internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelInstanceV3<<#=this.Model.GeneratedTypeName#>>, IRosterLevel<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutable
     {    
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, <#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutable>> getInstances, 
             Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies)
@@ -52,10 +48,14 @@
             RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies));
         <# }#> 
 
-        <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
-        {#> 
-            _conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
-        <#}#>
+<#
+	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder) 
+    {
+#>
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
+<#
+	}
+#>
         }
     
         private <#= Model.ParentTypeName#> @_parent;		
@@ -64,9 +64,7 @@
         {#>
         public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }                                        
         <#}#>
-
-      
-        <# if(Model.AreRowSpecificVariablesPresent){#>
+       
 		public decimal @rowcode { get { return this.RosterVector.Last(); } }
 
         public int @rowindex { get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>.Select((s, i) => new { Index = i, Value = s }).Where(t => t.Value.@rowcode == this.@rowcode).Select(t => t.Index).First(); } }    
@@ -82,7 +80,6 @@
         {
 			get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>; }
         }
-		<# }#>
 
 		<#foreach (var parentRoster in Model.AllParentsRostersToTop) 
 		{#>
@@ -101,9 +98,7 @@
              <#}#>
             };
 
-			<# if(Model.AreRowSpecificVariablesPresent){#>
 			((IRosterLevel)level).SetRowName(this.@rowname);
-			<# } #>
 
             ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
             StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);

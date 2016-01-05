@@ -1,35 +1,25 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
-    public class TypeAndNameModel
-    {
-        public string GeneratedTypeName { set; get; }
-        public string VariableName { set; get; }
-    }
-
     public class RosterScopeTemplateModel
     {
-        public RosterScopeTemplateModel(string rosterScopeType, List<RosterTemplateModel> rostersInScope, QuestionnaireExecutorTemplateModel executorModel)
+        public RosterScopeTemplateModel(
+            string rosterScopeType, 
+            List<QuestionTemplateModel> questions, 
+            List<GroupTemplateModel> groups, 
+            List<RosterTemplateModel> rosters, 
+            List<RosterTemplateModel> rostersInScope, 
+            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder)
         {
-            this.GeneratedRosterScopeName = String.Empty;
-            this.GeneratedTypeName = rosterScopeType;
-            this.Groups = rostersInScope.SelectMany(r => r.Groups).ToList();
-            this.Questions = rostersInScope.SelectMany(r => r.Questions).ToList();
-            this.Rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
-            this.RosterScope = new List<Guid>();
-            this.AreRowSpecificVariablesPresent = executorModel.QuestionnaireLevelModel.AreRowSpecificVariablesPresent;
-            this.IsIRosterLevelInherited = executorModel.QuestionnaireLevelModel.IsIRosterLevelInherited;
-            this.RostersInScope = rostersInScope;
-            this.ParentTypeName = rostersInScope[0].ParentGeneratedTypeName;
-            this.ExecutorModel = executorModel;
-            this.AbstractConditionalLevelClassName =
-                executorModel.QuestionnaireLevelModel.AbstractConditionalLevelClassName;
+            GeneratedTypeName = rosterScopeType;
+            Questions = questions;
+            Groups = groups;
+            Rosters = rosters;
+            ConditionMethodsSortedByExecutionOrder = conditionMethodsSortedByExecutionOrder;
+            RostersInScope = rostersInScope;
+            ParentTypeName = rostersInScope[0].ParentGeneratedTypeName;
         }
-
-        public string GeneratedRosterScopeName { get; set; }
 
         public string GeneratedTypeName { set; get; }
 
@@ -39,22 +29,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<RosterTemplateModel> Rosters { get; set; }
 
-        public List<Guid> RosterScope { set; get; }
-
-        public bool AreRowSpecificVariablesPresent { get; private set; }
-
-        public bool IsIRosterLevelInherited { get; private set; }
+        public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; }
 
         public IEnumerable<TypeAndNameModel> AllParentsQuestionsToTop  { set; get; }
 
         public IEnumerable<TypeAndNameModel> AllParentsRostersToTop { set; get; }
 
-        public QuestionnaireExecutorTemplateModel ExecutorModel { private set; get; }
-
         public string ParentTypeName { set; get; }
 
         public List<RosterTemplateModel> RostersInScope { set; get; }
-
-        public string AbstractConditionalLevelClassName { private set; get; }
     }
 }

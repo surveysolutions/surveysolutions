@@ -231,9 +231,7 @@ namespace WB.Tests.Unit
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {
-            return new CodeGenerationSettings(
-                abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
-                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV5" },
                 namespaces: new[]
                 {
                     "WB.Core.SharedKernels.DataCollection.V2",
@@ -244,7 +242,6 @@ namespace WB.Tests.Unit
                     "WB.Core.SharedKernels.DataCollection.V5",
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
-                areRosterServiceVariablesPresent: true,
                 isLookupTablesFeatureSupported: true);
         }
 

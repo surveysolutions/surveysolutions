@@ -428,8 +428,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaireDocument, new Version(9, 0, 0), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, new Version(9, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 

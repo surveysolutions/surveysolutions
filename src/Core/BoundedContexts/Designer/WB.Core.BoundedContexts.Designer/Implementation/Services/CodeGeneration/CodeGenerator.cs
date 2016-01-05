@@ -28,11 +28,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
         {
-            if (targetVersion.Major < 10)
+            if (targetVersion.Major == 9)
             {
                 return new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText();
             }
-            else if (targetVersion.Major < 11)
+            else if (targetVersion.Major == 10)
             {
                 return new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
             }
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure = this.executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, false);
+            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure = this.executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings);
 
             var transformText = GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
 
@@ -77,11 +77,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
         {
             if (version.Major <= 8)
-                throw new VersionNotFoundException(string.Format("version '{0}' is not found", version));
+                throw new VersionNotFoundException($"version '{version}' is not found");
             
             if (version.Major == 9)
                 return new CodeGenerationSettings(
-                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2" },
                     namespaces: new[]
                     {
@@ -89,12 +88,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
                         "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
-                    areRosterServiceVariablesPresent: true,
                     isLookupTablesFeatureSupported: false);
 
             if (version.Major == 10)
                 return new CodeGenerationSettings(
-                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV4",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
                     namespaces: new[]
                     {
@@ -104,10 +101,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V4",
                         "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
                     },
-                    areRosterServiceVariablesPresent: true,
                     isLookupTablesFeatureSupported: false);
             return new CodeGenerationSettings(
-                   abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
                    additionInterfaces: new[] { "IInterviewExpressionStateV5" },
                    namespaces: new[]
                    {
@@ -119,7 +114,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V5",
                         "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                    },
-                   areRosterServiceVariablesPresent: true,
                    isLookupTablesFeatureSupported: true);
         }
 

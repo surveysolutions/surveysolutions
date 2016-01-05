@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
  
-    internal partial class <#=Model.GeneratedTypeName#> : <#=this.Model.AbstractConditionalLevelClassName#><<#=this.Model.GeneratedTypeName#>>, IExpressionExecutableV2
+    internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelInstanceV4<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutableV2
     {
         public <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV2>> getInstances, 
                 Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
@@ -38,10 +38,14 @@
             RosterGenerators.Add(IdOf.<#=@roster.GeneratedIdName#>, (decimals, identities) => new <#=@roster.GeneratedTypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
         <# }#>
 
-        <#foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups)) 
-        {#>
-            _conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
-        <#}#>
+       <#
+	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder) 
+    {
+#>
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
+<#
+	}
+#>
 
         }         
 
@@ -85,23 +89,6 @@
             get { return <#=question.GeneratedStateName#>.State != State.Disabled ? this.<#=question.GeneratedMemberName#> : null; }
             
         }
-        <#if(!string.IsNullOrWhiteSpace(question.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-        {#>
-        private bool <#=question.GeneratedConditionsMethodName#>()
-        {
-            return <#=question.Conditions#>;
-        }
-        <# }#>
-        
-        <#if(!string.IsNullOrWhiteSpace(question.Validations) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-        {#>        
-        private bool <#=question.GeneratedValidationsMethodName#>()
-        {
-			var self = <#=question.VariableName#>;
-            return <#=question.Validations#>;
-        }
-        <# }#>
-
         <# }#>
                 
         <#foreach (var @roster in Model.Rosters) 
@@ -119,13 +106,6 @@
         <#foreach (var @group in Model.Groups) 
         {#>
         private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
-        <#if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-        {#>      
-        private bool <#=@group.GeneratedConditionsMethodName#>()
-        {
-            return <#=@group.Conditions#>;
-        }      
-        <# }#>
         <# }#>
         
 		private readonly IList<Action> _conditionExpressions = new List<Action>();
