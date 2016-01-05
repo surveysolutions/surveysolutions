@@ -12,8 +12,6 @@ using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.GenericSubdomains.Native;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;

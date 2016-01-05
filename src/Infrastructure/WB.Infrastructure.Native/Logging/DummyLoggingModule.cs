@@ -1,8 +1,7 @@
 ﻿using Ninject.Modules;
-
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Native.Logging
+namespace WB.Infrastructure.Native.Logging
 {
     public class DummyLoggingModule : NinjectModule
     {

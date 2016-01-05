@@ -8,7 +8,7 @@ using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
 
-namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
+namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
     internal class ZipArchiveUtils : IArchiveUtils
     {
@@ -21,7 +21,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public void ZipDirectory(string directory, string archiveFile)
         {
-            if (fileSystemAccessor.IsFileExists(archiveFile))
+            if (this.fileSystemAccessor.IsFileExists(archiveFile))
                 throw new InvalidOperationException("zip file exists");
 
             using (var zipFile = new ZipFile()
@@ -31,14 +31,14 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                     AlternateEncodingUsage = ZipOption.Always
                 })
             {
-                zipFile.AddDirectory(directory, fileSystemAccessor.GetFileName(directory));
+                zipFile.AddDirectory(directory, this.fileSystemAccessor.GetFileName(directory));
                 zipFile.Save(archiveFile);
             }
         }
 
         public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
         {
-            return Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
+            return Task.Run(() => this.ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
         }
 
         public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
@@ -68,7 +68,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
-            return Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
+            return Task.Run(() => this.Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
         }
 
         public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)

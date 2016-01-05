@@ -15,8 +15,8 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests

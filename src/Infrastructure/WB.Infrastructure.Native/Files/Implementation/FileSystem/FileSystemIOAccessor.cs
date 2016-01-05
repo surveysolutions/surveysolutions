@@ -1,12 +1,10 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 using ZetaLongPaths;
@@ -15,7 +13,7 @@ using FileAccess = System.IO.FileAccess;
 using FileAttributes = System.IO.FileAttributes;
 using FileShare = ZetaLongPaths.Native.FileShare;
 
-namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
+namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
     internal class FileSystemIOAccessor : IFileSystemAccessor
     {
@@ -58,16 +56,16 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         {
             long size = 0;
             // Add file sizes.
-            var filesInDirectory = GetFilesInDirectory(path);
+            var filesInDirectory = this.GetFilesInDirectory(path);
             foreach (var file in filesInDirectory)
             {
-                size += GetFileSize(file);
+                size += this.GetFileSize(file);
             }
             // Add subdirectory sizes.
-            var nestedDirectories = GetDirectoriesInDirectory(path);
+            var nestedDirectories = this.GetDirectoriesInDirectory(path);
             foreach (var nestedDirectory in nestedDirectories)
             {
-                size += GetDirectorySize(nestedDirectory);
+                size += this.GetDirectorySize(nestedDirectory);
             }
             return (size);
         }
@@ -107,7 +105,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         public void CreateDirectory(string path)
         {
-            IEnumerable<string> intermediateDirectories = GetAllIntermediateDirectories(path);
+            IEnumerable<string> intermediateDirectories = this.GetAllIntermediateDirectories(path);
 
             foreach (string directory in intermediateDirectories)
             {
@@ -151,7 +149,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         {
             var stream = new FileStream(
                 ZlpIOHelper.CreateFileHandle(pathToFile,
-                                             IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
+                                             this.IsFileExists(pathToFile) ? CreationDisposition.OpenExisting : CreationDisposition.New,
                                              ZetaLongPaths.Native.FileAccess.GenericWrite,
                                              FileShare.Write),
                 FileAccess.Write);
@@ -180,7 +178,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 return string.Empty;
             string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidReStr = String.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            var result = RemoveNonAscii(Regex.Replace(name, invalidReStr, "_")).Trim();
+            var result = this.RemoveNonAscii(Regex.Replace(name, invalidReStr, "_")).Trim();
             if (result.Length < 128)
                 return result;
             return result.Substring(0, 128);
@@ -226,17 +224,17 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             FileAttributes attr = File.GetAttributes(sourceDir);
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                var sourceDirectoryName = GetFileName(sourceDir);
+                var sourceDirectoryName = this.GetFileName(sourceDir);
                 if (sourceDirectoryName == null)
                     return;
                 var destDir = this.CombinePath(targetDir, sourceDirectoryName);
-                CreateDirectory(destDir);
+                this.CreateDirectory(destDir);
 
-                foreach (var file in GetFilesInDirectory(sourceDir))
-                    ZlpIOHelper.CopyFile(file, CombinePath(destDir, GetFileName(file)), true);
+                foreach (var file in this.GetFilesInDirectory(sourceDir))
+                    ZlpIOHelper.CopyFile(file, this.CombinePath(destDir, this.GetFileName(file)), true);
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
-                    CopyFileOrDirectory(directory, CombinePath(destDir, sourceDirectoryName));
+                    this.CopyFileOrDirectory(directory, this.CombinePath(destDir, sourceDirectoryName));
             }
             else
             {
@@ -271,7 +269,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 if (windowsIdentity.Groups != null)
                     identityReferences.AddRange(windowsIdentity.Groups);
 
-                var isAllowWriteForUser = IsAllowWriteForIdentityReferance(authorizationRuleCollection, identityReferences);
+                var isAllowWriteForUser = this.IsAllowWriteForIdentityReferance(authorizationRuleCollection, identityReferences);
                 return isAllowWriteForUser;
             }
             catch (InvalidOperationException)
@@ -323,10 +321,10 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
 
         private void CopyFile(string sourcePath, string backupFolderPath)
         {
-            var sourceFileName = GetFileName(sourcePath);
+            var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
-            ZlpIOHelper.CopyFile(sourcePath, CombinePath(backupFolderPath, sourceFileName), true);
+            ZlpIOHelper.CopyFile(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), true);
         }
     }
 }
