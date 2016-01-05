@@ -161,8 +161,6 @@
     <Compile Include="Files\FileInfrastructureModule.cs" />
     <Compile Include="Files\Implementation\FileSystem\FileSystemIOAccessor.cs" />
     <Compile Include="Files\Implementation\FileSystem\ZipArchiveUtils.cs" />
-    <Compile Include="Logging\DummyLogger.cs" />
-    <Compile Include="Logging\DummyLoggingModule.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggingModule.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
@@ -248,4 +246,3 @@
   </Target>
   -->
 </Project>
-
