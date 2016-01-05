@@ -1,7 +1,7 @@
 using System.Threading;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
-namespace WB.Infrastructure.Native
+namespace WB.Infrastructure.Native.Threading
 {
     public static class ThreadMarkerManager
     {

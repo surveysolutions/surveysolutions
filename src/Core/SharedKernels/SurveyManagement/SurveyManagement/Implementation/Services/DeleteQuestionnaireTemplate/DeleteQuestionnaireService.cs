@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplat
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Infrastructure.Native;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate
 {

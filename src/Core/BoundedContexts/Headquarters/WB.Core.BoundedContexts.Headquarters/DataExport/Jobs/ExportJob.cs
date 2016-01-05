@@ -4,6 +4,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 {
