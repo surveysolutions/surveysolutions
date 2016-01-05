@@ -1,6 +1,5 @@
 using System;
 using Quartz;
-using WB.Core.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
