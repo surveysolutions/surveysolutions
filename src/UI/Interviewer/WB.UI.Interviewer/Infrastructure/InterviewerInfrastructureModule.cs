@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
@@ -32,21 +33,10 @@ namespace WB.UI.Interviewer.Infrastructure
         {
             this.Bind<IDocumentSerializer>().To<SiaqodbSerializer>();
 
-            SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
-            SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
-            SiaqodbConfigurator.AddDocument("Document", typeof(QuestionnaireDocumentView));
-            SiaqodbConfigurator.AddDocument("Model", typeof(QuestionnaireModelView));
-            SiaqodbConfigurator.AddText("JsonEvent", typeof(EventView));
-            SiaqodbConfigurator.AddText("Title", typeof(QuestionnaireView));
-            SiaqodbConfigurator.AddText("LastInterviewerOrSupervisorComment", typeof(InterviewView));
-            SiaqodbConfigurator.AddText("QuestionText", typeof(InterviewAnswerOnPrefilledQuestionView));
-            SiaqodbConfigurator.AddText("Answer", typeof(InterviewAnswerOnPrefilledQuestionView));
-            SiaqodbConfigurator.SpecifyStoredDateTimeKind(DateTimeKind.Utc);
-            SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof(IPlainStorageEntity));
-            SiaqodbConfigurator.EncryptedDatabase = true;
-            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
-
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")));
+            this.Bind<ISiaqodb>()
+                .To<SiaqodbWithAutoSize>()
+                .InSingletonScope()
+                .WithConstructorArgument("pathToDatabase", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"));
             
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
