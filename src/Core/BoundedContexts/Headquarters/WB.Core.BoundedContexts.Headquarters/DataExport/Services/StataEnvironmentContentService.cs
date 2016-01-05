@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -31,24 +32,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                QuestionnaireLabels questionnaireLabels =
+                QuestionnaireLevelLabels questionnaireLevelLabels =
                       this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(questionnaireExportStructure, headerStructureForLevel.LevelScopeVector);
 
-                this.CreateContentOfAdditionalFile(questionnaireLabels,
-                    ExportFileSettings.GetContentFileName(questionnaireLabels.LevelName), folderPath);
+                this.CreateContentOfAdditionalFile(questionnaireLevelLabels,
+                    ExportFileSettings.GetContentFileName(questionnaireLevelLabels.LevelName), folderPath);
             }
         }
 
-        private void CreateContentOfAdditionalFile(QuestionnaireLabels questionnaireLabels, string dataFileName, string basePath)
+        private void CreateContentOfAdditionalFile(QuestionnaireLevelLabels questionnaireLevelLabels, string dataFileName, string basePath)
         {
             var doContent = new StringBuilder();
             
             BuildInsheet(dataFileName, doContent);
 
-            this.BuildLabelsForLevel(questionnaireLabels, doContent);
+            this.BuildLabelsForLevel(questionnaireLevelLabels, doContent);
 
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
-                this.GetEnvironmentContentFileName(questionnaireLabels.LevelName));
+                this.GetEnvironmentContentFileName(questionnaireLevelLabels.LevelName));
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString().ToLower());
         }
@@ -65,9 +66,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             doContent.AppendLine($"insheet using \"{fileName}\", tab");
         }
 
-        protected void BuildLabelsForLevel(QuestionnaireLabels questionnaireLabels, StringBuilder doContent)
+        protected void BuildLabelsForLevel(QuestionnaireLevelLabels questionnaireLevelLabels, StringBuilder doContent)
         {
-            foreach (var variableLabel in questionnaireLabels.LabeledVariable)
+            foreach (var variableLabel in questionnaireLevelLabels.LabeledVariable)
             {
                 doContent.AppendLine();
                 if (variableLabel.VariableValueLabels.Any())
@@ -99,7 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             foreach (var label in labels)
             {
                 decimal value;
-                if (decimal.TryParse(label.Value, out value) && value < limitValue && (value % 1) == 0)
+                if (decimal.TryParse(label.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value) && value < limitValue && (value % 1) == 0)
                 {
                     localBuilder.Append($"{label.Value } `\"{this.RemoveNotAllowedChars(label.Label)}\"' ");
                     hasValidValue = true;

@@ -185,7 +185,7 @@
     <Compile Include="DataExport\Views\DataExportStatusReader.cs" />
     <Compile Include="DataExport\Views\IDataExportStatusReader.cs" />
     <Compile Include="DataExport\Views\Labels\LabeledVariable.cs" />
-    <Compile Include="DataExport\Views\Labels\QuestionnaireLabels.cs" />
+    <Compile Include="DataExport\Views\Labels\QuestionnaireLevelLabels.cs" />
     <Compile Include="DataExport\Views\Labels\VariableValueLabel.cs" />
     <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
     <Compile Include="DataExport\Denormalizers\QuestionnaireExportStructureDenormalizer.cs" />
@@ -297,4 +297,3 @@
   </Target>
   -->
 </Project>
-

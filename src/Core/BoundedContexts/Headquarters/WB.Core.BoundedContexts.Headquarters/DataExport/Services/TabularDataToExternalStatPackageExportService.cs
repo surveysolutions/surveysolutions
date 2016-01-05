@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using StatData.Core;
@@ -130,14 +131,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return new string[0];
         }
 
-        private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLabels questionnaireLabels)
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
             foreach (var datasetVariable in meta.Variables)
             {
-                if (!questionnaireLabels.ContainsVariable(datasetVariable.VarName))
+                if (!questionnaireLevelLabels.ContainsVariable(datasetVariable.VarName))
                     continue;
 
-                var variableLabels = questionnaireLabels[datasetVariable.VarName];
+                var variableLabels = questionnaireLevelLabels[datasetVariable.VarName];
 
                 datasetVariable.VarLabel = variableLabels.Label;
 
@@ -146,7 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 foreach (var variableValueLabel in variableLabels.VariableValueLabels)
                 {
                     double value;
-                    if (double.TryParse(variableValueLabel.Value, out value))
+                    if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
                         valueSet.Add(value, variableValueLabel.Label);
                 }
 

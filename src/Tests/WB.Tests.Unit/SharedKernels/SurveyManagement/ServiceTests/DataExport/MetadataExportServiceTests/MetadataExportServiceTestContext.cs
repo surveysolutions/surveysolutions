@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -60,9 +61,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             };
         }
 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames = null)
+        protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text,
+            string[] columnNames = null, Guid? questionId = null, params LabelItem[] labels)
         {
-            return new ExportedHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type, VariableName = Guid.NewGuid().ToString()};
+            return new ExportedHeaderItem()
+            {
+                ColumnNames = columnNames ?? new[] {"1"},
+                Titles = columnNames ?? new[] {"1"},
+                QuestionType = type,
+                VariableName = Guid.NewGuid().ToString(),
+                PublicKey = questionId ?? Guid.NewGuid(),
+                Labels = labels.ToDictionary(x => Guid.NewGuid(), x => x)
+            };
+        }
+
+        protected static LabelItem CreateLabelItem(string caption="caption", string title="title")
+        {
+            return new LabelItem() {Caption = caption, Title = title};
         }
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)
