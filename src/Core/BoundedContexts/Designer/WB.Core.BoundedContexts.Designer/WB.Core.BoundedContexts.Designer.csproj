@@ -240,10 +240,40 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.cs">
-      <DependentUpon>InterviewExpressionStateTemplateV5.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplateV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplateV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosterScopeTemplateV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
       <AutoGen>True</AutoGen>
@@ -263,30 +293,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RosterScopeTemplateV5.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
-      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.cs">
-      <DependentUpon>InterviewExpressionStateTemplateV2.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.cs">
-      <DependentUpon>QuestionnaireLevelTemplateV2.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.cs">
-      <DependentUpon>RosterScopeTemplateV2.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
@@ -353,11 +368,6 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeBaseModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireLevelTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.Extended.cs" />
     <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterTemplateModel.cs" />
@@ -390,17 +400,7 @@
     <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionProcessorGenerator.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
-      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
-      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.Extended.cs" />
     <Compile Include="Services\IKeywordsProvider .cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
@@ -703,4 +703,3 @@
   </Target>
   -->
 </Project>
-
