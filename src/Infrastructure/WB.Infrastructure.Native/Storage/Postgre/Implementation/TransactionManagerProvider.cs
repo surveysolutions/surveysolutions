@@ -1,6 +1,7 @@
 ﻿using System;
 using NHibernate;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {

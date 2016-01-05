@@ -5,6 +5,7 @@ using Ninject;
 using Ninject.Activation;
 using Ninject.Syntax;
 using Ninject.Web.Common;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Infrastructure.Native.Storage
 {
