@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Humanizer;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal abstract class PostgresKeyValueStorage<TEntity> 
         where TEntity: class
@@ -22,7 +21,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         {
             this.connectionString = connectionString;
             this.logger = logger;
-            EnshureTableExists();
+            this.EnshureTableExists();
         }
 
         public TEntity GetById(string id)
@@ -36,7 +35,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 command.Parameters.Add(parameter);
 
-                queryResult = (string) ExecuteScalar(command);
+                queryResult = (string) this.ExecuteScalar(command);
             }
 
             if (queryResult != null)
@@ -59,7 +58,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 command.Parameters.Add(parameter);
 
-                queryResult = ExecuteNonQuery(command);
+                queryResult = this.ExecuteNonQuery(command);
             }
             if (queryResult > 1)
             {
@@ -81,7 +80,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
                 existsCommand.Parameters.Add(idParameter);
 
-                existsResult = ExecuteScalar(existsCommand);
+                existsResult = this.ExecuteScalar(existsCommand);
             }
 
             var existing = existsResult != null;
@@ -109,7 +108,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 upsertCommand.Parameters.Add(parameter);
                 upsertCommand.Parameters.Add(valueParameter);
 
-                queryResult = ExecuteNonQuery(upsertCommand);
+                queryResult = this.ExecuteNonQuery(upsertCommand);
             }
             if (queryResult > 1)
             {
@@ -133,12 +132,12 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         public void Clear()
         {
-            EnshureTableExists();
+            this.EnshureTableExists();
 
             using (var command = new NpgsqlCommand())
             {
                 command.CommandText = string.Format("DELETE FROM {0}", this.tableName);
-                ExecuteNonQuery(command);
+                this.ExecuteNonQuery(command);
             }
         }
 
@@ -190,7 +189,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 
         protected void EnshureTableExists()
         {
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(this.connectionString))
             {
                 connection.Open();
                 var command = @"CREATE TABLE IF NOT EXISTS " + this.tableName + @" (

@@ -4,7 +4,7 @@ using NHibernate;
 using Ninject;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     public class PlainPostgresTransactionManager : IPlainTransactionManager, IPlainSessionProvider, IDisposable
     {

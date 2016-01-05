@@ -5,11 +5,11 @@ using Ninject.Activation;
 using Ninject.Modules;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Esent.Implementation;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Infrastructure.Native.Storage.Esent.Implementation;
+using WB.Infrastructure.Native.Storage.Memory.Implementation;
 
-namespace WB.Core.Infrastructure.Storage.Postgre
+namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public abstract class PostgresModuleWithCache : NinjectModule
     {

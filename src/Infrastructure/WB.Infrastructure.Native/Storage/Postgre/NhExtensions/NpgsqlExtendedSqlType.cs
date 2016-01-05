@@ -2,7 +2,7 @@ using System.Data;
 using NHibernate.SqlTypes;
 using NpgsqlTypes;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.NhExtensions
+namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
     public class NpgsqlExtendedSqlType : SqlType
     {

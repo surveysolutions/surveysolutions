@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal interface ISessionProvider
     {

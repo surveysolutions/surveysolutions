@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using Ninject.Activation;
+﻿using Ninject.Activation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
-using WB.Core.SharedKernels.SurveySolutions;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
-namespace WB.Core.Infrastructure.Storage.Postgre
+namespace WB.Infrastructure.Native.Storage.Postgre
 {
     public class PostgresKeyValueModule : PostgresModuleWithCache
     {

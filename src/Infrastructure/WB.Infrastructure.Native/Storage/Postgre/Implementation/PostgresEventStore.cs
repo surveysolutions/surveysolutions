@@ -7,13 +7,11 @@ using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Npgsql;
 using NpgsqlTypes;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
-namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
+namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     public class PostgresEventStore : IStreamableEventStore
     {
@@ -165,7 +163,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     if (npgsqlException.Code == MissingTableErrorCode)
                     {
                         this.CreateRelations(connection);
-                        return CountOfAllEvents();
+                        return this.CountOfAllEvents();
                     }
                     throw;
                 }
@@ -200,7 +198,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                 {
                     while (reader.Read())
                     {
-                        yield return ReadSingleEvent(reader);
+                        yield return this.ReadSingleEvent(reader);
                     }
                 }
             }
@@ -232,7 +230,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
                     {
                         while (reader.Read())
                         {
-                            events.Add(ReadSingleEvent(reader));
+                            events.Add(this.ReadSingleEvent(reader));
                         }
                     }
 

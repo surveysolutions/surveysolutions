@@ -10,7 +10,7 @@ using EventStore.Core.Messages;
 using Machine.Specifications;
 using Moq;
 using Ncqrs;
-using WB.Core.Infrastructure.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.EventStore;
 
 namespace WB.Tests.Integration.EventStoreTests
 {

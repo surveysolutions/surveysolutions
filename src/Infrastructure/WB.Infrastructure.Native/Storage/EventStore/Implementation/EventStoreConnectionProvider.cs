@@ -3,7 +3,7 @@ using System.Net;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 
-namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
+namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
     public class EventStoreConnectionProvider : IEventStoreConnectionProvider
     {

@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 
-namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
+namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
     public class EventStoreApiService : IEventStoreApiService
     {
@@ -17,12 +17,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         public void RunScavenge()
         {
-            UriBuilder uriBuilder = new UriBuilder("http", settings.ServerIP, settings.ServerHttpPort, "/admin/scavenge");
+            UriBuilder uriBuilder = new UriBuilder("http", this.settings.ServerIP, this.settings.ServerHttpPort, "/admin/scavenge");
             var scanvageUri = uriBuilder.ToString();
 
             using (var client = new HttpClient())
             {
-                var byteArray = Encoding.ASCII.GetBytes(settings.Login + ":" + settings.Password);
+                var byteArray = Encoding.ASCII.GetBytes(this.settings.Login + ":" + this.settings.Password);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
                 var response = client.PostAsync(scanvageUri, null).WaitAndUnwrapException();

@@ -1,6 +1,6 @@
 ﻿using EventStore.ClientAPI;
 
-namespace WB.Core.Infrastructure.Storage.EventStore
+namespace WB.Infrastructure.Native.Storage.EventStore
 {
     public interface IEventStoreConnectionProvider
     {
