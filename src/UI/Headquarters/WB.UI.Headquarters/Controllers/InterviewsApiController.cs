@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -128,15 +129,21 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
             var fileBytes = fileStream.ToArray();
 
+            if (fileBytes.Length == 0)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                       $"File {request.FileWithInterviews.FileName} is empty");
+            }
+
             var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileBytes);
 
             var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
                     column => column.IsRequired && !column.ExistsInFIle).Select(column => column.ColumnName).ToList();
 
-            var isSupervisorRequired = !descriptionByFileWithInterviews.HasSupervisorColumn &&
+            var isSupervisorRequired = !descriptionByFileWithInterviews.HasResponsibleColumn &&
                                        !request.SupervisorId.HasValue;
 
-            var responsibleId = this.globalInfoProvider.GetCurrentUser().Id;
+            var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
             if (!requiredNotExistingColumns.Any() && !isSupervisorRequired)
             {
@@ -148,7 +155,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
                             questionnaireIdentity: questionnaireIdentity, fileBytes: fileBytes, 
-                            responsibleId: responsibleId);
+                            headquartersId: headquartersId);
                     }
                     finally
                     {

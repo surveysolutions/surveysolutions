@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.navigationGroupType = NavigationGroupType.InsideGroupOrRoster;
             }
 
-            this.SetNavigationItemTitle();
+            this.UpdateNavigationItemTitle();
             this.SetGroupState();
 
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
@@ -169,23 +169,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.navigationGroupType = this.groupOrSectionToNavigateIdentity == null ? NavigationGroupType.LastSection : NavigationGroupType.Section;
         }
 
-        private void SetNavigationItemTitle()
+        private void UpdateNavigationItemTitle()
         {
-            string title = string.Empty;
+            this.NavigationItemTitle = this.GetNavigationItemTitle();
+        }
+
+        private string GetNavigationItemTitle()
+        {
             switch (this.navigationGroupType)
             {
                 case NavigationGroupType.InsideGroupOrRoster:
-                    title = UIResources.Interview_ParentGroup_ButtonText;
-                    break;
+                    return UIResources.Interview_ParentGroup_ButtonText;
                 case NavigationGroupType.LastSection:
-                    title = UIResources.Interview_CompleteScreen_ButtonText;
-                    break;
+                    return UIResources.Interview_CompleteScreen_ButtonText;
                 case NavigationGroupType.Section:
-                    title = UIResources.Interview_NextSection_ButtonText;
-                    break;
+                    return UIResources.Interview_NextSection_ButtonText;
+                default:
+                    return string.Empty;
             }
-
-            this.NavigationItemTitle = title;
         }
 
         private bool CanNavigateToSection(Identity group)
@@ -218,7 +219,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private void UpdateNavigation()
         {
             this.SetNextEnabledSection();
-            this.SetNavigationItemTitle();
+            this.UpdateNavigationItemTitle();
             this.SetGroupState();
         }
 

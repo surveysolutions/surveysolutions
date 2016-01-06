@@ -657,7 +657,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
             if (!this.cacheOfRostersAffectedByRosterTitleQuestion.ContainsKey(questionId))
-                this.cacheOfRostersAffectedByRosterTitleQuestion[questionId] = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
+            {
+                IEnumerable<Guid> rosters = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
+                this.cacheOfRostersAffectedByRosterTitleQuestion.Add(questionId, rosters);
+            }
 
             return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }
