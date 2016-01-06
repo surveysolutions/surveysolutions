@@ -209,6 +209,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
+        public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
+
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
@@ -935,6 +937,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IGroup GetGroup(Guid groupId) => GetGroup(this.GroupCache, groupId.FormatGuid());
 
+        private IStaticText GetStaticTextOrThrow(Guid staticTextId)
+        {
+            IStaticText staticText = this.GetStaticTextImpl(staticTextId);
+
+            if (staticText == null)
+                throw new QuestionnaireException($"Static text with id '{staticTextId.FormatGuid()}' is not found.");
+
+            return staticText;
+        }
+
         private void ThrowIfQuestionDoesNotExist(Guid questionId) => this.GetQuestionOrThrow(questionId);
 
         private void ThrowIfEntityDoesNotExist(Guid entityId) => this.GetEntityOrThrow(entityId);
@@ -944,6 +956,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private IComposite GetEntityOrThrow(Guid entityId) => GetEntityOrThrow(this.EntityCache, entityId);
 
         private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
+
+        private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
         private static string FormatQuestionForException(IQuestion question)
         {
@@ -963,7 +977,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = GetQuestion(questions, questionId);
 
             if (question == null)
-                throw new QuestionnaireException(string.Format("Question with id '{0}' is not found.", questionId));
+                throw new QuestionnaireException($"Question with id '{questionId}' is not found.");
 
             return question;
         }
@@ -973,7 +987,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IComposite entity = GetEntity(entities, entityId);
 
             if (entity == null)
-                throw new QuestionnaireException(string.Format("Entity with id '{0}' is not found.", entityId));
+                throw new QuestionnaireException($"Entity with id '{entityId}' is not found.");
 
             return entity;
         }
