@@ -14,7 +14,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
     internal abstract class PostgresKeyValueStorageWithCache<TEntity> : PostgresKeyValueStorage<TEntity>
         where TEntity: class
     {
-        private object lockObject = new object();
+        private readonly object lockObject = new object();
 
         static MemoryCache memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
 
