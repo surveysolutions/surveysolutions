@@ -110,7 +110,7 @@ foreach (var question in Model.Questions)
             
             #line 23 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
 
-            bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);                       
+            bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validation);                       
 
             if(hasAnyValidation)
             {
@@ -128,7 +128,7 @@ foreach (var question in Model.Questions)
                     " ");
             
             #line 29 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.tt"
-if(!string.IsNullOrWhiteSpace(question.Validations)) {
+if(!string.IsNullOrWhiteSpace(question.Validation)) {
             
             #line default
             #line hidden

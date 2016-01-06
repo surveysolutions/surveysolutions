@@ -19,14 +19,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly IExpressionProcessor expressionProcessor;
 
-        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
         private const string privateFieldsPrefix = "@__";
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
 
         public QuestionnaireExecutorTemplateModelFactory(
-            IMacrosSubstitutionService macrosSubstitutionService, 
-            IExpressionProcessor expressionProcessor, 
+            IMacrosSubstitutionService macrosSubstitutionService,
+            IExpressionProcessor expressionProcessor,
             ILookupTableService lookupTableService)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
@@ -34,60 +33,67 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.lookupTableService = lookupTableService;
         }
 
-        public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
-            QuestionnaireDocument questionnaire, 
-            CodeGenerationSettings codeGenerationSettings)
+
+        public static Dictionary<string,ExpressionMethodModel> BuildMethodModels(
+            CodeGenerationSettings codeGenerationSettings, 
+            QuestionnaireExecutorTemplateModel questionnaireTemplate)
         {
-            var template = new QuestionnaireExecutorTemplateModel
-            {
-                AdditionInterfaces = codeGenerationSettings.AdditionInterfaces,
-                Namespaces = codeGenerationSettings.Namespaces,
-                Id = questionnaire.PublicKey,
-                GeneratedClassName = $"{InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}"
-            };
-
-            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel();
-
-            template.QuestionnaireLevelModel = questionnaireLevelModel;
-
-            template.LookupTables = BuildLookupTableModels(questionnaire).ToList();
-
-            template.StructuralDependencies = BuildStructuralDependencies(questionnaire);
-
-            template.ConditionalDependencies = BuildConditionalDependencies(questionnaire);
-
-            template.ConditionsPlayOrder = BuildConditionsPlayOrder(template.ConditionalDependencies, template.StructuralDependencies);
-
-            Dictionary<string, string> generatedScopesTypeNames;
-            List<QuestionTemplateModel> allQuestions;
-            List<GroupTemplateModel> allGroups;
-            List<RosterTemplateModel> allRosters;
-
-            // creates rosters model and fills questionnaireLevelModel and roster models with questions, groups and nested rosters.
-            this.BuildStructures(questionnaire, questionnaireLevelModel, out generatedScopesTypeNames, out allQuestions, out allGroups, out allRosters);
-
-            questionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(questionnaireLevelModel.Questions, questionnaireLevelModel.Groups, null, template.ConditionsPlayOrder);
-
-            var rosterGroupedByScope = allRosters.GroupBy(r => r.GeneratedTypeName);
-
-            template.RostersGroupedByScope = rosterGroupedByScope
-                .Select(x => BuildRosterScopeTemplateModel(x.Key, x.ToList(), template))
-                .ToDictionary(x => x.GeneratedTypeName);
-
-            BuildReferencesOnParentRosters(template.RostersGroupedByScope, questionnaireLevelModel);
-
-            BuildReferencesOnParentQuestions(template.RostersGroupedByScope, questionnaireLevelModel);
+            var methodModels = new Dictionary<string, ExpressionMethodModel>();
             
-            template.AllQuestions = allQuestions;
-            template.AllGroups = allGroups;
-            template.AllRosters = allRosters;
-            template.GeneratedScopesTypeNames = generatedScopesTypeNames;
-            return template;
+            foreach (var question in questionnaireTemplate.AllQuestions)
+            {
+                if (!string.IsNullOrWhiteSpace(question.Condition))
+                {
+                    methodModels.Add(ExpressionLocation.QuestionCondition(question.Id).Key, new ExpressionMethodModel(
+                        question.ParentScopeTypeName,
+                        question.GeneratedConditionsMethodName,
+                        codeGenerationSettings.Namespaces,
+                        question.Condition,
+                        false,
+                        question.VariableName));
+                }
+
+                if (!string.IsNullOrWhiteSpace(question.Validation))
+                {
+                    methodModels.Add(ExpressionLocation.QuestionValidation(question.Id).Key, new ExpressionMethodModel(
+                        question.ParentScopeTypeName,
+                        question.GeneratedValidationsMethodName,
+                        codeGenerationSettings.Namespaces,
+                        question.Validation,
+                        true,
+                        question.VariableName));
+                }
+            }
+
+            foreach (GroupTemplateModel group in questionnaireTemplate.AllGroups.Where(x => !string.IsNullOrWhiteSpace(x.Condition)))
+            {
+                methodModels.Add(ExpressionLocation.GroupCondition(group.Id).Key, new ExpressionMethodModel(
+                    group.ParentScopeTypeName,
+                    group.GeneratedConditionsMethodName,
+                    codeGenerationSettings.Namespaces,
+                    group.Condition,
+                    false,
+                    group.VariableName));
+            }
+
+            foreach (RosterTemplateModel roster in questionnaireTemplate.AllRosters.Where(x => !string.IsNullOrWhiteSpace(x.Conditions)))
+            {
+                methodModels.Add(ExpressionLocation.RosterCondition(roster.Id).Key,
+                    new ExpressionMethodModel(
+                    roster.GeneratedTypeName,
+                    roster.GeneratedConditionsMethodName,
+                    codeGenerationSettings.Namespaces,
+                    roster.Conditions,
+                    false,
+                    roster.VariableName));
+            }
+
+            return methodModels;
         }
 
-        private RosterScopeTemplateModel BuildRosterScopeTemplateModel(
-            string rosterScopeType, 
-            List<RosterTemplateModel> rostersInScope, 
+        public RosterScopeTemplateModel BuildRosterScopeTemplateModel(
+            string rosterScopeType,
+            List<RosterTemplateModel> rostersInScope,
             QuestionnaireExecutorTemplateModel template)
         {
             var groups = rostersInScope.SelectMany(r => r.Groups).ToList();
@@ -99,14 +105,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new RosterScopeTemplateModel(rosterScopeType, questions, groups, rosters, rostersInScope, conditionMethodsSortedByExecutionOrder);
         }
 
-        private static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
-            List<QuestionTemplateModel> questions, 
-            List<GroupTemplateModel> groups, 
-            List<RosterTemplateModel> rosters, 
+        public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
+            List<QuestionTemplateModel> questions,
+            List<GroupTemplateModel> groups,
+            List<RosterTemplateModel> rosters,
             List<Guid> conditionsPlayOrder)
         {
-            List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Conditions)).Reverse().ToList();
-            List<QuestionTemplateModel> questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Conditions)).ToList();
+            List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
+            List<QuestionTemplateModel> questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Condition)).ToList();
             List<RosterTemplateModel> rostersWithConditions = (rosters ?? new List<RosterTemplateModel>()).Where(r => !string.IsNullOrWhiteSpace(r.Conditions)).Reverse().ToList();
 
             Dictionary<Guid, ConditionMethodAndState> itemsToSort = new Dictionary<Guid, ConditionMethodAndState>();
@@ -126,8 +132,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return itemsSorted;
         }
 
-        private static List<Guid> BuildConditionsPlayOrder(
-            Dictionary<Guid, List<Guid>> conditionalDependencies, 
+        public static List<Guid> BuildConditionsPlayOrder(
+            Dictionary<Guid, List<Guid>> conditionalDependencies,
             Dictionary<Guid, List<Guid>> structuralDependencies)
         {
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
@@ -140,7 +146,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
 
-            structuralDependencies.ForEach(x => mergedDependencies[x.Key].AddRange(x.Value));
+            foreach (var x in structuralDependencies)
+            {
+                mergedDependencies[x.Key].AddRange(x.Value);
+            }
 
             foreach (var conditionalDependency in conditionalDependencies)
             {
@@ -158,14 +167,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return listOfOrderedContitions.ToList();
         }
 
-        private static Dictionary<Guid, List<Guid>> BuildStructuralDependencies(QuestionnaireDocument questionnaire)
+        public static Dictionary<Guid, List<Guid>> BuildStructuralDependencies(QuestionnaireDocument questionnaire)
         {
             return questionnaire
                 .GetAllGroups()
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
         }
 
-        private static void BuildReferencesOnParentRosters(
+        public static void BuildReferencesOnParentRosters(
             Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope,
             QuestionnaireLevelTemplateModel questionnaireLevelModel)
         {
@@ -178,11 +187,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(questionnaireLevelModel.Rosters)
                     .Select(x => new TypeAndNameModel { GeneratedTypeName = x.GeneratedTypeName, VariableName = x.VariableName }).ToList();
 
-               rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop;
+                rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop;
             }
         }
 
-        private static void BuildReferencesOnParentQuestions(
+        public static void BuildReferencesOnParentQuestions(
            Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope,
            QuestionnaireLevelTemplateModel questionnaireLevelModel)
         {
@@ -213,7 +222,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private IEnumerable<LookupTableTemplateModel> BuildLookupTableModels(QuestionnaireDocument questionnaire)
+        public IEnumerable<LookupTableTemplateModel> BuildLookupTableModels(QuestionnaireDocument questionnaire)
         {
             foreach (var table in questionnaire.LookupTables)
             {
@@ -231,10 +240,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private void BuildStructures(QuestionnaireDocument questionnaireDoc,
+        public void BuildStructures(QuestionnaireDocument questionnaireDoc,
             QuestionnaireLevelTemplateModel questionnaireLevelModel,
             out Dictionary<string, string> generatedScopesTypeNames,
-            out List<QuestionTemplateModel> allQuestions, 
+            out List<QuestionTemplateModel> allQuestions,
             out List<GroupTemplateModel> allGroups,
             out List<RosterTemplateModel> allRosters)
         {
@@ -264,7 +273,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (IsQuestion(child))
                     {
-                        var question = this.CreateQuestionTemplateModel(questionnaireDoc, (IQuestion)child, currentScope.GeneratedRosterScopeName);
+                        var question = this.CreateQuestionTemplateModel(
+                            questionnaireDoc, (IQuestion)child, 
+                            currentScope.GeneratedRosterScopeName, 
+                            currentScope.GeneratedTypeName);
 
                         currentScope.Questions.Add(question);
 
@@ -323,14 +335,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private QuestionTemplateModel CreateQuestionTemplateModel(
             QuestionnaireDocument questionnaireDoc,
             IQuestion childAsIQuestion,
-            string generatedRosterScopeName)
+            string rosterScopeName,
+            string parentScopeTypeName)
         {
             string varName = !String.IsNullOrEmpty(childAsIQuestion.StataExportCaption)
                 ? childAsIQuestion.StataExportCaption
                 : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
             var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
-            var condition = childAsIQuestion.CascadeFromQuestionId.HasValue 
+            var condition = childAsIQuestion.CascadeFromQuestionId.HasValue
                 ? this.GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
                 : this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values);
 
@@ -338,8 +351,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 Id = childAsIQuestion.PublicKey,
                 VariableName = varName,
-                Conditions = condition,
-                Validations = validation,
+                Condition = condition,
+                Validation = validation,
                 GeneratedConditionsMethodName = "IsEnabled_" + varName,
                 GeneratedValidationsMethodName = "IsValid_" + varName,
                 QuestionType = childAsIQuestion.QuestionType,
@@ -347,7 +360,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 GeneratedMemberName = "@__" + varName,
                 GeneratedStateName = "@__" + varName + "_state",
                 GeneratedIdName = "@__" + varName + "_id",
-                RosterScopeName = generatedRosterScopeName
+                RosterScopeName = rosterScopeName,
+                ParentScopeTypeName = parentScopeTypeName
             };
 
             if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)
@@ -391,6 +405,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 RosterScope = currentRosterScope,
                 ParentGeneratedTypeName = currentScope.GeneratedTypeName,
                 GeneratedRosterScopeName = "@__" + varName + "_scope",
+                ParentScopeTypeName = currentScope.GeneratedTypeName
             };
             return roster;
         }
@@ -404,7 +419,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var group = new GroupTemplateModel
             {
                 Id = childAsIGroup.PublicKey,
-                Conditions =
+                Condition =
                     this.macrosSubstitutionService.InlineMacros(
                         childAsIGroup.ConditionExpression,
                         questionnaireDoc.Macros.Values),
@@ -412,7 +427,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 GeneratedStateName = "@__" + varName + "_state",
                 GeneratedIdName = "@__" + varName + "_id",
                 GeneratedConditionsMethodName = "IsEnabled_" + varName,
-                RosterScopeName = currentScope.GeneratedRosterScopeName
+                RosterScopeName = currentScope.GeneratedRosterScopeName,
+                ParentScopeTypeName = currentScope.GeneratedTypeName
             };
             return @group;
         }
@@ -442,10 +458,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? string.Empty
                 : GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(parentOptionsThatHaveNoChildOptions, parentQuestion.StataExportCaption);
 
-            return string.Format("!IsAnswerEmpty({0})", parentQuestion.StataExportCaption) + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
+            return $"!IsAnswerEmpty({parentQuestion.StataExportCaption})" + expressionToDisableChildThatHasNoOptionsForChosenParent + childQuestionCondition;
         }
 
-        private Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
+        public Dictionary<Guid, List<Guid>> BuildConditionalDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var allGroups = questionnaireDocument.GetAllGroups().ToList();
             Dictionary<string, Guid> variableNames = questionnaireDocument
@@ -457,7 +473,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 variableNames.Add(roster.VariableName, questionnaireDocument.PublicKey);
             }
-            
+
             var groupsWithConditions = allGroups.Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
             var questionsWithCondition = questionnaireDocument
                 .GetEntitiesByType<IQuestion>()
@@ -498,8 +514,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         static string GenerateExpressionToDisableChildThatHasNoOptionsForChosenParent(IEnumerable<string> parentOptionsThatHaveNoChildOptions, string stataExportCaption)
         {
-            var joinedParentOptions = string.Join(",", parentOptionsThatHaveNoChildOptions.Select(x => string.Format("{0}", x)));
-            return string.Format(@" && !(new List<decimal?>(){{ {0} }}.Contains({1}))", joinedParentOptions, stataExportCaption);
+            var joinedParentOptions = string.Join(",", parentOptionsThatHaveNoChildOptions.Select(x => $"{x}"));
+            return $@" && !(new List<decimal?>(){{ {joinedParentOptions} }}.Contains({stataExportCaption}))";
         }
 
         private static string GenerateQuestionTypeName(IQuestion question)

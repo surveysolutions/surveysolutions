@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    internal class when_acreating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : InterviewTestsContext
+    internal class when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : InterviewTestsContext
     {
         Establish context = () =>
         {

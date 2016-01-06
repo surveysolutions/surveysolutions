@@ -1104,7 +1104,6 @@
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\CodeGeneratorTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_multimedia_question.cs" />
     <Compile Include="BoundedContexts\Designer\CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />

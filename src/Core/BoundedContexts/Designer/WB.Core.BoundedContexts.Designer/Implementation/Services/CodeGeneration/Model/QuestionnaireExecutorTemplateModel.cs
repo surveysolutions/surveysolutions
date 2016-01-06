@@ -22,5 +22,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string[] Namespaces { get; set; }
 
         public List<LookupTableTemplateModel> LookupTables { get; set; }
+        public Dictionary<string, ExpressionMethodModel> MethodModels { get; set; }
     }
 }

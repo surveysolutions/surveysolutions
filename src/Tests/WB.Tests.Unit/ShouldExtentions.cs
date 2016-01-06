@@ -36,8 +36,8 @@ namespace WB.Tests.Unit
         {
             question.Id.ShouldEqual(id);
             question.VariableName.ShouldEqual(variableName);
-            question.Conditions.ShouldEqual(conditions);
-            question.Validations.ShouldEqual(validations);
+            question.Condition.ShouldEqual(conditions);
+            question.Validation.ShouldEqual(validations);
             question.QuestionType.ShouldEqual(questionType);
             question.GeneratedIdName.ShouldEqual(generatedIdName);
             question.GeneratedTypeName.ShouldEqual(generatedTypeName);
