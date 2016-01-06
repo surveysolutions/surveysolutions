@@ -24,7 +24,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var questionnaireModel = new QuestionnaireModel
             {
-                Parents = new Dictionary<Guid, List<GroupReferenceModel>>(),
                 GroupsParentIdMap = new Dictionary<Guid, Guid?>(),
                 QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>()
             };
@@ -102,7 +101,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (@group != null)
             {
                 parents.Reverse();
-                questionnaireModel.Parents.Add(item.PublicKey, parents);
                 questionnaireModel.GroupsParentIdMap.Add(item.PublicKey, closestParentGroupId);
             }
 
