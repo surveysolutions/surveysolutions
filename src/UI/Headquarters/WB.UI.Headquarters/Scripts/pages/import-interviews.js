@@ -57,7 +57,7 @@
         }, true, true);
     };
 
-    self.importInterviews = function () {
+    self.importInterviews = function (callback) {
         if (!self.fileWithInterviews.isValid())
             return;
 
@@ -86,13 +86,18 @@
                     "keyboard": true,
                     "show": true
                 });
-            } 
+            }
+
+            if (!_.isUndefined(callback)) {
+                callback();
+            }
         });
     }
 
     self.selectSupervisor = function() {
-        self.importInterviews();
-        location.href = location.href;
+        self.importInterviews(function() {
+            location.href = location.href;
+        });
     }
 
     self.cancelSupervisorSelection = function() {
