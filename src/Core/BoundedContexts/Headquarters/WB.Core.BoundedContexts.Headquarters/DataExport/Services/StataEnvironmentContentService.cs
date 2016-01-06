@@ -28,12 +28,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath, CancellationToken cancellationToken)
         {
-            foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
+            var questionnaireLabels =
+                  this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
+
+            foreach (var questionnaireLevelLabels in questionnaireLabels)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
-                QuestionnaireLevelLabels questionnaireLevelLabels =
-                      this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(questionnaireExportStructure, headerStructureForLevel.LevelScopeVector);
 
                 this.CreateContentOfAdditionalFile(questionnaireLevelLabels,
                     ExportFileSettings.GetContentFileName(questionnaireLevelLabels.LevelName), folderPath);
