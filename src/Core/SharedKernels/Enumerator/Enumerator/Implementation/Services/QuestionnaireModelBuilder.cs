@@ -30,12 +30,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
-            var staticTexts = questionnaireDocument.GetEntitiesByType<IStaticText>().ToList();
             var entities = questionnaireDocument.GetEntitiesByType<IComposite>().ToList();
 
             questionnaireModel.Id = questionnaireDocument.PublicKey;
             questionnaireModel.Title = questionnaireDocument.Title;
-            questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
 
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
@@ -154,14 +152,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 }
             }
             return groupModel;
-        }
-
-        private static StaticTextModel CreateStaticTextModel(IStaticText staticText)
-        {
-            var staticTextModel = new StaticTextModel();
-            staticTextModel.Title = staticText.Text;
-            staticTextModel.Id = staticText.PublicKey;
-            return staticTextModel;
         }
 
         private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument, Dictionary<Guid, int> questionIdToRosterLevelDeep)
