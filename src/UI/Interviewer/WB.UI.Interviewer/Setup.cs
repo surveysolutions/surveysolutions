@@ -179,7 +179,7 @@ namespace WB.UI.Interviewer
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(AndroidCoreRegistry).Assembly,
+                typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
             });
         }
