@@ -71,5 +71,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
             return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray());
         }
+
+        public QuestionnaireLevelLabels[] CreateLabelsForQuestionnaire(QuestionnaireExportStructure structure)
+        {
+            return structure.HeaderToLevelMap.Values.Select(
+                        x => this.CreateLabelsForQuestionnaireLevel(structure, x.LevelScopeVector)).ToArray();
+        }
     }
 }

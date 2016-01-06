@@ -34,14 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
-            IMetaDescriptionFactory metaDescriptionFactory, IQuestionnaireLabelFactory questionnaireLabelFactory)
+            IMetaDescriptionFactory metaDescriptionFactory, 
+            IQuestionnaireLabelFactory questionnaireLabelFactory)
         {
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
         }
@@ -61,10 +61,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 IMetaDescription metaDescription = this.metaDescriptionFactory.CreateMetaDescription();
 
                 var questionnaireLabelsForAllLevels =
-                    questionnaireExportStructure.HeaderToLevelMap.Values.Select(
-                        x => this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(questionnaireExportStructure, x.LevelScopeVector)).ToArray();
+                    questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
-                metaDescription.Study.Title = metaDescription.Document.Title = GetQuestionnaireTitle(questionnaireExportStructure);
+                metaDescription.Study.Title = metaDescription.Document.Title = bigTemplateObject.Questionnaire.Title;
                 metaDescription.Study.Idno = "QUEST";
 
                 foreach (var questionnaireLevelLabels in questionnaireLabelsForAllLevels)
@@ -116,15 +115,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 this.logger.Error(
                     $"Error on DDI metadata creation (questionnaireId:{questionnaireId}, questionnaireVersion:{questionnaireVersion}): ", exc);
             }
-
-            return string.Empty;
-        }
-
-        private string GetQuestionnaireTitle(QuestionnaireExportStructure questionnaireExportStructure)
-        {
-            var headerStructureForLevel = questionnaireExportStructure.HeaderToLevelMap.Values.FirstOrDefault(x => !x.LevelScopeVector.Any());
-            if (headerStructureForLevel != null)
-                return headerStructureForLevel.LevelName;
 
             return string.Empty;
         }
