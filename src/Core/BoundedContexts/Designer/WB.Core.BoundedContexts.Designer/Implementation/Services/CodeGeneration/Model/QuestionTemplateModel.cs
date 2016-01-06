@@ -10,8 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { set; get; }
         public string VariableName { set; get; }
         
-        public string Conditions { set; get; }
-        public string Validations { set; get; }
+        public string Condition { set; get; }
+        public string Validation { set; get; }
 
         public QuestionType QuestionType { set; get; }
 
@@ -20,12 +20,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string GeneratedMemberName { set; get; }
         public string GeneratedStateName { set; get; }
 
-        public string RosterScopeName { set; get; }
-
         public string GeneratedValidationsMethodName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
 
         public bool IsMultiOptionYesNoQuestion { get; set; }
         public List<string> AllMultioptionYesNoCodes { get; set; }
+
+        public string RosterScopeName { set; get; }
+        public string ParentScopeTypeName { get; set; }
     }
 }

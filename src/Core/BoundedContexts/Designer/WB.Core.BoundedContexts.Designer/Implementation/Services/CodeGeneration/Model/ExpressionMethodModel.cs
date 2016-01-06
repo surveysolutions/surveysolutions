@@ -2,13 +2,18 @@
 {
     public class ExpressionMethodModel
     {
-        public ExpressionMethodModel(string generatedClassName, string generatedMethodName, string[] namespaces,
-            string expressionString, bool generateSelf, string variableName)
+        public ExpressionMethodModel(
+            string generatedClassName, 
+            string generatedMethodName, 
+            string[] namespaces,
+            string expression, 
+            bool generateSelf, 
+            string variableName)
         {
             this.GeneratedClassName = generatedClassName;
             this.GeneratedMethodName = generatedMethodName;
             this.Namespaces = namespaces;
-            this.ExpressionString = expressionString;
+            this.Expression = expression;
             this.VariableName = variableName;
             this.GenerateSelf = generateSelf;
         }
@@ -16,7 +21,7 @@
         public string GeneratedClassName { set; get; }
         public string GeneratedMethodName { set; get; }
         public string[] Namespaces { get; set; }
-        public string ExpressionString { set; get; }
+        public string Expression { set; get; }
         public string VariableName { set; get; }
         public bool GenerateSelf { set; get; }
     }

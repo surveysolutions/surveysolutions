@@ -7,11 +7,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { set; get; }
         public string VariableName { set; get; }
 
-        public string Conditions { set; get; }
+        public string Condition { set; get; }
         public string GeneratedStateName { set; get; }
         public string GeneratedIdName { set; get; }
         public string GeneratedConditionsMethodName { set; get; }
 
         public string RosterScopeName { set; get; }
+        public string ParentScopeTypeName { get; set; }
     }
 }

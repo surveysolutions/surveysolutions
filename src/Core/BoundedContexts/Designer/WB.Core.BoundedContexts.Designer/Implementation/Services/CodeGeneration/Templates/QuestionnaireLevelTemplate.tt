@@ -21,12 +21,12 @@
         {#>
             EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
         <#
-            bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);                       
+            bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validation);                       
 
             if(hasAnyValidation)
             {#>    
             ValidationExpressions.Add(new Identity(IdOf.<#= question.GeneratedIdName#>, rosterVector), new Func<bool>[] {                             
-                <#if(!string.IsNullOrWhiteSpace(question.Validations)) {#>  
+                <#if(!string.IsNullOrWhiteSpace(question.Validation)) {#>  
                     () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.GeneratedValidationsMethodName#>() , 
                 <# }#>
             }); 

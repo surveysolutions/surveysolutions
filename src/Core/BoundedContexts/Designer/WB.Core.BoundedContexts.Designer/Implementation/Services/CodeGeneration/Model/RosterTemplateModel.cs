@@ -21,5 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { set; get; }
 
         public string VariableName { set; get; }
+        public string ParentScopeTypeName { get; set; }
     }
 }
