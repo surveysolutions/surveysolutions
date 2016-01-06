@@ -461,7 +461,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 case QuestionType.Numeric:
                     return ((INumericQuestion) question).IsInteger ? typeof (int) : typeof (decimal);
                 case QuestionType.SingleOption:
-                    return typeof (int);
+                    return typeof (decimal);
                 case QuestionType.GpsCoordinates:
                     return typeof(GeoPosition);
                 default:
