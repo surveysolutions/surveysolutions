@@ -26,35 +26,43 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 .Returns(new SampleUploadView(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version,
                     new List<FeaturedQuestionItem>()
                     {
-                        new FeaturedQuestionItem(Guid.Parse("33333333333333333333333333333333"), "", "EANo"),
-                        new FeaturedQuestionItem(Guid.Parse("44444444444444444444444444444444"), "", "MapRefNo"),
-                        new FeaturedQuestionItem(Guid.Parse("55555555555555555555555555555555"), "", "DUNo"),
-                        new FeaturedQuestionItem(Guid.Parse("66666666666666666666666666666666"), "", "Prov"),
-                        new FeaturedQuestionItem(Guid.Parse("77777777777777777777777777777777"), "", "LocalMunic"),
-                        new FeaturedQuestionItem(Guid.Parse("88888888888888888888888888888888"), "", "MainPlace"),
-                        new FeaturedQuestionItem(Guid.Parse("99999999999999999999999999999999"), "", "SubPlace"),
-                        new FeaturedQuestionItem(Guid.Parse("10101010101010101010101010101010"), "", "LongLat__Latitude"),
-                        new FeaturedQuestionItem(Guid.Parse("10101010101010101010101010101010"), "", "LongLat__Longitude")
+                        new FeaturedQuestionItem(eanoId, "", "EANo"),
+                        new FeaturedQuestionItem(maprefnoId, "", "MapRefNo"),
+                        new FeaturedQuestionItem(dunoId, "", "DUNo"),
+                        new FeaturedQuestionItem(provId, "", "Prov"),
+                        new FeaturedQuestionItem(localmunicId, "", "LocalMunic"),
+                        new FeaturedQuestionItem(mainplaceId, "", "MainPlace"),
+                        new FeaturedQuestionItem(subplaceId, "", "SubPlace"),
+                        new FeaturedQuestionItem(longlatId, "", "LongLat__Latitude"),
+                        new FeaturedQuestionItem(longlatId, "", "LongLat__Longitude")
                     }));
 
             var questionnaireRepository = Create.CreateQuestionnaireReadSideKeyValueStorage(
                 Create.QuestionnaireDocumentWithOneChapter(
-                    Create.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
-                    Create.NumericQuestion(questionId: Guid.Parse("44444444444444444444444444444444"), variableName: "MapRefNo", prefilled: true, isInteger: true),
-                    Create.NumericQuestion(questionId: Guid.Parse("55555555555555555555555555555555"), variableName: "DUNo", prefilled: true, isInteger: true),
-                    Create.TextQuestion(questionId: Guid.Parse("66666666666666666666666666666666"), variable: "Prov", preFilled: true),
-                    Create.TextQuestion(questionId: Guid.Parse("77777777777777777777777777777777"), variable: "LocalMunic", preFilled: true),
-                    Create.TextQuestion(questionId: Guid.Parse("88888888888888888888888888888888"), variable: "MainPlace", preFilled: true),
-                    Create.TextQuestion(questionId: Guid.Parse("99999999999999999999999999999999"), variable: "SubPlace", preFilled: true),
-                    Create.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variableName: "LongLat", isPrefilled: true)));
+                    Create.NumericQuestion(questionId: eanoId, variableName: "EANo", prefilled: true, isInteger: true),
+                    Create.NumericQuestion(questionId: maprefnoId, variableName: "MapRefNo", prefilled: true, isInteger: true),
+                    Create.NumericQuestion(questionId: dunoId, variableName: "DUNo", prefilled: true, isInteger: true),
+                    Create.TextQuestion(questionId: provId, variable: "Prov", preFilled: true),
+                    Create.TextQuestion(questionId: localmunicId, variable: "LocalMunic", preFilled: true),
+                    Create.TextQuestion(questionId: mainplaceId, variable: "MainPlace", preFilled: true),
+                    Create.TextQuestion(questionId: subplaceId, variable: "SubPlace", preFilled: true),
+                    Create.GpsCoordinateQuestion(questionId: longlatId, variableName: "LongLat", isPrefilled: true)));
 
             var mockOfUserViewFactory = new Mock<IUserViewFactory>();
+            
             mockOfUserViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(new UserView()
             {
-                PublicKey = Guid.Parse("12121212121212121212121212121212"),
+                PublicKey = interviewerId,
                 UserName = "GONZALES",
-                Supervisor = new UserLight(Guid.Parse("12121212121212121212121212121212"), "super")
+                Supervisor = new UserLight(supervisorId, "super")
             });
+
+            mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewByPrefilledQuestions>(), null))
+                .Callback<ICommand, string>(
+                    (command, ordinal) =>
+                    {
+                        executedCommand = command as CreateInterviewByPrefilledQuestions;
+                    });
 
             interviewImportService =
                 CreateInterviewImportService(questionnaireDocumentRepository: questionnaireRepository,
@@ -65,7 +73,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportInterviews(questionnaireIdentity, csvBytes, null, Guid.Parse("22222222222222222222222222222222")));
+                interviewImportService.ImportInterviews(questionnaireIdentity, csvBytes, null, headquartersId));
 
         It should_not_be_exception = () =>
             exception.ShouldBeNull();
@@ -73,13 +81,59 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         It should_call_execute_command_service_once = () =>
             mockOfCommandService.Verify(x=> x.Execute(Moq.It.IsAny<CreateInterviewByPrefilledQuestions>(), null), Times.Once);
 
+        It should_be_specified_interviewer = () =>
+            executedCommand.InterviewerId.ShouldEqual(interviewerId);
+
+        It should_be_specified_supervisor = () =>
+            executedCommand.SupervisorId.ShouldEqual(supervisorId);
+
+        It should_EANo_column_parse_to_specified_int_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[eanoId].ShouldEqual(138215891);
+
+        It should_MapRefNo_column_parse_to_specified_int_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[maprefnoId].ShouldEqual(318);
+
+        It should_DUNo_column_parse_to_specified_int_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[dunoId].ShouldEqual(2513);
+
+        It should_Prov_column_parse_to_specified_string_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[provId].ShouldEqual("<?=/)L62O]#)7P#I_JOG[;>)1'");
+
+        It should_LocalMunic_column_parse_to_specified_string_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[localmunicId].ShouldEqual(";A)=1C9'82LQ+K-S;YJ`AR");
+
+        It should_MainPlace_column_parse_to_specified_string_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[mainplaceId].ShouldEqual("OR");
+
+        It should_SubPlace_column_parse_to_specified_string_value = () =>
+            executedCommand.AnswersOnPrefilledQuestions[subplaceId].ShouldEqual(@"`^!!4_!\\QF@RG_HL73ZD\");
+
+        It should_LongLat__Latitude_column_parse_to_specified_string_value = () =>
+            (executedCommand.AnswersOnPrefilledQuestions[longlatId] as GeoPosition).Latitude.ShouldEqual(-6);
+
+        It should_LongLat__Longitude_column_parse_to_specified_string_value = () =>
+            (executedCommand.AnswersOnPrefilledQuestions[longlatId] as GeoPosition).Longitude.ShouldEqual(1);
+
+
         private static readonly byte[] csvBytes = Encoding.UTF8.GetBytes(
             "Responsible	EANo	MapRefNo	DUNo	Prov	LocalMunic	MainPlace	SubPlace	LongLat__Latitude	LongLat__Longitude\r\n" +
             @"GONZALES	138215891	318	2513	<?=/)L62O]#)7P#I_JOG[;>)1'	;A)=1C9'82LQ+K-S;YJ`AR	OR	`^!!4_!\\QF@RG_HL73ZD\	-6	1");
 
+        private static CreateInterviewByPrefilledQuestions executedCommand = null;
         private static Exception exception;
-        private static Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
-        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
         private static InterviewImportService interviewImportService;
+        private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
+        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
+        private static readonly Guid longlatId = Guid.Parse("10101010101010101010101010101010");
+        private static readonly Guid subplaceId = Guid.Parse("99999999999999999999999999999999");
+        private static readonly Guid mainplaceId = Guid.Parse("88888888888888888888888888888888");
+        private static readonly Guid localmunicId = Guid.Parse("77777777777777777777777777777777");
+        private static readonly Guid provId = Guid.Parse("66666666666666666666666666666666");
+        private static readonly Guid dunoId = Guid.Parse("55555555555555555555555555555555");
+        private static readonly Guid maprefnoId = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid eanoId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid headquartersId = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid supervisorId = Guid.Parse("13131313131313131313131313131313");
+        private static readonly Guid interviewerId = Guid.Parse("12121212121212121212121212121212");
     }
 }
