@@ -152,8 +152,10 @@
     <Compile Include="DataExport\Factories\DatasetWriterFactory.cs" />
     <Compile Include="DataExport\Factories\ICsvWriter.cs" />
     <Compile Include="DataExport\Factories\IDatasetWriterFactory.cs" />
+    <Compile Include="DataExport\Factories\IMetadataWriter.cs" />
     <Compile Include="DataExport\Factories\IMetaDescriptionFactory.cs" />
     <Compile Include="DataExport\Factories\IQuestionnaireLabelFactory.cs" />
+    <Compile Include="DataExport\Factories\MetadataWriter.cs" />
     <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
     <Compile Include="DataExport\Factories\QuestionnaireLabelFactory.cs" />
     <Compile Include="DataExport\Jobs\ExportJob.cs" />

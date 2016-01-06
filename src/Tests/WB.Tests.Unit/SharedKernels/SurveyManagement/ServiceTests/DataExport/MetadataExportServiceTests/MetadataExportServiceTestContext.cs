@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -25,22 +27,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
     internal class MetadataExportServiceTestContext
     {
         protected static MetadataExportService CreateMetadataExportService(
-            IFileSystemAccessor fileSystemAccessor = null,
-            ITabFileReader tabFileReader = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage = null,
+            QuestionnaireDocument questionnaireDocument,
             IMetaDescriptionFactory metaDescriptionFactory = null,
             IQuestionnaireLabelFactory questionnaireLabelFactory=null)
         {
-            fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
             return new MetadataExportService(
-                fileSystemAccessor,
+                fileSystemAccessor.Object,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == new QuestionnaireExportStructure()),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
-                questionnaireDocumentVersionedStorage ??
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(_ => _.GetById(It.IsAny<string>()) ==
+                                                                                       new QuestionnaireDocumentVersioned()
+                                                                                       {
+                                                                                           Questionnaire =questionnaireDocument,
+                                                                                           Version = 1
+                                                                                       }),
                 metaDescriptionFactory ?? Mock.Of<IMetaDescriptionFactory>(),
                 questionnaireLabelFactory ?? new QuestionnaireLabelFactory());
         }

@@ -79,6 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 if (questionnaireExportStructure == null)
                     return new string[0];
 
+                var labelsForQuestionnaire = this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
+
                 var result = new List<string>();
                 string fileExtention = format == DataExportFormat.STATA
                     ? this.StataFileNameExtension
@@ -97,14 +99,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                     var levelName = this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile);
 
-                    var questionnaireLevel =
-                        questionnaireExportStructure.HeaderToLevelMap.Values.FirstOrDefault(
+                    var questionnaireLevelLabels =
+                        labelsForQuestionnaire.FirstOrDefault(
                             x => string.Equals(x.LevelName, levelName, StringComparison.InvariantCultureIgnoreCase));
 
-                    if (questionnaireLevel != null)
-                        UpdateMetaWithLabels(meta,
-                            this.questionnaireLabelFactory.CreateLabelsForQuestionnaireLevel(
-                                questionnaireExportStructure, questionnaireLevel.LevelScopeVector));
+                    if (questionnaireLevelLabels != null)
+                        UpdateMetaWithLabels(meta, questionnaireLevelLabels);
 
                     using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
                     {

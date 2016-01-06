@@ -4,9 +4,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
     internal class MetaDescriptionFactory : IMetaDescriptionFactory
     {
-        public IMetaDescription CreateMetaDescription()
+        public IMetadataWriter CreateMetaDescription()
         {
-            return new MetaDescription();
+            return new MetadataWriter(new MetaDescription());
         }
     }
 }

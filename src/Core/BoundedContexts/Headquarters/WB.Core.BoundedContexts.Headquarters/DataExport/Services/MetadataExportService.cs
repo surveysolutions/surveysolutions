@@ -58,17 +58,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             try
             {
-                IMetaDescription metaDescription = this.metaDescriptionFactory.CreateMetaDescription();
+                IMetadataWriter metadataWriter = this.metaDescriptionFactory.CreateMetaDescription();
 
                 var questionnaireLabelsForAllLevels =
                     questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
-                metaDescription.Study.Title = metaDescription.Document.Title = bigTemplateObject.Questionnaire.Title;
-                metaDescription.Study.Idno = "QUEST";
+                metadataWriter.SetMetadataTitle(bigTemplateObject.Questionnaire.Title);
 
                 foreach (var questionnaireLevelLabels in questionnaireLabelsForAllLevels)
                 {
-                    var hhDataFile = metaDescription.AddDataFile(questionnaireLevelLabels.LevelName);
+                    var hhDataFile = metadataWriter.CreateDdiDataFile(questionnaireLevelLabels.LevelName);
 
                     foreach (LabeledVariable variableLabel in questionnaireLevelLabels.LabeledVariable)
                     {
@@ -80,34 +79,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                             if (questionItem == null)
                                 continue;
 
-                            var variable = this.AddVariableToDdiFileAndReturnIt(hhDataFile, questionItem.QuestionType, variableLabel.VariableName);
-
-                            if (!string.IsNullOrWhiteSpace(questionItem.Instructions))
-                                variable.IvuInstr = questionItem.Instructions;
-
-                            variable.QstnLit = questionItem.QuestionText;
-
-                            variable.Label = variableLabel.Label;
+                            var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
+                                GetDdiDataType(questionItem.QuestionType), variableLabel.Label, questionItem.Instructions,
+                                questionItem.QuestionText, GetDdiVariableScale(questionItem.QuestionType));
 
                             foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
                             {
                                 decimal value;
                                 if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
-                                    variable.AddValueLabel(value, variableValueLabel.Label);
+                                    metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
                             }
                         }
                         else
                         {
-                            var column = hhDataFile.AddVariable(DdiDataType.DynString);
-                            column.Name = variableLabel.VariableName;
-                            column.Label = variableLabel.Label;
+                            metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
+                                DdiDataType.DynString, variableLabel.Label, null, null, null);
                         }
                     }
                 }
 
                 var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(
                     $"{questionnaireId}_{questionnaireVersion}_ddi"));
-                metaDescription.WriteXml(pathToWrite);
+
+                metadataWriter.SaveMetadataInFile(pathToWrite);
+
                 return pathToWrite;
             }
             catch (Exception exc)
@@ -135,31 +130,28 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     () => this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
         }
 
-        private DdiVariable AddVariableToDdiFileAndReturnIt(DdiDataFile hhDataFile, QuestionType questionType, string columnName)
+        private DdiDataType GetDdiDataType(QuestionType questionType)
         {
-            DdiVariable variable = null;
+            return
+                new[]
+                {QuestionType.Numeric, QuestionType.SingleOption, QuestionType.MultyOption, QuestionType.GpsCoordinates}
+                    .Contains(questionType)
+                    ? DdiDataType.Numeric
+                    : DdiDataType.DynString;
+        }
+
+        private DdiVariableScale? GetDdiVariableScale(QuestionType questionType)
+        {
             switch (questionType)
             {
                 case QuestionType.Numeric:
-                    variable = hhDataFile.AddVariable(DdiDataType.Numeric);
-                    variable.VariableScale = DdiVariableScale.Scale;
-                    break;
+                case QuestionType.GpsCoordinates:
+                    return DdiVariableScale.Scale;
                 case QuestionType.SingleOption:
                 case QuestionType.MultyOption:
-                    variable = hhDataFile.AddVariable(DdiDataType.Numeric);
-                    variable.VariableScale = DdiVariableScale.Nominal;
-                    break;
-                case QuestionType.GpsCoordinates:
-                    variable = hhDataFile.AddVariable(DdiDataType.Numeric);
-                    variable.VariableScale = DdiVariableScale.Scale;
-                    break;
-
-                default:
-                    variable = hhDataFile.AddVariable(DdiDataType.DynString);
-                    break;
+                    return DdiVariableScale.Nominal;
             }
-            variable.Name = columnName;
-            return variable;
+            return null;
         }
     }
 }
