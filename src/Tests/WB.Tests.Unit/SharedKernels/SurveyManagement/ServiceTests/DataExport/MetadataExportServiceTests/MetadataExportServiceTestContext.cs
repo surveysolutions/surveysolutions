@@ -25,22 +25,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
     internal class MetadataExportServiceTestContext
     {
         protected static MetadataExportService CreateMetadataExportService(
-            QuestionnaireExportStructure questionnaireExportStructure = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage = null,
-            IMetaDescriptionFactory metaDescriptionFactory = null)
+            IMetaDescriptionFactory metaDescriptionFactory = null,
+            IQuestionnaireLabelFactory questionnaireLabelFactory=null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
 
             return new MetadataExportService(
                 fileSystemAccessor,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure),
+                    It.IsAny<string>()) == new QuestionnaireExportStructure()),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
-                questionnaireDocumentVersionedStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                metaDescriptionFactory ?? Mock.Of< IMetaDescriptionFactory> (), new QuestionnaireLabelFactory());
+                questionnaireDocumentVersionedStorage ??
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
+                metaDescriptionFactory ?? Mock.Of<IMetaDescriptionFactory>(),
+                questionnaireLabelFactory ?? new QuestionnaireLabelFactory());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
