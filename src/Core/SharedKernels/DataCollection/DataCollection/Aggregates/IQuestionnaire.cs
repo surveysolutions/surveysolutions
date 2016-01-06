@@ -62,6 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
 
+        ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);
+
         Guid? GetParentGroup(Guid groupOrQuestionId);
 
         string GetCustomEnablementConditionForQuestion(Guid questionId);
