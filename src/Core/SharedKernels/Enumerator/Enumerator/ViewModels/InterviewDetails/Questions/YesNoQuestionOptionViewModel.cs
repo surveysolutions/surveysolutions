@@ -1,10 +1,7 @@
 ﻿using System;
-using WB.Core.GenericSubdomains.Portable.Tasks;
-using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -13,11 +10,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public YesNoQuestionViewModel QuestionViewModel { get; private set; }
         public QuestionStateViewModel<YesNoQuestionAnswered> QuestionState { get; set; }
 
+        private event EventHandler<EventArgs> AnswerChanged; 
+
         public YesNoQuestionOptionViewModel(YesNoQuestionViewModel questionViewModel,
             QuestionStateViewModel<YesNoQuestionAnswered> questionState)
         {
             this.QuestionViewModel = questionViewModel;
             this.QuestionState = questionState;
+            this.AnswerChanged += (o, e) => this.RaiseToggleAnswer();
         }
 
         public decimal Value { get; set; }
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.Selected = value;
-                this.RaiseToggleAnswer().WaitAndUnwrapException();
+                this.OnAnswerChanged();
             }
         }
 
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.Selected = !value;
-                this.RaiseToggleAnswer().WaitAndUnwrapException();
+                this.OnAnswerChanged();
             }
         }
 
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? AnswerCheckedOrder { get; set; }
 
-        public async Task RaiseToggleAnswer()
+        public async void RaiseToggleAnswer()
         {
             await this.QuestionViewModel.ToggleAnswerAsync(this).ConfigureAwait(false); 
         }
@@ -101,9 +101,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(() => {
                     this.Selected = null;
-                    this.RaiseToggleAnswer().WaitAndUnwrapException();
+                    this.OnAnswerChanged();
                 });
             }
+        }
+
+        protected virtual void OnAnswerChanged()
+        {
+            this.AnswerChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
