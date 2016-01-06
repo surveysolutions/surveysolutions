@@ -195,7 +195,7 @@ namespace WB.UI.Headquarters
                 WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10));
 
             var sampleImportSettings = new SampleImportSettings(
-                WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(10));
+                WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
 
             kernel.Load(
                 eventStoreModule,
