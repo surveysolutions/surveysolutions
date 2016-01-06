@@ -6,6 +6,8 @@ namespace WB.UI.Interviewer
     {
         public override void Initialize()
         {
+            //fix for Thai calendar (KP-6403)
+            var thai = new System.Globalization.ThaiBuddhistCalendar();
         }
     }
 }

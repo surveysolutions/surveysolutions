@@ -14,6 +14,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -44,9 +45,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             get { return ServiceLocator.Current.GetInstance<IUserWebViewFactory>(); }
         }
 
-        private IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory
+        private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory
         {
-            get { return ServiceLocator.Current.GetInstance<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(); }
+            get { return ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>(); }
         }
 
         private IUserViewFactory userViewFactory
@@ -152,9 +153,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             var messagesByInterviews = interviewsApiView.Select(x => new UrlHelper(context.Request).Link("Default",
                         new { controller = "Interview", action = "Details", id = x.Id })).ToList();
 
-            return SyncLogMessages.GetInterviews.FormatString(!messagesByInterviews.Any()
-                    ? SyncLogMessages.NoNewInterviewPackagesToDownload
-                    : string.Join("<br>", messagesByInterviews));
+            var readability = !messagesByInterviews.Any()
+                ? SyncLogMessages.NoNewInterviewPackagesToDownload
+                : string.Join("<br />", messagesByInterviews);
+            return SyncLogMessages.GetInterviews.FormatString(readability);
         }
 
         private string GetInterviewPackagesLogMessage(HttpActionExecutedContext context)
@@ -204,8 +206,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             List<QuestionnaireIdentity> censusQuestionnaireIdentities =
                 this.GetResponseObject<List<QuestionnaireIdentity>>(context);
 
-            var censusQuestionnaires = censusQuestionnaireIdentities.Select(x => this.questionnaireBrowseItemFactory.Load(
-                new QuestionnaireItemInputModel(x.QuestionnaireId, x.Version)));
+            var censusQuestionnaires = censusQuestionnaireIdentities.Select(x => this.questionnaireBrowseItemFactory.GetById(new QuestionnaireIdentity(x.QuestionnaireId, x.Version)));
 
             var messagesByCensusQuestionnaires = censusQuestionnaires.Select(
                 censusQuestionnaire => SyncLogMessages.CensusQuestionnaire.FormatString(censusQuestionnaire.Title,
@@ -216,8 +217,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         private string GetQuestionnaireLogMessage(string messageFormat, HttpActionExecutedContext context)
         {
-            var questionnaire = this.questionnaireBrowseItemFactory.Load(
-                new QuestionnaireItemInputModel(context.GetActionArgument<Guid>("id"),
+            var questionnaire = this.questionnaireBrowseItemFactory.GetById(
+                new QuestionnaireIdentity(context.GetActionArgument<Guid>("id"),
                     context.GetActionArgument<int>("version")));
 
             return messageFormat.FormatString(questionnaire.Title,

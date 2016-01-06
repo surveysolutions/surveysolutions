@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
-                zip.CompressionLevel = CompressionLevel.BestCompression;
+                zip.CompressionLevel = CompressionLevel.Default;
 
                 zip.AddFiles(files, "");
 

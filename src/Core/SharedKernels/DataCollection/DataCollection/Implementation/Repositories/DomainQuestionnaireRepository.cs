@@ -45,7 +45,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (snapshot != null)
             {
                 minVersion = snapshot.Version + 1;
+
+                if (version.HasValue && snapshot.Version >= version.Value)
+                {
+                    var questionnaire = (Questionnaire)this.domainRepository.Load(typeof(Questionnaire), snapshot, new CommittedEventStream(snapshot.EventSourceId));
+                    return questionnaire.GetHistoricalQuestionnaire(version.Value);
+                }
             }
+
             var eventStream = eventStore.ReadFrom(id, minVersion, maxEvent);
             var aggregateRoot = (Questionnaire) domainRepository.Load(typeof (Questionnaire), snapshot, eventStream);
 
