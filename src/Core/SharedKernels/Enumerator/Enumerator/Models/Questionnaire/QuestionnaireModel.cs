@@ -4,6 +4,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 
 namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 {
+    [Obsolete("Use IQuestionnaire instead")]
     public class QuestionnaireModel
     {
         public Guid Id { get; set; }
@@ -19,8 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
         public Dictionary<Guid, StaticTextModel> StaticTexts { get; set; }
 
         public List<QuestionnaireReferenceModel> PrefilledQuestionsIds { get; set; }
-
-        public Dictionary<Guid, List<GroupReferenceModel>> Parents { get; set; }
 
         public Dictionary<string, BaseQuestionModel> QuestionsByVariableNames { get; set; }
 

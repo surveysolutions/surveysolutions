@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
             return text.Replace(String.Format("{1}{0}{1}", variable, SubstitutionVariableDelimiter), replaceTo);
         }
 
-        public string RosterTitleSubstitutionReference { get { return "rostertitle"; } }
+        public string RosterTitleSubstitutionReference => "rostertitle";
 
         public bool ContainsRosterTitle(string input)
         {
@@ -38,6 +38,6 @@ namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
             return string.Format("{0} - {1}", groupTitle, string.IsNullOrEmpty(rosterTitle) ? DefaultSubstitutionText : rosterTitle);
         }
 
-        public string DefaultSubstitutionText { get { return "[...]"; } }
+        public string DefaultSubstitutionText => "[...]";
     }
 }
