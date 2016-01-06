@@ -134,7 +134,7 @@ this.Write(");\r\n");
         
         #line 27 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.tt"
 
-		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);					   
+		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validation);					   
 		if(hasAnyValidation)
 		{
 

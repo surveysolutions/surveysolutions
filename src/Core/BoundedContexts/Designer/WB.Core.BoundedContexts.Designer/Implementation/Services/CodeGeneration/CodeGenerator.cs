@@ -8,11 +8,13 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Te
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
     internal class CodeGenerator : ICodeGenerator
     {
+        private const string InterviewExpressionStatePrefix = "InterviewExpressionState";
         private readonly QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
 
         public CodeGenerator(
@@ -20,58 +22,93 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             IExpressionProcessor expressionProcessor,
             ILookupTableService lookupTableService)
         {
-            executorTemplateModelFactory = new QuestionnaireExecutorTemplateModelFactory(
+            this.executorTemplateModelFactory = new QuestionnaireExecutorTemplateModelFactory(
                 macrosSubstitutionService, 
                 expressionProcessor, 
                 lookupTableService);
         }
 
-        private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
-        {
-            if (targetVersion.Major == 9)
-            {
-                return new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText();
-            }
-            else if (targetVersion.Major == 10)
-            {
-                return new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
-            }
-            else
-            {
-                return new InterviewExpressionStateTemplateV5(questionnaireTemplateStructure).TransformText();
-            }
-        }
-
+        
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
+            CodeGenerationSettings codeGenerationSettings = this.CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure = this.executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings);
+            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure = this.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings);
 
-            var transformText = GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
+            var transformText = codeGenerationSettings.ExpressionStateBodyGenerator(questionnaireTemplateStructure);
 
-            var generatedClasses = new Dictionary<string, string>();
-
-            generatedClasses.Add(ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText);
+            var generatedClasses = new Dictionary<string, string>
+            {
+                { ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText }
+            };
 
             if (codeGenerationSettings.IsLookupTablesFeatureSupported)
             {
-                GenerateLookupTableClasses(questionnaireTemplateStructure.LookupTables, generatedClasses);
+                var lookupTablesTemplate = new LookupTablesTemplateV5(questionnaireTemplateStructure.LookupTables);
+                generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
             }
 
-            //generating partial classes
-            GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
-            GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
-
+            foreach (var expressionMethodModel in questionnaireTemplateStructure.MethodModels)
+            {
+                var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel.Value);
+                generatedClasses.Add(expressionMethodModel.Key, methodTemplate.TransformText());
+            }
+            
             return generatedClasses;
         }
 
-        private void GenerateLookupTableClasses(
-            List<LookupTableTemplateModel> lookupTables, 
-            Dictionary<string, string> generatedClasses)
+        public QuestionnaireExecutorTemplateModel CreateQuestionnaireExecutorTemplateModel(
+           QuestionnaireDocument questionnaire,
+           CodeGenerationSettings codeGenerationSettings)
         {
-            var lookupTablesTemplate = new LookupTablesTemplateV5(lookupTables);
-            generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
+            var template = new QuestionnaireExecutorTemplateModel
+            {
+                AdditionInterfaces = codeGenerationSettings.AdditionInterfaces,
+                Namespaces = codeGenerationSettings.Namespaces,
+                Id = questionnaire.PublicKey,
+                GeneratedClassName = $"{InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}"
+            };
+
+            var questionnaireLevelModel = new QuestionnaireLevelTemplateModel();
+
+            template.QuestionnaireLevelModel = questionnaireLevelModel;
+
+            template.LookupTables = this.executorTemplateModelFactory.BuildLookupTableModels(questionnaire).ToList();
+
+            template.StructuralDependencies = QuestionnaireExecutorTemplateModelFactory.BuildStructuralDependencies(questionnaire);
+
+            template.ConditionalDependencies = this.executorTemplateModelFactory.BuildConditionalDependencies(questionnaire);
+
+            template.ConditionsPlayOrder = QuestionnaireExecutorTemplateModelFactory.BuildConditionsPlayOrder(template.ConditionalDependencies, template.StructuralDependencies);
+
+            Dictionary<string, string> generatedScopesTypeNames;
+            List<QuestionTemplateModel> allQuestions;
+            List<GroupTemplateModel> allGroups;
+            List<RosterTemplateModel> allRosters;
+
+            // creates rosters model and fills questionnaireLevelModel and roster models with questions, groups and nested rosters.
+            this.executorTemplateModelFactory.BuildStructures(questionnaire, questionnaireLevelModel, out generatedScopesTypeNames, out allQuestions, out allGroups, out allRosters);
+
+            template.AllQuestions = allQuestions;
+            template.AllGroups = allGroups;
+            template.AllRosters = allRosters;
+
+            questionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = QuestionnaireExecutorTemplateModelFactory.GetConditionMethodsSortedByExecutionOrder(questionnaireLevelModel.Questions, questionnaireLevelModel.Groups, null, template.ConditionsPlayOrder);
+
+            var rosterGroupedByScope = allRosters.GroupBy(r => r.GeneratedTypeName);
+
+            template.RostersGroupedByScope = rosterGroupedByScope
+                .Select(x => this.executorTemplateModelFactory.BuildRosterScopeTemplateModel(x.Key, x.ToList(), template))
+                .ToDictionary(x => x.GeneratedTypeName);
+
+            QuestionnaireExecutorTemplateModelFactory.BuildReferencesOnParentRosters(template.RostersGroupedByScope, questionnaireLevelModel);
+
+            QuestionnaireExecutorTemplateModelFactory.BuildReferencesOnParentQuestions(template.RostersGroupedByScope, questionnaireLevelModel);
+
+            template.MethodModels = QuestionnaireExecutorTemplateModelFactory.BuildMethodModels(codeGenerationSettings, template);
+            
+            template.GeneratedScopesTypeNames = generatedScopesTypeNames;
+            return template;
         }
 
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
@@ -88,7 +125,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
                         "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
-                    isLookupTablesFeatureSupported: false);
+                    isLookupTablesFeatureSupported: false)
+                {
+                    ExpressionStateBodyGenerator = questionnaireTemplateModel => new InterviewExpressionStateTemplate(questionnaireTemplateModel).TransformText()
+                };
 
             if (version.Major == 10)
                 return new CodeGenerationSettings(
@@ -101,7 +141,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V4",
                         "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
                     },
-                    isLookupTablesFeatureSupported: false);
+                    isLookupTablesFeatureSupported: false)
+                {
+                    ExpressionStateBodyGenerator = questionnaireTemplateModel => new InterviewExpressionStateTemplateV2(questionnaireTemplateModel).TransformText()
+                };
             return new CodeGenerationSettings(
                    additionInterfaces: new[] { "IInterviewExpressionStateV5" },
                    namespaces: new[]
@@ -114,141 +157,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V5",
                         "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                    },
-                   isLookupTablesFeatureSupported: true);
-        }
-
-        private static void GenerateRostersPartialClasses(
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
-            Dictionary<string, string> generatedClasses)
-        {
-            foreach (var groupedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
+                   isLookupTablesFeatureSupported: true)
             {
-                foreach (QuestionTemplateModel questionTemplateModel in groupedRosters.Value.RostersInScope.SelectMany(roster => roster.Questions))
-                {
-                    if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                            groupedRosters.Key,
-                            questionTemplateModel.GeneratedConditionsMethodName,
-                            questionnaireTemplateStructure.Namespaces, 
-                            questionTemplateModel.Conditions,
-                            false,
-                            questionTemplateModel.VariableName);
-
-                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(ExpressionLocation.QuestionCondition(questionTemplateModel.Id).Key, methodTemplate.TransformText());
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                          groupedRosters.Key,
-                          questionTemplateModel.GeneratedValidationsMethodName,
-                          questionnaireTemplateStructure.Namespaces, 
-                          questionTemplateModel.Validations,
-                          true,
-                          questionTemplateModel.VariableName);
-
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(ExpressionLocation.QuestionValidation(questionTemplateModel.Id).Key, methodTemplate.TransformText());
-                    }
-                }
-
-                foreach (GroupTemplateModel groupTemplateModel in groupedRosters.Value.RostersInScope.SelectMany(roster => roster.Groups))
-                {
-                    if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                            groupedRosters.Key,
-                            groupTemplateModel.GeneratedConditionsMethodName,
-                            questionnaireTemplateStructure.Namespaces, 
-                            groupTemplateModel.Conditions,
-                            false,
-                            groupTemplateModel.VariableName);
-
-                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(ExpressionLocation.GroupCondition(groupTemplateModel.Id).Key, methodTemplate.TransformText());
-                    }
-                }
-
-                foreach (RosterTemplateModel rosterTemplateModel in groupedRosters.Value.RostersInScope)
-                {
-                    if (!string.IsNullOrWhiteSpace(rosterTemplateModel.Conditions))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                          groupedRosters.Key,
-                          rosterTemplateModel.GeneratedConditionsMethodName,
-                          questionnaireTemplateStructure.Namespaces, 
-                          rosterTemplateModel.Conditions,
-                          false,
-                          rosterTemplateModel.VariableName);
-
-                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(ExpressionLocation.RosterCondition(rosterTemplateModel.Id).Key, methodTemplate.TransformText());
-                    }
-                }
-            }
-        }
-
-        private static void GenerateQuestionnaireLevelExpressionClasses(
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, 
-            Dictionary<string, string> generatedClasses)
-        {
-            foreach (QuestionTemplateModel questionTemplateModel in questionnaireTemplateStructure.QuestionnaireLevelModel.Questions)
-            {
-                if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
-                {
-                    var expressionMethodModel = new ExpressionMethodModel(
-                         questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                         questionTemplateModel.GeneratedConditionsMethodName,
-                         questionnaireTemplateStructure.Namespaces, 
-                         questionTemplateModel.Conditions,
-                         false,
-                         questionTemplateModel.VariableName);
-
-                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                    generatedClasses.Add(ExpressionLocation.QuestionCondition(questionTemplateModel.Id).Key, methodTemplate.TransformText());
-                }
-
-                if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
-                {
-                    var expressionMethodModel = new ExpressionMethodModel(
-                        questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        questionTemplateModel.GeneratedValidationsMethodName,
-                        questionnaireTemplateStructure.Namespaces, 
-                        questionTemplateModel.Validations,
-                        true,
-                        questionTemplateModel.VariableName);
-
-                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                    generatedClasses.Add(ExpressionLocation.QuestionValidation(questionTemplateModel.Id).Key, methodTemplate.TransformText());
-                }
-            }
-
-            foreach (GroupTemplateModel groupTemplateModel in questionnaireTemplateStructure.QuestionnaireLevelModel.Groups)
-            {
-                if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
-                {
-                    var expressionMethodModel = new ExpressionMethodModel(
-                        questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        groupTemplateModel.GeneratedConditionsMethodName,
-                        questionnaireTemplateStructure.Namespaces, 
-                        groupTemplateModel.Conditions,
-                        false,
-                        groupTemplateModel.VariableName);
-
-                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                    generatedClasses.Add(ExpressionLocation.GroupCondition(groupTemplateModel.Id).Key, methodTemplate.TransformText());
-                }
-            }
+                ExpressionStateBodyGenerator = questionnaireTemplateModel => new InterviewExpressionStateTemplateV5(questionnaireTemplateModel).TransformText()
+            };
         }
     }
 }

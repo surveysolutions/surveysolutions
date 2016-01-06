@@ -25,7 +25,7 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 #>
 		EnablementStates.Add(<#=question.GeneratedStateName#>.ItemId, <#=question.GeneratedStateName#>);
 <#+
-		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validations);					   
+		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validation);					   
 		if(hasAnyValidation)
 		{
 #>

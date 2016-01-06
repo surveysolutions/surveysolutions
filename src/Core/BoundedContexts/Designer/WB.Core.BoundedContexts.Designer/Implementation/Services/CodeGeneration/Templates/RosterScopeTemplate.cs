@@ -167,7 +167,7 @@ foreach (var question in Model.Questions)
             #line 33 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
 
                                 
-            if(!string.IsNullOrWhiteSpace(question.Validations))
+            if(!string.IsNullOrWhiteSpace(question.Validation))
             {
             
             #line default
@@ -183,7 +183,7 @@ foreach (var question in Model.Questions)
                     " \r\n                ");
             
             #line 39 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.tt"
-if(!string.IsNullOrWhiteSpace(question.Validations)) {
+if(!string.IsNullOrWhiteSpace(question.Validation)) {
             
             #line default
             #line hidden
