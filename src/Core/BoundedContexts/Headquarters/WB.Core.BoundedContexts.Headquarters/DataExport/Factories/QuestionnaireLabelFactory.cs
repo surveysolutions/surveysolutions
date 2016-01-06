@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
     internal class QuestionnaireLabelFactory : IQuestionnaireLabelFactory
     {
-        public QuestionnaireLevelLabels CreateLabelsForQuestionnaireLevel(
+        private QuestionnaireLevelLabels CreateLabelsForQuestionnaireLevel(
             QuestionnaireExportStructure structure,
             ValueVector<Guid> levelRosterVector)
         {
