@@ -40,6 +40,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetGroupTitle(Guid groupId);
 
+        string GetStaticText(Guid staticTextId);
+
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
