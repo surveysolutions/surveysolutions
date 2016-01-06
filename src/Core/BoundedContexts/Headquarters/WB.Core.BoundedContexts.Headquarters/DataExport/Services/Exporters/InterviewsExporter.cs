@@ -187,8 +187,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             int totalInterviewsProcessed = 0;
             
+            
             foreach (var batchIds in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
+                Stopwatch batchWatch = new Stopwatch();
+                batchWatch.Start();
+
                 ConcurrentBag<InterviewExportedDataRecord> exportBulk = new ConcurrentBag<InterviewExportedDataRecord>();
                 Parallel.ForEach(batchIds,
                    new ParallelOptions
@@ -205,10 +209,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                        progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
                    });
 
-                this.logger.Info(string.Format("Exported {0:N0} interviews out of {1:N0} for questionnaire {2}",
+                batchWatch.Stop();
+                this.logger.Info(string.Format("Exported {0:N0} in {3:c} interviews out of {1:N0} for questionnaire {2}",
                     totalInterviewsProcessed,
                     interviewIdsToExport.Count,
-                    new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version)));
+                    new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version),
+                    batchWatch.Elapsed));
 
                 this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
             }

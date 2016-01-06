@@ -16,9 +16,11 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
-    internal class QuestionDataParser : IQuestionDataParser
+    public class QuestionDataParser : IQuestionDataParser
     {
+
         private readonly QuestionType[] QuestionTypesCommaFirbidden = new[] { QuestionType.MultyOption, QuestionType.SingleOption, QuestionType.Numeric, QuestionType.GpsCoordinates };
+        public static string ColumnDelimiter = "__";
 
         public ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out object parsedValue)
         {
@@ -276,8 +278,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private string ExtractValueFromColumnName(string columnName)
         {
-            if(columnName.Contains("__"))
-                return columnName.Substring(columnName.LastIndexOf("__") + 2).ToLower();
+            if(columnName.Contains(ColumnDelimiter))
+                return columnName.Substring(columnName.LastIndexOf(ColumnDelimiter) + 2).ToLower();
             
             //support of old format is disabled
             /*else if(columnName.Contains("_"))
