@@ -115,15 +115,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, request.SampleId);
 
-            var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
-                    column => column.IsRequired && !column.ExistsInFIle).Select(column => column.ColumnName).ToList();
-
             var isSupervisorRequired = !descriptionByFileWithInterviews.HasResponsibleColumn &&
                                        !request.SupervisorId.HasValue;
 
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
-            if (!requiredNotExistingColumns.Any() && !isSupervisorRequired)
+            if (!isSupervisorRequired)
             {
                 Task.Run(() =>
                 {
@@ -144,8 +141,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return Request.CreateResponse(new ImportInterviewsResponseApiView
             {
-                IsSupervisorRequired = isSupervisorRequired,
-                RequiredPrefilledQuestions = requiredNotExistingColumns
+                IsSupervisorRequired = isSupervisorRequired
             });
         }
 
@@ -185,7 +181,6 @@ namespace WB.UI.Headquarters.Controllers
         public class ImportInterviewsResponseApiView
         {
             public bool IsSupervisorRequired { get; set; }
-            public List<string> RequiredPrefilledQuestions { get; set; }
         }
 
         public class ImportInterviewsRequestApiView
