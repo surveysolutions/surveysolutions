@@ -1,8 +1,7 @@
-﻿Supervisor.VM.ImportInterviews = function (questionnaireId, questionnaireVersion, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl) {
+﻿Supervisor.VM.ImportInterviews = function (sampleId, questionnaireId, questionnaireVersion, importInterviewsStatusUrl, importInterviewsUrl, responsiblesUrl) {
     Supervisor.VM.ImportInterviews.superclass.constructor.apply(this, arguments);
 
     var self = this;
-    self.fileWithInterviews = ko.observable().extend({ required: { shouldValidateOnStart: false } });
     
     self.status = {
         questionnaireId: ko.observable(),
@@ -14,6 +13,7 @@
         isInProgress: ko.observable(false),
         questionnaireTitle: ko.observable(''),
         hasErrors: ko.observable(false),
+        sampleId: ko.observable()
     };
     self.isResponsiblesLoading = ko.observable(false);
     self.responsibles = function (query, sync, pageSize) {
@@ -26,13 +26,18 @@
     }
     self.selectedResponsible = ko.observable(undefined).extend({ required: { shouldValidateOnStart: false } });
     self.isStatusLoaded = ko.observable(false);
-    self.canImportInterviews = ko.computed(function() {
-        return self.isStatusLoaded() && !self.status.isInProgress();
+
+    self.canImportInterviews = ko.computed(function () {
+        if (sampleId !== self.status.sampleId())
+            return true;
+        return self.isStatusLoaded() && !self.status.isInProgress() && self.status.createdInterviewsCount() === 0;
     });
+    self.importCompleted = ko.computed(function () {
+        return sampleId === self.status.sampleId() && self.isStatusLoaded() && !self.status.isInProgress() && self.status.createdInterviewsCount() === self.status.totalInterviewsCount();
+    });
+
     self.isNeedShowStatusPanel = ko.computed(function() {
-        return self.status.hasErrors()
-            && questionnaireId === self.status.questionnaireId()
-            && questionnaireVersion === self.status.questionnaireVersion();
+        return sampleId === self.status.sampleId();
     });
 
     self.load = function () {
@@ -50,24 +55,19 @@
             self.status.questionnaireId(data.QuestionnaireId);
             self.status.questionnaireVersion(data.QuestionnaireVersion);
             self.status.hasErrors(data.HasErrors);
-
+            self.status.sampleId(data.SampleId);
             self.isStatusLoaded(true);
 
             _.delay(self.updateStatusByInterviewsImport, 3000);
         }, true, true);
     };
 
-    self.importInterviews = function (callback) {
-        if (!self.fileWithInterviews.isValid())
-            return;
-
-        var fileByPrefilledQuestions = $("#fileByPrefilledQuestions");
-
+    self.importInterviews = function () {
         var request = {
             questionnaireId: questionnaireId, 
             questionnaireVersion: questionnaireVersion,
             supervisorId: _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().UserId,
-            fileWithInterviews: fileByPrefilledQuestions[0].files[0]
+            sampleId: sampleId
         };
 
         self.SendRequestWithFiles(importInterviewsUrl, request, function (response) {
@@ -87,17 +87,12 @@
                     "show": true
                 });
             }
-
-            if (!_.isUndefined(callback)) {
-                callback();
-            }
         });
     }
 
-    self.selectSupervisor = function() {
-        self.importInterviews(function() {
-            location.href = location.href;
-        });
+    self.selectSupervisor = function () {
+        self.importInterviews();
+        $('#dialogSelectSupervisor').modal('hide');
     }
 
     self.cancelSupervisorSelection = function() {
