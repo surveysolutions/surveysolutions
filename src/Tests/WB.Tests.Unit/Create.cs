@@ -650,12 +650,12 @@ namespace WB.Tests.Unit
             return new Identity(id, rosterVector);
         }
 
-        public static Interview Interview(Guid? interviewId = null, IQuestionnaireRepository questionnaireRepository = null,
+        public static Interview Interview(Guid? interviewId = null, IPlainQuestionnaireRepository questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
@@ -1551,7 +1551,7 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
-            return new QuestionnaireBrowseItem(questionnaire, 1, false, 0);
+            return new QuestionnaireBrowseItem(questionnaire, 1, false);
         }
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
@@ -1757,12 +1757,12 @@ namespace WB.Tests.Unit
                 questionnaireBrowseItemStorage ?? Stub<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
-        public static IQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
             Guid questionnaireId, IQuestionnaire questionaire = null, long? questionnaireVersion = null)
         {
             questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
 
-            return Mock.Of<IQuestionnaireRepository>(repository
+            return Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionaire.Version) == questionaire
                 && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionaire);
         }
@@ -1953,12 +1953,12 @@ namespace WB.Tests.Unit
         }
 
         public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
-            IQuestionnaireRepository questionnaireRepository = null)
+            IPlainQuestionnaireRepository questionnaireRepository = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
