@@ -8,8 +8,7 @@
         //prefix to identify parent record
         public const string ParentId = "ParentId";
 
-        //column for assignee
-        public const string SupervisorName = "_Supervisor";
+        public const string ResponsibleColumnName = "responsible";
 
         //system generated
 
