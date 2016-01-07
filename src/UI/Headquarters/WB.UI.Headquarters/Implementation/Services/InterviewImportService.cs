@@ -318,16 +318,11 @@ namespace WB.UI.Headquarters.Implementation.Services
             var questionnaireDocument = this.questionnaireDocumentRepository.AsVersioned()
                 .Get(GuidExtensions.FormatGuid(questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version).Questionnaire;
 
-            var prefilledQuestions = questionnaireDocument.Find<IQuestion>(x => x.Featured);
-
             var interviewImportFileDescription = new InterviewImportFileDescription()
             {
                 ColumnsByPrefilledQuestions = new List<InterviewImportColumn>(),
                 QuestionnaireTitle = $"(ver. {questionnaireIdentity.Version}) {questionnaireDocument.Title}",
-                SampleId = sampleId,
-                PrefilledQuestions = prefilledQuestions
-                        .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
-                        .ToList(),
+                SampleId = sampleId
             };
             
             using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(this.preloadedDataRepository.GetBytesOfSampleData(sampleId)))))
@@ -337,6 +332,15 @@ namespace WB.UI.Headquarters.Implementation.Services
                 csvReader.Read();
 
                 var columns = interviewImportFileDescription.FileColumns = csvReader.FieldHeaders.Select(header => header.Trim().ToLower()).ToArray();
+
+                var presentPrefilledQuestion =
+                    questionnaireDocument.Find<IQuestion>(
+                        x => x.Featured && columns.Contains(x.StataExportCaption.Trim().ToLower())).ToArray();
+
+                interviewImportFileDescription.PrefilledQuestions = presentPrefilledQuestion
+                    .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
+                    .ToList();
+
                 interviewImportFileDescription.HasResponsibleColumn = columns.Contains(RESPONSIBLECOLUMNNAME);
 
                 var exportColumnsByPrefilledQuestions = this.sampleUploadViewFactory.Load(
@@ -345,7 +349,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
                 foreach (var exportColumnByPrefilledQuestion in exportColumnsByPrefilledQuestions)
                 {
-                    var prefilledQuestion = prefilledQuestions.FirstOrDefault(question => question.PublicKey == exportColumnByPrefilledQuestion.Id);
+                    var prefilledQuestion = presentPrefilledQuestion.FirstOrDefault(question => question.PublicKey == exportColumnByPrefilledQuestion.Id);
                     interviewImportFileDescription.ColumnsByPrefilledQuestions.Add(
                         new InterviewImportColumn
                         {
@@ -368,10 +372,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 QuestionId = prefilledQuestion.PublicKey,
                 Variable = prefilledQuestion.StataExportCaption.ToLower(),
                 AnswerType = this.GetTypeOfAnswer(prefilledQuestion),
-                IsGps = prefilledQuestion.QuestionType == QuestionType.GpsCoordinates,
-                IsRosterSize = prefilledQuestion.QuestionType == QuestionType.Numeric &&
-                               questionnaireDocument.Find<IGroup>(
-                                   group => group.RosterSizeQuestionId == prefilledQuestion.PublicKey).Any()
+                IsGps = prefilledQuestion.QuestionType == QuestionType.GpsCoordinates
             };
         }
 
@@ -435,16 +436,6 @@ namespace WB.UI.Headquarters.Implementation.Services
                             Accuracy = answerOnGpsQuestion.Accuracy.GetValueOrDefault(),
                             Timestamp = answerOnGpsQuestion.Timestamp.GetValueOrDefault()
                         });
-                }
-                else if (prefilledQuestion.IsRosterSize)
-                {
-                    var answerOnRosterSizeQuestion = (int)importedInterview[prefilledQuestionVariable];
-                    if (answerOnRosterSizeQuestion < 0 || answerOnRosterSizeQuestion > 40)
-                    {
-                        throw new Exception($"Field Name: '{prefilledQuestionVariable}', Field Value: '{answerOnRosterSizeQuestion}'");
-                    }
-
-                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId, answerOnRosterSizeQuestion);
                 }
                 else
                 {

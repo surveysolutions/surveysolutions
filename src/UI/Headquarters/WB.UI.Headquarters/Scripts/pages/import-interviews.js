@@ -71,15 +71,7 @@
         };
 
         self.SendRequestWithFiles(importInterviewsUrl, request, function (response) {
-            if (response.RequiredPrefilledQuestions.length > 0) {
-                bootbox.alert({
-                    message: self.getBindedHtmlTemplate("#required-prefilled-questions-template", response.RequiredPrefilledQuestions),
-                    callback: function () {
-                        self.fileWithInterviews('');
-                    }
-                });
-            }
-            else if (response.IsSupervisorRequired) {
+            if (response.IsSupervisorRequired) {
                 self.selectedResponsible.isValid();
                 $("#dialogSelectSupervisor").modal({
                     "backdrop": "static",
