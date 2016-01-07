@@ -35,7 +35,9 @@
     self.importCompleted = ko.computed(function () {
         return sampleId === self.status.sampleId() && self.isStatusLoaded() && !self.status.isInProgress() && self.status.createdInterviewsCount() === self.status.totalInterviewsCount();
     });
-
+    self.importCompletedWithError = ko.computed(function () {
+        return sampleId === self.status.sampleId() && self.isStatusLoaded() && !self.status.isInProgress() && self.status.hasErrors();
+    });
     self.isNeedShowStatusPanel = ko.computed(function() {
         return sampleId === self.status.sampleId();
     });
