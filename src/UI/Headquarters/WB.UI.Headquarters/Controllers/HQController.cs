@@ -38,6 +38,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -167,6 +168,38 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ObserverNotAllowed]
+        public ActionResult SampleBatchUpload(BatchUploadModel model)
+        {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("BatchUpload", model);
+            }
+
+            if (User.Identity.IsObserver())
+            {
+                this.Error("You cannot perform any operation in observer mode.");
+                return this.View("BatchUpload", model);
+            }
+
+            var preloadedDataId = this.preloadedDataRepository.Store(model.File.InputStream, model.File.FileName);
+            var preloadedMetadata = this.preloadedDataRepository.GetPreloadedDataMetaInformationForSampleData(preloadedDataId);
+
+            //clean up for security reasons
+            if (preloadedMetadata == null)
+            {
+                this.preloadedDataRepository.DeletePreloadedDataOfSample(preloadedDataId);
+            }
+
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
+
+            return this.View("ImportSample", new PreloadedMetaDataView(model.QuestionnaireId, model.QuestionnaireVersion, questionnaireInfo?.Title, preloadedMetadata));
+        }
+
         public ActionResult TemplateDownload(Guid id, long version)
         {
             var pathToFile = this.preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
@@ -175,6 +208,17 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult VerifySample(Guid questionnaireId, long version, string id)
         {
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+            if (this.interviewImportService.Status.SampleId == id)
+            {
+                var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
+                    questionnaireInfo?.Title, new PreloadedDataVerificationError[0],
+                    true, id, PreloadedContentType.Sample);
+
+                return this.View(inProgressModel);
+            }
+
             var preloadedSample = this.preloadedDataRepository.GetPreloadedDataOfSample(id);
             //null is handled inside 
             var verificationStatus = this.preloadedDataVerifier.VerifySample(questionnaireId, version, preloadedSample);
@@ -184,8 +228,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.preloadedDataRepository.DeletePreloadedDataOfSample(id);
             }
-
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
@@ -208,7 +250,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
                 verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
 
-            return this.View("VerifySample", model);
+            return this.View(model);
         }
 
         public ActionResult SampleCreationResult(string id)

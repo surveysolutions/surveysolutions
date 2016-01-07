@@ -459,7 +459,7 @@
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
-    <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\HQ\VerifyPanel.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
@@ -484,6 +484,7 @@
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
+    <Content Include="Views\HQ\VerifySample.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

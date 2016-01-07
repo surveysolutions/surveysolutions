@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters.Services
         }
 
         public Guid QuestionnaireId { get; set; }
+        public string SampleId { get; set; }
         public long QuestionnaireVersion { get; set; }
         public string QuestionnaireTitle { get; set; }
         public bool IsInProgress { get; set; } = false;
