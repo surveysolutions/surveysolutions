@@ -8,18 +8,51 @@
 
 @section scripts
 {
-    @Scripts.Render("~/js/batch-upload")
+    @Scripts.Render("~/js/import-interviews")
     <script type="text/javascript">
-    $(function () {
-        var $importDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewsApi", action = Model.PreloadedContentType == PreloadedContentType.Sample ? "ImportSampleData" : "ImportPanelData" })';
-        var $successUploadUrl = "@Url.Action("SampleCreationResult", "HQ", new { id = Model.Id })";
-        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Supervisors" })';
-        var model = new Supervisor.VM.BatchUpload('@Model.Id', '@Model.QuestionnaireId', '@Model.Version', responsiblesUrl, $importDataUrl, $successUploadUrl);
-        ko.applyBindings(model);
-        model.load();
-    });
+        var $invalidInterviewsByLastImportUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetInvalidInterviewsByLastImport"})';
+        $(function () {
+            var $importInterviewsStatusUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
+            var $importInterviewsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "ImportInterviews"})';
+            var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+            var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl);
+
+            model.load();
+            ko.applyBindings(model);
+        });
+    </script>
+    <script type="text/html" id="required-prefilled-questions-template">
+        @Html.Raw(string.Format(BatchUpload.PrefilledQuestionsRequired,
+            "<span class='text-normal' data-bind='text: $data.join(\", \")'></span>"))
     </script>
 }
+
+
+<div id="dialogSelectSupervisor" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" data-bind="click: cancelSupervisorSelection">&times;</button>
+                @BatchUpload.ImportInterviews_SelectSupervisor
+            </div>
+            <div class="modal-body">
+
+                <div id="select-supervisor-dialog" data-bind="css: { 'has-error': selectedResponsible.hasError }">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Any" data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
+                        <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
+                            <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bind="enable: !selectedResponsible.hasError(), click: selectSupervisor">@BatchUpload.ImportInterviews_SelectButtonText</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row-fluid">
     <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.BatchUpload_Title, Model.Version, Model.QuestionnaireTitle)</h3>
@@ -37,7 +70,7 @@
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Errors)
-                    {
+                {
                         <tr>
                             <th>@item.Code</th>
                             <th>@item.Message</th>
@@ -71,41 +104,49 @@
                 </tbody>
             </table>
         </div>
-        <a href="@Url.Action("BatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.Version })" class="btn btn-primary"><i class="icon-white"></i>Upload new data</a>
+        <a href="@Url.Action("BatchUpload", "HQ", new {id = Model.QuestionnaireId, version = Model.Version})" class="btn btn-primary"><i class="icon-white"></i>Upload new data</a>
     }
     else
     {
         <div class="well form-center">
             <div class="form-horizontal">
-                <fieldset>
-                    <legend>
-                        Data is valid
-                    </legend>
+                <div data-bind="visible: canImportInterviews">
+                    <fieldset>
+                        <legend>
+                            Data is valid
+                        </legend>
+                    </fieldset>
                     <div class="form-group">
-                        <label class="control-label col-sm-4">Responsible</label>
-                        <div class="col-sm-8">
-                            @if (!Model.WasSupervsorProvided)
-                            {
-                                <div class="input-group">
-                                    <input class="form-control" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
-                                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                                    <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
-                                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <h4 class="list-group-item-heading">Responsible supervisor will be assigned automatically.</h4>
-                            }
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <button class="btn btn-large btn-primary" type="submit" data-bind="click: importInterviews">
+                                Create sample from this data
+                            </button>
                         </div>
                     </div>
-                </fieldset>
-                <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <button class="btn btn-large btn-primary" type="submit" data-bind="click: uploadSample, @if (!Model.WasSupervsorProvided){<text>enable: IsSupervisorSelected</text>}">Create sample from this data</button>
-                    </div>
                 </div>
+                <fieldset data-bind="visible: importCompleted">
+                    <legend>
+                        Sample import is completed
+                    </legend>
+                </fieldset>
+                <ul class="list-group" data-bind="if: isNeedShowStatusPanel()">
+                    <li class="list-group-item disabled">
+                        <b>Import status</b>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge"><span data-bind="text: status.createdInterviewsCount"></span> of <span data-bind="text: status.totalInterviewsCount"></span></span>
+                        Interview(s) imported
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge" data-bind="text: status.estimatedTime"></span>
+                        Estimated Time
+                    </li>
+                    <li class="list-group-item">
+                        <a data-bind="if: status.hasErrors, attr: { href: $invalidInterviewsByLastImportUrl }">
+                            <i class="glyphicon glyphicon-download-alt"></i> Download invalid interviews
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     }

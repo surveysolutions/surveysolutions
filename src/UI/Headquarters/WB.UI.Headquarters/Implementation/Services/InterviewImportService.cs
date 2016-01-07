@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Services;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using GuidExtensions = WB.Core.GenericSubdomains.Portable.GuidExtensions;
 
 namespace WB.UI.Headquarters.Implementation.Services
@@ -93,6 +94,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly ILogger logger;
         private readonly IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory;
         private readonly SampleImportSettings sampleImportSettings;
+        private readonly IPreloadedDataRepository preloadedDataRepository;
 
         private readonly ConcurrentDictionary<string, UserView> usersCache = new ConcurrentDictionary<string, UserView>();
 
@@ -103,7 +105,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory,
-            SampleImportSettings sampleImportSettings)
+            SampleImportSettings sampleImportSettings, IPreloadedDataRepository preloadedDataRepository)
         {
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
             this.commandService = commandService;
@@ -112,9 +114,10 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.logger = logger;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
             this.sampleImportSettings = sampleImportSettings;
+            this.preloadedDataRepository = preloadedDataRepository;
         }
 
-        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes, Guid? supervisorId, Guid headquartersId)
+        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId, Guid? supervisorId, Guid headquartersId)
         {
 
             InterviewImportFileDescription fileDescription;
@@ -122,7 +125,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             try
             {
                 this.transactionManager.GetTransactionManager().BeginQueryTransaction();
-                fileDescription = this.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileBytes);
+                fileDescription = this.GetDescriptionByFileWithInterviews(questionnaireIdentity, sampleId);
             }
             finally
             {
@@ -135,6 +138,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.Status = new InterviewImportStatus
             {
                 QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                SampleId = sampleId, 
                 QuestionnaireVersion = questionnaireIdentity.Version,
                 QuestionnaireTitle = fileDescription.QuestionnaireTitle,
                 StartedDateTime = DateTime.Now,
@@ -206,7 +210,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 WithErrors = new List<InterviewImportError>()
             };
 
-            using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileDescription.FileBytes))))
+            using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(this.preloadedDataRepository.GetBytesOfSampleData(fileDescription.SampleId)))))
             {
                 this.ConfigureCsvReader(csvReader);
 
@@ -309,7 +313,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             return columnsWithTypes;
         }
 
-        public InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, byte[] fileBytes)
+        public InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId)
         {
             var questionnaireDocument = this.questionnaireDocumentRepository.AsVersioned()
                 .Get(GuidExtensions.FormatGuid(questionnaireIdentity.QuestionnaireId), questionnaireIdentity.Version).Questionnaire;
@@ -320,13 +324,13 @@ namespace WB.UI.Headquarters.Implementation.Services
             {
                 ColumnsByPrefilledQuestions = new List<InterviewImportColumn>(),
                 QuestionnaireTitle = $"(ver. {questionnaireIdentity.Version}) {questionnaireDocument.Title}",
-                FileBytes = fileBytes,
+                SampleId = sampleId,
                 PrefilledQuestions = prefilledQuestions
                         .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
                         .ToList(),
             };
             
-            using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(fileBytes))))
+            using (var csvReader = new CsvReader(new StreamReader(new MemoryStream(this.preloadedDataRepository.GetBytesOfSampleData(sampleId)))))
             {
                 this.ConfigureCsvReader(csvReader);
                 

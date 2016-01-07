@@ -69,20 +69,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
                         preloadedDataService));
 
-            errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
-            errors.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
+            if(ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
 
-            errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
-            errors.AddRange(this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric)(datas, preloadedDataService));
-            
-            errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
 
-            status.Errors = errors;
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
+
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric)(datas, preloadedDataService));
+
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
+
+            status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
 
             var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.SupervisorName);
             status.WasSupervisorProvided = supervisorNameIndex >= 0;
 
             return status;
+        }
+
+        private bool ShouldVerificationBeContinued(List<PreloadedDataVerificationError> errors)
+        {
+            return errors.Count < 100;
         }
 
         public VerificationStatus VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
