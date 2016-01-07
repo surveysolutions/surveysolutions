@@ -259,7 +259,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of Supervisor was not provided.
+        ///   Looks up a localized string similar to The name of Responsible was not provided.
         /// </summary>
         internal static string PL0025_SupervisorNameIsEmpty {
             get {
@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided Supervisor was not found.
+        ///   Looks up a localized string similar to Provided Responsible was not found.
         /// </summary>
         internal static string PL0026_SupervisorWasNotFound {
             get {
@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor is locked.
+        ///   Looks up a localized string similar to Responsible is locked.
         /// </summary>
         internal static string PL0027_SupervisorIsLocked {
             get {

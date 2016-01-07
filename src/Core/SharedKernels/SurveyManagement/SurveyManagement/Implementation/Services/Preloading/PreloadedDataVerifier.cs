@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
 
             if (ShouldVerificationBeContinued(errors))
-                errors.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
+                errors.AddRange(this.ErrorsByResposibleName(datas, preloadedDataService, acceptInterviewers: true));
 
             if (ShouldVerificationBeContinued(errors))
                 errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
 
-            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.SupervisorName);
+            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.ResponsibleColumnName);
             status.WasSupervisorProvided = supervisorNameIndex >= 0;
 
             return status;
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var topLevel = preloadedDataService.GetTopLevelData(data);
 
-            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.SupervisorName);
+            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.ResponsibleColumnName);
             status.WasSupervisorProvided = supervisorNameIndex >= 0;
 
             return status;
@@ -257,7 +257,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
             {
-                yield return ServiceColumns.SupervisorName;
+                yield return ServiceColumns.ResponsibleColumnName;
             }
             
         }
@@ -769,11 +769,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 levelData.FileName);
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels,
+            IPreloadedDataService preloadedDataService)
+        {
+            return ErrorsByResposibleName(allLevels, preloadedDataService, false);
+        }
+        private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, bool acceptInterviewers)
         {
             foreach (var levelData in allLevels)
             {
-                var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.SupervisorName);
+                var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.ResponsibleColumnName);
 
                 if (supervisorNameIndex < 0)
                     continue;
@@ -797,7 +802,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         continue;
                     }
 
-                    var userState = GetUserStateAndUpdateCache(supervisorCache, name);
+                    var userState = GetUserStateAndUpdateCache(supervisorCache, name, acceptInterviewers);
 
                     if (userState == null)
                     {
@@ -836,7 +841,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private Tuple<bool, bool> GetUserStateAndUpdateCache(Dictionary<string, Tuple<bool, bool>> supervisorCache, string name)
+        private Tuple<bool, bool> GetUserStateAndUpdateCache(Dictionary<string, Tuple<bool, bool>> supervisorCache, string name, bool acceptInterviewers)
         {
             if (supervisorCache.ContainsKey(name))
                 return supervisorCache[name];
@@ -848,7 +853,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
             }
             
-            var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor());
+            var item = new Tuple<bool, bool>(user.IsLockedByHQ, (user.IsSupervisor() || acceptInterviewers) && user.Roles.Any(role => role == UserRoles.Operator));
             supervisorCache.Add(name, item);
             return item;
         }

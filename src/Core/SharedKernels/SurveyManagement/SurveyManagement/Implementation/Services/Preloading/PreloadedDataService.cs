@@ -275,7 +275,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private int GetSupervisorNameIndex(PreloadedDataByFile dataFile)
         {
-            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.SupervisorName, StringComparison.InvariantCultureIgnoreCase));
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.ResponsibleColumnName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private string CheckAndGetSupervisorNameForLevel(string[] row, int supervisorNameIndex)
