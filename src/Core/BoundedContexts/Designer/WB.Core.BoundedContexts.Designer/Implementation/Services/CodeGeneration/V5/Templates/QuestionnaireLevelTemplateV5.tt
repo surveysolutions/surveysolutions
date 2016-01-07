@@ -7,9 +7,9 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
 <#@ include file="SharedTemplateV5.tt"#>
 
-internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelInstanceV5<<#=this.Model.GeneratedTypeName#>>, IExpressionExecutableV5
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV5<<#=this.Model.TypeName#>>, IExpressionExecutableV5
 {
-	public <#=Model.GeneratedTypeName#>(
+	public <#=Model.TypeName#>(
 		decimal[] rosterVector, 
 		Identity[] rosterKey, 
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
@@ -35,7 +35,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 
 	public override IExpressionExecutableV5 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances)
 	{
-		var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -67,12 +67,12 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var @roster in Model.Rosters) 
     {
 #>
-	public RosterRowList<<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
+	public RosterRowList<<#=@roster.TypeName#>> <#=@roster.VariableName#>
 	{
 		get 
 		{
-			var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.GeneratedRosterScopeName#>.Last());
-			return  new RosterRowList<<#=@roster.GeneratedTypeName#>>(rosters);
+			var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.RosterScopeName#>.Last());
+			return  new RosterRowList<<#=@roster.TypeName#>>(rosters);
 		}
 	}
 <# 
@@ -83,7 +83,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var @group in Model.Groups) 
 	{
 #>
-	private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
+	private ConditionalState <#= @group.StateName#> = new ConditionalState(IdOf.<#=@group.IdName#>, ItemType.Group);
 <# 
 	}
 #>

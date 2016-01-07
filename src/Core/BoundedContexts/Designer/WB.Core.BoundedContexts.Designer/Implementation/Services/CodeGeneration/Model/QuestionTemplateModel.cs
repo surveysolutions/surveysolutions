@@ -15,13 +15,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public QuestionType QuestionType { set; get; }
 
-        public string GeneratedIdName { set; get; }
-        public string GeneratedTypeName { set; get; }
-        public string GeneratedMemberName { set; get; }
-        public string GeneratedStateName { set; get; }
+        public string TypeName { set; get; }
 
-        public string GeneratedValidationsMethodName { set; get; }
-        public string GeneratedConditionsMethodName { set; get; }
+        public string ConditionMethodName => "IsEnabled_" + this.VariableName;
+
+        public string ValidationMethodName => "IsValid_" + VariableName;
+        public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
+        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + "_state";
+        public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + "_id";
 
         public bool IsMultiOptionYesNoQuestion { get; set; }
         public List<string> AllMultioptionYesNoCodes { get; set; }
