@@ -10,11 +10,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class StaticTextViewModel : MvxNotifyPropertyChanged, IInterviewEntityViewModel
     {
-        private readonly IQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         public StaticTextViewModel(
-            IQuestionnaireRepository questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
