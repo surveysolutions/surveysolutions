@@ -129,6 +129,11 @@
                         Sample import is completed
                     </legend>
                 </fieldset>
+                <fieldset data-bind="visible: importCompletedWithError">
+                    <legend style="color: red;">
+                        Sample import is completed with erros
+                    </legend>
+                </fieldset>
                 <ul class="list-group" data-bind="if: isNeedShowStatusPanel()">
                     <li class="list-group-item disabled">
                         <b>Import status</b>
@@ -141,7 +146,7 @@
                         <span class="badge" data-bind="text: status.estimatedTime"></span>
                         Estimated Time
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item"  data-bind="visible: status.hasErrors">
                         <a data-bind="if: status.hasErrors, attr: { href: $invalidInterviewsByLastImportUrl }">
                             <i class="glyphicon glyphicon-download-alt"></i> Download invalid interviews
                         </a>
