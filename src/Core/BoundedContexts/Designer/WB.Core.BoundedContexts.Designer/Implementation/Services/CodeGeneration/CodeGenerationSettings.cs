@@ -21,6 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public bool IsLookupTablesFeatureSupported { get; private set; }
 
-        public Func<QuestionnaireExecutorTemplateModel, string> ExpressionStateBodyGenerator { get; set; }
+        public Func<QuestionnaireExpressionStateModel, string> ExpressionStateBodyGenerator { get; set; }
     }
 }

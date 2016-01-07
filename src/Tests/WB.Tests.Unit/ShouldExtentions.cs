@@ -39,13 +39,13 @@ namespace WB.Tests.Unit
             question.Condition.ShouldEqual(conditions);
             question.Validation.ShouldEqual(validations);
             question.QuestionType.ShouldEqual(questionType);
-            question.GeneratedIdName.ShouldEqual(generatedIdName);
-            question.GeneratedTypeName.ShouldEqual(generatedTypeName);
-            question.GeneratedMemberName.ShouldEqual(generatedMemberName);
-            question.GeneratedStateName.ShouldEqual(generatedStateName);
+            question.IdName.ShouldEqual(generatedIdName);
+            question.TypeName.ShouldEqual(generatedTypeName);
+            question.MemberName.ShouldEqual(generatedMemberName);
+            question.StateName.ShouldEqual(generatedStateName);
             question.RosterScopeName.ShouldEqual(rosterScopeName);
-            question.GeneratedValidationsMethodName.ShouldEqual(generatedValidationsMethodName);
-            question.GeneratedConditionsMethodName.ShouldEqual(generatedConditionsMethodName);
+            question.ValidationMethodName.ShouldEqual(generatedValidationsMethodName);
+            question.ConditionMethodName.ShouldEqual(generatedConditionsMethodName);
         }
 
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)

@@ -1682,12 +1682,12 @@ namespace WB.Tests.Unit
             return new QuestionnaireDTO();
         }
 
-        public static QuestionnaireExecutorTemplateModelFactory QuestionnaireExecutorTemplateModelFactory(
+        public static QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(
             IMacrosSubstitutionService macrosSubstitutionService = null,
             IExpressionProcessor expressionProcessor = null,
             ILookupTableService lookupTableService = null)
         {
-            return new QuestionnaireExecutorTemplateModelFactory(
+            return new QuestionnaireExpressionStateModelFactory(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
