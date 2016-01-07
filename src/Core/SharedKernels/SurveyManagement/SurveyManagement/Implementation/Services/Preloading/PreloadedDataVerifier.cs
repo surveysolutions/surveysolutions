@@ -853,7 +853,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
             }
             
-            var item = new Tuple<bool, bool>(user.IsLockedByHQ, (user.IsSupervisor() || acceptInterviewers) && user.Roles.Any(role => role == UserRoles.Operator));
+            var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor() || (acceptInterviewers && user.Roles.Any(role => role == UserRoles.Operator)));
             supervisorCache.Add(name, item);
             return item;
         }
