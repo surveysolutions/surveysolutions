@@ -135,7 +135,6 @@ namespace WB.UI.Supervisor.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new SurveyManagementDataCollectionSharedKernelModule(basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
