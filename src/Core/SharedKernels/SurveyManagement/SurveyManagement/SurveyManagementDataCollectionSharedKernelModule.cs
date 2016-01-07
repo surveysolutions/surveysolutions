@@ -26,15 +26,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
 {
     public class SurveyManagementDataCollectionSharedKernelModule : NinjectModule
     {
-        private readonly bool usePlainQuestionnaireRepository;
         private readonly string basePath;
         private readonly string syncDirectoryName;
         private readonly string questionnaireAssembliesDirectoryName;
 
-        public SurveyManagementDataCollectionSharedKernelModule(bool usePlainQuestionnaireRepository, string basePath, string syncDirectoryName = "SYNC",
+        public SurveyManagementDataCollectionSharedKernelModule(string basePath, string syncDirectoryName = "SYNC",
             string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
         {
-            this.usePlainQuestionnaireRepository = usePlainQuestionnaireRepository;
             this.basePath = basePath;
             this.syncDirectoryName = syncDirectoryName;
             this.questionnaireAssembliesDirectoryName = questionnaireAssembliesFolder;
@@ -42,17 +40,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
         public override void Load()
         {
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
             this.Bind<ISupervisorsViewFactory>().To<SupervisorsViewFactory>();
-
-            if (this.usePlainQuestionnaireRepository)
-            {
-                this.Bind<IQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
-            }
-            else
-            {
-                this.Bind<IQuestionnaireRepository>().To<DomainQuestionnaireRepository>().InSingletonScope(); // has internal cache, so should be singleton
-            }
 
             this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
 

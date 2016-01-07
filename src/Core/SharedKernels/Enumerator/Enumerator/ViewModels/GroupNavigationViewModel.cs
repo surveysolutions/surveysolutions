@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private NavigationGroupType navigationGroupType;
         private readonly List<Identity> listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection = new List<Identity>();
 
-        private readonly IQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected GroupNavigationViewModel() {}
 
         public GroupNavigationViewModel(
-            IQuestionnaireRepository questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,

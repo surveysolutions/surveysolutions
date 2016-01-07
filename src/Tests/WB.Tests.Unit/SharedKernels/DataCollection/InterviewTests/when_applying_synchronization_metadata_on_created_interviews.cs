@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
 
-            questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
         };
 
@@ -119,6 +119,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Dictionary<InterviewStatus, InterviewStatus[]> interviewStatusesWhichWasChangedWithoutException =
             new Dictionary<InterviewStatus, InterviewStatus[]>();
 
-        private static IQuestionnaireRepository questionnaireRepository;
+        private static IPlainQuestionnaireRepository questionnaireRepository;
     }
 }

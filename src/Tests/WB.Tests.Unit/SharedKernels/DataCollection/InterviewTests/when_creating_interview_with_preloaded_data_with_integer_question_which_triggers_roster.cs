@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.GetRosterLevelForGroup(rosterGroupId) == 1
                    && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] {rosterGroupId});
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
             eventContext = new EventContext();
