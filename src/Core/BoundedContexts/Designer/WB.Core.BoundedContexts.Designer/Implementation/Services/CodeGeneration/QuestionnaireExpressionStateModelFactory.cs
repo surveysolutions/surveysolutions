@@ -395,7 +395,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 VariableName = varName,
                 Condition = condition,
                 Validation = validation,
-                QuestionType = childAsIQuestion.QuestionType,
                 TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName

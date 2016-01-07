@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Main.Core.Entities.SubEntities;
-
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
     public class QuestionTemplateModel : ITemplateModel
@@ -12,8 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         
         public string Condition { set; get; }
         public string Validation { set; get; }
-
-        public QuestionType QuestionType { set; get; }
 
         public string TypeName { set; get; }
 

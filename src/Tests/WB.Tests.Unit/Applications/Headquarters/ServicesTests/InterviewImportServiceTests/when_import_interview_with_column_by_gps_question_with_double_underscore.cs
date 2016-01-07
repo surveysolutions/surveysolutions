@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
 
             var questionnaireRepository = Create.CreateQuestionnaireReadSideKeyValueStorage(
                 Create.QuestionnaireDocumentWithOneChapter(
-                    Create.GpsCoordinateQuestion(questionId: gpsQuestionId, variableName: "LongLat", isPrefilled: true)));
+                    Create.GpsCoordinateQuestion(questionId: gpsQuestionId, variable: "LongLat", isPrefilled: true)));
 
             mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewByPrefilledQuestions>(), null))
                 .Callback<ICommand, string>(

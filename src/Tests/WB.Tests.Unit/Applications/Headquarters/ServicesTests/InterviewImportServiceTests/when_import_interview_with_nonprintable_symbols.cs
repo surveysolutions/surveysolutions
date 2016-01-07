@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.TextQuestion(questionId: localmunicId, variable: "LocalMunic", preFilled: true),
                     Create.TextQuestion(questionId: mainplaceId, variable: "MainPlace", preFilled: true),
                     Create.TextQuestion(questionId: subplaceId, variable: "SubPlace", preFilled: true),
-                    Create.GpsCoordinateQuestion(questionId: longlatId, variableName: "LongLat", isPrefilled: true)));
+                    Create.GpsCoordinateQuestion(questionId: longlatId, variable: "LongLat", isPrefilled: true)));
 
             var mockOfUserViewFactory = new Mock<IUserViewFactory>();
             

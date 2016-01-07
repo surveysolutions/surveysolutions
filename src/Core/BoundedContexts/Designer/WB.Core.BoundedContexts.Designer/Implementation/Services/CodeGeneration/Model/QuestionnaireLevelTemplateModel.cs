@@ -7,8 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public QuestionnaireLevelTemplateModel()
             : base(
-            "@__questionnaire_scope", 
-            "QuestionnaireTopLevel",
+            CodeGenerator.QuestionnaireScope, 
+            CodeGenerator.QuestionnaireTypeName,
             new List<GroupTemplateModel>(), 
             new List<QuestionTemplateModel>(), 
             new List<RosterTemplateModel>(), 
