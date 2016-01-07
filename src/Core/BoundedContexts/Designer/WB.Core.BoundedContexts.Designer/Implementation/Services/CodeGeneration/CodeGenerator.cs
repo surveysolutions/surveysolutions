@@ -14,6 +14,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public const string InterviewExpressionStatePrefix = "InterviewExpressionState";
         public const string PrivateFieldsPrefix = "@__";
+        public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
+        public const string QuestionnaireScope = "@__questionnaire_scope";
+        
         private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
 
         public CodeGenerator(

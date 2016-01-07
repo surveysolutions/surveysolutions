@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             var options = new List<Answer>();
             for (int i = 0; i < 60; i++)
             {
-                options.Add(Create.Option(text: i.ToString(), value: i.ToString()));
+                options.Add(Create.Option(value: i.ToString(), text: i.ToString()));
             }
             questionnaire.Children.Add(new MultyOptionsQuestion("question 1")
             {

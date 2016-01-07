@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         {
             questionnaire = CreateQuestionnaireDocument(
                 Create.MultyOptionsQuestion(id: multiOptionQuestionId, variable: "var",
-                    answers: new[] {Create.Answer("1", -1), Create.Answer("2", 2)}));
+                    options: new[] {Create.Answer("1", -1), Create.Answer("2", 2)}));
             
 
             verifier = CreateQuestionnaireVerifier();
