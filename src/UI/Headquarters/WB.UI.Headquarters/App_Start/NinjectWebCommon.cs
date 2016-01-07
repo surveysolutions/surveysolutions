@@ -150,7 +150,6 @@ namespace WB.UI.Headquarters
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new SurveyManagementDataCollectionSharedKernelModule(basePath: basePath),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
                 new HeadquartersRegistry(),

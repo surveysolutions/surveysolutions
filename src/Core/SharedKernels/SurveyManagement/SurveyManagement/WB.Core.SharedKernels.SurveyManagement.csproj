@@ -128,7 +128,6 @@
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
-    <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
@@ -512,4 +511,3 @@
   </Target>
   -->
 </Project>
-
