@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
-    public class QuestionnaireExecutorTemplateModel
+    public class QuestionnaireExpressionStateModel
     {
         public Guid Id { set; get; }
         public List<QuestionTemplateModel> AllQuestions { set; get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
         public List<RosterTemplateModel> AllRosters { set; get; }
-        public string GeneratedClassName { set; get; }
-        public Dictionary<string, string> GeneratedScopesTypeNames { set; get; }
+        public string ClassName { set; get; }
         public Dictionary<string, RosterScopeTemplateModel> RostersGroupedByScope { set; get; }
         public QuestionnaireLevelTemplateModel QuestionnaireLevelModel { set; get; }
 

@@ -1,38 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
     public abstract class RosterScopeBaseModel
     {
         protected RosterScopeBaseModel(
-            string generatedRosterScopeName, 
-            string generatedTypeName, 
+            string rosterScopeName, 
+            string typeName, 
             List<GroupTemplateModel> groups, 
             List<QuestionTemplateModel> questions, 
             List<RosterTemplateModel> rosters, 
             List<Guid> rosterScope,
-            string parentGeneratedTypeName)
+            string parentTypeName)
         {
-            GeneratedRosterScopeName = generatedRosterScopeName;
-            GeneratedTypeName = generatedTypeName;
+            this.RosterScopeName = rosterScopeName;
+            this.TypeName = typeName;
             Groups = groups;
             Questions = questions;
             Rosters = rosters;
             RosterScope = rosterScope;
-            ParentGeneratedTypeName = parentGeneratedTypeName;
+            this.ParentTypeName = parentTypeName;
         }
 
         protected RosterScopeBaseModel()
         {
         }
 
-        public string GeneratedRosterScopeName { get; set; }
+        public string RosterScopeName { get; set; }
 
-        public string GeneratedTypeName { set; get; }
+        public string TypeName { set; get; }
 
-        public string ParentGeneratedTypeName { set; get; }
+        public string ParentTypeName { set; get; }
 
         public List<QuestionTemplateModel> Questions { get; set; }
 

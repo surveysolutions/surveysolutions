@@ -3,23 +3,23 @@
     public class ExpressionMethodModel
     {
         public ExpressionMethodModel(
-            string generatedClassName, 
-            string generatedMethodName, 
+            string className, 
+            string methodName, 
             string[] namespaces,
             string expression, 
             bool generateSelf, 
             string variableName)
         {
-            this.GeneratedClassName = generatedClassName;
-            this.GeneratedMethodName = generatedMethodName;
+            this.ClassName = className;
+            this.MethodName = methodName;
             this.Namespaces = namespaces;
             this.Expression = expression;
             this.VariableName = variableName;
             this.GenerateSelf = generateSelf;
         }
 
-        public string GeneratedClassName { set; get; }
-        public string GeneratedMethodName { set; get; }
+        public string ClassName { set; get; }
+        public string MethodName { set; get; }
         public string[] Namespaces { get; set; }
         public string Expression { set; get; }
         public string VariableName { set; get; }

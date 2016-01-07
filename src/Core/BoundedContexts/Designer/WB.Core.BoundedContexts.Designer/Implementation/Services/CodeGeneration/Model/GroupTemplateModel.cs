@@ -8,11 +8,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string VariableName { set; get; }
 
         public string Condition { set; get; }
-        public string GeneratedStateName { set; get; }
-        public string GeneratedIdName { set; get; }
-        public string GeneratedConditionsMethodName { set; get; }
 
         public string RosterScopeName { set; get; }
         public string ParentScopeTypeName { get; set; }
+
+        public string StateName => "@__" + VariableName + "_state";
+        public string IdName => "@__" + VariableName + "_id";
+        public string ConditionMethodName => "IsEnabled_" + VariableName;
     }
 }

@@ -15,15 +15,13 @@ using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
-    internal class QuestionnaireExecutorTemplateModelFactory
+    internal class QuestionnaireExpressionStateModelFactory
     {
         private readonly IExpressionProcessor expressionProcessor;
-
-        private const string privateFieldsPrefix = "@__";
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly ILookupTableService lookupTableService;
 
-        public QuestionnaireExecutorTemplateModelFactory(
+        public QuestionnaireExpressionStateModelFactory(
             IMacrosSubstitutionService macrosSubstitutionService,
             IExpressionProcessor expressionProcessor,
             ILookupTableService lookupTableService)
@@ -33,10 +31,55 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.lookupTableService = lookupTableService;
         }
 
+        public QuestionnaireExpressionStateModel CreateQuestionnaireExecutorTemplateModel(
+           QuestionnaireDocument questionnaire,
+           CodeGenerationSettings codeGenerationSettings)
+        {
+            var expressionState = new QuestionnaireExpressionStateModel
+            {
+                AdditionInterfaces = codeGenerationSettings.AdditionInterfaces,
+                Namespaces = codeGenerationSettings.Namespaces,
+                Id = questionnaire.PublicKey,
+                ClassName = $"{CodeGenerator.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
+                QuestionnaireLevelModel = new QuestionnaireLevelTemplateModel(),
+                LookupTables = BuildLookupTableModels(questionnaire).ToList(),
+                StructuralDependencies = BuildStructuralDependencies(questionnaire),
+                ConditionalDependencies = BuildConditionalDependencies(questionnaire)
+            };
+
+            expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(expressionState.ConditionalDependencies, expressionState.StructuralDependencies);
+
+            List<QuestionTemplateModel> allQuestions;
+            List<GroupTemplateModel> allGroups;
+            List<RosterTemplateModel> allRosters;
+
+            // creates rosters model and fills questionnaireLevelModel and roster models with questions, groups and nested rosters.
+            TraverseQuestionnaireAndBuildStructures(questionnaire, expressionState.QuestionnaireLevelModel, out allQuestions, out allGroups, out allRosters);
+
+            expressionState.AllQuestions = allQuestions;
+            expressionState.AllGroups = allGroups;
+            expressionState.AllRosters = allRosters;
+
+            expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(expressionState.QuestionnaireLevelModel.Questions, expressionState.QuestionnaireLevelModel.Groups, null, expressionState.ConditionsPlayOrder);
+
+            var rosterGroupedByScope = allRosters.GroupBy(r => r.TypeName);
+
+            expressionState.RostersGroupedByScope = rosterGroupedByScope
+                .Select(x => this.BuildRosterScopeTemplateModel(x.Key, x.ToList(), expressionState))
+                .ToDictionary(x => x.TypeName);
+
+            BuildReferencesOnParentRosters(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
+
+            BuildReferencesOnParentQuestions(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
+
+            expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
+
+            return expressionState;
+        }
 
         public static Dictionary<string,ExpressionMethodModel> BuildMethodModels(
             CodeGenerationSettings codeGenerationSettings, 
-            QuestionnaireExecutorTemplateModel questionnaireTemplate)
+            QuestionnaireExpressionStateModel questionnaireTemplate)
         {
             var methodModels = new Dictionary<string, ExpressionMethodModel>();
             
@@ -46,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     methodModels.Add(ExpressionLocation.QuestionCondition(question.Id).Key, new ExpressionMethodModel(
                         question.ParentScopeTypeName,
-                        question.GeneratedConditionsMethodName,
+                        question.ConditionMethodName,
                         codeGenerationSettings.Namespaces,
                         question.Condition,
                         false,
@@ -57,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     methodModels.Add(ExpressionLocation.QuestionValidation(question.Id).Key, new ExpressionMethodModel(
                         question.ParentScopeTypeName,
-                        question.GeneratedValidationsMethodName,
+                        question.ValidationMethodName,
                         codeGenerationSettings.Namespaces,
                         question.Validation,
                         true,
@@ -69,7 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 methodModels.Add(ExpressionLocation.GroupCondition(group.Id).Key, new ExpressionMethodModel(
                     group.ParentScopeTypeName,
-                    group.GeneratedConditionsMethodName,
+                    group.ConditionMethodName,
                     codeGenerationSettings.Namespaces,
                     group.Condition,
                     false,
@@ -80,8 +123,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 methodModels.Add(ExpressionLocation.RosterCondition(roster.Id).Key,
                     new ExpressionMethodModel(
-                    roster.GeneratedTypeName,
-                    roster.GeneratedConditionsMethodName,
+                    roster.TypeName,
+                    roster.ConditionsMethodName,
                     codeGenerationSettings.Namespaces,
                     roster.Conditions,
                     false,
@@ -94,7 +137,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public RosterScopeTemplateModel BuildRosterScopeTemplateModel(
             string rosterScopeType,
             List<RosterTemplateModel> rostersInScope,
-            QuestionnaireExecutorTemplateModel template)
+            QuestionnaireExpressionStateModel template)
         {
             var groups = rostersInScope.SelectMany(r => r.Groups).ToList();
             var questions = rostersInScope.SelectMany(r => r.Questions).ToList();
@@ -117,9 +160,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             Dictionary<Guid, ConditionMethodAndState> itemsToSort = new Dictionary<Guid, ConditionMethodAndState>();
 
-            groupsWithConditions.ForEach(g => itemsToSort.Add(g.Id, new ConditionMethodAndState(g.GeneratedConditionsMethodName, g.GeneratedStateName)));
-            rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.GeneratedConditionsMethodName, r.GeneratedStateName)));
-            questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.GeneratedConditionsMethodName, q.GeneratedStateName)));
+            groupsWithConditions.ForEach(g => itemsToSort.Add(g.Id, new ConditionMethodAndState(g.ConditionMethodName, g.StateName)));
+            rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.ConditionsMethodName, r.StateName)));
+            questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.ConditionMethodName, q.StateName)));
 
             var itemsSorted = new List<ConditionMethodAndState>();
 
@@ -185,7 +228,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var allParentsRostersToTop = parentRosters
                     .SelectMany(x => x.Rosters)
                     .Union(questionnaireLevelModel.Rosters)
-                    .Select(x => new TypeAndNameModel { GeneratedTypeName = x.GeneratedTypeName, VariableName = x.VariableName }).ToList();
+                    .Select(x => new TypeAndNameModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
 
                 rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop;
             }
@@ -202,7 +245,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var allParentsQuestionsToTop = parentRosters
                     .SelectMany(x => x.Questions)
                     .Union(questionnaireLevelModel.Questions)
-                    .Select(x => new TypeAndNameModel { GeneratedTypeName = x.GeneratedTypeName, VariableName = x.VariableName }).ToList();
+                    .Select(x => new TypeAndNameModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
 
                 rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop;
             }
@@ -232,7 +275,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     TableName = tableName.ToCamelCase(),
                     TypeName = tableName.ToPascalCase(),
-                    TableNameField = privateFieldsPrefix + tableName.ToCamelCase(),
+                    TableNameField = CodeGenerator.PrivateFieldsPrefix + tableName.ToCamelCase(),
                     Rows = lookupTableData.Rows,
                     VariableNames = lookupTableData.VariableNames
                 };
@@ -240,14 +283,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public void BuildStructures(QuestionnaireDocument questionnaireDoc,
+        public void TraverseQuestionnaireAndBuildStructures(QuestionnaireDocument questionnaireDoc,
             QuestionnaireLevelTemplateModel questionnaireLevelModel,
-            out Dictionary<string, string> generatedScopesTypeNames,
             out List<QuestionTemplateModel> allQuestions,
             out List<GroupTemplateModel> allGroups,
             out List<RosterTemplateModel> allRosters)
         {
-            generatedScopesTypeNames = new Dictionary<string, string>();
+            var scopesTypeNames = new Dictionary<string, string>();
             allQuestions = new List<QuestionTemplateModel>();
             allGroups = new List<GroupTemplateModel>();
             allRosters = new List<RosterTemplateModel>();
@@ -275,8 +317,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     {
                         var question = this.CreateQuestionTemplateModel(
                             questionnaireDoc, (IQuestion)child, 
-                            currentScope.GeneratedRosterScopeName, 
-                            currentScope.GeneratedTypeName);
+                            currentScope.RosterScopeName, 
+                            currentScope.TypeName);
 
                         currentScope.Questions.Add(question);
 
@@ -292,7 +334,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (IsRoster(childAsGroup))
                     {
-                        var roster = this.CreateRosterTemplateModel(questionnaireDoc, generatedScopesTypeNames, childAsGroup, currentScope);
+                        var roster = this.CreateRosterTemplateModel(questionnaireDoc, scopesTypeNames, childAsGroup, currentScope);
 
                         rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsGroup, roster));
 
@@ -353,13 +395,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 VariableName = varName,
                 Condition = condition,
                 Validation = validation,
-                GeneratedConditionsMethodName = "IsEnabled_" + varName,
-                GeneratedValidationsMethodName = "IsValid_" + varName,
                 QuestionType = childAsIQuestion.QuestionType,
-                GeneratedTypeName = GenerateQuestionTypeName(childAsIQuestion),
-                GeneratedMemberName = "@__" + varName,
-                GeneratedStateName = "@__" + varName + "_state",
-                GeneratedIdName = "@__" + varName + "_id",
+                TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName
             };
@@ -378,7 +415,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         private RosterTemplateModel CreateRosterTemplateModel(
             QuestionnaireDocument questionnaireDoc,
-            Dictionary<string, string> generatedScopesTypeNames,
+            Dictionary<string, string> scopesTypeNames,
             IGroup childAsIGroup,
             RosterScopeBaseModel currentScope)
         {
@@ -398,14 +435,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 Id = childAsIGroup.PublicKey,
                 Conditions = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
                 VariableName = varName,
-                GeneratedTypeName = this.GenerateTypeNameByScope($"{varName}_{childAsIGroup.PublicKey.FormatGuid()}_", currentRosterScope, generatedScopesTypeNames),
-                GeneratedStateName = "@__" + varName + "_state",
-                GeneratedIdName = "@__" + varName + "_id",
-                GeneratedConditionsMethodName = "IsEnabled_" + varName,
+                TypeName = this.GenerateTypeNameByScope($"{varName}_{childAsIGroup.PublicKey.FormatGuid()}_", currentRosterScope, scopesTypeNames),
+                RosterScopeName = CodeGenerator.PrivateFieldsPrefix + varName + "_scope",
                 RosterScope = currentRosterScope,
-                ParentGeneratedTypeName = currentScope.GeneratedTypeName,
-                GeneratedRosterScopeName = "@__" + varName + "_scope",
-                ParentScopeTypeName = currentScope.GeneratedTypeName
+                ParentTypeName = currentScope.TypeName,
+                ParentScopeTypeName = currentScope.TypeName
             };
             return roster;
         }
@@ -419,16 +453,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var group = new GroupTemplateModel
             {
                 Id = childAsIGroup.PublicKey,
-                Condition =
-                    this.macrosSubstitutionService.InlineMacros(
-                        childAsIGroup.ConditionExpression,
-                        questionnaireDoc.Macros.Values),
-                VariableName = "@__" + varName, //generating variable name by publicKey
-                GeneratedStateName = "@__" + varName + "_state",
-                GeneratedIdName = "@__" + varName + "_id",
-                GeneratedConditionsMethodName = "IsEnabled_" + varName,
-                RosterScopeName = currentScope.GeneratedRosterScopeName,
-                ParentScopeTypeName = currentScope.GeneratedTypeName
+                Condition = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
+                VariableName = varName,
+                RosterScopeName = currentScope.RosterScopeName,
+                ParentScopeTypeName = currentScope.TypeName
             };
             return @group;
         }
@@ -571,13 +599,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 select variableNames[variable]);
         }
 
-        private string GenerateTypeNameByScope(string rosterClassNamePrefix, IEnumerable<Guid> currentRosterScope, Dictionary<string, string> generatedScopesTypeNames)
+        private string GenerateTypeNameByScope(string rosterClassNamePrefix, IEnumerable<Guid> currentRosterScope, Dictionary<string, string> scopesTypeNames)
         {
             string scopeStringKey = String.Join("$", currentRosterScope);
-            if (!generatedScopesTypeNames.ContainsKey(scopeStringKey))
-                generatedScopesTypeNames.Add(scopeStringKey, "@__" + rosterClassNamePrefix + Guid.NewGuid().FormatGuid());
+            if (!scopesTypeNames.ContainsKey(scopeStringKey))
+                scopesTypeNames.Add(scopeStringKey, "@__" + rosterClassNamePrefix + Guid.NewGuid().FormatGuid());
 
-            return generatedScopesTypeNames[scopeStringKey];
+            return scopesTypeNames[scopeStringKey];
         }
     }
 }

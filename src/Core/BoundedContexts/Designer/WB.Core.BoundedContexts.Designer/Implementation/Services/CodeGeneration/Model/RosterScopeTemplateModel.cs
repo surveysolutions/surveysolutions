@@ -5,23 +5,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     public class RosterScopeTemplateModel
     {
         public RosterScopeTemplateModel(
-            string rosterScopeType, 
+            string typeName, 
             List<QuestionTemplateModel> questions, 
             List<GroupTemplateModel> groups, 
             List<RosterTemplateModel> rosters, 
             List<RosterTemplateModel> rostersInScope, 
             List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder)
         {
-            GeneratedTypeName = rosterScopeType;
+            this.TypeName = typeName;
             Questions = questions;
             Groups = groups;
             Rosters = rosters;
             ConditionMethodsSortedByExecutionOrder = conditionMethodsSortedByExecutionOrder;
             RostersInScope = rostersInScope;
-            ParentTypeName = rostersInScope[0].ParentGeneratedTypeName;
+            ParentTypeName = rostersInScope[0].ParentTypeName;
         }
 
-        public string GeneratedTypeName { set; get; }
+        public string TypeName { set; get; }
 
         public List<QuestionTemplateModel> Questions { get; set; }
 
