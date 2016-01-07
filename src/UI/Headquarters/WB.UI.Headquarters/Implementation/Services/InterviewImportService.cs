@@ -145,7 +145,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 CreatedInterviewsCount = 0,
                 ElapsedTime = 0,
                 EstimatedTime = 0,
-                State = {Columns = fileDescription.FileColumns}
+                State = { Columns = fileDescription.FileColumns }
             };
             this.Status.State.Errors.Clear();
             this.Status.IsInProgress = true;
@@ -187,8 +187,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                         Interlocked.Increment(ref createdInterviewsCount);
                         this.Status.CreatedInterviewsCount = createdInterviewsCount;
                         this.Status.ElapsedTime = elapsedTime.ElapsedMilliseconds;
-                        this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
-                        this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
+                        this.Status.TimePerInterview = this.Status.ElapsedTime / this.Status.CreatedInterviewsCount;
+                        this.Status.EstimatedTime = this.Status.TimePerInterview * this.Status.TotalInterviewsCount;
                     });
 
                 this.logger.Info(
@@ -272,7 +272,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                         {
                             RawData = csvReader.CurrentRecord,
                             ErrorMessage = ex.Data.Contains("CsvHelper")
-                                ? ToUserFriendlyErrorMessage((string) ex.Data["CsvHelper"])
+                                ? ToUserFriendlyErrorMessage((string)ex.Data["CsvHelper"])
                                 : ex.Message
                         });
                     }
@@ -308,7 +308,7 @@ namespace WB.UI.Headquarters.Implementation.Services
 
             if (fileDescription.HasResponsibleColumn)
             {
-                columnsWithTypes.Add(RESPONSIBLECOLUMNNAME, typeof (string));
+                columnsWithTypes.Add(RESPONSIBLECOLUMNNAME, typeof(string));
             }
             return columnsWithTypes;
         }
@@ -335,10 +335,10 @@ namespace WB.UI.Headquarters.Implementation.Services
 
                 var presentPrefilledQuestion =
                     questionnaireDocument.Find<IQuestion>(
-                        x => x.Featured && columns.Contains(x.StataExportCaption.Trim().ToLower())).ToArray();
+                        x => x.Featured && IsQuestionColumnPresent(x, columns)).ToArray();
 
                 interviewImportFileDescription.PrefilledQuestions = presentPrefilledQuestion
-                    .Select(question => this.ToInterviewImportPrefilledQuestion(question, questionnaireDocument))
+                    .Select(this.ToInterviewImportPrefilledQuestion)
                     .ToList();
 
                 interviewImportFileDescription.HasResponsibleColumn = columns.Contains(RESPONSIBLECOLUMNNAME);
@@ -364,8 +364,18 @@ namespace WB.UI.Headquarters.Implementation.Services
             return interviewImportFileDescription;
         }
 
-        private InterviewImportPrefilledQuestion ToInterviewImportPrefilledQuestion(IQuestion prefilledQuestion,
-            QuestionnaireDocument questionnaireDocument)
+        private bool IsQuestionColumnPresent(IQuestion question, string[] columns)
+        {
+            if (question.QuestionType != QuestionType.GpsCoordinates)
+                return columns.Contains(question.StataExportCaption.Trim().ToLower());
+
+            var latitudeColumnName = $"{question.StataExportCaption.Trim().ToLower()}__latitude";
+            var longitudeColumnName = $"{question.StataExportCaption.Trim().ToLower()}__longitude";
+
+            return columns.Contains(latitudeColumnName)&& columns.Contains(longitudeColumnName);
+        }
+
+        private InterviewImportPrefilledQuestion ToInterviewImportPrefilledQuestion(IQuestion prefilledQuestion)
         {
             return new InterviewImportPrefilledQuestion
             {
@@ -396,7 +406,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             return this.usersCache[userName];
         }
 
-        private Dictionary<Guid, object> GetAnswersOnPrefilledQuestionsOrThrow(List<InterviewImportPrefilledQuestion> prefilledQuestions, 
+        private Dictionary<Guid, object> GetAnswersOnPrefilledQuestionsOrThrow(List<InterviewImportPrefilledQuestion> prefilledQuestions,
             IDictionary<string, object> importedInterview)
         {
             var answersOnPrefilledQuestions = new Dictionary<Guid, object>();
@@ -406,6 +416,9 @@ namespace WB.UI.Headquarters.Implementation.Services
                 if (prefilledQuestion.IsGps)
                 {
                     var answerOnGpsQuestion = (GeoPosition)importedInterview[prefilledQuestionVariable];
+
+                    if(!answerOnGpsQuestion.Latitude.HasValue && !answerOnGpsQuestion.Longitude.HasValue)
+                        continue;
 
                     if (!answerOnGpsQuestion.Latitude.HasValue)
                     {
@@ -439,7 +452,9 @@ namespace WB.UI.Headquarters.Implementation.Services
                 }
                 else
                 {
-                    answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId,
+                    var value = importedInterview[prefilledQuestionVariable];
+                    if (value != null)
+                        answersOnPrefilledQuestions.Add(prefilledQuestion.QuestionId,
                         importedInterview[prefilledQuestionVariable]);
                 }
             }
@@ -452,15 +467,15 @@ namespace WB.UI.Headquarters.Implementation.Services
             switch (question.QuestionType)
             {
                 case QuestionType.DateTime:
-                    return typeof (DateTime);
+                    return typeof(DateTime?);
                 case QuestionType.Numeric:
-                    return ((INumericQuestion) question).IsInteger ? typeof (int) : typeof (decimal);
+                    return ((INumericQuestion)question).IsInteger ? typeof(int?) : typeof(decimal?);
                 case QuestionType.SingleOption:
-                    return typeof (decimal);
+                    return typeof(decimal?);
                 case QuestionType.GpsCoordinates:
                     return typeof(GeoPosition);
                 default:
-                    return typeof (string);
+                    return typeof(string);
             }
         }
 
