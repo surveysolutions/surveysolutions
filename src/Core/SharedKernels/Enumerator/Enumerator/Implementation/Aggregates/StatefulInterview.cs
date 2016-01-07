@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
 
-        public StatefulInterview(ILogger logger, IQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+        public StatefulInterview(ILogger logger, IPlainQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();

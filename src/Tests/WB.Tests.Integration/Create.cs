@@ -397,11 +397,11 @@ namespace WB.Tests.Integration
         }
 
         public static Interview Interview(Guid? questionnaireId = null,
-            IQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
                 Mock.Of<ILogger>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireRepository>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
 
             interview.CreateInterview(

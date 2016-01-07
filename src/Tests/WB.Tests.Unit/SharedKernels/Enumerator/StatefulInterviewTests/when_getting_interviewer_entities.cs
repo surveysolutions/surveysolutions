@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            IQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetChildEntityIds(selectedGroupIdentity.Id) == new ReadOnlyCollection<Guid>(new [] { staticTextId, prefilledTextQuestionId, interviewerTextQuetionId, rosterId, groupId })
                 && _.IsRosterGroup(rosterId) == true
                 && _.IsRosterGroup(groupId) == false

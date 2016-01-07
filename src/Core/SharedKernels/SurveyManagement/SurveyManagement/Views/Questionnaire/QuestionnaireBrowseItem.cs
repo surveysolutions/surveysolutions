@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
             this.AllowCensusMode = allowCensusMode;
         }
 
-        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long serializedQuestionnaireSize)
+        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode)
             : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode)
         {
             this.FeaturedQuestions =

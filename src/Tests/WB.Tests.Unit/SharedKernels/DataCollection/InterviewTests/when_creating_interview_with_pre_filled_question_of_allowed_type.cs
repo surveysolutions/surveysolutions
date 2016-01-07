@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Text
                 && _.HasQuestion(prefilledQuestionId) == true);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
 
             eventContext = new EventContext();
