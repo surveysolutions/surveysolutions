@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.MultyOptionsQuestion(id: questionId, answers: new List<Answer> {Create.Answer("foo", 28), Create.Answer("bar", 42)}));
+                Create.MultyOptionsQuestion(id: questionId, options: new List<Answer> {Create.Answer("foo", 28), Create.Answer("bar", 42)}));
 
             exportViewFactory = CreateExportViewFactory();
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, 1);

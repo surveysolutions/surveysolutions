@@ -9,27 +9,24 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
-
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 
 using Microsoft.Practices.ServiceLocation;
-
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
-using NHibernate;
 using NSubstitute;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -243,7 +240,10 @@ namespace WB.Tests.Unit
                     "WB.Core.SharedKernels.DataCollection.V5",
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
-                isLookupTablesFeatureSupported: true);
+                isLookupTablesFeatureSupported: true)
+            {
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
+            };
         }
 
         public static CodeGenerator CodeGenerator(
@@ -490,15 +490,18 @@ namespace WB.Tests.Unit
                 : Guid.Parse(questionnaireItemParentId);
         }
 
-        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variableName = "var1", bool isPrefilled=false, string title = null)
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled=false, string title = null,
+            string enablementCondition = null, string validationExpression = null)
         {
             return new GpsCoordinateQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = variableName,
+                StataExportCaption = variable,
                 QuestionType = QuestionType.GpsCoordinates,
                 Featured = isPrefilled,
-                QuestionText = title
+                QuestionText = title,
+                ValidationExpression = validationExpression,
+                ConditionExpression = enablementCondition
             };
         }
 
@@ -1162,16 +1165,19 @@ namespace WB.Tests.Unit
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView=false)
+            IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView=false,
+            string enablementCondition = null, string validationExpression = null)
         {
             return new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
                 PublicKey = id ?? Guid.NewGuid(),
-                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] { }),
+                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable,
-                YesNoView = yesNoView
+                YesNoView = yesNoView,
+                ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression
             };
         }
 
@@ -1340,7 +1346,7 @@ namespace WB.Tests.Unit
             return group;
         }
 
-        public static Answer Option(Guid? id = null, string text = null, string value = null, string parentValue = null)
+        public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
         {
             return new Answer
             {
@@ -1918,13 +1924,13 @@ namespace WB.Tests.Unit
                 Mock.Of<AnswerNotifier>());
         }
 
-        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
+        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null)
         {
             return new SingleQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = "single_option_question",
+                StataExportCaption = variable ?? "single_option_question",
                 QuestionText = title??"SO Question",
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
@@ -1936,7 +1942,7 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer)
+            Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer, bool isFilteredCombobox = false)
         {
             return new SingleQuestion
             {
@@ -1948,7 +1954,8 @@ namespace WB.Tests.Unit
                 Answers = options ?? new List<Answer>(),
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 LinkedToQuestionId = linkedToQuestionId,
-                QuestionScope = scope
+                QuestionScope = scope,
+                IsFilteredCombobox = isFilteredCombobox
             };
         }
 
