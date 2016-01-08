@@ -49,20 +49,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(expressionState.ConditionalDependencies, expressionState.StructuralDependencies);
 
-            List<QuestionTemplateModel> allQuestions;
-            List<GroupTemplateModel> allGroups;
-            List<RosterTemplateModel> allRosters;
-
-            // creates rosters model and fills questionnaireLevelModel and roster models with questions, groups and nested rosters.
-            TraverseQuestionnaireAndBuildStructures(questionnaire, expressionState.QuestionnaireLevelModel, out allQuestions, out allGroups, out allRosters);
-
-            expressionState.AllQuestions = allQuestions;
-            expressionState.AllGroups = allGroups;
-            expressionState.AllRosters = allRosters;
-
+            TraverseQuestionnaireAndBuildStructures(questionnaire, expressionState.QuestionnaireLevelModel, expressionState.AllQuestions, expressionState.AllGroups, expressionState.AllRosters);
+            
             expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(expressionState.QuestionnaireLevelModel.Questions, expressionState.QuestionnaireLevelModel.Groups, null, expressionState.ConditionsPlayOrder);
 
-            var rosterGroupedByScope = allRosters.GroupBy(r => r.TypeName);
+            var rosterGroupedByScope = expressionState.AllRosters.GroupBy(r => r.TypeName);
 
             expressionState.RostersGroupedByScope = rosterGroupedByScope
                 .Select(x => this.BuildRosterScopeTemplateModel(x.Key, x.ToList(), expressionState))
@@ -285,14 +276,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public void TraverseQuestionnaireAndBuildStructures(QuestionnaireDocument questionnaireDoc,
             QuestionnaireLevelTemplateModel questionnaireLevelModel,
-            out List<QuestionTemplateModel> allQuestions,
-            out List<GroupTemplateModel> allGroups,
-            out List<RosterTemplateModel> allRosters)
+            List<QuestionTemplateModel> allQuestions,
+            List<GroupTemplateModel> allGroups,
+            List<RosterTemplateModel> allRosters)
         {
             var scopesTypeNames = new Dictionary<string, string>();
-            allQuestions = new List<QuestionTemplateModel>();
-            allGroups = new List<GroupTemplateModel>();
-            allRosters = new List<RosterTemplateModel>();
 
             var rostersToProcess = new Queue<Tuple<IGroup, RosterScopeBaseModel>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, questionnaireLevelModel));
