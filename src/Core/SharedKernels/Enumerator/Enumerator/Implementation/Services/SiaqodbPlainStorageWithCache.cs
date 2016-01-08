@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -12,8 +13,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         readonly Dictionary<string, TEntity> memoryStorage = new Dictionary<string, TEntity>();
 
-        public SiaqodbPlainStorageWithCache(ISiaqodb storage, IUserInteractionService userInteractionService)
-            : base(storage, userInteractionService)
+        public SiaqodbPlainStorageWithCache(ISiaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
+            : base(storage, userInteractionService, logger)
         {
         }
 
