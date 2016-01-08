@@ -42,45 +42,47 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         protected static QuestionnaireModel BuildDefaultQuestionnaire(Identity questionId, int? maxAllowedAnswers = 2)
         {
             var questionnaire = Create.QuestionnaireModel();
-            questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>();
-            questionnaire.Questions.Add(questionId.Id,
-                new YesNoQuestionModel
+            questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>
+            {
                 {
-                    AreAnswersOrdered = true,
-                    Id = questionId.Id,
-                    Instructions = "instructions",
-                    Options = new List<OptionModel>
+                    questionId.Id, new YesNoQuestionModel
                     {
-                        new OptionModel
+                        AreAnswersOrdered = true,
+                        Id = questionId.Id,
+                        Instructions = "instructions",
+                        Options = new List<OptionModel>
                         {
-                            Title = "item1",
-                            Value = 1
+                            new OptionModel
+                            {
+                                Title = "item1",
+                                Value = 1
+                            },
+                            new OptionModel
+                            {
+                                Title = "item2",
+                                Value = 2
+                            },
+                            new OptionModel
+                            {
+                                Title = "item3",
+                                Value = 3
+                            },
+                            new OptionModel
+                            {
+                                Title = "item4",
+                                Value = 4
+                            },
+                            new OptionModel
+                            {
+                                Title = "item5",
+                                Value = 5
+                            },
                         },
-                        new OptionModel
-                        {
-                            Title = "item2",
-                            Value = 2
-                        },
-                        new OptionModel
-                        {
-                            Title = "item3",
-                            Value = 3
-                        },
-                        new OptionModel
-                        {
-                            Title = "item4",
-                            Value = 4
-                        },
-                        new OptionModel
-                        {
-                            Title = "item5",
-                            Value = 5
-                        },
-                    },
-                    MaxAllowedAnswers = maxAllowedAnswers
-                });
+                        MaxAllowedAnswers = maxAllowedAnswers
+                    }
+                }
+            };
             return questionnaire;
         }
-
     }
 }

@@ -358,12 +358,16 @@
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_gps_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_list_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_list_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multimedia_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_yesno_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_numeric_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_qr_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_cascading_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_combo_question.cs" />

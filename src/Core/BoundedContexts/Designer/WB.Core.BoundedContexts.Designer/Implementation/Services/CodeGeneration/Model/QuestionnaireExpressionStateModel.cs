@@ -5,6 +5,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class QuestionnaireExpressionStateModel
     {
+        public QuestionnaireExpressionStateModel()
+        {
+            AllQuestions = new List<QuestionTemplateModel>();
+            AllGroups = new List<GroupTemplateModel>();
+            AllRosters = new List<RosterTemplateModel>();
+        }
         public Guid Id { set; get; }
         public List<QuestionTemplateModel> AllQuestions { set; get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
