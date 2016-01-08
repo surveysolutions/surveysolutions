@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "_Supervisor"}, new string[][] { new string[] { "1", "fd" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "responsible" }, new string[][] { new string[] { "1", "fd" } },
                 QuestionnaireCsvFileName);
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();

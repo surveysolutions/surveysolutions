@@ -185,13 +185,13 @@
     <value>Preloading data was not found</value>
   </data>
   <data name="PL0025_SupervisorNameIsEmpty" xml:space="preserve">
-    <value>The name of Supervisor was not provided</value>
+    <value>The name of Responsible was not provided</value>
   </data>
   <data name="PL0026_SupervisorWasNotFound" xml:space="preserve">
-    <value>Provided Supervisor was not found</value>
+    <value>Provided Responsible was not found</value>
   </data>
   <data name="PL0027_SupervisorIsLocked" xml:space="preserve">
-    <value>Supervisor is locked</value>
+    <value>Responsible is locked</value>
   </data>
   <data name="PL0028_UserIsNotSupervisor" xml:space="preserve">
     <value>Provided User is not Supervisor</value>

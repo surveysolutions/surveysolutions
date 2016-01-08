@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -56,7 +57,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 UserName = "GONZALES",
                 Supervisor = new UserLight(supervisorId, "super")
             });
-
+            var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
+            mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);
             mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewByPrefilledQuestions>(), null))
                 .Callback<ICommand, string>(
                     (command, ordinal) =>
@@ -69,11 +71,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     sampleUploadViewFactory: mockOfSampleUploadVievFactory.Object,
                     sampleImportSettings: new SampleImportSettings(1),
                     userViewFactory: mockOfUserViewFactory.Object,
-                    commandService: mockOfCommandService.Object);
+                    commandService: mockOfCommandService.Object,
+                    preloadedDataRepository: mockOfPreloadedDataRepository.Object);
         };
 
         Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportInterviews(questionnaireIdentity, csvBytes, null, headquartersId));
+                interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222")));
 
         It should_not_be_exception = () =>
             exception.ShouldBeNull();
