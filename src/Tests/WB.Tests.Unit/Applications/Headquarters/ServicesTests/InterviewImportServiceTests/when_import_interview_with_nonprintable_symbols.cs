@@ -53,11 +53,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
             mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);
 
-            var mockOfSamplePreloadingDataParsingService = new Mock<ISamplePreloadingDataParsingService>();
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.ParseSample("sampleId", questionnaireIdentity))
+            var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetInterviewsImportData("sampleId", questionnaireIdentity))
                 .Returns(new[]
                 {
-                    new InterviewSampleData()
+                    new InterviewImportData()
                     {
                         InterviewerId = Guid.NewGuid(),
                         SupervisorId = Guid.NewGuid(),
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     sampleImportSettings: new SampleImportSettings(1),
                     commandService: mockOfCommandService.Object,
                     preloadedDataRepository: mockOfPreloadedDataRepository.Object,
-                    samplePreloadingDataParsingService: mockOfSamplePreloadingDataParsingService.Object);
+                    interviewImportDataParsingService: mockOfSamplePreloadingDataParsingService.Object);
         };
 
         Because of = () => exception = Catch.Exception(() =>

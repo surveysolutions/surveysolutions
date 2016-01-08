@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
-    internal class SamplePreloadingDataParsingService : ISamplePreloadingDataParsingService
+    internal class InterviewImportDataParsingService : IInterviewImportDataParsingService
     {
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IPreloadedDataRepository preloadedDataRepository;
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly ITransactionManagerProvider transactionManager;
 
-        public SamplePreloadingDataParsingService(
+        public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository, 
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             this.preloadedDataRepository = preloadedDataRepository;
         }
 
-        public InterviewSampleData[] ParseSample(string sampleId, QuestionnaireIdentity questionnaireIdentity)
+        public InterviewImportData[] GetInterviewsImportData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
         {
             var bigTemplateObject =
                 this.transactionManager.GetTransactionManager()
@@ -56,14 +56,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
                     questionnaireRosterStructure, bigTemplateObject.Questionnaire);
 
-            var preloadedDataOfSample = this.preloadedDataRepository.GetPreloadedDataOfSample(sampleId);
+            var preloadedDataOfSample = this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId);
 
             var dataToPreload = preloadedDataService.CreatePreloadedDataDtoFromSampleData(preloadedDataOfSample);
 
             return
                 dataToPreload.Select(
                     d =>
-                        new InterviewSampleData()
+                        new InterviewImportData()
                         {
                             Answers = d.PreloadedDataDto.Data[0].Answers,
                             InterviewerId = d.InterviewerId,

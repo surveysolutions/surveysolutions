@@ -118,7 +118,7 @@
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
-    <Compile Include="Implementation\Services\Preloading\SamplePreloadingDataParsingService.cs" />
+    <Compile Include="Implementation\Services\Preloading\InterviewImportDataParsingService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
-    <Compile Include="Services\Preloading\ISamplePreloadingDataParsingService.cs" />
+    <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />

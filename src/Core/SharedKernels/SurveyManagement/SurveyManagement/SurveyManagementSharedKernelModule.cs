@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IPreloadedDataService>().To<PreloadedDataService>();
             this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<ISamplePreloadingDataParsingService>().To<SamplePreloadingDataParsingService>();
+            this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 
             this.Bind<IOldschoolChartStatisticsDataProvider>().To<OldschoolChartStatisticsDataProvider>();
 
