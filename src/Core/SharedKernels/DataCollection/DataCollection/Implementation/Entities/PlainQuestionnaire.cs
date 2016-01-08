@@ -141,6 +141,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public long Version => this.getVersion();
 
+        public string Title => this.innerDocument.Title;
+
         public void InitializeQuestionnaireDocument()
         {
             InitializeQuestionnaireDocument(this.innerDocument);

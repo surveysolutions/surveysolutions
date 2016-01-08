@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
@@ -15,7 +16,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public abstract class EnumeratorInterviewViewModel : BaseViewModel, IDisposable
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
@@ -25,7 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected string interviewId;
 
         protected EnumeratorInterviewViewModel(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
@@ -37,6 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             InterviewStateViewModel interviewState)
         {
             this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
@@ -51,19 +55,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public async Task Init(string interviewId)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            if (questionnaire == null) throw new Exception("questionnaire is null");
+            var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
+            if (questionnaireModel == null) throw new Exception("questionnaire is null");
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaire.PrefilledQuestionsIds
+            this.PrefilledQuestions = questionnaireModel.PrefilledQuestionsIds
                 .Select(referenceToQuestion => new SideBarPrefillQuestion
                 {
-                    Question = questionnaire.Questions[referenceToQuestion.Id].Title,
-                    Answer = this.GetAnswer(interview, questionnaire, referenceToQuestion),
+                    Question = questionnaireModel.Questions[referenceToQuestion.Id].Title,
+                    Answer = this.GetAnswer(interview, questionnaireModel, referenceToQuestion),
                     StatsInvisible = referenceToQuestion.ModelType == typeof(GpsCoordinatesQuestionModel)
                 })
                 .ToList();
@@ -74,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaireModel.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }

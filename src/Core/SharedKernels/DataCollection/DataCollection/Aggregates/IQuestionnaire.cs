@@ -15,6 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        string Title { get; }
+
         Guid? ResponsibleId { get; }
 
         void InitializeQuestionnaireDocument();

@@ -7,10 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
     [Obsolete("Use IQuestionnaire instead")]
     public class QuestionnaireModel
     {
-        public Guid Id { get; set; }
-
-        public string Title { get; set; }
-
         public Dictionary<Guid, GroupModel> GroupsWithFirstLevelChildrenAsReferences { set; get; }
 
         public Dictionary<Guid, BaseQuestionModel> Questions { get; set; }
