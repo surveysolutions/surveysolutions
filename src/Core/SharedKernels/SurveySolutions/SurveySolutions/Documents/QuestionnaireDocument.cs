@@ -174,8 +174,7 @@ namespace Main.Core.Documents
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
-            return
-                this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
+            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
                     this.Children.SelectMany(q => q.Find(condition)));
         }
 
