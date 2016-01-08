@@ -96,7 +96,8 @@ namespace WB.UI.Headquarters.Controllers
                 CreatedInterviewsCount = status.CreatedInterviewsCount,
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
                 ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
-                HasErrors = status.State.Errors.Any()
+                HasErrors = status.State.Errors.Any(),
+                SampleId = status.SampleId
             };
         }
 
@@ -111,42 +112,16 @@ namespace WB.UI.Headquarters.Controllers
                        "Import interviews is in progress. Wait until current operation is finished.");
             }
 
-            var fileStream = new MemoryStream(request.FileWithInterviews.FileBytes);
-
-            if (this.archiver.IsZipStream(fileStream))
-            {
-                var unzippedFiles = this.archiver.UnzipStream(fileStream).ToList();
-
-                var fileWithInterviews = unzippedFiles.FirstOrDefault();
-                if (fileWithInterviews == null)
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                        "Zip file does not contains file with interviews.");
-                }
-
-                fileStream = new MemoryStream(fileWithInterviews.FileBytes);
-            }
-
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
-            var fileBytes = fileStream.ToArray();
 
-            if (fileBytes.Length == 0)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                       $"File {request.FileWithInterviews.FileName} is empty");
-            }
-
-            var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, fileBytes);
-
-            var requiredNotExistingColumns = descriptionByFileWithInterviews.ColumnsByPrefilledQuestions.Where(
-                    column => column.IsRequired && !column.ExistsInFIle).Select(column => column.ColumnName).ToList();
+            var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, request.SampleId);
 
             var isSupervisorRequired = !descriptionByFileWithInterviews.HasResponsibleColumn &&
                                        !request.SupervisorId.HasValue;
 
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
 
-            if (!requiredNotExistingColumns.Any() && !isSupervisorRequired)
+            if (!isSupervisorRequired)
             {
                 Task.Run(() =>
                 {
@@ -155,7 +130,7 @@ namespace WB.UI.Headquarters.Controllers
                     try
                     {
                         this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
-                            questionnaireIdentity: questionnaireIdentity, fileBytes: fileBytes, 
+                            questionnaireIdentity: questionnaireIdentity, sampleId: request.SampleId, 
                             headquartersId: headquartersId);
                     }
                     finally
@@ -167,8 +142,7 @@ namespace WB.UI.Headquarters.Controllers
 
             return Request.CreateResponse(new ImportInterviewsResponseApiView
             {
-                IsSupervisorRequired = isSupervisorRequired,
-                RequiredPrefilledQuestions = requiredNotExistingColumns
+                IsSupervisorRequired = isSupervisorRequired
             });
         }
 
@@ -208,14 +182,14 @@ namespace WB.UI.Headquarters.Controllers
         public class ImportInterviewsResponseApiView
         {
             public bool IsSupervisorRequired { get; set; }
-            public List<string> RequiredPrefilledQuestions { get; set; }
         }
 
         public class ImportInterviewsRequestApiView
         {
             public Guid QuestionnaireId { get; set; }
             public int QuestionnaireVersion { get; set; }
-            public HttpFile FileWithInterviews { get; set; }
+
+            public string SampleId { get; set; }
             public Guid? SupervisorId { get; set; }
         }
 
@@ -230,6 +204,7 @@ namespace WB.UI.Headquarters.Controllers
             public string ElapsedTime { get; set; }
             public string EstimatedTime { get; set; }
             public bool HasErrors { get; set; }
+            public string SampleId { get; set; }
         }
     }
 }

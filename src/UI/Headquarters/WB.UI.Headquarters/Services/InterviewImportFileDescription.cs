@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Services
     {
         public bool HasResponsibleColumn { get; set; }
         public List<InterviewImportColumn> ColumnsByPrefilledQuestions { get; set; }
-        public byte[] FileBytes { get; set; }
+        public string SampleId { get; set; }
         public List<InterviewImportPrefilledQuestion> PrefilledQuestions { get; set; }
         public string QuestionnaireTitle { get; set; }
         public string[] FileColumns { get; set; }
