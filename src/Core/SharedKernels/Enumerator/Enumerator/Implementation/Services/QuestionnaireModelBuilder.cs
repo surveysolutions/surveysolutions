@@ -32,9 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var questions = questionnaireDocument.GetAllQuestions().ToList();
             var entities = questionnaireDocument.GetEntitiesByType<IComposite>().ToList();
 
-            questionnaireModel.Id = questionnaireDocument.PublicKey;
-            questionnaireModel.Title = questionnaireDocument.Title;
-
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
                 .ForEach(x => PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
