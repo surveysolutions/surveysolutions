@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.UI.Headquarters.Implementation.Services;
@@ -42,15 +43,19 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     });
 
 
+            var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
+            mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);
+
             interviewImportService =
                 CreateInterviewImportService(questionnaireDocumentRepository: questionnaireRepository,
                     sampleUploadViewFactory: mockOfSampleUploadVievFactory.Object,
                     sampleImportSettings: new SampleImportSettings(1),
-                    commandService: mockOfCommandService.Object);
+                    commandService: mockOfCommandService.Object,
+                    preloadedDataRepository: mockOfPreloadedDataRepository.Object);
         };
 
         Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportInterviews(questionnaireIdentity, csvBytes,
+                interviewImportService.ImportInterviews(questionnaireIdentity, "sampleId",
                     Guid.Parse("33333333333333333333333333333333"), Guid.Parse("22222222222222222222222222222222")));
 
         It should_not_be_exception = () =>

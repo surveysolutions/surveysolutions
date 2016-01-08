@@ -174,6 +174,7 @@
     <Compile Include="Storage\EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="Storage\EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
+    <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Threading\IsolatedThreadExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
