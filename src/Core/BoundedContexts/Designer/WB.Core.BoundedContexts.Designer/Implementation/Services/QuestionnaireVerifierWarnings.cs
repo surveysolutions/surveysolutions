@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        private IEnumerable<QuestionnaireVerificationError> VerifyAmountOfRosters(QuestionnaireDocument document, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationError> VerifyAmountOfRosters(CachedQuestionnaireDocument document, VerificationState state)
         {
             return Enumerable.Empty<QuestionnaireVerificationError>();
             //var rosters = document.Find<IGroup>(q => q.IsRoster).ToArray();
