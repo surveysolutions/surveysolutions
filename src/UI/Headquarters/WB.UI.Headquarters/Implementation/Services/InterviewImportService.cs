@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IPreloadedDataRepository preloadedDataRepository;
-        private readonly ISamplePreloadingDataParsingService samplePreloadingDataParsingService;
+        private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
         public InterviewImportService(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository,
@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             ILogger logger,
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
-            ISamplePreloadingDataParsingService samplePreloadingDataParsingService)
+            IInterviewImportDataParsingService interviewImportDataParsingService)
         {
             this.questionnaireDocumentRepository = questionnaireDocumentRepository;
             this.commandService = commandService;
@@ -58,10 +58,11 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
             this.preloadedDataRepository = preloadedDataRepository;
-            this.samplePreloadingDataParsingService = samplePreloadingDataParsingService;
+            this.interviewImportDataParsingService = interviewImportDataParsingService;
         }
 
-        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId, Guid? supervisorId, Guid headquartersId)
+        public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
+            Guid? supervisorId, Guid headquartersId)
         {
             QuestionnaireDocumentVersioned bigTemplateObject =
                 this.transactionManager.GetTransactionManager()
@@ -71,57 +72,72 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.Status = new InterviewImportStatus
             {
                 QuestionnaireId = questionnaireIdentity.QuestionnaireId,
-                SampleId = sampleId,
+                InterviewImportProcessId = interviewImportProcessId,
                 QuestionnaireVersion = questionnaireIdentity.Version,
                 QuestionnaireTitle = bigTemplateObject.Questionnaire.Title,
                 StartedDateTime = DateTime.Now,
                 CreatedInterviewsCount = 0,
                 ElapsedTime = 0,
                 EstimatedTime = 0,
-                State = { Columns = new string[0] }
+                State = {Columns = new string[0], Errors = new List<InterviewImportError>()}
             };
-            this.Status.State.Errors.Clear();
             this.Status.IsInProgress = true;
-            this.Status.State.Errors = new List<InterviewImportError>();
 
-            var dataToPreload = this.samplePreloadingDataParsingService.ParseSample(sampleId, questionnaireIdentity);
+            var interviewsToImport = this.interviewImportDataParsingService.GetInterviewsImportData(interviewImportProcessId,
+                questionnaireIdentity);
 
-            this.Status.TotalInterviewsCount = dataToPreload.Length;
+            this.Status.TotalInterviewsCount = interviewsToImport.Length;
             try
             {
 
                 int createdInterviewsCount = 0;
                 Stopwatch elapsedTime = Stopwatch.StartNew();
-                
-                Parallel.ForEach(dataToPreload,
+
+                Parallel.ForEach(interviewsToImport,
                     new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
                     (importedInterview) =>
                     {
+                        if (!supervisorId.HasValue && !importedInterview.SupervisorId.HasValue)
+                        {
+                            this.Status.State.Errors.Add(new InterviewImportError()
+                            {
+                                ErrorMessage =
+                                    $"Error during import of interview with prefilled questions {FormatInterviewImportData(importedInterview)}. Resposible supervisor is missing"
+                            });
+                            return;
+                        }
+                        var responsibleSupervisorId = importedInterview.SupervisorId ?? supervisorId.Value;
                         try
                         {
                             this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
                                 interviewId: Guid.NewGuid(),
                                 responsibleId: headquartersId,
                                 questionnaireIdentity: questionnaireIdentity,
-                                supervisorId: importedInterview.SupervisorId ?? supervisorId.Value,
+                                supervisorId: responsibleSupervisorId,
                                 interviewerId: importedInterview.InterviewerId,
                                 answersTime: DateTime.UtcNow,
                                 answersOnPrefilledQuestions: importedInterview.Answers));
                         }
                         catch (Exception ex)
                         {
-                            var answersOnPrefilledQuestions = string.Join(", ", importedInterview.Answers.Values.Where(x => x != null));
-                            this.logger.Error(
-                                $"Error during import of interview with prefilled questions {answersOnPrefilledQuestions}. " +
+                            var errorMessage =
+                                $"Error during import of interview with prefilled questions {FormatInterviewImportData(importedInterview)}. " +
+                                $"SupervisorId {responsibleSupervisorId}, " +
+                                $"InterviewerId {importedInterview.InterviewerId}, " +
                                 $"QuestionnaireId {questionnaireIdentity}, " +
-                                $"HeadquartersId: {headquartersId}", ex);
+                                $"HeadquartersId: {headquartersId}" +
+                                $"Exception: {ex.Message}";
+
+                            this.logger.Error(errorMessage, ex);
+
+                            this.Status.State.Errors.Add(new InterviewImportError() {ErrorMessage = errorMessage});
                         }
 
                         Interlocked.Increment(ref createdInterviewsCount);
                         this.Status.CreatedInterviewsCount = createdInterviewsCount;
                         this.Status.ElapsedTime = elapsedTime.ElapsedMilliseconds;
-                        this.Status.TimePerInterview = this.Status.ElapsedTime / this.Status.CreatedInterviewsCount;
-                        this.Status.EstimatedTime = this.Status.TimePerInterview * this.Status.TotalInterviewsCount;
+                        this.Status.TimePerInterview = this.Status.ElapsedTime/this.Status.CreatedInterviewsCount;
+                        this.Status.EstimatedTime = this.Status.TimePerInterview*this.Status.TotalInterviewsCount;
                     });
 
                 this.logger.Info(
@@ -132,6 +148,12 @@ namespace WB.UI.Headquarters.Implementation.Services
             {
                 this.Status.IsInProgress = false;
             }
+        }
+
+        private string FormatInterviewImportData(InterviewImportData importedInterview)
+        {
+            return string.Join(", ",
+                importedInterview.Answers.Values.Where(x => x != null));
         }
 
         public bool HasResponsibleColumn(string sampleId)

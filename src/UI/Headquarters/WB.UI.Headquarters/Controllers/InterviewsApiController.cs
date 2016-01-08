@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
                 ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
                 HasErrors = status.State.Errors.Any(),
-                SampleId = status.SampleId
+                InterviewImportProcessId = status.InterviewImportProcessId
             };
         }
 
@@ -113,7 +113,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var isSupervisorRequired = !this.interviewImportService.HasResponsibleColumn(request.SampleId) &&
+            var isSupervisorRequired = !this.interviewImportService.HasResponsibleColumn(request.InterviewImportProcessId) &&
                                        !request.SupervisorId.HasValue;
 
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;
@@ -127,7 +127,7 @@ namespace WB.UI.Headquarters.Controllers
                     try
                     {
                         this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
-                            questionnaireIdentity: questionnaireIdentity, sampleId: request.SampleId, 
+                            questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: request.InterviewImportProcessId, 
                             headquartersId: headquartersId);
                     }
                     finally
@@ -186,12 +186,13 @@ namespace WB.UI.Headquarters.Controllers
             public Guid QuestionnaireId { get; set; }
             public int QuestionnaireVersion { get; set; }
 
-            public string SampleId { get; set; }
+            public string InterviewImportProcessId { get; set; }
             public Guid? SupervisorId { get; set; }
         }
 
         public class InterviewImportStatusApiView
         {
+            public string InterviewImportProcessId { get; set; }
             public Guid QuestionnaireId { get; set; }
             public long QuestionnaireVersion { get; set; }
             public string QuestionnaireTitle { get; set; }
@@ -201,7 +202,6 @@ namespace WB.UI.Headquarters.Controllers
             public string ElapsedTime { get; set; }
             public string EstimatedTime { get; set; }
             public bool HasErrors { get; set; }
-            public string SampleId { get; set; }
         }
     }
 }

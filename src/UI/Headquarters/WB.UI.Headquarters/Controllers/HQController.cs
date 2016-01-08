@@ -210,7 +210,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
-            if (this.interviewImportService.Status.SampleId == id)
+            if (this.interviewImportService.Status.InterviewImportProcessId == id)
             {
                 var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
                     questionnaireInfo?.Title, new PreloadedDataVerificationError[0],
