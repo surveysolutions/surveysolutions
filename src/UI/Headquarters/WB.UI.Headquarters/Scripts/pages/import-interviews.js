@@ -72,16 +72,19 @@
             sampleId: sampleId
         };
 
-        self.SendRequestWithFiles(importInterviewsUrl, request, function (response) {
-            if (response.IsSupervisorRequired) {
-                self.selectedResponsible.isValid();
-                $("#dialogSelectSupervisor").modal({
-                    "backdrop": "static",
-                    "keyboard": true,
-                    "show": true
-                });
-            }
-        });
+        self.SendRequestWithFiles(importInterviewsUrl, request, function(response) {
+                if (response.IsSupervisorRequired) {
+                    self.selectedResponsible.isValid();
+                    $("#dialogSelectSupervisor").modal({
+                        "backdrop": "static",
+                        "keyboard": true,
+                        "show": true
+                    });
+                }
+            },
+            function(response) {
+                self.ShowError(JSON.parse(response.responseText).Message);
+            });
     }
 
     self.selectSupervisor = function () {
