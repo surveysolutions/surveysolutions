@@ -8,6 +8,6 @@ namespace WB.UI.Headquarters.Services
     {
         InterviewImportStatus Status { get; }
         void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId, Guid? supervisorId, Guid headquartersId);
-        InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId);
+        bool HasResponsibleColumn(string sampleId);
     }
 }
