@@ -5,6 +5,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -21,7 +22,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             ITransactionManagerProvider transactionManager = null,
             ILogger logger = null,
             IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory = null,
-            SampleImportSettings sampleImportSettings = null)
+            SampleImportSettings sampleImportSettings = null,
+            IPreloadedDataRepository preloadedDataRepository = null)
         {
             if (transactionManager == null)
             {
@@ -36,7 +38,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 transactionManager: transactionManager,
                 logger: logger ?? Mock.Of<ILogger>(),
                 sampleUploadViewFactory: sampleUploadViewFactory ?? Mock.Of<IViewFactory<SampleUploadViewInputModel, SampleUploadView>>(),
-                sampleImportSettings: sampleImportSettings ?? Mock.Of<SampleImportSettings>());
+                sampleImportSettings: sampleImportSettings ?? Mock.Of<SampleImportSettings>(),
+                preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>());
         }
     }
 }

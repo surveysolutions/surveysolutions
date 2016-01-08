@@ -6,7 +6,6 @@ namespace WB.UI.Headquarters.Services
     {
         public Guid QuestionId { get; set; }
         public string Variable { get; set; }
-        public bool IsRosterSize { get; set; }
         public bool IsGps { get; set; }
         public Type AnswerType { get; set; }
     }
