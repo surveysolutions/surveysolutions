@@ -113,9 +113,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireIdentity = new QuestionnaireIdentity(request.QuestionnaireId, request.QuestionnaireVersion);
 
-            var descriptionByFileWithInterviews = this.interviewImportService.GetDescriptionByFileWithInterviews(questionnaireIdentity, request.SampleId);
-
-            var isSupervisorRequired = !descriptionByFileWithInterviews.HasResponsibleColumn &&
+            var isSupervisorRequired = !this.interviewImportService.HasResponsibleColumn(request.SampleId) &&
                                        !request.SupervisorId.HasValue;
 
             var headquartersId = this.globalInfoProvider.GetCurrentUser().Id;

@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -48,23 +49,28 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.TextQuestion(questionId: Guid.Parse("88888888888888888888888888888888"), variable: "MainPlace", preFilled: true),
                     Create.TextQuestion(questionId: Guid.Parse("99999999999999999999999999999999"), variable: "SubPlace", preFilled: true),
                     Create.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variableName: "LongLat", isPrefilled: true)));
-
-            var mockOfUserViewFactory = new Mock<IUserViewFactory>();
-            mockOfUserViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(new UserView()
-            {
-                PublicKey = Guid.Parse("12121212121212121212121212121212"),
-                UserName = "GONZALES",
-                Supervisor = new UserLight(Guid.Parse("12121212121212121212121212121212"), "super")
-            });
+            
             var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
             mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);
+
+            var mockOfSamplePreloadingDataParsingService = new Mock<ISamplePreloadingDataParsingService>();
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.ParseSample("sampleId", questionnaireIdentity))
+                .Returns(new[]
+                {
+                    new InterviewSampleData()
+                    {
+                        InterviewerId = Guid.NewGuid(),
+                        SupervisorId = Guid.NewGuid(),
+                        Answers = new Dictionary<Guid, object>()
+                    }
+                });
+
             interviewImportService =
                 CreateInterviewImportService(questionnaireDocumentRepository: questionnaireRepository,
-                    sampleUploadViewFactory: mockOfSampleUploadVievFactory.Object,
                     sampleImportSettings: new SampleImportSettings(1),
-                    userViewFactory: mockOfUserViewFactory.Object,
                     commandService: mockOfCommandService.Object,
-                    preloadedDataRepository: mockOfPreloadedDataRepository.Object);
+                    preloadedDataRepository: mockOfPreloadedDataRepository.Object,
+                    samplePreloadingDataParsingService: mockOfSamplePreloadingDataParsingService.Object);
         };
 
         Because of = () => exception = Catch.Exception(() =>

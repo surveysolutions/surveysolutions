@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -256,18 +257,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var result = new List<PreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
-            var supervisorNameIndex = GetSupervisorNameIndex(sampleDataFile);
+            var interviewersCache = new Dictionary<string, UserDocument>();
+
+            var responsibleNameIndex = GetSupervisorNameIndex(sampleDataFile);
             var topLevelFileName = GetValidFileNameForTopLevelQuestionnaire();
             foreach (var contentRow in sampleDataFile.Content)
             {
                 var answersToFeaturedQuestions = BuildAnswerForLevel(contentRow, sampleDataFile.Header, topLevelFileName);
 
-                var supervisorName = CheckAndGetSupervisorNameForLevel(contentRow, supervisorNameIndex);
+                var responsibleName = CheckAndGetSupervisorNameForLevel(contentRow, responsibleNameIndex);
+                Guid? interviewerId = null;
+                Guid? supervisorId = null;
+                var interviewer = GetInterviewerIdAndUpdateCache(interviewersCache, responsibleName);
+                if (interviewer != null)
+                {
+                    interviewerId = interviewer.PublicKey;
+                    supervisorId = interviewer.Supervisor.Id;
+                }
+                else
+                {
+                    supervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
+                }
                 result.Add(
                     new PreloadedDataRecord
                     {
                         PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
-                        SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
+                        SupervisorId = supervisorId,
+                        InterviewerId = interviewerId
                     });
             }
             return result.ToArray();
@@ -456,6 +472,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             cache.Add(name, user.PublicKey);
             return user.PublicKey;
+        }
+
+        private UserDocument GetInterviewerIdAndUpdateCache(Dictionary<string, UserDocument> interviewerCache, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            if (interviewerCache.ContainsKey(name))
+                return interviewerCache[name];
+
+            var user = GetUserByName(name);//assuming that user exists
+            if (user == null || !user.Roles.Contains(UserRoles.Operator)) return null;
+
+            interviewerCache.Add(name, user);
+            return user;
         }
     }
 }
