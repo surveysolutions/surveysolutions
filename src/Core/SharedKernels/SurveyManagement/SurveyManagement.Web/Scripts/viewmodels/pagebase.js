@@ -139,7 +139,7 @@
         });
     };
 
-    self.SendRequestWithFiles = function (requestUrl, args, onSuccess, onDone) {
+    self.SendRequestWithFiles = function (requestUrl, args, onSuccess, onFail, onDone) {
 
         if (!self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -169,6 +169,10 @@
                 onSuccess(data);
             }
         }).fail(function (jqXhr, textStatus, errorThrown) {
+            if (!_.isUndefined(onFail)) {
+                onFail(jqXhr);
+                return;
+            }
             if (jqXhr.status === 403) {
                 if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
                     self.ShowError(input.settings.messages.forbiddenMessage);
