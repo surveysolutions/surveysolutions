@@ -52,12 +52,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
-        private It should_return_error_reference_with_type_Question = () =>
+        It should_return_error_reference_with_type_Question = () =>
             resultErrors.Single()
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
         It should_return_error_reference_with_id_of_secondQuestion = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(secondQuestionId);
+            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(firstQuestionId);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
