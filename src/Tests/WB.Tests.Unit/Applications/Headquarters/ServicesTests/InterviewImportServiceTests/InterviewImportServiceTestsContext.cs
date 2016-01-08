@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             ILogger logger = null,
             SampleImportSettings sampleImportSettings = null,
             IPreloadedDataRepository preloadedDataRepository = null,
-            ISamplePreloadingDataParsingService samplePreloadingDataParsingService=null)
+            IInterviewImportDataParsingService interviewImportDataParsingService=null)
         {
             if (transactionManager == null)
             {
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 logger: logger ?? Mock.Of<ILogger>(),
                 sampleImportSettings: sampleImportSettings ?? Mock.Of<SampleImportSettings>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
-                samplePreloadingDataParsingService: samplePreloadingDataParsingService ?? Mock.Of<ISamplePreloadingDataParsingService>());
+                interviewImportDataParsingService: interviewImportDataParsingService ?? Mock.Of<IInterviewImportDataParsingService>());
         }
     }
 }

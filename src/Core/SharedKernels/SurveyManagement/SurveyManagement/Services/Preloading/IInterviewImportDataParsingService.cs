@@ -5,12 +5,12 @@ using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 {
-    public interface ISamplePreloadingDataParsingService
+    public interface IInterviewImportDataParsingService
     {
-        InterviewSampleData[] ParseSample(string sampleId, QuestionnaireIdentity questionnaireIdentity);
+        InterviewImportData[] GetInterviewsImportData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity);
     }
 
-    public class InterviewSampleData
+    public class InterviewImportData
     {
         public Guid? SupervisorId { get; set; }
         public Guid? InterviewerId { get; set; }
