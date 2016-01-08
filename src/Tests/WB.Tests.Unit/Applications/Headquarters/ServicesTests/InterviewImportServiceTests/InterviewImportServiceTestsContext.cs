@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -18,12 +19,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         public static InterviewImportService CreateInterviewImportService(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository = null,
             ICommandService commandService = null,
-            IUserViewFactory userViewFactory = null,
             ITransactionManagerProvider transactionManager = null,
             ILogger logger = null,
-            IViewFactory<SampleUploadViewInputModel, SampleUploadView> sampleUploadViewFactory = null,
             SampleImportSettings sampleImportSettings = null,
-            IPreloadedDataRepository preloadedDataRepository = null)
+            IPreloadedDataRepository preloadedDataRepository = null,
+            ISamplePreloadingDataParsingService samplePreloadingDataParsingService=null)
         {
             if (transactionManager == null)
             {
@@ -34,12 +34,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             return new InterviewImportService(
                 questionnaireDocumentRepository: questionnaireDocumentRepository ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                userViewFactory: userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 transactionManager: transactionManager,
                 logger: logger ?? Mock.Of<ILogger>(),
-                sampleUploadViewFactory: sampleUploadViewFactory ?? Mock.Of<IViewFactory<SampleUploadViewInputModel, SampleUploadView>>(),
                 sampleImportSettings: sampleImportSettings ?? Mock.Of<SampleImportSettings>(),
-                preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>());
+                preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
+                samplePreloadingDataParsingService: samplePreloadingDataParsingService ?? Mock.Of<ISamplePreloadingDataParsingService>());
         }
     }
 }
