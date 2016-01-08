@@ -261,27 +261,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The name of Responsible was not provided.
         /// </summary>
-        internal static string PL0025_SupervisorNameIsEmpty {
+        internal static string PL0025_ResponsibleNameIsEmpty {
             get {
-                return ResourceManager.GetString("PL0025_SupervisorNameIsEmpty", resourceCulture);
+                return ResourceManager.GetString("PL0025_ResponsibleNameIsEmpty", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Provided Responsible was not found.
         /// </summary>
-        internal static string PL0026_SupervisorWasNotFound {
+        internal static string PL0026_ResponsibleWasNotFound {
             get {
-                return ResourceManager.GetString("PL0026_SupervisorWasNotFound", resourceCulture);
+                return ResourceManager.GetString("PL0026_ResponsibleWasNotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Responsible is locked.
         /// </summary>
-        internal static string PL0027_SupervisorIsLocked {
+        internal static string PL0027_ResponsibleIsLocked {
             get {
-                return ResourceManager.GetString("PL0027_SupervisorIsLocked", resourceCulture);
+                return ResourceManager.GetString("PL0027_ResponsibleIsLocked", resourceCulture);
             }
         }
         
