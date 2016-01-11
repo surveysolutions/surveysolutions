@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -18,11 +19,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
     {
         Establish context = () =>
         {
-            var interviewIdAsString = "hello";
+            interviewIdAsString = "hello";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Identity(questionGuid, Empty.RosterVector);
 
-            var questionnaire = BuildDefaultQuestionnaire(questionId);
+            var questionnaire = Create.QuestionnaireModel(new BaseQuestionModel[] {
+                Create.YesNoQuestionModel(id : questionId.Id, options: new List<OptionModel>
+                {
+                    Create.OptionModel("item1", 1),
+                    Create.OptionModel( "item2", 2),
+                    Create.OptionModel("item3",  3),
+                    Create.OptionModel("item4", 4),
+                    Create.OptionModel("item5", 5),
+                })
+            });
+
             ((YesNoQuestionModel)questionnaire.Questions.First().Value).IsRosterSizeQuestion = true;
 
             var yesNoAnswer = Create.YesNoAnswer(questionGuid, Empty.RosterVector);
@@ -30,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
 
             var questionnaireStorage = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
-            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
             interviewRepository.Setup(x => x.Get(interviewIdAsString)).Returns(interview);
@@ -44,8 +55,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         Because of = () => exception = Catch.Exception(
                () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException());
 
-        It should_not_throw_exceptions = () =>
-            exception.ShouldBeNull();
+        It should_get_interview_by_given_string_key_in_Init_and_ToggleAnswerAsync_methods = () =>
+            interviewRepository.Verify(x => x.Get(interviewIdAsString), Times.AtLeast(2));
 
         It should_check_no_option = () =>
             viewModel.Options.First().NoSelected.ShouldBeTrue();
@@ -54,5 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         static YesNoQuestionViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
+        private static Mock<IStatefulInterviewRepository> interviewRepository;
+        private static string interviewIdAsString;
     }
 }

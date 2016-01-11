@@ -2517,5 +2517,29 @@ namespace WB.Tests.Unit
                 .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire ?? new QuestionnaireDocument() });
             return questionnaireMock.Object;
         }
+
+        public static YesNoQuestionModel YesNoQuestionModel(Guid id, bool areAnswersOrdered = true, int maxAllowedAnswers = 2, List<OptionModel> options = null)
+        {
+            return new YesNoQuestionModel
+            {
+                AreAnswersOrdered = areAnswersOrdered,
+                Id = id,
+                Instructions = "instructions",
+                Options = options ?? new List <OptionModel>
+                {
+                    Create.OptionModel("item1", 1),
+                    Create.OptionModel( "item2", 2),
+                    Create.OptionModel("item3",  3),
+                    Create.OptionModel("item4", 4),
+                    Create.OptionModel("item5", 5),
+                },
+                MaxAllowedAnswers = maxAllowedAnswers
+            };
+        }
+
+        public static OptionModel OptionModel(string title, decimal value)
+        {
+            return new OptionModel { Title = title, Value = value };
+        }
     }
 }
