@@ -144,7 +144,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("BatchUpload", model);
+                return this.RedirectToAction("BatchUpload",
+                    new {id = model.QuestionnaireId, version = model.QuestionnaireVersion});
             }
 
             if (User.Identity.IsObserver())
@@ -176,7 +177,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("BatchUpload", model);
+                return this.RedirectToAction("BatchUpload",
+                    new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
 
             if (User.Identity.IsObserver())
@@ -209,7 +211,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
-            if (this.interviewImportService.Status.SampleId == id)
+            if (this.interviewImportService.Status.InterviewImportProcessId == id)
             {
                 var inProgressModel = new PreloadedDataVerificationErrorsView(questionnaireId, version,
                     questionnaireInfo?.Title, new PreloadedDataVerificationError[0],

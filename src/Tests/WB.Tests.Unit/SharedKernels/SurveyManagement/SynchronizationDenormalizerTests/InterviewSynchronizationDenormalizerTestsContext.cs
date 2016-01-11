@@ -34,7 +34,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
                 questionnriePropagationStructures ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(),
                 interviews ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 interviewSummarys ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
-                metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 interviewPackageStorageWriter ??
                 Mock.Of<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>(),
                 Mock.Of<IReadSideRepositoryWriter<InterviewResponsible>>(),
