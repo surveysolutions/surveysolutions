@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -30,13 +29,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter;
 
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
-        private readonly IMetaInfoBuilder metaBuilder;
 
         public InterviewSynchronizationDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
             IReadSideKeyValueStorage<InterviewData> interviews,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaries,
-            IMetaInfoBuilder metaBuilder,
             IReadSideRepositoryWriter<InterviewSyncPackageMeta> syncPackageWriter,
             IReadSideRepositoryWriter<InterviewResponsible> interviewResponsibleStorageWriter,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory)
@@ -44,7 +41,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.questionnriePropagationStructures = questionnriePropagationStructures;
             this.interviews = interviews;
             this.interviewSummaries = interviewSummaries;
-            this.metaBuilder = metaBuilder;
             this.syncPackageWriter = syncPackageWriter;
             this.interviewResponsibleStorageWriter = interviewResponsibleStorageWriter;
             this.synchronizationDtoFactory = synchronizationDtoFactory;
@@ -66,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         return;
 
                     this.StoreSynchronizationPackage(evnt.EventSourceId, interviewSummary.ResponsibleId,
-                        SyncItemType.DeleteInterview, 0, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
+                        SyncItemType.DeleteInterview, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
                     break;
 
                 case InterviewStatus.RejectedBySupervisor:
@@ -91,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (interviewResponsibleInfo != null && interviewResponsibleInfo.UserId != evnt.Payload.InterviewerId && interviewSummary.ResponsibleRole == UserRoles.Operator)
             {
                 this.StoreSynchronizationPackage(evnt.EventSourceId, interviewResponsibleInfo.UserId,
-                    SyncItemType.DeleteInterview, 0, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
+                    SyncItemType.DeleteInterview, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
             }
 
             if (this.IsInterviewWereRejectedAtLeastOnceBeboreOrNotCreateOnClient(interviewSummary))
@@ -126,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             this.StoreSynchronizationPackage(evnt.EventSourceId, interviewSummary.ResponsibleId,
-                SyncItemType.DeleteInterview, 0, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
+                SyncItemType.DeleteInterview, evnt.EventIdentifier.FormatGuid(), evnt.GlobalSequence);
         }
 
         private void ResendInterviewInNewStatus(InterviewData interviewData, InterviewStatus newStatus, string comments, DateTime timestamp, string packageId, long globalSequence)
@@ -152,20 +148,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void SaveSynchronizationPackage(InterviewSynchronizationDto doc, Guid responsibleId, string packageId, long globalSequence)
         {
-            this.StoreSynchronizationPackage(doc.Id, responsibleId, SyncItemType.Interview, 0, packageId, globalSequence);
+            this.StoreSynchronizationPackage(doc.Id, responsibleId, SyncItemType.Interview, packageId, globalSequence);
         }
 
-        public void StoreSynchronizationPackage(Guid interviewId, 
-            Guid? userId, 
-            string itemType, 
-            int packageSize, 
-            string packageId, 
+        public void StoreSynchronizationPackage(Guid interviewId,
+            Guid userId,
+            string itemType,
+            string packageId,
             long globalSequence)
         {
-            var syncPackageMeta = new InterviewSyncPackageMeta(interviewId, userId, itemType, packageSize)
+            var syncPackageMeta = new InterviewSyncPackageMeta
             {
-                PackageId = $"{interviewId.FormatGuid()}${packageId}{(userId.HasValue ? "$" + userId.FormatGuid() : "")}",
-                SortIndex = globalSequence
+                InterviewId = interviewId,
+                UserId = userId,
+                ItemType = itemType,
+                PackageId = $"{interviewId.FormatGuid()}${packageId}${userId.FormatGuid()}",
+                SortIndex = globalSequence,
+                SerializedPackageSize = 0
             };
 
             this.syncPackageWriter.Store(syncPackageMeta, syncPackageMeta.PackageId);
