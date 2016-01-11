@@ -69,6 +69,7 @@
         var formatedStartDate = start.format(dateFormat);
         var formatedEndDate = end.format(dateFormat);
         self.SelectedRange(formatedStartDate + "/" + formatedEndDate);
+        $('#dates-range').daterangepicker({ startDate: moment(start), endDate: moment(end) });
     };
 
     self.drawChart = function () {
