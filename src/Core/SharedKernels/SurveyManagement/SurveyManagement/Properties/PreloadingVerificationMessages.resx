@@ -172,7 +172,7 @@
     <value>Only integer values are allowed.</value>
   </data>
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
-    <value>Categorical question cannot have non-numeric values.</value>
+    <value>Only real values are allowed.</value>
     <comment>Non-numeric value found for categorical question</comment>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">

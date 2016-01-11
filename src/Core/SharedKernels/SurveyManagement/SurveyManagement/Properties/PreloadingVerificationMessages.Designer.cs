@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question cannot have non-numeric values..
+        ///   Looks up a localized string similar to Only real values are allowed..
         /// </summary>
         internal static string PL0019_ExpectedDecimalNotParsed {
             get {
